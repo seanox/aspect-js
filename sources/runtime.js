@@ -78,5 +78,6 @@ if (typeof(Runtime) == 'undefined') {
         return result; 
     };
     
-    Runtime.registerEvent(window, "load", function() {Runtime.complete = true;});
+    Runtime.registerEvent(window, "load", function() {
+        Runtime.complete = true;});
 };
