@@ -38,6 +38,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Manuals
+[Manual DE] https://github.com/seanox/aspect-js/blob/master/documents/manual_de.md
+[Manual EN] https://github.com/seanox/aspect-js/blob/master/documents/manual_en.md
 
 
 # Changes (Change Log)
