@@ -130,12 +130,10 @@ Composite-Rendering z.B. durch die Attribute `source` und `condition` zu steuern
 Composite-JavaScript kann direkt über ein render-Attribut angesteuert werden.
 
 ```
-<script id="ExampleScript" type="composite/javascript">
-  ...
-</script>
-
 <form id="ExampleForm" composite>
-  ...
-  <button event="click" render="#ExampleScript"></button>
+  <script id="ExampleScript" type="composite/javascript">
+      ...
+  </script>
+  <button event="click" render="#ExampleForm script"></button>
 </form>
 ```
