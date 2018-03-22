@@ -89,7 +89,6 @@ Composite-Rendering z.B. durch die Attribute `source` und `condition` zu steuern
 <script type="composite/javascript" source="./script.js" condition="{{ScriptBean.canExecute()}}>
   ...
 </script> 
-
 ```
 
 Composite-JavaScript kann direkt über ein render-Attribut angesteuert werden.
