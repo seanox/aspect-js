@@ -6,14 +6,14 @@
 
 ## Motivation
 
-Die Trennung von Web-Anwendungen in Frontend und Backend und die Nutzung von
+Die Trennung von Web-Anwendungen in Frontend und Backend sowie die Nutzung von
 browserbasierter Rich-Clients und Microservices ist mehr als eine
 Trenderscheinung. Neben der strikten Trennung der Komponenten, sind
 Skalierbarkeit und Modularisierung gut Argumente für diese Art der
 Anwendungsarchitektur.
 
-So ist die Vielzahl an Frameworks für browserbasierter Rich-Clients gross, sie
-unterscheiden sich stark in Funktion, Komplexität und Grösse und benötigen
+So ist die Vielzahl an Frameworks für browserbasierter Rich-Clients gross.
+Sie unterscheiden sich stark in Funktion, Komplexität und Grösse und benötigen
 teilweise eigene Compiler und Server.
 
 Bei Seanox aspect-js stehen ein minimalistischer Ansatz, der Wunsch nach etwas
@@ -31,7 +31,25 @@ von Rendering, Expression Language und Performance.
 {{'Hello World!'}}
 ```
 
-## Schlüsselwörter
+### Elemente
+
+
+#### Text
+
+
+#### Literale
+
+
+#### Logik
+
+
+#### Value-Expression
+
+
+#### Method-Expression
+
+
+#### Schlüsselwörter
 
 and &&        empty !         div /
 eq  ==        ge    >=        gt  >
@@ -41,9 +59,12 @@ ne  !=        not   !         or  ||
 
 ## Composites
 
+
 ## Events
 
+
 ## Markup
+
 
 ### Attribute
 
