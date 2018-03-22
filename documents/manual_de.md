@@ -136,6 +136,6 @@ Composite-JavaScript kann direkt über ein render-Attribut angesteuert werden.
 
 <form id="ExampleForm" composite>
   ...
-  <input type="button" event="click" render="#ExampleScript"></input>
+  <button event="click" render="#ExampleScript"></button>
 </form>
 ```
