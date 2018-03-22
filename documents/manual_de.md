@@ -92,7 +92,7 @@ Composite-Rendering z.B. durch die Attribute `source` und `condition` zu steuern
 
 ```
 
-So ein Script-Block kann direkt über ein render-Attribut adressiert werden.
+Composite-JavaScript kann direkt über ein render-Attribut angesteuert werden.
 
 ```
 <script id="ExampleScript" type="composite/javascript">
@@ -101,6 +101,6 @@ So ein Script-Block kann direkt über ein render-Attribut adressiert werden.
 
 <form id="ExampleForm" composite>
   ...
-  <input type="button" event="click" render="ExampleScript"></input>
+  <input type="button" event="click" render="#ExampleScript"></input>
 </form>
 ```
