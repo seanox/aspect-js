@@ -74,8 +74,28 @@ Attribute zur Verfügung, die sich einzeln und in Kombination verwenden lassen.
 
 #### composite
 
+Kennzeichnet ein HTML-Element als Composite und damit als Bestandteil einer
+Kombination aus HTML-Element und einem statischen JavaScript-Objekt. Die
+Zuordnung erfolgt über das `id`-Attribut vom HTML-Element und erwartet ein
+gleichnamiges JavaScript-Objekt. Ist dieses nicht vorhanden wird es dynamisch
+erstellt. Die Deklaration als Composite erfordert immer ein gültiges
+`id`-Attribute.
+
+```
+<article id="Example" composite>
+  ...
+</article> 
+
+<script type="text/javascript">
+
+  var Example = {};
+  ...
+</script> 
+```
+
 
 #### condition
+
 Bei jedem HTML-Element kann das Attribut `condition` hinzugefügt werden.  
 Das Attribute, was als Wert eine Expression erwartet, setuert die Anzeige von
 HTML-Elementen beim Rendering. So werden HTML-Elemente mit dem Attribut
@@ -84,7 +104,7 @@ HTML-Elementen beim Rendering. So werden HTML-Elemente mit dem Attribut
 ```
 <article condition="{{ArticleBean.visible}}">
   ...
-</article> 
+</article>
 ```
 
 
@@ -127,17 +147,17 @@ Composite-Rendering z.B. durch die Attribute `source` und `condition` zu steuern
 </script> 
 ```
 
-Composite-JavaScript kann direkt über ein render-Attribut angesteuert werden.
+Composite-JavaScript kann direkt über ein `render`-Attribut angesteuert werden.
 
 ```
 <form id="ExampleForm" composite>
   <script type="composite/javascript">
-      ...
+    ...
   </script>
   <button event="click" render="#ExampleForm script, #ExampleScript"></button>
 </form>
 
 <script id="ExampleScript" type="composite/javascript">
-    ...
+  ...
 </script>
 ```
