@@ -31,6 +31,7 @@ von Rendering, Expression Language und Performance.
 {{'Hello World!'}}
 ```
 
+
 ### Elemente
 
 
@@ -39,11 +40,19 @@ von Rendering, Expression Language und Performance.
 
 #### Literale
 
+```
+{{'Hello World!'}}
+{{"Hello World!"}}
+```
 
 #### Logik
 
 
 #### Value-Expression
+
+```
+{{Example.object.field}}
+```
 
 
 #### Method-Expression
@@ -134,7 +143,7 @@ nicht und es ist möglich den Aufruf und die Ausführung durch das
 Composite-Rendering z.B. durch die Attribute `source` und `condition` zu steuern.
 
 ```
-<script type="composite/javascript" condition="{{ScriptBean.canExecute()}}">
+<script type="composite/javascript" condition="{{Script.canExecute()}}">
   ...
 </script> 
 
@@ -142,7 +151,7 @@ Composite-Rendering z.B. durch die Attribute `source` und `condition` zu steuern
   ...
 </script> 
 
-<script type="composite/javascript" source="./script.js" condition="{{ScriptBean.canExecute()}}>
+<script type="composite/javascript" source="./script.js" condition="{{Script.canExecute()}}>
   ...
 </script> 
 ```
