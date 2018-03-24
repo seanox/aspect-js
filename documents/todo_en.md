@@ -1,6 +1,6 @@
 ## Open
 - General: Blocking/intercepting F5 (prevent reloading of the page)
-- General: Blocking/intercepting F5 (prevent return to previous page)
+- General: Blocking/intercepting Tab (prevent return to previous page)
 - Composite Render: repeat tag (concept / implementation)
 - Composite Render: interval tag (concept / implementation)
 - Composite Render: param tag (concept / implementation)
