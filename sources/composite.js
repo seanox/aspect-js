@@ -1,11 +1,43 @@
-//TODO:
+/**
+ *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
+ *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
+ *  Software unterliegt der Version 2 der GNU General Public License.
+ *
+ *  Seanox aspect-js, JavaScript Client Faces
+ *  Copyright (C) 2018 Seanox Software Solutions
+ *
+ *  This program is free software; you can redistribute it and/or modify it
+ *  under the terms of version 2 of the GNU General Public License as published
+ *  by the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful, but WITHOUT
+ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ *  more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  
+ *  
+ *      DESCRIPTION
+ *      ----
+ *  TODO:
+ *  
+ *  Composite 1.0 20180402
+ *  Copyright (C) 2018 Seanox Software Solutions
+ *  Alle Rechte vorbehalten.
+ *
+ *  @author  Seanox Software Solutions
+ *  @version 1.0 20180402
+ */
 if (typeof(Composite) == 'undefined') {
     
-    /** TODO:
+    /** 
+     *  TODO:
      *  Constructor, creates a new Composite object.
      */
-    Composite = function() {
-    };
+    Composite = {};
     
     //TODO:
     Composite.elements;
@@ -16,25 +48,25 @@ if (typeof(Composite) == 'undefined') {
     //TODO: 
     Composite.counter = {render:0, scan:0, serial:0};
     
-    //TODO:
+    /** Constant for attribute module */
     Composite.ATTRIBUTE_MODULE = "module";
 
-    //TODO: 
+    /** Constant for attribute condition */
     Composite.ATTRIBUTE_CONDITION = "condition";
     
-    //TODO:
+    /** Constant for attribute type */
     Composite.ATTRIBUTE_TYPE = "type";
   
-    //TODO:
+    /** Constant for attribute value */
     Composite.ATTRIBUTE_VALUE = "value";    
 
-    //TODO:
+    /** Constant for attribute composite */
     Composite.ATTRIBUTE_COMPOSITE = "composite";
     
-    //TODO:
+    /** Constant for attribute id */
     Composite.ATTRIBUTE_ID = "id";
     
-    //TODO:
+    /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
     
     //TODO:
@@ -66,24 +98,24 @@ if (typeof(Composite) == 'undefined') {
      *  see also https://www.w3schools.com/jsref/dom_obj_event.asp
      */
     Composite.events = " abort afterprint animationend animationiteration animationstart"
-                     + " beforeprint beforeunload blur"
-                     + " canplay canplaythrough change click contextmenu copy cut"
-                     + " dblclick drag dragend dragenter dragleave dragover dragstart drop durationchange"
-                     + " ended error"
-                     + " focus focusin focusout"
-                     + " hashchange"
-                     + " input invalid"
-                     + " keydown keypress keyup"
-                     + " load loadeddata loadedmetadata loadstart"
-                     + " message mousedown mouseenter mouseleave mousemove mouseover mouseout mouseup mousewheel"
-                     + " offline online open"
-                     + " pagehide pageshow paste pause play playing popstate progress"
-                     + " ratechange resize reset"
-                     + " scroll search seeked seeking select show stalled storage submit suspend"
-                     + " timeupdate toggle touchcancel touchend touchmove touchstart transitionend"
-                     + " unload"
-                     + " volumechange"
-                     + " waiting wheel";
+        + " beforeprint beforeunload blur"
+        + " canplay canplaythrough change click contextmenu copy cut"
+        + " dblclick drag dragend dragenter dragleave dragover dragstart drop durationchange"
+        + " ended error"
+        + " focus focusin focusout"
+        + " hashchange"
+        + " input invalid"
+        + " keydown keypress keyup"
+        + " load loadeddata loadedmetadata loadstart"
+        + " message mousedown mouseenter mouseleave mousemove mouseover mouseout mouseup mousewheel"
+        + " offline online open"
+        + " pagehide pageshow paste pause play playing popstate progress"
+        + " ratechange resize reset"
+        + " scroll search seeked seeking select show stalled storage submit suspend"
+        + " timeupdate toggle touchcancel touchend touchmove touchstart transitionend"
+        + " unload"
+        + " volumechange"
+        + " waiting wheel";
 
     //TODO:
     if (Element.indication === undefined)
@@ -223,6 +255,7 @@ if (typeof(Composite) == 'undefined') {
     
     //TODO:
     Composite.customize = function(selector, rendering) {
+        
         //TODO: Hinzufuegen eigener Tags/Selektoren
         //      void function(selector, rendering)
         //      - CSS Selector + Function, die das Rendering uebernimmt  
@@ -472,8 +505,7 @@ if (typeof(Expression) === "undefined") {
      *  object on the client side. There are many operators that are used in EL
      *  like arithmetic and logical operators to perform an expression.
      */
-    Expression = function() {
-    };
+    Expression = {};
 
     /** Constant for element type text */
     Expression.TYPE_TEXT = 1;
@@ -545,9 +577,7 @@ if (typeof(Expression) === "undefined") {
      *      e.g. {{ExampleBean.value}} -> ExampleBean.getValue()
      *  @param  context    context or expression without context
      *  @param  expression expression in combination with a context
-     *  @retrun TODO:
-     *  
-     *  TODO: Q: was ist mit Arrays?
+     *  @retrun the value of the value-expression, otherwise false
      */
     Expression.lookup = function(context, expression) {
 
@@ -577,7 +607,7 @@ if (typeof(Expression) === "undefined") {
             return context
             
         } catch (exception) {
-            return "";
+            return false;
         }
     };
     

@@ -24,6 +24,12 @@
         TestBean_1.getField_3 = function(value_1) {
             return "f3";
         };
+        TestBean_1.getField_11 = function(value_1) {
+            return [{x:{y:"f11[0]->x->y"}}];
+        };        
+        TestBean_1.getField_12 = function(value_1) {
+            return [{x:[{y:"f12[0]->x->y"}]}];
+        };         
         
         Test.create({test:function() {
             var expected = document.querySelector("script[type='text/test']");
@@ -61,8 +67,35 @@
     Value EL 04: <text value="{{0x546573744265616E5F312E6D6574686F645F31}}">function() {
             return "m1";
         }</text>
-            
-    Value EL Error 01: <text value="{{0x7878782E7979792E7A7A7A}}"></text>
+
+    Value EL 11_1: <text value="{{0x546573744265616E5F312E6669656C645F3131}}">[object Object]</text>
+    Value EL 11_2: <text value="{{0x546573744265616E5F312E6669656C645F31315B305D}}">[object Object]</text>
+    Value EL 11_3: <text value="{{0x546573744265616E5F312E6669656C645F31315B315D}}"></text>
+    Value EL 11_4: <text value="{{0x546573744265616E5F312E6669656C645F31315B305D2E78}}">[object Object]</text>
+    Value EL 11_5: <text value="{{0x546573744265616E5F312E6669656C645F31315B315D2E78}}">Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_11")[1].x</text>
+    Value EL 11_6: <text value="{{0x546573744265616E5F312E6669656C645F31315B305D2E782E79}}">f11[0]-&gt;x-&gt;y</text>
+    Value EL 11_7: <text value="{{0x546573744265616E5F312E6669656C645F31315B315D2E782E79}}">Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_11")[1].x.y</text>
+
+    Value EL 12_1: <text value="{{0x546573744265616E5F312E6669656C645F3132}}">[object Object]</text>
+    Value EL 12_2: <text value="{{0x546573744265616E5F312E6669656C645F31325B305D}}">[object Object]</text>
+    Value EL 12_3: <text value="{{0x546573744265616E5F312E6669656C645F31325B315D}}"></text>
+    Value EL 12_4: <text value="{{0x546573744265616E5F312E6669656C645F31325B305D2E78}}">[object Object]</text>
+    Value EL 12_5: <text value="{{0x546573744265616E5F312E6669656C645F31325B315D2E78}}">Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x</text>
+    Value EL 12_6: <text value="{{0x546573744265616E5F312E6669656C645F31325B305D2E782E79}}"></text>
+    Value EL 12_7: <text value="{{0x546573744265616E5F312E6669656C645F31325B315D2E782E79}}">Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x.y</text>
+    Value EL 12_8: <text value="{{0x546573744265616E5F312E6669656C645F31325B305D2E785B305D2E79}}">f12[0]-&gt;x-&gt;y</text>
+    Value EL 12_9: <text value="{{0x546573744265616E5F312E6669656C645F31325B315D2E785B305D2E79}}">Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x[0].y</text>
+    Value EL 12_A: <text value="{{0x546573744265616E5F312E6669656C645F31325B305D2E785B315D2E79}}">Expression.lookup(...)[0].x[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[0].x[1].y</text>
+    Value EL 12_B: <text value="{{0x546573744265616E5F312E6669656C645F31325B315D2E785B315D2E79}}">Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x[1].y</text>
+                
+    Value EL Error 01: <text value="{{0x7878782E7979792E7A7A7A}}">false</text>
     
     Mix 01: <text value="{{0x274C69746572616C20303127202B20546573744265616E5F312E6D6574686F645F312829}}">Literal 01m1</text>
     
@@ -93,7 +126,27 @@
     Value EL 02: {{TestBean_1.field_2}}
     Value EL 03: {{TestBean_1.field_3}}
     Value EL 04: {{TestBean_1.method_1}}
-            
+
+    Value EL 11_1: {{TestBean_1.field_11}}
+    Value EL 11_2: {{TestBean_1.field_11[0]}}
+    Value EL 11_3: {{TestBean_1.field_11[1]}}
+    Value EL 11_4: {{TestBean_1.field_11[0].x}}
+    Value EL 11_5: {{TestBean_1.field_11[1].x}}
+    Value EL 11_6: {{TestBean_1.field_11[0].x.y}}
+    Value EL 11_7: {{TestBean_1.field_11[1].x.y}}
+
+    Value EL 12_1: {{TestBean_1.field_12}}
+    Value EL 12_2: {{TestBean_1.field_12[0]}}
+    Value EL 12_3: {{TestBean_1.field_12[1]}}
+    Value EL 12_4: {{TestBean_1.field_12[0].x}}
+    Value EL 12_5: {{TestBean_1.field_12[1].x}}
+    Value EL 12_6: {{TestBean_1.field_12[0].x.y}}
+    Value EL 12_7: {{TestBean_1.field_12[1].x.y}}
+    Value EL 12_8: {{TestBean_1.field_12[0].x[0].y}}
+    Value EL 12_9: {{TestBean_1.field_12[1].x[0].y}}
+    Value EL 12_A: {{TestBean_1.field_12[0].x[1].y}}
+    Value EL 12_B: {{TestBean_1.field_12[1].x[1].y}}
+                
     Value EL Error 01: {{xxx.yyy.zzz}}
     
     Mix 01: {{'Literal 01' + TestBean_1.method_1()}}

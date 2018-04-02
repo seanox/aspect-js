@@ -76,13 +76,16 @@
  *  perform the integration test on different levels and with different
  *  complexity.
  *  
- *  
+ *      
  *      Assert
  *      ----
- *  TODO:    
+ *  The test cases are implemented with assertions. The test module provides
+ *  elementary assertions, you can implement more. The function is simple. If an
+ *  assertion was not true, a error is thrown -- see as an example the
+ *  implementation here.
  *  
  *  Test 1.0 20180331
- *  Copyright (C) 2015 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
@@ -97,31 +100,31 @@ if (typeof(Test) === "undefined") {
      */
     Test = {};
     
-    /** the output to be used for all messages and errors */
+    /** The output to be used for all messages and errors */
     Test.output;
     
-    /** the monitor to be used */
+    /** The monitor to be used */
     Test.monitor;
     
-    /** stack of created / registered test tasks (backlog) */
+    /** Stack of created / registered test tasks (backlog) */
     Test.stack;
     
-    /** queue of currently running test tasks */ 
+    /** Queue of currently running test tasks */ 
     Test.queue;
     
-    /** the currently performed test task */  
+    /** The currently performed test task */  
     Test.task;
     
-    /** timer for processing the queue */
+    /** Timer for processing the queue */
     Test.interval;
     
-    /** counter for identification of test tasks */
+    /** Counter for identification of test tasks */
     Test.serial;
     
-    /** timer for controlling test tasks with timeout */
+    /** Timer for controlling test tasks with timeout */
     Test.timeout;
     
-    //TODO:
+    /** Indicator if the autostart function can be used */
     Test.autostart;
     
     /**
