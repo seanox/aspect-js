@@ -121,6 +121,9 @@ if (typeof(Test) === "undefined") {
     /** timer for controlling test tasks with timeout */
     Test.timeout;
     
+    //TODO:
+    Test.autostart;
+    
     /**
      *  Optional configuration of the test environment.
      *  You can configure (also separately): the output and a monitor.
@@ -311,7 +314,8 @@ if (typeof(Test) === "undefined") {
     /**
      *  (Re)Starts the test run.
      *  The start can be done manually or when using the parameter auto = true,
-     *  by loading the page.
+     *  by loading the page. If the page is already loaded, the parameter auto
+     *  is ignored and the start is executed immediately.
      *  @param auto true, the start is triggered when the page is loaded
      */
     Test.start = function(auto) {
@@ -319,10 +323,13 @@ if (typeof(Test) === "undefined") {
         if (Test.interval)
             return;
 
-        if (auto) {
-            window.addEventListener("load", function() {
-                Test.start();
-            });
+        if (auto && document.readyState == "loaded") {
+            if (typeof(Test.autostart) == "undefined") {
+                Test.autostart = true;
+                window.addEventListener("load", function() {
+                    Test.start();
+                });
+            }
             return;
         }
         
@@ -347,7 +354,7 @@ if (typeof(Test) === "undefined") {
             interrupt:function(status) {
                 Test.output.log(new Date().toUTCString() + " Test is interrupted"
                         + "\n\t" + numerical(status.queue.size -status.queue.progress, "task") + " still outstanding"
-                        + "\n\t" + numerical(status.queue.faults, "faults") + " were detected"
+                        + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
                         + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
             },
             perform:function(status) {
@@ -360,7 +367,7 @@ if (typeof(Test) === "undefined") {
             finish:function(status) {
                 Test.output.log(new Date().toUTCString() + " Test is finished"
                         + "\n\t" + numerical(status.queue.size, "task") + " were performed"
-                        + "\n\t" + numerical(status.queue.faults, "faults") + " were detected"
+                        + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
                         + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
             }            
         };

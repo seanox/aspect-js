@@ -9,6 +9,7 @@
       }
     </style>
     <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
     <script type="text/javascript">
     
         var TestBean_1 = {};
@@ -26,9 +27,13 @@
         
         Test.create({test:function() {
             var expected = document.querySelector("script[type='text/test']");
-            expected = expected.textContent;
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/(\{\{0x)[0-9A-F]+(\}\})/g, "$1...$2");
+            expected = expected.replace(/\t/g, '    ');
             var actual = document.querySelector("body");
-            actual = actual.textContent;
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/(\{\{0x)[0-9A-F]+(\}\})/g, "$1...$2");
+            actual = actual.replace(/\t/g, '    ');
             Assert.assertEquals(expected, actual);
         }});         
         Test.start(true);        
@@ -66,8 +71,7 @@
     Condition 01: <text value="{{0x31206E6F742067742032}}">unexpected token: '!'
     1  !   &gt;  2</text>
     Condition 01: <text value="{{0x747970656F662032}}">number</text>
-  
-</script>
+    </script>
   </head>
   <body>
     Literal 01: {{'Literal 01'}}
