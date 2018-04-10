@@ -392,8 +392,8 @@ if (typeof(Test) === "undefined") {
             if (!Test.task.timeout
                     || Test.task.timeout > new Date().getTime())
                 return;
-            Test.task.error = new Error("Timeout occurred, expected after " + Test.task.meta.timeout + " ms");
             Test.task.duration = new Date().getTime() -task.timing;
+            Test.task.error = new Error("Timeout occurred, expected " + Test.task.timeout + " ms but was " + Test.task.duration + " ms");
             Test.inform("response", Test.status());
             Test.queue.faults++;
             Test.queue.lock = false;
@@ -447,7 +447,7 @@ if (typeof(Test) === "undefined") {
                         if (task.timeout
                                 && task.timeout < new Date().getTime()
                                 && !task.error) {
-                            task.error = new Error("Timeout occurred, expected after " + task.meta.timeout + " ms");                            
+                            task.error = new Error("Timeout occurred, expected " + task.meta.timeout + " ms but was " + task.duration + " ms");                            
                             Test.inform("response", Test.status());
                             Test.queue.faults++;
                         }
