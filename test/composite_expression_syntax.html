@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace; white-space:pre;
+      }
+    </style>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+        
+        Test.create({test:function() {
+            var expected = document.querySelector("script[type='text/test']");
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/(\{\{0x)[0-9A-F]+(\}\})/g, "$1...$2");
+            expected = expected.replace(/\t/g, '    ');
+            var actual = document.querySelector("body");
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/(\{\{0x)[0-9A-F]+(\}\})/g, "$1...$2");
+            actual = actual.replace(/\t/g, '    ');
+            Assert.assertEquals(expected, actual);
+        }});         
+        Test.start(true);        
+    </script>
+    <script type="text/test">
+    mapping:
+    ----
+    and &amp;&amp;        empty !         div /
+    eq  ==        ge    &gt;=        gt  &gt;
+    le  &lt;=        lt    &lt;         mod %
+    ne  !=        not   !         or  ||
+    
+    normal use:
+    ----
+    <text value="{{0x7472756520616E642074727565}}">true</text> <text value="{{0x747275652026262074727565}}">true</text>
+    <text value="{{0x747275652065712074727565}}">true</text> <text value="{{0x74727565203D3D2074727565}}">true</text> 
+    <text value="{{0x31206C652032}}">true</text> <text value="{{0x31203C3D2032}}">true</text>
+    <text value="{{0x31206E652032}}">true</text> <text value="{{0x3120213D2032}}">true</text>
+    
+    <text value="{{0x656D707479202727}}">true</text> <text value="{{0x212727}}">true</text>
+    <text value="{{0x322067652031}}">true</text> <text value="{{0x32203E3D2031}}">true</text> 
+    <text value="{{0x31206C742032}}">true</text> <text value="{{0x31203C2032}}">true</text>
+    <text value="{{0x6E6F74202727}}">true</text> <text value="{{0x212727}}">true</text>
+    <text value="{{0x6E6F7420656D70747920277827}}">true</text> <text value="{{0x2121277827}}">true</text>    
+    
+    <text value="{{0x283235206469762035292065712035}}">true</text> <text value="{{0x283235202F35292065712035}}">true</text>
+    <text value="{{0x322067742031}}">true</text> <text value="{{0x32203E2031}}">true</text> 
+    <text value="{{0x283130206D6F642033292065712031}}">true</text> <text value="{{0x28313020252033292065712031}}">true</text>
+    <text value="{{0x74727565206F722066616C7365}}">true</text> <text value="{{0x74727565207C7C2066616C7365}}">true</text>
+       
+    invalid word boundaries:
+    ----
+    <text value="{{0x74727565616E6474727565}}">false</text> <text value="{{0x74727565262674727565}}">true</text>
+    <text value="{{0x74727565657174727565}}">false</text> <text value="{{0x747275653D3D74727565}}">true</text> 
+    <text value="{{0x316C6532}}">identifier starts immediately after numeric literal
+    1le2</text> <text value="{{0x313C3D2032}}">true</text>
+    <text value="{{0x316E6532}}">identifier starts immediately after numeric literal
+    1ne2</text> <text value="{{0x31213D2032}}">true</text>
+    
+    <text value="{{0x656D7074792727}}">true</text> <text value="{{0x212727}}">true</text>
+    <text value="{{0x32676531}}">identifier starts immediately after numeric literal
+    2ge1</text> <text value="{{0x323E3D31}}">true</text> 
+    <text value="{{0x316C7432}}">identifier starts immediately after numeric literal
+    1lt2</text> <text value="{{0x313C32}}">true</text>
+    <text value="{{0x6E6F742727}}">true</text> <text value="{{0x212727}}">true</text>
+    <text value="{{0x6E6F74656D707479277827}}">unexpected token: string literal
+    Expression.lookup("notempty")'x'</text> <text value="{{0x2121277827}}">true</text>    
+    
+    <text value="{{0x2832356469763529657135}}">identifier starts immediately after numeric literal
+    (25div5)Expression.lookup("eq5")</text> <text value="{{0x283235202F3529657135}}">unexpected token: identifier
+    (25 /5)Expression.lookup("eq5")</text>
+    <text value="{{0x32677431}}">identifier starts immediately after numeric literal
+    2gt1</text> <text value="{{0x323E31}}">true</text> 
+    <text value="{{0x2831306D6F643329657131}}">identifier starts immediately after numeric literal
+    (10mod3)Expression.lookup("eq1")</text> <text value="{{0x283130253329657131}}">unexpected token: identifier
+    (10%3)Expression.lookup("eq1")</text>
+    <text value="{{0x747275656F7266616C7365}}">false</text> <text value="{{0x747275657C7C66616C7365}}">true</text>
+    
+    lower / upper case:
+    ----
+    <text value="{{0x7472756520414E442074727565}}">true</text> <text value="{{0x747275652026262074727565}}">true</text>
+    <text value="{{0x747275652045512074727565}}">true</text> <text value="{{0x74727565203D3D2074727565}}">true</text> 
+    <text value="{{0x31204C452032}}">true</text> <text value="{{0x31203C3D2032}}">true</text>
+    <text value="{{0x31204E452032}}">true</text> <text value="{{0x3120213D2032}}">true</text>
+    
+    <text value="{{0x454D505459202727}}">true</text> <text value="{{0x212727}}">true</text>
+    <text value="{{0x322047452031}}">true</text> <text value="{{0x32203E3D2031}}">true</text> 
+    <text value="{{0x31204C542032}}">true</text> <text value="{{0x31203C2032}}">true</text>
+    <text value="{{0x4E4F54202727}}">true</text> <text value="{{0x212727}}">true</text>
+    <text value="{{0x4E4F5420454D50545920277827}}">true</text> <text value="{{0x2121277827}}">true</text>    
+    
+    <text value="{{0x283235204449562035292045512035}}">true</text> <text value="{{0x283235202F35292065712035}}">true</text>
+    <text value="{{0x322047542031}}">true</text> <text value="{{0x32203E2031}}">true</text> 
+    <text value="{{0x283130204D4F442033292045512031}}">true</text> <text value="{{0x28313020252033292065712031}}">true</text>
+    <text value="{{0x74727565204F522066616C7365}}">true</text> <text value="{{0x74727565207C7C2066616C7365}}">true</text>
+    </script>
+  </head>
+  <body>
+    mapping:
+    ----
+    and &&        empty !         div /
+    eq  ==        ge    >=        gt  >
+    le  <=        lt    <         mod %
+    ne  !=        not   !         or  ||
+    
+    normal use:
+    ----
+    {{true and true}} {{true && true}}
+    {{true eq true}} {{true == true}} 
+    {{1 le 2}} {{1 <= 2}}
+    {{1 ne 2}} {{1 != 2}}
+    
+    {{empty ''}} {{!''}}
+    {{2 ge 1}} {{2 >= 1}} 
+    {{1 lt 2}} {{1 < 2}}
+    {{not ''}} {{!''}}
+    {{not empty 'x'}} {{!!'x'}}    
+    
+    {{(25 div 5) eq 5}} {{(25 /5) eq 5}}
+    {{2 gt 1}} {{2 > 1}} 
+    {{(10 mod 3) eq 1}} {{(10 % 3) eq 1}}
+    {{true or false}} {{true || false}}
+       
+    invalid word boundaries:
+    ----
+    {{trueandtrue}} {{true&&true}}
+    {{trueeqtrue}} {{true==true}} 
+    {{1le2}} {{1<= 2}}
+    {{1ne2}} {{1!= 2}}
+    
+    {{empty''}} {{!''}}
+    {{2ge1}} {{2>=1}} 
+    {{1lt2}} {{1<2}}
+    {{not''}} {{!''}}
+    {{notempty'x'}} {{!!'x'}}    
+    
+    {{(25div5)eq5}} {{(25 /5)eq5}}
+    {{2gt1}} {{2>1}} 
+    {{(10mod3)eq1}} {{(10%3)eq1}}
+    {{trueorfalse}} {{true||false}}
+    
+    lower / upper case:
+    ----
+    {{true AND true}} {{true && true}}
+    {{true EQ true}} {{true == true}} 
+    {{1 LE 2}} {{1 <= 2}}
+    {{1 NE 2}} {{1 != 2}}
+    
+    {{EMPTY ''}} {{!''}}
+    {{2 GE 1}} {{2 >= 1}} 
+    {{1 LT 2}} {{1 < 2}}
+    {{NOT ''}} {{!''}}
+    {{NOT EMPTY 'x'}} {{!!'x'}}    
+    
+    {{(25 DIV 5) EQ 5}} {{(25 /5) eq 5}}
+    {{2 GT 1}} {{2 > 1}} 
+    {{(10 MOD 3) EQ 1}} {{(10 % 3) eq 1}}
+    {{true OR false}} {{true || false}}
+  </body>
+</html>
