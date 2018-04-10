@@ -71,10 +71,12 @@ Rendering, Expression Language und Performance.
 
 #### Schlüsselwörter
 
+```
 and &&        empty !         div /
 eq  ==        ge    >=        gt  >
 le  <=        lt    <         mod %
 ne  !=        not   !         or  ||
+```
 
 
 ## Composites
