@@ -413,7 +413,7 @@ if (typeof(Test) === "undefined") {
                 Test.queue.progress++;
                 var meta = Test.queue.stack.shift();
                 var timeout = false;
-                if (isNaN(meta.timeout)
+                if (!isNaN(meta.timeout)
                         && meta.timeout > 0)
                     timeout = new Date().getTime() +meta.timeout;
                 Test.task = {title:null, meta:meta, running:true, timing:new Date().getTime(), timeout:timeout, duration:false, error:null};
@@ -444,6 +444,13 @@ if (typeof(Test) === "undefined") {
                         }
                         task.running = false;
                         task.duration = new Date().getTime() -task.timing;
+                        if (task.timeout
+                                && task.timeout < new Date().getTime()
+                                && !task.error) {
+                            task.error = new Error("Timeout occurred, expected after " + task.meta.timeout + " ms");                            
+                            Test.inform("response", Test.status());
+                            Test.queue.faults++;
+                        }
                         if (!task.error
                                 || !String(task.error.message).match(/^Timeout occurred/)) {
                             if (task.error)

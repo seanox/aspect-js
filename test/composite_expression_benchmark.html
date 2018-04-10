@@ -44,7 +44,6 @@
         Test.create({timeout:750, test:function() {
             var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
-            var timing = new Date().getTime();
             for (var loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});        
