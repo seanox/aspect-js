@@ -84,12 +84,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20180331
+ *  Test 1.0 201804013
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180331
+ *  @version 1.0 201804013
  */
 if (typeof(Test) === "undefined") {
     
@@ -363,9 +363,10 @@ if (typeof(Test) === "undefined") {
             perform:function(status) {
             },
             response:function(status) {
+                var timing = new Date().getTime() -status.task.timing;
                 if (status.task.error)
                     Test.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
-                else Test.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful");
+                else Test.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
             },
             finish:function(status) {
                 Test.output.log(new Date().toUTCString() + " Test is finished"

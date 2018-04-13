@@ -35,67 +35,73 @@
     
     normal use:
     ----
-    <text value="{{0x7472756520616E642074727565}}">true</text> <text value="{{0x747275652026262074727565}}">true</text>
-    <text value="{{0x747275652065712074727565}}">true</text> <text value="{{0x74727565203D3D2074727565}}">true</text> 
-    <text value="{{0x31206C652032}}">true</text> <text value="{{0x31203C3D2032}}">true</text>
-    <text value="{{0x31206E652032}}">true</text> <text value="{{0x3120213D2032}}">true</text>
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text> 
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>
     
-    <text value="{{0x656D707479202727}}">true</text> <text value="{{0x212727}}">true</text>
-    <text value="{{0x322067652031}}">true</text> <text value="{{0x32203E3D2031}}">true</text> 
-    <text value="{{0x31206C742032}}">true</text> <text value="{{0x31203C2032}}">true</text>
-    <text value="{{0x6E6F74202727}}">true</text> <text value="{{0x212727}}">true</text>
-    <text value="{{0x6E6F7420656D70747920277827}}">true</text> <text value="{{0x2121277827}}">true</text>    
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text> 
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>    
     
-    <text value="{{0x283235206469762035292065712035}}">true</text> <text value="{{0x283235202F35292065712035}}">true</text>
-    <text value="{{0x322067742031}}">true</text> <text value="{{0x32203E2031}}">true</text> 
-    <text value="{{0x283130206D6F642033292065712031}}">true</text> <text value="{{0x28313020252033292065712031}}">true</text>
-    <text value="{{0x74727565206F722066616C7365}}">true</text> <text value="{{0x74727565207C7C2066616C7365}}">true</text>
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text> 
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>
        
     invalid word boundaries:
     ----
-    <text value="{{0x74727565616E6474727565}}">false</text> <text value="{{0x74727565262674727565}}">true</text>
-    <text value="{{0x74727565657174727565}}">false</text> <text value="{{0x747275653D3D74727565}}">true</text> 
-    <text value="{{0x316C6532}}">identifier starts immediately after numeric literal
-    1le2</text> <text value="{{0x313C3D2032}}">true</text>
-    <text value="{{0x316E6532}}">identifier starts immediately after numeric literal
-    1ne2</text> <text value="{{0x31213D2032}}">true</text>
+    <text>false</text> <text>true</text>
+    <text>false</text> <text>true</text> 
+    <text>identifier starts immediately after numeric literal
+    1le2</text> <text>true</text>
+    <text>identifier starts immediately after numeric literal
+    1ne2</text> <text>true</text>
     
-    <text value="{{0x656D7074792727}}">true</text> <text value="{{0x212727}}">true</text>
-    <text value="{{0x32676531}}">identifier starts immediately after numeric literal
-    2ge1</text> <text value="{{0x323E3D31}}">true</text> 
-    <text value="{{0x316C7432}}">identifier starts immediately after numeric literal
-    1lt2</text> <text value="{{0x313C32}}">true</text>
-    <text value="{{0x6E6F742727}}">true</text> <text value="{{0x212727}}">true</text>
-    <text value="{{0x6E6F74656D707479277827}}">unexpected token: string literal
-    Expression.lookup("notempty")'x'</text> <text value="{{0x2121277827}}">true</text>    
+    <text>true</text> <text>true</text>
+    <text>identifier starts immediately after numeric literal
+    2ge1</text> <text>true</text> 
+    <text>identifier starts immediately after numeric literal
+    1lt2</text> <text>true</text>
+    <text>true</text> <text>true</text>
+    <text>unexpected token: string literal
+    Expression.lookup("notempty")'x'</text> <text>true</text>    
     
-    <text value="{{0x2832356469763529657135}}">identifier starts immediately after numeric literal
-    (25div5)Expression.lookup("eq5")</text> <text value="{{0x283235202F3529657135}}">unexpected token: identifier
+    <text>identifier starts immediately after numeric literal
+    (25div5)Expression.lookup("eq5")</text> <text>unexpected token: identifier
     (25 /5)Expression.lookup("eq5")</text>
-    <text value="{{0x32677431}}">identifier starts immediately after numeric literal
-    2gt1</text> <text value="{{0x323E31}}">true</text> 
-    <text value="{{0x2831306D6F643329657131}}">identifier starts immediately after numeric literal
-    (10mod3)Expression.lookup("eq1")</text> <text value="{{0x283130253329657131}}">unexpected token: identifier
+    <text>identifier starts immediately after numeric literal
+    2gt1</text> <text>true</text> 
+    <text>identifier starts immediately after numeric literal
+    (10mod3)Expression.lookup("eq1")</text> <text>unexpected token: identifier
     (10%3)Expression.lookup("eq1")</text>
-    <text value="{{0x747275656F7266616C7365}}">false</text> <text value="{{0x747275657C7C66616C7365}}">true</text>
+    <text>false</text> <text>true</text>
     
     lower / upper case:
     ----
-    <text value="{{0x7472756520414E442074727565}}">true</text> <text value="{{0x747275652026262074727565}}">true</text>
-    <text value="{{0x747275652045512074727565}}">true</text> <text value="{{0x74727565203D3D2074727565}}">true</text> 
-    <text value="{{0x31204C452032}}">true</text> <text value="{{0x31203C3D2032}}">true</text>
-    <text value="{{0x31204E452032}}">true</text> <text value="{{0x3120213D2032}}">true</text>
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text> 
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>
     
-    <text value="{{0x454D505459202727}}">true</text> <text value="{{0x212727}}">true</text>
-    <text value="{{0x322047452031}}">true</text> <text value="{{0x32203E3D2031}}">true</text> 
-    <text value="{{0x31204C542032}}">true</text> <text value="{{0x31203C2032}}">true</text>
-    <text value="{{0x4E4F54202727}}">true</text> <text value="{{0x212727}}">true</text>
-    <text value="{{0x4E4F5420454D50545920277827}}">true</text> <text value="{{0x2121277827}}">true</text>    
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text> 
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>    
     
-    <text value="{{0x283235204449562035292045512035}}">true</text> <text value="{{0x283235202F35292065712035}}">true</text>
-    <text value="{{0x322047542031}}">true</text> <text value="{{0x32203E2031}}">true</text> 
-    <text value="{{0x283130204D4F442033292045512031}}">true</text> <text value="{{0x28313020252033292065712031}}">true</text>
-    <text value="{{0x74727565204F522066616C7365}}">true</text> <text value="{{0x74727565207C7C2066616C7365}}">true</text>
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text> 
+    <text>true</text> <text>true</text>
+    <text>true</text> <text>true</text>
+    
+    various
+    ----
+    <text>-1</text>
+    <text>1</text>
+    <text>-12</text>
     </script>
   </head>
   <body>
@@ -159,5 +165,11 @@
     {{2 GT 1}} {{2 > 1}} 
     {{(10 MOD 3) EQ 1}} {{(10 % 3) eq 1}}
     {{true OR false}} {{true || false}}
+    
+    various
+    ----
+    {{-1}}
+    {{-1 +2}}
+    {{'-1' +2}}
   </body>
 </html>
