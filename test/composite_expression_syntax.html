@@ -15,11 +15,9 @@
         Test.create({test:function() {
             var expected = document.querySelector("script[type='text/test']");
             expected = expected.innerHTML.trim();
-            expected = expected.replace(/(\{\{0x)[0-9A-F]+(\}\})/g, "$1...$2");
             expected = expected.replace(/\t/g, '    ');
             var actual = document.querySelector("body");
             actual = actual.innerHTML.trim();
-            actual = actual.replace(/(\{\{0x)[0-9A-F]+(\}\})/g, "$1...$2");
             actual = actual.replace(/\t/g, '    ');
             Assert.assertEquals(expected, actual);
         }});         
