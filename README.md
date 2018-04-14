@@ -2,6 +2,13 @@
 
 
 # Features
+- Easy integration in markup and JavaScript
+- Component based architecture
+- Modularization (supports imports at the runtime)
+- Event handling
+- Expression Language
+- Markup Rendering (supports conditions, action and custom tags)
+- ...
 
 
 # Licence Agreement
