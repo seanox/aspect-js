@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<project name="aspect-js" default="usage" basedir="..">
+  <target name="usage">
+    <echo>                                                    </echo>
+    <echo> the following targets are available ...            </echo>
+    <echo>                                                    </echo>
+    <echo>   archive    builds the final scripts and creates  </echo>
+    <echo>              the archives for the distribution.    </echo>
+  </target>
+  
+  <property name="workspace" value="${basedir}"/>
+  <property name="workspace.sources" value="${workspace}/sources"/>
+  <property name="workspace.development" value="${workspace}/development"/>
+  <property name="workspace.releases" value="${workspace}/releases"/>
+    
+  <property name="build" value="${workspace}/build"/>
+  <property name="build.sources" value="${build}/sources"/>
+  
+  <macrodef name="release-locate">
+    <sequential>
+      <copy file="${workspace.development}/release.txt" tofile="${workspace.development}/release.tmp" overwrite="true"/>
+      <replaceregexp file="${workspace.development}/release.tmp"
+        match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
+        replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
+      <replaceregexp file="${workspace.development}/release.tmp" match="x+" replace="0000" flags="g" byline="false"/>
+      <loadproperties>
+        <file file="${workspace.development}/release.tmp"/>
+      </loadproperties>
+      <delete file="${workspace.development}/release.tmp"/>
+    </sequential>
+  </macrodef> 
+  
+  <macrodef name="compress-javascript">
+    <attribute name="file"/>
+    <sequential>
+      <echo>Compressing: @{file}</echo> 
+      <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)\/\*.*?\*/" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\s*//.*$" flags="g" replace="" byline="true"/>
+      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
+      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)(\{)[\r\n]+\s*" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?=\})" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?!\})" flags="g" replace=" " byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+ *(\})" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(?i)[\r\n]+([a-z0-9_\.]+\s*[=;])" flags="g" replace=" \1" byline="false"/>
+      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
+      <!-- TODO:
+        - move into /aspect-js/releases, rename in file_<version>_min.js
+        - copy source into /aspect-js/releases, rename in file_<version>.js
+        - create one file for all aspect-js_<version>_min.js
+      -->
+    </sequential>
+  </macrodef>
+  
+  <target name="archive">
+    <release-locate/>
+    <delete dir="${build}"/> 
+    <mkdir dir="${build.sources}"/>    
+    <copy todir="${build.sources}">
+      <fileset dir="${workspace.sources}"/>
+    </copy>    
+    <compress-javascript file="${build.sources}/codec.js"/>
+    <compress-javascript file="${build.sources}/common.js"/>
+    <compress-javascript file="${build.sources}/composite.js"/>
+    <compress-javascript file="${build.sources}/test.js"/>
+  </target>
+</project>
