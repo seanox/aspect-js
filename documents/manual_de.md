@@ -132,6 +132,22 @@ HTML-Elementen beim Rendering. So werden HTML-Elemente mit dem Attribut
 ```
 
 
+#### sequence
+
+Beim Rendern wird das DOM rekursive durchlaufen und den Verzweigungen
+unkontrolliert gefolgt. Werden JavaScript oder Parameter im Markup eingebettet,
+kann dieses zu unerwarteten Effekte führen, da die Reihenfolge bei der
+Ausführung nicht gesteuert werden kann.  
+Die Option `sequence` bewirkt weiterhin ein rekursives Durchlaufen mit
+kontrollierter Verzweigung von oben nach unten.
+
+```
+<article sequence>
+  ...
+</article>
+```
+
+
 #### import
 
 
