@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace; white-space:pre;
+      }
+    </style>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+
+        var macroA = function(node) {
+            node.innerHTML = node.nodeName + ":" + node.getAttribute("a") + ":" + node.innerHTML;
+        };
+        
+        Composite.customize("xa", macroA);
+        Composite.customize("xb", macroA);
+        Composite.customize("xc", macroA);
+        Composite.customize("xd", macroA);
+        Composite.customize("xd", null);
+        Composite.customize("xf", macroA);
+        
+        var compositeCustomize = function(variants) {
+            try {Composite.customize(arguments[0], arguments[1]);
+            } catch (error) {
+                return String(error);                
+            }
+            return "";
+        }
+        
+        Test.create({test:function() {
+
+            if (!compositeCustomize("").match(/^Error: Invalid scope/i))
+                Assert.fail("A:1");
+            if (!compositeCustomize(" ").match(/^Error: Invalid scope/i))
+                Assert.fail("A:2");
+            if (!compositeCustomize("x").match(/^$/i))
+                Assert.fail("A:3");         
+            if (!compositeCustomize(null).match(/^TypeError: Invalid scope: object/i))
+                Assert.fail("A:4");     
+            if (!compositeCustomize(new Object()).match(/^TypeError: Invalid scope: object/i))
+                Assert.fail("A:5");     
+
+            if (!compositeCustomize("", function() {}).match(/^Error: Invalid scope/i))
+                Assert.fail("A:6");     
+            if (!compositeCustomize(" ", function() {}).match(/^Error: Invalid scope/i))
+                Assert.fail("A:7");     
+            if (!compositeCustomize(null, function() {}).match(/^TypeError: Invalid scope: object/i))
+                Assert.fail("A:8");     
+            if (!compositeCustomize(new Object(), function() {}).match(/^TypeError: Invalid scope: object/i))
+                Assert.fail("A:9");     
+            
+            if (!compositeCustomize("x", new Object()).match(/^TypeError: Invalid rendering: object/i))
+                Assert.fail("A:A");     
+        }});
+        
+        Test.create({test:function() {
+            var expected = document.querySelector("script[type='text/test-1']");
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/\t/g, '    ');
+            var actual = document.querySelector("body");
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/\t/g, '    ');
+            Assert.assertEquals(expected, actual);
+        }});        
+    
+        Test.create({test:function() {
+            Composite.customize("ma", macroA);
+            Composite.customize("mb", macroA);
+            Composite.customize("mc", macroA);
+            Composite.customize("md", macroA);
+            Composite.customize("md", null);
+            Composite.customize("mf", macroA);
+            Composite.render("body");
+        }});
+    
+        Test.create({test:function() {
+            var expected = document.querySelector("script[type='text/test-2']");
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/\t/g, '    ');
+            var actual = document.querySelector("body");
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/\t/g, '    ');
+            Assert.assertEquals(expected, actual);
+        }});
+
+        Test.start(true);        
+    </script>
+    <script type="text/test-1">
+    <oa a="xo1">o1</oa>
+    <ob a="xo2">o2</ob>
+    <oc a="xo3">o3</oc>
+    <od a="xo4">o4</od>
+    <oe a="xo5">o5</oe>
+    <of a="xo6">
+      <span>
+        <span><text>123</text></span>
+      </span>
+    </of>  
+    <og>
+      <span>
+        <span><text>456</text></span>
+      </span>
+    </og>
+          
+    <xa a="xx1">XA:xx1:x1</xa>
+    <xb a="xx2">XB:xx2:x2</xb>
+    <xc a="xx3">XC:xx3:x3</xc>
+    <xd a="xx4">x4</xd>
+    <xe a="xx5">x5</xe>
+    <xf a="xx6">XF:xx6:
+      <span>
+        <span>{{'123'}}</span>
+      </span>
+    </xf>  
+    <xg>
+      <span>
+        <span><text>456</text></span>
+      </span>
+    </xg>  
+
+    <ma a="mm1">m1</ma>
+    <mb a="mm2">m2</mb>
+    <mc a="mm3">m3</mc>
+    <md a="mm4">m4</md>
+    <me a="mm5">m5</me>
+    <mf a="mm6">
+      <span>
+        <span><text>123</text></span>
+      </span>
+    </mf>  
+    <mg>
+      <span>
+        <span><text>456</text></span>
+      </span>
+    </mg>    
+    </script>
+    <script type="text/test-2">
+    <oa a="xo1">o1</oa>
+    <ob a="xo2">o2</ob>
+    <oc a="xo3">o3</oc>
+    <od a="xo4">o4</od>
+    <oe a="xo5">o5</oe>
+    <of a="xo6">
+      <span>
+        <span><text>123</text></span>
+      </span>
+    </of>  
+    <og>
+      <span>
+        <span><text>456</text></span>
+      </span>
+    </og>
+          
+    <xa a="xx1">XA:xx1:XA:xx1:x1</xa>
+    <xb a="xx2">XB:xx2:XB:xx2:x2</xb>
+    <xc a="xx3">XC:xx3:XC:xx3:x3</xc>
+    <xd a="xx4">x4</xd>
+    <xe a="xx5">x5</xe>
+    <xf a="xx6">XF:xx6:XF:xx6:
+      <span>
+        <span>{{'123'}}</span>
+      </span>
+    </xf>  
+    <xg>
+      <span>
+        <span><text>456</text></span>
+      </span>
+    </xg>  
+
+    <ma a="mm1">MA:mm1:m1</ma>
+    <mb a="mm2">MB:mm2:m2</mb>
+    <mc a="mm3">MC:mm3:m3</mc>
+    <md a="mm4">m4</md>
+    <me a="mm5">m5</me>
+    <mf a="mm6">MF:mm6:
+      <span>
+        <span><text>123</text></span>
+      </span>
+    </mf>  
+    <mg>
+      <span>
+        <span><text>456</text></span>
+      </span>
+    </mg>    
+    </script>
+  </head>
+  <body>
+    <oa a="xo1">o1</oa>
+    <ob a="xo2">o2</ob>
+    <oc a="xo3">o3</oc>
+    <od a="xo4">o4</od>
+    <oe a="xo5">o5</oe>
+    <of a="xo6">
+      <span>
+        <span>{{'123'}}</span>
+      </span>
+    </of>  
+    <og>
+      <span>
+        <span>{{'456'}}</span>
+      </span>
+    </og>
+          
+    <xa a="xx1">x1</xa>
+    <xb a="xx2">x2</xb>
+    <xc a="xx3">x3</xc>
+    <xd a="xx4">x4</xd>
+    <xe a="xx5">x5</xe>
+    <xf a="xx6">
+      <span>
+        <span>{{'123'}}</span>
+      </span>
+    </xf>  
+    <xg>
+      <span>
+        <span>{{'456'}}</span>
+      </span>
+    </xg>  
+
+    <ma a="mm1">m1</ma>
+    <mb a="mm2">m2</mb>
+    <mc a="mm3">m3</mc>
+    <md a="mm4">m4</md>
+    <me a="mm5">m5</me>
+    <mf a="mm6">
+      <span>
+        <span>{{'123'}}</span>
+      </span>
+    </mf>  
+    <mg>
+      <span>
+        <span>{{'456'}}</span>
+      </span>
+    </mg>    
+  </body>
+</html>

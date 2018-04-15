@@ -84,12 +84,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 201804013
+ *  Test 1.0 201804015
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 201804013
+ *  @version 1.0 201804015
  */
 if (typeof(Test) === "undefined") {
     
@@ -776,4 +776,20 @@ if (typeof(Assert) === "undefined") {
             return;
         throw assert.error("Assert.assertNotNull", "not null", "{0}");
     };
+
+    /**
+     *  Fails a test with an optional message.
+     *  This assertion will be thrown a error with an optional message.
+     *  The method uses variable parameters and has the following signatures:
+     *      function(message) 
+     *      function() 
+     *  @param message
+     */
+    Assert.fail = function(message) {
+
+        if (message)
+            message = String(message).trim();
+        message = "Assert.fail" + (message ? ", " + message : "");
+        throw new Error(message);
+    }
 };
