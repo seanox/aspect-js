@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace; white-space:pre;
+      }
+    </style>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+    
+        var TestBean = {};
+        TestBean.ticks = 0;
+        TestBean.count = function() {
+            return ++TestBean.ticks;
+        };
+        
+        Test.create({test:function() {
+        }});         
+        Test.start(true);  
+    </script>
+    <script type="text/test">
+    </script>
+  </head>
+  <body>
+    <span>
+      A-1:{{TestBean.count()}} 
+      A-2:{{TestBean.count()}} 
+      A-3:{{TestBean.count()}}
+      <span>
+        <span>
+          A-A-A-1:{{TestBean.count()}} 
+          A-A-A-2:{{TestBean.count()}} 
+          A-A-A-3:{{TestBean.count()}}
+          <span>
+            A-A-A-A-1:{{TestBean.count()}} 
+            A-A-A-A-2:{{TestBean.count()}} 
+            A-A-A-A-3:{{TestBean.count()}}
+            <span>
+              A-A-A-A-A-1:{{TestBean.count()}} 
+              A-A-A-A-A-2:{{TestBean.count()}} 
+              A-A-A-A-A-3:{{TestBean.count()}}        
+            </span>
+            <span>
+              A-A-A-A-B-1:{{TestBean.count()}} 
+              A-A-A-A-B-2:{{TestBean.count()}} 
+              A-A-A-A-B-3:{{TestBean.count()}}        
+            </span>
+          </span>
+          <span>
+            A-A-A-B-1:{{TestBean.count()}} 
+            A-A-A-B-2:{{TestBean.count()}} 
+            A-A-A-B-3:{{TestBean.count()}}        
+          </span>
+          <span>
+            A-A-A-C-1:{{TestBean.count()}} 
+            A-A-A-C-2:{{TestBean.count()}} 
+            A-A-A-C-3:{{TestBean.count()}}        
+          </span>
+        </span>
+      </span>
+    </span>
+    <span sequence>
+      B-1:{{TestBean.count()}} 
+      B-2:{{TestBean.count()}} 
+      B-3:{{TestBean.count()}}
+      <span>
+        <span>
+          B-A-A-1:{{TestBean.count()}} 
+          B-A-A-2:{{TestBean.count()}} 
+          B-A-A-3:{{TestBean.count()}}
+          <span>
+            B-A-A-A-1:{{TestBean.count()}} 
+            B-A-A-A-2:{{TestBean.count()}} 
+            B-A-A-A-3:{{TestBean.count()}}
+            <span>
+              B-A-A-A-A-1:{{TestBean.count()}} 
+              B-A-A-A-A-2:{{TestBean.count()}} 
+              B-A-A-A-A-3:{{TestBean.count()}}        
+            </span>
+            <span>
+              B-A-A-A-B-1:{{TestBean.count()}} 
+              B-A-A-A-B-2:{{TestBean.count()}} 
+              B-A-A-A-B-3:{{TestBean.count()}}        
+            </span>
+          </span>
+          <span>
+            B-A-A-B-1:{{TestBean.count()}} 
+            B-A-A-B-2:{{TestBean.count()}} 
+            B-A-A-B-3:{{TestBean.count()}}        
+          </span>
+          <span>
+            B-A-A-C-1:{{TestBean.count()}} 
+            B-A-A-C-2:{{TestBean.count()}} 
+            B-A-A-C-3:{{TestBean.count()}}        
+          </span>
+        </span>
+      </span>
+    </span>
+  </body>
+</html>
