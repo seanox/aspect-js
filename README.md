@@ -4,7 +4,7 @@
 # Features
 - Easy integration in markup and JavaScript
 - Lightweight implementation (requires no additional frameworks)  
-  less than 256kB for all (so the plan)
+  less than 64kB for all (so the plan)
 - Component based architecture
 - Modularization (supports imports at the runtime)
 - Event handling
