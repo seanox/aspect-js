@@ -76,8 +76,8 @@ if (typeof(Composite) == 'undefined') {
     //TODO:
     Composite.ATTRIBUTE_SEQUENCE = "sequence";
     
-    /** Constant for attribute value */
-    Composite.ATTRIBUTE_VALUE = "value";    
+    /** Constant for attribute expression */
+    Composite.ATTRIBUTE_EXPRESSION = "expression";    
 
     //TODO:
     Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|id|name|sequence|$/i;   
@@ -361,7 +361,7 @@ if (typeof(Composite) == 'undefined') {
                 var node = document.createElement("text");
                 var serial = node.indicate();
                 var object = {serial:serial, element:node, attributes:{}};
-                object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
+                object.attributes[Composite.ATTRIBUTE_EXPRESSION] = "{{" + match + "}}";
                 Composite.elements[serial] = object;                
                 return "{{" + serial + "}}";
             });
@@ -371,7 +371,7 @@ if (typeof(Composite) == 'undefined') {
             //is an array of elements (#Text + Text), which replace the found
             //text node in the DOM. For this purpose, a temporary placeholder
             //(empty) is inserted. The newly created text nodes/elements of the
-            //found expressions are then re-rendered.
+            //found expressions are interpreted and filled as text content.
             var empty = document.createTextNode("");
             selector.parentNode.replaceChild(empty, selector);
             var words = content.split(/(\{\{\d+\}\})/);
@@ -379,22 +379,19 @@ if (typeof(Composite) == 'undefined') {
                 if (word.match(/^\{\{\d+\}\}$/)) {
                     var serial = parseInt(word.substring(2, word.length -2).trim());
                     var object = Composite.elements[serial];
+                    word = object.attributes[Composite.ATTRIBUTE_EXPRESSION];
+                    word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EXPRESSION, word);
+                    object.element.textContent = word;
                     array[index] = object.element;
                 } else array[index] = document.createTextNode(word);
             });
-            var render = function(node, sequence) {
-                Composite.asynchron(Composite.render, sequence, node, sequence);
-            };
             //The new elements are inserted.
-            //Rendering of newly created text elements (selective).
             words.forEach(function(node, index, array) {
                 empty.parentNode.insertBefore(node, empty);
-                if (node.nodeType != Node.TEXT_NODE)
-                    render(node, sequence);
             });
             //The temporary placeholder will be removed.
             empty.parentNode.removeChild(empty); 
-            
+
             return;
         }  
         
@@ -407,9 +404,8 @@ if (typeof(Composite) == 'undefined') {
         //Elements are hidden with the condition attribute via CSS and only
         //explicitly displayed with [condition=true].
         //JavaScript elements are executed or not.
-        if (selector.hasAttribute(Composite.ATTRIBUTE_CONDITION)
-                || object.attributes.hasOwnProperty[Composite.ATTRIBUTE_CONDITION]) {
-            var condition = object.attributes[Composite.ATTRIBUTE_CONDITION] || "";
+        var condition = object.attributes[Composite.ATTRIBUTE_CONDITION];
+        if (condition) {
             condition = Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition);
             selector.setAttribute(Composite.ATTRIBUTE_CONDITION, condition !== true);
             //Recursive processing is stopped at the first element where the
@@ -425,23 +421,8 @@ if (typeof(Composite) == 'undefined') {
                     }
                 }
             }
-        }     
-        
-        var macro = null;
-        if (Composite.macros)
-            macro = Composite.macros[selector.nodeName.toLowerCase()];
-        
-        //Follow other element children recursively.
-        //Scripts, style elements and custom tags are ignored.
-        //The content of custom tags is considered like a template.
-        if (selector.childNodes
-                && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                && !macro) {
-            selector.childNodes.forEach(function(node, index, array) {
-                Composite.asynchron(Composite.render, sequence, node, sequence);
-            });
         }
-
+        
         //TODO: sequence
         //For elements with the import-attribute, the content is loaded and the
         //inner HTML element will be replaced by the content. If the content can
@@ -473,7 +454,16 @@ if (typeof(Composite) == 'undefined') {
                 request.send(null);  
             })(selector, module);
             return;
-        } 
+        }         
+        
+        //TODO: add origin counting (-> Composite.render)
+        //If a custom tag exists, the macro is executed.
+        Composite.macros = Composite.macros || {};
+        var macro = Composite.macros[selector.nodeName.toLowerCase()];
+        if (macro) {
+            Composite.asynchron(macro, sequence, selector);
+            return;
+        }
         
         //The expression in the attributes is interpreted.
         //The expression is stored in a wrapper object and loaded from there,
@@ -482,34 +472,35 @@ if (typeof(Composite) == 'undefined') {
         //text element. The result is output here as textContent.
         //Script and style elements are ignored.
         if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-            if (selector.nodeName.match(Composite.PATTERN_ELEMENT_TEXT)) {
-                var context = serial + ":" + Composite.ATTRIBUTE_VALUE;
-                if (object.attributes[Composite.ATTRIBUTE_VALUE] !== undefined)
-                    selector.textContent = Expression.eval(context, object.attributes[Composite.ATTRIBUTE_VALUE]);
-            } else {
-                for (var attribute in object.attributes) {
-                    //Ignore internal attributes (import, condition, ...).
-                    if (attribute.match(Composite.PATTERN_ATTRIBUTE_IGNORE))
-                        continue;
-                    var context = serial + ":" + attribute;
-                    var value = Expression.eval(context, object.attributes[attribute]);
-                    value = String(value).encodeHtml();
-                    value = value.replace(/"/g, "&quot;");
-                    selector.setAttribute(attribute, value);
-                }
+            for (var attribute in object.attributes) {
+                //Ignore internal attributes (import, condition, ...).
+                if (attribute.match(Composite.PATTERN_ATTRIBUTE_IGNORE))
+                    continue;
+                var value = object.attributes[attribute];
+                if (!(value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                    continue;
+                var context = serial + ":" + attribute;
+                value = Expression.eval(context, value);
+                value = String(value).encodeHtml();
+                value = value.replace(/"/g, "&quot;");
+                selector.setAttribute(attribute, value);
             }
         }
-
-        //TODO: add origin counting (-> Composite.render)
-        //If a custom tag exists, the macro is executed.
-        if (macro)
-            Composite.asynchron(macro, sequence, selector);
+        
+        //Follow other element children recursively.
+        //Scripts, style elements and custom tags are ignored.
+        //The content of custom tags is considered like a template.
+        if (selector.childNodes
+                && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
+            Array.from(selector.childNodes).forEach(function(node, index, array) {
+                Composite.asynchron(Composite.render, sequence, node, sequence);
+            });
+        }
         
         //(Re)Index new composite elements in the DOM.
-        //TODO: use of the collection of detected nodes by MutationObserver 
-        //Composite.asynchron(function() {
-        //    Composite.scan(selector);
-        //}); 
+        //TODO: R: use of the collection of detected nodes by MutationObserver
+        //TODO: Q: sequence or not? 
+        //Composite.asynchron(Composite.scan, false, selector);
     };
     
     //An additional style is inserted before the current script element.

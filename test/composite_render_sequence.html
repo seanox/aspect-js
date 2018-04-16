@@ -14,7 +14,7 @@
     
         var TestBean = {};
         TestBean.ticks = 0;
-        TestBean.count = function() {
+        TestBean.ping = function() {
             return ++TestBean.ticks;
         };
         
@@ -27,75 +27,112 @@
   </head>
   <body>
     <span>
-      A-1:{{TestBean.count()}} 
-      A-2:{{TestBean.count()}} 
-      A-3:{{TestBean.count()}}
+      A-1:{{TestBean.ping()}} 
+      A-2:{{TestBean.ping()}} 
+      A-3:{{TestBean.ping()}}
       <span>
         <span>
-          A-A-A-1:{{TestBean.count()}} 
-          A-A-A-2:{{TestBean.count()}} 
-          A-A-A-3:{{TestBean.count()}}
+          A-A-A-1:{{TestBean.ping()}} 
+          A-A-A-2:{{TestBean.ping()}} 
+          A-A-A-3:{{TestBean.ping()}}
           <span>
-            A-A-A-A-1:{{TestBean.count()}} 
-            A-A-A-A-2:{{TestBean.count()}} 
-            A-A-A-A-3:{{TestBean.count()}}
+            A-A-A-A-1:{{TestBean.ping()}} 
+            A-A-A-A-2:{{TestBean.ping()}} 
+            A-A-A-A-3:{{TestBean.ping()}}
             <span>
-              A-A-A-A-A-1:{{TestBean.count()}} 
-              A-A-A-A-A-2:{{TestBean.count()}} 
-              A-A-A-A-A-3:{{TestBean.count()}}        
+              A-A-A-A-A-1:{{TestBean.ping()}} 
+              A-A-A-A-A-2:{{TestBean.ping()}} 
+              A-A-A-A-A-3:{{TestBean.ping()}}        
             </span>
             <span>
-              A-A-A-A-B-1:{{TestBean.count()}} 
-              A-A-A-A-B-2:{{TestBean.count()}} 
-              A-A-A-A-B-3:{{TestBean.count()}}        
+              A-A-A-A-B-1:{{TestBean.ping()}} 
+              A-A-A-A-B-2:{{TestBean.ping()}} 
+              A-A-A-A-B-3:{{TestBean.ping()}}        
             </span>
           </span>
           <span>
-            A-A-A-B-1:{{TestBean.count()}} 
-            A-A-A-B-2:{{TestBean.count()}} 
-            A-A-A-B-3:{{TestBean.count()}}        
+            A-A-A-B-1:{{TestBean.ping()}} 
+            A-A-A-B-2:{{TestBean.ping()}} 
+            A-A-A-B-3:{{TestBean.ping()}}        
           </span>
           <span>
-            A-A-A-C-1:{{TestBean.count()}} 
-            A-A-A-C-2:{{TestBean.count()}} 
-            A-A-A-C-3:{{TestBean.count()}}        
+            A-A-A-C-1:{{TestBean.ping()}} 
+            A-A-A-C-2:{{TestBean.ping()}} 
+            A-A-A-C-3:{{TestBean.ping()}}        
           </span>
         </span>
       </span>
     </span>
     <span sequence>
-      B-1:{{TestBean.count()}} 
-      B-2:{{TestBean.count()}} 
-      B-3:{{TestBean.count()}}
+      B-1:{{TestBean.ping()}} 
+      B-2:{{TestBean.ping()}} 
+      B-3:{{TestBean.ping()}}
       <span>
         <span>
-          B-A-A-1:{{TestBean.count()}} 
-          B-A-A-2:{{TestBean.count()}} 
-          B-A-A-3:{{TestBean.count()}}
+          B-A-A-1:{{TestBean.ping()}} 
+          B-A-A-2:{{TestBean.ping()}} 
+          B-A-A-3:{{TestBean.ping()}}
           <span>
-            B-A-A-A-1:{{TestBean.count()}} 
-            B-A-A-A-2:{{TestBean.count()}} 
-            B-A-A-A-3:{{TestBean.count()}}
+            B-A-A-A-1:{{TestBean.ping()}} 
+            B-A-A-A-2:{{TestBean.ping()}} 
+            B-A-A-A-3:{{TestBean.ping()}}
             <span>
-              B-A-A-A-A-1:{{TestBean.count()}} 
-              B-A-A-A-A-2:{{TestBean.count()}} 
-              B-A-A-A-A-3:{{TestBean.count()}}        
+              B-A-A-A-A-1:{{TestBean.ping()}} 
+              B-A-A-A-A-2:{{TestBean.ping()}} 
+              B-A-A-A-A-3:{{TestBean.ping()}}        
             </span>
             <span>
-              B-A-A-A-B-1:{{TestBean.count()}} 
-              B-A-A-A-B-2:{{TestBean.count()}} 
-              B-A-A-A-B-3:{{TestBean.count()}}        
+              B-A-A-A-B-1:{{TestBean.ping()}} 
+              B-A-A-A-B-2:{{TestBean.ping()}} 
+              B-A-A-A-B-3:{{TestBean.ping()}}        
             </span>
           </span>
           <span>
-            B-A-A-B-1:{{TestBean.count()}} 
-            B-A-A-B-2:{{TestBean.count()}} 
-            B-A-A-B-3:{{TestBean.count()}}        
+            B-A-A-B-1:{{TestBean.ping()}} 
+            B-A-A-B-2:{{TestBean.ping()}} 
+            B-A-A-B-3:{{TestBean.ping()}}        
           </span>
           <span>
-            B-A-A-C-1:{{TestBean.count()}} 
-            B-A-A-C-2:{{TestBean.count()}} 
-            B-A-A-C-3:{{TestBean.count()}}        
+            B-A-A-C-1:{{TestBean.ping()}} 
+            B-A-A-C-2:{{TestBean.ping()}} 
+            B-A-A-C-3:{{TestBean.ping()}}        
+          </span>
+        </span>
+      </span>
+    </span>
+    <span>
+      C-1:{{TestBean.ping()}} 
+      C-2:{{TestBean.ping()}} 
+      C-3:{{TestBean.ping()}}
+      <span>
+        <span>
+          C-A-A-1:{{TestBean.ping()}} 
+          C-A-A-2:{{TestBean.ping()}} 
+          C-A-A-3:{{TestBean.ping()}}
+          <span>
+            C-A-A-A-1:{{TestBean.ping()}} 
+            C-A-A-A-2:{{TestBean.ping()}} 
+            C-A-A-A-3:{{TestBean.ping()}}
+            <span>
+              C-A-A-A-A-1:{{TestBean.ping()}} 
+              C-A-A-A-A-2:{{TestBean.ping()}} 
+              C-A-A-A-A-3:{{TestBean.ping()}}        
+            </span>
+            <span>
+              C-A-A-A-B-1:{{TestBean.ping()}} 
+              C-A-A-A-B-2:{{TestBean.ping()}} 
+              C-A-A-A-B-3:{{TestBean.ping()}}        
+            </span>
+          </span>
+          <span>
+            C-A-A-B-1:{{TestBean.ping()}} 
+            C-A-A-B-2:{{TestBean.ping()}} 
+            C-A-A-B-3:{{TestBean.ping()}}        
+          </span>
+          <span>
+            C-A-A-C-1:{{TestBean.ping()}} 
+            C-A-A-C-2:{{TestBean.ping()}} 
+            C-A-A-C-3:{{TestBean.ping()}}        
           </span>
         </span>
       </span>
