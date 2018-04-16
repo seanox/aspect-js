@@ -19,10 +19,25 @@
         };
         
         Test.create({test:function() {
-        }});         
+            var expected = document.querySelector("script[type='text/test']");
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/\t/g, '    ');
+            var actual = document.querySelector("body");
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/\t/g, '    ');
+            Assert.assertEquals(expected, actual);            
+        }}); 
+        //TODO: start test via event-listener rendering-finished        
         Test.start(true);  
     </script>
     <script type="text/test">
+    A:<text>1-{{TestBean.ping()}}</text> 
+    B:<text>2-{{TestBean.ping()}}</text> 
+    C:<text>3-{{TestBean.ping()}}</text>
+    
+    D:<input value="4-{{TestBean.ping()}}" type="text">
+    E:<input value="5-{{TestBean.ping()}}" type="text">
+    F:<input value="6-{{TestBean.ping()}}" type="text">
     </script>
   </head>
   <body>

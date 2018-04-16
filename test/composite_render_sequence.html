@@ -19,10 +19,129 @@
         };
         
         Test.create({test:function() {
-        }});         
-        Test.start(true);  
+            var expected = document.querySelector("script[type='text/test']");
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/\t/g, '    ');
+            var actual = document.querySelector("body");
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/\t/g, '    ');
+            Assert.assertEquals(expected, actual);            
+        }});
+        //TODO: start test via event-listener rendering-finished
+        window.setTimeout(Test.start, 750); 
     </script>
     <script type="text/test">
+    <span>
+      A-1:<text>22</text> 
+      A-2:<text>23</text> 
+      A-3:<text>24</text>
+      <span>
+        <span>
+          A-A-A-1:<text>28</text> 
+          A-A-A-2:<text>29</text> 
+          A-A-A-3:<text>30</text>
+          <span>
+            A-A-A-A-1:<text>34</text> 
+            A-A-A-A-2:<text>35</text> 
+            A-A-A-A-3:<text>36</text>
+            <span>
+              A-A-A-A-A-1:<text>52</text> 
+              A-A-A-A-A-2:<text>53</text> 
+              A-A-A-A-A-3:<text>54</text>        
+            </span>
+            <span>
+              A-A-A-A-B-1:<text>55</text> 
+              A-A-A-A-B-2:<text>56</text> 
+              A-A-A-A-B-3:<text>57</text>        
+            </span>
+          </span>
+          <span>
+            A-A-A-B-1:<text>37</text> 
+            A-A-A-B-2:<text>38</text> 
+            A-A-A-B-3:<text>39</text>        
+          </span>
+          <span>
+            A-A-A-C-1:<text>40</text> 
+            A-A-A-C-2:<text>41</text> 
+            A-A-A-C-3:<text>42</text>        
+          </span>
+        </span>
+      </span>
+    </span>
+    <span sequence="">
+      B-1:<text>1</text> 
+      B-2:<text>2</text> 
+      B-3:<text>3</text>
+      <span>
+        <span>
+          B-A-A-1:<text>4</text> 
+          B-A-A-2:<text>5</text> 
+          B-A-A-3:<text>6</text>
+          <span>
+            B-A-A-A-1:<text>7</text> 
+            B-A-A-A-2:<text>8</text> 
+            B-A-A-A-3:<text>9</text>
+            <span>
+              B-A-A-A-A-1:<text>10</text> 
+              B-A-A-A-A-2:<text>11</text> 
+              B-A-A-A-A-3:<text>12</text>        
+            </span>
+            <span>
+              B-A-A-A-B-1:<text>13</text> 
+              B-A-A-A-B-2:<text>14</text> 
+              B-A-A-A-B-3:<text>15</text>        
+            </span>
+          </span>
+          <span>
+            B-A-A-B-1:<text>16</text> 
+            B-A-A-B-2:<text>17</text> 
+            B-A-A-B-3:<text>18</text>        
+          </span>
+          <span>
+            B-A-A-C-1:<text>19</text> 
+            B-A-A-C-2:<text>20</text> 
+            B-A-A-C-3:<text>21</text>        
+          </span>
+        </span>
+      </span>
+    </span>
+    <span>
+      C-1:<text>25</text> 
+      C-2:<text>26</text> 
+      C-3:<text>27</text>
+      <span>
+        <span>
+          C-A-A-1:<text>31</text> 
+          C-A-A-2:<text>32</text> 
+          C-A-A-3:<text>33</text>
+          <span>
+            C-A-A-A-1:<text>43</text> 
+            C-A-A-A-2:<text>44</text> 
+            C-A-A-A-3:<text>45</text>
+            <span>
+              C-A-A-A-A-1:<text>58</text> 
+              C-A-A-A-A-2:<text>59</text> 
+              C-A-A-A-A-3:<text>60</text>        
+            </span>
+            <span>
+              C-A-A-A-B-1:<text>61</text> 
+              C-A-A-A-B-2:<text>62</text> 
+              C-A-A-A-B-3:<text>63</text>        
+            </span>
+          </span>
+          <span>
+            C-A-A-B-1:<text>46</text> 
+            C-A-A-B-2:<text>47</text> 
+            C-A-A-B-3:<text>48</text>        
+          </span>
+          <span>
+            C-A-A-C-1:<text>49</text> 
+            C-A-A-C-2:<text>50</text> 
+            C-A-A-C-3:<text>51</text>        
+          </span>
+        </span>
+      </span>
+    </span>
     </script>
   </head>
   <body>
