@@ -86,9 +86,10 @@
             actual = actual.replace(/\t/g, '    ');
             Assert.assertEquals(expected, actual);
         }});
-
-        //TODO: start test via event-listener rendering-finished
-        Test.start(true);        
+        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });         
     </script>
     <script type="text/test-1">
     <oa a="xo1">o1</oa>
