@@ -179,6 +179,10 @@ Language.
 <param name="paramFoo3" value="{{paramFoo1 + ' ' + paramFoo2}}"/>
 ```
 
+Auf diese Art erzeugte Parameter sind als JavaScript-Variable global verfügbar.
+Daher Vorsicht, da so auch existierende Variablen, Funktionen oder Objekte
+überschrieben werden können.
+
 
 ### Composite-JavaScript
 
