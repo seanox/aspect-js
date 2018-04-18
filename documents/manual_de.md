@@ -138,8 +138,9 @@ Beim Rendern wird das DOM rekursive durchlaufen und den Verzweigungen
 unkontrolliert gefolgt. Werden JavaScript oder Parameter im Markup eingebettet,
 kann dieses zu unerwarteten Effekte führen, da die Reihenfolge bei der
 Ausführung nicht gesteuert werden kann.  
-Die Option `sequence` bewirkt weiterhin ein rekursives Durchlaufen mit
-kontrollierter Verzweigung von oben nach unten.
+Die Option `sequence` bewirkt ab dem so gekennzeichneten HTML-Element weiterhin
+ein rekursives Durchlaufen mit kontrollierter Verzweigung im DOM von oben nach
+unten.
 
 ```
 <article sequence>
@@ -155,6 +156,28 @@ kontrollierter Verzweigung von oben nach unten.
 
 
 #### event
+
+### Tags
+
+#### param
+
+Das PARAM-Tag ist ein Standard HTML-Tag welches in aspect-js etwas entfremdet
+wurde.  
+Mit dem PARAM-Tag lassen sich zur Laufzeit und beim Rendern im Markup Parameter
+definieren und deren Werte ändern. Dazu werden die Attribute `name` und `value`
+verwendet. Der Name muss den für JavaScript üblichen Konventionen entsprechen
+und kann mit einem Unterstrich oder einem Buchstaben beginnen. Parameter mit
+ungültigem Namen werden ignoriert und erzeugen keine Fehlermeldung. Das 
+Attribute `value` enthält den Wert vom Parameter als Text oder Expression
+Language.
+
+```
+<param name="paramFoo" value="Hallo"/>
+```
+
+```
+<param name="paramFoo3" value="{{paramFoo1 + ' ' + paramFoo2}}"/>
+```
 
 
 ### Composite-JavaScript
