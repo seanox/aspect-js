@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace; white-space:pre;
+      }
+    </style>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+    
+        var TestBean = {};
+        TestBean.ticks = 0;
+        TestBean.ping = function() {
+            return ++TestBean.ticks;
+        };
+        
+        Test.create({test:function() {
+            var expected = document.querySelector("script[type='text/test']");
+            expected = expected.innerHTML.trim();
+            expected = expected.replace(/\t/g, '    ');
+            var actual = document.querySelector("body");
+            actual = actual.innerHTML.trim();
+            actual = actual.replace(/\t/g, '    ');
+            Assert.assertEquals(expected, actual);            
+        }});
+        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });  
+    </script>
+    <script type="text/test">
+    A:1: 
+    <param name="globalA" value="Hallo">
+    A:2: Hallo
+    <article id="AB">
+      AA:1: Hallo
+      AB:1:    
+      <param name="globalAB" value="Hallo">
+      AA:2: Hallo
+      AB:2: Hallo
+      <param name="globalAB" value="Welt">
+      AA:3: Hallo
+      AB:3: Welt
+      <param name="globalAB" value="{{globalAB}}">
+      AA:4: Hallo
+      AB:4: Welt
+      <param name="globalAB" value="{{'Hallo ' + globalAB}}">
+      AA:5: Hallo
+      AB:5: Hallo Welt
+      <param name="globalAB" value="{{globalAB + ' ' + globalAB}}">
+      AA:5: Hallo
+      AB:5: Hallo Welt Hallo Welt
+    </article>
+    </script>
+  </head>
+  <body>
+    A:1: {{globalA}}
+    <param name="globalA" value="Hallo"/>
+    A:2: {{globalA}}
+    <article id="AB">
+      AA:1: {{globalA}}
+      AB:1: {{globalAB}}   
+      <param name="globalAB" value="Hallo"/>
+      AA:2: {{globalA}}
+      AB:2: {{globalAB}}
+      <param name="globalAB" value="Welt"/>
+      AA:3: {{globalA}}
+      AB:3: {{globalAB}}
+      <param name="globalAB" value="{{globalAB}}"/>
+      AA:4: {{globalA}}
+      AB:4: {{globalAB}}
+      <param name="globalAB" value="{{'Hallo ' + globalAB}}"/>
+      AA:5: {{globalA}}
+      AB:5: {{globalAB}}
+      <param name="globalAB" value="{{globalAB + ' ' + globalAB}}"/>
+      AA:5: {{globalA}}
+      AB:5: {{globalAB}}
+    </article>
+  </body>
+</html>

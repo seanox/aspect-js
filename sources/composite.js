@@ -76,6 +76,12 @@ if (typeof(Composite) == 'undefined') {
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
     
+    /** Constant for attribute text */
+    Composite.ATTRIBUTE_TEXT = "text";    
+
+    /** Constant for attribute value */
+    Composite.ATTRIBUTE_VALUE = "value"; 
+    
     //TODO:
     Composite.ATTRIBUTE_SEQUENCE = "sequence";
     
@@ -98,7 +104,7 @@ if (typeof(Composite) == 'undefined') {
     Composite.PATTERN_ELEMENT_SCRIPT = /script/i;
     
     //TODO:
-    Composite.PATTERN_ELEMENT_TEXT = /text/i;    
+    Composite.PATTERN_ELEMENT_PARAM = /param/i;  
 
     //TODO:
     Composite.PATTERN_ELEMENT_IGNORE = "/script|style/i";
@@ -112,6 +118,9 @@ if (typeof(Composite) == 'undefined') {
     //TODO:
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z]\w*$/i;
 
+    //TODO:
+    Composite.PATTERN_PARAM_NAME = /^_*[a-z]\w*$/i;
+    
     //TODO:
     Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
 
@@ -174,7 +183,7 @@ if (typeof(Composite) == 'undefined') {
      *  Adds a method for getting the serial ID to the Node objects.
      */ 
     if (Node.prototype.ordinal === undefined) {
-        Node.prototype.indicate = function() {
+        Node.prototype.ordinal = function() {
             this.serial = this.serial || Node.indication++;
             return this.serial;
         };     
@@ -384,7 +393,7 @@ if (typeof(Composite) == 'undefined') {
             //The node prototype has been enhanced with creation and a get-method.
             //During the analysis, the attributes of a element (not node) containing
             //an expression are cached in the memory (Composite.elements).
-            var serial = selector.indicate();
+            var serial = selector.ordinal();
             var object = Composite.elements[serial];
             if (!object) {
                 object = {serial:serial, element:selector, attributes:{}};
@@ -397,6 +406,19 @@ if (typeof(Composite) == 'undefined') {
                             object.attributes[attribute.nodeName.toLowerCase()] = attribute.value;
                     });
             }
+            
+            //The name of the parameter must correspond to the pattern
+            //Composite.PATTERN_PARAM_NAME. Parameters with invalid names are
+            //ignored. An invalid name does not cause an error.
+            if (selector.nodeName.match(Composite.PATTERN_ELEMENT_PARAM)) {
+                var name = (object.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                if (!name.match(Composite.PATTERN_PARAM_NAME))
+                    return;
+                var value = (object.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, value);
+                eval(name + " = value;");
+                return;
+            }               
             
             sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
             
@@ -411,6 +433,19 @@ if (typeof(Composite) == 'undefined') {
                 if (selector.parentNode
                         && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
                     return;
+
+                //Text nodes are only analyzed once.
+                //Pure text is completely ignored.
+                //Text nodes with expression are updated.
+                if (object.attributes
+                        && object.attributes[Composite.ATTRIBUTE_TEXT])
+                    return;
+                var expression = object.attributes[Composite.ATTRIBUTE_VALUE];
+                if (expression) {
+                    expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, expression);
+                    object.element.nodeValue = expression;
+                    return;
+                }
                 
                 //Ignore text nodes without expression.
                 if (!selector.textContent.match(Composite.PATTERN_EXPRESSION_CONTAINS))
@@ -428,11 +463,11 @@ if (typeof(Composite) == 'undefined') {
                     match = match.substring(2, match.length -2).trim();
                     if (!match)
                         return "";
-                    var node = document.createElement("text");
-                    var serial = node.indicate();
+                    var node = document.createTextNode("");
+                    var serial = node.ordinal();
                     var object = {serial:serial, element:node, attributes:{}};
                     object.attributes[Composite.ATTRIBUTE_EXPRESSION] = "{{" + match + "}}";
-                    Composite.elements[serial] = object;                
+                    Composite.elements[serial] = object; 
                     return "{{" + serial + "}}";
                 });
                 
@@ -451,9 +486,15 @@ if (typeof(Composite) == 'undefined') {
                         var object = Composite.elements[serial];
                         word = object.attributes[Composite.ATTRIBUTE_EXPRESSION];
                         word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EXPRESSION, word);
-                        object.element.textContent = word;
-                        array[index] = object.element;
-                    } else array[index] = document.createTextNode(word);
+                    } else {
+                        var node = document.createTextNode(word);
+                        var serial = node.ordinal();
+                        var object = {serial:serial, element:node, attributes:{}};
+                        object.attributes[Composite.ATTRIBUTE_TEXT] = word;
+                        Composite.elements[serial] = object; 
+                    }
+                    object.element.nodeValue = word;
+                    array[index] = object.element;
                 });
                 //The new elements are inserted.
                 words.forEach(function(node, index, array) {
@@ -687,7 +728,7 @@ if (typeof(Expression) === "undefined") {
             return context
             
         } catch (exception) {
-            return false;
+            return "";
         }
     };
     
@@ -749,6 +790,11 @@ if (typeof(Expression) === "undefined") {
         expression = expression.replace(/[\r\n]/g, " ");
         expression = expression.replace(/(\{\{)/g, "\n$1");
         expression = expression.replace(/(\}\})/g, "$1\n");
+        
+        //Without expression it is pure text.
+        if (expression.indexOf("\n") < 0)
+            return "\"" + expression + "\"";
+        
         expression = expression.replace(/(^\n+)|(\n+$)/g, "");
 
         var collate = function(word) {
