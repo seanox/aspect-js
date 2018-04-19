@@ -10,6 +10,7 @@
     </style>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
     
         var TestBean_1 = {};
@@ -32,13 +33,8 @@
         };         
         
         Test.create({test:function() {
-            var expected = document.querySelector("script[type='text/test']");
-            expected = expected.innerHTML.trim();
-            expected = expected.replace(/\t/g, '    ');
             var actual = document.querySelector("body");
-            actual = actual.innerHTML.trim();
-            actual = actual.replace(/\t/g, '    ');
-            Assert.assertEquals(expected, actual);
+            Assert.assertEqualsTemplate("script[type='text/test']", actual.innerHTML);
         }});         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
