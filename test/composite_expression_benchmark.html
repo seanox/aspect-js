@@ -47,7 +47,9 @@
             for (var loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});        
-        Test.start(true);    
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });   
     </script>
     <script type="text/expression">
     {{

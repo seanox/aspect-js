@@ -40,73 +40,75 @@
             actual = actual.replace(/\t/g, '    ');
             Assert.assertEquals(expected, actual);
         }});         
-        Test.start(true);        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });        
     </script>
     <script type="text/test">
-    Literal 01: <text>Literal 01</text>
-    Literal 02: <text>Literal 02</text>
-    Literal 03: <text>Literal 01Literal 02</text>
+    Literal 01: Literal 01
+    Literal 02: Literal 02
+    Literal 03: Literal 01Literal 02
     
-    Logic 01: <text>3</text>
+    Logic 01: 3
     
-    Method EL 01: <text>m1</text>
-    Method EL 02: <text>m1</text>
-    Method EL 03: <text>m2undefined</text>
-    Method EL 04: <text>m22</text>
-    Method EL 05: <text>m22</text>
+    Method EL 01: m1
+    Method EL 02: m1
+    Method EL 03: m2undefined
+    Method EL 04: m22
+    Method EL 05: m22
                     
-    Method EL Error 01: <text>xxx is not defined
-    xxx.yyy.zzz()</text>
+    Method EL Error 01: xxx is not defined
+    xxx.yyy.zzz()
     
-    Value EL 00: <text>[object Object]</text>
-    Value EL 01: <text>f1</text>
-    Value EL 02: <text>f2</text>
-    Value EL 03: <text>f3</text>
-    Value EL 04: <text>function() {
+    Value EL 00: [object Object]
+    Value EL 01: f1
+    Value EL 02: f2
+    Value EL 03: f3
+    Value EL 04: function() {
             return "m1";
-        }</text>
+        }
 
-    Value EL 11_1: <text>[object Object]</text>
-    Value EL 11_2: <text>[object Object]</text>
-    Value EL 11_3: <text></text>
-    Value EL 11_4: <text>[object Object]</text>
-    Value EL 11_5: <text>Expression.lookup(...)[1] is undefined
-    Expression.lookup("TestBean_1.field_11")[1].x</text>
-    Value EL 11_6: <text>f11[0]-&gt;x-&gt;y</text>
-    Value EL 11_7: <text>Expression.lookup(...)[1] is undefined
-    Expression.lookup("TestBean_1.field_11")[1].x.y</text>
+    Value EL 11_1: [object Object]
+    Value EL 11_2: [object Object]
+    Value EL 11_3: 
+    Value EL 11_4: [object Object]
+    Value EL 11_5: Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_11")[1].x
+    Value EL 11_6: f11[0]-&gt;x-&gt;y
+    Value EL 11_7: Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_11")[1].x.y
 
-    Value EL 12_1: <text>[object Object]</text>
-    Value EL 12_2: <text>[object Object]</text>
-    Value EL 12_3: <text></text>
-    Value EL 12_4: <text>[object Object]</text>
-    Value EL 12_5: <text>Expression.lookup(...)[1] is undefined
-    Expression.lookup("TestBean_1.field_12")[1].x</text>
-    Value EL 12_6: <text></text>
-    Value EL 12_7: <text>Expression.lookup(...)[1] is undefined
-    Expression.lookup("TestBean_1.field_12")[1].x.y</text>
-    Value EL 12_8: <text>f12[0]-&gt;x-&gt;y</text>
-    Value EL 12_9: <text>Expression.lookup(...)[1] is undefined
-    Expression.lookup("TestBean_1.field_12")[1].x[0].y</text>
-    Value EL 12_A: <text>Expression.lookup(...)[0].x[1] is undefined
-    Expression.lookup("TestBean_1.field_12")[0].x[1].y</text>
-    Value EL 12_B: <text>Expression.lookup(...)[1] is undefined
-    Expression.lookup("TestBean_1.field_12")[1].x[1].y</text>
+    Value EL 12_1: [object Object]
+    Value EL 12_2: [object Object]
+    Value EL 12_3: 
+    Value EL 12_4: [object Object]
+    Value EL 12_5: Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x
+    Value EL 12_6: 
+    Value EL 12_7: Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x.y
+    Value EL 12_8: f12[0]-&gt;x-&gt;y
+    Value EL 12_9: Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x[0].y
+    Value EL 12_A: Expression.lookup(...)[0].x[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[0].x[1].y
+    Value EL 12_B: Expression.lookup(...)[1] is undefined
+    Expression.lookup("TestBean_1.field_12")[1].x[1].y
                 
-    Value EL Error 01: <text>false</text>
+    Value EL Error 01: 
     
-    Mix 01: <text>Literal 01m1</text>
+    Mix 01: Literal 01m1
     
-    Condition 01: <text>false</text>
-    Condition 01: <text>true</text>
-    Condition 01: <text>unexpected token: '!'
-    1  !   &gt;  2</text>
-    Condition 01: <text>number</text>
+    Condition 01: false
+    Condition 01: true
+    Condition 01: unexpected token: '!'
+    1  !   &gt;  2
+    Condition 01: number
     
     
     
-    <text>expected expression, got end of script
-    -</text>
+    expected expression, got end of script
+    -
     </script>
   </head>
   <body>

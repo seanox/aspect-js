@@ -21,7 +21,9 @@
             actual = actual.replace(/\t/g, '    ');
             Assert.assertEquals(expected, actual);
         }});         
-        Test.start(true);        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });     
     </script>
     <script type="text/test">
     mapping:
@@ -33,73 +35,76 @@
     
     normal use:
     ----
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text> 
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>
+    true true
+    true true 
+    true true
+    true true
     
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text> 
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>    
+    true true
+    true true 
+    true true
+    true true
+    true true    
     
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text> 
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>
+    true true
+    true true 
+    true true
+    true true
        
     invalid word boundaries:
     ----
-    <text>false</text> <text>true</text>
-    <text>false</text> <text>true</text> 
-    <text>identifier starts immediately after numeric literal
-    1le2</text> <text>true</text>
-    <text>identifier starts immediately after numeric literal
-    1ne2</text> <text>true</text>
+     true
+     true 
+    identifier starts immediately after numeric literal
+    1le2 true
+    identifier starts immediately after numeric literal
+    1ne2 true
     
-    <text>true</text> <text>true</text>
-    <text>identifier starts immediately after numeric literal
-    2ge1</text> <text>true</text> 
-    <text>identifier starts immediately after numeric literal
-    1lt2</text> <text>true</text>
-    <text>true</text> <text>true</text>
-    <text>unexpected token: string literal
-    Expression.lookup("notempty")'x'</text> <text>true</text>    
+    true true
+    identifier starts immediately after numeric literal
+    2ge1 true 
+    identifier starts immediately after numeric literal
+    1lt2 true
+    true true
+    unexpected token: string literal
+    Expression.lookup("notempty")'x' true    
     
-    <text>identifier starts immediately after numeric literal
-    (25div5)Expression.lookup("eq5")</text> <text>unexpected token: identifier
-    (25 /5)Expression.lookup("eq5")</text>
-    <text>identifier starts immediately after numeric literal
-    2gt1</text> <text>true</text> 
-    <text>identifier starts immediately after numeric literal
-    (10mod3)Expression.lookup("eq1")</text> <text>unexpected token: identifier
-    (10%3)Expression.lookup("eq1")</text>
-    <text>false</text> <text>true</text>
+    identifier starts immediately after numeric literal
+    (25div5)Expression.lookup("eq5") unexpected token: identifier
+    (25 /5)Expression.lookup("eq5")
+    identifier starts immediately after numeric literal
+    2gt1 true 
+    identifier starts immediately after numeric literal
+    (10mod3)Expression.lookup("eq1") unexpected token: identifier
+    (10%3)Expression.lookup("eq1")
+     true
     
     lower / upper case:
     ----
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text> 
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>
+    true true
+    true true 
+    true true
+    true true
     
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text> 
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>    
+    true true
+    true true 
+    true true
+    true true
+    true true    
     
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text> 
-    <text>true</text> <text>true</text>
-    <text>true</text> <text>true</text>
+    true true
+    true true 
+    true true
+    true true
     
     various
     ----
-    <text>-1</text>
-    <text>1</text>
-    <text>-12</text>
+    -1
+    1
+    -12
+    
+    
+    123
     </script>
   </head>
   <body>
@@ -169,5 +174,8 @@
     {{-1}}
     {{-1 +2}}
     {{'-1' +2}}
+    
+    {{unknown}}
+    {{unknown + '123'}}
   </body>
 </html>
