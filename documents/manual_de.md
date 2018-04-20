@@ -181,7 +181,7 @@ TODO: siehe auch Composite-JavaScript
 #### event
 
 Die Attribute `events` und `render` gehören zusammen.  
-So bestimmt das Attribut `events`, durch Leerzeichen getrennte, welche Ereignisse
+So bestimmt das Attribut `events`, durch Leerzeichen getrennt, welche Ereignisse
 bei einem HTML-Element den Aufruf des Renderers bewirken, wobei der Umfang vom
 Rendering durch den CSS-Selector im Attribut `render` festgelegt wird.
 Entsprechend der üblichen Verwendung des CSS-Selector, kann dieser durch Komma
@@ -197,7 +197,7 @@ getrennt mehrere Ziele ansprechen.
 #### render
 
 Die Attribute `events` und `render` gehören zusammen.  
-So bestimmt das Attribut `events`, durch Leerzeichen getrennte, welche Ereignisse
+So bestimmt das Attribut `events`, durch Leerzeichen getrennt, welche Ereignisse
 bei einem HTML-Element den Aufruf des Renderers bewirken, wobei der Umfang vom
 Rendering durch den CSS-Selector im Attribut `render` festgelegt wird.
 Entsprechend der üblichen Verwendung des CSS-Selector, kann dieser durch Komma
