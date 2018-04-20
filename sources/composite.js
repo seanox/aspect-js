@@ -26,12 +26,12 @@
  *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei ersten Auftreten eines Elements gelesen und können später nicht geänert werden, da sie dann aus Element-Cache verwendet werden 
  *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese eine Expression enthalten
  *  
- *  Composite 1.0 20180402
+ *  Composite 1.0 20180420
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180402
+ *  @version 1.0 20180420
  */
 if (typeof(Composite) == 'undefined') {
     
@@ -63,9 +63,12 @@ if (typeof(Composite) == 'undefined') {
     
     /** Constant for attribute condition */
     Composite.ATTRIBUTE_CONDITION = "condition";
-    
-    /** Constant for attribute type */
-    Composite.ATTRIBUTE_TYPE = "type";
+
+    /** Constant for attribute events */
+    Composite.ATTRIBUTE_EVENTS = "events"; 
+
+    /** Constant for attribute expression */
+    Composite.ATTRIBUTE_EXPRESSION = "expression";    
   
     /** Constant for attribute id */
     Composite.ATTRIBUTE_ID = "id";
@@ -76,20 +79,23 @@ if (typeof(Composite) == 'undefined') {
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
     
-    /** Constant for attribute text */
-    Composite.ATTRIBUTE_TEXT = "text";    
-
-    /** Constant for attribute value */
-    Composite.ATTRIBUTE_VALUE = "value"; 
+    /** Constant for attribute render */
+    Composite.ATTRIBUTE_RENDER = "render";     
     
     //TODO:
     Composite.ATTRIBUTE_SEQUENCE = "sequence";
+
+    /** Constant for attribute text */
+    Composite.ATTRIBUTE_TEXT = "text";    
+
+    /** Constant for attribute type */
+    Composite.ATTRIBUTE_TYPE = "type";
     
-    /** Constant for attribute expression */
-    Composite.ATTRIBUTE_EXPRESSION = "expression";    
+    /** Constant for attribute value */
+    Composite.ATTRIBUTE_VALUE = "value";     
 
     //TODO:
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|id|name|sequence|$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|sequence|render$/i;   
     
     //TODO:
     Composite.PATTERN_ATTRIBUTE_IGNORE = /import|condition/i;    
@@ -370,7 +376,10 @@ if (typeof(Composite) == 'undefined') {
         
         try {
             
-            Composite.fire(Composite.ticks.render <= 0 ? Composite.EVENT_RENDER_START : Composite.EVENT_RENDER_NEXT, selector);
+            var event = Composite.EVENT_RENDER_START;
+            if (Composite.ticks.render > 0)
+                event = Composite.EVENT_RENDER_NEXT;
+            Composite.fire(event, selector);
 
             if (typeof selector === "string") {
                 selector = selector.trim();
@@ -388,11 +397,12 @@ if (typeof(Composite) == 'undefined') {
             
             Composite.elements = Composite.elements || new Array();
             
-            //Register each analyzed node/element and minimizes multiple analysis.
-            //For registration, the serial number of the node/element is used.
-            //The node prototype has been enhanced with creation and a get-method.
-            //During the analysis, the attributes of a element (not node) containing
-            //an expression are cached in the memory (Composite.elements).
+            //Register each analyzed node/element and minimizes multiple
+            //analysis. For registration, the serial number of the node/element
+            //is used. The node prototype has been enhanced with creation and a
+            //get-method. During the analysis, the attributes of a element (not
+            //node) containing an expression or all allowed attributes are
+            //cached in the memory (Composite.elements).
             var serial = selector.ordinal();
             var object = Composite.elements[serial];
             if (!object) {
@@ -401,9 +411,10 @@ if (typeof(Composite) == 'undefined') {
                 if ((selector instanceof Element)
                         && selector.attributes)
                     Array.from(selector.attributes).forEach(function(attribute, index, array) {
-                        if ((attribute.value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)
+                        var value = (attribute.value || "").trim();
+                        if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                 || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT))
-                            object.attributes[attribute.nodeName.toLowerCase()] = attribute.value;
+                            object.attributes[attribute.nodeName.toLowerCase()] = value;
                     });
             }
             
@@ -440,9 +451,9 @@ if (typeof(Composite) == 'undefined') {
                 if (object.attributes
                         && object.attributes[Composite.ATTRIBUTE_TEXT])
                     return;
-                var expression = object.attributes[Composite.ATTRIBUTE_VALUE];
+                var expression = object.attributes[Composite.ATTRIBUTE_EXPRESSION];
                 if (expression) {
-                    expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, expression);
+                    expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EXPRESSION, expression);
                     object.element.nodeValue = expression;
                     return;
                 }
@@ -507,7 +518,24 @@ if (typeof(Composite) == 'undefined') {
             }  
             
             if (!(selector instanceof Element))
-                return;        
+                return;
+            
+            if (selector.hasAttribute(Composite.ATTRIBUTE_EVENTS)) {
+                var events = object.attributes[Composite.ATTRIBUTE_EVENTS];
+                events = events.split(/s+/);
+                events.forEach(function(event, index, array) {
+                    selector.addEventListener(event, function(event) {
+                        var serial = event.target.ordinal();
+                        var object = Composite.elements[serial];
+                        var render = object.attributes[Composite.ATTRIBUTE_RENDER];
+                        alert(render);
+                        Composite.render(render);
+                        Composite.asynchron(Composite.render, false, render);
+                    });                    
+                });
+                selector.removeAttribute(Composite.ATTRIBUTE_EVENTS);
+                selector.removeAttribute(Composite.ATTRIBUTE_RENDER);
+            }
             
             //The condition attribute is interpreted.
             //As result of the expression true/false is expected and will be set as
@@ -542,13 +570,12 @@ if (typeof(Composite) == 'undefined') {
                 var module = (selector.getAttribute(Composite.ATTRIBUTE_IMPORT) || "").trim();
                 (function(element, url) {
                     try {
-                        Composite.fire(Composite.Composite.EVENT_AJAX_START, "GET", url);                    
+                        Composite.fire(Composite.EVENT_AJAX_START, "GET", url);                    
                         var request = new XMLHttpRequest();
                         request.overrideMimeType("text/plain");
                         request.open("GET", url, true);
                         request.onreadystatechange = function() {
                             Composite.fire(Composite.EVENT_AJAX_RECEIVE, request);
-                            //TODO: fire events
                             if (request.readyState == 4) {
                                 if (request.status == "200") {
                                     Composite.fire(Composite.EVENT_AJAX_SUCCESS, request);
@@ -572,7 +599,6 @@ if (typeof(Composite) == 'undefined') {
                         Composite.fire(Composite.EVENT_AJAX_ERROR, error);
                         throw error;
                     }
-                        
                 })(selector, module);
                 return;
             }         

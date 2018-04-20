@@ -151,13 +151,67 @@ unten.
 
 #### import
 
+Das Attribut `import` verweis auf einen externen Inhalt für ein HTML-Element.
+Dieser Inhalt wird vom Renderer nachgeladen und kann HTML, CSS, JavaScript oder
+andere Daten enthalten, welcher als Inner-HTML eingefügt wird. Evtl. bestehende
+Inhalte werden dabei überschrieben. Nachgeladenes HTML kann dann ebenfalls
+Composite-Attribute und die Expression Language verwenden, die dann im gleichen
+Render-Zyklus angewandt werden.
 
-#### render
+```
+<article import="external.html">
+  Coming soon...
+</article>
+```
+
+In Kombination mit dem Attribut `condition` kann das Nachladen zusätzlich
+gesteuert werden, was eine modulare und komponentenbasierte Umsetzung
+vereinfacht und das initiale Rendering beschleunigt, da Module und Komponenten
+erst geladen werden, wenn diese benötigt werden.
+
+```
+<article import="external.html" condition="{{ExampleBean.isVisible()}}">
+  Coming soon...
+</article>
+```
+
+TODO: siehe auch Composite-JavaScript
 
 
 #### event
 
+Die Attribute `events` und `render` gehören zusammen.  
+So bestimmt das Attribut `events`, durch Leerzeichen getrennte, welche Ereignisse
+bei einem HTML-Element den Aufruf des Renderers bewirken, wobei der Umfang vom
+Rendering durch den CSS-Selector im Attribut `render` festgelegt wird.
+Entsprechend der üblichen Verwendung des CSS-Selector, kann dieser durch Komma
+getrennt mehrere Ziele ansprechen.
+
+```
+<button events="click dblclick" render="article:nth-child(1), article:nth-child(2)">
+  ...
+</article>
+```
+
+
+#### render
+
+Die Attribute `events` und `render` gehören zusammen.  
+So bestimmt das Attribut `events`, durch Leerzeichen getrennte, welche Ereignisse
+bei einem HTML-Element den Aufruf des Renderers bewirken, wobei der Umfang vom
+Rendering durch den CSS-Selector im Attribut `render` festgelegt wird.
+Entsprechend der üblichen Verwendung des CSS-Selector, kann dieser durch Komma
+getrennt mehrere Ziele ansprechen.
+
+```
+<button events="click dblclick" render="article:nth-child(1), article:nth-child(2)">
+  ...
+</article>
+```
+
+
 ### Tags
+
 
 #### param
 
