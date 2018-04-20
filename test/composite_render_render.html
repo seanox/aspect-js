@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace; white-space:pre;
+      }
+    </style>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+        var TestBean = {};
+        TestBean.ticks = new Array();
+        TestBean.ping = function(name) {
+            TestBean.ticks[name] = (TestBean.ticks[name] || "") + "x";
+            return TestBean.ticks[name];
+        };
+        
+        Test.create({test:function() {
+            var actual = document.querySelector("body");
+            Assert.assertEqualsTemplate("script[type='text/test']", actual.innerHTML);
+        }});
+        
+        var count = 0;
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            count++;
+            if (count == 1) {
+                Composite.render("body");
+            } else if (count == 2) {
+                Composite.render("body > span:first-child + span, body > span:first-child, body > span:first-child, body > span:first-child, body > span:first-child");
+            } else if (count == 3) {
+                Composite.render("body > span:first-child");
+            } else Test.start();
+        }); 
+    </script>
+    <script type="text/test">
+    <span>
+      A:xxxx
+    </span>
+    <span>
+      B:xxx
+    </span>
+    <span>
+      C:xx
+    </span>
+    </script>
+  </head>
+  <body>
+    <span>
+      A:{{TestBean.ping("A")}}
+    </span>
+    <span>
+      B:{{TestBean.ping("B")}}
+    </span>
+    <span>
+      C:{{TestBean.ping("C")}}
+    </span>
+  </body>
+</html>

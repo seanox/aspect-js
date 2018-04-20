@@ -19,16 +19,11 @@
         };
         
         Test.create({test:function() {
-            var expected = document.querySelector("script[type='text/test']");
-            expected = expected.innerHTML.trim();
-            expected = expected.replace(/\t/g, '    ');
             var actual = document.querySelector("body");
-            actual = actual.innerHTML.trim();
-            actual = actual.replace(/\t/g, '    ');
-            Assert.assertEquals(expected, actual);            
+            Assert.assertEqualsTemplate("script[type='text/test']", actual.innerHTML);          
         }}); 
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start();
+            //Test.start();
         }); 
     </script>
     <script type="text/test">
