@@ -2,7 +2,7 @@
 
 
 # Features
-- Easy integration in markup and JavaScript
+- Easy integration in markup and JavaScript (clean code)
 - Lightweight implementation (requires no additional frameworks)  
   less than 64kB for all (so the plan)
 - Component based architecture
