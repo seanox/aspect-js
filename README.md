@@ -47,8 +47,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Manuals
-- [Manual DE](https://github.com/seanox/aspect-js/blob/master/documents/manual_de.md) status: startet
-- [Manual EN](https://github.com/seanox/aspect-js/blob/master/documents/manual_en.md) status: still open
+- [Manual DE](https://github.com/seanox/aspect-js/blob/master/documents/manual_de.md) startet
+- [Manual EN](https://github.com/seanox/aspect-js/blob/master/documents/manual_en.md) still open
 - [ToDo EN](https://github.com/seanox/aspect-js/blob/master/documents/todo_en.md) overview of open issues, problems, errors
 
 # Changes (Change Log)
