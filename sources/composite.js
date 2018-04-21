@@ -26,12 +26,12 @@
  *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei ersten Auftreten eines Elements gelesen und können später nicht geänert werden, da sie dann aus Element-Cache verwendet werden 
  *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese eine Expression enthalten
  *  
- *  Composite 1.0 20180420
+ *  Composite 1.0 20180421
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180420
+ *  @version 1.0 20180421
  */
 if (typeof(Composite) == 'undefined') {
     
@@ -192,6 +192,20 @@ if (typeof(Composite) == 'undefined') {
         Node.prototype.ordinal = function() {
             this.serial = this.serial || Node.indication++;
             return this.serial;
+        };     
+    };
+    
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a method for getting and removing an attribute to the Element objects.
+     */ 
+    if (Element.prototype.fetchAttribute === undefined) {
+        Element.prototype.fetchAttribute = function(attribute) {
+            if (!this.hasAttribute(attribute))
+                return false;
+            var value = this.getAttribute(attribute);
+            this.removeAttribute(attribute);
+            return value; 
         };     
     };
     
@@ -433,6 +447,9 @@ if (typeof(Composite) == 'undefined') {
             
             sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
             
+            //TODO: Erweiterung/Einfuehrung von NODE_TYPE TEXT/EXPRESSION/PARAM
+            //      - auch das Param wird dann als leeres TextNode verwendet
+            
             //Nodes of type TEXT_NODE are changed to text-elements.
             //The content is stored in the value-attribute of the wrapper-object.
             //If the element is rendered later, the value-attribute is interpreted
@@ -520,21 +537,18 @@ if (typeof(Composite) == 'undefined') {
             if (!(selector instanceof Element))
                 return;
             
-            if (selector.hasAttribute(Composite.ATTRIBUTE_EVENTS)) {
-                var events = object.attributes[Composite.ATTRIBUTE_EVENTS];
-                events = events.split(/s+/);
+            var events = selector.fetchAttribute(Composite.ATTRIBUTE_EVENTS);
+            var render = selector.fetchAttribute(Composite.ATTRIBUTE_RENDER);
+            if (events && render) {
+                events = events.split(/\s+/);
                 events.forEach(function(event, index, array) {
                     selector.addEventListener(event, function(event) {
                         var serial = event.target.ordinal();
                         var object = Composite.elements[serial];
                         var render = object.attributes[Composite.ATTRIBUTE_RENDER];
-                        alert(render);
-                        Composite.render(render);
                         Composite.asynchron(Composite.render, false, render);
                     });                    
                 });
-                selector.removeAttribute(Composite.ATTRIBUTE_EVENTS);
-                selector.removeAttribute(Composite.ATTRIBUTE_RENDER);
             }
             
             //The condition attribute is interpreted.
@@ -731,6 +745,12 @@ if (typeof(Expression) === "undefined") {
         try {
             if (typeof context === "string"
                     && expression === undefined) {
+                if (context.match(/^#[a-zA-Z]\w*$/))
+                    return document.querySelector(context);
+                if (context.match(/^(#[a-zA-Z]\w*)\.(.*)*$/)) {
+                    expression = context.match(/^(#[a-zA-Z]\w*)\.(.*)*$/);
+                    return Expression.lookup(document.querySelector(expression[1]), expression[2]);
+                }
                 if (context.indexOf(".") < 0)
                     return eval(context);
                 expression = context.match(/^(.*?)\.(.*)$/);
@@ -754,7 +774,7 @@ if (typeof(Expression) === "undefined") {
             return context
             
         } catch (exception) {
-            return "";
+            return undefined;
         }
     };
     
@@ -929,15 +949,15 @@ if (typeof(Expression) === "undefined") {
         
         //Step 4:
         //Detection of value- and method-expressions
-        //    method expression: (^|[^\w\.])([a-zA-Z](?:[\w\.]*[\w])*)(?=\()
+        //    method expression: (^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()
         //The expression is followed by a round bracket.
-        //    value expression: (^|[^\w\.])([a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
+        //    value expression: (^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
         //The expression is followed by a non-word character or the end.
         
         cascade.other.forEach(function(entry, index, array) {
             var text =  entry.data;
-            text = text.replace(/(^|[^\w\.])([a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, '$1\n\r\r$2\n');
-            text = text.replace(/(^|[^\w\.])([a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, '$1\n\r$2\n');
+            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, '$1\n\r\r$2\n');
+            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, '$1\n\r$2\n');
             var words = new Array();
             text.split(/\n/).forEach(function(entry, index, array) {
                 var object = {type:Expression.TYPE_LOGIC, data:entry};
@@ -946,6 +966,8 @@ if (typeof(Expression) === "undefined") {
                     object.type = Expression.TYPE_VALUE;
                 } else if (entry.match(/^\r[^\r]/)) {
                     object.data = entry.substring(1);
+                    if (object.data.match(/^#[a-zA-Z]/))
+                        object.data = "Expression.lookup(\"" + object.data + "\")";
                     object.type = Expression.TYPE_METHOD;
                 }
                 collate(object);

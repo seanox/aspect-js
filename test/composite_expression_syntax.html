@@ -100,7 +100,50 @@
     -12
     
     
-    123
+    undefined123
+    
+    A1: 
+    A2: 
+    A3: Peter is not defined
+    Peter.und.der()
+    
+    B1: [object HTMLInputElement]
+    B2: Expression.lookup(...) is not a function
+    Expression.lookup("#HiddenField.value")()
+    B3: Test-HF    
+    
+    C1: illegal character
+    #Expression.lookup("#HiddenField")
+    C2: illegal character
+    #Expression.lookup("#HiddenField.value")()
+    C3: illegal character
+    #Expression.lookup("#HiddenField.value")()    
+    
+    D1: 
+    
+    E1: illegal character
+    #
+    E2: illegal character
+    # + #
+    
+    F1: Expression.lookup(...) is not a function
+    '123' + Expression.lookup("#HiddenField.value")() + 'abc'
+    F2: 123Test-HFabc
+    
+    G1: [object HTMLInputElement]
+    G2: illegal character
+    #HiddenField_1.#Expression.lookup("HiddenField_1")
+    G3: illegal character
+    #HiddenField_1.#Expression.lookup("HiddenField_2")    
+    G4: unexpected token: identifier
+    Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")    
+    G5: illegal character
+    Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
+        
+    X0: <input id="HiddenField" value="Test-HF" type="hidden">
+    X1: <input id="HiddenField_1" value="Test-HF_A" type="hidden">
+    X2: <input id="HiddenField_2" value="Test-HF_B" type="hidden">
+    X3: <input id="HiddenField_3" value="Test-HF_C" type="hidden">    
     </script>
   </head>
   <body>
@@ -173,5 +216,36 @@
     
     {{unknown}}
     {{unknown + '123'}}
+    
+    A1: {{Peter}}
+    A2: {{Peter.und.der.Wolf}}
+    A3: {{Peter.und.der()}}
+    
+    B1: {{#HiddenField}}
+    B2: {{#HiddenField.value()}}
+    B3: {{#HiddenField.value}}    
+    
+    C1: {{##HiddenField}}
+    C2: {{##HiddenField.value()}}
+    C3: {{##HiddenField.value()}}    
+    
+    D1: {{#Nothing}}
+    
+    E1: {{#}}
+    E2: {{# + #}}
+    
+    F1: {{'123' + #HiddenField.value() + 'abc'}}
+    F2: {{'123' + #HiddenField.value + 'abc'}}
+    
+    G1: {{#HiddenField_1}}
+    G2: {{#HiddenField_1.#HiddenField_1}}
+    G3: {{#HiddenField_1.#HiddenField_2}}    
+    G4: {{#HiddenField_1 #HiddenField_2}}    
+    G5: {{#HiddenField_1#HiddenField_2}}
+        
+    X0: <input type="hidden" id="HiddenField" value="Test-HF">
+    X1: <input type="hidden" id="HiddenField_1" value="Test-HF_A">
+    X2: <input type="hidden" id="HiddenField_2" value="Test-HF_B">
+    X3: <input type="hidden" id="HiddenField_3" value="Test-HF_C">    
   </body>
 </html>

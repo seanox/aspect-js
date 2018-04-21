@@ -24,12 +24,12 @@
  *      ----
  *  Project-specific extensions of the test environment.
  *  
- *  TestUtils 1.0 20180419
+ *  TestUtils 1.0 20180421
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180419
+ *  @version 1.0 20180421
  */
 if (typeof(TestUtils) === "undefined") {
     
@@ -48,3 +48,24 @@ if (Assert.assertEqualsTemplate === undefined)
         actual = actual.replace(/\t/g, '    ');
         Assert.assertEquals(content, actual);    
     };
+   
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a method that simulates keyboard input to the Element objects.
+ */ 
+if (Element.prototype.typeValue === undefined) {
+    Element.prototype.typeValue = function(value) {
+        this.focus();
+        var eventKeyDown = document.createEvent('HTMLEvents');
+        eventKeyDown.initEvent("keydown", false, true);
+        var eventKeyUp = document.createEvent('HTMLEvents');
+        eventKeyUp.initEvent("keyup", false, true);
+        var element = this;
+        value = (value || "").split("");
+        value.forEach(function(digit, index, array) {
+            element.dispatchEvent(eventKeyDown);
+            element.value = (element.value || "") + digit;
+            element.dispatchEvent(eventKeyUp);
+        });
+    };     
+};
