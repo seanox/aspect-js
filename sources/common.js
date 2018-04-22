@@ -45,21 +45,26 @@ if (typeof(Namespace) === "undefined") {
     //TODO:
     Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
     
-    //TODO:
-    Namespace.using = function(name) {
+    /**
+     *  TODO:
+     *  @throws An error occurs in the following cases:
+     *    - event is not valid or is not supported
+     *    - callback function is not implemented correctly or does not exist
+     */
+    Namespace.using = function(namespace) {
         
-        if (name == null)
+        if (namespace == null)
             return null;
 
-        if (typeof(name) !== "string")
-            throw new TypeError("Invalid parameter type: " + typeof(name));
-        if (!name.match(Namespace.PATTERN_NAMESPACE)
-                || name.match(Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
-            throw new Error("Invalid namespace" + (name.trim() ? ": " + name : ""));
+        if (typeof(namespace) !== "string")
+            throw new TypeError("Invalid namespace: " + typeof(namespace));
+        if (!namespace.match(Namespace.PATTERN_NAMESPACE)
+                || namespace.match(Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
+            throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
         
         var scope = window;
-        name = name.replace(/^[\\\/]/, '');
-        name.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
+        namespace = namespace.replace(/^[\\\/]/, '');
+        namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
             if (typeof(scope[entry]) === "undefined") {
                 scope[entry] = new Object();
             } else if (typeof(scope[entry]) === "object") {

@@ -25,6 +25,13 @@
  *  TODO:
  *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei ersten Auftreten eines Elements gelesen und können später nicht geänert werden, da sie dann aus Element-Cache verwendet werden 
  *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese eine Expression enthalten
+ *  - Die Welt ist statisch. So auch aspect-js und alle Komponenten.
+ *    Das erspart die Verwaltung und Einrichtung von Instanzen.
+ *  - Rendering: Clean Code
+ *    Nur fuer aspect-js verwendete Attribute werden ueber Element-Wrapper
+ *    zwischengespeichert und koennen/sollen im Markup nach Verwendung entfernt
+ *    werden. An einem Element befindliche aspect-js-Attribute sind ein
+ *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
  *  
  *  Composite 1.0 20180421
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -37,8 +44,7 @@ if (typeof(Composite) == 'undefined') {
     
     /** 
      *  TODO:
-     *  TODO: - add tag param
-     *        - add tag repeat / loop
+     *  TODO: - add tag repeat / loop
      *        - add tag interval
      */
     Composite = {};
@@ -49,6 +55,9 @@ if (typeof(Composite) == 'undefined') {
     /** Assoziative array for custom tags (key:tag, value:function) */
     Composite.macros;
 
+    /** Queue with outstanding scans */
+    Composite.queue;
+    
     /** RegExp to detect custom tags */
     Composite.pattern;
 
@@ -67,9 +76,6 @@ if (typeof(Composite) == 'undefined') {
     /** Constant for attribute events */
     Composite.ATTRIBUTE_EVENTS = "events"; 
 
-    /** Constant for attribute expression */
-    Composite.ATTRIBUTE_EXPRESSION = "expression";    
-  
     /** Constant for attribute id */
     Composite.ATTRIBUTE_ID = "id";
     
@@ -82,7 +88,7 @@ if (typeof(Composite) == 'undefined') {
     /** Constant for attribute render */
     Composite.ATTRIBUTE_RENDER = "render";     
     
-    //TODO:
+    /** Constant for attribute sequence */
     Composite.ATTRIBUTE_SEQUENCE = "sequence";
 
     /** Constant for attribute text */
@@ -92,10 +98,15 @@ if (typeof(Composite) == 'undefined') {
     Composite.ATTRIBUTE_TYPE = "type";
     
     /** Constant for attribute value */
-    Composite.ATTRIBUTE_VALUE = "value";     
+    Composite.ATTRIBUTE_VALUE = "value";
 
-    //TODO:
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|sequence|render$/i;   
+    /**
+     *  Pattern for all accepted attributes.
+     *  Accepted attributes are all attributes, even without an expression that
+     *  is cached in the object wrapper. Other attributes are only cached if
+     *  they contain an expression.
+     */
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|sequence|render|value$/i;   
     
     //TODO:
     Composite.PATTERN_ATTRIBUTE_IGNORE = /import|condition/i;    
@@ -129,53 +140,70 @@ if (typeof(Composite) == 'undefined') {
     
     //TODO:
     Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
-
+    
     //TODO:
+    Composite.PATTERN_NAMESPACE_SEPARATOR = /[\\\/\.]/;
+    
+    //TODO:
+    Composite.PATTERN_NAMESPACE = /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i;
+    
+    //TODO:
+    Composite.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
+
+    /** Constants of events during rendering */
     Composite.EVENT_RENDER_START = "RenderStart";
     Composite.EVENT_RENDER_NEXT = "RenderNext";
     Composite.EVENT_RENDER_END = "RenderEnd";
 
-    //TODO:
+    /** Constants of events during scanning */
     Composite.EVENT_SCAN_START = "ScanStart";
     Composite.EVENT_SCAN_NEXT = "ScanNext";
     Composite.EVENT_SCAN_END = "ScanEnd";
 
-    //TODO:
+    /** Constants of events during mounting */
     Composite.EVENT_MOUNT_BEFORE = "MountBefore";
     Composite.EVENT_MOUNT_AFTER = "MountAfter";
     
-    //TODO:
+    /** Constants of events when using AJAX */
     Composite.EVENT_AJAX_START = "AjaxStart";
     Composite.EVENT_AJAX_RECEIVE = "AjaxReceive";
     Composite.EVENT_AJAX_SUCCESS = "AjaxSuccess";
     Composite.EVENT_AJAX_ERROR = "AjaxError";
 
-    //TODO:
+    /** Constants of events when errors occur */
     Composite.EVENT_ERROR = "Error";
     
     /** 
      *  List of possible DOM events
      *  see also https://www.w3schools.com/jsref/dom_obj_event.asp
      */
-    Composite.events = " abort afterprint animationend animationiteration animationstart"
-        + " beforeprint beforeunload blur"
-        + " canplay canplaythrough change click contextmenu copy cut"
-        + " dblclick drag dragend dragenter dragleave dragover dragstart drop durationchange"
+    Composite.events = "abort after|print animation|end animation|iteration animation|start"
+        + " before|print before|unload blur"
+        + " can|play can|play|through change click context|menu copy cut"
+        + " dbl|click drag drag|end drag|enter drag|leave drag|over drag|start drop duration|change"
         + " ended error"
-        + " focus focusin focusout"
-        + " hashchange"
+        + " focus focus|in focus|out"
+        + " hash|change"
         + " input invalid"
-        + " keydown keypress keyup"
-        + " load loadeddata loadedmetadata loadstart"
-        + " message mousedown mouseenter mouseleave mousemove mouseover mouseout mouseup mousewheel"
+        + " key|down key|press key|up"
+        + " load loaded|data loaded|meta|data load|start"
+        + " message mouse|down mouse|enter mouse|leave mouse|move mouse|over mouse|out mouse|up mouse|wheel"
         + " offline online open"
-        + " pagehide pageshow paste pause play playing popstate progress"
-        + " ratechange resize reset"
+        + " page|hide page|show paste pause play playing popstate progress"
+        + " rate|change resize reset"
         + " scroll search seeked seeking select show stalled storage submit suspend"
-        + " timeupdate toggle touchcancel touchend touchmove touchstart transitionend"
+        + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
         + " unload"
-        + " volumechange"
+        + " volume|change"
         + " waiting wheel";
+    
+    Composite.PATTERN_EVENT_FUNCTIONS = (function() {
+        var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, function(match, letter) {
+           return letter.toUpperCase();
+        });
+        pattern = new RegExp("^on(" + pattern.replace(/\s+/g, '|') + ")");
+        return pattern;
+    })();
 
     /**
      *  Enhancement of the JavaScript API
@@ -186,7 +214,7 @@ if (typeof(Composite) == 'undefined') {
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a method for getting the serial ID to the Node objects.
+     *  Adds a function for getting the serial ID to the Node objects.
      */ 
     if (Node.prototype.ordinal === undefined) {
         Node.prototype.ordinal = function() {
@@ -197,7 +225,7 @@ if (typeof(Composite) == 'undefined') {
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a method for getting and removing an attribute to the Element objects.
+     *  Adds a function for getting and removing an attribute to the Element objects.
      */ 
     if (Element.prototype.fetchAttribute === undefined) {
         Element.prototype.fetchAttribute = function(attribute) {
@@ -211,7 +239,7 @@ if (typeof(Composite) == 'undefined') {
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a capitalize methode to the String objects.
+     *  Adds a capitalize function to the String objects.
      */ 
     if (String.prototype.capitalize === undefined) {
         String.prototype.capitalize = function() {
@@ -221,7 +249,7 @@ if (typeof(Composite) == 'undefined') {
 
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a HTML encode methode to the String objects.
+     *  Adds a HTML encode function to the String objects.
      */ 
     if (String.prototype.encodeHtml === undefined) {
         String.prototype.encodeHtml = function() {
@@ -233,7 +261,7 @@ if (typeof(Composite) == 'undefined') {
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a method for encoding the string objects in hexadecimal code.
+     *  Adds a function for encoding the string objects in hexadecimal code.
      */      
     if (String.prototype.encodeHex === undefined) {
         String.prototype.encodeHex = function() {
@@ -251,7 +279,7 @@ if (typeof(Composite) == 'undefined') {
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a method for decoding hexadecimal code to the string objects.
+     *  Adds a function for decoding hexadecimal code to the string objects.
      */     
     if (String.prototype.decodeHex === undefined) {
         String.prototype.decodeHex = function() {
@@ -265,7 +293,14 @@ if (typeof(Composite) == 'undefined') {
         };
     };      
 
-    //TODO:
+    /**
+     *  Registers a callback function for composite events.
+     *  @param  event    see Composite.EVENT_***
+     *  @param  callback callback function
+     *  @throws An error occurs in the following cases:
+     *    - event is not valid or is not supported
+     *    - callback function is not implemented correctly or does not exist
+     */
     Composite.listen = function(event, callback) {
         
         if (typeof(event) !== "string")
@@ -284,7 +319,13 @@ if (typeof(Composite) == 'undefined') {
         Composite.listeners[event].push(callback);
     };
     
-    //TODO:
+    /**
+     *  Triggers an event.
+     *  All callback functions for this event are called.
+     *  @param event    see Composite.EVENT_***
+     *  @param variants up to five additional optional arguments that are passed
+     *                  as arguments when the callback function is called
+     */
     Composite.fire = function(event, variants) {
 
         event = (event || "").trim();
@@ -294,51 +335,164 @@ if (typeof(Composite) == 'undefined') {
         var listeners = Composite.listeners[event.toLowerCase()];
         if (!Array.isArray(listeners))
             return;
+        variants = Array.prototype.slice.call(arguments);
+        variants = variants.slice(1, 5);
         listeners.forEach(function(callback, index, array) {
-            window.setTimeout(callback, 0, event, arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
+            window.setTimeout(callback, 0, event, variants[0], variants[1], variants[2], variants[3], variants[4]);
         });        
     };
 
-    //TODO:
+    /**
+     *  Asynchronous call of a function.
+     *  In reality, it is a non-blocking function call, because asynchronous
+     *  execution is not possible without Web Worker.
+     *  @param task     function to be executed
+     *  @param sequence true if the execution is to be linear/sequential
+     *  @param variants up to five additional optional arguments that are passed
+     *                  as arguments when the callback function is called
+     */
     Composite.asynchron = function(task, sequence, variants) {
         
-        var method = function(arguments) {
-            var invoke = arguments[0];
-            invoke(arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
-            if (invoke == Composite.scan) {
+        var method = function(invoke, variants) {
+            invoke(variants[0], variants[1], variants[2], variants[3], variants[4]);
+            if (invoke == Composite.scan
+                    || invoke == Composite.mount) {
                 Composite.ticks.scan--;
                 if (Composite.ticks.render <= 0)
-                    Composite.fire(Composite.EVENT_SCAN_END);            
+                    Composite.fire(Composite.EVENT_SCAN_END, variants[0], variants[1], variants[2], variants[3], variants[4]);            
             } else {
                 Composite.ticks.render--;
                 if (Composite.ticks.render <= 0)
-                    Composite.fire(Composite.EVENT_RENDER_END);            
+                    Composite.fire(Composite.EVENT_RENDER_END, variants[0], variants[1], variants[2], variants[3], variants[4]);            
             }
         };
         
-        if (task == Composite.scan)
+        arguments = Array.prototype.slice.call(arguments);
+        arguments = arguments.slice(2, 6);
+        
+        if (task == Composite.scan
+                || task == Composite.mount)
             Composite.ticks.scan++;
         else Composite.ticks.render++;
         if (sequence)
-            method(arguments);
-        else window.setTimeout(method, 0, arguments);
+            method(task, arguments);
+        else window.setTimeout(method, 0, task, arguments);
+    };
+    
+    /**
+     *  TODO:
+     *  TODO: fire events render start/progress/end
+     *        - jede Komponente ist statisch
+     *        - Namespaces werden unterstuetzt, diese aber syntaktisch gueltig sein
+     *        - Objekte in Objekten ist durch den Namespaces moeglich (als static inner Class)
+     * 
+     *  @throws An error occurs in the following cases:
+     *    - namespace is not valid or is not supported
+     *    - namespace cannot be created if it already exists as a method
+     */
+    Composite.mount = function(namespace) {
+
+        //Step 1:
+        //The namespace will be created.
+        
+        if (typeof(namespace) !== "string")
+            throw new TypeError("Invalid namespace: " + typeof(namespace));
+        if (!namespace.match(Composite.PATTERN_NAMESPACE)
+                || namespace.match(Composite.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
+            throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
+        
+        var scope = window;
+        namespace = namespace.replace(/^[\\\/]/, '');
+        namespace.split(Composite.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
+            if (typeof(scope[entry]) === "undefined") {
+                scope[entry] = new Object();
+            } else if (typeof(scope[entry]) === "object") {
+            } else if (typeof(scope[entry]) === "function") {
+            } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
+            scope = scope[entry];
+        });
+        
+        if (typeof(scope) != "object")
+            return;
+        
+        //Step 2:
+        //The events for the object itself are configured.
+        //The implemented event functions must correspond to signature: on<Event>.
+        //The 'on' must be followed by a capital letter.
+        //    For a complete list of allowed events see:
+        //Composite.events, Composite.PATTERN_EVENT_FUNCTIONS
+        
+        var element = document.getElementById(namespace);
+        for (var entry in scope)
+            if (typeof scope[entry] === "function"
+                    && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
+                element.addEventListener(entry.substring(2).toLowerCase(), scope[entry]);
+
+        //TODO: the handling of array, e.g. for day iterate/repaet/loop
+        //      <button id="TestButton"> -> <button id="TestButton"> einfache
+        //      <button id="TestButton"> -> <button id="TestButton:1"> mehrfach
     };
     
     //TODO:
-    //TODO: fire events render start/progress/end
-    Composite.mount = function(selector) {
-    };
-    
-    //TODO:
-    //TODO: fire events render start/progress/end
+    //(Re)Index new composite elements in the DOM.
+    //TODO: R: use of the collection of detected nodes by MutationObserver
+    //TODO: Q: sequence or not? 
     Composite.scan = function(selector) {
+        
+        if (!selector)
+            return;
+        
+        try {
+
+            var event = Composite.EVENT_SCAN_START;
+            if (Composite.ticks.scan > 0)
+                event = Composite.EVENT_SCAN_NEXT;
+            Composite.fire(event, selector);
+
+            if (typeof selector === "string") {
+                selector = selector.trim();
+                if (!selector)
+                    return;
+                var nodes = document.querySelectorAll(selector);
+                nodes.forEach(function(node, index, array) {
+                    Composite.asynchron(Composite.scan, false, node);
+                });
+                return; 
+            }
+
+            if (!(selector instanceof Element))
+                return;
+
+            var nodes = selector.querySelectorAll("[composite][id]");
+            if (selector.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                    && selector.hasAttribute(Composite.ATTRIBUTE_ID)) {
+                nodes = Array.prototype.slice.call(nodes);
+                nodes.push(selector);
+            }
+            
+            nodes.forEach(function(node, index, array) {
+                var context = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+                if (!context.match(Composite.PATTERN_COMPOSITE_CONTEXT))
+                    return;
+                Composite.asynchron(Composite.mount, false, context);            
+            });
+            
+        } finally {
+            if (Composite.ticks.scan <= 0)
+                Composite.fire(Composite.EVENT_SCAN_END);
+        }
     };
     
-    //TODO:
+    /**
+     *  TODO:
+     *  @throws An error occurs in the following cases:
+     *    - namespace is not valid or is not supported
+     *    - rendering function is not implemented correctly
+     */
     Composite.customize = function(scope, rendering) {
         
         //Custom tags, here also called macro, are based on a case-insensitive
-        //tag name (key) and a render function (value). In this method, the
+        //tag name (key) and a render function (value). In this function, the
         //tag name and the render functions are registered and a RegExp will be
         //created so that the custom tags can be found faster.
         
@@ -414,8 +568,8 @@ if (typeof(Composite) == 'undefined') {
             //Register each analyzed node/element and minimizes multiple
             //analysis. For registration, the serial number of the node/element
             //is used. The node prototype has been enhanced with creation and a
-            //get-method. During the analysis, the attributes of a element (not
-            //node) containing an expression or all allowed attributes are
+            //get-function. During the analysis, the attributes of a element
+            //(not node) containing an expression or all allowed attributes are
             //cached in the memory (Composite.elements).
             var serial = selector.ordinal();
             var object = Composite.elements[serial];
@@ -447,9 +601,6 @@ if (typeof(Composite) == 'undefined') {
             
             sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
             
-            //TODO: Erweiterung/Einfuehrung von NODE_TYPE TEXT/EXPRESSION/PARAM
-            //      - auch das Param wird dann als leeres TextNode verwendet
-            
             //Nodes of type TEXT_NODE are changed to text-elements.
             //The content is stored in the value-attribute of the wrapper-object.
             //If the element is rendered later, the value-attribute is interpreted
@@ -462,16 +613,19 @@ if (typeof(Composite) == 'undefined') {
                         && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
                     return;
 
+                
                 //Text nodes are only analyzed once.
-                //Pure text is completely ignored.
-                //Text nodes with expression are updated.
-                if (object.attributes
-                        && object.attributes[Composite.ATTRIBUTE_TEXT])
+                //Pure text is completely ignored, only text nodes with a
+                //expression as value are updated.
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_TEXT))
                     return;
-                var expression = object.attributes[Composite.ATTRIBUTE_EXPRESSION];
-                if (expression) {
-                    expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EXPRESSION, expression);
-                    object.element.nodeValue = expression;
+                
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)) {
+                    var expression = object.attributes[Composite.ATTRIBUTE_VALUE];
+                    if (expression) {
+                        expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, expression);
+                        object.element.nodeValue = expression;
+                    }
                     return;
                 }
                 
@@ -481,9 +635,9 @@ if (typeof(Composite) == 'undefined') {
                 
                 //Replacement of the text nodes with a text element.
                 //The expression will be stored in the value-attribute of the
-                //wrapper-object and not directly not on the element itself. Found
-                //expressions are replaced by simple expressions {{serial}} and a
-                //new text-element with a wrapper-object is created for the
+                //wrapper-object and not directly not on the element itself.
+                //Found expressions are replaced temporarilty by {{serial}} and
+                //a new text-element with a wrapper-object is created for the
                 //expressions, which is later inserted into the DOM.
                 //Empty expressions are ignored, are replaced by void/nothing.
                 var content = selector.textContent;
@@ -494,17 +648,22 @@ if (typeof(Composite) == 'undefined') {
                     var node = document.createTextNode("");
                     var serial = node.ordinal();
                     var object = {serial:serial, element:node, attributes:{}};
-                    object.attributes[Composite.ATTRIBUTE_EXPRESSION] = "{{" + match + "}}";
+                    object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
                     Composite.elements[serial] = object; 
                     return "{{" + serial + "}}";
                 });
                 
-                //The content of the found text nodes is separated into text-nodes
-                //for the raw text and text-elements for the expressions. The result
-                //is an array of elements (#Text + Text), which replace the found
-                //text node in the DOM. For this purpose, a temporary placeholder
-                //(empty) is inserted. The newly created text nodes/elements of the
-                //found expressions are interpreted and filled as text content.
+                //The content of the found text nodes is separated into two
+                //different types of text-nodes. The text-nodes are
+                //distinguished by the attributes Composite.ATTRIBUTE_TEXT and
+                //Composite.ATTRIBUTE_VALUE. Pure text-nodes have only the
+                //attribute Composite.ATTRIBUTE_TEXT and only text-nodes with an
+                //expression use the attribute Composite.ATTRIBUTE_VALUE.
+                //To separate the content of a text node, the first step
+                //simplifies the expression as temporary placeholder, the second
+                //step separates text and expressions to create new text-nodes,
+                //which are then inserted at the position of the original
+                //text-node.
                 var empty = document.createTextNode("");
                 selector.parentNode.replaceChild(empty, selector);
                 var words = content.split(/(\{\{\d+\}\})/);
@@ -512,8 +671,9 @@ if (typeof(Composite) == 'undefined') {
                     if (word.match(/^\{\{\d+\}\}$/)) {
                         var serial = parseInt(word.substring(2, word.length -2).trim());
                         var object = Composite.elements[serial];
-                        word = object.attributes[Composite.ATTRIBUTE_EXPRESSION];
-                        word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EXPRESSION, word);
+                        word = object.attributes[Composite.ATTRIBUTE_VALUE];
+                        word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                       
                     } else {
                         var node = document.createTextNode(word);
                         var serial = node.ordinal();
@@ -577,9 +737,9 @@ if (typeof(Composite) == 'undefined') {
             }
             
             //TODO: sequence
-            //For elements with the import-attribute, the content is loaded and the
-            //inner HTML element will be replaced by the content. If the content can
-            //be loaded successfully, the import-attribute is removed.
+            //For elements with the import-attribute, the content is loaded and
+            //the inner HTML element will be replaced by the content. If the
+            //content can be loaded successfully, the import-attribute is removed.
             if (selector.hasAttribute(Composite.ATTRIBUTE_IMPORT)) {
                 var module = (selector.getAttribute(Composite.ATTRIBUTE_IMPORT) || "").trim();
                 (function(element, url) {
@@ -656,14 +816,10 @@ if (typeof(Composite) == 'undefined') {
                     Composite.asynchron(Composite.render, sequence, node, sequence);
                 });
             }
-            
-            //(Re)Index new composite elements in the DOM.
-            //TODO: R: use of the collection of detected nodes by MutationObserver
-            //TODO: Q: sequence or not? 
-            //Composite.asynchron(Composite.scan, false, selector);
+
         } finally {
             if (Composite.ticks.render <= 0)
-                Composite.fire(Composite.EVENT_RENDER_END);
+                Composite.fire(Composite.EVENT_RENDER_END, selector);
         }
     };
     
@@ -677,13 +833,26 @@ if (typeof(Composite) == 'undefined') {
         script.parentNode.insertBefore(css, script); 
     })();
 
-    //TODO:
+    //Register a listener when an error occurs and trigger a matching composite-event.
     window.addEventListener("error", function(event) {
         Composite.fire(Composite.EVENT_ERROR, event);
     });
 
     //With the start the complete body element is rendered.
+    //Register the composite (re)scan with the end of the rendering.
     window.addEventListener("load", function(event) {
+        Composite.queue = Composite.queue || new Array();
+        Composite.listen(Composite.EVENT_RENDER_START, function(event, node) {
+            Composite.queue.push(node);
+        });
+        Composite.listen(Composite.EVENT_RENDER_END, function(event, node) {
+            var queue = new Array();
+            while (Composite.queue.length > 0)
+                queue.push(Composite.queue.shift());
+            queue.forEach(function(entry, index, array) {
+                Composite.asynchron(Composite.scan, false, entry);
+            });
+        });
         Composite.render("body");
     });
 };
@@ -729,11 +898,13 @@ if (typeof(Expression) === "undefined") {
     Expression.cache;
     
     /**
+     *  TODO: docu: add element-reference
+     *  
      *  Resolves a value-expression recursively if necessary.
      *  Value expressions refer to a field in a static bean.
-     *  The value is retrieved using a corresponding get method or, if this is
+     *  The value is retrieved using a corresponding get-function or, if this is
      *  not available, the value is retrieved directly from the field.
-     *  For the Get method, the first character is changed from field name to
+     *  For the get-function, the first character is changed from field name to
      *  uppercase and prefixed with get.
      *      e.g. {{ExampleBean.value}} -> ExampleBean.getValue()
      *  @param  context    context or expression without context
@@ -1032,7 +1203,7 @@ if (typeof(Expression) === "undefined") {
      *  In case of an error, the error is returned and no exception is thrown.
      *  A serial can be specified optionally. The serial is an alias for caching
      *  compiled expressions. Without, the expressions are always compiled. 
-     *  The method uses variable parameters and has the following signatures:
+     *  The function uses variable parameters and has the following signatures:
      *      function(expression) 
      *      function(serial, expression)
      *  @param  serial
