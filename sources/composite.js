@@ -197,6 +197,7 @@ if (typeof(Composite) == 'undefined') {
         + " volume|change"
         + " waiting wheel";
     
+    //TODO:
     Composite.PATTERN_EVENT_FUNCTIONS = (function() {
         var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, function(match, letter) {
            return letter.toUpperCase();
@@ -391,7 +392,7 @@ if (typeof(Composite) == 'undefined') {
      *    - namespace cannot be created if it already exists as a method
      */
     Composite.mount = function(namespace) {
-
+        
         //Step 1:
         //The namespace will be created.
         
@@ -441,7 +442,7 @@ if (typeof(Composite) == 'undefined') {
         
         if (!selector)
             return;
-        
+
         try {
 
             var event = Composite.EVENT_SCAN_START;
@@ -463,7 +464,7 @@ if (typeof(Composite) == 'undefined') {
             if (!(selector instanceof Element))
                 return;
 
-            var nodes = selector.querySelectorAll("[composite][id]");
+            var nodes = selector.querySelectorAll("[id]");
             if (selector.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
                     && selector.hasAttribute(Composite.ATTRIBUTE_ID)) {
                 nodes = Array.prototype.slice.call(nodes);
@@ -613,7 +614,6 @@ if (typeof(Composite) == 'undefined') {
                         && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
                     return;
 
-                
                 //Text nodes are only analyzed once.
                 //Pure text is completely ignored, only text nodes with a
                 //expression as value are updated.
@@ -673,7 +673,6 @@ if (typeof(Composite) == 'undefined') {
                         var object = Composite.elements[serial];
                         word = object.attributes[Composite.ATTRIBUTE_VALUE];
                         word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, word);
-                       
                     } else {
                         var node = document.createTextNode(word);
                         var serial = node.ordinal();
@@ -720,7 +719,7 @@ if (typeof(Composite) == 'undefined') {
             var condition = object.attributes[Composite.ATTRIBUTE_CONDITION];
             if (condition) {
                 condition = Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition);
-                selector.setAttribute(Composite.ATTRIBUTE_CONDITION, condition !== true);
+                selector.setAttribute(Composite.ATTRIBUTE_CONDITION, condition === true);
                 //Recursive processing is stopped at the first element where the
                 //condition-attribute is false. Further sub-elements are not followed.
                 if (condition !== true)
