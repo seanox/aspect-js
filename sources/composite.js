@@ -49,7 +49,10 @@ if (typeof(Composite) == 'undefined') {
      */
     Composite = {};
     
-    //TODO:
+    /** 
+     *  Assoziative array for elements that were detected during rendering and a
+     *  wrapper was created. (key:Serial, value:wrapper)
+     */ 
     Composite.elements;
     
     /** Assoziative array for custom tags (key:tag, value:function) */
@@ -61,10 +64,10 @@ if (typeof(Composite) == 'undefined') {
     /** RegExp to detect custom tags */
     Composite.pattern;
 
-    //TODO: 
+    /** Assoziative array with different counters */
     Composite.ticks = {render:0, scan:0};
     
-    //TODO:
+    /** Assoziative array with events and their registered listerners */
     Composite.listeners;
     
     /** Constant for attribute composite */
@@ -108,13 +111,19 @@ if (typeof(Composite) == 'undefined') {
      */
     Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|sequence|render|value$/i;   
     
-    //TODO:
+    /** Pattern for all attributes that are not cached during rendering */
     Composite.PATTERN_ATTRIBUTE_IGNORE = /import|condition/i;    
 
-    //TODO:
+    /** 
+     *  Pattern to detect if a string contains an expression.
+     *  Escaping characters via slash is supported.
+     */
     Composite.PATTERN_EXPRESSION_CONTAINS = /\{\{((.*?[^\\](\\\\)*)|((\\\\)*))*?\}\}/g;   
     
-    //TODO:
+    /**
+     *  Patterns to test whether an expression is exclusive, i.e. an expression
+     *  without additional text fragments before or after.
+     */
     Composite.PATTERN_EXPRESSION_EXCLUSIVE = /^\s*\{\{((.*?[^\\](\\\\)*)|((\\\\)*))*\}\}\s*$/;
 
     //TODO:
@@ -141,13 +150,13 @@ if (typeof(Composite) == 'undefined') {
     //TODO:
     Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
     
-    //TODO:
+    /** Pattern for the namespace separator */
     Composite.PATTERN_NAMESPACE_SEPARATOR = /[\\\/\.]/;
     
-    //TODO:
+    /** Pattern for a valid namespace. */
     Composite.PATTERN_NAMESPACE = /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i;
     
-    //TODO:
+    /** Pattern to detect if there are conflicts in the namespace. */
     Composite.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
 
     /** Constants of events during rendering */

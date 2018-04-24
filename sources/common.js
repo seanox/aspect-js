@@ -36,13 +36,13 @@ if (typeof(Namespace) === "undefined") {
     //TODO:
     Namespace = {};
     
-    //TODO:
+    /** Pattern for the namespace separator */
     Namespace.PATTERN_NAMESPACE_SEPARATOR = /[\\\/\.]/;
     
-    //TODO:
+    /** Pattern for a valid namespace. */
     Namespace.PATTERN_NAMESPACE = /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i;
     
-    //TODO:
+    /** Pattern to detect if there are conflicts in the namespace. */
     Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
     
     /**
