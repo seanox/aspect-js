@@ -33,12 +33,12 @@
  *    werden. An einem Element befindliche aspect-js-Attribute sind ein
  *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
  *  
- *  Composite 1.0 20180421
+ *  Composite 1.0 20180428
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180421
+ *  @version 1.0 20180428
  */
 if (typeof(Composite) == 'undefined') {
     
@@ -58,12 +58,12 @@ if (typeof(Composite) == 'undefined') {
     /** Assoziative array for custom tags (key:tag, value:function) */
     Composite.macros;
 
+    /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
+    Composite.selectors;
+
     /** Queue with outstanding scans */
     Composite.queue;
     
-    /** RegExp to detect custom tags */
-    Composite.pattern;
-
     /** Assoziative array with different counters */
     Composite.ticks = {render:0, scan:0};
     
@@ -142,7 +142,7 @@ if (typeof(Composite) == 'undefined') {
     Composite.PATTERN_COMPOSITE_CONTEXT = /^[a-z](?:[\w\.]*[\w])*$/i;
     
     //TODO:
-    Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z]\w*$/i;
+    Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
 
     //TODO:
     Composite.PATTERN_PARAM_NAME = /^_*[a-z]\w*$/i;
@@ -267,41 +267,21 @@ if (typeof(Composite) == 'undefined') {
             element.textContent = this;
             return element.innerHTML;
         };
-    };    
+    }; 
     
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a function for encoding the string objects in hexadecimal code.
-     */      
-    if (String.prototype.encodeHex === undefined) {
-        String.prototype.encodeHex = function() {
-            var text = this;
-            var result = "";
-            for (var loop = 0; loop < text.length; loop++) {
-                var digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
-                while (digit.length < 2)
-                    digit = "0" + digit;            
-                result += digit;
-            }
-            return "0x" + result;
+    //TODO:
+    if (String.prototype.hashCode === undefined) {
+        String.prototype.hashCode = function() {
+            if (this.hash == undefined)
+                this.hash = 0;
+            if (this.hash != 0)
+                return this.hash;
+            for (var loop = 0; loop < this.length; loop++)
+                this.hash = 31 *this.hash +this.charCodeAt(loop);
+            this.hash = this.hash & this.hash;
+            return this.hash;
         };
-    };  
-    
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a function for decoding hexadecimal code to the string objects.
-     */     
-    if (String.prototype.decodeHex === undefined) {
-        String.prototype.decodeHex = function() {
-            var text = this;
-            if (text.match(/^0x/))
-                text = text.substring(2);
-            var result = "";
-            for (var loop = 0; loop < text.length; loop += 2)
-                result += String.fromCharCode(parseInt(text.substr(loop, 2), 16));
-            return result;
-        };
-    };      
+    }; 
 
     /**
      *  Registers a callback function for composite events.
@@ -511,21 +491,23 @@ if (typeof(Composite) == 'undefined') {
         if (typeof(rendering) !== "function"
                 && rendering !== null
                 && rendering !== undefined)
-            throw new TypeError("Invalid rendering: " + typeof(rendering));        
-        if (!scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE))
-            throw new Error("Invalid scope" + (scope.trim() ? ": " + scope : ""));
-        
-        Composite.macros = Composite.macros || {};
-        if (rendering == null)
-            delete Composite.macros[scope.toLowerCase()];
-        else Composite.macros[scope.toLowerCase()] = rendering;
-        
-        var pattern = new Array();
-        for (var macro in Composite.macros)
-            pattern.push(macro);
-        if (pattern.length)
-            Composite.pattern = new RegExp("^" + pattern.join("|") + "$", "i");
-        else Composite.pattern = null;
+            throw new TypeError("Invalid rendering: " + typeof(rendering));
+        scope = scope.trim();
+        if (scope.length <= 0)
+            throw new Error("Invalid scope");
+            
+        if (scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE)) {
+            Composite.macros = Composite.macros || {};
+            if (rendering == null)
+                delete Composite.macros[scope.toLowerCase()];
+            else Composite.macros[scope.toLowerCase()] = rendering;
+        } else {
+            var hash = scope.toLowerCase().hashCode();
+            Composite.selectors = Composite.selectors || {};
+            if (rendering == null)
+                delete Composite.selectors[hash];
+            else Composite.selectors[hash] = {selector:scope, rendering:rendering};
+        } 
     };
     
     /**
@@ -793,6 +775,17 @@ if (typeof(Composite) == 'undefined') {
                 return;
             }
             
+            //TODO: Composite.selectors
+            Composite.selectors = Composite.selectors || {};
+            for (var macro in Composite.selectors) {
+                (function(element, macro) {
+                    var nodes = element.querySelectorAll(macro.selector);
+                    nodes.forEach(function(node, index, array) {
+                        Composite.asynchron(macro.rendering, sequence, node);
+                    });
+                })(selector, Composite.selectors[macro]);
+            }
+
             //The expression in the attributes is interpreted.
             //The expression is stored in a wrapper object and loaded from there,
             //the attributes of the element can be overwritten in a render cycle and
