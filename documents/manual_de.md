@@ -208,7 +208,7 @@ getrennt mehrere Ziele ansprechen.
 ```
 <button events="click dblclick" render="article:nth-child(1), article:nth-child(2)">
   ...
-</article>
+</button>
 ```
 
 
@@ -264,7 +264,9 @@ unterstützt. Das Customizing ist ein fester Bestandteil vom Rendering, welches
 zusätzliche und geänderte Tags wie die Standard-Tags verwendet.
 
 ```
-<example attr-a="a" attr-a="b"> ... </example>
+<example>
+  ...
+</example>
 ```
 
 ```
@@ -272,6 +274,10 @@ Composite.customize("example", function(element) {
     element.innerHTML = "my example-tag, my example-output...";
 });
 ```
+
+Der Renderer ruft die Tag-Implementierung immer mit dem aktuell verarbeiteten
+HTML-Element als Argument auf, was den Zugriff auf das Element und somit auf
+dessen Attribute, Events und vieles mehr, unterstützt.
 
 
 ### Composite-JavaScript
