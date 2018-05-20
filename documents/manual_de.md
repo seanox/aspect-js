@@ -268,8 +268,8 @@ zusätzliche und geänderte Tags wie die Standard-Tags verwendet.
 ```
 
 ```
-Composite.customize("x-projects", function(element) {
-    element.innerHTML = "my tag, my output...";
+Composite.customize("example", function(element) {
+    element.innerHTML = "my example-tag, my example-output...";
 });
 ```
 
