@@ -54,11 +54,29 @@ Verständnis von Rendering, Expression Language und Performance.
 {{Example.object.field}}
 ```
 
+Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht verfügbar
+ist und der Rückgabewert entspricht dann `undefined`.
+
 
 #### Method-Expression
 
 ```
 {{Example.getData()}}
+```
+
+Die Method-Expression ist streng und führt zu einem Fehler, wenn ein Objekt nicht
+verfügbar ist.
+
+#### Element-Expression
+
+Beginnt in einer Expression eine Variable mit `#`, so verweist diese Variable
+auf ein HTML-Element mit gleichnamiger ID. Kann kein passendes HTML-Element
+gefunden werden, entspricht der Wert der Variablen `undefined`.
+
+```
+{{#ExampleElement.value}}
+
+<input type="text" id="ExampleElement"/>
 ```
 
 
@@ -236,6 +254,30 @@ Language.
 Auf diese Art erzeugte Parameter sind als JavaScript-Variable global verfügbar.
 Daher Vorsicht, da so auch existierende Variablen, Funktionen oder Objekte
 überschrieben werden können.
+
+
+### Custom-Tags
+
+Die Erweiterung durch neue Tags und auch die Anpassung der Implementierung
+existierender Tags wird durch die Methode `Composite.customize(tag, function(element))`
+unterstützt. Das Customizing ist ein fester Bestandteil vom Rendering, welches
+zusätzliche und geänderte Tags wie die Standard-Tags verwendet.
+
+```
+<example attr-a="a" attr-a="b"> ... </example>
+```
+
+```
+Composite.customize("x-projects", function(element) {
+    element.innerHTML = "my tag, my output...";
+});
+```
+
+
+Neben den existierenden Tags können auch eigene erstellt oder existierende
+geändert bzw. mit einer eigenen Implementierung überschrieben werden. 
+Dafür steht die Methode Composite.customize(tag, function) bereit.
+
 
 
 ### Composite-JavaScript
