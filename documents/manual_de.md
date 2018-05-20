@@ -274,12 +274,6 @@ Composite.customize("x-projects", function(element) {
 ```
 
 
-Neben den existierenden Tags können auch eigene erstellt oder existierende
-geändert bzw. mit einer eigenen Implementierung überschrieben werden. 
-Dafür steht die Methode Composite.customize(tag, function) bereit.
-
-
-
 ### Composite-JavaScript
 
 Beim JavaScript gibt es keine Unterschiede.  
