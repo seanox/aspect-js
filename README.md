@@ -10,6 +10,7 @@
 - Event handling
 - Expression Language
 - Markup rendering (supports conditions, action and custom tags)
+- Model View Controller (incl. events)
 - ...
 
 
