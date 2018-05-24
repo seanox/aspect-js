@@ -8,6 +8,7 @@
         font-family:monospace; white-space:pre;
       }
     </style>
+    <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
     <script type="text/javascript">
@@ -41,7 +42,7 @@
             for (var loop = 0; loop < 250; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }}); 
-        Test.create({timeout:750, test:function() {
+        Test.create({timeout:1000, test:function() {
             var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (var loop = 0; loop < 25000; loop++)
