@@ -8,6 +8,7 @@
         font-family:monospace; white-space:pre;
       }
     </style>
+    <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
     <script src="../sources/testutils.js"></script>
@@ -19,7 +20,17 @@
         }});         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
-        });     
+        });
+        Example = {
+            xa: function() {
+                return 122;        
+            },
+            xb: function() {
+                var element = document.createElement("i");
+                element.innerHTML = "Hallo";
+                return element;        
+            }
+        }
     </script>
     <script type="text/test">
     mapping:
@@ -143,7 +154,17 @@
     X0: <input id="HiddenField" value="Test-HF" type="hidden">
     X1: <input id="HiddenField_1" value="Test-HF_A" type="hidden">
     X2: <input id="HiddenField_2" value="Test-HF_B" type="hidden">
-    X3: <input id="HiddenField_3" value="Test-HF_C" type="hidden">    
+    X3: <input id="HiddenField_3" value="Test-HF_C" type="hidden">
+
+    O1: <span>undefined</span>
+    O2: <span>function() {
+                return 122;        
+            }</span>
+    O3: <span>122</span>
+    O4: <span>xxxx</span>
+    O5: <span>xxxx</span>
+    O6: <span>xxxxx</span>
+    O7: <span><i>Hallo</i></span>
     </script>
   </head>
   <body>
@@ -246,6 +267,14 @@
     X0: <input type="hidden" id="HiddenField" value="Test-HF">
     X1: <input type="hidden" id="HiddenField_1" value="Test-HF_A">
     X2: <input type="hidden" id="HiddenField_2" value="Test-HF_B">
-    X3: <input type="hidden" id="HiddenField_3" value="Test-HF_C">    
+    X3: <input type="hidden" id="HiddenField_3" value="Test-HF_C">
+
+    O1: <span output="{{}}">span-1</span>
+    O2: <span output="{{Example.xa}}">span-2</span>
+    O3: <span output="{{Example.xa()}}">span-3</span>
+    O4: <span output="x{{'xxx'}}">span-4</span>
+    O5: <span output="{{'xxx'}}x">span-5</span>
+    O6: <span output="x{{'xxx'}}x">span-6</span>
+    O7: <span output="{{Example.xb()}}">span-7</span>
   </body>
 </html>

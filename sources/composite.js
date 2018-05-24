@@ -33,12 +33,12 @@
  *    werden. An einem Element befindliche aspect-js-Attribute sind ein
  *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
  *  
- *  Composite 1.0 20180428
+ *  Composite 1.0 20180524
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180428
+ *  @version 1.0 20180524
  */
 if (typeof(Composite) == 'undefined') {
     
@@ -87,7 +87,10 @@ if (typeof(Composite) == 'undefined') {
     
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
-    
+
+    /** Constant for attribute output */
+    Composite.ATTRIBUTE_OUTPUT = "output";
+
     /** Constant for attribute render */
     Composite.ATTRIBUTE_RENDER = "render";     
     
@@ -109,10 +112,10 @@ if (typeof(Composite) == 'undefined') {
      *  is cached in the object wrapper. Other attributes are only cached if
      *  they contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|sequence|render|value$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|output|sequence|render|value$/i;   
     
     /** Pattern for all attributes that are not cached during rendering */
-    Composite.PATTERN_ATTRIBUTE_IGNORE = /import|condition/i;    
+    Composite.PATTERN_ATTRIBUTE_IGNORE = /import|condition|output/i;    
 
     /** 
      *  Pattern to detect if a string contains an expression.
@@ -246,50 +249,36 @@ if (typeof(Composite) == 'undefined') {
             return value; 
         };     
     };
-    
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a capitalize function to the String objects.
-     */ 
-    if (String.prototype.capitalize === undefined) {
-        String.prototype.capitalize = function() {
-            return this.charAt(0).toUpperCase() + this.slice(1);
-        };
-    };
 
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a HTML encode function to the String objects.
+     *  Implements an own send method for event management. The original method
+     *  is reused in the background.
      */ 
-    if (String.prototype.encodeHtml === undefined) {
-        String.prototype.encodeHtml = function() {
-            var element = document.createElement("div");
-            element.textContent = this;
-            return element.innerHTML;
+    XMLHttpRequest.prototype.internalSend = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function(body) {
+        Composite.fire(Composite.EVENT_AJAX_START, this); 
+        var internalOnReadyStateChange = this.onreadystatechange;
+        this.onreadystatechange = function() {
+            Composite.fire(Composite.EVENT_AJAX_RECEIVE, this);
+            if (this.readyState == 4) {
+                if (this.status == "200")
+                    Composite.fire(Composite.EVENT_AJAX_SUCCESS, this);
+                else Composite.fire(Composite.EVENT_AJAX_ERROR, this);
+            }
+            if (internalOnReadyStateChange)
+                internalOnReadyStateChange.apply(this, arguments);
         };
+        this.internalSend(body);
     }; 
     
-    //TODO:
-    if (String.prototype.hashCode === undefined) {
-        String.prototype.hashCode = function() {
-            if (this.hash == undefined)
-                this.hash = 0;
-            if (this.hash != 0)
-                return this.hash;
-            for (var loop = 0; loop < this.length; loop++)
-                this.hash = 31 *this.hash +this.charCodeAt(loop);
-            this.hash = this.hash & this.hash;
-            return this.hash;
-        };
-    }; 
-
     /**
      *  Registers a callback function for composite events.
      *  @param  event    see Composite.EVENT_***
      *  @param  callback callback function
      *  @throws An error occurs in the following cases:
-     *    - event is not valid or is not supported
-     *    - callback function is not implemented correctly or does not exist
+     *      - event is not valid or is not supported
+     *      - callback function is not implemented correctly or does not exist
      */
     Composite.listen = function(event, callback) {
         
@@ -727,6 +716,7 @@ if (typeof(Composite) == 'undefined') {
             }
             
             //TODO: sequence
+            //TODO: url as expression is possible
             //For elements with the import-attribute, the content is loaded and
             //the inner HTML element will be replaced by the content. If the
             //content can be loaded successfully, the import-attribute is removed.
@@ -734,21 +724,17 @@ if (typeof(Composite) == 'undefined') {
                 var module = (selector.getAttribute(Composite.ATTRIBUTE_IMPORT) || "").trim();
                 (function(element, url) {
                     try {
-                        Composite.fire(Composite.EVENT_AJAX_START, "GET", url);                    
                         var request = new XMLHttpRequest();
                         request.overrideMimeType("text/plain");
                         request.open("GET", url, true);
                         request.onreadystatechange = function() {
-                            Composite.fire(Composite.EVENT_AJAX_RECEIVE, request);
                             if (request.readyState == 4) {
                                 if (request.status == "200") {
-                                    Composite.fire(Composite.EVENT_AJAX_SUCCESS, request);
                                     element.innerHTML = request.responseText;
                                     element.removeAttribute(Composite.ATTRIBUTE_IMPORT);
                                     Composite.render(element);
                                     return;
                                 }
-                                Composite.fire(Composite.EVENT_AJAX_ERROR, request);
                                 function HttpRequestError(message) {
                                     this.name = 'HttpRequestError';
                                     this.message = message;
@@ -765,7 +751,25 @@ if (typeof(Composite) == 'undefined') {
                     }
                 })(selector, module);
                 return;
-            }         
+            } 
+
+            //This attribute is used to set the value or result of an expression
+            //as the content of the selected element. For an expression, the
+            //result can also be an element or a node list with elements. All
+            //other data types are set as text. This setting is exclusive, thus
+            //overwriting any existing content.
+            if (selector.hasAttribute(Composite.ATTRIBUTE_OUTPUT)) {
+                selector.removeAttribute(Composite.ATTRIBUTE_OUTPUT);
+                var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
+                if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                    var context = serial + ":" + Composite.ATTRIBUTE_OUTPUT;
+                    value = Expression.eval(context, value);
+                    if (value instanceof Element
+                            || value instanceof NodeList)
+                        selector.appendChild(value, true);
+                    else selector.innerHTML = String(value);
+                } else selector.innerHTML = value;
+            }
             
             //If a custom tag exists, the macro is executed.
             Composite.macros = Composite.macros || {};
@@ -1171,7 +1175,7 @@ if (typeof(Expression) === "undefined") {
         mux(cascade.words);
         
         //Step 6:
-        //Create a script from the Word sequence.
+        //Create a script from the word sequence.
         //The possible word types: text, literal, keyword, value, method, logic
         //Text and expression are always separated by brackets.
         //    e.g. text + (expression) + text + ...
@@ -1190,7 +1194,11 @@ if (typeof(Expression) === "undefined") {
                     || word.type == Expression.TYPE_LOGIC)
                 script += word.data;
         });
-        script = script.replace(/(^\n)|(\r$)/, '');
+        script = script.replace(/(^\n)|(\r$)/g, '');
+        if (script.match(/\r[^\n]*$/))
+            script += ")";
+        if (script.match(/^[^\r]*\n/))
+            script = "(" + script; 
         script = script.replace(/(\n\r)+/g, ' + ');
         script = script.replace(/\r/g, ' + (');
         script = script.replace(/\n/g, ') + ');
