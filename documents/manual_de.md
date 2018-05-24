@@ -150,20 +150,19 @@ HTML-Elementen beim Rendering. So werden HTML-Elemente mit dem Attribut
 ```
 
 
-#### sequence
+#### event
 
-Beim Rendern wird das DOM rekursive durchlaufen und den Verzweigungen
-unkontrolliert gefolgt. Werden JavaScript oder Parameter im Markup eingebettet,
-kann dieses zu unerwarteten Effekte führen, da die Reihenfolge bei der
-Ausführung nicht gesteuert werden kann.  
-Die Option `sequence` bewirkt ab dem so gekennzeichneten HTML-Element weiterhin
-ein rekursives Durchlaufen mit kontrollierter Verzweigung im DOM von oben nach
-unten.
+Die Attribute `events` und `render` gehören zusammen.  
+So bestimmt das Attribut `events`, durch Leerzeichen getrennt, welche Ereignisse
+bei einem HTML-Element den Aufruf des Renderers bewirken, wobei der Umfang vom
+Rendering durch den CSS-Selector im Attribut `render` festgelegt wird.
+Entsprechend der üblichen Verwendung des CSS-Selector, kann dieser durch Komma
+getrennt mehrere Ziele ansprechen.
 
 ```
-<article sequence>
+<button events="click dblclick" render="article:nth-child(1), article:nth-child(2)">
   ...
-</article>
+</button>
 ```
 
 
@@ -196,19 +195,18 @@ erst geladen werden, wenn diese benötigt werden.
 TODO: siehe auch Composite-JavaScript
 
 
-#### event
+#### output
 
-Die Attribute `events` und `render` gehören zusammen.  
-So bestimmt das Attribut `events`, durch Leerzeichen getrennt, welche Ereignisse
-bei einem HTML-Element den Aufruf des Renderers bewirken, wobei der Umfang vom
-Rendering durch den CSS-Selector im Attribut `render` festgelegt wird.
-Entsprechend der üblichen Verwendung des CSS-Selector, kann dieser durch Komma
-getrennt mehrere Ziele ansprechen.
+Mit diesem Attribute wird der Wert bzw. das Ergebnis einer Expression als Inhalt
+von einem Element (`Element.innerHTML`) gesetzt. Bei einer Expression kann das
+Ergebnis auch ein Element oder eine NodeList mit Elementen sein. Alle anderen
+Datentypen werden als Text gesetzt. Das setzen erfolgt exclusive, überschreibt
+damit evtl. existierenden Inhalt.
 
 ```
-<button events="click dblclick" render="article:nth-child(1), article:nth-child(2)">
+<div output="{{Example.getData()}}">
   ...
-</button>
+<div>
 ```
 
 
@@ -223,6 +221,23 @@ getrennt mehrere Ziele ansprechen.
 
 ```
 <button events="click dblclick" render="article:nth-child(1), article:nth-child(2)">
+  ...
+</article>
+```
+
+
+#### sequence
+
+Beim Rendern wird das DOM rekursive durchlaufen und den Verzweigungen
+unkontrolliert gefolgt. Werden JavaScript oder Parameter im Markup eingebettet,
+kann dieses zu unerwarteten Effekte führen, da die Reihenfolge bei der
+Ausführung nicht gesteuert werden kann.  
+Die Option `sequence` bewirkt ab dem so gekennzeichneten HTML-Element weiterhin
+ein rekursives Durchlaufen mit kontrollierter Verzweigung im DOM von oben nach
+unten.
+
+```
+<article sequence>
   ...
 </article>
 ```
@@ -271,7 +286,7 @@ zusätzliche und geänderte Tags wie die Standard-Tags verwendet.
 
 ```
 Composite.customize("example", function(element) {
-    element.innerHTML = "my example-tag, my example-output...";
+    element.innerHTML = "my example-output...";
 });
 ```
 
