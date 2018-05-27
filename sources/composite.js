@@ -23,8 +23,11 @@
  *      DESCRIPTION
  *      ----
  *  TODO:
- *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei ersten Auftreten eines Elements gelesen und können später nicht geänert werden, da sie dann aus Element-Cache verwendet werden 
- *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese eine Expression enthalten
+ *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei
+ *    ersten Auftreten eines Elements gelesen und können später nicht geänert
+ *    werden, da sie dann aus Element-Cache verwendet werden 
+ *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese
+ *    eine Expression enthalten
  *  - Die Welt ist statisch. So auch aspect-js und alle Komponenten.
  *    Das erspart die Verwaltung und Einrichtung von Instanzen.
  *  - Rendering: Clean Code
@@ -32,13 +35,18 @@
  *    zwischengespeichert und koennen/sollen im Markup nach Verwendung entfernt
  *    werden. An einem Element befindliche aspect-js-Attribute sind ein
  *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
+ *  - Object-Bindung
+ *    Die Composite-ID setzt sich wie folgt zusammen: namespace:qualifier
+ *        nameSpace = package + class
+ *        qualifier = zusätzliche Kennzeichnung damit die ID unique ist
+ *    Der Qualifier wird von Composite/Object-Bindung ignoriert.
  *  
- *  Composite 1.0 20180524
+ *  Composite 1.0 20180526
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180524
+ *  @version 1.0 20180526
  */
 if (typeof(Composite) == 'undefined') {
     
@@ -142,7 +150,7 @@ if (typeof(Composite) == 'undefined') {
     Composite.PATTERN_ELEMENT_SCRIPT_TYPE = /^(text|condition)\/javascript$/i;
     
     //TODO:
-    Composite.PATTERN_COMPOSITE_CONTEXT = /^[a-z](?:[\w\.]*[\w])*$/i;
+    Composite.PATTERN_COMPOSITE_CONTEXT = /^([a-z](?:[\w\.]*[\w])*)(?:\:(.*))*$/i;
     
     //TODO:
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
@@ -214,7 +222,7 @@ if (typeof(Composite) == 'undefined') {
         var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, function(match, letter) {
            return letter.toUpperCase();
         });
-        pattern = new RegExp("^on(" + pattern.replace(/\s+/g, '|') + ")");
+        pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
         return pattern;
     })();
 
@@ -369,19 +377,34 @@ if (typeof(Composite) == 'undefined') {
      *    - namespace is not valid or is not supported
      *    - namespace cannot be created if it already exists as a method
      */
-    Composite.mount = function(namespace) {
+    Composite.mount = function(variant) {
         
+        if (!(variant instanceof Element)
+                && typeof(variant) !== "string")
+            throw new TypeError("Invalid argument type: " + typeof(variant));
+        
+        var identifier;
+        if (variant instanceof Element)
+            identifier = variant.getAttribute(Composite.ATTRIBUTE_ID);
+        else identifier = variant;
+        
+        var element;
+        if (!(variant instanceof Element))
+            element = document.getElementById(namespace);
+        else element = variant;
+        
+        identifier = identifier.replace(/:.*$/, "").trim();
+
         //Step 1:
         //The namespace will be created.
-        
-        if (typeof(namespace) !== "string")
-            throw new TypeError("Invalid namespace: " + typeof(namespace));
+
+        var namespace = identifier;
         if (!namespace.match(Composite.PATTERN_NAMESPACE)
                 || namespace.match(Composite.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
-            throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
+            throw new Error("Invalid namespace" + (namespace ? ": " + namespace : ""));
         
         var scope = window;
-        namespace = namespace.replace(/^[\\\/]/, '');
+        namespace = namespace.replace(/^[\\\/]/, "");
         namespace.split(Composite.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
             if (typeof(scope[entry]) === "undefined") {
                 scope[entry] = new Object();
@@ -401,7 +424,6 @@ if (typeof(Composite) == 'undefined') {
         //    For a complete list of allowed events see:
         //Composite.events, Composite.PATTERN_EVENT_FUNCTIONS
         
-        var element = document.getElementById(namespace);
         for (var entry in scope)
             if (typeof scope[entry] === "function"
                     && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
@@ -410,6 +432,9 @@ if (typeof(Composite) == 'undefined') {
         //TODO: the handling of array, e.g. for day iterate/repaet/loop
         //      <button id="TestButton"> -> <button id="TestButton"> einfache
         //      <button id="TestButton"> -> <button id="TestButton:1"> mehrfach
+        //TODO: wird das wirklich benoetigt???
+        //identifier = identifier + ":" + element.ordinal();
+        //element.setAttribute(Composite.ATTRIBUTE_ID, identifier);
     };
     
     //TODO:
@@ -453,7 +478,7 @@ if (typeof(Composite) == 'undefined') {
                 var context = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
                 if (!context.match(Composite.PATTERN_COMPOSITE_CONTEXT))
                     return;
-                Composite.asynchron(Composite.mount, false, context);            
+                Composite.asynchron(Composite.mount, false, node);            
             });
             
         } finally {
@@ -566,11 +591,12 @@ if (typeof(Composite) == 'undefined') {
                             object.attributes[attribute.nodeName.toLowerCase()] = value;
                     });
             }
-            
+
             //The name of the parameter must correspond to the pattern
             //Composite.PATTERN_PARAM_NAME. Parameters with invalid names are
             //ignored. An invalid name does not cause an error.
             if (selector.nodeName.match(Composite.PATTERN_ELEMENT_PARAM)) {
+                selector.removeAttribute(Composite.ATTRIBUTE_VALUE);
                 var name = (object.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
                 if (!name.match(Composite.PATTERN_PARAM_NAME))
                     return;
@@ -758,8 +784,9 @@ if (typeof(Composite) == 'undefined') {
             //result can also be an element or a node list with elements. All
             //other data types are set as text. This setting is exclusive, thus
             //overwriting any existing content.
-            if (selector.hasAttribute(Composite.ATTRIBUTE_OUTPUT)) {
+            if (selector.hasAttribute(Composite.ATTRIBUTE_OUTPUT))
                 selector.removeAttribute(Composite.ATTRIBUTE_OUTPUT);
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
                 var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     var context = serial + ":" + Composite.ATTRIBUTE_OUTPUT;
@@ -1045,7 +1072,7 @@ if (typeof(Expression) === "undefined") {
             if (entry.match(/^\{\{.*\}\}$/)) {
                 object.data = object.data.substring(2, object.data.length -2);
                 object.type = Expression.TYPE_EXPRESSION;
-            } else object.data = "\"" + object.data.replace(/\\/, '\\\\').replace(/"/, '\\"') + "\"";
+            } else object.data = "\"" + object.data.replace(/\\/, "\\\\").replace(/"/, "\\\"") + "\"";
             collate(object);
             cascade.words.push(object);
         });
@@ -1057,19 +1084,19 @@ if (typeof(Expression) === "undefined") {
 
         cascade.expression.forEach(function(entry, index, array) {
             var text = entry.data;
-            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, '$1\n$2\n');
-            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, '$1\r$2\r');
+            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, "$1\n$2\n");
+            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, "$1\r$2\r");
             var words = new Array();
             var pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
                 text = text.replace(pattern, function(match, script, literal) {
-                    script = script.replace(/\n/g, '\'');
-                    script = script.replace(/\r/g, '\"');
+                    script = script.replace(/\n/g, "\'");
+                    script = script.replace(/\r/g, "\"");
                     script = {type:Expression.TYPE_SCRIPT, data:script};
                     collate(script);
                     words.push(script);
-                    literal = literal.replace(/\n/g, '\'');
-                    literal = literal.replace(/\r/g, '\"');
+                    literal = literal.replace(/\n/g, "\'");
+                    literal = literal.replace(/\r/g, "\"");
                     literal = {type:Expression.TYPE_LITERAL, data:literal};
                     collate(literal);
                     words.push(literal);
@@ -1077,8 +1104,8 @@ if (typeof(Expression) === "undefined") {
                 });
             }
             if (text.length > 0) {
-                text = text.replace(/\n/g, '\'');
-                text = text.replace(/\r/g, '\"');
+                text = text.replace(/\n/g, "\'");
+                text = text.replace(/\r/g, "\"");
                 text = {type:Expression.TYPE_SCRIPT, data:text};
                 collate(text);
                 words.push(text);
@@ -1132,8 +1159,8 @@ if (typeof(Expression) === "undefined") {
         
         cascade.other.forEach(function(entry, index, array) {
             var text =  entry.data;
-            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, '$1\n\r\r$2\n');
-            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, '$1\n\r$2\n');
+            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
             var words = new Array();
             text.split(/\n/).forEach(function(entry, index, array) {
                 var object = {type:Expression.TYPE_LOGIC, data:entry};
@@ -1194,15 +1221,15 @@ if (typeof(Expression) === "undefined") {
                     || word.type == Expression.TYPE_LOGIC)
                 script += word.data;
         });
-        script = script.replace(/(^\n)|(\r$)/g, '');
+        script = script.replace(/(^\n)|(\r$)/g, "");
         if (script.match(/\r[^\n]*$/))
             script += ")";
         if (script.match(/^[^\r]*\n/))
             script = "(" + script; 
-        script = script.replace(/(\n\r)+/g, ' + ');
-        script = script.replace(/\r/g, ' + (');
-        script = script.replace(/\n/g, ') + ');
-        script = script.replace(/(^\s*\+\s*)|(\s*\+\s*$)/, '');
+        script = script.replace(/(\n\r)+/g, " + ");
+        script = script.replace(/\r/g, " + (");
+        script = script.replace(/\n/g, ") + ");
+        script = script.replace(/(^\s*\+\s*)|(\s*\+\s*$)/, "");
         
         return script;
     };
