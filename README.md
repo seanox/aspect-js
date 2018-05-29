@@ -9,8 +9,11 @@
 - Modularization (supports imports at the runtime)
 - Event handling
 - Expression Language
-- Markup rendering (supports conditions, action and custom tags)
-- Model View Controller (incl. events)
+- Markup rendering  
+  supports condition, action, interval, iterate, custom tags, filter, ...
+- Model View Controller  
+  incl. events and virtual paths
+- NoSQL datasource based on XML
 - ...
 
 
