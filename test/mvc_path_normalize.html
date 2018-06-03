@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace; white-space:pre;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/mvc.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+    
+      Test.create({test:function() {
+          
+          Assert.assertNull(Path.normalize());
+          Assert.assertNull(Path.normalize(null));
+          
+          Assert.assertEquals("#", Path.normalize(""));
+          
+          Assert.assertEquals("#aaa", Path.normalize("aaa"));
+          Assert.assertEquals("#aaa#bbb", Path.normalize("aaa#bbb"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa#bbb#ccc"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa#bbb#ccc#"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa##bbb##ccc##"));
+          
+          Assert.assertEquals("#aaa#bbb", Path.normalize("#aaa#bbb"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc#"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa##bbb##ccc##"));
+          
+          Assert.assertEquals("##aaa#bbb", Path.normalize("##aaa#bbb"));
+          Assert.assertEquals("##aaa#bbb#ccc", Path.normalize("##aaa#bbb#ccc"));
+          Assert.assertEquals("##aaa#bbb#ccc", Path.normalize("##aaa#bbb#ccc#"));
+          Assert.assertEquals("##aaa#bbb#ccc", Path.normalize("##aaa##bbb##ccc##"));
+          
+          Assert.assertEquals("###aaa#bbb", Path.normalize("###aaa#bbb"));
+          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("###aaa#bbb#ccc"));
+          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("###aaa#bbb#ccc#"));
+          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("###aaa##bbb##ccc##"));
+          
+          Assert.assertEquals("###aaa#bbb", Path.normalize("####aaa#bbb"));
+          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("####aaa#bbb#ccc"));
+          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("####aaa#bbb#ccc#"));
+          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("####aaa##bbb##ccc##"));
+      }});
+      
+      Test.create({test:function() {
+
+          window.location.hash = "#";
+          Path.collection.unshift("#");
+          
+          Assert.assertNull(Path.normalize());
+          Assert.assertNull(Path.normalize(null, true));
+          
+          Assert.assertEquals("{\"type\":1,\"path\":\"#\"}", JSON.stringify(Path.normalize("", true)));
+          
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa\"}", JSON.stringify(Path.normalize("aaa", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb\"}", JSON.stringify(Path.normalize("aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":1,\"path\":\"#\"}", JSON.stringify(Path.normalize("#", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb\"}", JSON.stringify(Path.normalize("#aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("#aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("#aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("#aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":2,\"path\":\"#\"}", JSON.stringify(Path.normalize("##", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#aaa#bbb\"}", JSON.stringify(Path.normalize("##aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("##aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("##aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("##aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("###", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("###aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("###aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("###aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("###aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa##bbb##ccc##", true)));          
+      }});    
+      
+      Test.create({test:function() {
+
+          window.location.hash = "#123";
+          Path.collection.unshift("#123");
+          
+          Assert.assertNull(Path.normalize());
+          Assert.assertNull(Path.normalize(null, true));
+          
+          Assert.assertEquals("{\"type\":1,\"path\":\"#\"}", JSON.stringify(Path.normalize("", true)));
+          
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa\"}", JSON.stringify(Path.normalize("aaa", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb\"}", JSON.stringify(Path.normalize("aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":1,\"path\":\"#\"}", JSON.stringify(Path.normalize("#", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb\"}", JSON.stringify(Path.normalize("#aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("#aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("#aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":1,\"path\":\"#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("#aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":2,\"path\":\"#123\"}", JSON.stringify(Path.normalize("##", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#123#aaa#bbb\"}", JSON.stringify(Path.normalize("##aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#123#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("##aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#123#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("##aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":2,\"path\":\"#123#aaa#bbb#ccc\"}", JSON.stringify(Path.normalize("##aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("###", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("###aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("###aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("###aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("###aaa##bbb##ccc##", true)));
+          
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("####", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("####aaa#bbb", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("####aaa#bbb#ccc", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("####aaa#bbb#ccc#", true)));
+          Assert.assertEquals("{\"type\":3,\"path\":\"#123\"}", JSON.stringify(Path.normalize("####aaa##bbb##ccc##", true)));       
+      }});       
+      
+      Test.create({expected:/\bInvalid path: false/i, test:function() {
+          Path.normalize(false);
+      }});  
+      Test.create({expected:/\bInvalid path: \[object Object\]/i, test:function() {
+          Path.normalize({});
+      }});       
+      Test.create({expected:/\bInvalid path: 123/i, test:function() {
+          Path.normalize(123);
+      }});  
+      Test.create({expected:/\bInvalid path(?!:)/i, test:function() {
+          Path.normalize(" ");
+      }}); 
+      Test.create({expected:/\bInvalid path(?!:)/i, test:function() {
+          Path.normalize("  ");
+      }}); 
+      Test.create({expected:/\bInvalid path(?!:)/i, test:function() {
+          Path.normalize("   ");
+      }});
+      Test.create({expected:/\bInvalid path: \?\?\?/i, test:function() {
+          Path.normalize("???");
+      }});       
+      Test.start(true);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
