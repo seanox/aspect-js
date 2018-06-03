@@ -22,7 +22,6 @@
  *  
  *      DESCRIPTION
  *      ----
- *
  *  Test is a simple API and module to implement and execute integration tests.
  *  The tests can be implemented as suites, scenarios and test cases.
  *  
@@ -421,7 +420,7 @@ if (typeof(Test) === "undefined") {
                 Test.task.title = "#" + meta.serial;
                 if (typeof(meta.name) == "string"
                         && meta.name.trim().length > 0)
-                    Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, ' ').trim();
+                    Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                 Test.inform("perform", Test.status());
                 window.setTimeout(function() {
                     var task = Test.task;
@@ -602,7 +601,7 @@ if (typeof(Assert) === "undefined") {
                     if (index > assert.values.length)
                         return "[null]";
                     match = String(assert.values[index]);
-                    match = match.replace(/\s*[\r\n]+\s*/g, ' '); 
+                    match = match.replace(/\s*[\r\n]+\s*/g, " "); 
                     return match;
                 });
             });
@@ -618,7 +617,7 @@ if (typeof(Assert) === "undefined") {
                 if (index > words.length)
                     return "[null]";
                 match = String(words[index]);
-                match = match.replace(/\s*[\r\n]+\s*/g, ' '); 
+                match = match.replace(/\s*[\r\n]+\s*/g, " "); 
                 return match;                
             });
             return new Error(message);

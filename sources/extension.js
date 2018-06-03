@@ -31,6 +31,51 @@
  *  @author  Seanox Software Solutions
  *  @version 1.0 20180524
  */
+if (typeof(Namespace) === "undefined") {
+
+    //TODO:
+    Namespace = {};
+    
+    /** Pattern for the namespace separator */
+    Namespace.PATTERN_NAMESPACE_SEPARATOR = /[\\\/\.]/;
+    
+    /** Pattern for a valid namespace. */
+    Namespace.PATTERN_NAMESPACE = /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i;
+    
+    /** Pattern to detect if there are conflicts in the namespace. */
+    Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
+    
+    /**
+     *  TODO:
+     *  @throws An error occurs in the following cases:
+     *    - event is not valid or is not supported
+     *    - callback function is not implemented correctly or does not exist
+     */
+    Namespace.using = function(namespace) {
+        
+        if (namespace == null)
+            return null;
+
+        if (typeof(namespace) !== "string")
+            throw new TypeError("Invalid namespace: " + typeof(namespace));
+        if (!namespace.match(Namespace.PATTERN_NAMESPACE)
+                || namespace.match(Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
+            throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
+        
+        var scope = window;
+        namespace = namespace.replace(/^[\\\/]/, "");
+        namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
+            if (typeof(scope[entry]) === "undefined") {
+                scope[entry] = new Object();
+            } else if (typeof(scope[entry]) === "object") {
+            } else if (typeof(scope[entry]) === "function") {
+            } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
+            scope = scope[entry];
+        });
+        
+        return scope; 
+    };
+};
 
 /**
  *  Enhancement of the JavaScript API
@@ -63,6 +108,59 @@ if (String.prototype.capitalize === undefined) {
         return this.charAt(0).toUpperCase() + this.slice(1);
     };
 };
+
+//TODO:
+if (String.prototype.decodeBase64 === undefined) {
+    String.prototype.decodeBase64 = function() {
+        return decodeURIComponent(atob(this).split('').map(function(code) {
+            return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    };
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a function for decoding hexadecimal code to the string objects.
+ */     
+if (String.prototype.decodeHex === undefined) {
+    String.prototype.decodeHex = function() {
+        var text = this;
+        if (text.match(/^0x/))
+            text = text.substring(2);
+        var result = "";
+        for (var loop = 0; loop < text.length; loop += 2)
+            result += String.fromCharCode(parseInt(text.substr(loop, 2), 16));
+        return result;
+    };
+};
+
+//TODO:
+if (String.prototype.encodeBase64 === undefined) {
+    String.prototype.encodeBase64 = function() {
+        return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, code) {
+                return String.fromCharCode('0x' + code);
+            }));
+    };
+}; 
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a function for encoding the string objects in hexadecimal code.
+ */      
+if (String.prototype.encodeHex === undefined) {
+    String.prototype.encodeHex = function() {
+        var text = this;
+        var result = "";
+        for (var loop = 0; loop < text.length; loop++) {
+            var digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
+            while (digit.length < 2)
+                digit = "0" + digit;            
+            result += digit;
+        }
+        return "0x" + result;
+    };
+};  
 
 /**
  *  Enhancement of the JavaScript API
@@ -100,12 +198,30 @@ if (String.prototype.hashCode === undefined) {
 }; 
 
 //TODO:
+if (String.prototype.unescape === undefined) {
+    String.prototype.unescape = function() {
+        var text = this;
+        text = text.replace(/\r/g, "\\r");
+        text = text.replace(/\n/g, "\\n");
+        text = text.replace(/^(["'])/, "\$1");
+        text = text.replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
+        return eval("\"" + text + "\"");
+    };
+};
+
+//TODO:
 Element.prototype.internalAppendChild = Element.prototype.appendChild;
 Element.prototype.appendChild = function(node, exclusive) {
     if (exclusive)
         this.innerHTML = "";
-    if (node instanceof NodeList) {
-        node = Array.prototype.slice.call(node);
+    if (node instanceof Node
+            || node instanceof Element) {
+        this.internalAppendChild(node);
+    } else if (Array.isArray(node)
+            || node instanceof NodeList
+            || (Symbol && Symbol.iterator
+                    && typeof(node[Symbol.iterator]))) {
+        node = Array.from(node);
         for (var loop = 0; loop < node.length; loop++)
             this.internalAppendChild(node[loop]);
     } else this.internalAppendChild(node);

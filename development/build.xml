@@ -60,9 +60,12 @@
     <copy todir="${build.sources}">
       <fileset dir="${workspace.sources}"/>
     </copy>    
-    <compress-javascript file="${build.sources}/codec.js"/>
-    <compress-javascript file="${build.sources}/common.js"/>
     <compress-javascript file="${build.sources}/composite.js"/>
+    <compress-javascript file="${build.sources}/content.js"/>
+    <compress-javascript file="${build.sources}/datasource.js"/>
+    <compress-javascript file="${build.sources}/extension.js"/>
+    <compress-javascript file="${build.sources}/mvc.js"/>
     <compress-javascript file="${build.sources}/test.js"/>
+    <compress-javascript file="${build.sources}/testutils.js"/>
   </target>
 </project>

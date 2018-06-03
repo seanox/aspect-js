@@ -43,9 +43,9 @@ if (typeof(TestUtils) === "undefined") {
 if (Assert.assertEqualsTemplate === undefined)
     Assert.assertEqualsTemplate = function(selector, actual) {
         var element = document.querySelector(selector);
-        var content = element.innerHTML.trim().replace(/\t/g, '    ');
+        var content = element.innerHTML.trim().replace(/\t/g, "    ");
         actual = actual.trim();
-        actual = actual.replace(/\t/g, '    ');
+        actual = actual.replace(/\t/g, "    ");
         Assert.assertEquals(content, actual);    
     };
    

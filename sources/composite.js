@@ -53,7 +53,6 @@ if (typeof(Composite) == 'undefined') {
     /** 
      *  TODO:
      *  TODO: - add tag repeat / loop
-     *        - add tag interval
      */
     Composite = {};
     
