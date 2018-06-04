@@ -10,9 +10,10 @@
 - Event handling
 - Expression Language
 - Markup rendering  
-  supports condition, action, interval, iterate, custom tags, filter, ...
+  supports: condition, action, interval, iterate, custom tags, filter, messages
+  resources, ...
 - Model View Controller  
-  incl. events and virtual paths
+  incl. events, virtual paths, sitemap, ...
 - NoSQL datasource based on XML
 - ...
 
@@ -39,6 +40,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # System Requirement
+- ECMAScript 6 support
 
 
 # Downloads
