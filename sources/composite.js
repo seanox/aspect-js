@@ -40,20 +40,40 @@
  *        nameSpace = package + class
  *        qualifier = zusätzliche Kennzeichnung damit die ID unique ist
  *    Der Qualifier wird von Composite/Object-Bindung ignoriert.
+ *  TODO: Test Attribute render + events
+ *  TODO: Doku:
+ *        Custom-Tag, hier muss sich um alle attribute selbt gekuemmert werden.
+ *        Composite tut hier nicht, ausser dem Aufruf der Implementierung.
+ *        Es kann jedes Node-Element (auch #text) als custom-tag registriert werden.
+ *        Die Attribute werden durch Composite nicht manipuliert oder interpretiert.
+ *        Das ueberschreiben von eigenen Tags, wie z.B. "param" ist moeglich, aber nicht empfehlenswert.
+ *  TODO: Doku:
+ *        If a custom selector exists, the macro is executed.
+ *        Custom selector is a filter-function based on a query selector.
+ *        The root of the selector is the current element.
+ *        The filter therefore affects the child elements.
+ *        Custom Selector wird nach Custom-Tag ausgefuehrt.
+ *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
+ *  TODO: Hinweis zu JavaScript-Blöcken
+ *        Diese werden durch das rekursive Rendering ggf. mehrfach verarbeitet.
+ *        Bsp. iterate: Erst beim initialen Laden der Seite, dann beim Iterate
+ *        selbst und dann beim Rescan nach Abschluss vom Iterate. Daher sollte
+ *        hier besser condition/javascript oder composite/javascript verwendet werden.
+ *        Der Effekt betriff alle Stellen, an denen ein Output in die Seite beim
+ *        Rendern erfolgt. Diese Stellen werden nach dem Output immer gescannt ob
+ *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
+ *        ergeben hat.
  *  
- *  Composite 1.0 20180526
+ *  Composite 1.0 20180604
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180526
+ *  @version 1.0 20180604
  */
-if (typeof(Composite) == 'undefined') {
+if (typeof(Composite) === "undefined") {
     
-    /** 
-     *  TODO:
-     *  TODO: - add tag repeat / loop
-     */
+    //TODO:
     Composite = {};
     
     /** 
@@ -91,6 +111,12 @@ if (typeof(Composite) == 'undefined') {
     
     /** Constant for attribute import */
     Composite.ATTRIBUTE_IMPORT = "import";
+
+    /** Constant for attribute interval */
+    Composite.ATTRIBUTE_INTERVAL = "interval";
+
+    /** Constant for attribute iterate */
+    Composite.ATTRIBUTE_ITERATE = "iterate";
     
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
@@ -119,10 +145,13 @@ if (typeof(Composite) == 'undefined') {
      *  is cached in the object wrapper. Other attributes are only cached if
      *  they contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|name|output|sequence|render|value$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|name|output|sequence|render|value$/i;   
     
-    /** Pattern for all attributes that are not cached during rendering */
-    Composite.PATTERN_ATTRIBUTE_IGNORE = /import|condition|output/i;    
+    //TODO:
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|interval|events|id|name|render$/i
+
+    //TODO:
+    Composite.PATTERN_ATTRIBUTE_INTERNAL = /^events|import|interval|iterate|output|sequence|render$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
@@ -146,7 +175,7 @@ if (typeof(Composite) == 'undefined') {
     Composite.PATTERN_ELEMENT_IGNORE = "/script|style/i";
 
     //TODO:
-    Composite.PATTERN_ELEMENT_SCRIPT_TYPE = /^(text|condition)\/javascript$/i;
+    Composite.PATTERN_ELEMENT_SCRIPT_TYPE = /^(text|condition|composite)\/javascript$/i;
     
     //TODO:
     Composite.PATTERN_COMPOSITE_CONTEXT = /^([a-z](?:[\w\.]*[\w])*)(?:\:(.*))*$/i;
@@ -168,6 +197,9 @@ if (typeof(Composite) == 'undefined') {
     
     /** Pattern to detect if there are conflicts in the namespace. */
     Composite.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
+    
+    //TODO:
+    Composite.PATTERN_ITERATE_EXPRESSION = /^\s*([a-z][\w]*)\s*:\s*({{.*}})$/i;
 
     /** Constants of events during rendering */
     Composite.EVENT_RENDER_START = "RenderStart";
@@ -413,7 +445,7 @@ if (typeof(Composite) == 'undefined') {
             scope = scope[entry];
         });
         
-        if (typeof(scope) != "object")
+        if (typeof(scope) !== "object")
             return;
         
         //Step 2:
@@ -568,6 +600,28 @@ if (typeof(Composite) == 'undefined') {
             if (!(selector instanceof Node))
                 return;
             
+            //If a custom tag exists, the macro is executed.
+            Composite.macros = Composite.macros || {};
+            var macro = Composite.macros[selector.nodeName.toLowerCase()];
+            if (macro) {
+                Composite.asynchron(macro, sequence, selector);
+                return;
+            }
+            
+            //If a custom selector exists, the macro is executed.
+            //Custom selector is a filter-function based on a query selector.
+            //The root of the selector is the current element.
+            //The filter therefore affects the child elements.
+            Composite.selectors = Composite.selectors || {};
+            for (var macro in Composite.selectors) {
+                (function(element, macro) {
+                    var nodes = element.querySelectorAll(macro.selector);
+                    nodes.forEach(function(node, index, array) {
+                        Composite.asynchron(macro.rendering, sequence, node);
+                    });
+                })(selector, Composite.selectors[macro]);
+            }               
+            
             Composite.elements = Composite.elements || new Array();
             
             //Register each analyzed node/element and minimizes multiple
@@ -586,8 +640,15 @@ if (typeof(Composite) == 'undefined') {
                     Array.from(selector.attributes).forEach(function(attribute, index, array) {
                         var value = (attribute.value || "").trim();
                         if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
-                                || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT))
-                            object.attributes[attribute.nodeName.toLowerCase()] = value;
+                                || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
+                            //Remove all internal attributes but not the static.
+                            //Static attributes are still used in the markup or
+                            //for the rendering.
+                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                    && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC))
+                                selector.removeAttribute(attribute.name);
+                            object.attributes[attribute.name.toLowerCase()] = value;
+                        }
                     });
             }
 
@@ -700,7 +761,8 @@ if (typeof(Composite) == 'undefined') {
             
             if (!(selector instanceof Element))
                 return;
-            
+
+            //TODO: Doku
             var events = selector.fetchAttribute(Composite.ATTRIBUTE_EVENTS);
             var render = selector.fetchAttribute(Composite.ATTRIBUTE_RENDER);
             if (events && render) {
@@ -716,10 +778,10 @@ if (typeof(Composite) == 'undefined') {
             }
             
             //The condition attribute is interpreted.
-            //As result of the expression true/false is expected and will be set as
-            //an absolute value for the condition attribute - so only true or false.
-            //Elements are hidden with the condition attribute via CSS and only
-            //explicitly displayed with [condition=true].
+            //As result of the expression true/false is expected and will be se
+            //as an absolute value for the condition attribute - so only true or
+            //false. Elements are hidden with the condition attribute via CSS
+            //and only explicitly displayed with [condition=true].
             //JavaScript elements are executed or not.
             var condition = object.attributes[Composite.ATTRIBUTE_CONDITION];
             if (condition) {
@@ -729,15 +791,6 @@ if (typeof(Composite) == 'undefined') {
                 //condition-attribute is false. Further sub-elements are not followed.
                 if (condition !== true)
                     return;
-                if (selector.nodeName.match(Composite.PATTERN_ELEMENT_SCRIPT)) {
-                    var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
-                    if (type.match(Composite.PATTERN_ELEMENT_SCRIPT_TYPE)) {
-                        try {eval(selector.textContent);
-                        } catch (exception) {
-                            console.error(exception);
-                        }
-                    }
-                }
             }
             
             //TODO: sequence
@@ -761,7 +814,7 @@ if (typeof(Composite) == 'undefined') {
                                     return;
                                 }
                                 function HttpRequestError(message) {
-                                    this.name = 'HttpRequestError';
+                                    this.name = "HttpRequestError";
                                     this.message = message;
                                     this.stack = (new Error()).stack;
                                 }
@@ -777,58 +830,116 @@ if (typeof(Composite) == 'undefined') {
                 })(selector, module);
                 return;
             } 
-
+            
             //This attribute is used to set the value or result of an expression
             //as the content of the selected element. For an expression, the
             //result can also be an element or a node list with elements. All
             //other data types are set as text. This setting is exclusive, thus
             //overwriting any existing content.
-            if (selector.hasAttribute(Composite.ATTRIBUTE_OUTPUT))
-                selector.removeAttribute(Composite.ATTRIBUTE_OUTPUT);
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
                 var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     var context = serial + ":" + Composite.ATTRIBUTE_OUTPUT;
-                    value = Expression.eval(context, value);
+                    var value = Expression.eval(context, value);
                     if (value instanceof Element
                             || value instanceof NodeList)
                         selector.appendChild(value, true);
                     else selector.innerHTML = String(value);
                 } else selector.innerHTML = value;
             }
-            
-            //If a custom tag exists, the macro is executed.
-            Composite.macros = Composite.macros || {};
-            var macro = Composite.macros[selector.nodeName.toLowerCase()];
-            if (macro) {
-                Composite.asynchron(macro, sequence, selector);
-                return;
-            }
-            
-            //TODO: Composite.selectors
-            Composite.selectors = Composite.selectors || {};
-            for (var macro in Composite.selectors) {
-                (function(element, macro) {
-                    var nodes = element.querySelectorAll(macro.selector);
-                    nodes.forEach(function(node, index, array) {
-                        Composite.asynchron(macro.rendering, sequence, node);
-                    });
-                })(selector, Composite.selectors[macro]);
-            }
 
+            //This attribute starts an interval for automatic (re)rendering of
+            //an element. An interval in milliseconds is expected as value.
+            //Invalid values lead to an error output on the console.
+            var interval = selector.fetchAttribute(Composite.ATTRIBUTE_INTERVAL);
+            if (interval && !object.interval) {
+                interval = String(interval).trim();
+                var context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
+                interval = Expression.eval(context, interval);
+                if (interval.match(/^\d+$/)) {
+                    interval = parseInt(interval);
+                    object.interval = window.setInterval(function(selector) {
+                        //The interval is terminated and removed when the DOM
+                        //no longer contains the element.
+                        if (!document.body.contains(selector)) {
+                            var object = Composite.elements[selector.ordinal()];
+                            window.clearInterval(object.interval);
+                        } else Composite.render(selector);
+                    }, interval, selector);
+                } else if (interval)
+                    console.error("Invalid interval: " + interval);
+            }
+            
+            //TODO: Doku
+            //There are two particularities to consider.
+            //  1. The internal recusive rendering must be done sequentially.
+            //  2. The internal rendering creates temporary composite wrapper
+            //     objects. These wrapper objects contain meta information in
+            //     their attributes, which can be incorrectly interpreted during
+            //     rescan after the iteration. Therefore, the temporarily
+            //     created wrapper objects must be removed.
+            //  3. A global variable is required for the iteration. If this
+            //     variable already exists, the existing method is saved and
+            //     restored at the end of the iteration.
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
+                if (!object.iterate) {
+                    var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
+                    iterate = String(iterate).trim();
+                    var match = iterate.match(Composite.PATTERN_ITERATE_EXPRESSION)
+                    if (match)
+                        object.iterate = {name:match[1].trim(),
+                            expression:match[2].trim(),
+                            markup:selector.innerHTML};
+                    else if (iterate)
+                        console.error("Invalid iterate: " + iterate);
+                }
+                if (object.iterate) {
+                    //The internal rendering creates temporary composite wrapper
+                    //objects. These wrapper objects contain meta information in
+                    //their attributes
+                    var elements = Array.from(Composite.elements);
+                    //A temporary global variable is required for the iteration.
+                    //If this variable already exists, the existing method is
+                    //cahced and restored at the end of the iteration.
+                    var variable = window[object.iterate.name];
+                    try {
+                        var context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
+                        selector.innerHTML = "";
+                        iterate = Expression.eval(context, object.iterate.expression);
+                        if (iterate) {
+                            iterate = Array.from(Expression.eval(context, object.iterate.expression));
+                            iterate.forEach(function(item, index, array) {
+                                var temp = document.createElement("div");
+                                window[object.iterate.name] = {item:item, index:index, data:array};
+                                temp.innerHTML = object.iterate.markup;
+                                Composite.render(temp, true);
+                                selector.appendChild(temp.childNodes);
+                            });
+                        }
+                    } finally {
+                        //If necessary, restore the temporary variable.
+                        if (variable === undefined)
+                            delete window[object.iterate.name];
+                        else window[object.iterate.name] = variable;
+                    }
+                    //Removing temporary wrapper objects.
+                    Composite.elements = elements;
+                }
+            }
+            
             //The expression in the attributes is interpreted.
             //The expression is stored in a wrapper object and loaded from there,
-            //the attributes of the element can be overwritten in a render cycle and
-            //are available (conserved) for further cycles. A special case is the
-            //text element. The result is output here as textContent.
+            //the attributes of the element can be overwritten in a render cycle
+            //and are available (conserved) for further cycles. A special case
+            //is the text element. The result is output here as textContent.
             //Script and style elements are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 for (var attribute in object.attributes) {
-                    //Ignore internal attributes (import, condition, ...).
-                    if (attribute.match(Composite.PATTERN_ATTRIBUTE_IGNORE))
+                    //Ignore all internal attributes (import, condition, ...).
+                    if (attribute.match(Composite.PATTERN_ATTRIBUTE_INTERNAL))
                         continue;
-                    var value = object.attributes[attribute];
-                    if (!(value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                    var value = object.attributes[attribute] || "";
+                    if (!value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         continue;
                     var context = serial + ":" + attribute;
                     value = Expression.eval(context, value);
@@ -837,6 +948,17 @@ if (typeof(Composite) == 'undefined') {
                     selector.setAttribute(attribute, value);
                 }
             }
+
+            //TODO:
+            if (selector.nodeName.match(Composite.PATTERN_ELEMENT_SCRIPT)) {
+                var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
+                if (type.match(Composite.PATTERN_ELEMENT_SCRIPT_TYPE)) {
+                    try {eval(selector.textContent);
+                    } catch (exception) {
+                        console.error(exception);
+                    }
+                }
+            }            
             
             //Follow other element children recursively.
             //Scripts, style elements and custom tags are ignored.
@@ -884,7 +1006,7 @@ if (typeof(Composite) == 'undefined') {
                 Composite.asynchron(Composite.scan, false, entry);
             });
         });
-        Composite.render("body");
+        Composite.render(document.body);
     });
 };
 
