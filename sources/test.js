@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 201804015
+ *  Test 1.0 20180604
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 201804015
+ *  @version 1.0 20180604
  */
 if (typeof(Test) === "undefined") {
     
@@ -326,7 +326,7 @@ if (typeof(Test) === "undefined") {
             return;
 
         if (auto && document.readyState == "loaded") {
-            if (typeof(Test.autostart) == "undefined") {
+            if (typeof(Test.autostart) === "undefined") {
                 Test.autostart = true;
                 window.addEventListener("load", function() {
                     Test.start();
@@ -418,7 +418,7 @@ if (typeof(Test) === "undefined") {
                     timeout = new Date().getTime() +meta.timeout;
                 Test.task = {title:null, meta:meta, running:true, timing:new Date().getTime(), timeout:timeout, duration:false, error:null};
                 Test.task.title = "#" + meta.serial;
-                if (typeof(meta.name) == "string"
+                if (typeof(meta.name) === "string"
                         && meta.name.trim().length > 0)
                     Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                 Test.inform("perform", Test.status());

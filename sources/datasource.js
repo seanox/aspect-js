@@ -24,14 +24,14 @@
  *      ----
  *  TODO:
  *  
- *  DataSource 1.0 20180428
+ *  DataSource 1.0 20180604
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180428
+ *  @version 1.0 20180604
  */
-if (typeof(DataSource) == "undefined") {
+if (typeof(DataSource) === "undefined") {
     
     DataSource = {};
 

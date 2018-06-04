@@ -24,14 +24,14 @@
  *      ----
  *  TODO:
  *  
- *  Content 1.0 20180527
+ *  Content 1.0 20180604
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180527
+ *  @version 1.0 20180604
  */
-if (typeof(Content) == "undefined") {
+if (typeof(Content) === "undefined") {
 
     Content = {};
     
