@@ -40,7 +40,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # System Requirement
-- ECMAScript 6 support
+- ECMAScript 6 support  
+  Microsoft Edge, Firefox, Chrome, Safari, Webkit  
 
 
 # Downloads
