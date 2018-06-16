@@ -12,7 +12,7 @@
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
     <script src="../sources/testutils.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript"> 
     
         var TestBean = {};
         TestBean.ticks = 0;
@@ -31,24 +31,24 @@
     </script>
     <script type="text/test">
     A:1: 
-    <param name="globalA" value="Hallo">
+    <param name="globalA">
     A:2: Hallo
     <article id="AB">
       AA:1: Hallo
       AB:1:    
-      <param name="globalAB" value="Hallo">
+      <param name="globalAB">
       AA:2: Hallo
       AB:2: Hallo
-      <param name="globalAB" value="Welt">
+      <param name="globalAB">
       AA:3: Hallo
       AB:3: Welt
-      <param name="globalAB" value="{{globalAB}}">
+      <param name="globalAB">
       AA:4: Hallo
       AB:4: Welt
-      <param name="globalAB" value="{{'Hallo ' + globalAB}}">
+      <param name="globalAB">
       AA:5: Hallo
       AB:5: Hallo Welt
-      <param name="globalAB" value="{{globalAB + ' ' + globalAB}}">
+      <param name="globalAB">
       AA:5: Hallo
       AB:5: Hallo Welt Hallo Welt
     </article>
