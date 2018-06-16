@@ -13,6 +13,9 @@
     <script src="../sources/test.js"></script>
     <script type="text/javascript">
     
+      if (window.location.href.indexOf("#") >= 0)
+          window.location.href = window.location.href.replace(/#.*$/, "");
+    
       Test.create({test:function() {
           
           Assert.assertNull(Path.normalize());
@@ -31,20 +34,20 @@
           Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc#"));
           Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa##bbb##ccc##"));
           
-          Assert.assertEquals("##aaa#bbb", Path.normalize("##aaa#bbb"));
-          Assert.assertEquals("##aaa#bbb#ccc", Path.normalize("##aaa#bbb#ccc"));
-          Assert.assertEquals("##aaa#bbb#ccc", Path.normalize("##aaa#bbb#ccc#"));
-          Assert.assertEquals("##aaa#bbb#ccc", Path.normalize("##aaa##bbb##ccc##"));
+          Assert.assertEquals("#aaa#bbb", Path.normalize("##aaa#bbb"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("##aaa#bbb#ccc"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("##aaa#bbb#ccc#"));
+          Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("##aaa##bbb##ccc##"));
           
-          Assert.assertEquals("###aaa#bbb", Path.normalize("###aaa#bbb"));
-          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("###aaa#bbb#ccc"));
-          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("###aaa#bbb#ccc#"));
-          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("###aaa##bbb##ccc##"));
+          Assert.assertEquals("#", Path.normalize("###aaa#bbb"));
+          Assert.assertEquals("#", Path.normalize("###aaa#bbb#ccc"));
+          Assert.assertEquals("#", Path.normalize("###aaa#bbb#ccc#"));
+          Assert.assertEquals("#", Path.normalize("###aaa##bbb##ccc##"));
           
-          Assert.assertEquals("###aaa#bbb", Path.normalize("####aaa#bbb"));
-          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("####aaa#bbb#ccc"));
-          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("####aaa#bbb#ccc#"));
-          Assert.assertEquals("###aaa#bbb#ccc", Path.normalize("####aaa##bbb##ccc##"));
+          Assert.assertEquals("#", Path.normalize("####aaa#bbb"));
+          Assert.assertEquals("#", Path.normalize("####aaa#bbb#ccc"));
+          Assert.assertEquals("#", Path.normalize("####aaa#bbb#ccc#"));
+          Assert.assertEquals("#", Path.normalize("####aaa##bbb##ccc##"));
       }});
       
       Test.create({test:function() {
@@ -85,7 +88,7 @@
           Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa#bbb", true)));
           Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa#bbb#ccc", true)));
           Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa#bbb#ccc#", true)));
-          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa##bbb##ccc##", true)));          
+          Assert.assertEquals("{\"type\":3,\"path\":\"#\"}", JSON.stringify(Path.normalize("####aaa##bbb##ccc##", true)));  
       }});    
       
       Test.create({test:function() {
@@ -149,7 +152,39 @@
       }});
       Test.create({expected:/\bInvalid path: \?\?\?/i, test:function() {
           Path.normalize("???");
-      }});       
+      }});
+      
+      Test.create({test:function() {
+
+          window.location.hash = "#ooo";
+          Path.collection.unshift("#ooo");
+         
+          Assert.assertEquals("#", Path.normalize("-#"));
+          Assert.assertEquals("#", Path.normalize("#-"));
+          Assert.assertEquals("#", Path.normalize("#-#"));
+          
+          Assert.assertEquals("#", Path.normalize("##-#"));
+          Assert.assertEquals("#", Path.normalize("##-"));
+          Assert.assertEquals("#", Path.normalize("##-#-#"));
+          Assert.assertEquals("#", Path.normalize("##-#-"));
+          Assert.assertEquals("#", Path.normalize("##-#-#-#"));
+          Assert.assertEquals("#", Path.normalize("##-#-#-"));
+          Assert.assertEquals("#", Path.normalize("##-#-#-#-#"));
+          Assert.assertEquals("#", Path.normalize("##-#-#-#-"));
+
+          Assert.assertEquals("#a#b#c#d#e#f#g", Path.normalize("#a#b#c#d#e#f#g"));
+          Assert.assertEquals("#a#d#e#f#g", Path.normalize("#a#b#-#d#e#f#g"));
+          Assert.assertEquals("#d#e#f#g", Path.normalize("#a#b#--#d#e#f#g"));
+          Assert.assertEquals("#d#e#f#g", Path.normalize("#a#b#---#d#e#f#g"));
+          Assert.assertEquals("#d#e#f#g", Path.normalize("#a#b#----#d#e#f#g"));
+
+          Assert.assertEquals("#d#e#f#g", Path.normalize("#a#b#-#-#d#e#f#g"));
+          Assert.assertEquals("#d#e#f#g", Path.normalize("#a#b#-#-#-#d#e#f#g"));
+          Assert.assertEquals("#d#e#f#g", Path.normalize("#a#b#-#-#-#-#d#e#f#g"));
+          Assert.assertEquals("#g", Path.normalize("#a#b#c#-#e#---#g"));          
+          Assert.assertEquals("#a#b#g", Path.normalize("#a#b#c#d#-#e#f#---#g"));          
+      }});        
+      
       Test.start(true);
     </script>
   </head>

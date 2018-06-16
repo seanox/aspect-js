@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  DataSource 1.0 20180604
+ *  DataSource 1.0 20180616
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180604
+ *  @version 1.0 20180616
  */
 if (typeof(DataSource) === "undefined") {
     
@@ -39,7 +39,7 @@ if (typeof(DataSource) === "undefined") {
     
     DataSource.ROOT = window.location.pathname;
     
-    DataSource.DATA = (DataSource.ROOT + "/data").replace(/\/+/g, "/");
+    DataSource.DATA = (DataSource.ROOT.replace(/[^/]*\.[^/]+$/, "") + "/data").replace(/\/+/g, "/");
     
     DataSource.PATTERN_LOCATOR = /^([a-z]+):\/(\/[\w\-\/]+)$/;
     
@@ -127,7 +127,8 @@ if (typeof(DataSource) === "undefined") {
         
         if (result.body)
             return result.body.childNodes;
-        if (result.firstChild.nodeName.match(/^transformiix\b/i))
+        if (result.firstChild
+                && result.firstChild.nodeName.match(/^transformiix\b/i))
             return result.firstChild.childNodes;
         return result.childNodes;        
     }; 

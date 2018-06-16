@@ -595,7 +595,7 @@ if (typeof(Assert) === "undefined") {
     Assert.create = function(arguments, size) {
 
         var assert = {message:null, values:[], error:function() {
-            var words = Array.prototype.slice.call(arguments);
+            var words = Array.from(arguments);
             words.forEach(function(argument, index, array) {
                 array[index] = String(argument).replace(/\{(\d+)\}/g, function(match, index) {
                     if (index > assert.values.length)
@@ -623,7 +623,7 @@ if (typeof(Assert) === "undefined") {
             return new Error(message);
         }};
         
-        arguments = Array.prototype.slice.call(arguments);
+        arguments = Array.from(arguments);
         if (arguments.length > size)
             assert.message = arguments.shift();
         while (arguments.length > 0)

@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  MVC 1.0 20180604
+ *  MVC 1.0 20180616
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180604
+ *  @version 1.0 20180616
  */
 if (typeof(Page) === "undefined") {
     
@@ -59,7 +59,7 @@ if (typeof(Path) === "undefined") {
     Path.filter = {};
     
     /** Pattern for a valid path. */
-    Path.PATTERN_PATH = /^(#*(\w*)#*(#+\w+#*)*)*$/;
+    Path.PATTERN_PATH = /^(#*([\w\-]*)#*(#+[\w\-]+#*)*)*$/;
     
     Path.customize = function(scope, acceptor) {
         
@@ -137,7 +137,19 @@ if (typeof(Path) === "undefined") {
     Path.permit = function(path) {
         return true;
     };
-    
+
+    /**
+     *  Normalizes a path.
+     *  To do this, unnecessary separators are removed and relative and
+     *  functional paths in canonical paths are changed. The methods also
+     *  support the directive #-# for navigating to parent path segments.
+     *  The number of - determines the width when jumping back to the root.
+     *      #--# is equivalent to #-#-#, #---# is equivalent to #-#-#-#, ...
+     *  The simple and long directive can be used in combination. The long
+     *  directive is a short form.  
+     *  @param  path to normalize
+     *  @return the normalize path
+     */
     Path.normalize = function(path) {
         
         if (path == null)
@@ -155,25 +167,37 @@ if (typeof(Path) === "undefined") {
         //  - interaction paths (###)
         //    is only temporary and is replaced by the previous path        
         var type = Math.max(1, String(path.match(/^(?!#)|(?:#{0,3})/)).length);
-        path = path.replace(/(^#+)|(#+$)/g, "").trim();
+        
+        //The current path is determined.
+        var here = null;
+        if (Path.collection
+                && Path.collection[0])
+            here = Path.collection[0];
+        else here = "#" + Path.locate().join("#");
+        
+        //Relative and functional path will be completed.
+        if (type == 2)
+            path = here + "#" + path;
+        else if (type == 3)
+            path = here;
+        path = "#" + path + "#";
         path = path.replace(/\s*#+\s*/g, "#");
         
+        //Path will be balanced
+        var pattern = /#+(?:\-*\w\-*)+#+\-(\-*)#/;
+        while (path.match(pattern))
+            path = path.replace(pattern, "#$1#"); 
+        path = path.replace(/^(#+\-+(?=#))+/, "#");
+        path = path.replace(/(^#+)|(#+$)/g, "")
+        path = ("#" + path).replace(/\s*#+\s*/g, "#");
+
         //Internally, a second argument can be passed with the value true.
-        //Then the return value is an object with type and a canonical path.
+        //Then the return value is an object with type and a canonical path,
+        //otherwise only the canonical path.
         if (arguments.length > 1
-                && arguments[1] == true) {
-            var here = Path.collection[0] || "#";
-            if (type == 2)
-                path = (here + (path ? "#" + path : "")).replace(/^#{2,}/, "#");
-            else if (type == 3)
-                path = here;
-            else path = "#" + path;
+                && arguments[1] == true)
             return {type:type, path:path};
-        }
-        
-        while (--type >= 0)
-            path = "#" + path;
-        return path; 
+        return path;
     };
 
     Path.lock;
@@ -182,11 +206,19 @@ if (typeof(Path) === "undefined") {
     
     window.addEventListener("hashchange", function(event) {
         
-        Path.lock = Path.lock || new Array();
-
-        var path = window.location.hash;
+        var hash = window.location.hash;
         var meta = Path.normalize(window.location.hash, true);
         var here = Path.collection[0];
+
+        //If the path does not have the expected syntax, a redirect is triggered.
+        //Functional paths are ignored.
+        if (hash != meta.path
+                && !hash.match(/^#{3,}/)) {
+            Path.navigate(meta.path);
+            return;
+        }
+
+        Path.lock = Path.lock || new Array();
         
         path = meta.path;
         if (Path.lock
@@ -200,43 +232,19 @@ if (typeof(Path) === "undefined") {
         //Rendering is not necessary because the page does not change or the
         //called function has partially triggered rendering.
         if (meta.type == 3) {
-            
+            var x = window.pageXOffset || document.documentElement.scrollLeft;
+            var y = window.pageYOffset || document.documentElement.scrollTop;
             Path.lock.unshift(path);
             window.history.back();
+            window.setTimeout(window.scrollTo, 0, x, y); 
             return;
         }
         
-        //During a backward step, only the target path is set and rendered,
-        //since the current path indicates that previous path segments have
-        //already been called and rendered.
-        if ((here.startsWith(path + "#")
-                || (path == "#" && here != path))) {
-            Path.lock.unshift(path);
-            Path.collection.unshift(path);
-            window.location.hash = path;
-            Composite.render(document.body);
-            return;
-        }
-
-        //For a path, all path segments are called separately and rendered
-        //from the root to the target. Excludes the path segments from the root
-        //that have already been rendered. Only unaccessed path segments are
-        //used. This should ensure that the page can render all necessary faces
-        //and facets even if a path is called directly.
-        var paths = path.split("#");
-        if (path == "#")
-            paths = new Array("");
-        paths.forEach(function(path, index, array) {
-            path = path ? array.slice(0, index +1).join("#") : "#";
-            if (here.startsWith(path + "#")
-                    || path == here
-                    || path == "#")
-                return;
-            Path.lock.unshift(path);
-            window.location.hash = path;
-            Composite.render(document.body);
-        });
+        Path.lock.unshift(path);
         Path.collection.unshift(path);
+        window.location.hash = path;
+        Composite.render(document.body);
+        return;
     });
 };
 
@@ -282,4 +290,61 @@ if (typeof(SiteMap) === "undefined") {
 
     SiteMap.visible = function(path) {
     };
+    
+    SiteMap.style = (function() {
+        
+        var style = document.createElement("style");
+        style.setAttribute("type", "text/css");
+        var script = document.querySelector("script");
+        script.parentNode.insertBefore(style, script);
+        return style;
+    })();
+    
+    window.addEventListener("hashchange", function(event) {
+        
+        var path = Path.normalize(window.location.hash);
+        var axis = Array.from(Object.getOwnPropertyNames(SiteMap.paths));
+
+        var condition = "[composite]:not([static])";
+
+        //Determine the face to the path.
+        var face = path;
+        while (face.length > 1) {
+            if (axis.includes(face))
+                break;
+            face = face.replace(/#[^#]*$/, "") || "#";
+        }
+        
+        //Allow all facets of the path.
+        var facets = SiteMap.paths[face] || [];
+        face = face.replace(/#+$/, "")
+        facets.forEach(function(facet, index, array) {
+            condition += ":not([path='" + face + "#" + facet + "'])";
+        });
+        
+        //Allow all cascaded faces to the path.
+        while (face.length > 1) {
+            condition += ":not([path='" + face + "'])";
+            face = face.replace(/#[^#]*$/, "") || "#";
+        }
+        
+        condition += "\n{display:none!important;}";
+        SiteMap.style.textContent = condition;
+    });
 };
+
+window.addEventListener("load", function(event) {
+    
+    var hash = window.location.hash;
+    var path = Path.normalize(window.location.hash);
+    
+    //If the path does not have the expected syntax, a redirect is triggered.
+    if (path != hash) {
+        Path.navigate(path);
+        return;
+    }
+    
+    var event = document.createEvent('HTMLEvents');
+    event.initEvent("hashchange", false, true);
+    window.dispatchEvent(event);
+});
