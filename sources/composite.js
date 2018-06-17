@@ -64,12 +64,12 @@
  *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
  *        ergeben hat.
  *  
- *  Composite 1.0 20180604
+ *  Composite 1.0 20180617
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180604
+ *  @version 1.0 20180617
  */
 if (typeof(Composite) === "undefined") {
     
@@ -90,9 +90,6 @@ if (typeof(Composite) === "undefined") {
 
     /** Queue with outstanding scans */
     Composite.queue;
-    
-    /** Assoziative array with different counters */
-    Composite.ticks = {render:0, scan:0};
     
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
@@ -145,10 +142,10 @@ if (typeof(Composite) === "undefined") {
      *  is cached in the object wrapper. Other attributes are only cached if
      *  they contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|name|output|sequence|render|value$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|name|output|sequence|render$/i;   
     
     //TODO:
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|interval|events|id|name|render$/i
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|interval|events|id|render$/i
 
     //TODO:
     Composite.PATTERN_ATTRIBUTE_INTERNAL = /^events|import|interval|iterate|output|sequence|render$/i;
@@ -169,9 +166,6 @@ if (typeof(Composite) === "undefined") {
     Composite.PATTERN_ELEMENT_SCRIPT = /script/i;
     
     //TODO:
-    Composite.PATTERN_ELEMENT_PARAM = /param/i;  
-
-    //TODO:
     Composite.PATTERN_ELEMENT_IGNORE = "/script|style/i";
 
     //TODO:
@@ -184,8 +178,8 @@ if (typeof(Composite) === "undefined") {
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
 
     //TODO:
-    Composite.PATTERN_PARAM_NAME = /^_*[a-z]\w*$/i;
-    
+    Composite.PATTERN_PARAM = /^\s*(_*[a-z]\w*)\s*:\s*(.*?)\s*$/i;
+
     //TODO:
     Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
     
@@ -353,7 +347,7 @@ if (typeof(Composite) === "undefined") {
         var listeners = Composite.listeners[event.toLowerCase()];
         if (!Array.isArray(listeners))
             return;
-        variants = Array.prototype.slice.call(arguments);
+        variants = Array.from(arguments);
         variants = variants.slice(1, 5);
         listeners.forEach(function(callback, index, array) {
             window.setTimeout(callback, 0, event, variants[0], variants[1], variants[2], variants[3], variants[4]);
@@ -375,23 +369,25 @@ if (typeof(Composite) === "undefined") {
             invoke(variants[0], variants[1], variants[2], variants[3], variants[4]);
             if (invoke == Composite.scan
                     || invoke == Composite.mount) {
-                Composite.ticks.scan--;
-                if (Composite.ticks.render <= 0)
+                Composite.scan.ticks--;
+                if (Composite.scan.ticks <= 0) {}
                     Composite.fire(Composite.EVENT_SCAN_END, variants[0], variants[1], variants[2], variants[3], variants[4]);            
             } else {
-                Composite.ticks.render--;
-                if (Composite.ticks.render <= 0)
-                    Composite.fire(Composite.EVENT_RENDER_END, variants[0], variants[1], variants[2], variants[3], variants[4]);            
+                Composite.render.ticks--;
+                if (Composite.render.ticks <= 0) {
+                    Composite.fire(Composite.EVENT_RENDER_END, variants[0], variants[1], variants[2], variants[3], variants[4]);
+                    Composite.render.lock = false;
+                }
             }
         };
         
-        arguments = Array.prototype.slice.call(arguments);
+        arguments = Array.from(arguments);
         arguments = arguments.slice(2, 6);
         
         if (task == Composite.scan
                 || task == Composite.mount)
-            Composite.ticks.scan++;
-        else Composite.ticks.render++;
+            Composite.scan.ticks++;
+        else Composite.render.ticks++;
         if (sequence)
             method(task, arguments);
         else window.setTimeout(method, 0, task, arguments);
@@ -472,15 +468,27 @@ if (typeof(Composite) === "undefined") {
     //(Re)Index new composite elements in the DOM.
     //TODO: R: use of the collection of detected nodes by MutationObserver
     //TODO: Q: sequence or not? 
-    Composite.scan = function(selector) {
+    Composite.scan = function(selector, lock) {
         
         if (!selector)
             return;
 
         try {
+            
+            //The lock locks concurrent scan requests.
+            //Concurrent scaning causes unexpected effects.
+            if (Composite.scan.lock
+                    && Composite.scan.lock != lock) {
+                Composite.asynchron(Composite.scan, selector, lock);
+                return;
+            }
+            if (!Composite.scan.lock)
+                Composite.scan.lock = new Date().getTime();
+            lock = Composite.scan.lock;
 
+            Composite.scan.ticks = Composite.scan.ticks || 0;
             var event = Composite.EVENT_SCAN_START;
-            if (Composite.ticks.scan > 0)
+            if (Composite.scan.ticks > 0)
                 event = Composite.EVENT_SCAN_NEXT;
             Composite.fire(event, selector);
 
@@ -490,7 +498,7 @@ if (typeof(Composite) === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.scan, false, node);
+                    Composite.asynchron(Composite.scan, false, node, lock);
                 });
                 return; 
             }
@@ -501,7 +509,7 @@ if (typeof(Composite) === "undefined") {
             var nodes = selector.querySelectorAll("[id]");
             if (selector.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
                     && selector.hasAttribute(Composite.ATTRIBUTE_ID)) {
-                nodes = Array.prototype.slice.call(nodes);
+                nodes = Array.from(nodes);
                 nodes.push(selector);
             }
             
@@ -513,7 +521,7 @@ if (typeof(Composite) === "undefined") {
             });
             
         } finally {
-            if (Composite.ticks.scan <= 0)
+            if (Composite.scan.ticks <= 0)
                 Composite.fire(Composite.EVENT_SCAN_END);
         }
     };
@@ -574,15 +582,30 @@ if (typeof(Composite) === "undefined") {
      *        Evtl. kann auch der Inhalt aller Skripte gesammelt werden und erst
      *        am Ende (nach Abschluss vom Rendering) ausgeführt werden.
      */
-    Composite.render = function(selector, sequence) {
+    Composite.render = function(selector, sequence, lock) {
         
         if (!selector)
             return;
         
         try {
             
+            //The lock locks concurrent render requests.
+            //Concurrent rendering causes unexpected states due to manipulations
+            //at the DOM. HTML elements that are currently being processed can
+            //be omitted or replaced from the DOM. Access to parent and child
+            //elements may then no longer be possible.
+            if (Composite.render.lock
+                    && Composite.render.lock != lock) {
+                Composite.asynchron(Composite.render, selector, sequence, lock);
+                return;
+            }
+            if (!Composite.render.lock)
+                Composite.render.lock = new Date().getTime();
+            lock = Composite.render.lock;
+            
+            Composite.render.ticks = Composite.render.ticks || 0;
             var event = Composite.EVENT_RENDER_START;
-            if (Composite.ticks.render > 0)
+            if (Composite.render.ticks > 0)
                 event = Composite.EVENT_RENDER_NEXT;
             Composite.fire(event, selector);
 
@@ -592,7 +615,7 @@ if (typeof(Composite) === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.render, sequence, node, sequence);
+                    Composite.asynchron(Composite.render, sequence, node, sequence, lock);
                 });
                 return;
             }
@@ -651,20 +674,6 @@ if (typeof(Composite) === "undefined") {
                         }
                     });
             }
-
-            //The name of the parameter must correspond to the pattern
-            //Composite.PATTERN_PARAM_NAME. Parameters with invalid names are
-            //ignored. An invalid name does not cause an error.
-            if (selector.nodeName.match(Composite.PATTERN_ELEMENT_PARAM)) {
-                selector.removeAttribute(Composite.ATTRIBUTE_VALUE);
-                var name = (object.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                if (!name.match(Composite.PATTERN_PARAM_NAME))
-                    return;
-                var value = (object.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
-                value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, value);
-                eval(name + " = value;");
-                return;
-            }               
             
             sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
             
@@ -706,6 +715,7 @@ if (typeof(Composite) === "undefined") {
                 //a new text-element with a wrapper-object is created for the
                 //expressions, which is later inserted into the DOM.
                 //Empty expressions are ignored, are replaced by void/nothing.
+                //TODO: Doku unterscheidung von param / value
                 var content = selector.textContent;
                 content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
                     match = match.substring(2, match.length -2).trim();
@@ -714,7 +724,11 @@ if (typeof(Composite) === "undefined") {
                     var node = document.createTextNode("");
                     var serial = node.ordinal();
                     var object = {serial:serial, element:node, attributes:{}};
-                    object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
+                    var param = match.match(Composite.PATTERN_PARAM);
+                    if (param) {
+                        object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
+                        object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
+                    } else object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
                     Composite.elements[serial] = object; 
                     return "{{" + serial + "}}";
                 });
@@ -730,6 +744,7 @@ if (typeof(Composite) === "undefined") {
                 //step separates text and expressions to create new text-nodes,
                 //which are then inserted at the position of the original
                 //text-node.
+                //TODO: Doku unterscheidung von param / value
                 var empty = document.createTextNode("");
                 selector.parentNode.replaceChild(empty, selector);
                 var words = content.split(/(\{\{\d+\}\})/);
@@ -737,8 +752,16 @@ if (typeof(Composite) === "undefined") {
                     if (word.match(/^\{\{\d+\}\}$/)) {
                         var serial = parseInt(word.substring(2, word.length -2).trim());
                         var object = Composite.elements[serial];
-                        word = object.attributes[Composite.ATTRIBUTE_VALUE];
-                        word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
+                            var name = (object.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                            var value = (object.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                            value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, value);                            
+                            eval(name + " = value;");
+                            word = "";
+                        } else {
+                            word = object.attributes[Composite.ATTRIBUTE_VALUE];
+                            word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                        }
                     } else {
                         var node = document.createTextNode(word);
                         var serial = node.ordinal();
@@ -772,7 +795,7 @@ if (typeof(Composite) === "undefined") {
                         var serial = event.target.ordinal();
                         var object = Composite.elements[serial];
                         var render = object.attributes[Composite.ATTRIBUTE_RENDER];
-                        Composite.asynchron(Composite.render, false, render);
+                        Composite.asynchron(Composite.render, false, render, lock);
                     });                    
                 });
             }
@@ -793,42 +816,51 @@ if (typeof(Composite) === "undefined") {
                     return;
             }
             
-            //TODO: sequence
-            //TODO: url as expression is possible
             //For elements with the import-attribute, the content is loaded and
             //the inner HTML element will be replaced by the content. If the
             //content can be loaded successfully, the import-attribute is removed.
-            if (selector.hasAttribute(Composite.ATTRIBUTE_IMPORT)) {
-                var module = (selector.getAttribute(Composite.ATTRIBUTE_IMPORT) || "").trim();
-                (function(element, url) {
-                    try {
-                        var request = new XMLHttpRequest();
-                        request.overrideMimeType("text/plain");
-                        request.open("GET", url, true);
-                        request.onreadystatechange = function() {
-                            if (request.readyState == 4) {
-                                if (request.status == "200") {
-                                    element.innerHTML = request.responseText;
-                                    element.removeAttribute(Composite.ATTRIBUTE_IMPORT);
-                                    Composite.render(element);
-                                    return;
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
+                var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
+                if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                    var context = serial + ":" + Composite.ATTRIBUTE_OUTPUT;
+                    value = Expression.eval(context, value);
+                }
+                if (!(value instanceof Element
+                        || value instanceof NodeList)) {
+                    (function(element, url) {
+                        try {
+                            var request = new XMLHttpRequest();
+                            request.overrideMimeType("text/plain");
+                            request.open("GET", url, true);
+                            request.onreadystatechange = function() {
+                                if (request.readyState == 4) {
+                                    if (request.status == "200") {
+                                        element.innerHTML = request.responseText;
+                                        var serial = element.ordinal();
+                                        var object = Composite.elements[serial];
+                                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                                        Composite.render(element);
+                                        return;
+                                    }
+                                    function HttpRequestError(message) {
+                                        this.name = "HttpRequestError";
+                                        this.message = message;
+                                        this.stack = (new Error()).stack;
+                                    }
+                                    HttpRequestError.prototype = new Error;
+                                    throw new HttpRequestError("HTTP status " + request.status + " for " + url);
                                 }
-                                function HttpRequestError(message) {
-                                    this.name = "HttpRequestError";
-                                    this.message = message;
-                                    this.stack = (new Error()).stack;
-                                }
-                                HttpRequestError.prototype = new Error;
-                                throw new HttpRequestError("HTTP status " + request.status + " for " + url);
-                            }
-                        };
-                        request.send(null);  
-                    } catch (error) {
-                        Composite.fire(Composite.EVENT_AJAX_ERROR, error);
-                        throw error;
-                    }
-                })(selector, module);
-                return;
+                            };
+                            request.send(null);  
+                        } catch (error) {
+                            Composite.fire(Composite.EVENT_AJAX_ERROR, error);
+                            throw error;
+                        }
+                    })(selector, value);
+                    return;
+                }
+                selector.appendChild(value, true);
+                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
             } 
             
             //This attribute is used to set the value or result of an expression
@@ -912,7 +944,7 @@ if (typeof(Composite) === "undefined") {
                                 var temp = document.createElement("div");
                                 window[object.iterate.name] = {item:item, index:index, data:array};
                                 temp.innerHTML = object.iterate.markup;
-                                Composite.render(temp, true);
+                                Composite.render(temp, true, lock);
                                 selector.appendChild(temp.childNodes);
                             });
                         }
@@ -962,16 +994,15 @@ if (typeof(Composite) === "undefined") {
             
             //Follow other element children recursively.
             //Scripts, style elements and custom tags are ignored.
-            //The content of custom tags is considered like a template.
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.render, sequence, node, sequence);
+                    Composite.asynchron(Composite.render, sequence, node, sequence, lock);
                 });
             }
 
         } finally {
-            if (Composite.ticks.render <= 0)
+            if (Composite.render.ticks <= 0)
                 Composite.fire(Composite.EVENT_RENDER_END, selector);
         }
     };
@@ -981,7 +1012,7 @@ if (typeof(Composite) === "undefined") {
     (function() {
         var css = document.createElement("style");
         css.setAttribute("type", "text/css");
-        css.textContent = "*[condition]:not([condition='true']) {display:none!important;}";
+        css.textContent = "[condition]:not([condition='true']) {display:none!important;}";
         var script = document.querySelector("script");
         script.parentNode.insertBefore(css, script); 
     })();

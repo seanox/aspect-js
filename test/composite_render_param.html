@@ -30,52 +30,118 @@
         });  
     </script>
     <script type="text/test">
+   expected expression, got ':'
+    :
+   expected expression, got ':'
+    :
+   expected expression, got ':'
+    :
+   expected expression, got ':'
+    :
+
+   
+   
+   
+   
+   
+   
+   
+   
+  
     A:1: 
-    <param name="globalA">
-    A:2: Hallo
+    
+    A:2: 
+    
+    A:3: Hallo
     <article id="AB">
       AA:1: Hallo
       AB:1:    
-      <param name="globalAB">
+      
       AA:2: Hallo
-      AB:2: Hallo
-      <param name="globalAB">
+      AB:2: 
+      
       AA:3: Hallo
       AB:3: Welt
-      <param name="globalAB">
+      
       AA:4: Hallo
       AB:4: Welt
-      <param name="globalAB">
+      
       AA:5: Hallo
       AB:5: Hallo Welt
-      <param name="globalAB">
+      
       AA:5: Hallo
       AB:5: Hallo Welt Hallo Welt
     </article>
+    
+    X: 1
+    
+    X: 2
+    
+    X: 1
+    
+    
+    X: 1
+    
+    X: 2
+    
+    X: 4
+    
+    X: 7
     </script>
   </head>
   <body>
+   {{:}}
+   {{ :}}
+   {{ : }}
+   {{: }}
+
+   {{n:}}
+   {{n}}
+   {{n :}}
+   {{n}}
+   {{n : }}
+   {{n}}
+   {{n: }}
+   {{n}}
+  
     A:1: {{globalA}}
-    <param name="globalA" value="Hallo"/>
+    {{globalA:Hallo}}
     A:2: {{globalA}}
+    {{globalA:'Hallo'}}
+    A:3: {{globalA}}
     <article id="AB">
       AA:1: {{globalA}}
       AB:1: {{globalAB}}   
-      <param name="globalAB" value="Hallo"/>
+      {{globalAB:Hallo}}
       AA:2: {{globalA}}
       AB:2: {{globalAB}}
-      <param name="globalAB" value="Welt"/>
+      {{globalAB:'Welt'}}
       AA:3: {{globalA}}
       AB:3: {{globalAB}}
-      <param name="globalAB" value="{{globalAB}}"/>
+      {{globalAB:globalAB}}
       AA:4: {{globalA}}
       AB:4: {{globalAB}}
-      <param name="globalAB" value="{{'Hallo ' + globalAB}}"/>
+      {{globalAB:'Hallo ' + globalAB}}
       AA:5: {{globalA}}
       AB:5: {{globalAB}}
-      <param name="globalAB" value="{{globalAB + ' ' + globalAB}}"/>
+      {{globalAB:globalAB + ' ' + globalAB}}
       AA:5: {{globalA}}
       AB:5: {{globalAB}}
     </article>
+    {{x : '1'}}
+    X: {{x}}
+    {{x : '2'}}
+    X: {{x}}
+    {{x :'1'}}
+    X: {{x}}
+    
+    {{x:1}}
+    X: {{x}}
+    {{x:x+1}}
+    X: {{x}}
+    {{x:x+2}}
+    X: {{x}}
+    {{x:x+3}}
+    X: {{x}}
   </body>
 </html>
