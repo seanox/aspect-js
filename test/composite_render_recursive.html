@@ -11,7 +11,8 @@
     <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
-    <script type="text/javascript">
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript"> 
     
         var TestBean = {};
         TestBean.ticks = 0;
@@ -21,16 +22,35 @@
         
         Test.create({test:function() {
             var actual = document.querySelector("body");
-            Assert.assertEqualsTemplate("script[type='text/test']", actual.innerHTML);          
+            var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
+            Assert.assertEqualsTemplate("script[type='text/test-" + type + "']", actual.innerHTML);
         }}); 
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            //Test.start();
+            Test.start();
         }); 
     </script>
-    <script type="text/test">
-    A:<text>1-{{TestBean.ping()}}</text> 
-    B:<text>2-{{TestBean.ping()}}</text> 
-    C:<text>3-{{TestBean.ping()}}</text>
+    <script type="text/test-edge">
+    A:1-{{TestBean.ping()}} 
+    B:2-{{TestBean.ping()}} 
+    C:3-{{TestBean.ping()}}
+    
+    D:<input type="text" value="4-{{TestBean.ping()}}">
+    E:<input type="text" value="5-{{TestBean.ping()}}">
+    F:<input type="text" value="6-{{TestBean.ping()}}">
+    </script>
+    <script type="text/test-chrome">
+    A:1-{{TestBean.ping()}} 
+    B:2-{{TestBean.ping()}} 
+    C:3-{{TestBean.ping()}}
+    
+    D:<input type="text" value="4-{{TestBean.ping()}}">
+    E:<input type="text" value="5-{{TestBean.ping()}}">
+    F:<input type="text" value="6-{{TestBean.ping()}}">
+    </script>
+    <script type="text/test-firefox">
+    A:1-{{TestBean.ping()}} 
+    B:2-{{TestBean.ping()}} 
+    C:3-{{TestBean.ping()}}
     
     D:<input value="4-{{TestBean.ping()}}" type="text">
     E:<input value="5-{{TestBean.ping()}}" type="text">

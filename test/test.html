@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        overflow:hidden;
+      }
+      
+      body > table {
+        border-collapse:collapse;
+        height:100%;
+        left:0px;
+        overflow:hidden;
+        position:absolute;
+        top:0px;
+        width:100%;
+      }
+      body > table td {
+        border:0px solid;
+        margin:0px; 
+        padding:0px;
+        position:relative;
+        vertical-align:top;
+        width:40%;
+      }
+      body > table td:first-child {
+        width:20%;
+      }
+      body > table th {
+        background:#F0F0F0;
+        height:3em;
+      }
+      body > table th + th,
+      body > table td + td {
+        border-left:3px solid #FFFFFF;
+      }      
+      body > table th {
+        border-bottom:3px solid #FFFFFF;
+      }      
+      body > table td > * {
+        overflow:auto;
+      }
+      
+      body > table td iframe {
+        border:0px solid;
+        height:100%;
+        position:absolute;
+        top:0px; left:0px;
+        width:100%;
+      }
+      
+      #progress {
+        height:100%;
+        position:absolute;
+        top:0em;
+        left:0em;
+        width:100%;
+      }      
+      #progress > div {
+        border-left:0.5em solid;
+        border-left-color:#C0C0C0;
+        cursor:pointer;
+        margin:0em;
+        padding:0.75em;
+      }
+      #progress > div.successful  {
+        border-left-color:#70A040;
+      }
+      #progress > div.failed  {
+        border-left-color:#FF0000;
+      }
+      #progress > div + div {
+        border-top:1px dotted #909090;
+        margin-top:1px;
+      }      
+      #progress > div span ~ span {
+        color:#C0C0C0;
+      } 
+      #progress > div.failed span ~ span {
+        color:#FF0000;
+      } 
+            
+      #output {
+        height:100%;
+        position:absolute;
+        top:0em;
+        left:0em;
+        width:100%;
+      }
+      #output pre {
+        border-left:0.5em solid;
+        border-left-color:#C0C0C0;
+        margin:0em;
+        padding:0.75em;
+      }
+      #output pre + pre {
+        margin-top:1px;
+        border-top:1px dotted #909090;
+      }
+      #output pre.error {
+        border-left-color:#FF0000;
+      }
+      #output pre.info {
+        border-left-color:#00A0F0;
+      }
+      #output pre.warn {
+        border-left-color:#F0A000;
+      }
+    </style>
+    <script type="text/test-cases">
+      composite_expression_benchmark.html
+      composite_expression_parse.html
+      composite_expression_syntax.html
+      composite_render_param.html
+      composite_render_recursive.html
+      composite_render_sequence.html
+      content.html
+      extension_namespace.html
+      mvc_path_locate.html
+      mvc_path_normalize.html
+    </script>
+    <script src="../sources/extension.js"></script>
+    <script type="text/javascript">
+    
+      var queue;
+    
+      window.addEventListener("load", function(event) {
+          queue = document.querySelector("script[type='text/test-cases']");
+          queue = queue.textContent.trim().split(/\s+/);
+          var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
+          queue.forEach(function(entry, index, array) {
+              var text = content;
+              text = text.replace(/%1/g, entry.hashCode());
+              text = text.replace(/%2/g, entry);
+              document.querySelector("#progress").innerHTML += text;
+          });
+          var tests = document.querySelectorAll("#progress div[id]");
+          tests.forEach(function(test, index, array) {
+              test.addEventListener("click", function(event) {
+                  loadTest(event.target.textContent.match(/^[\S]+/));
+              });
+          });
+          loadTest(queue.shift());
+      });
+      
+      var locateTest = function() {
+          return String(document.querySelector("iframe").getAttribute("src").match(/^[^\?]+/));
+      };
+      
+      var loadTest = function(test) {
+          document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + new Date().getTime());
+      };
+      
+      var onMessage = function(event, message) {
+          var output = document.querySelector("#output");
+          var content = document.createElement("pre");
+          content.className = event;
+          content.textContent = message.trim();
+          if (content.textContent)
+              output.appendChild(content);
+          output.innerHTML = output.innerHTML.trim();
+          output.scrollTop = output.scrollHeight;          
+      };
+      var onLog = function(message) {
+          onMessage("log", message);
+      };
+      var onInfo = function(message) {
+          onMessage("info", message);
+      };      
+      var onWarn = function(message) {
+          onMessage("warn", message);
+      };      
+      var onError = function(message) {
+          onMessage("error", message);
+      };    
+      
+      var onStart = function(event, status) {
+          onMessage("info", "Start of " + locateTest()
+                  + "\r\n\t" + status.queue.size + " tests found");
+      };
+      var onPerform = function(event, status) {
+          var test = locateTest();
+          test = document.querySelector("#" + test.hashCode());
+          
+          document.querySelector("#progress").scrollTop = test.offsetTop; 
+          
+          var meter = test.querySelector("meter");
+          meter.max = status.queue.size;
+          meter.value = status.queue.progress;
+          test.querySelector("span").textContent = status.queue.progress;
+          test.querySelector("span + span").textContent = status.queue.faults;
+          test.className = status.queue.faults ? "failed" : "successful";
+      };      
+      var onFinish = function(event, status) {
+          onPerform(event, status);
+          if (queue.length > 0)
+              loadTest(queue.shift());
+      };      
+      var onInterrupt = function(event, status) {
+          onMessage("warn", "Interrupt of " + locateTest());
+          onPerform(event, status);
+          if (queue.length > 0)
+              loadTest(queue.shift());
+      };    
+    </script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Progress</th>
+        <th>Output</th>
+        <th>Frame</th>
+      </tr>
+      <tr>
+        <td>
+          <div id="progress"></div>
+        </td>
+        <td>
+          <div id="output"></div>
+        </td>
+        <td>
+          <iframe></iframe>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

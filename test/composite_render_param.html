@@ -22,14 +22,133 @@
         
         Test.create({test:function() {
             var actual = document.querySelector("body");
-            Assert.assertEqualsTemplate("script[type='text/test']", actual.innerHTML);           
+            var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
+            Assert.assertEqualsTemplate("script[type='text/test-" + type + "']", actual.innerHTML);            
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
         });  
     </script>
-    <script type="text/test">
+    <script type="text/test-edge">
+   Syntax error
+    :
+   Syntax error
+    :
+   Syntax error
+    :
+   Syntax error
+    :
+
+   
+   undefined
+   
+   undefined
+   
+   undefined
+   
+   undefined
+  
+    A:1: undefined
+    
+    A:2: undefined
+    
+    A:3: Hallo
+    <article id="AB">
+      AA:1: Hallo
+      AB:1: undefined   
+      
+      AA:2: Hallo
+      AB:2: undefined
+      
+      AA:3: Hallo
+      AB:3: Welt
+      
+      AA:4: Hallo
+      AB:4: Welt
+      
+      AA:5: Hallo
+      AB:5: Hallo Welt
+      
+      AA:5: Hallo
+      AB:5: Hallo Welt Hallo Welt
+    </article>
+    
+    X: 1
+    
+    X: 2
+    
+    X: 1
+    
+    
+    X: 1
+    
+    X: 2
+    
+    X: 4
+    
+    X: 7
+    </script>
+    <script type="text/test-chrome">
+   Unexpected token :
+    :
+   Unexpected token :
+    :
+   Unexpected token :
+    :
+   Unexpected token :
+    :
+
+   
+   
+   
+   
+   
+   
+   
+   
+  
+    A:1: 
+    
+    A:2: 
+    
+    A:3: Hallo
+    <article id="AB">
+      AA:1: Hallo
+      AB:1:    
+      
+      AA:2: Hallo
+      AB:2: 
+      
+      AA:3: Hallo
+      AB:3: Welt
+      
+      AA:4: Hallo
+      AB:4: Welt
+      
+      AA:5: Hallo
+      AB:5: Hallo Welt
+      
+      AA:5: Hallo
+      AB:5: Hallo Welt Hallo Welt
+    </article>
+    
+    X: 1
+    
+    X: 2
+    
+    X: 1
+    
+    
+    X: 1
+    
+    X: 2
+    
+    X: 4
+    
+    X: 7
+    </script>
+    <script type="text/test-firefox">
    expected expression, got ':'
     :
    expected expression, got ':'

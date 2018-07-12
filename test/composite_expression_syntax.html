@@ -13,10 +13,11 @@
     <script src="../sources/test.js"></script>
     <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
-        
+
         Test.create({test:function() {
             var actual = document.querySelector("body");
-            Assert.assertEqualsTemplate("script[type='text/test']", actual.innerHTML);
+            var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
+            Assert.assertEqualsTemplate("script[type='text/test-" + type + "']", actual.innerHTML);
         }});         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
@@ -32,7 +33,275 @@
             }
         }
     </script>
-    <script type="text/test">
+    <script type="text/test-edge">
+    mapping:
+    ----
+    and &amp;&amp;        empty !         div /
+    eq  ==        ge    &gt;=        gt  &gt;
+    le  &lt;=        lt    &lt;         mod %
+    ne  !=        not   !         or  ||
+    
+    normal use:
+    ----
+    true true
+    true true 
+    true true
+    true true
+    
+    true true
+    true true 
+    true true
+    true true
+    true true    
+    
+    true true
+    true true 
+    true true
+    true true
+       
+    invalid word boundaries:
+    ----
+    undefined true
+    undefined true 
+    Expected ';'
+    1le2 true
+    Expected ';'
+    1ne2 true
+    
+    true true
+    Expected ';'
+    2ge1 true 
+    Expected ';'
+    1lt2 true
+    true true
+    Expected ';'
+    Expression.lookup("notempty")'x' true    
+    
+    Expected ')'
+    (25div5)Expression.lookup("eq5") Expected ';'
+    (25 /5)Expression.lookup("eq5")
+    Expected ';'
+    2gt1 true 
+    Expected ')'
+    (10mod3)Expression.lookup("eq1") Expected ';'
+    (10%3)Expression.lookup("eq1")
+    undefined true
+    
+    lower / upper case:
+    ----
+    true true
+    true true 
+    true true
+    true true
+    
+    true true
+    true true 
+    true true
+    true true
+    true true    
+    
+    true true
+    true true 
+    true true
+    true true
+    
+    various
+    ----
+    -1
+    1
+    -12
+    
+    undefined
+    undefined123
+    
+    A1: undefined
+    A2: undefined
+    A3: 'Peter' is not defined
+    Peter.und.der()
+    
+    B1: [object HTMLInputElement]
+    B2: Function expected
+    Expression.lookup("#HiddenField.value")()
+    B3: Test-HF    
+    
+    C1: Invalid character
+    #Expression.lookup("#HiddenField")
+    C2: Invalid character
+    #Expression.lookup("#HiddenField.value")()
+    C3: Invalid character
+    #Expression.lookup("#HiddenField.value")()    
+    
+    D1: 
+    
+    E1: Invalid character
+    #
+    E2: Invalid character
+    # + #
+    
+    F1: Function expected
+    '123' + Expression.lookup("#HiddenField.value")() + 'abc'
+    F2: 123Test-HFabc
+    
+    G1: [object HTMLInputElement]
+    G2: Invalid character
+    #HiddenField_1.#Expression.lookup("HiddenField_1")
+    G3: Invalid character
+    #HiddenField_1.#Expression.lookup("HiddenField_2")    
+    G4: Expected ';'
+    Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")    
+    G5: Invalid character
+    Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
+        
+    X0: <input id="HiddenField" type="hidden" value="Test-HF">
+    X1: <input id="HiddenField_1" type="hidden" value="Test-HF_A">
+    X2: <input id="HiddenField_2" type="hidden" value="Test-HF_B">
+    X3: <input id="HiddenField_3" type="hidden" value="Test-HF_C">
+
+    O1: <span>undefined</span>
+    O2: <span>function () {
+                return 122;        
+            }</span>
+    O3: <span>122</span>
+    O4: <span>xxxx</span>
+    O5: <span>xxxx</span>
+    O6: <span>xxxxx</span>
+    O7: <span><i>Hallo</i></span>
+    </script>
+    <script type="text/test-chrome">
+    mapping:
+    ----
+    and &amp;&amp;        empty !         div /
+    eq  ==        ge    &gt;=        gt  &gt;
+    le  &lt;=        lt    &lt;         mod %
+    ne  !=        not   !         or  ||
+    
+    normal use:
+    ----
+    true true
+    true true 
+    true true
+    true true
+    
+    true true
+    true true 
+    true true
+    true true
+    true true    
+    
+    true true
+    true true 
+    true true
+    true true
+       
+    invalid word boundaries:
+    ----
+     true
+     true 
+    Invalid or unexpected token
+    1le2 true
+    Invalid or unexpected token
+    1ne2 true
+    
+    true true
+    Invalid or unexpected token
+    2ge1 true 
+    Invalid or unexpected token
+    1lt2 true
+    true true
+    Unexpected string
+    Expression.lookup("notempty")'x' true    
+    
+    Invalid or unexpected token
+    (25div5)Expression.lookup("eq5") Unexpected identifier
+    (25 /5)Expression.lookup("eq5")
+    Invalid or unexpected token
+    2gt1 true 
+    Invalid or unexpected token
+    (10mod3)Expression.lookup("eq1") Unexpected identifier
+    (10%3)Expression.lookup("eq1")
+     true
+    
+    lower / upper case:
+    ----
+    true true
+    true true 
+    true true
+    true true
+    
+    true true
+    true true 
+    true true
+    true true
+    true true    
+    
+    true true
+    true true 
+    true true
+    true true
+    
+    various
+    ----
+    -1
+    1
+    -12
+    
+    
+    undefined123
+    
+    A1: 
+    A2: 
+    A3: Peter is not defined
+    Peter.und.der()
+    
+    B1: [object HTMLInputElement]
+    B2: Expression.lookup(...) is not a function
+    Expression.lookup("#HiddenField.value")()
+    B3: Test-HF    
+    
+    C1: Invalid or unexpected token
+    #Expression.lookup("#HiddenField")
+    C2: Invalid or unexpected token
+    #Expression.lookup("#HiddenField.value")()
+    C3: Invalid or unexpected token
+    #Expression.lookup("#HiddenField.value")()    
+    
+    D1: 
+    
+    E1: Invalid or unexpected token
+    #
+    E2: Invalid or unexpected token
+    # + #
+    
+    F1: Expression.lookup(...) is not a function
+    '123' + Expression.lookup("#HiddenField.value")() + 'abc'
+    F2: 123Test-HFabc
+    
+    G1: [object HTMLInputElement]
+    G2: Invalid or unexpected token
+    #HiddenField_1.#Expression.lookup("HiddenField_1")
+    G3: Invalid or unexpected token
+    #HiddenField_1.#Expression.lookup("HiddenField_2")    
+    G4: Unexpected identifier
+    Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")    
+    G5: Invalid or unexpected token
+    Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
+        
+    X0: <input type="hidden" id="HiddenField" value="Test-HF">
+    X1: <input type="hidden" id="HiddenField_1" value="Test-HF_A">
+    X2: <input type="hidden" id="HiddenField_2" value="Test-HF_B">
+    X3: <input type="hidden" id="HiddenField_3" value="Test-HF_C">
+
+    O1: <span>undefined</span>
+    O2: <span>function() {
+                return 122;        
+            }</span>
+    O3: <span>122</span>
+    O4: <span>xxxx</span>
+    O5: <span>xxxx</span>
+    O6: <span>xxxxx</span>
+    O7: <span><i>Hallo</i></span>
+    </script>
+    <script type="text/test-firefox">
     mapping:
     ----
     and &amp;&amp;        empty !         div /
