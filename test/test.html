@@ -111,14 +111,17 @@
       }
     </style>
     <script type="text/test-cases">
-      composite_expression_benchmark.html
+     *composite_expression_benchmark.html
+      composite_expression_element.html
       composite_expression_parse.html
       composite_expression_syntax.html
+      composite_render_customize.html
       composite_render_param.html
       composite_render_recursive.html
       composite_render_sequence.html
       content.html
       extension_namespace.html
+      extension_window_serial.html
       mvc_path_locate.html
       mvc_path_normalize.html
     </script>
@@ -130,6 +133,7 @@
       window.addEventListener("load", function(event) {
           queue = document.querySelector("script[type='text/test-cases']");
           queue = queue.textContent.trim().split(/\s+/);
+          queue = queue.filter(entry => !entry.match(/^\*/));
           var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
           queue.forEach(function(entry, index, array) {
               var text = content;
@@ -140,7 +144,7 @@
           var tests = document.querySelectorAll("#progress div[id]");
           tests.forEach(function(test, index, array) {
               test.addEventListener("click", function(event) {
-                  loadTest(event.target.textContent.match(/^[\S]+/));
+                  loadTest(event.currentTarget.textContent.match(/^[\S]+/));
               });
           });
           loadTest(queue.shift());

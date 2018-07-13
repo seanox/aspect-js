@@ -5,7 +5,8 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace; white-space:pre;
+        font-family:monospace;
+        white-space:pre;
       }
     </style>
     <script src="../sources/extension.js"></script>
@@ -13,6 +14,9 @@
     <script src="../sources/test.js"></script>
     <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
+    
+        var results = new Array();
+        var count = 0;
 
         var macroA = function(node) {
             node.innerHTML = node.nodeName + ":" + node.getAttribute("a") + ":" + node.innerHTML;
@@ -31,7 +35,39 @@
                 return String(error);                
             }
             return "";
-        }
+        };
+        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            
+            switch (++count) {
+                
+                case 1:
+                    var actual = document.querySelector("body");
+                    try {Assert.assertEqualsTemplate("script[type='text/test-1']", actual.innerHTML);
+                    } catch (exception) {
+                        results.push(exception);
+                    }
+                    
+                    Composite.customize("ma", macroA);
+                    Composite.customize("mb", macroA);
+                    Composite.customize("mc", macroA);
+                    Composite.customize("md", macroA);
+                    Composite.customize("md", null);
+                    Composite.customize("mf", macroA);
+                    Composite.render("body");
+                    
+                    break;
+                    
+                case 2:
+                    var actual = document.querySelector("body");
+                    try {Assert.assertEqualsTemplate("script[type='text/test-2']", actual.innerHTML);
+                    } catch (exception) {
+                        results.push(exception);
+                    }
+                    Test.start();
+                    break;
+            }
+        });
         
         Test.create({test:function() {
 
@@ -60,28 +96,9 @@
         }});
         
         Test.create({test:function() {
-            var actual = document.querySelector("body");
-            Assert.assertEqualsTemplate("script[type='text/test-1']", actual.innerHTML);
+            Assert.assertEquals(2, count);
+            Assert.assertTrue(results && results.length == 0);
         }});        
-
-        Test.create({test:function() {
-            Composite.customize("ma", macroA);
-            Composite.customize("mb", macroA);
-            Composite.customize("mc", macroA);
-            Composite.customize("md", macroA);
-            Composite.customize("md", null);
-            Composite.customize("mf", macroA);
-            Composite.render("body");
-        }});
-    
-        Test.create({test:function() {
-            var actual = document.querySelector("body");
-            Assert.assertEqualsTemplate("script[type='text/test-2']", actual.innerHTML);
-        }});
-        
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start();
-        });         
     </script>
     <script type="text/test-1">
     <oa a="xo1">o1</oa>
