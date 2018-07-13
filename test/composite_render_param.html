@@ -5,7 +5,8 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace; white-space:pre;
+        font-family:monospace;
+        white-space:pre;
       }
     </style>
     <script src="../sources/extension.js"></script>
@@ -14,12 +15,6 @@
     <script src="../sources/testutils.js"></script>
     <script type="text/javascript"> 
     
-        var TestBean = {};
-        TestBean.ticks = 0;
-        TestBean.ping = function() {
-            return ++TestBean.ticks;
-        };
-        
         Test.create({test:function() {
             var actual = document.querySelector("body");
             var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();

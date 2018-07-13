@@ -6,21 +6,16 @@
     <style type="text/css">
       body {
         font-family:monospace;
+        overflow:hidden;
         white-space:pre;
       }
     </style>
     <script src="../sources/extension.js"></script>
-    <script src="../sources/datasource.js"></script>
-    <script src="../sources/content.js"></script>
-    <script src="../sources/test.js"></script>
-    <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
-    
-      Test.create({test:function() {
-          Assert.assertTrue(Content.publish('content-empty') instanceof NodeList); 
-      }});
-      
-      Test.start(true);
+      window.addEventListener("load", function(event) {
+          document.body.textContent = window.serial;
+          parent["count"] += 1;
+      });
     </script>
   </head>
   <body>

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+      iframe {
+        height:2em;
+        overflow:hidden;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+      var count = 0;
+    
+      Test.create({test:function() {
+          
+          var filter = "";
+          for (var loop = 0; loop < 9; loop++) {
+              var frame = document.querySelector("#Test" + loop);
+              frame = frame.contentDocument || frame.contentWindow.document;
+              var serial = " " + frame.body.textContent + " ";
+              Assert.assertFalse(filter.includes(serial));
+              filter += serial;
+          }
+      }});
+      
+      var interval = window.setInterval(function() {
+          if (count < 10)
+              return;
+          window.clearInterval(interval);
+          Test.start(true);
+      }, 250);
+    </script>
+  </head>
+  <body>
+    <iframe id="Test1" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test2" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test3" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test4" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test5" src="extension_window_serial_frame.html"></iframe>
+    
+    <iframe id="Test6" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test7" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test8" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test9" src="extension_window_serial_frame.html"></iframe>
+    <iframe id="Test0" src="extension_window_serial_frame.html"></iframe>
+  </body>
+</html>

@@ -5,7 +5,8 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace; white-space:pre;
+        font-family:monospace;
+        white-space:pre;
       }
     </style>
     <script src="../sources/extension.js"></script>
@@ -14,10 +15,10 @@
     <script src="../sources/testutils.js"></script>
     <script type="text/javascript"> 
     
-        var TestBean = {};
-        TestBean.ticks = 0;
-        TestBean.ping = function() {
-            return ++TestBean.ticks + "-" + "{{TestBean.ping()}}";
+        var TestModel = {};
+        TestModel.ticks = 0;
+        TestModel.ping = function() {
+            return ++TestModel.ticks + "-" + "{{TestModel.ping()}}";
         };
         
         Test.create({test:function() {
@@ -30,40 +31,40 @@
         }); 
     </script>
     <script type="text/test-edge">
-    A:1-{{TestBean.ping()}} 
-    B:2-{{TestBean.ping()}} 
-    C:3-{{TestBean.ping()}}
+    A:1-{{TestModel.ping()}} 
+    B:2-{{TestModel.ping()}} 
+    C:3-{{TestModel.ping()}}
     
-    D:<input type="text" value="4-{{TestBean.ping()}}">
-    E:<input type="text" value="5-{{TestBean.ping()}}">
-    F:<input type="text" value="6-{{TestBean.ping()}}">
+    D:<input type="text" value="4-{{TestModel.ping()}}">
+    E:<input type="text" value="5-{{TestModel.ping()}}">
+    F:<input type="text" value="6-{{TestModel.ping()}}">
     </script>
     <script type="text/test-chrome">
-    A:1-{{TestBean.ping()}} 
-    B:2-{{TestBean.ping()}} 
-    C:3-{{TestBean.ping()}}
+    A:1-{{TestModel.ping()}} 
+    B:2-{{TestModel.ping()}} 
+    C:3-{{TestModel.ping()}}
     
-    D:<input type="text" value="4-{{TestBean.ping()}}">
-    E:<input type="text" value="5-{{TestBean.ping()}}">
-    F:<input type="text" value="6-{{TestBean.ping()}}">
+    D:<input type="text" value="4-{{TestModel.ping()}}">
+    E:<input type="text" value="5-{{TestModel.ping()}}">
+    F:<input type="text" value="6-{{TestModel.ping()}}">
     </script>
     <script type="text/test-firefox">
-    A:1-{{TestBean.ping()}} 
-    B:2-{{TestBean.ping()}} 
-    C:3-{{TestBean.ping()}}
+    A:1-{{TestModel.ping()}} 
+    B:2-{{TestModel.ping()}} 
+    C:3-{{TestModel.ping()}}
     
-    D:<input value="4-{{TestBean.ping()}}" type="text">
-    E:<input value="5-{{TestBean.ping()}}" type="text">
-    F:<input value="6-{{TestBean.ping()}}" type="text">
+    D:<input value="4-{{TestModel.ping()}}" type="text">
+    E:<input value="5-{{TestModel.ping()}}" type="text">
+    F:<input value="6-{{TestModel.ping()}}" type="text">
     </script>
   </head>
   <body>
-    A:{{TestBean.ping()}} 
-    B:{{TestBean.ping()}} 
-    C:{{TestBean.ping()}}
+    A:{{TestModel.ping()}} 
+    B:{{TestModel.ping()}} 
+    C:{{TestModel.ping()}}
     
-    D:<input type="text" value="{{TestBean.ping()}}"/>
-    E:<input type="text" value="{{TestBean.ping()}}"/>
-    F:<input type="text" value="{{TestBean.ping()}}"/>
+    D:<input type="text" value="{{TestModel.ping()}}"/>
+    E:<input type="text" value="{{TestModel.ping()}}"/>
+    F:<input type="text" value="{{TestModel.ping()}}"/>
   </body>
 </html>
