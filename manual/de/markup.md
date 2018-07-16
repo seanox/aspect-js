@@ -4,14 +4,18 @@ Mit aspect-js wird der deklarative Ansatz von HTML weiter ausgebaut.
 Neben der Expression-Language werden für Funktionen und Objektbindung Attribute
 an den HTML-Elementen verwendet.
 
+
 ## Inhalt
+
 * [Attribute](#attribute)
   * [condition](#condition)
   * [interval](#interval)
 
 ## Attribute
 
+
 ### condition
+
 Die Sichtbarkeit der HTML-Elemente, die Interpretation der aspect-js
 Attribute und das Rendering lassen sich über das condition-Attribut steuern,
 welches für jedes HTML-Element verwendet werden kann.
@@ -25,7 +29,9 @@ Verarbeitung durch aspect-js ausgesetzt..
 </article>
 ```
 
+
 ### interval
+
 Dieses Attribut aktiviert eine zeitgesteuerte Auffrischung (Re-rendering) eines
 HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
 Als Wert wird ein Interval in Millisekunden erwartet, der auch als Expression
