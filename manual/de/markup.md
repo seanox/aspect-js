@@ -5,8 +5,8 @@ Neben der Expression-Language werden für Funktionen und Objektbindung Attribute
 an den HTML-Elementen verwendet.
 
 ## Inhalt
-* [Attribute](#attributes)
-  * [interval](md#interval)
+* [Attribute](#attribute)
+  * [interval](#interval)
 
 ## Attribute
 
