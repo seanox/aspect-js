@@ -116,6 +116,7 @@
       composite_expression_parse.html
       composite_expression_syntax.html
       composite_render_customize.html
+      composite_render_interval.html
       composite_render_param.html
       composite_render_recursive.html
       composite_render_sequence.html
@@ -144,6 +145,7 @@
           var tests = document.querySelectorAll("#progress div[id]");
           tests.forEach(function(test, index, array) {
               test.addEventListener("click", function(event) {
+                  document.querySelector("#output").innerHTML = "";
                   loadTest(event.currentTarget.textContent.match(/^[\S]+/));
               });
           });
@@ -162,7 +164,7 @@
           var output = document.querySelector("#output");
           var content = document.createElement("pre");
           content.className = event;
-          content.textContent = message.trim();
+          content.textContent = String(message || "").trim();
           if (content.textContent)
               output.appendChild(content);
           output.innerHTML = output.innerHTML.trim();
