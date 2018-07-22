@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript"> 
+    
+        var TestModel = {
+            outputA: function() {
+                return "A1<span>A2<span>A3</span></span>";
+            },
+            isVisibleA: true,
+            outputB: function() {
+                return "B1<span>B2 B3:{{TestModel.isVisibleB3}}<span condition='{{TestModel.isVisibleB3}}'>B3</span></span>";
+            },
+            isVisibleB: false,
+            outputB3: function() {
+                return "B3";
+            },
+            isVisibleB3: false,
+            outputC: function() {
+            },
+            isVisibleC: false
+        };
+
+        var results = new Array();
+        
+        Test.create({test:function() {
+            Assert.assertEqualsTemplate("script[type='text/test-1']", snapshots.shift());            
+        }}); 
+        Test.create({test:function() {
+            Assert.assertEqualsTemplate("script[type='text/test-2']", snapshots.shift());
+        }}); 
+        Test.create({test:function() {
+            Assert.assertEqualsTemplate("script[type='text/test-3']", snapshots.shift());
+        }});
+        Test.create({test:function() {
+            Assert.assertEqualsTemplate("script[type='text/test-4']", snapshots.shift());
+        }});
+        
+        var counter = 0;
+        var snapshots = new Array();
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            
+            var snapshot = document.body.textContent;
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            snapshots.push(snapshot);
+            
+            switch (++counter) {
+                case 1:
+                    Composite.render("#B0");
+                    break;
+                case 2:
+                    TestModel.isVisibleB = true;
+                    Composite.render("#B0");
+                    break;   
+                case 3:
+                    TestModel.isVisibleB3 = true;
+                    Composite.render("#B0"); 
+                    break;
+                case 4:
+                    Test.start();
+            }
+        }); 
+    </script>
+  </head>
+  <script type="text/test-1">
+    A:A1A2A3
+    B:
+    C:
+  </script>
+  <script type="text/test-2">
+    A:A1A2A3
+    B:
+    C:
+  </script>
+  <script type="text/test-3">
+    A:A1A2A3
+    B:B1B2 B3:falseB3
+    C:
+  </script>
+  <script type="text/test-4">
+    A:A1A2A3
+    B:B1B2 B3:trueB3
+    C:
+  </script>
+  <body>
+    A:<span id="A0" output="{{TestModel.outputA()}}" condition="{{TestModel.isVisibleA}}"></span>
+    B:<span id="B0" output="{{TestModel.outputB()}}" condition="{{TestModel.isVisibleB}}"></span>
+    C:<span id="C0" output="{{TestModel.outputC()}}" condition="{{TestModel.isVisibleC}}"></span>
+  </body>
+</html>
