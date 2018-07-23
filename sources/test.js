@@ -129,7 +129,7 @@ if (typeof(Test) === "undefined") {
     /** Assoziative array with events and their registered listerners */
     Test.listeners;
     
-    /** Pattern for all accepted events. */
+    /** Pattern for all accepted events */
     Test.PATTERN_EVENT = /^[a-z]+$/;
     
     /** Constants of events */    
