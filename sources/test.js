@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20180604
+ *  Test 1.0 20180723
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180604
+ *  @version 1.0 20180723
  */
 if (typeof(Test) === "undefined") {
     
@@ -126,6 +126,21 @@ if (typeof(Test) === "undefined") {
     /** Indicator if the autostart function can be used */
     Test.autostart;
     
+    /** Assoziative array with events and their registered listerners */
+    Test.listeners;
+    
+    /** Pattern for all accepted events. */
+    Test.PATTERN_EVENT = /^[a-z]+$/;
+    
+    /** Constants of events */    
+    Test.EVENT_FINISH = "finish";
+    Test.EVENT_INTERRUPT = "interrupt";
+    Test.EVENT_PERFORM = "perform";
+    Test.EVENT_RESPONSE = "response";
+    Test.EVENT_RESUME = "resume";
+    Test.EVENT_START = "start";
+    Test.EVENT_SUSPEND = "suspend";
+
     /**
      *  Optional configuration of the test environment.
      *  You can configure (also separately): the output and a monitor.
@@ -240,19 +255,57 @@ if (typeof(Test) === "undefined") {
     };
     
     /**
-     *  Internal method to inform the monitor about current events.
-     *  @param event
-     *  @param message
+     *  Registers a callback function for test events.
+     *  @param  event    see Test.EVENT_***
+     *  @param  callback callback function
+     *  @throws An error occurs in the following cases:
+     *      - event is not valid or is not supported
+     *      - callback function is not implemented correctly or does not exist
      */
-    Test.inform = function(event, message) {
+    Test.listen = function(event, callback) {
+        
+        if (typeof(event) !== "string")
+            throw new TypeError("Invalid event: " + typeof(event));
+        if (typeof(callback) !== "function"
+                && callback !== null
+                && callback !== undefined)
+            throw new TypeError("Invalid callback: " + typeof(callback));        
+        if (!event.match(Test.PATTERN_EVENT))
+            throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
+        
+        event = event.toLowerCase();
+        Test.listeners = Test.listeners || new Array();
+        if (!Array.isArray(Test.listeners[event]))
+            Test.listeners[event] = new Array();
+        Test.listeners[event].push(callback);
+    };  
+    
+    /**
+     *  Internal method to trigger an event.
+     *  All callback functions for this event are called.
+     *  @param event  see Test.EVENT_***
+     *  @param status status object with information about the test execution
+     */
+    Test.fire = function(event, status) {
         
         if (typeof(Test.monitor) === "object"
-                && typeof(Test.monitor[event]) === "function")
-            try {Test.monitor[event](message);
-            } catch (error) {
-                console.error(error);
-            }
-    };
+            && typeof(Test.monitor[event]) === "function")
+        try {Test.monitor[event](status);
+        } catch (error) {
+            console.error(error);
+        }        
+
+        event = (event || "").trim();
+        if (!Test.listeners
+                || !event)
+            return;
+        var listeners = Test.listeners[event.toLowerCase()];
+        if (!Array.isArray(listeners))
+            return;
+        listeners.forEach(function(callback, index, array) {
+            window.setTimeout(callback, 0, event, status);
+        });        
+    };    
     
     /**
      *  Creates and registers a test task.
@@ -394,7 +447,7 @@ if (typeof(Test) === "undefined") {
                 return;
             Test.task.duration = new Date().getTime() -task.timing;
             Test.task.error = new Error("Timeout occurred, expected " + Test.task.timeout + " ms but was " + Test.task.duration + " ms");
-            Test.inform("response", Test.status());
+            Test.fire(Test.EVENT_RESPONSE, Test.status());
             Test.queue.faults++;
             Test.queue.lock = false;
         }, 25);
@@ -403,7 +456,7 @@ if (typeof(Test) === "undefined") {
             
             if (!Test.queue.lock
                     && Test.queue.progress <= 0)
-                Test.inform("start", Test.status());
+                Test.fire(Test.EVENT_START, Test.status());
             
             if (Test.queue.lock)
                 return;
@@ -421,7 +474,7 @@ if (typeof(Test) === "undefined") {
                 if (typeof(meta.name) === "string"
                         && meta.name.trim().length > 0)
                     Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
-                Test.inform("perform", Test.status());
+                Test.fire(Test.EVENT_PERFORM, Test.status());
                 window.setTimeout(function() {
                     var task = Test.task;
                     try {task.meta.test();
@@ -448,14 +501,14 @@ if (typeof(Test) === "undefined") {
                                 && task.timeout < new Date().getTime()
                                 && !task.error) {
                             task.error = new Error("Timeout occurred, expected " + task.meta.timeout + " ms but was " + task.duration + " ms");                            
-                            Test.inform("response", Test.status());
+                            Test.fire(Test.EVENT_RESPONSE, Test.status());
                             Test.queue.faults++;
                         }
                         if (!task.error
                                 || !String(task.error.message).match(/^Timeout occurred/)) {
                             if (task.error)
                                 Test.queue.faults++;
-                            Test.inform("response", Test.status());
+                            Test.fire(Test.EVENT_RESPONSE, Test.status());
                         }
                         Test.queue.lock = false;
                     }
@@ -466,7 +519,7 @@ if (typeof(Test) === "undefined") {
             window.clearTimeout(Test.interval);
             Test.interval = null;
             Test.task = null;
-            Test.inform("finish", Test.status());
+            Test.fire(Test.EVENT_FINISH, Test.status());
         }, 25);
     };
     
@@ -483,7 +536,7 @@ if (typeof(Test) === "undefined") {
         while (Test.queue.lock)
             continue;
         Test.task = null;
-        Test.inform("suspend", Test.status());
+        Test.fire(Test.EVENT_SUSPEND, Test.status());
     };
     
     /** Continues the test run if it was previously suspended. */
@@ -497,7 +550,7 @@ if (typeof(Test) === "undefined") {
         if (Test.queue.stack.length <= 0)
             return;
         Test.start();
-        Test.inform("resume", Test.status());
+        Test.fire(Test.EVENT_RESUME, Test.status());
     };
     
     /**
@@ -514,7 +567,7 @@ if (typeof(Test) === "undefined") {
             continue;
         Test.task = null;        
         Test.queue.stack = new Array();
-        Test.inform("interrupt", Test.status());
+        Test.fire(Test.EVENT_INTERRUPT, Test.status());
     };
     
     /**
