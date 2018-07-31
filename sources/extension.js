@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  Extension 1.0 20180524
+ *  Extension 1.0 20180730
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180524
+ *  @version 1.0 20180730
  */
 if (typeof(Namespace) === "undefined") {
 
@@ -214,8 +214,7 @@ Element.prototype.internalAppendChild = Element.prototype.appendChild;
 Element.prototype.appendChild = function(node, exclusive) {
     if (exclusive)
         this.innerHTML = "";
-    if (node instanceof Node
-            || node instanceof Element) {
+    if (node instanceof Node) {
         this.internalAppendChild(node);
     } else if (Array.isArray(node)
             || node instanceof NodeList

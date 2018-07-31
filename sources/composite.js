@@ -65,12 +65,12 @@
  *        ergeben hat.
  *  TODO: Scope/Namespace - Begriff nach Aussen = Namespace, in Methoden auch scope
  *  
- *  Composite 1.0 20180723
+ *  Composite 1.0 20180730
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180723
+ *  @version 1.0 20180730
  */
 if (typeof(Composite) === "undefined") {
     
@@ -111,8 +111,8 @@ if (typeof(Composite) === "undefined") {
     /** Constant for attribute iterate */
     Composite.ATTRIBUTE_ITERATE = "iterate";
 
-    /** Constant for attribute mounted*/
-    Composite.ATTRIBUTE_MOUNTED = "mounted";
+    /** Constant for attribute mount */
+    Composite.ATTRIBUTE_MOUNT = "mount";
 
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
@@ -425,58 +425,79 @@ if (typeof(Composite) === "undefined") {
      *    - namespace is not valid or is not supported
      *    - namespace cannot be created if it already exists as a method
      */
-    Composite.mount = function(variants) {
-
-        if (arguments.length < 1)
-            return null;
+    Composite.mount = function(selector) {
         
-        var scope = null;
-        if (arguments.length > 1) {
-            scope = arguments[0];
-            if (typeof(scope) !== "string"
-                    && scope !== null)
-                throw new TypeError("Invalid scope type: " + typeof(scope));
-            scope = (scope || "").trim();
-            if (!scope)
-                scope = null;
+        if (!selector)
+            return;        
+        
+        Composite.mount.stack = Composite.mount.stack || new Array();
+        
+        if (typeof(selector) === "string") {
+            selector = selector.trim();
+            if (!selector)
+                return;
+            var nodes = document.querySelectorAll(selector);
+            nodes.forEach(function(node, index, array) {
+                Composite.asynchron(Composite.mount, false, node);
+            });
+            return;
         }
         
-        var element = arguments[arguments.length > 1 ? 1 : 0];
-        if (!(element instanceof Element)
-                && typeof(element) === "string")
-            throw new TypeError("Invalid element type: " + typeof(element));
-        
-        var serial;
-        if (element instanceof Element)
-            serial = element.getAttribute(Composite.ATTRIBUTE_ID);
-        else serial = element;
-
-        if (!(element instanceof Element))
-            element = document.getElementById(serial);
-        
-        serial = serial.replace(/:.*$/, "").trim();
-        if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+        if (!(selector instanceof Element))
             return;
-
-        var model = null;
-        if (scope)
-            model = Object.lookup(scope + "." + serial);
-        if (!model)
-            model = Object.lookup(serial);
         
-        //There must be a model class.
+        //There must be a corresponding model class.
+        var model = Composite.mount.lookup(selector);
         if (!(model instanceof Object)
                 || model instanceof Element)
             return;
         
+        //No multiple object binding
+        if (Composite.mount.stack.includes(selector))
+            return;
+        
         //Marks the element as mounted.
-        element.setAttribute(Composite.ATTRIBUTE_MOUNTED, "");
+        selector.setAttribute(Composite.ATTRIBUTE_MOUNT, "");
         
         //Registers all events that are implemented in the model.
         for (var entry in model)
             if (typeof model[entry] === "function"
                     && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
-                element.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
+                selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
+    };
+    
+    //TODO:
+    Composite.mount.lookup = function(element, meta) {
+
+        if (!(element instanceof Element))
+            return null;        
+        
+        var scope = null;
+        for (var node = element; !scope && node.parentNode; node = node.parentNode) {
+            if (!node.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                    || !node.hasAttribute(Composite.ATTRIBUTE_ID))
+                continue;
+            var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                continue;
+            scope = serial.replace(/:.*$/, "").trim();
+        }
+        
+        var serial = element.getAttribute(Composite.ATTRIBUTE_ID) || "";
+        serial = serial.replace(/:.*$/, "").trim();
+        if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+            return null;
+
+        if (meta) {
+            if (scope && Object.lookup(scope + "." + serial))
+                return scope + "." + serial;
+            return serial;
+        }
+            
+        var model = scope ? Object.lookup(scope + "." + serial) : null;
+        if (!model)
+            model = Object.lookup(serial);
+        return model;
     };
     
     //TODO:
@@ -527,20 +548,17 @@ if (typeof(Composite) === "undefined") {
     
             //Find all unmounted elements with an ID in a composite, including
             //the composite itself. Mounted elements are marked with the
-            //attribute 'mounted'.
-            var scope = selector.getAttribute(Composite.ATTRIBUTE_ID);
-            var nodes = selector.querySelectorAll("[id]:not([mounted])");
+            //attribute 'mount'.
+            var nodes = selector.querySelectorAll("[" + Composite.ATTRIBUTE_ID + "]:not([" + Composite.ATTRIBUTE_MOUNT + "])");
             nodes = Array.from(nodes);
-            if (!selector.hasAttribute(Composite.ATTRIBUTE_MOUNTED))
-                nodes.unshift(selector);            
+            if (!selector.hasAttribute(Composite.ATTRIBUTE_MOUNT))
+                nodes.unshift(selector); 
             nodes.forEach(function(node, index, array) {
                 var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-                if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                    return;
-                if (selector == node)
-                    Composite.asynchron(Composite.mount, false, selector);
-                else Composite.asynchron(Composite.mount, false, scope, node);
-            });              
+                if (serial.match(Composite.PATTERN_COMPOSITE_ID)) {
+                    Composite.asynchron(Composite.mount, false, node);
+                }
+            });
         } finally {
             if (Composite.scan.ticks <= 0)
                 Composite.fire(Composite.EVENT_SCAN_END);
@@ -826,8 +844,25 @@ if (typeof(Composite) === "undefined") {
                 events = events.split(/\s+/);
                 events.forEach(function(event, index, array) {
                     selector.addEventListener(event, function(event) {
-                        var serial = event.currentTarget.ordinal();
+                        var target = event.currentTarget;
+                        var serial = target.ordinal();
                         var object = Composite.render.elements[serial];
+                        if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
+                                && target.hasAttribute(Composite.ATTRIBUTE_VALUE)) {
+                            //TODO: validation
+                            //      I: validation attribute: value is expression / method-call / regexp
+                            //      Q: What is to do in the case of a validation error?
+                            var namespace = Composite.mount.lookup(target, true);
+                            if (namespace) {
+                                namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
+                                var scope = namespace[1] ? Object.lookup(namespace[1]) : window;
+                                var field = namespace[2];
+                                if (scope && scope.hasOwnProperty(field))
+                                    if (scope[field] instanceof Object)
+                                        scope[field].value = target.value;
+                                    else scope[field] = target.value
+                            }
+                        }
                         var render = object.attributes[Composite.ATTRIBUTE_RENDER];
                         Composite.asynchron(Composite.render, false, render, lock);
                     });                    
