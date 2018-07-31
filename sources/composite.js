@@ -64,6 +64,7 @@
  *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
  *        ergeben hat.
  *  TODO: Scope/Namespace - Begriff nach Aussen = Namespace, in Methoden auch scope
+ *        A: namespace = text, scope = object after lookup
  *  
  *  Composite 1.0 20180730
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -132,6 +133,9 @@ if (typeof(Composite) === "undefined") {
     /** Constant for attribute type */
     Composite.ATTRIBUTE_TYPE = "type";
     
+    /** Constant for attribute validate */
+    Composite.ATTRIBUTE_VALIDATE = "validate";
+    
     /** Constant for attribute value */
     Composite.ATTRIBUTE_VALUE = "value";
 
@@ -141,7 +145,7 @@ if (typeof(Composite) === "undefined") {
      *  is cached in the object wrapper. Other attributes are only cached if
      *  they contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|sequence|render$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -149,7 +153,7 @@ if (typeof(Composite) === "undefined") {
      *  are also set in the wrapper object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|events|id|render$/i;
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|events|id|render|validate$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
@@ -466,7 +470,19 @@ if (typeof(Composite) === "undefined") {
                 selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
     };
     
-    //TODO:
+    /**
+     *  Determines the object scope (namespace) for an element.
+     *  If the passed element uses an ID with a qualified namespace, then this
+     *  is used. Otherwise, if a superordinate composite with ID exists in the
+     *  DOM, this is used as base for the namespace. Otherwise, a global
+     *  variable is assumed in the scope of window.
+     *  Returns the reference to the corresponding object, object field
+     *  otherwise null.
+     *  @param  element element
+     *  @param  meta    option true determines the complete namespace as text
+     *  @return the reference to the corresponding object, object field
+     *      otherwise null
+     */
     Composite.mount.lookup = function(element, meta) {
 
         if (!(element instanceof Element))
@@ -837,7 +853,16 @@ if (typeof(Composite) === "undefined") {
             if (!(selector instanceof Element))
                 return;
 
-            //TODO: Doku
+            //TODO: Doku Events
+            
+            //TODO: Doku Synchronisation
+            
+            //Validation is only defined declaratively.
+            //If the attribute 'validate' exists, the value for this is ignored,
+            //the static method <Model>.validate(element, value) is  called in
+            //the corresponding model. 
+            //This call must return a true value as the result, otherwise the
+            //element value is not stored into the corresponding model field.            
             var events = selector.fetchAttribute(Composite.ATTRIBUTE_EVENTS);
             var render = selector.fetchAttribute(Composite.ATTRIBUTE_RENDER);
             if (events && render) {
@@ -849,18 +874,23 @@ if (typeof(Composite) === "undefined") {
                         var object = Composite.render.elements[serial];
                         if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
                                 && target.hasAttribute(Composite.ATTRIBUTE_VALUE)) {
-                            //TODO: validation
-                            //      I: validation attribute: value is expression / method-call / regexp
-                            //      Q: What is to do in the case of a validation error?
                             var namespace = Composite.mount.lookup(target, true);
                             if (namespace) {
                                 namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
                                 var scope = namespace[1] ? Object.lookup(namespace[1]) : window;
                                 var field = namespace[2];
-                                if (scope && scope.hasOwnProperty(field))
-                                    if (scope[field] instanceof Object)
-                                        scope[field].value = target.value;
-                                    else scope[field] = target.value
+                                if (scope && scope.hasOwnProperty(field)) {
+                                    var valid = false;
+                                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                                            && typeof(scope[Composite.ATTRIBUTE_VALIDATE]) === "function") {
+                                        valid = scope[Composite.ATTRIBUTE_VALIDATE].apply(target, target.value) === true;
+                                    } else valid = true;
+                                    if (valid) {
+                                        if (scope[field] instanceof Object)
+                                            scope[field].value = target.value;
+                                        else scope[field] = target.value
+                                    }
+                                }
                             }
                         }
                         var render = object.attributes[Composite.ATTRIBUTE_RENDER];
