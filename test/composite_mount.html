@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      body div {
+        margin:1em;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+      var aComp = {};
+      var bComp = {};
+      var cComp = {};
+      var dComp = {
+          dText1:false,
+          dText2:false,
+          dText3:false,
+          dText4:false    
+      };
+      var eComp = {};
+      var fComp = {};
+      
+      Test.create({test:function() {
+          Assert.assertEquals("dText1-X", dComp.dText1);
+      }});    
+
+      var results = new Array();
+      Composite.listen(Composite.EVENT_RENDER_END, function() {
+          switch (results.length) {
+              case 0:
+                  Element.prototype.typeTestValue = function() {
+                      this.typeValue(this.id + "-X");
+                  };
+                  aText.typeTestValue();
+                  
+                  bText.typeTestValue();
+                  baText.typeTestValue();
+                  baaText.typeTestValue();
+                  
+                  cText.typeTestValue();
+                  caText.typeTestValue();       
+                  
+                  dText1.typeTestValue();
+                  dText2.typeTestValue();
+                  dText3.typeTestValue();
+                  
+                  window["fComp.aText1"].typeTestValue();
+                  window["fComp.aText2"].typeTestValue();
+                  aText3.typeTestValue();   
+                  
+                  results.push(null);
+                  
+                  return;
+              case 1:
+                  results.push(dComp.dText1);
+                  Test.start();
+                  return;       
+          }
+      });      
+    </script>
+  </head>
+  <body>
+    <div id="aComp" composite>
+      <input type="text" id="aText">
+    </div>
+    <div id="bComp" composite>
+      <input type="text" id="bText">
+      <div id="baComp" composite>
+        <input type="text" id="baText">
+        <div id="baa" composite>
+          <input type="text" id="baaText">
+        </div>
+      </div>
+    </div>
+    <div composite>
+      <input type="text" id="cText">
+      <div composite>
+        <input type="text" id="caText">
+      </div>
+    </div>
+    <div id="dComp" composite>
+      <input type="text" id="dText1" events="change" render="#dText1" value="{{dComp.dText1}}">
+      <div composite>
+        <input type="text" id="dText2">
+        <div composite>
+          <input type="text" id="dText3">
+        </div>
+      </div>
+    </div>
+    <div id="eComp" composite>
+      <input type="text" id="fComp.aText1">
+      <div id="ea" composite>
+        <input type="text" id="fComp.aText2">
+        <div id="fComp" composite>
+          <input type="text" id="aText3">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

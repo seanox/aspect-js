@@ -116,6 +116,32 @@
           Namespace.using("..x0005.a");
       }}); 
       
+      var object1 = {
+              a:null,
+              b:"",
+              c:123,
+              d:new Date(),
+              e:{},
+              f:function() {}
+      };
+      
+      Test.create({test:function() {
+          Namespace.using("object1");
+          Namespace.using("object1.d");
+          Namespace.using("object1.e");
+          Namespace.using("object1.f");
+      }});
+
+      Test.create({expected:/\bInvalid namespace: object1\.a/i, test:function() {
+          Namespace.using("object1.a");
+      }}); 
+      Test.create({expected:/\bInvalid namespace: object1\.b/i, test:function() {
+          Namespace.using("object1.b");
+      }});
+      Test.create({expected:/\bInvalid namespace: object1\.c/i, test:function() {
+          Namespace.using("object1.c");
+      }});      
+      
       Test.start(true);
     </script>
   </head>

@@ -66,12 +66,12 @@
  *  TODO: Scope/Namespace - Begriff nach Aussen = Namespace, in Methoden auch scope
  *        A: namespace = text, scope = object after lookup
  *  
- *  Composite 1.0 20180730
+ *  Composite 1.0 20180803
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180730
+ *  @version 1.0 20180803
  */
 if (typeof(Composite) === "undefined") {
     
@@ -293,10 +293,20 @@ if (typeof(Composite) === "undefined") {
                     || namespace.length <= 0)
                 return null;
             var scope = window;
-            for (var index = 0; scope && index < namespace.length; index++)
+            for (var index = 0; scope && index < namespace.length; index++) {
+                if (!scope.hasOwnProperty(namespace[index])
+                        || typeof(scope[namespace[index]]) !== "object")
+                    return null;
                 scope = scope[namespace[index]];
+            }
             return scope;
         };
+        
+    //TODO:
+    if (Object.exists === undefined)
+        Object.exists = function(namespace) {
+            return Object.lookup(namespace) != null; 
+        };        
 
     /**
      *  Enhancement of the JavaScript API
@@ -455,6 +465,7 @@ if (typeof(Composite) === "undefined") {
         if (!(model instanceof Object)
                 || model instanceof Element)
             return;
+        model = model.scope;
         
         //No multiple object binding
         if (Composite.mount.stack.includes(selector))
@@ -471,6 +482,7 @@ if (typeof(Composite) === "undefined") {
     };
     
     /**
+     *  TODO:
      *  Determines the object scope (namespace) for an element.
      *  If the passed element uses an ID with a qualified namespace, then this
      *  is used. Otherwise, if a superordinate composite with ID exists in the
@@ -483,37 +495,46 @@ if (typeof(Composite) === "undefined") {
      *  @return the reference to the corresponding object, object field
      *      otherwise null
      */
-    Composite.mount.lookup = function(element, meta) {
+    Composite.mount.lookup = function(element) {
 
         if (!(element instanceof Element))
             return null;        
         
-        var scope = null;
-        for (var node = element; !scope && node.parentNode; node = node.parentNode) {
+        var composite = null;
+        for (var node = element; !composite && node.parentNode; node = node.parentNode) {
             if (!node.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
                     || !node.hasAttribute(Composite.ATTRIBUTE_ID))
                 continue;
             var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 continue;
-            scope = serial.replace(/:.*$/, "").trim();
+            composite = serial.replace(/:.*$/, "").trim();
         }
-        
+
         var serial = element.getAttribute(Composite.ATTRIBUTE_ID) || "";
         serial = serial.replace(/:.*$/, "").trim();
         if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
             return null;
-
-        if (meta) {
-            if (scope && Object.lookup(scope + "." + serial))
-                return scope + "." + serial;
-            return serial;
+        
+        if (composite) {
+            var namespace = composite + "." + serial;
+            namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
+            var model = namespace[1];
+            var field = namespace[2];
+            var scope = model ? Object.lookup(model) : window;
+            if (scope && scope.hasOwnProperty(field))
+                return {scope:scope, model:model, field:field};
         }
             
-        var model = scope ? Object.lookup(scope + "." + serial) : null;
-        if (!model)
-            model = Object.lookup(serial);
-        return model;
+        var namespace = serial;
+        namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
+        var model = namespace[1];
+        var field = namespace[2];
+        var scope = model ? Object.lookup(model) : window;
+        if (scope && scope.hasOwnProperty(field))
+            return {scope:scope, model:model, field:field};
+            
+        return null;    
     };
     
     //TODO:
@@ -874,22 +895,17 @@ if (typeof(Composite) === "undefined") {
                         var object = Composite.render.elements[serial];
                         if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
                                 && target.hasAttribute(Composite.ATTRIBUTE_VALUE)) {
-                            var namespace = Composite.mount.lookup(target, true);
-                            if (namespace) {
-                                namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
-                                var scope = namespace[1] ? Object.lookup(namespace[1]) : window;
-                                var field = namespace[2];
-                                if (scope && scope.hasOwnProperty(field)) {
-                                    var valid = false;
-                                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                                            && typeof(scope[Composite.ATTRIBUTE_VALIDATE]) === "function") {
-                                        valid = scope[Composite.ATTRIBUTE_VALIDATE].apply(target, target.value) === true;
-                                    } else valid = true;
-                                    if (valid) {
-                                        if (scope[field] instanceof Object)
-                                            scope[field].value = target.value;
-                                        else scope[field] = target.value
-                                    }
+                            var model = Composite.mount.lookup(target);
+                            if (model) {
+                                var valid = false;
+                                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                                        && typeof(model.scope[Composite.ATTRIBUTE_VALIDATE]) === "function") {
+                                    valid = model.scope[Composite.ATTRIBUTE_VALIDATE].apply(target, target.value) === true;
+                                } else valid = true;
+                                if (valid) {
+                                    if (model.scope[model.field] instanceof Object)
+                                        model.scope[model.field].value = target.value;
+                                    else model.scope[model.field] = target.value
                                 }
                             }
                         }
