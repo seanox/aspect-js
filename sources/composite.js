@@ -40,9 +40,8 @@
  *        nameSpace = package + class
  *        qualifier = zusätzliche Kennzeichnung damit die ID unique ist
  *    Der Qualifier wird von Composite/Object-Bindung ignoriert.
- *  TODO: Test Attribute render + events
  *  TODO: Doku:
- *        Custom-Tag, hier muss sich um alle attribute selbt gekuemmert werden.
+ *        Custom-Tag, hier muss man sich um alle attribute selbt gekuemmert werden.
  *        Composite tut hier nicht, ausser dem Aufruf der Implementierung.
  *        Es kann jedes Node-Element (auch #text) als custom-tag registriert werden.
  *        Die Attribute werden durch Composite nicht manipuliert oder interpretiert.
@@ -66,12 +65,12 @@
  *  TODO: Scope/Namespace - Begriff nach Aussen = Namespace, in Methoden auch scope
  *        A: namespace = text, scope = object after lookup
  *  
- *  Composite 1.0 20180803
+ *  Composite 1.0 20180804
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180803
+ *  @version 1.0 20180804
  */
 if (typeof(Composite) === "undefined") {
     
@@ -159,13 +158,13 @@ if (typeof(Composite) === "undefined") {
      *  Pattern to detect if a string contains an expression.
      *  Escaping characters via slash is supported.
      */
-    Composite.PATTERN_EXPRESSION_CONTAINS = /\{\{((.*?[^\\](\\\\)*)|((\\\\)*))*?\}\}/g;   
+    Composite.PATTERN_EXPRESSION_CONTAINS = /\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}/g;   
     
     /**
      *  Patterns to test whether an expression is exclusive, i.e. an expression
      *  without additional text fragments before or after.
      */
-    Composite.PATTERN_EXPRESSION_EXCLUSIVE = /^\s*\{\{((.*?[^\\](\\\\)*)|((\\\\)*))*\}\}\s*$/;
+    Composite.PATTERN_EXPRESSION_EXCLUSIVE = /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*$/;
     
     /**
      *  Patterns for expressions with variable.
@@ -268,20 +267,6 @@ if (typeof(Composite) === "undefined") {
         Node.prototype.ordinal = function() {
             this.serial = this.serial || Node.indication++;
             return this.serial;
-        };     
-    };
-    
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a function for getting and removing an attribute to the Element objects.
-     */ 
-    if (Element.prototype.fetchAttribute === undefined) {
-        Element.prototype.fetchAttribute = function(attribute) {
-            if (!this.hasAttribute(attribute))
-                return false;
-            var value = this.getAttribute(attribute);
-            this.removeAttribute(attribute);
-            return value; 
         };     
     };
 
@@ -438,6 +423,10 @@ if (typeof(Composite) === "undefined") {
      *  @throws An error occurs in the following cases:
      *    - namespace is not valid or is not supported
      *    - namespace cannot be created if it already exists as a method
+     *    
+     *  The object binding and synchronization assume that a model corresponding to the composite exists with the same namespace.
+     *  During synchronization, the element must also exist as a property in the model.
+     *  The object binding only connects what was implemented with the model. An automatic extension of the models at runtime by the renderer is not supported, but can be solved programmatically - this is a conscious decision!
      */
     Composite.mount = function(selector) {
         
@@ -874,19 +863,25 @@ if (typeof(Composite) === "undefined") {
             if (!(selector instanceof Element))
                 return;
 
-            //TODO: Doku Events
-            
-            //TODO: Doku Synchronisation
-            
-            //Validation is only defined declaratively.
+            //Events primarily controls the synchronization of the input values
+            //of the HTML elements with the fields of a model. Means that the
+            //value in the model only changes if an event occurs for the
+            //corresponding HTML element. Synchronization is performed at a low
+            //level. Means that the fields are synchronized directly and without
+            //the use of get and set methods.
+            //For a better control a declarative validation is supported.
             //If the attribute 'validate' exists, the value for this is ignored,
             //the static method <Model>.validate(element, value) is  called in
-            //the corresponding model. 
-            //This call must return a true value as the result, otherwise the
-            //element value is not stored into the corresponding model field.            
-            var events = selector.fetchAttribute(Composite.ATTRIBUTE_EVENTS);
-            var render = selector.fetchAttribute(Composite.ATTRIBUTE_RENDER);
-            if (events && render) {
+            //the corresponding model. This call must return a true value as the
+            //result, otherwise the element value is not stored into the
+            //corresponding model field.
+            //If an event occurs, synchronization is performed. After that will
+            //be checked whether the render attribute exists. All selectors
+            //listed here are then triggered for re-rendering. Re-rendering is
+            //independent of synchronization and validation and is executed
+            //immediately after an event occurs.
+            var events = object.attributes[Composite.ATTRIBUTE_EVENTS];
+            if (events) {
                 events = events.split(/\s+/);
                 events.forEach(function(event, index, array) {
                     selector.addEventListener(event, function(event) {
@@ -894,7 +889,7 @@ if (typeof(Composite) === "undefined") {
                         var serial = target.ordinal();
                         var object = Composite.render.elements[serial];
                         if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                                && target.hasAttribute(Composite.ATTRIBUTE_VALUE)) {
+                                && Composite.ATTRIBUTE_VALUE in target) {
                             var model = Composite.mount.lookup(target);
                             if (model) {
                                 var valid = false;
@@ -1056,14 +1051,13 @@ if (typeof(Composite) === "undefined") {
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
-                    iterate = String(iterate).trim();
-                    var match = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE)
-                    if (match)
-                        object.iterate = {name:match[1].trim(),
-                            expression:match[2].trim(),
+                    var content = iterate.match(Composite.PATTERN_EXPRESSION_EXCLUSIVE);
+                    content = content ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE) : null;
+                    if (content)
+                        object.iterate = {name:content[1].trim(),
+                            expression:"{{" + content[2].trim() + "}}",
                             markup:selector.innerHTML};
-                    else if (iterate)
-                        console.error("Invalid iterate: " + iterate);
+                    else console.error("Invalid iterate: " + iterate);
                 }
                 if (object.iterate) {
                     //The internal rendering creates temporary composite wrapper
@@ -1118,6 +1112,13 @@ if (typeof(Composite) === "undefined") {
                     value = Expression.eval(context, value);
                     value = String(value).encodeHtml();
                     value = value.replace(/"/g, "&quot;");
+                    //Special case attribute value, here primarily the value of
+                    //the property must be set, the value of the attribute is
+                    //optional. Changing the value does not trigger an event, so
+                    //no unwanted recursions occur.
+                    if (attribute.toLowerCase() == Composite.ATTRIBUTE_VALUE
+                            && Composite.ATTRIBUTE_VALUE in selector)
+                        selector.value = value;
                     selector.setAttribute(attribute, value);
                 }
             }

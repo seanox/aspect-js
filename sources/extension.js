@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  Extension 1.0 20180730
+ *  Extension 1.0 20180804
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180730
+ *  @version 1.0 20180804
  */
 if (typeof(Namespace) === "undefined") {
 
@@ -67,8 +67,7 @@ if (typeof(Namespace) === "undefined") {
         namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
             if (typeof(scope[entry]) === "undefined") {
                 scope[entry] = new Object();
-            } else if (typeof(scope[entry]) === "object") {
-            } else if (typeof(scope[entry]) === "function") {
+            } else if (scope[entry] instanceof Object) {
             } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
             scope = scope[entry];
         });

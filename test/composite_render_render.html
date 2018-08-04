@@ -5,7 +5,8 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace; white-space:pre;
+        font-family:monospace;
+        white-space:pre;
       }
     </style>
     <script src="../sources/extension.js"></script>
@@ -14,11 +15,11 @@
     <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
     
-        var TestBean = {};
-        TestBean.ticks = new Array();
-        TestBean.ping = function(name) {
-            TestBean.ticks[name] = (TestBean.ticks[name] || "") + "x";
-            return TestBean.ticks[name];
+        var TestModel = {};
+        TestModel.ticks = new Array();
+        TestModel.ping = function(name) {
+            TestModel.ticks[name] = (TestModel.ticks[name] || "") + "x";
+            return TestModel.ticks[name];
         };
         
         Test.create({test:function() {
@@ -52,13 +53,13 @@
   </head>
   <body>
     <span>
-      A:{{TestBean.ping("A")}}
+      A:{{TestModel.ping("A")}}
     </span>
     <span>
-      B:{{TestBean.ping("B")}}
+      B:{{TestModel.ping("B")}}
     </span>
     <span>
-      C:{{TestBean.ping("C")}}
+      C:{{TestModel.ping("C")}}
     </span>
   </body>
 </html>
