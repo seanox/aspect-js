@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      body div {
+        margin:1em;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+      var aComp = {};
+      var bComp = {};
+      var cComp = {};
+      var dComp = {
+          dText1:false,
+          dText2:false,
+          dText3:false,
+          dText4:false    
+      };
+      var eComp = {};
+      var fComp = {
+          aText1:false,    
+          aText4:false
+      };
+      
+      Test.create({test:function() {
+          Assert.assertEquals("dText1-X", dComp.dText1);
+      }});    
+
+      Test.create({test:function() {
+          Assert.assertEquals(false, dComp.dText2);
+      }});
+
+      Test.create({test:function() {
+          Assert.assertEquals("dText3-X", dComp.dText3);
+      }});
+      
+      //fComp: aText1 + aText4 are defined in the model and the value must be synchronized
+      //fComp: aText2 + aText3 are not defined in the model and the value must not be synchronized
+      Test.create({test:function() {
+          Assert.assertTrue(fComp["aText1"] != undefined);
+          Assert.assertEquals("fComp.aText1-X", fComp["aText1"]);
+      }});      
+      Test.create({test:function() {
+          Assert.assertTrue(fComp["aText2"] == undefined);
+      }});  
+      Test.create({test:function() {
+          Assert.assertTrue(fComp["aText3"] == undefined);
+      }});  
+      Test.create({test:function() {
+          Assert.assertTrue(fComp["aText4"] != undefined);
+          Assert.assertEquals("fComp.aText4-X", fComp["aText4"]);
+      }});  
+
+      var startup = null;
+      Composite.listen(Composite.EVENT_RENDER_END, function() {
+          
+          if (!startup) {
+              Element.prototype.typeTestValue = function() {
+                  this.typeValue(this.id + "-X");
+              };
+              aText.typeTestValue();
+              
+              bText.typeTestValue();
+              baText.typeTestValue();
+              baaText.typeTestValue();
+              
+              cText.typeTestValue();
+              caText.typeTestValue();       
+              
+              dText1.typeTestValue();
+              dText2.typeTestValue();
+              dText3.typeTestValue();
+              
+              window["fComp.aText1"].typeTestValue();
+              window["fComp.aText2"].typeTestValue();
+              window["fComp.aText4"].typeTestValue();
+              aText3.typeTestValue();   
+          }
+          
+          if (startup)
+              window.clearTimeout(startup);
+          startup = window.setTimeout(() => {
+              Test.start();
+          }, 250);
+      });      
+    </script>
+  </head>
+  <body>
+    <div id="aComp" composite>
+      <input type="text" id="aText">
+    </div>
+    <div id="bComp" composite>
+      <input type="text" id="bText">
+      <div id="baComp" composite>
+        <input type="text" id="baText" value="{{bComp.bText + '-1'}}">
+        <div id="baa" composite>
+          <input type="text" id="baaText" events="change" render="#baText">
+        </div>
+      </div>
+    </div>
+    <div composite>
+      <input type="text" id="cText">
+      <div composite>
+        <input type="text" id="caText">
+      </div>
+    </div>
+    <div id="dComp" composite>
+      <input type="text" id="dText1" events="change" render="#dText1" value="{{dComp.dText1}}">
+      <div composite>
+        <input type="text" id="dText2">
+        <div composite>
+          <input type="text" id="dText3" events="change">
+        </div>
+      </div>
+    </div>
+    <div id="eComp" composite>
+      <input type="text" id="fComp.aText1" events="change">
+      <div id="ea" composite>
+        <input type="text" id="fComp.aText2" events="change">
+        <div id="fComp" composite>
+          <input type="text" id="aText3" events="change">
+        </div>
+        <input type="text" id="fComp.aText4" events="change">
+      </div>
+    </div>
+  </body>
+</html>
