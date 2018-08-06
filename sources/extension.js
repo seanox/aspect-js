@@ -31,7 +31,7 @@
  *  @author  Seanox Software Solutions
  *  @version 1.0 20180804
  */
-if (typeof(Namespace) === "undefined") {
+if (typeof Namespace === "undefined") {
 
     //TODO:
     Namespace = {};
@@ -56,8 +56,8 @@ if (typeof(Namespace) === "undefined") {
         if (namespace == null)
             return null;
 
-        if (typeof(namespace) !== "string")
-            throw new TypeError("Invalid namespace: " + typeof(namespace));
+        if (typeof namespace !== "string")
+            throw new TypeError("Invalid namespace: " + typeof namespace);
         if (!namespace.match(Namespace.PATTERN_NAMESPACE)
                 || namespace.match(Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
             throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
@@ -65,7 +65,7 @@ if (typeof(Namespace) === "undefined") {
         var scope = window;
         namespace = namespace.replace(/^[\\\/]/, "");
         namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
-            if (typeof(scope[entry]) === "undefined") {
+            if (typeof scope[entry] === "undefined") {
                 scope[entry] = new Object();
             } else if (scope[entry] instanceof Object) {
             } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
@@ -218,7 +218,7 @@ Element.prototype.appendChild = function(node, exclusive) {
     } else if (Array.isArray(node)
             || node instanceof NodeList
             || (Symbol && Symbol.iterator
-                    && typeof(node[Symbol.iterator]))) {
+                    && typeof node[Symbol.iterator])) {
         node = Array.from(node);
         for (var loop = 0; loop < node.length; loop++)
             this.internalAppendChild(node[loop]);

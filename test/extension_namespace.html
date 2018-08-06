@@ -15,9 +15,9 @@
     <script type="text/javascript">
     
       Test.create({test:function() {
-          Assert.assertNotEquals("undefined", typeof(Namespace));
-          Assert.assertEquals("object", typeof(Namespace));
-          Assert.assertEquals("function", typeof(Namespace.using));
+          Assert.assertNotEquals("undefined", typeof Namespace);
+          Assert.assertEquals("object", typeof Namespace);
+          Assert.assertEquals("function", typeof Namespace.using);
       }});
 
       Test.create({test:function() {
@@ -38,39 +38,39 @@
       }});
 
       Test.create({test:function() {
-          Assert.assertEquals("undefined", typeof(x0001));
-          Assert.assertEquals("object", typeof(Namespace.using("x0001")));
-          Assert.assertEquals("object", typeof(Namespace.using("x0001.a")));
-          Assert.assertEquals("object", typeof(Namespace.using("x0001.a.b.c.d")));
-          Assert.assertEquals("object", typeof(x0001));
-          Assert.assertEquals("object", typeof(x0001.a));
-          Assert.assertEquals("object", typeof(x0001.a.b));
-          Assert.assertEquals("object", typeof(x0001.a.b.c));
-          Assert.assertEquals("object", typeof(x0001.a.b.c.d));
+          Assert.assertEquals("undefined", typeof x0001);
+          Assert.assertEquals("object", typeof Namespace.using("x0001"));
+          Assert.assertEquals("object", typeof Namespace.using("x0001.a"));
+          Assert.assertEquals("object", typeof Namespace.using("x0001.a.b.c.d"));
+          Assert.assertEquals("object", typeof x0001);
+          Assert.assertEquals("object", typeof x0001.a);
+          Assert.assertEquals("object", typeof x0001.a.b);
+          Assert.assertEquals("object", typeof x0001.a.b.c);
+          Assert.assertEquals("object", typeof x0001.a.b.c.d);
       }});
 
       Test.create({test:function() {
-          Assert.assertEquals("undefined", typeof(x0002));
-          Assert.assertEquals("object", typeof(Namespace.using("x0002")));
-          Assert.assertEquals("object", typeof(Namespace.using("x0002/a")));
-          Assert.assertEquals("object", typeof(Namespace.using("x0002/a/b/c/d")));
-          Assert.assertEquals("object", typeof(x0002));
-          Assert.assertEquals("object", typeof(x0002.a));
-          Assert.assertEquals("object", typeof(x0002.a.b));
-          Assert.assertEquals("object", typeof(x0002.a.b.c));
-          Assert.assertEquals("object", typeof(x0002.a.b.c.d));
+          Assert.assertEquals("undefined", typeof x0002);
+          Assert.assertEquals("object", typeof Namespace.using("x0002"));
+          Assert.assertEquals("object", typeof Namespace.using("x0002/a"));
+          Assert.assertEquals("object", typeof Namespace.using("x0002/a/b/c/d"));
+          Assert.assertEquals("object", typeof x0002);
+          Assert.assertEquals("object", typeof x0002.a);
+          Assert.assertEquals("object", typeof x0002.a.b);
+          Assert.assertEquals("object", typeof x0002.a.b.c);
+          Assert.assertEquals("object", typeof x0002.a.b.c.d);
       }});
 
       Test.create({test:function() {
-          Assert.assertEquals("undefined", typeof(x0003));
-          Assert.assertEquals("object", typeof(Namespace.using("x0003")));
-          Assert.assertEquals("object", typeof(Namespace.using("x0003\\a")));
-          Assert.assertEquals("object", typeof(Namespace.using("x0003\\a\\b\\c\\d")));
-          Assert.assertEquals("object", typeof(x0003));
-          Assert.assertEquals("object", typeof(x0003.a));
-          Assert.assertEquals("object", typeof(x0003.a.b));
-          Assert.assertEquals("object", typeof(x0003.a.b.c));
-          Assert.assertEquals("object", typeof(x0003.a.b.c.d));
+          Assert.assertEquals("undefined", typeof x0003);
+          Assert.assertEquals("object", typeof Namespace.using("x0003"));
+          Assert.assertEquals("object", typeof Namespace.using("x0003\\a"));
+          Assert.assertEquals("object", typeof Namespace.using("x0003\\a\\b\\c\\d"));
+          Assert.assertEquals("object", typeof x0003);
+          Assert.assertEquals("object", typeof x0003.a);
+          Assert.assertEquals("object", typeof x0003.a.b);
+          Assert.assertEquals("object", typeof x0003.a.b.c);
+          Assert.assertEquals("object", typeof x0003.a.b.c.d);
       }});
 
       Test.create({expected:/\bInvalid namespace:\s+x0001\.a\.b\. \.d/i, test:function() {

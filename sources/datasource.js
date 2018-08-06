@@ -31,7 +31,7 @@
  *  @author  Seanox Software Solutions
  *  @version 1.0 20180616
  */
-if (typeof(DataSource) === "undefined") {
+if (typeof DataSource === "undefined") {
     
     DataSource = {};
 
@@ -72,7 +72,7 @@ if (typeof(DataSource) === "undefined") {
     
     DataSource.manipulate = function(locator) {
 
-        if (typeof(locator) !== "string"
+        if (typeof locator !== "string"
                 || !locator.match(DataSource.PATTERN_LOCATOR))
             throw new Error("Invalid locator: " + String(locator));        
         
@@ -135,7 +135,7 @@ if (typeof(DataSource) === "undefined") {
     
     DataSource.fetch = function(locator, transform, partial) {
         
-        if (typeof(locator) !== "string"
+        if (typeof locator !== "string"
                 || !locator.match(DataSource.PATTERN_LOCATOR))
             throw new Error("Invalid locator: " + String(locator));        
 
@@ -164,7 +164,7 @@ if (typeof(DataSource) === "undefined") {
                 && Array.isArray(arguments[0])) {
             collection = collection.concat(arguments[0]);
         } else if (arguments.length > 1
-                || typeof(arguments[0]) === "string") {
+                || typeof arguments[0] === "string") {
             for (var loop = 0; loop < arguments.length; loop++)
                 collection.push(arguments[loop]);
         } else throw new TypeError("Invalid collection"); 
@@ -175,7 +175,7 @@ if (typeof(DataSource) === "undefined") {
             return DataSource.cache[hash].clone();  
         var root = document.implementation.createDocument(null, "collection", null, null);
         collection.forEach(function(entry, index, array) {
-            if (typeof(entry) !== "string")
+            if (typeof entry !== "string")
                 throw TypeError("Invalid collection entry");
             root.documentElement.appendChild(
                     DataSource.fetch(entry).documentElement);

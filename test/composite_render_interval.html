@@ -26,7 +26,7 @@
         var a1condition = false; 
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (typeof(Test.started) !== "undefined")
+            if (typeof Test.started !== "undefined")
                 return;
             Test.started = true;
             

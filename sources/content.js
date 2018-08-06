@@ -31,7 +31,7 @@
  *  @author  Seanox Software Solutions
  *  @version 1.0 20180604
  */
-if (typeof(Content) === "undefined") {
+if (typeof Content === "undefined") {
 
     Content = {};
     
