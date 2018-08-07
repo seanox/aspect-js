@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      input {
+        display:block;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript"> 
+        
+        var TestModel = {
+            listA: ["a", "b", "c"],
+            listB: ["d", "e", "f"]
+        };
+        
+        var tempB = function() {
+            return "123";
+        }
+
+        Test.create({test:function() {
+            Assert.assertEquals("", OutputA1.textContent);            
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("a:0", window["a:0"].id);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("0: a of a,b,c", window["a:0"].value);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("a:1", window["a:1"].id);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("1: b of a,b,c", window["a:1"].value);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("a:2", window["a:2"].id);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("2: c of a,b,c", window["a:2"].value);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("", OutputA2.textContent);            
+        }});
+
+        Test.create({test:function() {
+            Assert.assertEquals("123", OutputB1.textContent);            
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("b:0", window["b:0"].id);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("0: d of d,e,f", window["b:0"].value);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("b:1", window["b:1"].id);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("1: e of d,e,f", window["b:1"].value);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("b:2", window["b:2"].id);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("2: f of d,e,f", window["b:2"].value);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("123", OutputB2.textContent);            
+        }});
+        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });
+    </script>
+    <script type="text/test">
+    </script>
+  </head>
+  <body>
+    <div id="OutputA1">{{tempA}}</div>
+    <div iterate={{tempA:TestModel.listA}}>
+      <input id="a:{{tempA.index}}" type="text" value="{{tempA.index}}: {{tempA.item}} of {{tempA.data}}">
+    </div>
+    <div id="OutputA2">{{tempA}}</div>
+
+    <div id="OutputB1">{{tempB()}}</div>
+    <div iterate={{tempB:TestModel.listB}}>
+      <input id="b:{{tempB.index}}" type="text" value="{{tempB.index}}: {{tempB.item}} of {{tempB.data}}">
+    </div>
+    <div id="OutputB2">{{tempB()}}</div>
+  </body>
+</html>
