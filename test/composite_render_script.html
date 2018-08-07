@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+    Test.create({test:function() {
+        var content = OutputA.textContent.replace(/\s+/g, " ").trim();
+        Assert.assertEquals("A:A0", content);
+    }});
+    Test.create({test:function() {
+        var content = OutputB.textContent.replace(/\s+/g, " ").trim();
+        Assert.assertEquals("B:B4B5B6B7B8B9", content);
+    }});
+    Test.create({test:function() {
+        var content = OutputC.textContent.replace(/\s+/g, " ").trim();
+        Assert.assertEquals("C:C0C1C2", content);
+    }});
+    Test.create({test:function() {
+        var content = OutputD.textContent.replace(/\s+/g, " ").trim();
+        Assert.assertEquals("D:D0D2D4D6D8", content);
+    }});
+    
+    var count = 0;
+    Composite.listen(Composite.EVENT_RENDER_END, function() {
+        if (++count <= 9)
+            Composite.render(document.body);
+        else Test.start();
+    }); 
+    
+    var ModelA = {
+            isVisibleA:function() {
+                return count % 2 == 0;
+            },
+            isVisibleB:function() {
+                return count > 3;
+            },
+            isVisibleC:function() {
+                return count < 3;
+            }
+    };
+    </script>
+  </head>
+  <body>
+    <div id="OutputA">A:</div>
+    <div>
+      <script type="text/javascript" condition={{ModelA.isVisibleA()}}>
+         OutputA.textContent += "A" + count;        
+      </script>
+    </div>
+    <div id="OutputB">B:</div>
+    <div>
+      <script type="condition/javascript" condition={{ModelA.isVisibleB()}}>
+         OutputB.textContent += "B" + count;        
+      </script>
+    </div>
+    <div id="OutputC">C:</div>
+    <div>
+      <script type="composite/javascript" condition={{ModelA.isVisibleC()}}>
+         OutputC.textContent += "C" + count;        
+      </script>
+    </div>
+    <div id="OutputD">D:</div>
+    <div>
+      <script type="composite/javascript" condition={{ModelA.isVisibleA()}}>
+         OutputD.textContent += "D" + count;        
+      </script>
+    </div>
+  </body>
+</html>
