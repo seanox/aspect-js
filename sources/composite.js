@@ -65,14 +65,14 @@
  *  TODO: Scope/Namespace - Begriff nach Aussen = Namespace, in Methoden auch scope
  *        A: namespace = text, scope = object after lookup
  *  
- *  Composite 1.0 20180804
+ *  Composite 1.0 20180806
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180804
+ *  @version 1.0 20180806
  */
-if (typeof(Composite) === "undefined") {
+if (typeof Composite === "undefined") {
     
     /**
      *  Static component for rendering and object binding.
@@ -185,7 +185,7 @@ if (typeof(Composite) === "undefined") {
      *  triggered by rendering. Therefore, these scripts can be combined and
      *  controlled with the condition attribute.
      */
-    Composite.PATTERN_COMPOSITE_SCRIPT = /^(text|condition|composite)\/javascript$/i;
+    Composite.PATTERN_COMPOSITE_SCRIPT = /^(condition|composite)\/javascript$/i;
 
     /** Pattern for a composite id */
     Composite.PATTERN_COMPOSITE_ID = /^([a-z](?:[\w\.]*[\w])*)(?:\:\w*)*$/i;
@@ -205,10 +205,6 @@ if (typeof(Composite) === "undefined") {
     Composite.EVENT_SCAN_START = "ScanStart";
     Composite.EVENT_SCAN_NEXT = "ScanNext";
     Composite.EVENT_SCAN_END = "ScanEnd";
-
-    /** Constants of events during mounting */
-    Composite.EVENT_MOUNT_BEFORE = "MountBefore";
-    Composite.EVENT_MOUNT_AFTER = "MountAfter";
     
     /** Constants of events when using AJAX */
     Composite.EVENT_AJAX_START = "AjaxStart";
@@ -243,7 +239,7 @@ if (typeof(Composite) === "undefined") {
         + " volume|change"
         + " waiting wheel";
     
-    //TODO:
+    /** Patterns with the supported events */
     Composite.PATTERN_EVENT_FUNCTIONS = (function() {
         var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, function(match, letter) {
            return letter.toUpperCase();
@@ -269,8 +265,25 @@ if (typeof(Composite) === "undefined") {
             return this.serial;
         };     
     };
+    
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a function to get and remove an attribute from an element.
+     */ 
+    if (Element.prototype.fetchAttribute === undefined) {
+        Element.prototype.fetchAttribute = function(attribute) {
+            if (!this.hasAttribute(attribute))
+                return false;
+            var value = this.getAttribute(attribute);
+            this.removeAttribute(attribute);
+            return value; 
+        };     
+    };    
 
-    //TODO:
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a static function to determine an object via the namespace.
+     */ 
     if (Object.lookup === undefined)
         Object.lookup = function(namespace) {
             namespace = (namespace || "").trim().split(/\./);
@@ -279,15 +292,18 @@ if (typeof(Composite) === "undefined") {
                 return null;
             var scope = window;
             for (var index = 0; scope && index < namespace.length; index++) {
-                if (!scope.hasOwnProperty(namespace[index])
-                        || typeof(scope[namespace[index]]) !== "object")
-                    return null;
-                scope = scope[namespace[index]];
+                if (namespace[index] in scope
+                        && scope[namespace[index]] instanceof Object)
+                    scope = scope[namespace[index]];
+                else return null;
             }
             return scope;
         };
         
-    //TODO:
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a static function to check whether an object exists in a namespace.
+     */ 
     if (Object.exists === undefined)
         Object.exists = function(namespace) {
             return Object.lookup(namespace) != null; 
@@ -325,12 +341,12 @@ if (typeof(Composite) === "undefined") {
      */
     Composite.listen = function(event, callback) {
         
-        if (typeof(event) !== "string")
-            throw new TypeError("Invalid event: " + typeof(event));
-        if (typeof(callback) !== "function"
+        if (typeof event !== "string")
+            throw new TypeError("Invalid event: " + typeof event);
+        if (typeof callback !== "function"
                 && callback !== null
                 && callback !== undefined)
-            throw new TypeError("Invalid callback: " + typeof(callback));        
+            throw new TypeError("Invalid callback: " + typeof callback);        
         if (!event.match(Composite.PATTERN_EVENT))
             throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
         
@@ -435,7 +451,7 @@ if (typeof(Composite) === "undefined") {
         
         Composite.mount.stack = Composite.mount.stack || new Array();
         
-        if (typeof(selector) === "string") {
+        if (typeof selector === "string") {
             selector = selector.trim();
             if (!selector)
                 return;
@@ -471,16 +487,13 @@ if (typeof(Composite) === "undefined") {
     };
     
     /**
-     *  TODO:
      *  Determines the object scope (namespace) for an element.
-     *  If the passed element uses an ID with a qualified namespace, then this
-     *  is used. Otherwise, if a superordinate composite with ID exists in the
-     *  DOM, this is used as base for the namespace. Otherwise, a global
-     *  variable is assumed in the scope of window.
-     *  Returns the reference to the corresponding object, object field
-     *  otherwise null.
+     *  The method always requires an existing model / composite in which the
+     *  element is located. If the passed element uses an ID with a qualified
+     *  namespace, then this is used. Otherwise, if a superordinate composite
+     *  with ID exists in the DOM, this is used as base for the namespace.
+     *  Returns an meta object with scope, model and field, otherwise null.
      *  @param  element element
-     *  @param  meta    option true determines the complete namespace as text
      *  @return the reference to the corresponding object, object field
      *      otherwise null
      */
@@ -505,25 +518,18 @@ if (typeof(Composite) === "undefined") {
         if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
             return null;
         
-        if (composite) {
-            var namespace = composite + "." + serial;
-            namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
-            var model = namespace[1];
-            var field = namespace[2];
-            var scope = model ? Object.lookup(model) : window;
-            if (scope && scope.hasOwnProperty(field))
-                return {scope:scope, model:model, field:field};
-        }
-            
-        var namespace = serial;
+        var namespace = composite ? composite + "." + serial : serial;
         namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
         var model = namespace[1];
+        if (!model)
+            return null;
         var field = namespace[2];
-        var scope = model ? Object.lookup(model) : window;
-        if (scope && scope.hasOwnProperty(field))
+        if (!field)
+            return null;        
+        var scope = Object.lookup(model);
+        if (scope && field in scope)
             return {scope:scope, model:model, field:field};
-            
-        return null;    
+        return null;
     };
     
     //TODO:
@@ -558,7 +564,7 @@ if (typeof(Composite) === "undefined") {
                 event = Composite.EVENT_SCAN_NEXT;
             Composite.fire(event, selector);
 
-            if (typeof(selector) === "string") {
+            if (typeof selector === "string") {
                 selector = selector.trim();
                 if (!selector)
                     return;
@@ -581,9 +587,8 @@ if (typeof(Composite) === "undefined") {
                 nodes.unshift(selector); 
             nodes.forEach(function(node, index, array) {
                 var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-                if (serial.match(Composite.PATTERN_COMPOSITE_ID)) {
+                if (serial.match(Composite.PATTERN_COMPOSITE_ID))
                     Composite.asynchron(Composite.mount, false, node);
-                }
             });
         } finally {
             if (Composite.scan.ticks <= 0)
@@ -605,12 +610,12 @@ if (typeof(Composite) === "undefined") {
         //tag name and the render functions are registered and a RegExp will be
         //created so that the custom tags can be found faster.
         
-        if (typeof(scope) !== "string")
-            throw new TypeError("Invalid scope: " + typeof(scope));
-        if (typeof(rendering) !== "function"
+        if (typeof scope !== "string")
+            throw new TypeError("Invalid scope: " + typeof scope);
+        if (typeof rendering !== "function"
                 && rendering !== null
                 && rendering !== undefined)
-            throw new TypeError("Invalid rendering: " + typeof(rendering));
+            throw new TypeError("Invalid rendering: " + typeof rendering);
         scope = scope.trim();
         if (scope.length <= 0)
             throw new Error("Invalid scope");
@@ -682,7 +687,7 @@ if (typeof(Composite) === "undefined") {
                 event = Composite.EVENT_RENDER_NEXT;
             Composite.fire(event, selector);
 
-            if (typeof(selector) === "string") {
+            if (typeof selector === "string") {
                 selector = selector.trim();
                 if (!selector)
                     return;
@@ -709,14 +714,14 @@ if (typeof(Composite) === "undefined") {
             //The root of the selector is the current element.
             //The filter therefore affects the child elements.
             Composite.selectors = Composite.selectors || {};
-            for (var macro in Composite.selectors) {
-                (function(element, macro) {
-                    var nodes = element.querySelectorAll(macro.selector);
-                    nodes.forEach(function(node, index, array) {
-                        Composite.asynchron(macro.rendering, sequence, node);
-                    });
-                })(selector, Composite.selectors[macro]);
-            }               
+            for (var macro in Composite.selectors)
+                if (typeof macro === "object")
+                    (function(element, macro) {
+                        var nodes = element.querySelectorAll(macro.selector);
+                        nodes.forEach(function(node, index, array) {
+                            Composite.asynchron(macro.rendering, sequence, node);
+                        });
+                    })(selector, Composite.selectors[macro]);
             
             //Assoziative array for elements that were detected during
             //rendering and a wrapper was created. (key:Serial, value:wrapper)
@@ -880,7 +885,8 @@ if (typeof(Composite) === "undefined") {
             //listed here are then triggered for re-rendering. Re-rendering is
             //independent of synchronization and validation and is executed
             //immediately after an event occurs.
-            var events = object.attributes[Composite.ATTRIBUTE_EVENTS];
+            var events = selector.fetchAttribute(Composite.ATTRIBUTE_EVENTS);
+            var render = selector.fetchAttribute(Composite.ATTRIBUTE_RENDER);
             if (events) {
                 events = events.split(/\s+/);
                 events.forEach(function(event, index, array) {
@@ -894,7 +900,7 @@ if (typeof(Composite) === "undefined") {
                             if (model) {
                                 var valid = false;
                                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                                        && typeof(model.scope[Composite.ATTRIBUTE_VALIDATE]) === "function") {
+                                        && typeof model.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
                                     valid = model.scope[Composite.ATTRIBUTE_VALIDATE].apply(target, target.value) === true;
                                 } else valid = true;
                                 if (valid) {
@@ -904,8 +910,8 @@ if (typeof(Composite) === "undefined") {
                                 }
                             }
                         }
-                        var render = object.attributes[Composite.ATTRIBUTE_RENDER];
-                        Composite.asynchron(Composite.render, false, render, lock);
+                        if (render)
+                            Composite.asynchron(Composite.render, false, render, lock);
                     });                    
                 });
             }
@@ -1100,14 +1106,22 @@ if (typeof(Composite) === "undefined") {
             //is the text element. The result is output here as textContent.
             //Script and style elements are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                for (var attribute in object.attributes) {
+                var attributes = Array.from(selector.attributes || new Array());
+                attributes = attributes.map(entry => entry.name);
+                attributes = attributes.concat(Array.from(object.attributes));
+                if (Composite.ATTRIBUTE_VALUE in selector)
+                    attributes.push(Composite.ATTRIBUTE_VALUE);
+                attributes = attributes.filter(function(value, index, array) {
+                    return array.indexOf(value) === index;
+                });
+                attributes.forEach(function(attribute, index, array) {
                     //Ignore all internal attributes
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
-                        continue;
+                        return;                    
                     var value = object.attributes[attribute] || "";
                     if (!value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                        continue;
+                        return;
                     var context = serial + ":" + attribute;
                     value = Expression.eval(context, value);
                     value = String(value).encodeHtml();
@@ -1120,7 +1134,7 @@ if (typeof(Composite) === "undefined") {
                             && Composite.ATTRIBUTE_VALUE in selector)
                         selector.value = value;
                     selector.setAttribute(attribute, value);
-                }
+                });
             }
 
             //TODO:
@@ -1172,8 +1186,7 @@ if (typeof(Composite) === "undefined") {
         Composite.listen(Composite.EVENT_RENDER_START, function(event, node) {
             Composite.scan.queue.push(node);
         });
-        //TODO: Und wass pasiert zwischem dem ersten und dem letzen element?
-        //      Die anderen sollten auch registriert werden in der Composite.scan.queue
+        //At the end of each render cycle, scanning for elements to mount is started.
         Composite.listen(Composite.EVENT_RENDER_END, function(event, node) {
             var queue = new Array();
             while (Composite.scan.queue.length > 0)
@@ -1203,7 +1216,7 @@ if (typeof(Composite) === "undefined") {
     });    
 };
 
-if (typeof(Expression) === "undefined") {    
+if (typeof Expression === "undefined") {    
     
     /**
      *  Expression / Expression Language (EL) is mechanism that simplifies the
@@ -1244,23 +1257,27 @@ if (typeof(Expression) === "undefined") {
     Expression.cache;
     
     /**
-     *  TODO: docu: add element-reference
-     *  
      *  Resolves a value-expression recursively if necessary.
      *  Value expressions refer to a field in a static model.
-     *  The value is retrieved using a corresponding get-function or, if this is
-     *  not available, the value is retrieved directly from the field.
-     *  For the get-function, the first character is changed from field name to
-     *  uppercase and prefixed with get.
-     *      e.g. {{ExampleModel.value}} -> ExampleModel.getValue()
+     *  The value is retrieved using a corresponding get- or is-function or, if
+     *  this is not available, the value is retrieved directly from the field.
+     *  For the get- and is-functions, the first character is changed from field
+     *  name to uppercase and prefixed with 'get' or 'is'.
+     *      e.g. {{Model.value}} -> Model.getValue()
+     *           {{Model.value}} -> Model.isValue()
+     *  In addition to the namespace of JavaScript, the method also supports DOM
+     *  elements. To do this, the variable in the expression must begin with #
+     *  and there must be a corresponding element with a matching ID in the DOM.
+     *      e.g. {{#Element}} -> document.querySelector(#Element)
+     *           {{#Element.value}} -> document.querySelector(#Element).value
      *  @param  context    context or expression without context
      *  @param  expression expression in combination with a context
-     *  @retrun the value of the value-expression, otherwise false
+     *  @retrun the value of the expression, otherwise false
      */
     Expression.lookup = function(context, expression) {
 
         try {
-            if (typeof(context) === "string"
+            if (typeof context === "string"
                     && expression === undefined) {
                 if (context.match(/^#[a-zA-Z]\w*$/))
                     return document.querySelector(context);
@@ -1278,7 +1295,9 @@ if (typeof(Expression) === "undefined") {
                 expression = [null, expression];
             else expression = expression.match(/^(.*?)\.(.*)$/);
             var method = "get" + expression[1].capitalize();
-            if (typeof(context[method]) === "function") {
+            if (typeof context[method] !== "function")
+                method = "is" + expression[1].capitalize();
+            if (typeof context[method] === "function") {
                 context = (context[method])();
                 if (expression.length > 2)
                     return Expression.lookup(context, expression[2]);
@@ -1506,7 +1525,7 @@ if (typeof(Expression) === "undefined") {
                 word.data.forEach(function(entry, index, array) {
                     merge(entry);    
                 });            
-            else if (typeof(word.data) === "string")
+            else if (typeof word.data === "string")
                 if (word.data
                         && word.data.length)
                     words.push(word);

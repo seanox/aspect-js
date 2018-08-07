@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+        var ModelA = {
+            a:"ma",
+            getB:function() {
+                return "mb";
+            },
+            isC:function() {
+                return true;
+            }  
+        }
+        
+        Test.create({test:function() {
+            var content = Output.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("ma mb true EA EA mercedes", content);
+        }});         
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });        
+    </script>
+  </head>
+  <body>
+    <input type="text" id="ElementA" value="EA">
+    <textarea id="ElementB" style="height:1.25em;">EA</textarea>
+    <select id="ElementC">
+      <option value="volvo">Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes" selected>Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+    <span id="Output">
+      {{ModelA.a}}
+      {{ModelA.b}}
+      {{ModelA.c}}
+      {{ModelA.d}}
+      {{ElementA.value}}
+      {{ElementB.value}}
+      {{ElementC.value}}
+    </span>  
+  </body>
+</html>
