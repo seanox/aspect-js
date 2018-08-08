@@ -13,15 +13,26 @@
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
     <script src="../sources/testutils.js"></script>
-    <script type="text/javascript"> 
+    <script type="text/javascript">
+    
+        var ModelA = {
+            list: ["a", "b", "c"]
+        }; 
     
         Test.create({test:function() {
-            var actual = document.querySelector("body");
+            var content = document.body.innerHTML;
             var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
-            Assert.assertEqualsTemplate("script[type='text/test-" + type + "']", actual.innerHTML);            
+            Assert.assertEqualsTemplate("script[type='text/test-" + type + "']", content);            
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
+            if (typeof Test.started != "undefined")
+                return;
+            Test.started = true;
+            var content = document.body.innerHTML;
+            content = content.replace(/([\r\n]+)\s*(?=\1)/g, "");
+            content = content.replace(/script/g, "x-script");
+            document.body.innerHTML = content;
             Test.start();
         });  
     </script>
@@ -34,55 +45,49 @@
     :
    Syntax error
     :
-
-   
    undefined
-   
    undefined
-   
    undefined
-   
    undefined
-  
     A:1: undefined
-    
     A:2: undefined
-    
     A:3: Hallo
     <article id="AB">
       AA:1: Hallo
       AB:1: undefined   
-      
       AA:2: Hallo
       AB:2: undefined
-      
       AA:3: Hallo
       AB:3: Welt
-      
       AA:4: Hallo
       AB:4: Welt
-      
       AA:5: Hallo
       AB:5: Hallo Welt
-      
       AA:5: Hallo
       AB:5: Hallo Welt Hallo Welt
     </article>
-    
     X: 1
-    
     X: 2
-    
     X: 1
-    
-    
     X: 1
-    
     X: 2
-    
     X: 4
-    
     X: 7
+    <span id="outputA"> 0:10 1:11 2:13</span>
+    <div>
+      10
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+      12
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+      15
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+    </div>
     </script>
     <script type="text/test-chrome">
    Unexpected token :
@@ -93,130 +98,110 @@
     :
    Unexpected token :
     :
-
-   
-   
-   
-   
-   
-   
-   
-   
-  
     A:1: 
-    
     A:2: 
-    
     A:3: Hallo
     <article id="AB">
       AA:1: Hallo
       AB:1:    
-      
       AA:2: Hallo
       AB:2: 
-      
       AA:3: Hallo
       AB:3: Welt
-      
       AA:4: Hallo
       AB:4: Welt
-      
       AA:5: Hallo
       AB:5: Hallo Welt
-      
       AA:5: Hallo
       AB:5: Hallo Welt Hallo Welt
     </article>
-    
     X: 1
-    
     X: 2
-    
     X: 1
-    
-    
     X: 1
-    
     X: 2
-    
     X: 4
-    
     X: 7
+    <span id="outputA"> 0:10 1:11 2:13</span>
+    <div>
+      10
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+      12
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+      15
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+    </div>
     </script>
     <script type="text/test-firefox">
-   expected expression, got ':'
+    expected expression, got ':'
     :
-   expected expression, got ':'
+    expected expression, got ':'
     :
-   expected expression, got ':'
+    expected expression, got ':'
     :
-   expected expression, got ':'
-    :
-
-   
-   
-   
-   
-   
-   
-   
-   
-  
+    expected expression, got ':'
+    : 
     A:1: 
-    
     A:2: 
-    
     A:3: Hallo
     <article id="AB">
       AA:1: Hallo
       AB:1:    
-      
       AA:2: Hallo
       AB:2: 
-      
       AA:3: Hallo
       AB:3: Welt
-      
       AA:4: Hallo
       AB:4: Welt
-      
       AA:5: Hallo
       AB:5: Hallo Welt
-      
       AA:5: Hallo
       AB:5: Hallo Welt Hallo Welt
     </article>
-    
     X: 1
-    
     X: 2
-    
     X: 1
-    
-    
     X: 1
-    
     X: 2
-    
     X: 4
-    
     X: 7
+    <span id="outputA"> 0:10 1:11 2:13</span>
+    <div>
+      10
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+      12
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+      15
+      <x-script type="composite/javax-script">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </x-script>
+    </div>
     </script>
   </head>
   <body>
-   {{:}}
-   {{ :}}
-   {{ : }}
-   {{: }}
+    {{:}}
+    {{ :}}
+    {{ : }}
+    {{: }} 
 
-   {{n:}}
-   {{n}}
-   {{n :}}
-   {{n}}
-   {{n : }}
-   {{n}}
-   {{n: }}
-   {{n}}
+    {{n:}}
+    {{n}}
+    {{n :}}
+    {{n}}
+    {{n : }}
+    {{n}}
+    {{n: }}
+    {{n}}
   
     A:1: {{globalA}}
     {{globalA:Hallo}}
@@ -257,5 +242,15 @@
     X: {{x}}
     {{x:x+3}}
     X: {{x}}
+    
+    <span id="outputA"></span>
+    {{tempA:10}}
+    <div iterate="{{tempB:ModelA.list}}">
+      {{tempA:tempA +tempB.index}} 
+      {{tempA +tempB.index}}
+      <script type="composite/javascript">
+        outputA.textContent += " " + tempB.index + ":" + tempA;
+      </script>
+    </div>
   </body>
 </html>

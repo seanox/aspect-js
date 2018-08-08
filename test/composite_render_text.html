@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+        Test.create({test:function() {
+            var content = document.body.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("Text A: Text B: Text C:", content);            
+        }});
+      
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });     
+    </script>
+  </head>
+  <body>
+    Text A: {{}} {{}} {{}}
+    <br>
+    Text B: {{ }} {{}} {{}}
+    <br>
+    Text C: {{''}} {{}} {{}}
+  </body>
+</html>
