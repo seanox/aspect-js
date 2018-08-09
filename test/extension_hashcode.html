@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/test.js"></script>
+    <script src="../sources/testutils.js"></script>
+    <script type="text/javascript">
+    
+      Test.create({test:function() {
+          Assert.assertEquals("2U90", (" a").hashCode());
+          Assert.assertEquals("32CF0", ("a ").hashCode());
+          Assert.assertEquals("3Q2N0", (" a ").hashCode());
+          Assert.assertEquals("22P0", ("a").hashCode());
+      }});
+      
+      Test.create({test:function() {
+          Assert.assertEquals("B1VXT0PNSYNNG5", ("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.").hashCode());
+      }});      
+
+      Test.create({test:function() {
+          Assert.assertEquals("B1VXT0PNSYMRG5", ("Lorem ipsum dolor sit amet, consetetur sadipscing Elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.").hashCode());
+      }});      
+
+      Test.start(true);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
