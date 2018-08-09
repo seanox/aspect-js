@@ -8,7 +8,7 @@
 - Component based architecture
 - Modularization (supports imports at the runtime)
 - Event handling
-- Expression Language
+- Expression Language  
   simple meta-language extension in combination with full JavaScript
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate, rendering,
@@ -16,6 +16,8 @@
 - Model View Controller  
   supports: events, virtual paths, sitemap, ...
 - NoSQL datasource based on XML
+- Test environment  
+  something like JUnit for automated tests
 - ...
 
 
