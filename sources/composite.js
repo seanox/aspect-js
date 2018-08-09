@@ -31,7 +31,7 @@
  *  - Die Welt ist statisch. So auch aspect-js und alle Komponenten.
  *    Das erspart die Verwaltung und Einrichtung von Instanzen.
  *  - Rendering: Clean Code
- *    Nur fuer aspect-js verwendete Attribute werden ueber Element-Wrapper
+ *    Nur fuer aspect-js verwendete Attribute werden in Meta-Objketen zu den Elementen
  *    zwischengespeichert und koennen/sollen im Markup nach Verwendung entfernt
  *    werden. An einem Element befindliche aspect-js-Attribute sind ein
  *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
@@ -141,15 +141,15 @@ if (typeof Composite === "undefined") {
     /**
      *  Pattern for all accepted attributes.
      *  Accepted attributes are all attributes, even without an expression that
-     *  is cached in the object wrapper. Other attributes are only cached if
-     *  they contain an expression.
+     *  is cached in the meta object. Other attributes are only cached if they
+     *  contain an expression.
      */
     Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
     
     /**
      *  Pattern for all static attributes.
      *  Static attributes are not removed from the element during rendering, but
-     *  are also set in the wrapper object like non-static attributes.
+     *  are also set in the meta object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
     Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|events|id|render|validate$/i;
@@ -724,7 +724,7 @@ if (typeof Composite === "undefined") {
                     })(selector, Composite.selectors[macro]);
             
             //Assoziative array for elements that were detected during
-            //rendering and a wrapper was created. (key:Serial, value:wrapper)
+            //rendering and a meta object was created (key:serial, value:meta)
             //TODO: rename into Composite.render.objects (check also in tests)
             Composite.render.elements = Composite.render.elements || new Array();
             
@@ -758,112 +758,152 @@ if (typeof Composite === "undefined") {
             
             sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
             
-            //Nodes of type TEXT_NODE are changed to text-elements.
-            //The content is stored in the value-attribute of the wrapper-object.
-            //If the element is rendered later, the value-attribute is interpreted
-            //and the result is output via textContent.
-            //Script and style elements are ignored.
+            //A text node contain static and dynamic contents as well as
+            //parameters. Dynamic contents and parameters are formulated as
+            //expressions, but only the dynamic contents are output. Parameters
+            //are interpreritert, but do not generate any output. During initial
+            //processing, a text node is analyzed and, if necessary, splitted
+            //into static content, dynamic content and parameters. To do this,
+            //the original text node is replaced by new separate text nodes:
+            //    e.g. "text {{el}} + {{param:el}}" ->  ["text ", {{el}}, " + ", {{param:el}}]
+            //When the text nodes are split, meta objects are created for them.
+            //The meta objects are compatible with the meta objects of the
+            //rendering methods but use the additional attributes: 
+            //    Composite.ATTRIBUTE_TEXT, Composite.ATTRIBUTE_NAME and
+            //    Composite.ATTRIBUTE_VALUE
+            //Only static content uses Composite.ATTRIBUTE_TEXT, dynamic content
+            //and parameters use Composite.ATTRIBUTE_VALUE, and only the
+            //parameters use Composite.ATTRIBUTE_NAME.
+            //The meta objects for dynamic content also have their own rendering
+            //method for generating output. Static content is ignored later
+            //during rendering because it is unchangeable.
+            
             if (selector.nodeType == Node.TEXT_NODE) {
                 
                 //Ignore script and style tags, no expression is replaced here.
                 if (selector.parentNode
                         && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
                     return;
-
+                
                 //Text nodes are only analyzed once.
                 //Pure text is completely ignored, only text nodes with a
                 //expression as value are updated.
                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_TEXT))
                     return;
+
+                //New/unknown text nodes must be analyzed and prepared.
+                //If the meta object for text nodes Composite.ATTRIBUTE_TEXT and
+                //Composite.ATTRIBUTE_VALUE are not contained, it must be new.
                 
                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)) {
-                    var expression = object.attributes[Composite.ATTRIBUTE_VALUE];
-                    if (expression) {
-                        expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, expression);
-                        var name = object.attributes[Composite.ATTRIBUTE_NAME];
-                        if (name)
-                            window[name] = expression; 
-                        else object.element.textContent = expression;
-                    }
+                    object.render();
                     return;
+                }   
+                    
+                //Step 1:
+                //If the text node does not contain an expression, the content
+                //is static. Static text nodes are marked with the attribute
+                //Composite.ATTRIBUTE_TEXT.
+                
+                var content = selector.textContent;
+                if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                    
+                    //Step 2:
+                    //All expressions are determined. A meta object is created
+                    //for all expressions. In the text content from the text
+                    //node, the expressions are replaced by a placeholder in the
+                    //format of the expression with a serial.
+                    //Empty expressions are removed / ignored.
+                    
+                    //All created meta objects with an expression have a special
+                    //render metode for updating the text content of the text
+                    //node.
+                    
+                    //Step 3:
+                    //The format of the expression distinguishes whether it is a
+                    //parameter or an output expression. Parameter expressions
+                    //start with the name of the parameter and are interpreted
+                    //later, but do not generate any output.
+                    
+                    content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
+                        match = match.substring(2, match.length -2).trim();
+                        if (!match)
+                            return "";
+                        var node = document.createTextNode("");
+                        var serial = node.ordinal();
+                        var object = {serial:serial, element:node, attributes:{}, render:function() {
+                            if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
+                                var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                                var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                                window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
+                                word = "";
+                            } else {
+                                word = this.attributes[Composite.ATTRIBUTE_VALUE];
+                                word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                            }
+                            this.element.textContent = word;                                     
+                        }};
+                        var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                        if (param) {
+                            object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
+                            object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
+                        } else object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
+                        Composite.render.elements[serial] = object; 
+                        return "{{" + serial + "}}";
+                    });
+                    
+                    //Step 4:
+                    //The prepared text with expression placeholders is
+                    //analyzed. All placeholders are determined and the text is
+                    //split at the placeholders. The result is an array of
+                    //words. Each word are new text nodes with static text or
+                    //dynamic content.
+                    
+                    if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                        var words = content.split(/(\{\{\d+\}\})/);
+                        words.forEach(function(word, index, array) {
+                            if (word.match(/^\{\{\d+\}\}$/)) {
+                                var serial = parseInt(word.substring(2, word.length -2).trim());
+                                var object = Composite.render.elements[serial];
+                                object.render();
+                            } else {
+                                var node = document.createTextNode(word);
+                                var serial = node.ordinal();
+                                var object = {serial:serial, element:node, attributes:{}};
+                                object.element.textContent = word;
+                                object.attributes[Composite.ATTRIBUTE_TEXT] = word;
+                                Composite.render.elements[serial] = object; 
+                            }
+                            array[index] = object.element;
+                        });
+                        
+                        //Step 5:
+                        //The newly created text nodes are inserted before the
+                        //current text node. The current text node can then be
+                        //deleted, since its content is displayed using the
+                        //newly created text nodes.
+                        
+                        //The new text nodes are inserted before the current
+                        //element one.
+                        words.forEach(function(node, index, array) {
+                            selector.parentNode.insertBefore(node, selector);
+                        });
+                        
+                        //The current element will be removed.
+                        selector.parentNode.removeChild(selector);                        
+                        
+                        return;
+                    }
+                    
+                    //If the text content contains empty expressions, these are
+                    //corrected and the content is used as static.
+                    selector.nodeValue = content;
                 }
                 
-                //Ignore text nodes without expression.
-                if (!selector.textContent.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                    return;
+                object.attributes[Composite.ATTRIBUTE_TEXT] = content;
                 
-                //Replacement of the text nodes with a text element.
-                //The expression will be stored in the value-attribute of the
-                //wrapper-object and not directly not on the element itself.
-                //Found expressions are replaced temporarilty by {{serial}} and
-                //a new text-element with a wrapper-object is created for the
-                //expressions, which is later inserted into the DOM.
-                //Empty expressions are ignored, are replaced by void/nothing.
-                //TODO: Doku unterscheidung von param / value
-                var content = selector.textContent;
-                content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
-                    match = match.substring(2, match.length -2).trim();
-                    if (!match)
-                        return "";
-                    var node = document.createTextNode("");
-                    var serial = node.ordinal();
-                    var object = {serial:serial, element:node, attributes:{}};
-                    var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
-                    if (param) {
-                        object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
-                        object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
-                    } else object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
-                    Composite.render.elements[serial] = object; 
-                    return "{{" + serial + "}}";
-                });
-                
-                //The content of the found text nodes is separated into two
-                //different types of text-nodes. The text-nodes are
-                //distinguished by the attributes Composite.ATTRIBUTE_TEXT and
-                //Composite.ATTRIBUTE_VALUE. Pure text-nodes have only the
-                //attribute Composite.ATTRIBUTE_TEXT and only text-nodes with an
-                //expression use the attribute Composite.ATTRIBUTE_VALUE.
-                //To separate the content of a text node, the first step
-                //simplifies the expression as temporary placeholder, the second
-                //step separates text and expressions to create new text-nodes,
-                //which are then inserted at the position of the original
-                //text-node.
-                //TODO: Doku unterscheidung von param / value
-                var empty = document.createTextNode("");
-                selector.parentNode.replaceChild(empty, selector);
-                var words = content.split(/(\{\{\d+\}\})/);
-                words.forEach(function(word, index, array) {
-                    if (word.match(/^\{\{\d+\}\}$/)) {
-                        var serial = parseInt(word.substring(2, word.length -2).trim());
-                        var object = Composite.render.elements[serial];
-                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
-                            var name = (object.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                            var value = (object.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
-                            window[name] = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, value);
-                            word = "";
-                        } else {
-                            word = object.attributes[Composite.ATTRIBUTE_VALUE];
-                            word = Expression.eval(serial + ":" + Composite.ATTRIBUTE_VALUE, word);
-                        }
-                    } else {
-                        var node = document.createTextNode(word);
-                        var serial = node.ordinal();
-                        var object = {serial:serial, element:node, attributes:{}};
-                        object.attributes[Composite.ATTRIBUTE_TEXT] = word;
-                        Composite.render.elements[serial] = object; 
-                    }
-                    object.element.textContent = word;
-                    array[index] = object.element;
-                });
-                //The new elements are inserted.
-                words.forEach(function(node, index, array) {
-                    empty.parentNode.insertBefore(node, empty);
-                });
-                //The temporary placeholder will be removed.
-                empty.parentNode.removeChild(empty);
-    
                 return;
-            }  
+            }
             
             if (!(selector instanceof Element))
                 return;
@@ -1043,17 +1083,18 @@ if (typeof Composite === "undefined") {
                     console.error("Invalid interval: " + interval);
             }
             
-            //TODO: Doku
             //There are two particularities to consider.
             //  1. The internal recusive rendering must be done sequentially.
-            //  2. The internal rendering creates temporary composite wrapper
-            //     objects. These wrapper objects contain meta information in
-            //     their attributes, which can be incorrectly interpreted during
+            //  2. The internal rendering creates temporary composite meta
+            //     objects. These meta objects contain meta information in their
+            //     attributes, which can be incorrectly interpreted during
             //     rescan after the iteration. Therefore, the temporarily
-            //     created wrapper objects must be removed.
+            //     created meta objects must be removed.
             //  3. A global variable is required for the iteration. If this
-            //     variable already exists, the existing method is saved and
+            //     variable already exists, the existing variable is saved and
             //     restored at the end of the iteration.
+            //A variable with meta information is used within the iteration:
+            //     e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}   
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
@@ -1066,8 +1107,8 @@ if (typeof Composite === "undefined") {
                     else console.error("Invalid iterate: " + iterate);
                 }
                 if (object.iterate) {
-                    //The internal rendering creates temporary composite wrapper
-                    //objects. These wrapper objects contain meta information in
+                    //The internal rendering creates temporary composite meta
+                    //objects. These meta objects contain meta information in
                     //their attributes
                     var elements = Array.from(Composite.render.elements);
                     //A temporary global variable is required for the iteration.
@@ -1079,7 +1120,7 @@ if (typeof Composite === "undefined") {
                         selector.innerHTML = "";
                         iterate = Expression.eval(context, object.iterate.expression);
                         if (iterate) {
-                            iterate = Array.from(Expression.eval(context, object.iterate.expression));
+                            iterate = Array.from(iterate);
                             iterate.forEach(function(item, index, array) {
                                 var temp = document.createElement("div");
                                 window[object.iterate.name] = {item:item, index:index, data:array};
@@ -1094,13 +1135,13 @@ if (typeof Composite === "undefined") {
                             delete window[object.iterate.name];
                         else window[object.iterate.name] = variable;
                     }
-                    //Removing temporary wrapper objects.
+                    //Removing temporary meta objects.
                     Composite.render.elements = elements;
                 }
             }
             
             //The expression in the attributes is interpreted.
-            //The expression is stored in a wrapper object and loaded from there,
+            //The expression is stored in a meta object and loaded from there,
             //the attributes of the element can be overwritten in a render cycle
             //and are available (conserved) for further cycles. A special case
             //is the text element. The result is output here as textContent.
@@ -1137,7 +1178,18 @@ if (typeof Composite === "undefined") {
                 });
             }
 
-            //TODO:
+            //Embedded scripting brings some special effects.
+            //The default scripting is automatically executed by the browser and
+            //independent of rendering. Therefore, the scripting for rendering
+            //has been adapted and two new script types have been introduced:
+            //    composite/javascript and condition/javascript.
+            //Both script types work the same and use the normal JavaScript.
+            //Unlike type text/javascript, the browser does not recognize them
+            //and does not execute the code automatically. Only the render
+            //recognizes the JavaScript code and executes it in each render
+            //cycle when the cycle includes the script element.
+            //In this way, the execution of the script element can also be
+            //combined with the attribute condition.
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                 var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
