@@ -7,7 +7,7 @@ an den HTML-Elementen verwendet.
 
 ## Inhalt
 
-* {Expression Language](#expression-language)
+* [Expression Language](#expression-language)
 * [Attribute](#attribute)
   * [condition](#condition)
   * [interval](#interval)
