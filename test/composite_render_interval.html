@@ -56,7 +56,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 2);
+                Assert.assertTrue(match.length == 4);
                 var b1 = parseInt(match[0]);
                 var c1 = parseInt(match[1]);
                 Assert.assertTrue(a1 < b1 && b1 == c1);
@@ -67,7 +67,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 2);
+                Assert.assertTrue(match.length == 4);
                 var b2 = parseInt(match[0]);
                 var c2 = parseInt(match[1]);
                 Assert.assertTrue(a2 < b2 && b2 > c2);
@@ -79,7 +79,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 2);
+                Assert.assertTrue(match.length == 4);
                 var b2 = parseInt(match[0]);
                 var c2 = parseInt(match[1]);
                 Assert.assertTrue(a2 < b2 && b2 > c2);
@@ -92,7 +92,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 3);
+                Assert.assertTrue(match.length == 5);
                 var a2 = parseInt(match[0]);
                 var b2 = parseInt(match[1]);
                 var c2 = parseInt(match[2]);
@@ -106,7 +106,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 3);
+                Assert.assertTrue(match.length == 5);
                 var a2 = parseInt(match[0]);
                 var b2 = parseInt(match[1]);
                 var c2 = parseInt(match[2]);
@@ -120,7 +120,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 3);
+                Assert.assertTrue(match.length == 5);
                 var a2 = parseInt(match[0]);
                 var b2 = parseInt(match[1]);
                 var c2 = parseInt(match[2]);
@@ -134,7 +134,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 3);
+                Assert.assertTrue(match.length == 5);
                 var a2 = parseInt(match[0]);
                 var b2 = parseInt(match[1]);
                 var c2 = parseInt(match[2]);
@@ -148,7 +148,7 @@
                 Assert.assertTrue("B", new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue("C", !!match);
-                Assert.assertTrue("D", match.length == 3);
+                Assert.assertTrue("D", match.length == 5);
                 var a2 = parseInt(match[0]);
                 var b2 = parseInt(match[1]);
                 var c2 = parseInt(match[2]);
@@ -162,7 +162,7 @@
                 Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
                 var match = snapshot.match(/^\d+/gm);
                 Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 3);
+                Assert.assertTrue(match.length == 5);
                 var a2 = parseInt(match[0]);
                 var b2 = parseInt(match[1]);
                 var c2 = parseInt(match[2]);
@@ -170,6 +170,13 @@
                 Assert.assertTrue(a1 == a2 && b1 < b2 && c1 < c2); 
                 a1 = a2; b1 = b2; c1 = c2;
             }});
+            Test.create({test:function() {
+                Assert.assertTrue(s1 > 3);
+                Assert.assertTrue(s2 > 3);
+            }});
+            Test.create({test:function() {
+                Assert.assertTrue(s1 < s2);
+            }});            
         });  
     </script>
     <script type="text/test">
@@ -199,6 +206,16 @@
         </div>
       </div>
     </div>
+    {{s1:0}}
+    <div id="outputScript1"></div>
+    <script type="composite/javascript" interval="3000">
+        outputScript1.textContent = ++s1;
+    </script>
+    {{s2:0}}
+    <div id="outputScript2"></div>
+    <script type="condition/javascript" interval="1500">
+        outputScript2.textContent = ++s2;
+    </script>
     <br>
     Please wait, test in progress...
   </body>
