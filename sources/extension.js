@@ -191,7 +191,7 @@ if (String.prototype.hashCode === undefined) {
         this.hash = this.hash.toString(36);
         this.hash = this.hash.length.toString(36) + this.hash; 
         this.hash = this.hash + hops.toString(36);
-        this.hash = this.hash.toUpperCase()
+        this.hash = this.hash.toUpperCase();
         return this.hash;
     };
 }; 

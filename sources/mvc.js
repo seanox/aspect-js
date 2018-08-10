@@ -24,33 +24,33 @@
  *      ----
  *  TODO:
  *  
- *  MVC 1.0 20180616
+ *  MVC 1.0 20180810
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180616
+ *  @version 1.0 20180810
  */
-if (typeof(Page) === "undefined") {
+if (typeof Page === "undefined") {
     
     Page = {};
 };    
 
-if (typeof(Face) === "undefined") {
+if (typeof Face === "undefined") {
     
     Face = {};
     
     //TODO:
 };
 
-if (typeof(Facet) === "undefined") {
+if (typeof Facet === "undefined") {
     
     Facet = {};
     
     //TODO:
 };
 
-if (typeof(Path) === "undefined") {
+if (typeof Path === "undefined") {
     
     Path = {};
     
@@ -61,6 +61,7 @@ if (typeof(Path) === "undefined") {
     /** Pattern for a valid path. */
     Path.PATTERN_PATH = /^(#*([\w\-]*)#*(#+[\w\-]+#*)*)*$/;
     
+    //TODO: Q: It is better to rename 'scope'?
     Path.customize = function(scope, acceptor) {
         
         if (scope == null)
@@ -154,7 +155,7 @@ if (typeof(Path) === "undefined") {
         
         if (path == null)
             return null;
-        if (typeof(path) !== "string"
+        if (typeof path !== "string"
                 || !path.match(Path.PATTERN_PATH))
             throw new TypeError("Invalid path" + (String(path).trim() ? ": " + path : ""));
         path = path.trim();
@@ -188,7 +189,7 @@ if (typeof(Path) === "undefined") {
         while (path.match(pattern))
             path = path.replace(pattern, "#$1#"); 
         path = path.replace(/^(#+\-+(?=#))+/, "#");
-        path = path.replace(/(^#+)|(#+$)/g, "")
+        path = path.replace(/(^#+)|(#+$)/g, "");
         path = ("#" + path).replace(/\s*#+\s*/g, "#");
 
         //Internally, a second argument can be passed with the value true.
@@ -254,7 +255,7 @@ if (typeof(Path) === "undefined") {
 //   Faces sind sichtbar wenn der Pfad ab Root enthalten ist, weitere Pfad-Segmente von Views kann der Pfad enthalten
 //   Facets sind sichtbar, wenn der Pfad vom Face ab Root enthalten ist, weitere Pfad-Segmente von Views kann der Pfad enthalten
 // - SiteMap basiert/verwendet/ergaenzt 'Path'
-if (typeof(SiteMap) === "undefined") {
+if (typeof SiteMap === "undefined") {
     
     SiteMap = {};
     
@@ -268,15 +269,15 @@ if (typeof(SiteMap) === "undefined") {
     
     SiteMap.customize = function(paths) {
         
-        if (typeof(paths) !== "object")
-            throw new TypeError("Invalid paths: " + typeof(paths));        
+        if (typeof paths !== "object")
+            throw new TypeError("Invalid paths: " + typeof paths);        
 
         var sitemap = {};
         for (path in paths) {
-            if (typeof(path) !== "string")
+            if (typeof path !== "string")
                 throw new TypeError("Invalid path: " + path);
             var views = paths[path];
-            if ((typeof(views) !== "string"
+            if ((typeof views !== "string"
                         || !views.match(SiteMap.PATTERN_PATH_VIEWS))
                     && views != null)
                 throw new TypeError("Invalid path: " + path);
@@ -317,7 +318,7 @@ if (typeof(SiteMap) === "undefined") {
         
         //Allow all facets of the path.
         var facets = SiteMap.paths[face] || [];
-        face = face.replace(/#+$/, "")
+        face = face.replace(/#+$/, "");
         facets.forEach(function(facet, index, array) {
             condition += ":not([path='" + face + "#" + facet + "'])";
         });

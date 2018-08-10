@@ -62,15 +62,13 @@
  *        Rendern erfolgt. Diese Stellen werden nach dem Output immer gescannt ob
  *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
  *        ergeben hat.
- *  TODO: Scope/Namespace - Begriff nach Aussen = Namespace, in Methoden auch scope
- *        A: namespace = text, scope = object after lookup
- *  
- *  Composite 1.0 20180806
+ *        
+ *  Composite 1.0 20180810
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180806
+ *  @version 1.0 20180810
  */
 if (typeof Composite === "undefined") {
     
@@ -494,8 +492,7 @@ if (typeof Composite === "undefined") {
      *  with ID exists in the DOM, this is used as base for the namespace.
      *  Returns an meta object with scope, model and field, otherwise null.
      *  @param  element element
-     *  @return the reference to the corresponding object, object field
-     *      otherwise null
+     *  @return the created meta object, otherwise null
      */
     Composite.mount.lookup = function(element) {
 
@@ -518,22 +515,34 @@ if (typeof Composite === "undefined") {
         if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
             return null;
         
-        var namespace = composite ? composite + "." + serial : serial;
-        namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
-        var model = namespace[1];
-        if (!model)
+        var namespace = function(namespace) {
+            namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
+            var model = namespace[1];
+            var field = namespace[2];
+            if (!model || !field)
+                return null;
+            var scope = Object.lookup(model);
+            if (scope  && scope.hasOwnProperty(field))
+                return {scope:scope, model:model, field:field};
             return null;
-        var field = namespace[2];
-        if (!field)
-            return null;        
-        var scope = Object.lookup(model);
-        if (scope && field in scope)
-            return {scope:scope, model:model, field:field};
-        return null;
+        };
+
+        var scope = namespace(composite ? composite + "." + serial : serial);
+        if (!scope
+                && composite)
+            scope = namespace(serial);
+        return scope;
     };
     
-    //TODO:
-    //(Re)Index new composite elements in the DOM.
+    /**
+     *  TODO: (Re)Index new composite elements in the DOM.
+     *   
+     *      Queue and Lock:
+     *      ----
+     *  The method used a simple queue and transaction management so that the
+     *  concurrent execution of scanning works sequentially in the order of the
+     *  method call.
+     */
     Composite.scan = function(selector, lock) {
 
         if (!selector)
@@ -597,7 +606,7 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO:
+     *  TODO: Q: It is better to rename 'scope'?
      *  @throws An error occurs in the following cases:
      *    - namespace is not valid or is not supported
      *    - rendering function is not implemented correctly
@@ -635,23 +644,150 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO:
-     *  TODO: Rendern vom import-Attribute
-     *        Es muss zwei Arten unterstuetzen.
-     *             1. Einfach
-     *        Der Inhalt wird direkt in das Tag eingefuegt
-     *             2. Module/Komponenten-Set
-     *        Dabei liefert das Nachladen ein Index-Dateien mit Dateien, deren
-     *        Inhalt eingefuegt werden muss. Es koennen verschiedene
-     *        Medien-Dateien sein (HTML, JS, CSS, SVG, ...). Der Inhalt muss
-     *        dann korrekt nach der Reihenfolge in der Liste eingefuegt werden.
-     *  TODO: Rendern von Skripten
-     *        Werden beim Rendern skripte ermittelt, muessen diese ausgefuhert
-     *        werden, wenn das condition-Attribute true ist oder kein
-     *        condition-Attribute vorhanden ist. Die Herausforderung ist das
-     *        asynchrone Rendern. Daher mussen die Skripte "ThreadSafe" sein.
-     *        Evtl. kann auch der Inhalt aller Skripte gesammelt werden und erst
-     *        am Ende (nach Abschluss vom Rendering) ausgeführt werden.
+     *  Rendering involves updating and, if necessary, reconstructing an HTML
+     *  element and all its children. The declarative commands for rendering
+     *  (attributes) and the expression language are executed.
+     *
+     *      Queue and Lock:
+     *      ----
+     *  The method used a simple queue and transaction management so that the
+     *  concurrent execution of rendering works sequentially in the order of the
+     *  method call.
+     *  
+     *      Element Meta Object
+     *      ---- 
+     *  With the processed HTML elements and text nodes, simplified meta objects
+     *  are created. The serial, the reference on the HTML element and the
+     *  initial attributes (which are required for rendering) are stored there.
+     *  
+     *      Serial
+     *      ----
+     *  Serial is a special extension of the JavaScript API of the object and
+     *  creates a unique ID for each object. This ID can be used to compare, map
+     *  and reference a wide variety of objects. Composite and rendering use
+     *  serial, since this cannot be changed via the markup.  
+     *      
+     *      Sequence
+     *      ----
+     *  Sequence is a very special declaration and controls the sequence of
+     *  concurrent processing. Sequence defines that the processing of the
+     *  children of an HTML element takes place from top to bottom and from left
+     *  to right. Thus the processing of the DOM follows the serial branching:
+     *      1 - 1.1 - 1.1.1 - 1.2 - 1.2.1 - 2 - ...
+     *  This specification is important if rendering and/or the object binding
+     *  must follow a certain logical sequence.    
+     *      
+     *      Text Node (simple embedded expression)
+     *      ----
+     *  A text node contain static and dynamic contents as well as parameters.
+     *  Dynamic contents and parameters are formulated as expressions, but only
+     *  the dynamic contents are output. Parameters are interpreritert, but do
+     *  not generate any output. During initial processing, a text node is
+     *  analyzed and, if necessary, splitted into static content, dynamic
+     *  content and parameters. To do this, the original text node is replaced
+     *  by new separate text nodes:
+     *      e.g. "text {{expr}} + {{var:expr}}" -> ["text ", {{expr}}, " + ", {{var:expr}}]
+     *  When the text nodes are split, meta objects are created for them. The
+     *  meta objects are compatible with the meta objects of the rendering
+     *  methods but use the additional attributes:
+     *      Composite.ATTRIBUTE_TEXT, Composite.ATTRIBUTE_NAME and
+     *      Composite.ATTRIBUTE_VALUE
+     *  Only static content uses Composite.ATTRIBUTE_TEXT, dynamic content and
+     *  parameters use Composite.ATTRIBUTE_VALUE, and only the parameters use
+     *  Composite.ATTRIBUTE_NAME. The meta objects for dynamic content also have
+     *  their own rendering method for generating output. Static content is
+     *  ignored later during rendering because it is unchangeable.     
+     *      
+     *      Events + Render
+     *      ----
+     *  Events primarily controls the synchronization of the input values of
+     *  HTML elements with the fields of a model. Means that the value in the
+     *  model only changes if an event occurs for the corresponding HTML
+     *  element. Synchronization is performed at a low level. Means that the
+     *  fields are synchronized directly and without the use of get and set
+     *  methods. For a better control a declarative validation is supported. If
+     *  the attribute 'validate' exists, the value for this is ignored, the
+     *  static method <Model>.validate(element, value) is  called in the
+     *  corresponding model. This call must return a true value as the result,
+     *  otherwise the element value is not stored into the corresponding model
+     *  field. If an event occurs, synchronization is performed. After that will
+     *  be checked whether the render attribute exists. All selectors listed
+     *  here are then triggered for re-rendering. Re-rendering is independent of
+     *  synchronization and validation and is executed immediately after an
+     *  event occurs.
+     *      
+     *      Condition
+     *      ----
+     *  The declaration can be used with all HTTML elements, but not with script
+     *  and style. The condition defines whether an element is (re)rendered or
+     *  not. As result of the expression true/false is expected and will be se
+     *  as an absolute value for the condition attribute - only true or false.
+     *  Elements are hidden with the condition attribute via CSS and only
+     *  explicitly displayed with [condition=true]. JavaScript elements are
+     *  executed or not.     
+     *      
+     *      Import
+     *      ----
+     *  This declation loads the content and replaces the inner HTML of an
+     *  element with the content. If the content can be loaded successfully, the
+     *  import attribute is removed.
+     *  Recursive rendering is initiated via the MutationObserver.
+     *  
+     *      Output
+     *      ----
+     *  Set the value or result of an expression as the content of an element.
+     *  For an expression, the result can also be an element or a node list with
+     *  elements. All other data types are set as text. This output is
+     *  exclusive, thus overwriting any existing content.
+     *  The recursive rerendering is initiated via the MutationObserver.
+     *      
+     *      Interval
+     *      ----
+     *  Interval rendering based on a window interval.
+     *  If an HTML element is declared as interval, its initial inner HTML is
+     *  used as a template. During the intervals, the inner HTML is first
+     *  emptied, the template is rendered individually with each interval cycle,
+     *  and the result is added to the inner HTML. The interval attribute
+     *  expects a value in milliseconds. An invalid value cause a console
+     *  output. The interval starts automatically with the (re)rendering of the
+     *  declared HTML element and is terminated and removed when:
+     *    - the element no longer exists in the DOM
+     *    - the condition attribute is false
+     *    - the element or a parent is no longer visible
+     *      
+     *      Iterate
+     *      ----
+     *  Iterative rendering based on lists, enumeration and arrays.
+     *  If an HTML element is declared as iterate, its initial inner HTML is
+     *  used as a template. During iteration, the inner HTML is initially
+     *  emptied, the template is rendered individually with each iteration cycle
+     *  and the result is added to the inner HTML.
+     *  The expression for the iteration is a parameter expression. The
+     *  parameter is a meta object and supports access to the iteration cycle.
+     *      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}
+     *             
+     *      Scripting
+     *      ----
+     *  Embedded scripting brings some special effects.
+     *  The default scripting is automatically executed by the browser and
+     *  independent of rendering. Therefore, the scripting for rendering has
+     *  been adapted and two new script types have been introduced:
+     *      composite/javascript and condition/javascript.
+     *  Both script types work the same and use the normal JavaScript. Unlike
+     *  type text/javascript, the browser does not recognize them and does not
+     *  execute the code automatically. Only the render recognizes the
+     *  JavaScript code and executes it in each render cycle when the cycle
+     *  includes the script element. In this way, the execution of the script
+     *  element can also be combined with the attribute condition.
+     *  Embedded scripts must be 'ThreadSafe'.
+     *  
+     *      Custom Tag (Macro):
+     *      ----  
+     *  TODO
+     *      
+     *      Custom Selectors
+     *      ----
+     *  TODO    
      */
     Composite.render = function(selector, sequence, lock) {
         
@@ -723,22 +859,21 @@ if (typeof Composite === "undefined") {
                         });
                     })(selector, Composite.selectors[macro]);
             
-            //Assoziative array for elements that were detected during
-            //rendering and a meta object was created (key:serial, value:meta)
-            //TODO: rename into Composite.render.objects (check also in tests)
-            Composite.render.elements = Composite.render.elements || new Array();
+            //Associative array for the element-related meta-objects, those
+            //which are created during rendering: (key:serial, value:meta)
+            Composite.render.meta = Composite.render.meta || new Array();
             
             //Register each analyzed node/element and minimizes multiple
             //analysis. For registration, the serial number of the node/element
             //is used. The node prototype has been enhanced with creation and a
             //get-function. During the analysis, the attributes of a element
             //(not node) containing an expression or all allowed attributes are
-            //cached in the memory (Composite.render.elements).
+            //cached in the memory (Composite.render.meta).
             var serial = selector.ordinal();
-            var object = Composite.render.elements[serial];
+            var object = Composite.render.meta[serial];
             if (!object) {
                 object = {serial:serial, element:selector, attributes:{}};
-                Composite.render.elements[serial] = object;
+                Composite.render.meta[serial] = object;
                 if ((selector instanceof Element)
                         && selector.attributes)
                     Array.from(selector.attributes).forEach(function(attribute, index, array) {
@@ -756,6 +891,13 @@ if (typeof Composite === "undefined") {
                     });
             }
             
+            //The condition attribute is interpreted.
+            //Sequence is a very special declaration and controls the sequence
+            //of concurrent processing. Sequence defines that the processing of
+            //the children of an HTML element takes place from top to bottom and
+            //from left to right. Thus the processing of the DOM follows the
+            //serial branching:
+            //    1 - 1.1 - 1.1.1 - 1.2 - 1.2.1 - 2 - ...    
             sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
             
             //A text node contain static and dynamic contents as well as
@@ -765,7 +907,7 @@ if (typeof Composite === "undefined") {
             //processing, a text node is analyzed and, if necessary, splitted
             //into static content, dynamic content and parameters. To do this,
             //the original text node is replaced by new separate text nodes:
-            //    e.g. "text {{el}} + {{param:el}}" ->  ["text ", {{el}}, " + ", {{param:el}}]
+            //    e.g. "text {{expr}} + {{var:expr}}" ->  ["text ", {{exprl}}, " + ", {{var:expr}}]
             //When the text nodes are split, meta objects are created for them.
             //The meta objects are compatible with the meta objects of the
             //rendering methods but use the additional attributes: 
@@ -777,7 +919,6 @@ if (typeof Composite === "undefined") {
             //The meta objects for dynamic content also have their own rendering
             //method for generating output. Static content is ignored later
             //during rendering because it is unchangeable.
-            
             if (selector.nodeType == Node.TEXT_NODE) {
                 
                 //Ignore script and style tags, no expression is replaced here.
@@ -848,7 +989,7 @@ if (typeof Composite === "undefined") {
                             object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
                             object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
                         } else object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
-                        Composite.render.elements[serial] = object; 
+                        Composite.render.meta[serial] = object; 
                         return "{{" + serial + "}}";
                     });
                     
@@ -864,7 +1005,7 @@ if (typeof Composite === "undefined") {
                         words.forEach(function(word, index, array) {
                             if (word.match(/^\{\{\d+\}\}$/)) {
                                 var serial = parseInt(word.substring(2, word.length -2).trim());
-                                var object = Composite.render.elements[serial];
+                                var object = Composite.render.meta[serial];
                                 object.render();
                             } else {
                                 var node = document.createTextNode(word);
@@ -872,7 +1013,7 @@ if (typeof Composite === "undefined") {
                                 var object = {serial:serial, element:node, attributes:{}};
                                 object.element.textContent = word;
                                 object.attributes[Composite.ATTRIBUTE_TEXT] = word;
-                                Composite.render.elements[serial] = object; 
+                                Composite.render.meta[serial] = object; 
                             }
                             array[index] = object.element;
                         });
@@ -909,11 +1050,11 @@ if (typeof Composite === "undefined") {
                 return;
 
             //Events primarily controls the synchronization of the input values
-            //of the HTML elements with the fields of a model. Means that the
-            //value in the model only changes if an event occurs for the
-            //corresponding HTML element. Synchronization is performed at a low
-            //level. Means that the fields are synchronized directly and without
-            //the use of get and set methods.
+            //of HTML elements with the fields of a model. Means that the value
+            //in the model only changes if an event occurs for the corresponding
+            //HTML element. Synchronization is performed at a low level. Means
+            //that the fields are synchronized directly and without the use of
+            //get and set methods.
             //For a better control a declarative validation is supported.
             //If the attribute 'validate' exists, the value for this is ignored,
             //the static method <Model>.validate(element, value) is  called in
@@ -933,9 +1074,10 @@ if (typeof Composite === "undefined") {
                     selector.addEventListener(event, function(event) {
                         var target = event.currentTarget;
                         var serial = target.ordinal();
-                        var object = Composite.render.elements[serial];
+                        var object = Composite.render.meta[serial];
                         if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                                && Composite.ATTRIBUTE_VALUE in target) {
+                                && Composite.ATTRIBUTE_VALUE in target
+                                && typeof target[Composite.ATTRIBUTE_VALUE] !== "function") {
                             var model = Composite.mount.lookup(target);
                             if (model) {
                                 var valid = false;
@@ -957,11 +1099,13 @@ if (typeof Composite === "undefined") {
             }
             
             //The condition attribute is interpreted.
-            //As result of the expression true/false is expected and will be se
-            //as an absolute value for the condition attribute - so only true or
-            //false. Elements are hidden with the condition attribute via CSS
-            //and only explicitly displayed with [condition=true].
-            //JavaScript elements are executed or not.
+            //The declaration can be used with all HTTML elements, but not with
+            //script and style. The condition defines whether an element is
+            //(re)rendered or not. As result of the expression true/false is
+            //expected and will be se as an absolute value for the condition
+            //attribute - so only true or false. Elements are hidden with the
+            //condition attribute via CSS and only explicitly displayed with
+            //[condition=true]. JavaScript elements are executed or not.
             var condition = object.attributes[Composite.ATTRIBUTE_CONDITION];
             if (condition) {
                 condition = Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition);
@@ -972,10 +1116,11 @@ if (typeof Composite === "undefined") {
                     return;
             }
             
-            //For elements with the import-attribute, the content is loaded and
-            //the inner HTML element will be replaced by the content. If the
-            //content can be loaded successfully, the import-attribute is removed.
-            //The recursive rerendering is initiated via the MutationObserver.
+            //The import attribute is interpreted.
+            //This declation loads the content and replaces the inner HTML of an
+            //element with the content. If the content can be loaded
+            //successfully, the import attribute is removed. Recursive rendering
+            //is initiated via the MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
                 if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
@@ -995,7 +1140,7 @@ if (typeof Composite === "undefined") {
                                         if (request.status == "200") {
                                             element.innerHTML = request.responseText;
                                             var serial = element.ordinal();
-                                            var object = Composite.render.elements[serial];
+                                            var object = Composite.render.meta[serial];
                                             delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                                             return;
                                         }
@@ -1021,12 +1166,13 @@ if (typeof Composite === "undefined") {
                 delete object.attributes[Composite.ATTRIBUTE_IMPORT];
             } 
             
-            //This attribute is used to set the value or result of an expression
-            //as the content of the selected element. For an expression, the
-            //result can also be an element or a node list with elements. All
-            //other data types are set as text. This setting is exclusive, thus
-            //overwriting any existing content.
-            //The recursive rerendering is initiated via the MutationObserver.                
+            //The output attribute is interpreted.
+            //This declaration sets the value or result of an expression as the
+            //content of an element. For an expression, the result can also be
+            //an element or a node list with elements. All other data types are
+            //set as text. This output is exclusive, thus overwriting any
+            //existing content. The recursive rerendering is initiated via the
+            //MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
                 var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
@@ -1039,10 +1185,16 @@ if (typeof Composite === "undefined") {
                 } else selector.innerHTML = value;
             }
 
-            //This attribute starts an interval for automatic (re)rendering of
-            //an element. An interval in milliseconds is expected as value.
-            //Invalid values lead to an error output on the console.
-            //The interval is terminated and removed when:
+            //The interval attribute is interpreted.
+            //Interval rendering based on a window interval.
+            //If an HTML element is declared as interval, its initial inner HTML
+            //is used as a template. During the intervals, the inner HTML is
+            //first emptied, the template is rendered individually with each
+            //interval cycle, and the result is added to the inner HTML.
+            //The interval attribute expects a value in milliseconds. An invalid
+            //value cause a console output.
+            //The interval starts automatically with the (re)rendering of the
+            //declared HTML element and is terminated and removed when:
             //  - the element no longer exists in the DOM
             //  - the condition attribute is false
             //  - the element or a parent is no longer visible
@@ -1083,6 +1235,12 @@ if (typeof Composite === "undefined") {
                     console.error("Invalid interval: " + interval);
             }
             
+            //The iterate attribute is interpreted.
+            //Iterative rendering based on lists, enumeration and arrays.
+            //If an HTML element is declared iteratively, its initial inner HTML
+            //is used as a template. During iteration, the inner HTML is
+            //initially emptied, the template is rendered individually with each
+            //iteration cycle and the result is added to the inner HTML.
             //There are two particularities to consider.
             //  1. The internal recusive rendering must be done sequentially.
             //  2. The internal rendering creates temporary composite meta
@@ -1110,7 +1268,7 @@ if (typeof Composite === "undefined") {
                     //The internal rendering creates temporary composite meta
                     //objects. These meta objects contain meta information in
                     //their attributes
-                    var elements = Array.from(Composite.render.elements);
+                    var elements = Array.from(Composite.render.meta);
                     //A temporary global variable is required for the iteration.
                     //If this variable already exists, the existing method is
                     //cahced and restored at the end of the iteration.
@@ -1136,7 +1294,7 @@ if (typeof Composite === "undefined") {
                         else window[object.iterate.name] = variable;
                     }
                     //Removing temporary meta objects.
-                    Composite.render.elements = elements;
+                    Composite.render.meta = elements;
                 }
             }
             
@@ -1190,6 +1348,7 @@ if (typeof Composite === "undefined") {
             //cycle when the cycle includes the script element.
             //In this way, the execution of the script element can also be
             //combined with the attribute condition.
+            //Embedded scripts must be 'ThreadSafe'.
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                 var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
