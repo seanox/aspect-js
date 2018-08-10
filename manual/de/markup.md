@@ -40,14 +40,19 @@ Details zu Syntax und Verwendung werden im Kapitel
 
 ## Attribute
 
+Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt. Die
+entsprechenden Deklaration können mit allen HTML-Elementen verwendet werden,
+ausgenommen sind `SCRIPT`, was nur mit den Typen `composite/javascript` bzw.
+`condition/javascript` unterstützt wird, sowie `STYLE`, welches nicht unterstützt
+wird.  
+
 
 ### condition
 
-Die Deklaration kann für alle HTTML-Elementen verwendet werden, jedoch nicht mit
-`SKRIPT` und `STYLE`. Das condition-Attribut legt fest, ob ein Element gerendert
-wird oder nicht. Der mit dem Attribute angegebene Ausdrucks muss explizit `true`
-oder `false` liefern, da die Sichtbarkeit der Element ebenfalls explizit per CSS
-Bedinung `[condition=true]` gesteuert wird.
+Das condition-Attribut legt fest, ob ein Element aufgefrischt (Re-Rendering) 
+wird oder nicht. Der mit dem Attribut angegebene Ausdrucks muss explizit `true`
+oder `false` liefern, da die Sichtbarkeit der Elemente ebenfalls explizit per
+CSS-Bedingung `[condition=true]` gesteuert wird.
 
 ```
 <article condition="{{Model.visible}}">
@@ -61,13 +66,13 @@ ist als Composite- bzw. Condition-JavaScript möglich.
 ```
 <script type="composite/javascript" condition="{{Model.visible}}">
   ...
-</scrip>
+</script>
 ```
  
 ```
 <script type="condition/javascript" condition="{{Model.visible}}">
   ...
-</scrip>
+</script>
 ```
 
 Details zur Verwendung von eingebettem JavaScript werden im Kapitel
@@ -87,13 +92,23 @@ TODO:
 ### interval
 
 Diese Deklaration aktiviert eine intervalgesteuerte Auffrischung (Re-Rendering)
-eines HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
+eines HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.
 Als Wert wird ein Interval in Millisekunden erwartet, der auch als Expression
 formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
 nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
 Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
 JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
 aber als exakt zu verstehen.
+Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
+verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
+Rendern vom deklariertes HTML-Element und wird beendet bzw. entfernt wenn:
+- das Element nicht mehr im DOM existiert 
+- das condition-Attribut `false` ist
+- das Element oder ein Elternteil nicht mehr sichtbar ist
+Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
+HTML-Code als Vorlage verwendet. Während der Intervalle wird zuerst der innere
+HTML-Code geleert, die Vorlage mit jedem Intervallzyklus einzeln gerendert und
+das Ergebnis dem inneren HTML-Code hinzugefügt.  
 
 ```
 <span interval="1000">
@@ -135,10 +150,44 @@ eines permanten Zählers sehr einfach.
 </span>
 ```
 
+Die Verwendung vom interval-Attribut in Verbindung mit eingebettem JavaScript
+ist als Composite- bzw. Condition-JavaScript möglich.
+
+```
+<script type="composite/javascript" interval="1000">
+  ...
+</script>
+```
+ 
+```
+<script type="condition/javascript" interval="1000">
+  ...
+</script>
+```
+
 
 ### iterate
 
-TODO:
+Iteratives Rendering basiert auf Listen, Aufzählungen und Arrays.  
+Wird ein HTML-Element als iterativ deklariert, wird sein ursprünglicher innerer
+HTML-Code als Vorlage verwendet. Während der Iteration wird beim HTML-Element
+der innere HTML-Code zunächst entfernt, die Vorlage bei jedem Iterationszyklus
+einzeln gerendert und das Ergebnis dem inneren HTML-Code hinzugefügt.  
+Das iterate-Attribut erwartet einen Parameter-Ausdruck, zudem ein Meta-Objekt
+erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt `tempA = {item, index, data}`),
+dass den Zugriff auf Iterationszyklus ermöglich.  
+
+```
+var Model = {
+    months: ["Frühling", "Sommer", "Herbst", "Winter"]
+};
+
+<select>
+  <option id="{{months.index}}" iterate={{months:Model.months}}>
+    {{months.item}}
+  </option>
+</select>
+```
 
 
 ### output
@@ -148,7 +197,28 @@ TODO:
 
 ### sequence
 
-TODO:
+Sequence ist eine sehr spezielle Deklaration und steuert die Reihenfolge der
+nebenläufigen DOM-Verarbeitung. Sequence legt fest, dass die Verarbeitung der
+Kinder eines HTML-Elements der seriellen Verzweigung folgt, also von oben nach
+unten und von links nach rechts: 1, 1.1, 1.1.1, 1.2, 1.2.1, 2, ...
+Diese Angabe ist wichtig, wenn das Rendern und/oder die Objekt-Bindung eine
+bestimmte logische Reihenfolge einhalten muss.
+
+```
+<article sequence>
+  {{index:0}}
+  <div id="{{index +1}}">
+    <div id="{{index +1}}">
+      <div id="{{index +1}}"></div>
+    </div>
+    <div id="{{index +1}}">
+      <div id="{{index +1}}"></div>
+    </div>
+  </div>
+  <div id="{{index +1}}">
+  </div>
+</article>
+```
 
 
 ## Scripting
