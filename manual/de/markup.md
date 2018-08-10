@@ -28,7 +28,7 @@ Attributen der HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und
 CSS-Elemente. Hier wird die Expression-Language nicht unterstützt.
 
 ```
-<article title="{{ArticleModel.title}}">
+<article title="{{Model.title}}">
   {{'Hallo World!'}}
   ...
 </article>
@@ -43,18 +43,35 @@ Details zu Syntax und Verwendung werden im Kapitel
 
 ### condition
 
-Dieses Attribut Die Sichtbarkeit der HTML-Elemente, die Interpretation der aspect-js
-Attribute und das Rendering lassen sich über das condition-Attribut steuern,
-welches für jedes HTML-Element verwendet werden kann.
-Als Wert wird eine Expression erwartet, die als Ergebnis den Wert `true`
-erwartet. In allen anderen Fällen wird die Anzeige unterdrück und die
-Verarbeitung durch aspect-js ausgesetzt.
+Die Deklaration kann für alle HTTML-Elementen verwendet werden, jedoch nicht mit
+`SKRIPT` und `STYLE`. Das condition-Attribut legt fest, ob ein Element gerendert
+wird oder nicht. Der mit dem Attribute angegebene Ausdrucks muss explizit `true`
+oder `false` liefern, da die Sichtbarkeit der Element ebenfalls explizit per CSS
+Bedinung `[condition=true]` gesteuert wird.
 
 ```
-<article condition="{{ArticleModel.visible}}">
+<article condition="{{Model.visible}}">
   ...
 </article>
 ```
+
+Die Verwendung vom condition-Attribut in Verbindung mit eingebettem JavaScript
+ist als Composite- bzw. Condition-JavaScript möglich.
+
+```
+<script type="composite/javascript" condition="{{Model.visible}}">
+  ...
+</scrip>
+```
+ 
+```
+<script type="condition/javascript" condition="{{Model.visible}}">
+  ...
+</scrip>
+```
+
+Details zur Verwendung von eingebettem JavaScript werden im Kapitel
+[Scripting](#scripting) beschrieben.
 
 
 ### events + render
