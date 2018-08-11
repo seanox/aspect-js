@@ -4,7 +4,7 @@ Mit aspect-js wird der deklarative Ansatz von HTML aufgegriffen und erweitert.
 Neben der Expression-Language werden den HTML-Elementen zusätzliche Attribute
 für Funktionen und Objektbindung Attribute bereitgestellt.  
 Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
-überwacht den DOM aktiv über den MutationObserver und funktioniert und reagiert
+überwacht das DOM aktiv über den MutationObserver und funktioniert und reagiert
 somit rekursiv auf Veränderungen im DOM.
 
 ## Inhalt
@@ -56,7 +56,7 @@ wird.
 ### condition
 
 Das condition-Attribut legt fest, ob ein Element aufgefrischt (Re-Rendering) 
-wird oder nicht. Der mit dem Attribut angegebene Ausdrucks muss explizit `true`
+wird oder nicht. Der mit dem Attribut angegebene Ausdruck muss explizit `true`
 oder `false` liefern, da die Sichtbarkeit der Elemente ebenfalls explizit per
 CSS-Bedingung `[condition=true]` gesteuert wird.
 
@@ -66,7 +66,7 @@ CSS-Bedingung `[condition=true]` gesteuert wird.
 </article>
 ```
 
-Die Verwendung vom condition-Attribut in Verbindung mit eingebettem JavaScript
+Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
 ist als Composite- bzw. Condition-JavaScript möglich.
 
 ```
@@ -81,13 +81,40 @@ ist als Composite- bzw. Condition-JavaScript möglich.
 </script>
 ```
 
-Details zur Verwendung von eingebettem JavaScript werden im Kapitel
+Details zur Verwendung von eingebettetem JavaScript werden im Kapitel
 [Scripting](#scripting) beschrieben.
 
 
 ### events
 
-TODO:
+Diese Deklaration bindet ein oder mehre Ereignisse an ein HTML-Element.  
+Übersicht der Ereignisse: https://www.w3.org/TR/DOM-Level-3-Events  
+Ereignisse eröffnen primäre Funktionen zur Validierung und Synchronisation von
+HTML-Elementen und den korrespondierenden JavaScript-Modellen (mehr dazu im
+Kapitel [validate](#validate) sowie die ereignisgesteuerte Aktualisierung von
+weiteren HTML-Elementen (mehr dazu im Kapitel [render](#render)).  
+
+```
+var Model = {
+    validate: function(element, value) {
+        return true;
+    },
+    text1: ""
+};
+
+<form id="Model" composite>
+  <input id="text1" type="text"
+      validate events="mouseup keyup change"/>
+  <input type="submit" value="submit"
+      validate events="click"/>
+</form>
+```
+
+Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
+Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
+Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
+JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: MouseUp,
+KeyUp oder Change eintritt und die Validierung den Wert `true` zurückgibt.
 
 
 ### import
@@ -97,7 +124,7 @@ eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt und
 verhält sich ähnlich wie das Attribut `output`, oder der Wert wird als entfernte
-Ressouce mit relativer bzw. absoluter URL betrachtet und per HTTP-Method GET
+Ressource mit relativer bzw. absoluter URL betrachtet und per HTTP-Methode GET
 nachgeladen. Das Laden und Ersetzen der Import-Funktion lässt sich mit dem
 condition-Attribut kombinieren und wird dann erst ausgeführt, wenn die Bedingung
 `true` ist.
@@ -139,9 +166,9 @@ var Model = {
 
 ### interval
 
-Diese Deklaration aktiviert eine intervalgesteuerte Auffrischung (Re-Rendering)
+Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung (Re-Rendering)
 eines HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.
-Als Wert wird ein Interval in Millisekunden erwartet, der auch als Expression
+Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
 formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
 nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
 Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
@@ -188,7 +215,7 @@ und steuern.
 ```
 
 Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
-eines permanten Zählers sehr einfach.
+eines permanenten Zählers sehr einfach.
 
 ```
 {{count:0}}
@@ -198,7 +225,7 @@ eines permanten Zählers sehr einfach.
 </span>
 ```
 
-Die Verwendung vom interval-Attribut in Verbindung mit eingebettem JavaScript
+Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript
 ist als Composite- bzw. Condition-JavaScript möglich.
 
 ```
@@ -240,12 +267,10 @@ var Model = {
 
 ### output
 
-Setzt den inneren HTML-Code eines Element
-
 Setzt den Wert oder das Ergebnis eines Ausdrucks als inneren HTML-Code bei einem
 HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element oder eine
 Knotenliste mit Elementen sein. Alle anderen Datentypen werden als Text gesetzt.
-Die Ausgabe ist exklusiv und überschreibt den vorhandene inneren HTML-Code.
+Die Ausgabe ist exklusiv und überschreibt den vorhandenen inneren HTML-Code.
 
 ```
 var Model = {
@@ -288,7 +313,7 @@ var Model = {
 Die Deklaration mit dem Attribut `render` erfordert die Deklaration mit dem
 Attribut `events`. Das Attribut definiert, welche Ziele nach dem Auftreten eins
 oder verschiedener Events aktualisiert (Re-Rerending) wird.  
-Als Wert erwartet das Attribute einen CSS-Selector bzw. Query-Selector welche
+Als Wert erwartet das Attribut einen CSS-Selector bzw. Query-Selector welche
 die Ziele definieren.
 
 ```
