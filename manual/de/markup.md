@@ -268,6 +268,18 @@ bestimmte logische Reihenfolge einhalten muss.
 
 ## Scripting
 
+Eingebettetes Scripting bringt einige Besonderheit mit sich.  
+Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
+ausgeführt. Daher wurde das Scripting für das Rendering angepasst und zwei neue
+Typen von Scripten eingeführt: composite/javascript und condition/javascript.
+Beide Typen funktionieren gleich und verwenden das normale JavaScript. Im
+Gegensatz zum Typ text/javascript erkennt der Browser diese nicht und führt den
+Code nicht automatisch aus. Nur der Renderer erkennt den JavaScript-Code und
+führt ihn in jedem Renderzyklus aus, wenn der Zyklus ein Skript-Element enthält.
+Auf diese Weise kann die Ausführung vom script-element auch mit dem Attribut
+condition kombiniert werden.  
+Eingebettete Skripte müssen "ThreadSafe" sein.
+
 TODO:
 
 
