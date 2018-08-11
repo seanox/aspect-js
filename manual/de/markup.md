@@ -113,8 +113,8 @@ var Model = {
 Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
 Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
 Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
-JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: MouseUp,
-KeyUp oder Change eintritt und die Validierung den Wert `true` zurückgibt.
+JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: _MouseUp_,
+_KeyUp_ oder _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
 
 
 ### import
