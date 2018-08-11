@@ -108,7 +108,9 @@ Rendern vom deklariertes HTML-Element und wird beendet bzw. entfernt wenn:
 Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
 HTML-Code als Vorlage verwendet. Während der Intervalle wird zuerst der innere
 HTML-Code geleert, die Vorlage mit jedem Intervallzyklus einzeln gerendert und
-das Ergebnis dem inneren HTML-Code hinzugefügt.  
+das Ergebnis dem inneren HTML-Code hinzugefügt. Der MutationObserver initiiert
+dabei bei Bedarf ein rekursives Rendering, damit auch der eingefügte HTML-Code
+vom Renderer verarbeitet wird.  
 
 ```
 <span interval="1000">
@@ -172,7 +174,9 @@ Iteratives Rendering basiert auf Listen, Aufzählungen und Arrays.
 Wird ein HTML-Element als iterativ deklariert, wird sein ursprünglicher innerer
 HTML-Code als Vorlage verwendet. Während der Iteration wird beim HTML-Element
 der innere HTML-Code zunächst entfernt, die Vorlage bei jedem Iterationszyklus
-einzeln gerendert und das Ergebnis dem inneren HTML-Code hinzugefügt.  
+einzeln gerendert und das Ergebnis dem inneren HTML-Code hinzugefügt. Der
+MutationObserver initiiert dabei bei Bedarf ein rekursives Rendering, damit auch
+der eingefügte HTML-Code vom Renderer verarbeitet wird.    
 Das iterate-Attribut erwartet einen Parameter-Ausdruck, zudem ein Meta-Objekt
 erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt `tempA = {item, index, data}`),
 dass den Zugriff auf Iterationszyklus ermöglich.  
@@ -182,8 +186,8 @@ var Model = {
     months: ["Frühling", "Sommer", "Herbst", "Winter"]
 };
 
-<select>
-  <option id="{{months.index}}" iterate={{months:Model.months}}>
+<select iterate={{months:Model.months}}>
+  <option id="{{months.index}}">
     {{months.item}}
   </option>
 </select>
@@ -192,8 +196,49 @@ var Model = {
 
 ### output
 
-TODO:
+Setzt den inneren HTML-Code eines Element
 
+Setzt den Wert oder das Ergebnis eines Ausdrucks als inneren HTML-Code bei einem
+HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element oder eine
+Knotenliste mit Elementen sein. Alle anderen Datentypen werden als Text gesetzt.
+Die Ausgabe ist exklusiv und überschreibt den vorhandene inneren HTML-Code. Der
+MutationObserver initiiert dabei bei Bedarf ein rekursives Rendering, damit auch
+der eingefügte HTML-Code vom Renderer verarbeitet wird.
+
+```
+var Model = {
+    publishForm: function() {
+        var form = document.createElement("form");
+        var label = document.createElement("label");
+        label.textContent = "Input";
+        form.appendChild(label);
+        var input = document.createElement("input");
+        input.value = "123";
+        input.type = "text";
+        form.appendChild(input);
+        var submit = document.createElement("input");
+        submit.type = "submit";
+        form.appendChild(submit);
+        return form;
+    },
+    publishImg: function() {
+        var img = document.createElement("img");
+        img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
+        return img;
+    },
+    publishText: "Hallo Welt!"
+};
+
+<article output="{{Model.publishImg()}}">
+  loading image...  
+</article>
+<article output="{{Model.publishText}}">
+  loading text...  
+</article>
+<article output="{{Model.publishForm()}}">
+  loading form...  
+</article>
+```
 
 ### sequence
 
@@ -208,14 +253,14 @@ bestimmte logische Reihenfolge einhalten muss.
 <article sequence>
   {{index:0}}
   <div id="{{index +1}}">
-    <div id="{{index +1}}">
-      <div id="{{index +1}}"></div>
+    <div id="{{index +2}}">
+      <div id="{{index +3}}"></div>
     </div>
-    <div id="{{index +1}}">
-      <div id="{{index +1}}"></div>
+    <div id="{{index +4}}">
+      <div id="{{index +5}}"></div>
     </div>
   </div>
-  <div id="{{index +1}}">
+  <div id="{{index +6}}">
   </div>
 </article>
 ```
