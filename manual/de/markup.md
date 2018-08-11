@@ -1,21 +1,24 @@
 # Markup
 
-Mit aspect-js wird der deklarative Ansatz von HTML aufgeriffen und erweitert.
-Neben der Expression-Language werden für Funktionen und Objektbindung Attribute
-an den HTML-Elementen verwendet.
-
+Mit aspect-js wird der deklarative Ansatz von HTML aufgegriffen und erweitert.
+Neben der Expression-Language werden den HTML-Elementen zusätzliche Attribute
+für Funktionen und Objektbindung Attribute bereitgestellt.  
+Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
+überwacht den DOM aktiv über den MutationObserver und funktioniert und reagiert
+somit rekursiv auf Veränderungen im DOM.
 
 ## Inhalt
 
 * [Expression Language](#expression-language)
 * [Attribute](#attribute)
   * [condition](#condition)
-  * [events + render](#events-render)
+  * [events](#events)
   * [import](#import)
   * [interval](#interval)
-  * [iterate](#iterate)
   * [output](#output)
+  * [render](#render)    
   * [sequence](#sequence)
+  * [validate](#validate)  
 * [Scripting](#scripting)
 * [Customizing](#customizing)
   * [Tag](#tag)   
@@ -25,11 +28,14 @@ an den HTML-Elementen verwendet.
 
 Die Expression-Language kann innerhalb vom Markup als Freitext und in den
 Attributen der HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und
-CSS-Elemente. Hier wird die Expression-Language nicht unterstützt.
+CSS-Elemente. Hier wird die Expression-Language nicht unterstützt.  
+Die direkte Verwendung als Freitext wird immer als reiner Text (plain text)
+verarbeitet. Das Hinzufügen von Markup, insbesondere HTML-Code, ist so nicht
+möglich und wir nur mit den Attributen `output` und `import` unterstützt.
 
 ```
 <article title="{{Model.title}}">
-  {{'Hallo World!'}}
+  {{'Hello World!'}}
   ...
 </article>
 ```
@@ -79,14 +85,56 @@ Details zur Verwendung von eingebettem JavaScript werden im Kapitel
 [Scripting](#scripting) beschrieben.
 
 
-### events + render
+### events
 
 TODO:
 
 
 ### import
 
-TODO:
+Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
+eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
+`import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
+Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt und
+verhält sich ähnlich wie das Attribut `output`, oder der Wert wird als entfernte
+Ressouce mit relativer bzw. absoluter URL betrachtet und per HTTP-Method GET
+nachgeladen. Das Laden und Ersetzen der Import-Funktion lässt sich mit dem
+condition-Attribut kombinieren und wird dann erst ausgeführt, wenn die Bedingung
+`true` ist.
+
+```
+var Model = {
+    publishForm: function() {
+        var form = document.createElement("form");
+        var label = document.createElement("label");
+        label.textContent = "Input";
+        form.appendChild(label);
+        var input = document.createElement("input");
+        input.value = "123";
+        input.type = "text";
+        form.appendChild(input);
+        var submit = document.createElement("input");
+        submit.type = "submit";
+        form.appendChild(submit);
+        return form;
+    },
+    publishImg: function() {
+        var img = document.createElement("img");
+        img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
+        return img;
+    }
+};
+
+<article import="{{Model.publishImg()}}">
+  loading image...  
+</article>
+<article import="{{Model.publishForm()}}">
+  loading form...  
+</article>e>
+<article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
+  loading resource...  
+</article>
+```
 
 
 ### interval
@@ -108,9 +156,7 @@ Rendern vom deklariertes HTML-Element und wird beendet bzw. entfernt wenn:
 Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
 HTML-Code als Vorlage verwendet. Während der Intervalle wird zuerst der innere
 HTML-Code geleert, die Vorlage mit jedem Intervallzyklus einzeln gerendert und
-das Ergebnis dem inneren HTML-Code hinzugefügt. Der MutationObserver initiiert
-dabei bei Bedarf ein rekursives Rendering, damit auch der eingefügte HTML-Code
-vom Renderer verarbeitet wird.  
+das Ergebnis dem inneren HTML-Code hinzugefügt.
 
 ```
 <span interval="1000">
@@ -174,16 +220,14 @@ Iteratives Rendering basiert auf Listen, Aufzählungen und Arrays.
 Wird ein HTML-Element als iterativ deklariert, wird sein ursprünglicher innerer
 HTML-Code als Vorlage verwendet. Während der Iteration wird beim HTML-Element
 der innere HTML-Code zunächst entfernt, die Vorlage bei jedem Iterationszyklus
-einzeln gerendert und das Ergebnis dem inneren HTML-Code hinzugefügt. Der
-MutationObserver initiiert dabei bei Bedarf ein rekursives Rendering, damit auch
-der eingefügte HTML-Code vom Renderer verarbeitet wird.    
+einzeln gerendert und das Ergebnis dem inneren HTML-Code hinzugefügt.
 Das iterate-Attribut erwartet einen Parameter-Ausdruck, zudem ein Meta-Objekt
 erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt `tempA = {item, index, data}`),
 dass den Zugriff auf Iterationszyklus ermöglich.  
 
 ```
 var Model = {
-    months: ["Frühling", "Sommer", "Herbst", "Winter"]
+    months: ["Spring", "Summer", "Autumn", "Winter"]
 };
 
 <select iterate={{months:Model.months}}>
@@ -201,9 +245,7 @@ Setzt den inneren HTML-Code eines Element
 Setzt den Wert oder das Ergebnis eines Ausdrucks als inneren HTML-Code bei einem
 HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element oder eine
 Knotenliste mit Elementen sein. Alle anderen Datentypen werden als Text gesetzt.
-Die Ausgabe ist exklusiv und überschreibt den vorhandene inneren HTML-Code. Der
-MutationObserver initiiert dabei bei Bedarf ein rekursives Rendering, damit auch
-der eingefügte HTML-Code vom Renderer verarbeitet wird.
+Die Ausgabe ist exklusiv und überschreibt den vorhandene inneren HTML-Code.
 
 ```
 var Model = {
@@ -226,7 +268,7 @@ var Model = {
         img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
         return img;
     },
-    publishText: "Hallo Welt!"
+    publishText: "Hello World!"
 };
 
 <article output="{{Model.publishImg()}}">
@@ -239,6 +281,58 @@ var Model = {
   loading form...  
 </article>
 ```
+
+
+### render
+
+Die Deklaration mit dem Attribut `render` erfordert die Deklaration mit dem
+Attribut `events`. Das Attribut definiert, welche Ziele nach dem Auftreten eins
+oder verschiedener Events aktualisiert (Re-Rerending) wird.  
+Als Wert erwartet das Attribute einen CSS-Selector bzw. Query-Selector welche
+die Ziele definieren.
+
+```
+var Model = {
+    _status1: 0,
+    getStatus1: function() {
+        return ++Model._status1;
+    },
+    _status2: 0,
+    getStatus2: function() {
+        return ++Model._status2;
+    },
+    _status3: 0,
+    getStatus3: function() {
+        return ++Model._status3;
+    }
+};
+    
+Taget #1:
+<span id="outputText1">{{Model.status1}}</span>
+Events: Wheel
+<input id="text1" type="text"
+    events="wheel"
+    render="#outputText1, #outputText2, #outputText3"/>
+
+Target #2:
+<span id="outputText2">{{Model.status2}}</span>
+Events: MouseDown KeyDown
+<input id="text1" type="text"
+    events="mousedown keydown"
+    render="#outputText2, #outputText3"/>
+
+Target #3:
+<span id="outputText3">{{Model.status3}}</span>
+Events: MouseUp KeyUp
+<input id="text1" type="text"
+    events="mouseup keyup"
+    render="#outputText3"/>
+```  
+
+Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen (events)
+und Zielen (render). Die Ziele sind hochzählende Textausgaben, welche auf die
+entsprechenden Ereignisse reagieren.
+
 
 ### sequence
 
@@ -266,21 +360,79 @@ bestimmte logische Reihenfolge einhalten muss.
 ```
 
 
+### validate
+
+Die Deklaration mit dem Attribut `validate` erfordert die Deklaration mit dem
+Attribut `events`. Das Attribut `validate` steuert die Synchronisation zwischen
+Markup eines Composites und dem korrespondierenden JavaScript-Model.  
+Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
+validate-Methode implementieren: `boolean Model.validate(element, value)`  
+Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
+`true` der Wert aus dem Composite in das JavaScript-Model übertragen.  
+
+Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
+bewusst nicht bereitgestellt, da diese in den meisten Fällen zu starr ist und
+diese mit geringem Aufwand als zentrale Lösung implementiert werden kann.
+
+```
+input.invalid {
+    border:1px solid #FF0000;
+    background:#FFE0E0;
+}
+
+var Model = {
+    validate: function(element, value) {
+        var valid = !!(value || "").match(/[a-z0-9]+[\w\.\-]*@[a-z0-9]+[\w\.\-]*/i);
+        if (element) {
+            element.className = (" " + element.className + " ").replace(/\s+(in){0,1}valid\s+/ig, " ").trim();
+            element.className += valid ? " valid" : " invalid";
+            element.className = element.className.trim();
+        }
+        return valid;
+    },
+    text1: ""
+};
+
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate events="mouseup keyup change" render="#Model"/>
+  input: {{Model.text1}}    
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+In dem Beispiel erwartet das Eingabefeld eine E-Mail-Adresse.  
+Das Format wird fortlaufend bei der Eingabe überprüft und das Eingabefeld bei
+ungültigen Eingaben als `invalid` gekennzeichnet. Unterhalb vom Eingabefeld ist
+die Kontrollausgabe vom korrespondierenden Feld im Model. Dieses Feld wird nur
+synchronisiert, wenn die validate-Methode den Wert `true` zurückgibt.
+
+
 ## Scripting
 
 Eingebettetes Scripting bringt einige Besonderheit mit sich.  
 Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
 ausgeführt. Daher wurde das Scripting für das Rendering angepasst und zwei neue
-Typen von Scripten eingeführt: composite/javascript und condition/javascript.
+Typen von Scripten eingeführt: `composite/javascript` und `condition/javascript`.
 Beide Typen funktionieren gleich und verwenden das normale JavaScript. Im
-Gegensatz zum Typ text/javascript erkennt der Browser diese nicht und führt den
+Gegensatz zum Typ `text/javascript` erkennt der Browser diese nicht und führt den
 Code nicht automatisch aus. Nur der Renderer erkennt den JavaScript-Code und
-führt ihn in jedem Renderzyklus aus, wenn der Zyklus ein Skript-Element enthält.
-Auf diese Weise kann die Ausführung vom script-element auch mit dem Attribut
-condition kombiniert werden.  
+führt ihn in jedem Renderzyklus aus, wenn der Zyklus ein SCRIPT-Element enthält.
+Auf diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem Attribut
+`condition` kombiniert werden.  
 Eingebettete Skripte müssen "ThreadSafe" sein.
 
-TODO:
+```
+<script type="composite/javascript">
+  ...
+</script>
+```
+
+```
+<script type="condition/javascript">
+  ...
+</script>
+```
 
 
 ## Customizing
