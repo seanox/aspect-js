@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180810
+ *  Composite 1.0 20180812
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180810
+ *  @version 1.0 20180812
  */
 if (typeof Composite === "undefined") {
     
@@ -1294,7 +1294,7 @@ if (typeof Composite === "undefined") {
                         if (iterate) {
                             iterate = Array.from(iterate);
                             iterate.forEach(function(item, index, array) {
-                                var temp = document.createElement("div");
+                                var temp = document.createElement(object.element.nodeName);
                                 window[object.iterate.name] = {item:item, index:index, data:array};
                                 temp.innerHTML = object.iterate.markup;
                                 Composite.render(temp, true, lock);
