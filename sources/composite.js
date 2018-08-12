@@ -1099,8 +1099,13 @@ if (typeof Composite === "undefined") {
                                 }
                             }
                         }
-                        if (render)
+                        if (render) {
+                            if (render.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                                var context = serial + ":" + Composite.ATTRIBUTE_RENDER;
+                                render = Expression.eval(context, render);
+                            }
                             Composite.asynchron(Composite.render, false, render, lock);
+                        }
                     });                    
                 });
             }

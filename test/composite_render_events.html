@@ -17,7 +17,7 @@
     <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
     
-      var aComp = {
+      var aModel = {
               text1:null,
               text2:null,
               text3:null,
@@ -28,62 +28,71 @@
               text8:null,
               text8_1:null,
               text8_2:null,
-              text9:null    
+              text9:null
       };
-      var bComp = {
+      var bModel = {
               text3:null,
               text4:null,
               text9:null              
       };
-      var cComp = {};
-      var fComp = {
+      var cModel = {};
+      var fModel = {
               text1:null,
               text2:null,
               text5:null
       };
+      var xModel = {
+              count: 0,
+              ping: function() {
+                  return ++this.count;       
+              }
+      }
       
       var pattern = null;
 
       Test.create({test:function() {
           var x = 0;
-          if (pattern.shift() == aComp.toPlainString()) x++;
-          if (pattern.shift() == aComp.toPlainString()) x++;
+          if (pattern.shift() == aModel.toPlainString()) x++;
+          if (pattern.shift() == aModel.toPlainString()) x++;
           Assert.assertEquals(1, x);
       }});    
 
       Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), bComp.toPlainString());
+          Assert.assertEquals(pattern.shift(), bModel.toPlainString());
       }});    
 
       Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), cComp.toPlainString());
+          Assert.assertEquals(pattern.shift(), cModel.toPlainString());
       }});    
       
       Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), String(typeof dComp));
+          Assert.assertEquals(pattern.shift(), String(typeof dModel));
       }});    
 
       Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), String(typeof eComp));
+          Assert.assertEquals(pattern.shift(), String(typeof eModel));
       }});    
 
-      //aComp contains a mix of sub-composites and fields with absolute namespace.
-      //Synchronization must primarily take place in fComp.
+      //aModel contains a mix of sub-composites and fields with absolute namespace.
+      //Synchronization must primarily take place in fModel.
       
-      //fComp: text1, text2, text5 are defined in the model and the value must be synchronized
-      //fComp: text9 are not defined in the model and the value must not be synchronized
+      //fModel: text1, text2, text5 are defined in the model and the value must be synchronized
+      //fModel: text9 are not defined in the model and the value must not be synchronized
       //The value must not then be bubbled upwards.
       
       Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), fComp.toPlainString());
+          Assert.assertEquals(pattern.shift(), fModel.toPlainString());
       }});    
 
       Test.create({test:function() {
-          Assert.assertTrue(!aComp.text8_1);
+          Assert.assertTrue(!aModel.text8_1);
       }});    
       Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), aComp.text8_2);
+          Assert.assertEquals(pattern.shift(), aModel.text8_2);
       }});    
+      Test.create({test:function() {
+          Assert.assertEquals("3", outputX.textContent);
+      }});  
       
       Element.prototype.typeTestValue = function() {
           this.typeValue(this.id + "-X");
@@ -101,16 +110,16 @@
                   text7.typeTestValue();
                   text8.typeTestValue();
                   text9.typeTestValue();
-                  window["fComp.text1"].typeTestValue();
-                  window["fComp.text2"].typeTestValue();
-                  window["fComp.text5"].typeTestValue();
+                  window["fModel.text1"].typeTestValue();
+                  window["fModel.text2"].typeTestValue();
+                  window["fModel.text5"].typeTestValue();
                   return;
               case 2:
-                  aComp.text8_1 = aComp.text8;
+                  aModel.text8_1 = aModel.text8;
                   text8.trigger("focus"); 
                   return; 
               case 3:
-                  aComp.text8_2 = aComp.text8;
+                  aModel.text8_2 = aModel.text8;
                   window.setTimeout(Test.start, 250);
                   return;
           }
@@ -123,25 +132,26 @@
       {}
       undefined
       undefined
-      {"text1":"fComp.text1-X","text2":"fComp.text2-X","text5":"fComp.text5-X"}
+      {"text1":"fModel.text1-X","text2":"fModel.text2-X","text5":"fModel.text5-X"}
       text8-X
     </script>
   </head>
   <body>
-    <div id="aComp" composite>
-      <input type="text" id="fComp.text1" events="change">
-      <div id="bComp" composite>
-        <input type="text" id="fComp.text2" events="change">
-        <div id="cComp" composite>
+    <div id="aModel" composite>
+      <input type="text" id="fModel.text1" events="change">
+      <div id="bModel" composite>
+        <input type="text" id="fModel.text2" events="change">
+        <div id="cModel" composite>
           <input type="text" id="text3" events="change">
           <input type="text" id="text4" events="change">
           <input type="text" id="text9" events="change">
         </div>
-        <input type="text" id="fComp.text5" events="change">
+        <input type="text" id="fModel.text5" events="change">
       </div>
       <input type="text" id="text6">
       <input type="text" id="text7" events="change">
-      <input type="text" id="text8" events="focus" render="#text7, #text7">
+      <input type="text" id="text8" events="focus" render="#text7, #text7, #{{'output' + 'X'}}">
+      <span id="outputX">{{xModel.ping()}}</span>
     </div>
   </body>
 </html>
