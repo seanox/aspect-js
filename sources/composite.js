@@ -62,6 +62,7 @@
  *        Rendern erfolgt. Diese Stellen werden nach dem Output immer gescannt ob
  *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
  *        ergeben hat.
+ *  TODO: Check the usage of apply      
  *        
  *  Composite 1.0 20180810
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -698,7 +699,7 @@ if (typeof Composite === "undefined") {
      *  their own rendering method for generating output. Static content is
      *  ignored later during rendering because it is unchangeable.     
      *      
-     *      Events + Render
+     *      Events + Validate + Render
      *      ----
      *  Events primarily controls the synchronization of the input values of
      *  HTML elements with the fields of a model. Means that the value in the
@@ -729,9 +730,15 @@ if (typeof Composite === "undefined") {
      *      Import
      *      ----
      *  This declation loads the content and replaces the inner HTML of an
-     *  element with the content. If the content can be loaded successfully, the
-     *  import attribute is removed.
-     *  Recursive rendering is initiated via the MutationObserver.
+     *  element with the content. The attribute expects as value one element or
+     *  more elements as node list or array -- these are then inserted directly
+     *  and behave similar to the output-attribute, or the value is considered
+     *  as a remote resource with relative or absolute URL and will be loaded
+     *  via the HTTP method GET.
+     *  Loading and replacing the import function can be combined with the
+     *  condition attribute and is only executed when the condition is true.
+     *  If the content can be loaded successfully, the import attribute is
+     *  removed. Recursive rendering is initiated via the MutationObserver.
      *  
      *      Output
      *      ----
@@ -768,7 +775,7 @@ if (typeof Composite === "undefined") {
      *             
      *      Scripting
      *      ----
-     *  Embedded scripting brings some special effects.
+     *  Embedded scripting brings some peculiarities.
      *  The default scripting is automatically executed by the browser and
      *  independent of rendering. Therefore, the scripting for rendering has
      *  been adapted and two new script types have been introduced:
@@ -1083,7 +1090,7 @@ if (typeof Composite === "undefined") {
                                 var valid = false;
                                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
                                         && typeof model.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                                    valid = model.scope[Composite.ATTRIBUTE_VALIDATE].apply(target, target.value) === true;
+                                    valid = model.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
                                 } else valid = true;
                                 if (valid) {
                                     if (model.scope[model.field] instanceof Object)
@@ -1118,9 +1125,16 @@ if (typeof Composite === "undefined") {
             
             //The import attribute is interpreted.
             //This declation loads the content and replaces the inner HTML of an
-            //element with the content. If the content can be loaded
-            //successfully, the import attribute is removed. Recursive rendering
-            //is initiated via the MutationObserver.
+            //element with the content. The attribute expects as value one
+            //element or more elements as node list or array -- these are then
+            //inserted directly and behave similar to the output-attribute, or
+            //the value is considered as a remote resource with relative or
+            //absolute URL and will be loaded via the HTTP method GET.
+            //Loading and replacing the import function can be combined with the
+            //condition attribute and is only executed when the condition is
+            //true.
+            //If the content can be loaded successfully, the import attribute is
+            //removed. Recursive rendering is initiated via the MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
                 if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
