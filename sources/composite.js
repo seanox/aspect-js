@@ -57,19 +57,19 @@
  *        Diese werden durch das rekursive Rendering ggf. mehrfach verarbeitet.
  *        Bsp. iterate: Erst beim initialen Laden der Seite, dann beim Iterate
  *        selbst und dann beim Rescan nach Abschluss vom Iterate. Daher sollte
- *        hier besser condition/javascript oder composite/javascript verwendet werden.
+ *        hier besser composite/javascript verwendet werden.
  *        Der Effekt betriff alle Stellen, an denen ein Output in die Seite beim
  *        Rendern erfolgt. Diese Stellen werden nach dem Output immer gescannt ob
  *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180812
+ *  Composite 1.0 20180815
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180812
+ *  @version 1.0 20180815
  */
 if (typeof Composite === "undefined") {
     
@@ -184,7 +184,7 @@ if (typeof Composite === "undefined") {
      *  triggered by rendering. Therefore, these scripts can be combined and
      *  controlled with the condition attribute.
      */
-    Composite.PATTERN_COMPOSITE_SCRIPT = /^(condition|composite)\/javascript$/i;
+    Composite.PATTERN_COMPOSITE_SCRIPT = /^composite\/javascript$/i;
 
     /** Pattern for a composite id */
     Composite.PATTERN_COMPOSITE_ID = /^([a-z](?:[\w\.]*[\w])*)(?:\:\w*)*$/i;
@@ -778,14 +778,14 @@ if (typeof Composite === "undefined") {
      *  Embedded scripting brings some peculiarities.
      *  The default scripting is automatically executed by the browser and
      *  independent of rendering. Therefore, the scripting for rendering has
-     *  been adapted and two new script types have been introduced:
-     *      composite/javascript and condition/javascript.
-     *  Both script types work the same and use the normal JavaScript. Unlike
-     *  type text/javascript, the browser does not recognize them and does not
-     *  execute the code automatically. Only the render recognizes the
-     *  JavaScript code and executes it in each render cycle when the cycle
-     *  includes the script element. In this way, the execution of the script
-     *  element can also be combined with the attribute condition.
+     *  been adapted and a new script type have been introduced:
+     *      composite/javascript
+     *  This script type use the normal JavaScript. Unlike type text/javascript,
+     *  the browser does not recognize them and does not execute the JavaScript
+     *  code automatically. Only the render recognizes the JavaScript code and
+     *  executes it in each render cycle when the cycle includes the script
+     *  element. In this way, the execution of the script element can also be
+     *  combined with the attribute condition.
      *  Embedded scripts must be 'ThreadSafe'.
      *  
      *      Custom Tag (Macro):
@@ -898,7 +898,7 @@ if (typeof Composite === "undefined") {
                     });
             }
             
-            //The condition attribute is interpreted.
+            //The sequence attribute is interpreted.
             //Sequence is a very special declaration and controls the sequence
             //of concurrent processing. Sequence defines that the processing of
             //the children of an HTML element takes place from top to bottom and
@@ -1358,15 +1358,15 @@ if (typeof Composite === "undefined") {
             //Embedded scripting brings some special effects.
             //The default scripting is automatically executed by the browser and
             //independent of rendering. Therefore, the scripting for rendering
-            //has been adapted and two new script types have been introduced:
-            //    composite/javascript and condition/javascript.
-            //Both script types work the same and use the normal JavaScript.
-            //Unlike type text/javascript, the browser does not recognize them
-            //and does not execute the code automatically. Only the render
+            //has been adapted and a new script type have been introduced:
+            //    composite/javascript
+            //This script type use the normal JavaScript. Unlike type
+            //text/javascript, the browser does not recognize them and does not
+            //execute the JavaScript code automatically. Only the render
             //recognizes the JavaScript code and executes it in each render
-            //cycle when the cycle includes the script element.
-            //In this way, the execution of the script element can also be
-            //combined with the attribute condition.
+            //cycle when the cycle includes the script element. In this way, the
+            //execution of the script element can also be combined with the
+            //attribute condition.
             //Embedded scripts must be 'ThreadSafe'.
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                 var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();

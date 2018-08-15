@@ -48,9 +48,16 @@ Details zu Syntax und Verwendung werden im Kapitel
 
 Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt. Die
 entsprechenden Deklaration können mit allen HTML-Elementen verwendet werden,
-ausgenommen sind `SCRIPT`, was nur mit den Typen `composite/javascript` bzw.
-`condition/javascript` unterstützt wird, sowie `STYLE`, welches nicht unterstützt
-wird.  
+ausgenommen sind `SCRIPT`, was nur mit Typen `composite/javascript` unterstützt
+wird, sowie `STYLE`, welches nicht unterstützt wird.  
+Attribute unterstützen Expressions.  
+Enthält ein Attribute eine Expression, werden das Attribute und der Wert
+unveränderlich, da der Renderer diese bei jeder Auffrischung (Re-Rendering)
+erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
+    TODO: Elemente und Attribute werden vom Renderer immer initial verarbeitet.
+Spätere ÄNderungen werden vom Renderer nicht berücksichtig. Attribute mit
+Expression werden bei jedem Render-zyklus wiederhergestellt, die anderen werden
+ignoriert, Änderungen werden später nicht berücksichtig.
 
 
 ### condition
@@ -71,12 +78,6 @@ ist als Composite- bzw. Condition-JavaScript möglich.
 
 ```
 <script type="composite/javascript" condition="{{Model.visible}}">
-  ...
-</script>
-```
- 
-```
-<script type="condition/javascript" condition="{{Model.visible}}">
   ...
 </script>
 ```
@@ -232,13 +233,6 @@ ist als Composite- bzw. Condition-JavaScript möglich.
 <script type="composite/javascript" interval="1000">
   ...
 </script>
-```
- 
-```
-<script type="condition/javascript" interval="1000">
-  ...
-</script>
-```
 
 
 ### iterate
@@ -437,24 +431,17 @@ synchronisiert, wenn die validate-Methode den Wert `true` zurückgibt.
 
 Eingebettetes Scripting bringt einige Besonderheit mit sich.  
 Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
-ausgeführt. Daher wurde das Scripting für das Rendering angepasst und zwei neue
-Typen von Scripten eingeführt: `composite/javascript` und `condition/javascript`.
-Beide Typen funktionieren gleich und verwenden das normale JavaScript. Im
-Gegensatz zum Typ `text/javascript` erkennt der Browser diese nicht und führt den
-Code nicht automatisch aus. Nur der Renderer erkennt den JavaScript-Code und
-führt ihn in jedem Renderzyklus aus, wenn der Zyklus ein SCRIPT-Element enthält.
-Auf diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem Attribut
-`condition` kombiniert werden.  
+ausgeführt. Daher wurde das Scripting für das Rendering angepasst und ein neuer
+Type von Scripten: `composite/javascript`. Dieser verwendet das normale JavaScript.
+Im Gegensatz zum Typ `text/javascript` erkennt der Browser diesen aber nicht und
+führt den JavaScript-Code nicht automatisch aus. Der Renderer aber erkennt den
+JavaScript-Code und führt diesen in jedem Renderzyklus aus, wenn der Zyklus ein
+SCRIPT-Element enthält. Auf diese Weise kann die Ausführung vom SCRIPT-Element
+auch mit dem Attribut `condition` kombiniert werden.  
 Eingebettete Skripte müssen "ThreadSafe" sein.
 
 ```
 <script type="composite/javascript">
-  ...
-</script>
-```
-
-```
-<script type="condition/javascript">
   ...
 </script>
 ```
