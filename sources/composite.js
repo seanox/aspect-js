@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180815
+ *  Composite 1.0 20180817
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180815
+ *  @version 1.0 20180817
  */
 if (typeof Composite === "undefined") {
     
@@ -88,7 +88,10 @@ if (typeof Composite === "undefined") {
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
-    
+
+    /** Constant for attribute assent */
+    Composite.ATTRIBUTE_ASSENT = "assent";
+
     /** Constant for attribute composite */
     Composite.ATTRIBUTE_COMPOSITE = "composite";
     
@@ -141,9 +144,10 @@ if (typeof Composite === "undefined") {
      *  Pattern for all accepted attributes.
      *  Accepted attributes are all attributes, even without an expression that
      *  is cached in the meta object. Other attributes are only cached if they
-     *  contain an expression.
+     *  contain an expression. The attribute condition is not included in the
+     *  list because it is used very specifically.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -151,7 +155,7 @@ if (typeof Composite === "undefined") {
      *  are also set in the meta object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|condition|events|id|render|validate$/i;
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|events|id|render|validate$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
@@ -719,7 +723,8 @@ if (typeof Composite === "undefined") {
      *      
      *      Condition
      *      ----
-     *  The declaration can be used with all HTTML elements, but not with script
+     *  TODO: condition
+     *  The declaration can be used with all HTML elements, but not with script
      *  and style. The condition defines whether an element is (re)rendered or
      *  not. As result of the expression true/false is expected and will be se
      *  as an absolute value for the condition attribute - only true or false.
@@ -735,6 +740,7 @@ if (typeof Composite === "undefined") {
      *  and behave similar to the output-attribute, or the value is considered
      *  as a remote resource with relative or absolute URL and will be loaded
      *  via the HTTP method GET.
+     *  TODO: condition
      *  Loading and replacing the import function can be combined with the
      *  condition attribute and is only executed when the condition is true.
      *  If the content can be loaded successfully, the import attribute is
@@ -759,7 +765,7 @@ if (typeof Composite === "undefined") {
      *  output. The interval starts automatically with the (re)rendering of the
      *  declared HTML element and is terminated and removed when:
      *    - the element no longer exists in the DOM
-     *    - the condition attribute is false
+     *    - TODO: condition the condition attribute is false
      *    - the element or a parent is no longer visible
      *      
      *      Iterate
@@ -882,7 +888,10 @@ if (typeof Composite === "undefined") {
                 object = {serial:serial, element:selector, attributes:{}};
                 Composite.render.meta[serial] = object;
                 if ((selector instanceof Element)
-                        && selector.attributes)
+                        && selector.attributes) {
+                    //Attribute condition is not included in the list of
+                    //Composite.PATTERN_ATTRIBUTE_ACCEPT because it is used very
+                    //specifically and must therefore be requested separately.
                     Array.from(selector.attributes).forEach(function(attribute, index, array) {
                         var value = (attribute.value || "").trim();
                         if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
@@ -896,6 +905,44 @@ if (typeof Composite === "undefined") {
                             object.attributes[attribute.name.toLowerCase()] = value;
                         }
                     });
+                    
+                    //The condition attribute is interpreted.
+                    //If an HTML element uses the condition attribute, a text
+                    //node is created for the HTML element as a placeholder
+                    //For the placeholder, a meta object is created with all the
+                    //details of the HTML element, the condition and the outer
+                    //HTML code of the HTML element as a template. Then the HTML
+                    //element in the DOM is replaced by the placeholder. The
+                    //change at the DOM triggers the MutationObserver and this
+                    //then takes over the processing of the placeholder.
+                    var condition = (selector.fetchAttribute(Composite.ATTRIBUTE_CONDITION) || "").trim();
+                    if (condition) {
+
+                        //The meta object for the HTML element is removed,
+                        //because only the new placeholder is relevant.
+                        delete Composite.render.meta[serial];
+                        
+                        var template = document.createElement(selector.parentNode.nodeName);
+                        template.innerHTML = selector.outerHTML;
+                        template = Array.from(template.childNodes).shift();
+                        
+                        //The placeholder and its meta object are created.
+                        var placeholder = document.createTextNode("");
+                        object = {serial:placeholder.ordinal(), element:placeholder, attributes:{},
+                                condition:{serial:placeholder.ordinal(), expression:condition, template:template}
+                        };
+                        
+                        //The Meta object is registered.
+                        Composite.render.meta[object.serial] = object;
+                        
+                        //The HTML element is replaced by the /placeholder. This
+                        //change at the DOM triggers the MutationObserver, which
+                        //then processes the placeholder.
+                        selector.parentNode.replaceChild(placeholder, selector);
+                        
+                        return;
+                    }
+                }
             }
             
             //The sequence attribute is interpreted.
@@ -926,7 +973,8 @@ if (typeof Composite === "undefined") {
             //The meta objects for dynamic content also have their own rendering
             //method for generating output. Static content is ignored later
             //during rendering because it is unchangeable.
-            if (selector.nodeType == Node.TEXT_NODE) {
+            if (selector.nodeType == Node.TEXT_NODE
+                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 
                 //Ignore script and style tags, no expression is replaced here.
                 if (selector.parentNode
@@ -1053,6 +1101,39 @@ if (typeof Composite === "undefined") {
                 return;
             }
             
+            //condition The condition attribute is interpreted.
+            //TODO: condition Doku
+            if (selector.nodeType == Node.TEXT_NODE
+                    && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                var condition = object.condition;
+                if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition.expression) === true) {
+                    if (!condition.element
+                            || !document.body.contains(condition.element)) {
+                        var template = condition.template.cloneNode(true);
+                        Composite.render(template, true, lock);
+                        condition.element = template;
+                        var serial = template.ordinal();
+                        var object = Composite.render.meta[serial];
+                        object.condition = {serial:condition.serial};
+                        object.assent = true;
+                        selector.parentNode.insertBefore(template, selector);
+                        return;                        
+                    }
+                    
+                    selector = condition.element;
+                    serial = selector.ordinal();
+                    object = Composite.render.meta[serial];
+                    object.assent = true;
+                } else {
+                    if (!condition.element)
+                        return;
+                    selector.parentNode.removeChild(condition.element);
+                    delete Composite.render.meta[condition.element.ordinal()];
+                    delete condition.element;
+                    return;
+                }
+            }
+            
             if (!(selector instanceof Element))
                 return;
 
@@ -1111,22 +1192,18 @@ if (typeof Composite === "undefined") {
             }
             
             //The condition attribute is interpreted.
-            //The declaration can be used with all HTTML elements, but not with
-            //script and style. The condition defines whether an element is
-            //(re)rendered or not. As result of the expression true/false is
-            //expected and will be se as an absolute value for the condition
-            //attribute - so only true or false. Elements are hidden with the
-            //condition attribute via CSS and only explicitly displayed with
-            //[condition=true]. JavaScript elements are executed or not.
-            var condition = object.attributes[Composite.ATTRIBUTE_CONDITION];
-            if (condition) {
-                condition = Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition);
-                selector.setAttribute(Composite.ATTRIBUTE_CONDITION, condition === true);
-                //Recursive processing is stopped at the first element where the
-                //condition-attribute is false. Further sub-elements are not followed.
-                if (condition !== true)
+            //TODO: condition
+            if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                if (!object.assent) {
+                    var serial = object.condition.serial;
+                    var object = Composite.render.meta[serial];
+                    Composite.render(object, true, lock);
                     return;
+                }
             }
+            
+            if (object.hasOwnProperty(Composite.ATTRIBUTE_ASSENT))
+                object.assent = false;
             
             //The import attribute is interpreted.
             //This declation loads the content and replaces the inner HTML of an
@@ -1159,7 +1236,7 @@ if (typeof Composite === "undefined") {
                                         if (request.status == "200") {
                                             element.innerHTML = request.responseText;
                                             var serial = element.ordinal();
-                                            var object = Composite.render.meta[serial];
+                                            var object = Composite.render.meta[element];
                                             delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                                             return;
                                         }
@@ -1230,6 +1307,7 @@ if (typeof Composite === "undefined") {
                         selector: selector,
                         task: function(interval) {
                             var interrupt = !document.body.contains(interval.selector);
+                            //TODO: condition
                             if (interval.selector.hasAttribute(Composite.ATTRIBUTE_CONDITION)
                                     && (interval.selector.getAttribute(Composite.ATTRIBUTE_CONDITION) || "").trim().toLowerCase() != "true")
                                 interrupt = true;
@@ -1381,9 +1459,16 @@ if (typeof Composite === "undefined") {
             //Follow other element children recursively.
             //Scripts, style elements and custom tags are ignored.
             if (selector.childNodes
-                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
+                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
+                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.render, sequence, node, sequence, lock);
+                    var serial = node.ordinal();
+                    var object = Composite.render.meta[serial];
+                    //Ignore all elements with condition, this is the markup to
+                    //the placeholders. However, only the placeholders are
+                    //processed and controlled.
+                    if (!(object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)))
+                        Composite.asynchron(Composite.render, sequence, node, sequence, lock);
                 });
             }
 
@@ -1392,16 +1477,6 @@ if (typeof Composite === "undefined") {
                 Composite.fire(Composite.EVENT_RENDER_END, selector);
         }
     };
-    
-    //An additional style is inserted before the current script element.
-    //It is required for displaying and hiding elements with a condition attribute.
-    (function() {
-        var css = document.createElement("style");
-        css.setAttribute("type", "text/css");
-        css.textContent = "[condition]:not([condition='true']) {display:none!important;}";
-        var script = document.querySelector("script");
-        script.parentNode.insertBefore(css, script); 
-    })();
 
     //Register a listener when an error occurs and trigger a matching composite-event.
     window.addEventListener("error", function(event) {
@@ -1429,21 +1504,31 @@ if (typeof Composite === "undefined") {
     });
     
     //A MutationObserver is established to detect changes at the DOM and
-    //triggers (re)rendering and (re)scan. However, the (re)rendering is only
-    //triggered if no rendering is currently running. Otherwise, the rendering
-    //changes will cause recursions.
+    //triggers (re)rendering and (re)scanning. Unwanted recursions are possible,
+    //but these are detected and prevented in the Composize.render method.
     window.addEventListener("load", function(event) {
         (new MutationObserver(function(mutations) {
             var stack = new Array();
             mutations.forEach(function(mutation) {
-                //Render only the first element and ignore all childrens.
-                if (stack.filter(entry => entry.contains(mutation.target)).length > 0)
+                //Duplicates should be prevented (e.g. for IE).
+                if (stack.indexOf(mutation.target))
                     return;
+                if (mutation.target instanceof Element) {
+                    var serial = mutation.target.ordinal();
+                    var object = Composite.render.meta[serial];
+                    //Ignore all elements with condition, this is the markup to
+                    //the placeholders. However, only the placeholders are
+                    //processed and controlled.
+                    if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                        object.assent = false;
+                        return;
+                    }
+                }
                 stack.push(mutation.target);
                 Composite.render(mutation.target);
             }); 
         })).observe(document.body, {childList:true, subtree:true});
-    });    
+    });       
 };
 
 if (typeof Expression === "undefined") {    
