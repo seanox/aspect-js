@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180817
+ *  Composite 1.0 20180824
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180817
+ *  @version 1.0 20180824
  */
 if (typeof Composite === "undefined") {
     
@@ -155,7 +155,7 @@ if (typeof Composite === "undefined") {
      *  are also set in the meta object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|events|id|render|validate$/i;
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|id$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
@@ -1119,7 +1119,6 @@ if (typeof Composite === "undefined") {
                         selector.parentNode.insertBefore(template, selector);
                         return;                        
                     }
-                    
                     selector = condition.element;
                     serial = selector.ordinal();
                     object = Composite.render.meta[serial];
@@ -1217,6 +1216,7 @@ if (typeof Composite === "undefined") {
             //true.
             //If the content can be loaded successfully, the import attribute is
             //removed. Recursive rendering is initiated via the MutationObserver.
+            //TODO: condition + import
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
                 if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
@@ -1454,13 +1454,12 @@ if (typeof Composite === "undefined") {
                         console.error(exception);
                     }
                 }
-            }            
-            
+            }
+
             //Follow other element children recursively.
-            //Scripts, style elements and custom tags are ignored.
+            //Elements of type: script + style and custom tags are ignored.
             if (selector.childNodes
-                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
                     var serial = node.ordinal();
                     var object = Composite.render.meta[serial];
@@ -1510,22 +1509,36 @@ if (typeof Composite === "undefined") {
         (new MutationObserver(function(mutations) {
             var stack = new Array();
             mutations.forEach(function(mutation) {
-                //Duplicates should be prevented (e.g. for IE).
-                if (stack.indexOf(mutation.target))
-                    return;
-                if (mutation.target instanceof Element) {
-                    var serial = mutation.target.ordinal();
-                    var object = Composite.render.meta[serial];
-                    //Ignore all elements with condition, this is the markup to
-                    //the placeholders. However, only the placeholders are
-                    //processed and controlled.
-                    if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                        object.assent = false;
-                        return;
-                    }
+                if (mutation.addedNodes) {
+                    mutation.addedNodes.forEach(function(node) {
+                        //Duplicates should be prevented.
+                        if (stack.indexOf(node) >= 0)
+                            return;                
+                        stack.push(node);
+                        if (mutation.target instanceof Element) {
+                            var serial = mutation.target.ordinal();
+                            var object = Composite.render.meta[serial];
+                            //Ignore all elements with condition, this is the
+                            //markup to the placeholders. However, only the
+                            //placeholders are processed and controlled.
+                            if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                                object.assent = false;
+                                return;
+                            }
+                        }
+                        Composite.render(node);
+                    });
                 }
-                stack.push(mutation.target);
-                Composite.render(mutation.target);
+                if (mutation.removedNodes) {
+                    mutation.removedNodes.forEach(function(node) {
+                        //Duplicates should be prevented.
+                        if (stack.indexOf(node) >= 0)
+                            return;                
+                        stack.push(node);
+                        //TODO: Remove meta object
+                        //      Stop intervals
+                    });
+                }
             }); 
         })).observe(document.body, {childList:true, subtree:true});
     });       
