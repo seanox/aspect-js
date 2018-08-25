@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180824
+ *  Composite 1.0 20180825
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180824
+ *  @version 1.0 20180825
  */
 if (typeof Composite === "undefined") {
     
@@ -1115,9 +1115,7 @@ if (typeof Composite === "undefined") {
                         var serial = template.ordinal();
                         var object = Composite.render.meta[serial];
                         object.condition = {serial:condition.serial};
-                        object.assent = true;
                         selector.parentNode.insertBefore(template, selector);
-                        return;                        
                     }
                     selector = condition.element;
                     serial = selector.ordinal();
@@ -1461,13 +1459,16 @@ if (typeof Composite === "undefined") {
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
-                    var serial = node.ordinal();
-                    var object = Composite.render.meta[serial];
-                    //Ignore all elements with condition, this is the markup to
-                    //the placeholders. However, only the placeholders are
-                    //processed and controlled.
-                    if (!(object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)))
-                        Composite.asynchron(Composite.render, sequence, node, sequence, lock);
+                    if (node.nodeType != Node.TEXT_NODE) {
+                        var serial = node.ordinal();
+                        var object = Composite.render.meta[serial];
+                        //Ignore all elements with condition, this is the markup
+                        //to the placeholders. However, only the placeholders
+                        //are processed and controlled.
+                        if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION))
+                            return;
+                    }
+                    Composite.asynchron(Composite.render, sequence, node, sequence, lock);
                 });
             }
 
@@ -1515,7 +1516,7 @@ if (typeof Composite === "undefined") {
                         if (stack.indexOf(node) >= 0)
                             return;                
                         stack.push(node);
-                        if (mutation.target instanceof Element) {
+                        if (node.nodeType != Node.TEXT_NODE) {
                             var serial = mutation.target.ordinal();
                             var object = Composite.render.meta[serial];
                             //Ignore all elements with condition, this is the
