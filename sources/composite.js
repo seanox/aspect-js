@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180825
+ *  Composite 1.0 20180827
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180825
+ *  @version 1.0 20180827
  */
 if (typeof Composite === "undefined") {
     
@@ -88,9 +88,6 @@ if (typeof Composite === "undefined") {
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
-
-    /** Constant for attribute assent */
-    Composite.ATTRIBUTE_ASSENT = "assent";
 
     /** Constant for attribute composite */
     Composite.ATTRIBUTE_COMPOSITE = "composite";
@@ -144,10 +141,9 @@ if (typeof Composite === "undefined") {
      *  Pattern for all accepted attributes.
      *  Accepted attributes are all attributes, even without an expression that
      *  is cached in the meta object. Other attributes are only cached if they
-     *  contain an expression. The attribute condition is not included in the
-     *  list because it is used very specifically.
+     *  contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -177,7 +173,7 @@ if (typeof Composite === "undefined") {
     Composite.PATTERN_EXPRESSION_VARIABLE = /^\s*(_*[a-z]\w*)\s*:\s*(.*?)\s*$/i;    
 
     /** Pattern for all to ignore (script-)elements */
-    Composite.PATTERN_ELEMENT_IGNORE = "/script|style/i";
+    Composite.PATTERN_ELEMENT_IGNORE = /script|style/i;
 
     /** Pattern for all script elements */
     Composite.PATTERN_SCRIPT = /script/i;
@@ -253,36 +249,22 @@ if (typeof Composite === "undefined") {
 
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a static counter for assigning serial IDs to the Node object.
+     *  Adds a static counter for assigning serial IDs to the object.
      */    
-    if (Node.indication === undefined)
-        Node.indication = 0;
+    if (Object.indication === undefined)
+        Object.indication = 0;
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a function for getting the serial ID to the Node objects.
+     *  Adds a function for getting the serial ID to the objects.
      */ 
-    if (Node.prototype.ordinal === undefined) {
-        Node.prototype.ordinal = function() {
-            this.serial = this.serial || Node.indication++;
+    if (Object.prototype.ordinal === undefined) {
+        Object.prototype.ordinal = function() {
+            this.serial = this.serial || ++Object.indication;
             return this.serial;
         };     
     };
     
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a function to get and remove an attribute from an element.
-     */ 
-    if (Element.prototype.fetchAttribute === undefined) {
-        Element.prototype.fetchAttribute = function(attribute) {
-            if (!this.hasAttribute(attribute))
-                return false;
-            var value = this.getAttribute(attribute);
-            this.removeAttribute(attribute);
-            return value; 
-        };     
-    };    
-
     /**
      *  Enhancement of the JavaScript API
      *  Adds a static function to determine an object via the namespace.
@@ -915,7 +897,9 @@ if (typeof Composite === "undefined") {
                     //element in the DOM is replaced by the placeholder. The
                     //change at the DOM triggers the MutationObserver and this
                     //then takes over the processing of the placeholder.
-                    var condition = (selector.fetchAttribute(Composite.ATTRIBUTE_CONDITION) || "").trim();
+                    var condition = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                            ? object.attributes[Composite.ATTRIBUTE_CONDITION] : null;
+                    delete object.attributes[Composite.ATTRIBUTE_CONDITION];        
                     if (condition) {
 
                         //The meta object for the HTML element is removed,
@@ -929,7 +913,7 @@ if (typeof Composite === "undefined") {
                         //The placeholder and its meta object are created.
                         var placeholder = document.createTextNode("");
                         object = {serial:placeholder.ordinal(), element:placeholder, attributes:{},
-                                condition:{serial:placeholder.ordinal(), expression:condition, template:template}
+                                condition:condition, template:template, output:null
                         };
                         
                         //The Meta object is registered.
@@ -940,7 +924,9 @@ if (typeof Composite === "undefined") {
                         //then processes the placeholder.
                         selector.parentNode.replaceChild(placeholder, selector);
                         
-                        return;
+                        selector = placeholder;
+                        serial = selector.ordinal();
+                        object = Composite.render.meta[serial];
                     }
                 }
             }
@@ -952,7 +938,17 @@ if (typeof Composite === "undefined") {
             //from left to right. Thus the processing of the DOM follows the
             //serial branching:
             //    1 - 1.1 - 1.1.1 - 1.2 - 1.2.1 - 2 - ...    
-            sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;
+            sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;            
+
+            //The placeholder(-output) is interpreted.
+            //Placeholder output is only processed via the placeholder.
+            //Therefore the placeholder output is replaced by the placeholder at
+            //variable level (selector + serial + object).
+            if (object.hasOwnProperty("placeholder")) {
+                selector = object.placeholder;
+                serial = selector.ordinal();
+                object = Composite.render.meta[serial];                
+            }
             
             //A text node contain static and dynamic contents as well as
             //parameters. Dynamic contents and parameters are formulated as
@@ -976,7 +972,8 @@ if (typeof Composite === "undefined") {
             if (selector.nodeType == Node.TEXT_NODE
                     && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 
-                //Ignore script and style tags, no expression is replaced here.
+                //Elements of type: script + style are ignored.
+                //No expression is replaced here.
                 if (selector.parentNode
                         && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
                     return;
@@ -1105,28 +1102,31 @@ if (typeof Composite === "undefined") {
             //TODO: condition Doku
             if (selector.nodeType == Node.TEXT_NODE
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                var condition = object.condition;
-                if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition.expression) === true) {
-                    if (!condition.element
-                            || !document.body.contains(condition.element)) {
-                        var template = condition.template.cloneNode(true);
+                var placeholder = object;
+                if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
+                    if (!placeholder.output
+                            || !document.body.contains(placeholder.output)) {
+                        //The placeholder output is rendered recursively and
+                        //finally and inserted before the placeholder.
+                        //Therefore, rendering can be stopped afterwards.
+                        var template = placeholder.template.cloneNode(true);
                         Composite.render(template, true, lock);
-                        condition.element = template;
+                        placeholder.output = template;
                         var serial = template.ordinal();
                         var object = Composite.render.meta[serial];
-                        object.condition = {serial:condition.serial};
+                        object.placeholder = placeholder;
                         selector.parentNode.insertBefore(template, selector);
+                        return;
                     }
-                    selector = condition.element;
+                    selector = placeholder.output;
                     serial = selector.ordinal();
                     object = Composite.render.meta[serial];
-                    object.assent = true;
                 } else {
-                    if (!condition.element)
+                    if (!placeholder.output)
                         return;
-                    selector.parentNode.removeChild(condition.element);
-                    delete Composite.render.meta[condition.element.ordinal()];
-                    delete condition.element;
+                    selector.parentNode.removeChild(placeholder.output);
+                    delete Composite.render.meta[placeholder.output.ordinal()];
+                    delete placeholder.output;
                     return;
                 }
             }
@@ -1134,6 +1134,7 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Element))
                 return;
 
+            //TODO: Doku
             //Events primarily controls the synchronization of the input values
             //of HTML elements with the fields of a model. Means that the value
             //in the model only changes if an event occurs for the corresponding
@@ -1151,8 +1152,12 @@ if (typeof Composite === "undefined") {
             //listed here are then triggered for re-rendering. Re-rendering is
             //independent of synchronization and validation and is executed
             //immediately after an event occurs.
-            var events = selector.fetchAttribute(Composite.ATTRIBUTE_EVENTS);
-            var render = selector.fetchAttribute(Composite.ATTRIBUTE_RENDER);
+            var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+                    ? object.attributes[Composite.ATTRIBUTE_EVENTS] : null;
+            delete object.attributes[Composite.ATTRIBUTE_EVENTS];        
+            var render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
+                    ? object.attributes[Composite.ATTRIBUTE_RENDER] : false;
+            delete object.attributes[Composite.ATTRIBUTE_RENDER];        
             if (events) {
                 events = events.split(/\s+/);
                 events.forEach(function(event, index, array) {
@@ -1187,20 +1192,6 @@ if (typeof Composite === "undefined") {
                     });                    
                 });
             }
-            
-            //The condition attribute is interpreted.
-            //TODO: condition
-            if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                if (!object.assent) {
-                    var serial = object.condition.serial;
-                    var object = Composite.render.meta[serial];
-                    Composite.render(object, true, lock);
-                    return;
-                }
-            }
-            
-            if (object.hasOwnProperty(Composite.ATTRIBUTE_ASSENT))
-                object.assent = false;
             
             //The import attribute is interpreted.
             //This declation loads the content and replaces the inner HTML of an
@@ -1304,10 +1295,13 @@ if (typeof Composite === "undefined") {
                         object: object,
                         selector: selector,
                         task: function(interval) {
+                            var serial = interval.selector.ordinal();
+                            var object = Composite.render.meta[serial];
                             var interrupt = !document.body.contains(interval.selector);
                             //TODO: condition
-                            if (interval.selector.hasAttribute(Composite.ATTRIBUTE_CONDITION)
-                                    && (interval.selector.getAttribute(Composite.ATTRIBUTE_CONDITION) || "").trim().toLowerCase() != "true")
+                            if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                                    && (!object.condition.element
+                                            || !document.body.contains(object.condition.element)))
                                 interrupt = true;
                             for (var selector = interval.selector;
                                     !interrupt && selector;
@@ -1398,7 +1392,7 @@ if (typeof Composite === "undefined") {
             //the attributes of the element can be overwritten in a render cycle
             //and are available (conserved) for further cycles. A special case
             //is the text element. The result is output here as textContent.
-            //Script and style elements are ignored.
+            //Elements of type: script + style are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 var attributes = Array.from(selector.attributes || new Array());
                 attributes = attributes.map(entry => entry.name);
@@ -1453,7 +1447,7 @@ if (typeof Composite === "undefined") {
                     }
                 }
             }
-
+            
             //Follow other element children recursively.
             //Elements of type: script + style and custom tags are ignored.
             if (selector.childNodes
@@ -1462,11 +1456,11 @@ if (typeof Composite === "undefined") {
                     if (node.nodeType != Node.TEXT_NODE) {
                         var serial = node.ordinal();
                         var object = Composite.render.meta[serial];
-                        //Ignore all elements with condition, this is the markup
-                        //to the placeholders. However, only the placeholders
-                        //are processed and controlled.
-                        if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION))
-                            return;
+                        //Ignore all placeholder outputs.
+                        //Rendering is only done via the placeholder.
+                        if (object)
+                            if (object.hasOwnProperty("placeholder"))
+                                return;
                     }
                     Composite.asynchron(Composite.render, sequence, node, sequence, lock);
                 });
@@ -1516,17 +1510,16 @@ if (typeof Composite === "undefined") {
                         if (stack.indexOf(node) >= 0)
                             return;                
                         stack.push(node);
-                        if (node.nodeType != Node.TEXT_NODE) {
-                            var serial = mutation.target.ordinal();
-                            var object = Composite.render.meta[serial];
-                            //Ignore all elements with condition, this is the
-                            //markup to the placeholders. However, only the
-                            //placeholders are processed and controlled.
-                            if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                                object.assent = false;
-                                return;
-                            }
-                        }
+                        var serial = node.ordinal();
+                        var object = Composite.render.meta[serial];
+                        //Ignore all placeholders. The corresponding output
+                        //elements are generated when the placeholder is created
+                        //and rendered, and are then rendered initially.
+                        if (object)
+                            if (object.hasOwnProperty("template")
+                                    || object.hasOwnProperty("output")
+                                    || object.hasOwnProperty("placeholder"))
+                            return;
                         Composite.render(node);
                     });
                 }
