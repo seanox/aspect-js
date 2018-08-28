@@ -47,6 +47,9 @@
             },
             isVisibleC:function() {
                 return count < 3;
+            },
+            isVisibleD:function() {
+                return count % 2 == 0;
             }
     };
     </script>
@@ -72,7 +75,7 @@
     </div>
     <div id="OutputD">D:</div>
     <div>
-      <script type="composite/javascript" condition={{ModelA.isVisibleA()}}>
+      <script type="composite/javascript" condition={{ModelA.isVisibleD()}}>
          OutputD.textContent += "D" + count;        
       </script>
     </div>
