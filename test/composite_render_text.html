@@ -24,7 +24,7 @@
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (++count < 3)
                 Composite.render(document.body);
-            else if (count < 4)
+            else if (count == 3)
                 Test.start();
         });
         

@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180827
+ *  Composite 1.0 20180903
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180827
+ *  @version 1.0 20180903
  */
 if (typeof Composite === "undefined") {
     
@@ -380,35 +380,12 @@ if (typeof Composite === "undefined") {
     Composite.asynchron = function(task, sequence, variants) {
         
         var method = function(invoke, variants) {
-            
-            try {invoke.apply(null, variants);
-            } finally {
-                if (invoke == Composite.scan
-                        || invoke == Composite.mount) {
-                    Composite.scan.ticks--;
-                    if (Composite.scan.ticks <= 0) {
-                        variants.unshift(Composite.EVENT_SCAN_END);
-                        Composite.fire.apply(null, variants);    
-                        Composite.scan.lock = false;
-                    }
-                } else {
-                    Composite.render.ticks--;
-                    if (Composite.render.ticks <= 0) {
-                        variants.unshift(Composite.EVENT_RENDER_END);
-                        Composite.fire.apply(null, variants);    
-                        Composite.render.lock = false;
-                    }
-                }
-            }
+            invoke.apply(null, variants);
         };
         
         arguments = Array.from(arguments);
         arguments = arguments.slice(2);
         
-        if (task == Composite.scan
-                || task == Composite.mount)
-            Composite.scan.ticks++;
-        else Composite.render.ticks++;
         if (sequence)
             method(task, arguments);
         else window.setTimeout(method, 0, task, arguments);
@@ -531,34 +508,29 @@ if (typeof Composite === "undefined") {
      *  method call.
      */
     Composite.scan = function(selector, lock) {
-
-        if (!selector)
+        
+        Composite.scan.queue = Composite.scan.queue || new Array();
+        
+        //The lock locks concurrent scan requests.
+        //Concurrent scaning causes unexpected effects.
+        if (Composite.scan.lock
+                && Composite.scan.lock != lock) {
+            if (!Composite.scan.queue.includes(selector))
+                Composite.scan.queue.push(selector);
             return;
+        }
 
+        if (Composite.scan.lock === undefined
+                || Composite.scan.lock === false)
+            Composite.scan.lock = {ticks:1, selector:selector, share:function() {this.ticks++; return this;}};
+        var lock = Composite.scan.lock;
+            
         try {
             
-            Composite.scan.queue = Composite.scan.queue || new Array();
-            
-            //The lock locks concurrent scan requests.
-            //Concurrent scaning causes unexpected effects.
-            if (Composite.scan.lock
-                    && Composite.scan.lock != lock) {
-                if (Composite.scan.queue.includes(selector))
-                    return;
-                Composite.asynchron(Composite.scan, false, selector, lock);
-                return;
-            }
-            if (!Composite.scan.lock)
-                Composite.scan.lock = new Date().getTime();
-            lock = Composite.scan.lock;
-            
-            Composite.scan.queue = Composite.scan.queue.filter(entry => entry == selector);
-
-            Composite.scan.ticks = Composite.scan.ticks || 0;
             var event = Composite.EVENT_SCAN_START;
-            if (Composite.scan.ticks > 0)
+            if (lock.ticks > 1)
                 event = Composite.EVENT_SCAN_NEXT;
-            Composite.fire(event, selector);
+            Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
                 selector = selector.trim();
@@ -566,7 +538,7 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.scan, false, node, lock);
+                    Composite.asynchron(Composite.scan, false, node, lock.share());
                 });
                 return; 
             }
@@ -587,8 +559,18 @@ if (typeof Composite === "undefined") {
                     Composite.asynchron(Composite.mount, false, node);
             });
         } finally {
-            if (Composite.scan.ticks <= 0)
-                Composite.fire(Composite.EVENT_SCAN_END);
+        
+            Composite.scan.queue = Composite.scan.queue.filter(entry => entry == lock.selector);
+            
+            lock.ticks--;
+            if (lock.ticks >= 0)
+                return;
+            Composite.scan.lock = false;
+            Composite.fire(Composite.EVENT_SCAN_END, lock.selector);
+            
+            selector = Composite.scan.queue.shift();
+            if (selector)
+                Composite.asynchron(Composite.scan, {arguments:[selector]});
         }
     };
     
@@ -788,35 +770,32 @@ if (typeof Composite === "undefined") {
         
         if (!selector)
             return;
-        
-        try {
 
-            Composite.render.queue = Composite.render.queue || new Array();
-            
-            //The lock locks concurrent render requests.
-            //Concurrent rendering causes unexpected states due to manipulations
-            //at the DOM. HTML elements that are currently being processed can
-            //be omitted or replaced from the DOM. Access to parent and child
-            //elements may then no longer be possible.
-            if (Composite.render.lock
-                    && Composite.render.lock != lock) {
-                if (Composite.render.queue.includes(selector))
-                    return;
+        Composite.render.queue = Composite.render.queue || new Array();
+        
+        //The lock locks concurrent render requests.
+        //Concurrent rendering causes unexpected states due to manipulations
+        //at the DOM. HTML elements that are currently being processed can
+        //be omitted or replaced from the DOM. Access to parent and child
+        //elements may then no longer be possible.
+        if (Composite.render.lock
+                && Composite.render.lock != lock) {
+            if (!Composite.render.queue.includes(selector))
                 Composite.render.queue.push(selector);
-                Composite.asynchron(Composite.render, sequence, selector, sequence, lock);
-                return;
-            }
-            if (!Composite.render.lock)
-                Composite.render.lock = new Date().getTime();
-            lock = Composite.render.lock;
+            return;
+        }
+
+        if (Composite.render.lock === undefined
+                || Composite.render.lock === false)
+            Composite.render.lock = {ticks:1, selector:selector, share:function() {this.ticks++; return this;}};
+        var lock = Composite.render.lock;
             
-            Composite.render.queue = Composite.render.queue.filter(entry => entry == selector);
+        try {
             
-            Composite.render.ticks = Composite.render.ticks || 0;
             var event = Composite.EVENT_RENDER_START;
-            if (Composite.render.ticks > 0)
+            if (lock.ticks > 1)
                 event = Composite.EVENT_RENDER_NEXT;
-            Composite.fire(event, selector);
+            Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
                 selector = selector.trim();
@@ -824,7 +803,7 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.render, sequence, node, sequence, lock);
+                    Composite.asynchron(Composite.render, sequence, node, sequence, lock.share());
                 });
                 return;
             }
@@ -901,23 +880,27 @@ if (typeof Composite === "undefined") {
                             ? object.attributes[Composite.ATTRIBUTE_CONDITION] : null;
                     delete object.attributes[Composite.ATTRIBUTE_CONDITION];        
                     if (condition) {
+                        
+                        //The initial HTML element is replaced by a placeholder.
+                        //Because the meta object is also replaced, all
+                        //attributes must be completely copied for later
+                        //rendering, excluding the attribute 'condition', which
+                        //is controlled by the placeholder and should not create
+                        //a new or recursive placeholder.
+                        delete object.attributes[Composite.ATTRIBUTE_CONDITION];
+                        
+                        //The placeholder and its meta object are created.
+                        var placeholder = document.createTextNode("");
+                        object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
+                                condition:condition, template:selector.cloneNode(true), output:null
+                        };
+
+                        //The Meta object is registered.
+                        Composite.render.meta[object.serial] = object;
 
                         //The meta object for the HTML element is removed,
                         //because only the new placeholder is relevant.
                         delete Composite.render.meta[serial];
-                        
-                        var template = document.createElement(selector.parentNode.nodeName);
-                        template.innerHTML = selector.outerHTML;
-                        template = Array.from(template.childNodes).shift();
-                        
-                        //The placeholder and its meta object are created.
-                        var placeholder = document.createTextNode("");
-                        object = {serial:placeholder.ordinal(), element:placeholder, attributes:{},
-                                condition:condition, template:template, output:null
-                        };
-                        
-                        //The Meta object is registered.
-                        Composite.render.meta[object.serial] = object;
                         
                         //The HTML element is replaced by the /placeholder. This
                         //change at the DOM triggers the MutationObserver, which
@@ -987,7 +970,6 @@ if (typeof Composite === "undefined") {
                 //New/unknown text nodes must be analyzed and prepared.
                 //If the meta object for text nodes Composite.ATTRIBUTE_TEXT and
                 //Composite.ATTRIBUTE_VALUE are not contained, it must be new.
-                
                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)) {
                     object.render();
                     return;
@@ -1110,10 +1092,19 @@ if (typeof Composite === "undefined") {
                         //finally and inserted before the placeholder.
                         //Therefore, rendering can be stopped afterwards.
                         var template = placeholder.template.cloneNode(true);
-                        Composite.render(template, true, lock);
                         placeholder.output = template;
+                        
+                        //The meta object is prepared and registered so that
+                        //the attributes of the placeholder are available for
+                        //rendering.
                         var serial = template.ordinal();
-                        var object = Composite.render.meta[serial];
+                        var object = {serial:serial, element:template, attributes:object.attributes};
+                        Composite.render.meta[serial] = object; 
+                        
+                        //The placeholder output is rendered recursively and
+                        //finally and inserted in the iterate container.
+                        //Therefore, rendering can be stopped afterwards.
+                        Composite.render(template, true, lock.share());
                         object.placeholder = placeholder;
                         selector.parentNode.insertBefore(template, selector);
                         return;
@@ -1187,7 +1178,7 @@ if (typeof Composite === "undefined") {
                                 var context = serial + ":" + Composite.ATTRIBUTE_RENDER;
                                 render = Expression.eval(context, render);
                             }
-                            Composite.asynchron(Composite.render, false, render, lock);
+                            Composite.asynchron(Composite.render, false, render, lock.share());
                         }
                     });                    
                 });
@@ -1205,7 +1196,7 @@ if (typeof Composite === "undefined") {
             //true.
             //If the content can be loaded successfully, the import attribute is
             //removed. Recursive rendering is initiated via the MutationObserver.
-            //TODO: condition + import
+            //TODO: condition + import (use a cache for imports)
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
                 if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
@@ -1270,6 +1261,7 @@ if (typeof Composite === "undefined") {
                 } else selector.innerHTML = value;
             }
 
+            //TODO: Doku (condition)
             //The interval attribute is interpreted.
             //Interval rendering based on a window interval.
             //If an HTML element is declared as interval, its initial inner HTML
@@ -1290,29 +1282,23 @@ if (typeof Composite === "undefined") {
                 var context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
                 interval = String(Expression.eval(context, interval));
                 if (interval.match(/^\d+$/)) {
+                    //TODO:
+                    if (object.hasOwnProperty("placeholder")) {
+                        object = object.placeholder;
+                        selector = object.element;
+                    }
                     interval = parseInt(interval);
                     object.interval = {
-                        object: object,
-                        selector: selector,
-                        task: function(interval) {
+                        object:object,
+                        selector:selector,
+                        task:function(interval) {
                             var serial = interval.selector.ordinal();
                             var object = Composite.render.meta[serial];
                             var interrupt = !document.body.contains(interval.selector);
-                            //TODO: condition
                             if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
                                     && (!object.condition.element
                                             || !document.body.contains(object.condition.element)))
                                 interrupt = true;
-                            for (var selector = interval.selector;
-                                    !interrupt && selector;
-                                    selector = selector.parentNode) {
-                                if (selector.style
-                                        && selector.style.display
-                                        && selector.style.display.trim().toLowerCase() == "none")
-                                    interrupt = true;
-                                if (selector == document.body)
-                                    break;
-                            }
                             if (interrupt) {
                                 window.clearInterval(interval.serial);
                                 delete interval.object.interval                         
@@ -1324,6 +1310,7 @@ if (typeof Composite === "undefined") {
                     console.error("Invalid interval: " + interval);
             }
             
+            //TODO: Doku
             //The iterate attribute is interpreted.
             //Iterative rendering based on lists, enumeration and arrays.
             //If an HTML element is declared iteratively, its initial inner HTML
@@ -1347,17 +1334,14 @@ if (typeof Composite === "undefined") {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
                     var content = iterate.match(Composite.PATTERN_EXPRESSION_EXCLUSIVE);
                     content = content ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE) : null;
-                    if (content)
+                    if (content) {
                         object.iterate = {name:content[1].trim(),
-                            expression:"{{" + content[2].trim() + "}}",
-                            markup:selector.innerHTML};
-                    else console.error("Invalid iterate: " + iterate);
+                                expression:"{{" + content[2].trim() + "}}"
+                        };
+                        object.template = selector.cloneNode(true);
+                    } else console.error("Invalid iterate: " + iterate);
                 }
                 if (object.iterate) {
-                    //The internal rendering creates temporary composite meta
-                    //objects. These meta objects contain meta information in
-                    //their attributes
-                    var elements = Array.from(Composite.render.meta);
                     //A temporary global variable is required for the iteration.
                     //If this variable already exists, the existing method is
                     //cahced and restored at the end of the iteration.
@@ -1369,11 +1353,11 @@ if (typeof Composite === "undefined") {
                         if (iterate) {
                             iterate = Array.from(iterate);
                             iterate.forEach(function(item, index, array) {
-                                var temp = document.createElement(object.element.nodeName);
                                 window[object.iterate.name] = {item:item, index:index, data:array};
-                                temp.innerHTML = object.iterate.markup;
-                                Composite.render(temp, true, lock);
-                                selector.appendChild(temp.childNodes);
+                                var template = object.template.cloneNode(true);
+                                Composite.render(template, true, lock.share());
+                                selector.appendChild(template.childNodes);
+                                delete Composite.render.meta[template.ordinal()];                                 
                             });
                         }
                     } finally {
@@ -1382,8 +1366,10 @@ if (typeof Composite === "undefined") {
                             delete window[object.iterate.name];
                         else window[object.iterate.name] = variable;
                     }
-                    //Removing temporary meta objects.
-                    Composite.render.meta = elements;
+                    //The output of iterate is rendered recursively and finally
+                    //and inserted in the iterate container. Therefore,
+                    //rendering can be stopped afterwards.
+                    return;
                 }
             }
             
@@ -1462,13 +1448,23 @@ if (typeof Composite === "undefined") {
                             if (object.hasOwnProperty("placeholder"))
                                 return;
                     }
-                    Composite.asynchron(Composite.render, sequence, node, sequence, lock);
+                    Composite.asynchron(Composite.render, sequence, node, sequence, lock.share());
                 });
             }
 
         } finally {
-            if (Composite.render.ticks <= 0)
-                Composite.fire(Composite.EVENT_RENDER_END, selector);
+        
+            Composite.render.queue = Composite.render.queue.filter(entry => entry == lock.selector);
+            
+            lock.ticks--;
+            if (lock.ticks > 0)
+                return;
+            Composite.render.lock = false;
+            Composite.fire(Composite.EVENT_RENDER_END, lock.selector);
+            
+            selector = Composite.render.queue.shift();
+            if (selector)
+                Composite.asynchron(Composite.render, false, selector);
         }
     };
 
@@ -1510,16 +1506,22 @@ if (typeof Composite === "undefined") {
                         if (stack.indexOf(node) >= 0)
                             return;                
                         stack.push(node);
+                        //Ignore all text nodes. These are filled with the final
+                        //text content during rendering.
+                        if (node.nodeType == Node.TEXT_NODE)
+                            return;
                         var serial = node.ordinal();
                         var object = Composite.render.meta[serial];
                         //Ignore all placeholders. The corresponding output
                         //elements are generated when the placeholder is created
                         //and rendered, and are then rendered initially.
-                        if (object)
+                        if (object) {
                             if (object.hasOwnProperty("template")
                                     || object.hasOwnProperty("output")
-                                    || object.hasOwnProperty("placeholder"))
-                            return;
+                                    || object.hasOwnProperty("placeholder")
+                                    || object.attributes.hasOwnProperty("value"))
+                                return;
+                        }
                         Composite.render(node);
                     });
                 }

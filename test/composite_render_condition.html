@@ -38,7 +38,13 @@
               toggleD: function() {
                   this.onD = !this.onD;
                   return this.onD;
-              }
+              },
+              onE: false,
+              toggleE: function() {
+                  this.onE = !this.onE;
+                  return this.onE;
+              },
+              listE: ["a", "b", "c"]
         };
         
         var snapshots = new Array();
@@ -56,7 +62,6 @@
             window.clearInterval(interval);
             Test.start();
         }, 250);
-        
         var x1 = 0;
         var x2 = 0;
         var x3 = 0;
@@ -89,10 +94,11 @@
     C2CC    
     false
     true
-    O1: 1x1++; output1.textContent = x1;
-    O2: 1x2++; output2.textContent = x2;
-    O3: 1 falsex3++; output3.textContent = x3;
-    O4: 1 falsex4++; output4.textContent = x4;
+    O1: 1 x1++; output1.textContent = x1;
+    O2: 1 x2++; output2.textContent = x2;
+    O3: 1 false x3++; output3.textContent = x3;
+    O4: 1 false x4++; output4.textContent = x4;
+    E::E
     A3-1 
     A3-2
     A3-3
@@ -109,10 +115,11 @@
     C2CC    
     false
     true
-    O1: 1x1++; output1.textContent = x1;
-    O2: 2x2++; output2.textContent = x2;
+    O1: 1 x1++; output1.textContent = x1;
+    O2: 2 x2++; output2.textContent = x2;
     O3: 1 true
-    O4: 1 true    
+    O4: 1 true
+    E:abc:E    
     </script>
     <script type="text/test-3">
     A1AA
@@ -125,10 +132,11 @@
     C2C    
     true
     false
-    O1: 1x1++; output1.textContent = x1;
-    O2: 3x2++; output2.textContent = x2;
-    O3: 1 falsex3++; output3.textContent = x3;
-    O4: 2 falsex4++; output4.textContent = x4;
+    O1: 1 x1++; output1.textContent = x1;
+    O2: 3 x2++; output2.textContent = x2;
+    O3: 1 false x3++; output3.textContent = x3;
+    O4: 2 false x4++; output4.textContent = x4;
+    E::E
     A3-1 
     A3-2
     A3-3
@@ -146,10 +154,11 @@
     C2C    
     true
     false
-    O1: 1x1++; output1.textContent = x1;
-    O2: 4x2++; output2.textContent = x2;
+    O1: 1 x1++; output1.textContent = x1;
+    O2: 4 x2++; output2.textContent = x2;
     O3: 1 true
-    O4: 2 true    
+    O4: 2 true
+    E:abc:E    
     </script>
     <script type="text/test-5">
     A1AA
@@ -162,10 +171,11 @@
     C2CC    
     false
     true
-    O1: 1x1++; output1.textContent = x1;
-    O2: 5x2++; output2.textContent = x2;
-    O3: 1 falsex3++; output3.textContent = x3;
-    O4: 3 falsex4++; output4.textContent = x4;
+    O1: 1 x1++; output1.textContent = x1;
+    O2: 5 x2++; output2.textContent = x2;
+    O3: 1 false x3++; output3.textContent = x3;
+    O4: 3 false x4++; output4.textContent = x4;
+    E::E
     A3-1 
     A3-2
     A3-3
@@ -187,14 +197,16 @@
     {{Model.toggleA()}}
     
     O1: <span id="output1">
-      </span><script type="text/javascript">x1++; output1.textContent = x1;</script>
+      </span> <script type="text/javascript">x1++; output1.textContent = x1;</script>
     O2: <span id="output2">
-      </span><script type="composite/javascript">x2++; output2.textContent = x2;</script>
-    O3: <span id="output3"></span> {{Model.onC}}<script type="text/javascript"
+      </span> <script type="composite/javascript">x2++; output2.textContent = x2;</script>
+    O3: <span id="output3"></span> {{Model.onC}} <script type="text/javascript"
         condition="{{Model.toggleC()}}">x3++; output3.textContent = x3;</script>
-    O4: <span id="output4"></span> {{Model.onD}}<script type="composite/javascript"
+    O4: <span id="output4"></span> {{Model.onD}} <script type="composite/javascript"
         condition="{{Model.toggleD()}}">x4++; output4.textContent = x4;</script>
         
+    E:<span iterate="{{list:Model.listE}}" condition="{{not Model.toggleE()}}"><span>{{list.item}}</span></span>:E
+
     <span condition="{{Model.toggleB()}}">A3-1 
       <span condition="{{true}}">A3-2
         <span condition="{{true}}">A3-3
@@ -204,6 +216,6 @@
           </span>
         </span>
       </span>
-    </span>            
+    </span>
   </body>
 </html>
