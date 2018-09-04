@@ -16,21 +16,21 @@
     <script type="text/javascript"> 
     
         var TestModel = {
+            isVisibleA: true,
             outputA: function() {
                 return "A1<span>A2<span>A3</span></span>";
             },
-            isVisibleA: true,
+            isVisibleB: false,
             outputB: function() {
                 return "B1<span>B2 B3:{{TestModel.isVisibleB3}}<span condition='{{TestModel.isVisibleB3}}'>B3</span></span>";
             },
-            isVisibleB: false,
+            isVisibleB3: false,
             outputB3: function() {
                 return "B3";
             },
-            isVisibleB3: false,
+            isVisibleC: false,
             outputC: function() {
-            },
-            isVisibleC: false
+            }
         };
 
         var results = new Array();
@@ -55,14 +55,13 @@
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
-            
             switch (++counter) {
                 case 1:
-                    Composite.render("#B0");
+                    Composite.render(document.body);
                     break;
                 case 2:
                     TestModel.isVisibleB = true;
-                    Composite.render("#B0");
+                    Composite.render(document.body);
                     break;   
                 case 3:
                     TestModel.isVisibleB3 = true;
@@ -86,7 +85,7 @@
   </script>
   <script type="text/test-3">
     A:A1A2A3
-    B:B1B2 B3:falseB3
+    B:B1B2 B3:false
     C:
   </script>
   <script type="text/test-4">
