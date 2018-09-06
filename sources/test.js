@@ -83,14 +83,14 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20180723
+ *  Test 1.0 20180906
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180723
+ *  @version 1.0 20180906
  */
-if (typeof(Test) === "undefined") {
+if (typeof Test === "undefined") {
     
     /**
      *  Static component for creating and executing tests.
@@ -242,15 +242,15 @@ if (typeof(Test) === "undefined") {
      */
     Test.configure = function(options) {
         
-        if (typeof(options) !== "object"
-                && typeof(options) !== "function")
+        if (typeof options !== "object"
+                && typeof options !== "function")
             return;
         
-        if (typeof(options.output) === "object"
-                || typeof(options.output) === "function")
+        if (typeof options.output === "object"
+                || typeof options.output === "function")
             Test.output = options.output;
-        if (typeof(options.monitor) === "object"
-                || typeof(options.monitor) === "function")
+        if (typeof options.monitor === "object"
+                || typeof options.monitor === "function")
             Test.monitor = options.monitor;
     };
     
@@ -264,12 +264,12 @@ if (typeof(Test) === "undefined") {
      */
     Test.listen = function(event, callback) {
         
-        if (typeof(event) !== "string")
-            throw new TypeError("Invalid event: " + typeof(event));
-        if (typeof(callback) !== "function"
+        if (typeof event !== "string")
+            throw new TypeError("Invalid event: " + typeof event);
+        if (typeof callback !== "function"
                 && callback !== null
                 && callback !== undefined)
-            throw new TypeError("Invalid callback: " + typeof(callback));        
+            throw new TypeError("Invalid callback: " + typeof callback);        
         if (!event.match(Test.PATTERN_EVENT))
             throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
         
@@ -288,8 +288,8 @@ if (typeof(Test) === "undefined") {
      */
     Test.fire = function(event, status) {
         
-        if (typeof(Test.monitor) === "object"
-            && typeof(Test.monitor[event]) === "function")
+        if (typeof Test.monitor === "object"
+            && typeof Test.monitor[event] === "function")
         try {Test.monitor[event](status);
         } catch (error) {
             console.error(error);
@@ -349,11 +349,11 @@ if (typeof(Test) === "undefined") {
      */
     Test.create = function(meta) {
         
-        if (typeof(meta) !== "object"
-                || typeof(meta.test) !== "function")
+        if (typeof meta !== "object"
+                || typeof meta.test !== "function")
             return;
         
-        if (typeof(meta.ignore) !== "undefined"
+        if (typeof meta.ignore !== "undefined"
                 && meta.ignore === true)
             return;
         
@@ -379,7 +379,7 @@ if (typeof(Test) === "undefined") {
             return;
 
         if (auto && document.readyState == "loaded") {
-            if (typeof(Test.autostart) === "undefined") {
+            if (typeof Test.autostart === "undefined") {
                 Test.autostart = true;
                 window.addEventListener("load", function() {
                     Test.start();
@@ -471,7 +471,7 @@ if (typeof(Test) === "undefined") {
                     timeout = new Date().getTime() +meta.timeout;
                 Test.task = {title:null, meta:meta, running:true, timing:new Date().getTime(), timeout:timeout, duration:false, error:null};
                 Test.task.title = "#" + meta.serial;
-                if (typeof(meta.name) === "string"
+                if (typeof meta.name === "string"
                         && meta.name.trim().length > 0)
                     Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                 Test.fire(Test.EVENT_PERFORM, Test.status());
@@ -486,10 +486,10 @@ if (typeof(Test) === "undefined") {
                     } finally {
                         if (task.meta.expected) {
                             if (task.error) {
-                                if (typeof(task.meta.expected) === "function"
+                                if (typeof task.meta.expected === "function"
                                         && task.error instanceof(task.meta.expected))
                                     task.error = null;
-                                if (typeof(task.meta.expected) === "object"
+                                if (typeof task.meta.expected === "object"
                                         && task.meta.expected instanceof(RegExp)
                                         && String(task.error).match(task.meta.expected))
                                     task.error = null;
@@ -628,7 +628,7 @@ if (typeof(Test) === "undefined") {
     };    
 };
 
-if (typeof(Assert) === "undefined") {
+if (typeof Assert === "undefined") {
 
     /**
      *  A set of assertion methods useful for writing tests.
@@ -756,6 +756,23 @@ if (typeof(Assert) === "undefined") {
             return;
         throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
     };
+    
+    /**
+     *  Enhancement of the Test/Assert API
+     *  Adds a equals methode for a template to the Assert objects.
+     *  Spaces at the beginning and end of lines are ignored.
+     */
+    Assert.assertEqualsTo = function(selector, actual) {
+        var element = document.querySelector(selector);
+        var content = element.innerHTML.trim().replace(/\t/g, "    ");
+        content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        content = content.replace(/(^\s+)|(\s+$)/gm, "");
+        actual = actual.trim();
+        actual = actual.replace(/\t/g, "    ");
+        actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
+        Assert.assertEquals(content, actual);    
+    };    
 
     /**
      *  Asserts that two values are the same.
@@ -845,3 +862,117 @@ if (typeof(Assert) === "undefined") {
         throw new Error(message);
     }
 };
+
+/**
+ *  Implementation of a redirection of the console when using tests in IFrames.
+ *  Redirection  is based on calling message events in the parent document.
+ *  The message events are on methods for console levels: INFO, ERROR, WARN, LOG.
+ *  
+ *      Example:
+ *      
+ *  var onLog = function(message) {
+ *      ....
+ *  }
+ */
+if (typeof parent !== "undefined") {
+    
+    /** 
+     *  General method for redirecting console levels.
+     *  @param level
+     *  @param variants
+     */
+    console.forward = function(level, variants) {
+        
+        var invoke;
+        if (parent)
+            invoke = parent["on" + level.capitalize()];
+        if (invoke == null)
+            invoke = console.forward[level];
+        invoke.apply(null, variants);
+    };
+    
+    /** Redirect for the level: LOG */
+    console.forward.log = console.log;
+    console.log = function(message) {
+        console.forward("log", arguments);
+    };
+    
+    /** Redirect for the level: WARN */
+    console.forward.warn = console.warn;
+    console.warn = function(message) {
+        console.forward("warn", arguments);
+    };
+    
+    /** Redirect for the level: ERROR */
+    console.forward.error = console.error;
+    console.error = function(message) {
+        console.forward("error", arguments);
+    };
+    
+    /** Redirect for the level: INFO */
+    console.forward.info = console.info;
+    console.info = function(message) {
+        console.forward("info", arguments);
+    };
+    
+    /** Registration of events for redirection */
+    if (typeof parent.onFinish === "function")
+        Test.listen(Test.EVENT_FINISH, parent.onFinish);
+    if (typeof parent.onInterrupt === "function")
+        Test.listen(Test.EVENT_INTERRUPT, parent.onInterrupt);
+    if (typeof parent.onPerform === "function")
+        Test.listen(Test.EVENT_PERFORM, parent.onPerform);
+    if (typeof parent.onResponse === "function")
+        Test.listen(Test.EVENT_RESPONSE, parent.onResponse);
+    if (typeof parent.onResume === "function")
+        Test.listen(Test.EVENT_RESUME, parent.onResume);
+    if (typeof parent.onStart === "function")
+        Test.listen(Test.EVENT_START, parent.onStart);
+    if (typeof parent.onSuspend === "function")    
+        Test.listen(Test.EVENT_SUSPEND, parent.onSuspend);
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a method that simulates keyboard input to the Element objects.
+ *  The following events are triggered during simulation:
+ *      focus, keydown, keyup, change
+ *  @param value simulated input value
+ *  @param clear option false suppresses emptying before input
+ */ 
+if (Element.prototype.typeValue === undefined) {
+    Element.prototype.typeValue = function(value, clear) {
+        this.focus();
+        if (clear !== false)
+            this.value = "";
+        var element = this;
+        value = (value || "").split("");
+        value.forEach(function(digit, index, array) {
+            element.trigger("keydown");
+            element.value = (element.value || "") + digit;
+            element.trigger("keyup");
+        });
+        this.trigger("change");
+    };     
+};
+
+if (Object.prototype.toPlainString === undefined)
+    Object.prototype.toPlainString = function() {
+        return JSON.stringify(this);
+    };     
+
+if (Element.prototype.toPlainString === undefined)
+    Element.prototype.toPlainString = function() {
+        return this.outerHTML;
+    };     
+    
+if (Element.prototype.trigger === undefined)
+    Element.prototype.trigger = function(event, bubbles, cancelable) {
+        var trigger = document.createEvent("Event");
+        if (arguments.length < 2)
+            bubbles = false;
+        if (arguments.length < 3)
+            cancelable = true;
+        trigger.initEvent(event, bubbles, cancelable);
+        this.dispatchEvent(trigger);
+    };     

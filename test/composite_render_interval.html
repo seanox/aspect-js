@@ -11,7 +11,6 @@
     <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
-    <script src="../sources/testutils.js"></script>
     <script type="text/javascript"> 
         
         var results = new Array();
@@ -23,174 +22,138 @@
         var b2 = 0;
         var c2 = 0;
         
-        var a1condition = false; 
+        var aCondition = false; 
         
+        var snapshots = new Array();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (typeof Test.started !== "undefined")
                 return;
             Test.started = true;
             
-            var snapshots = new Array();
             var counter = 0;
             var timer = window.setInterval(function() {
                 ++counter;
                 var snapshot = document.body.textContent;
                 snapshot = snapshot.replace(/^\s+/mg, "");
+                snapshot = snapshot.replace(/(:)\s+/g, "$1 ");
+                snapshot = snapshot.replace(/\sout.*?;/g, "");
+                snapshot = snapshot.replace(/\sPlease.*$/im, "");
+                snapshot = snapshot.replace(/:\s+(\S+)/g, "=$1;");
                 snapshots.push(snapshot);
                 if (counter == 3) {
-                    a1condition = true; 
-                    Composite.render("#TestA");                       
+                    aCondition = true; 
+                    Composite.render(document.body);                       
                 }
                 if (counter == 6) {
-                    a1condition = false; 
+                    aCondition = false; 
                     Composite.render("#TestA");                       
                 }
-                if (counter < 9)
+                if (counter == 9) {
+                    aCondition = true; 
+                    Composite.render(document.body);                       
+                }
+                if (counter < 12)
                     return;
                 window.clearInterval(timer);
                 Test.start();
-            }, 1000);
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertTrue(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 4);
-                var b1 = parseInt(match[0]);
-                var c1 = parseInt(match[1]);
-                Assert.assertTrue(a1 < b1 && b1 == c1);
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertTrue(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 4);
-                var b2 = parseInt(match[0]);
-                var c2 = parseInt(match[1]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                a1 = a2; b1 = b2; c1 = c2;
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertTrue(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 4);
-                var b2 = parseInt(match[0]);
-                var c2 = parseInt(match[1]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                Assert.assertTrue(a1 == a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertFalse(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 5);
-                var a2 = parseInt(match[0]);
-                var b2 = parseInt(match[1]);
-                var c2 = parseInt(match[2]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                Assert.assertTrue(a1 < a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertFalse(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 5);
-                var a2 = parseInt(match[0]);
-                var b2 = parseInt(match[1]);
-                var c2 = parseInt(match[2]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                Assert.assertTrue(a1 < a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }});  
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertFalse(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 5);
-                var a2 = parseInt(match[0]);
-                var b2 = parseInt(match[1]);
-                var c2 = parseInt(match[2]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                Assert.assertTrue(a1 < a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertFalse(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 5);
-                var a2 = parseInt(match[0]);
-                var b2 = parseInt(match[1]);
-                var c2 = parseInt(match[2]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                Assert.assertTrue(a1 == a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertFalse("A", new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue("B", new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue("C", !!match);
-                Assert.assertTrue("D", match.length == 5);
-                var a2 = parseInt(match[0]);
-                var b2 = parseInt(match[1]);
-                var c2 = parseInt(match[2]);
-                Assert.assertTrue("E", a2 < b2 && b2 > c2);
-                Assert.assertTrue("F", a1 == a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }}); 
-            Test.create({test:function() {
-                var snapshot = snapshots.shift();
-                Assert.assertFalse(new RegExp(".*\{").test(snapshot));
-                Assert.assertTrue(new RegExp(".*Please wait, test in progress\\.\\.\\.").test(snapshot));
-                var match = snapshot.match(/^\d+/gm);
-                Assert.assertTrue(!!match);
-                Assert.assertTrue(match.length == 5);
-                var a2 = parseInt(match[0]);
-                var b2 = parseInt(match[1]);
-                var c2 = parseInt(match[2]);
-                Assert.assertTrue(a2 < b2 && b2 > c2);
-                Assert.assertTrue(a1 == a2 && b1 < b2 && c1 < c2); 
-                a1 = a2; b1 = b2; c1 = c2;
-            }});
-            Test.create({test:function() {
-                Assert.assertTrue(s1 > 3);
-                Assert.assertTrue(s2 > 3);
-            }});
-            Test.create({test:function() {
-                Assert.assertTrue(s1 < s2);
-            }});            
-        });  
+                document.body.textContent = "Please wait, test in progress...";
+                
+            }, 1000);            
+        });
+            
+        Test.create({test:function() {
+            eval(snapshots.shift());
+            Assert.assertTrue(typeof A === 'undefined');
+            Assert.assertTrue(typeof B !== 'undefined');
+            Assert.assertTrue(typeof C !== 'undefined');
+            Assert.assertTrue(typeof S1 !== 'undefined');
+            Assert.assertTrue(typeof S2 !== 'undefined');
+            Assert.assertTrue(B == C && B > 1);
+            Assert.assertTrue(S1 == S2 && S1 == 1);    
+        }}); 
+        Test.create({test:function() {
+            eval(snapshots.shift());
+            Assert.assertTrue(typeof A === 'undefined');
+            Assert.assertTrue(B > C);
+            Assert.assertTrue(S1 < S2);    
+        }}); 
+        Test.create({test:function() {
+            eval(snapshots.shift());
+            Assert.assertTrue(typeof A === 'undefined');
+            Assert.assertTrue(B > C);
+            Assert.assertTrue(S1 < S2);    
+        }});  
+        Test.create({test:function() {
+            eval(snapshots.shift());
+            Assert.assertTrue(typeof A !== 'undefined');
+            Assert.assertTrue(A == B && B == C && A == 3);
+            Assert.assertTrue(S1 == S2 && S1 == 1);              
+        }});   
+        Test.create({test:function() {
+            eval(snapshots.shift());
+            Assert.assertTrue(A > B && B > C && A == 6);
+            Assert.assertTrue(S1 < S2 && S1 == 1);              
+        }});   
+        Test.create({test:function() {
+            eval(snapshots.shift());
+            Assert.assertTrue(A > B && B > C && A == 9);
+            Assert.assertTrue(S1 < S2 && S1 == 2);              
+        }});         
+        Test.create({test:function() {
+            var snapshot = snapshots.shift();
+            eval(snapshot);
+            Assert.assertFalse((/.*A=.*/).test(snapshot));
+            Assert.assertTrue(A == 9 && B > C && B == 8);
+            Assert.assertTrue(S1 < S2 && S1 == 2);              
+        }});    
+        Test.create({test:function() {
+            var snapshot = snapshots.shift();
+            eval(snapshot);
+            Assert.assertFalse((/.*A=.*/).test(snapshot));
+            Assert.assertTrue(A == 9 && B > C && B == 10);
+            Assert.assertTrue(S1 < S2 && S1 == 2);              
+        }});  
+        Test.create({test:function() {
+            var snapshot = snapshots.shift();
+            eval(snapshot);
+            Assert.assertFalse((/.*A=.*/).test(snapshot));
+            Assert.assertTrue(A == 9 && B > C && B == 12);
+            Assert.assertTrue(S1 < S2);              
+        }}); 
+        Test.create({test:function() {
+            var snapshot = snapshots.shift();
+            eval(snapshot);
+            Assert.assertTrue((/.*A=.*/).test(snapshot));
+            Assert.assertTrue(A == B && B >= C && A == 3);
+            Assert.assertTrue(S1 == S2 && S1 == 1);              
+        }});    
+        Test.create({test:function() {
+            var snapshot = snapshots.shift();
+            eval(snapshot);
+            Assert.assertTrue((/.*A=.*/).test(snapshot));
+            Assert.assertTrue(A > B && B == C && A == 6);
+            Assert.assertTrue(S1 < S2 && S1 == 1);
+        }});    
+        Test.create({test:function() {
+            var snapshot = snapshots.shift();
+            eval(snapshot);
+            Assert.assertTrue((/.*A=.*/).test(snapshot));
+            Assert.assertTrue(A > B && B > C && A == 9);
+            Assert.assertTrue(S1 < S2 && S1 == 2);            
+        }});         
     </script>
   </head>
   <body>
     {{xA:0}}
-    <div id="TestA" interval="{{300 +30 +3}}" condition="{{a1condition}}">
+    <div id="TestA" interval="{{300 +30 +3}}" condition="{{aCondition}}">
       {{xA:parseInt(xA)+1}}
-      {{xA}}
+      A: {{xA}}
     </div>
     <div id="TestBC">
       {{xB:0}}
       <div id="TestB" interval="555">
         {{xB:parseInt(xB)+1}}
-        {{xB}}
+        B: {{xB}}
       </div>
     </div>
     <div id="TestCC">
@@ -199,17 +162,17 @@
           {{xC:0}}
           <div id="TestC" interval="777">
             {{xC:parseInt(xC)+1}}
-            {{xC}}
+            C: {{xC}}
           </div>
         </div>
       </div>
     </div>
-    {{s1:0}}
+    S1: {{s1:0}}
     <div id="outputScript1"></div>
     <script type="composite/javascript" interval="3000">
         outputScript1.textContent = ++s1;
     </script>
-    {{s2:0}}
+    S2: {{s2:0}}
     <div id="outputScript2"></div>
     <script type="composite/javascript" interval="1500">
         outputScript2.textContent = ++s2;

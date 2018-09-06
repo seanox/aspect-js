@@ -12,7 +12,6 @@
     <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
-    <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
     
         var results = new Array();
@@ -43,7 +42,7 @@
                 
                 case 1:
                     var actual = document.querySelector("body");
-                    try {Assert.assertEqualsTemplate("script[type='text/test-1']", actual.innerHTML);
+                    try {Assert.assertEqualsTo("script[type='text/test-1']", actual.innerHTML);
                     } catch (exception) {
                         results.push(exception);
                     }
@@ -60,7 +59,7 @@
                     
                 case 2:
                     var actual = document.querySelector("body");
-                    try {Assert.assertEqualsTemplate("script[type='text/test-2']", actual.innerHTML);
+                    try {Assert.assertEqualsTo("script[type='text/test-2']", actual.innerHTML);
                     } catch (exception) {
                         results.push(exception);
                     }

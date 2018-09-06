@@ -64,12 +64,12 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180903
+ *  Composite 1.0 20180906
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180903
+ *  @version 1.0 20180906
  */
 if (typeof Composite === "undefined") {
     
@@ -928,7 +928,7 @@ if (typeof Composite === "undefined") {
             //Therefore the placeholder output is replaced by the placeholder at
             //variable level (selector + serial + object).
             if (object.hasOwnProperty("placeholder")) {
-                selector = object.placeholder;
+                selector = object.placeholder.element;
                 serial = selector.ordinal();
                 object = Composite.render.meta[serial];                
             }
@@ -1282,7 +1282,6 @@ if (typeof Composite === "undefined") {
                 var context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
                 interval = String(Expression.eval(context, interval));
                 if (interval.match(/^\d+$/)) {
-                    //TODO:
                     if (object.hasOwnProperty("placeholder")) {
                         object = object.placeholder;
                         selector = object.element;
@@ -1294,18 +1293,24 @@ if (typeof Composite === "undefined") {
                         task:function(interval) {
                             var serial = interval.selector.ordinal();
                             var object = Composite.render.meta[serial];
+                            
                             var interrupt = !document.body.contains(interval.selector);
-                            if (object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+
+                            if (!object)
+                                interrupt = true;
+                            if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
                                     && (!object.condition.element
                                             || !document.body.contains(object.condition.element)))
                                 interrupt = true;
+
+                            
                             if (interrupt) {
-                                window.clearInterval(interval.serial);
+                                window.clearInterval(interval.timer);
                                 delete interval.object.interval                         
                             } else Composite.render(interval.selector);
                         }
                     };
-                    object.interval.serial = window.setInterval(object.interval.task, interval, object.interval);
+                    object.interval.timer = window.setInterval(object.interval.task, interval, object.interval);
                 } else if (interval)
                     console.error("Invalid interval: " + interval);
             }
@@ -1527,12 +1532,7 @@ if (typeof Composite === "undefined") {
                 }
                 if (mutation.removedNodes) {
                     mutation.removedNodes.forEach(function(node) {
-                        //Duplicates should be prevented.
-                        if (stack.indexOf(node) >= 0)
-                            return;                
-                        stack.push(node);
-                        //TODO: Remove meta object
-                        //      Stop intervals
+                        delete Composite.render.meta[node.ordinal()];
                     });
                 }
             }); 

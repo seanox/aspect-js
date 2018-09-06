@@ -12,7 +12,6 @@
     <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
-    <script src="../sources/testutils.js"></script>
     <script type="text/javascript">
     
         var ModelA = {
@@ -22,7 +21,7 @@
         Test.create({test:function() {
             var content = document.body.innerHTML;
             var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
-            Assert.assertEqualsTemplate("script[type='text/test-" + type + "']", content);            
+            Assert.assertEqualsTo("script[type='text/test-" + type + "']", content);            
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {

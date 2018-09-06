@@ -12,7 +12,6 @@
     <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
-    <script src="../sources/testutils.js"></script>
     <script type="text/javascript"> 
     
         var TestModel = {
@@ -36,16 +35,16 @@
         var results = new Array();
         
         Test.create({test:function() {
-            Assert.assertEqualsTemplate("script[type='text/test-1']", snapshots.shift());            
+            Assert.assertEqualsTo("script[type='text/test-1']", snapshots.shift());            
         }}); 
         Test.create({test:function() {
-            Assert.assertEqualsTemplate("script[type='text/test-2']", snapshots.shift());
+            Assert.assertEqualsTo("script[type='text/test-2']", snapshots.shift());
         }}); 
         Test.create({test:function() {
-            Assert.assertEqualsTemplate("script[type='text/test-3']", snapshots.shift());
+            Assert.assertEqualsTo("script[type='text/test-3']", snapshots.shift());
         }});
         Test.create({test:function() {
-            Assert.assertEqualsTemplate("script[type='text/test-4']", snapshots.shift());
+            Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
         }});
         
         var counter = 0;

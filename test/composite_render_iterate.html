@@ -14,7 +14,6 @@
     <script src="../sources/extension.js"></script>
     <script src="../sources/composite.js"></script>
     <script src="../sources/test.js"></script>
-    <script src="../sources/testutils.js"></script>
     <script type="text/javascript"> 
         
         var TestModel = {
@@ -79,7 +78,7 @@
         Test.create({test:function() {
             var content = document.querySelector("table").outerHTML;
             content = content.replace(/^\s+/mg, "");
-            Assert.assertEqualsTemplate("script[type='text/test-1']", content);
+            Assert.assertEqualsTo("script[type='text/test-1']", content);
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
