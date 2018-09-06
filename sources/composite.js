@@ -1293,17 +1293,13 @@ if (typeof Composite === "undefined") {
                         task:function(interval) {
                             var serial = interval.selector.ordinal();
                             var object = Composite.render.meta[serial];
-                            
                             var interrupt = !document.body.contains(interval.selector);
-
                             if (!object)
                                 interrupt = true;
                             if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
                                     && (!object.condition.element
                                             || !document.body.contains(object.condition.element)))
                                 interrupt = true;
-
-                            
                             if (interrupt) {
                                 window.clearInterval(interval.timer);
                                 delete interval.object.interval                         
