@@ -47,14 +47,12 @@
             Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
         }});
         
-        var counter = 0;
         var snapshots = new Array();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
-            switch (++counter) {
+            switch (snapshots.length) {
                 case 1:
                     Composite.render(document.body);
                     break;

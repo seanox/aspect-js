@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+    
+      var snapshots = new Array();
+      Composite.listen(Composite.EVENT_RENDER_END, function() {
+          var snapshot = document.body.textContent;
+          snapshot = snapshot.replace(/^\s+/mg, "");
+          snapshots.push(snapshot);
+          if (snapshots.length == 8)
+              Composite.render(document.body);
+          if (snapshots.length == 9)
+              Composite.render(document.body);
+          if (snapshots.length == 10)
+              Test.start();
+      });
+    
+      var xA = 5;
+      var xB = 5;
+      var xC = 5;
+      
+      Test.create({test:function() {
+          Assert.assertEquals(10, snapshots.length);
+          Assert.assertEqualsTo("script[type='text/test-1']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-2']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-3']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-5']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-6']", snapshots.shift());
+      }});      
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-7']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-8']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-9']", snapshots.shift());
+      }});
+      Test.create({test:function() {
+          Assert.assertEqualsTo("script[type='text/test-10']", snapshots.shift());
+      }}); 
+    </script>
+    <script type="text/test-1">
+    </script>
+    <script type="text/test-2">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      {{xA:parseInt(xA)+1}}
+      A:{{xA}}
+      {{xB:0}}
+      {{xB:parseInt(xB)+1}}
+      B:{{xB}}
+      {{xC:parseInt(xC)+1}}
+      C:{{xC}}
+    </script>
+    <script type="text/test-3">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:6
+      {{xB:0}}
+      {{xB:parseInt(xB)+1}}
+      B:{{xB}}
+      {{xC:parseInt(xC)+1}}
+      C:{{xC}}
+    </script>
+    <script type="text/test-4">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:6
+      B:1
+      {{xC:parseInt(xC)+1}}
+      C:{{xC}}
+    </script>
+    <script type="text/test-5">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:6
+      B:1
+      {{xC:parseInt(xC)+1}}
+      C:{{xC}}
+    </script>
+    <script type="text/test-6">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:6
+      B:1
+      C:6
+    </script>
+    <script type="text/test-7">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:6
+      B:1
+      C:6
+    </script>
+    <script type="text/test-8">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:6
+      B:1
+      C:6
+      Spring-C
+      Summer-C
+      Autumn-C
+      Winter-C
+    </script>
+    <script type="text/test-9">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:7
+      B:1
+      C:7
+      Spring-C
+      Summer-C
+      Autumn-C
+      Winter-C
+    </script>
+    <script type="text/test-10">
+      Spring-A
+      Summer-A
+      Autumn-A
+      Winter-A
+      A:8
+      B:1
+      C:8
+      Spring-C
+      Summer-C
+      Autumn-C
+      Winter-C
+    </script>
+  </head>
+  <body>
+    <div id="A" import="resources/import_a.htmlx"></div>
+    <div id="B" import="resources/import_b.htmlx"></div>
+    <div id="X" import="resources/import_x.htmlx"></div>
+  </body>
+</html>

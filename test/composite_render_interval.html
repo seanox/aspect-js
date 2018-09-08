@@ -29,10 +29,7 @@
             if (typeof Test.started !== "undefined")
                 return;
             Test.started = true;
-            
-            var counter = 0;
             var timer = window.setInterval(function() {
-                ++counter;
                 var snapshot = document.body.textContent;
                 snapshot = snapshot.replace(/^\s+/mg, "");
                 snapshot = snapshot.replace(/(:)\s+/g, "$1 ");
@@ -40,19 +37,19 @@
                 snapshot = snapshot.replace(/\sPlease.*$/im, "");
                 snapshot = snapshot.replace(/:\s+(\S+)/g, "=$1;");
                 snapshots.push(snapshot);
-                if (counter == 3) {
+                if (snapshots.length == 3) {
                     aCondition = true; 
                     Composite.render(document.body);                       
                 }
-                if (counter == 6) {
+                if (snapshots.length == 6) {
                     aCondition = false; 
                     Composite.render("#TestA");                       
                 }
-                if (counter == 9) {
+                if (snapshots.length == 9) {
                     aCondition = true; 
                     Composite.render(document.body);                       
                 }
-                if (counter < 12)
+                if (snapshots.length < 12)
                     return;
                 window.clearInterval(timer);
                 Test.start();

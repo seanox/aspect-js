@@ -17,10 +17,7 @@
     <script src="../sources/test.js"></script>
     <script type="text/javascript">
     
-      var count = 0;
-    
       Test.create({test:function() {
-          
           var filter = "";
           for (var loop = 0; loop < 9; loop++) {
               var frame = document.querySelector("#Test" + loop);
@@ -31,6 +28,7 @@
           }
       }});
       
+      var count = 0;
       var interval = window.setInterval(function() {
           if (count < 10)
               return;

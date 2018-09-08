@@ -1,0 +1,6 @@
+{{xB:0}}
+{{xB:parseInt(xB)+1}}
+B:{{xB}}<br>
+{{xC:parseInt(xC)+1}}
+C:{{xC}}
+<div id="C" import="resources/import_c.htmlx"></div>

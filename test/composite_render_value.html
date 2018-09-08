@@ -33,7 +33,7 @@
         var snapshots = new Array();
         var timeout = null;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (!timeout)
+            if (timeout)
                 window.clearInterval(timeout);
             timeout = window.setTimeout(() => {
                 Test.start();
@@ -51,10 +51,8 @@
                     return;
                 case 2:
                     b1.typeValue("7");
-
                     return;
                 case 3:
-
                     b2.typeValue("7");
                     return;
                 case 4:
