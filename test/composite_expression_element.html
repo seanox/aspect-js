@@ -15,9 +15,8 @@
     <script type="text/javascript">
     
         Test.create({test:function() {
-            var actual = document.querySelector("body");
             var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
-            Assert.assertEqualsTo("script[type='text/test-" + type + "']", actual.innerHTML);
+            Assert.assertEqualsTo("script[type='text/test-" + type + "']", document.body.innerHTML);
         }});
         
         var count = 0;

@@ -14,9 +14,6 @@
     <script src="../sources/test.js"></script>
     <script type="text/javascript">
     
-        var results = new Array();
-        var count = 0;
-
         var macroA = function(node) {
             node.innerHTML = node.nodeName + ":" + node.getAttribute("a") + ":" + node.innerHTML;
         };
@@ -36,17 +33,14 @@
             return "";
         };
         
+        var pattern = null;
+        var snapshots = new Array();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            
-            switch (++count) {
-                
+            var snapshot = document.body.textContent;
+            snapshot = snapshot.replace(/^\s+/mg, "").trim();
+            snapshots.push(snapshot);
+            switch (snapshots.length) {
                 case 1:
-                    var actual = document.querySelector("body");
-                    try {Assert.assertEqualsTo("script[type='text/test-1']", actual.innerHTML);
-                    } catch (exception) {
-                        results.push(exception);
-                    }
-                    
                     Composite.customize("ma", macroA);
                     Composite.customize("mb", macroA);
                     Composite.customize("mc", macroA);
@@ -54,22 +48,21 @@
                     Composite.customize("md", null);
                     Composite.customize("mf", macroA);
                     Composite.render("body");
-                    
                     break;
-                    
-                case 2:
-                    var actual = document.querySelector("body");
-                    try {Assert.assertEqualsTo("script[type='text/test-2']", actual.innerHTML);
-                    } catch (exception) {
-                        results.push(exception);
-                    }
+                case 5:
+                    pattern = document.querySelector("script[type='text/test']").innerHTML.trim();
+                    pattern = pattern.split(/([\r\n]\s*){2,}/g);
+                    pattern = pattern.filter(entry => entry.trim());
+                    pattern.forEach(function(text, index, array) {
+                        array[index] = text.replace(/^\s+/mg, "");
+                    });
                     Test.start();
                     break;
             }
         });
         
         Test.create({test:function() {
-
+            
             if (!compositeCustomize("").match(/^Error: Invalid scope/i))
                 Assert.fail("A:1");
             if (!compositeCustomize(" ").match(/^Error: Invalid scope/i))
@@ -93,109 +86,144 @@
             if (!compositeCustomize("x", new Object()).match(/^TypeError: Invalid rendering: object/i))
                 Assert.fail("A:A");     
         }});
-        
         Test.create({test:function() {
-            Assert.assertEquals(2, count);
-            Assert.assertTrue(results && results.length == 0);
-        }});        
+            Assert.assertEquals(5, snapshots.length);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), snapshots.shift());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), snapshots.shift());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), snapshots.shift());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), snapshots.shift());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), snapshots.shift());
+        }});
     </script>
-    <script type="text/test-1">
-    <oa a="xo1">o1</oa>
-    <ob a="xo2">o2</ob>
-    <oc a="xo3">o3</oc>
-    <od a="xo4">o4</od>
-    <oe a="xo5">o5</oe>
-    <of a="xo6">
-      <span>
-        <span>123</span>
-      </span>
-    </of>  
-    <og>
-      <span>
-        <span>456</span>
-      </span>
-    </og>
-          
-    <xa a="xx1">XA:xx1:x1</xa>
-    <xb a="xx2">XB:xx2:x2</xb>
-    <xc a="xx3">XC:xx3:x3</xc>
-    <xd a="xx4">x4</xd>
-    <xe a="xx5">x5</xe>
-    <xf a="xx6">XF:xx6:
-      <span>
-        <span>{{'123'}}</span>
-      </span>
-    </xf>  
-    <xg>
-      <span>
-        <span>456</span>
-      </span>
-    </xg>  
+    <script type="text/test">
+        o1
+        o2
+        o3
+        o4
+        o5
+        123
+        456
+        XA:xx1:x1
+        XB:xx2:x2
+        XC:xx3:x3
+        x4
+        x5
+        XF:xx6:
+        {{'123'}}
+        456
+        m1
+        m2
+        m3
+        m4
+        m5
+        123
+        456
 
-    <ma a="mm1">m1</ma>
-    <mb a="mm2">m2</mb>
-    <mc a="mm3">m3</mc>
-    <md a="mm4">m4</md>
-    <me a="mm5">m5</me>
-    <mf a="mm6">
-      <span>
-        <span>123</span>
-      </span>
-    </mf>  
-    <mg>
-      <span>
-        <span>456</span>
-      </span>
-    </mg>    
-    </script>
-    <script type="text/test-2">
-    <oa a="xo1">o1</oa>
-    <ob a="xo2">o2</ob>
-    <oc a="xo3">o3</oc>
-    <od a="xo4">o4</od>
-    <oe a="xo5">o5</oe>
-    <of a="xo6">
-      <span>
-        <span>123</span>
-      </span>
-    </of>  
-    <og>
-      <span>
-        <span>456</span>
-      </span>
-    </og>
-          
-    <xa a="xx1">XA:xx1:XA:xx1:x1</xa>
-    <xb a="xx2">XB:xx2:XB:xx2:x2</xb>
-    <xc a="xx3">XC:xx3:XC:xx3:x3</xc>
-    <xd a="xx4">x4</xd>
-    <xe a="xx5">x5</xe>
-    <xf a="xx6">XF:xx6:XF:xx6:
-      <span>
-        <span>{{'123'}}</span>
-      </span>
-    </xf>  
-    <xg>
-      <span>
-        <span>456</span>
-      </span>
-    </xg>  
+        o1
+        o2
+        o3
+        o4
+        o5
+        123
+        456
+        XA:xx1:XA:xx1:x1
+        XB:xx2:XB:xx2:x2
+        XC:xx3:XC:xx3:x3
+        x4
+        x5
+        XF:xx6:XF:xx6:
+        {{'123'}}
+        456
+        MA:mm1:m1
+        MB:mm2:m2
+        MC:mm3:m3
+        m4
+        m5
+        MF:mm6:
+        123
+        456
 
-    <ma a="mm1">MA:mm1:m1</ma>
-    <mb a="mm2">MB:mm2:m2</mb>
-    <mc a="mm3">MC:mm3:m3</mc>
-    <md a="mm4">m4</md>
-    <me a="mm5">m5</me>
-    <mf a="mm6">MF:mm6:
-      <span>
-        <span>123</span>
-      </span>
-    </mf>  
-    <mg>
-      <span>
-        <span>456</span>
-      </span>
-    </mg>    
+        o1
+        o2
+        o3
+        o4
+        o5
+        123
+        456
+        XA:xx1:XA:xx1:x1
+        XB:xx2:XB:xx2:x2
+        XC:xx3:XC:xx3:x3
+        x4
+        x5
+        XF:xx6:XF:xx6:
+        {{'123'}}
+        456
+        MA:mm1:m1
+        MB:mm2:m2
+        MC:mm3:m3
+        m4
+        m5
+        MF:mm6:
+        123
+        456
+        
+        o1
+        o2
+        o3
+        o4
+        o5
+        123
+        456
+        XA:xx1:XA:xx1:x1
+        XB:xx2:XB:xx2:x2
+        XC:xx3:XC:xx3:x3
+        x4
+        x5
+        XF:xx6:XF:xx6:
+        123
+        456
+        MA:mm1:m1
+        MB:mm2:m2
+        MC:mm3:m3
+        m4
+        m5
+        MF:mm6:
+        123
+        456
+        
+        o1
+        o2
+        o3
+        o4
+        o5
+        123
+        456
+        XA:xx1:XA:xx1:x1
+        XB:xx2:XB:xx2:x2
+        XC:xx3:XC:xx3:x3
+        x4
+        x5
+        XF:xx6:XF:xx6:
+        123
+        456
+        MA:mm1:m1
+        MB:mm2:m2
+        MC:mm3:m3
+        m4
+        m5
+        MF:mm6:
+        123
+        456
     </script>
   </head>
   <body>

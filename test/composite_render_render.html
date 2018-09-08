@@ -22,8 +22,7 @@
         };
         
         Test.create({test:function() {
-            var actual = document.querySelector("body");
-            Assert.assertEqualsTo("script[type='text/test']", actual.innerHTML);
+            Assert.assertEqualsTo("script[type='text/test']", document.body.innerHTML);
         }});
         
         var count = 0;

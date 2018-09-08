@@ -64,7 +64,7 @@
  *        ergeben hat.
  *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180906
+ *  Composite 1.0 20180908
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
@@ -189,7 +189,7 @@ if (typeof Composite === "undefined") {
     /** Pattern for a composite id */
     Composite.PATTERN_COMPOSITE_ID = /^([a-z](?:[\w\.]*[\w])*)(?:\:\w*)*$/i;
     
-    //TODO:
+    /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
 
     /** Pattern for all accepted events */
@@ -560,11 +560,11 @@ if (typeof Composite === "undefined") {
             });
         } finally {
         
-            Composite.scan.queue = Composite.scan.queue.filter(entry => entry == lock.selector);
-            
             lock.ticks--;
             if (lock.ticks >= 0)
                 return;
+
+            Composite.scan.queue = Composite.scan.queue.filter(entry => entry != lock.selector);
             Composite.scan.lock = false;
             Composite.fire(Composite.EVENT_SCAN_END, lock.selector);
             
@@ -1058,6 +1058,10 @@ if (typeof Composite === "undefined") {
                         //deleted, since its content is displayed using the
                         //newly created text nodes.
                         
+                        //For internal and temporary calls, no parent can exist.
+                        if (selector.parentNode == null)
+                            return;
+                        
                         //The new text nodes are inserted before the current
                         //element one.
                         words.forEach(function(node, index, array) {
@@ -1196,7 +1200,6 @@ if (typeof Composite === "undefined") {
             //true.
             //If the content can be loaded successfully, the import attribute is
             //removed. Recursive rendering is initiated via the MutationObserver.
-            //TODO: condition + import (use a cache for imports)
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
                 if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
@@ -1207,6 +1210,14 @@ if (typeof Composite === "undefined") {
                     if (!(value instanceof Element
                             || value instanceof NodeList)) {
                         (function(element, url) {
+                            Composite.render.cache = Composite.render.cache || {};
+                            if (typeof Composite.render.cache[url] !== "undefined") {
+                                element.innerHTML = Composite.render.cache[url];
+                                var serial = element.ordinal();
+                                var object = Composite.render.meta[serial];
+                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                                return;
+                            }
                             try {
                                 var request = new XMLHttpRequest();
                                 request.overrideMimeType("text/plain");
@@ -1214,9 +1225,10 @@ if (typeof Composite === "undefined") {
                                 request.onreadystatechange = function() {
                                     if (request.readyState == 4) {
                                         if (request.status == "200") {
+                                            Composite.render.cache[url] = request.responseText;
                                             element.innerHTML = request.responseText;
                                             var serial = element.ordinal();
-                                            var object = Composite.render.meta[element];
+                                            var object = Composite.render.meta[serial];
                                             delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                                             return;
                                         }
@@ -1455,11 +1467,11 @@ if (typeof Composite === "undefined") {
 
         } finally {
         
-            Composite.render.queue = Composite.render.queue.filter(entry => entry == lock.selector);
-            
             lock.ticks--;
             if (lock.ticks > 0)
                 return;
+            
+            Composite.render.queue = Composite.render.queue.filter(entry => entry != lock.selector);
             Composite.render.lock = false;
             Composite.fire(Composite.EVENT_RENDER_END, lock.selector);
             
@@ -1508,21 +1520,22 @@ if (typeof Composite === "undefined") {
                             return;                
                         stack.push(node);
                         //Ignore all text nodes. These are filled with the final
-                        //text content during rendering.
-                        if (node.nodeType == Node.TEXT_NODE)
+                        //text content during rendering, unless the content
+                        //still contains expressions
+                        if (node.nodeType == Node.TEXT_NODE
+                                && !node.nodeValue.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                             return;
                         var serial = node.ordinal();
                         var object = Composite.render.meta[serial];
                         //Ignore all placeholders. The corresponding output
                         //elements are generated when the placeholder is created
                         //and rendered, and are then rendered initially.
-                        if (object) {
+                        if (object)
                             if (object.hasOwnProperty("template")
                                     || object.hasOwnProperty("output")
                                     || object.hasOwnProperty("placeholder")
                                     || object.attributes.hasOwnProperty("value"))
                                 return;
-                        }
                         Composite.render(node);
                     });
                 }

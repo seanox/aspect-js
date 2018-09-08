@@ -24,7 +24,7 @@
             var expected = document.querySelector("script[type='text/test']");
             expected = expected.innerHTML.trim();
             expected = expected.replace(/\t/g, '    ');
-            var actual = document.querySelector("body");
+            var actual = document.body;
             actual = actual.innerHTML.trim();
             actual = actual.replace(/\t/g, '    ');
             Assert.assertEquals(expected, actual);            
