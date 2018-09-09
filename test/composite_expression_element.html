@@ -19,10 +19,9 @@
             Assert.assertEqualsTo("script[type='text/test-" + type + "']", document.body.innerHTML);
         }});
         
-        var count = 0;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (++count > 1)
-                return;
+            if (Test.status().queue != null)
+                return;    
             var element = document.querySelector("#InputTextA");
             element.value = "";
             element.typeValue("Hallo Berlin");
@@ -30,19 +29,19 @@
         });
     </script>
     <script type="text/test-edge">
-    A1-O: Hallo Berlin
-    A1-I: <input id="InputTextA" type="text" value="A1">
-    A1-O: Hallo Berlin
+      A1-O: Hallo Berlin
+      A1-I: <input id="InputTextA" type="text" value="A1">
+      A1-O: Hallo Berlin
     </script>
     <script type="text/test-chrome">
-    A1-O: Hallo Berlin
-    A1-I: <input type="text" id="InputTextA" value="A1">
-    A1-O: Hallo Berlin
+      A1-O: Hallo Berlin
+      A1-I: <input type="text" id="InputTextA" value="A1">
+      A1-O: Hallo Berlin
     </script>
     <script type="text/test-firefox">
-    A1-O: Hallo Berlin
-    A1-I: <input id="InputTextA" value="A1" type="text">
-    A1-O: Hallo Berlin
+      A1-O: Hallo Berlin
+      A1-I: <input id="InputTextA" value="A1" type="text">
+      A1-O: Hallo Berlin
     </script>
   </head>
   <body>

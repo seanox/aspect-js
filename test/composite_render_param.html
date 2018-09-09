@@ -25,9 +25,8 @@
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (typeof Test.started != "undefined")
-                return;
-            Test.started = true;
+            if (Test.status().queue != null)
+                return;    
             var content = document.body.innerHTML;
             content = content.replace(/([\r\n]+)\s*(?=\1)/g, "");
             content = content.replace(/script/g, "x-script");
