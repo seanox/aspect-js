@@ -27,7 +27,19 @@
               text8:null,
               text8_1:null,
               text8_2:null,
-              text9:null
+              text9:null,
+              bModel:{
+                      text3:null,
+                      text4:null,
+                      text9:null              
+              },
+              cModel:{
+              },
+              fModel:{
+                      text1:null,
+                      text2:null,
+                      text5:null
+              }              
       };
       var bModel = {
               text3:null,
@@ -46,48 +58,24 @@
                   return ++this.count;       
               }
       }
-      
-      var pattern = null;
+      var textX = null;
 
       Test.create({test:function() {
-          var x = 0;
-          if (pattern.shift() == aModel.toPlainString()) x++;
-          if (pattern.shift() == aModel.toPlainString()) x++;
-          Assert.assertEquals(1, x);
-      }});    
-
+          var a = pattern.shift().replace(/"text8_1":""/, '"text8_1":null');
+          var b = aModel.toPlainString().replace(/"text8_1":""/, '"text8_1":null');
+          Assert.assertEquals(a, b);
+      }});
       Test.create({test:function() {
           Assert.assertEquals(pattern.shift(), bModel.toPlainString());
       }});    
-
       Test.create({test:function() {
           Assert.assertEquals(pattern.shift(), cModel.toPlainString());
       }});    
-      
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), String(typeof dModel));
-      }});    
-
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), String(typeof eModel));
-      }});    
-
-      //aModel contains a mix of sub-composites and fields with absolute namespace.
-      //Synchronization must primarily take place in fModel.
-      
-      //fModel: text1, text2, text5 are defined in the model and the value must be synchronized
-      //fModel: text9 are not defined in the model and the value must not be synchronized
-      //The value must not then be bubbled upwards.
-      
       Test.create({test:function() {
           Assert.assertEquals(pattern.shift(), fModel.toPlainString());
       }});    
-
       Test.create({test:function() {
-          Assert.assertTrue(!aModel.text8_1);
-      }});    
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), aModel.text8_2);
+          Assert.assertEquals(pattern.shift(), xModel.toPlainString());
       }});    
       Test.create({test:function() {
           Assert.assertEquals("3", outputX.textContent);
@@ -96,13 +84,17 @@
       Element.prototype.typeTestValue = function() {
           this.typeValue(this.id + "-X");
       };
+      
+      var pattern = null;
+      window.addEventListener("load", function(event) {
+          pattern = document.querySelector("script[type='text/test']").textContent.trim();
+          pattern = pattern.split(/\s*[\r\n]+\s*/m);
+      });
 
       var count = 0;
       Composite.listen(Composite.EVENT_RENDER_END, function() {
           switch (++count) {
               case 1:
-                  pattern = document.querySelector("script[type='text/test']").textContent.trim();
-                  pattern = pattern.split(/\s*[\r\n]+\s*/m);
                   text3.typeTestValue();
                   text4.typeTestValue();
                   text6.typeTestValue();
@@ -112,6 +104,8 @@
                   window["fModel.text1"].typeTestValue();
                   window["fModel.text2"].typeTestValue();
                   window["fModel.text5"].typeTestValue();
+                  document.querySelector("#textX").typeTestValue();
+                  Composite.render(document.body);
                   return;
               case 2:
                   aModel.text8_1 = aModel.text8;
@@ -125,28 +119,32 @@
       });     
     </script>
     <script type="text/test">
-      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null}
-      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":"","text8_2":"text8-X","text9":null}
+      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null},"cModel":{},"fModel":{"text1":null,"text2":null,"text5":null}}
       {"text3":null,"text4":null,"text9":null}
       {}
-      undefined
-      undefined
       {"text1":"fModel.text1-X","text2":"fModel.text2-X","text5":"fModel.text5-X"}
-      text8-X
+      {"count":3}
     </script>
   </head>
   <body>
     <div id="aModel" composite>
+      <!-- write to fModel.text1 --> 
       <input type="text" id="fModel.text1" events="change">
       <div id="bModel" composite>
+        <!-- write to fModel.text2 --> 
         <input type="text" id="fModel.text2" events="change">
         <div id="cModel" composite>
+          <!-- write to aModel.bModel.cModel.text* --> 
           <input type="text" id="text3" events="change">
           <input type="text" id="text4" events="change">
           <input type="text" id="text9" events="change">
+          <!-- write to textX -->
+          <input type="text" id="textX" events="change">
         </div>
+        <!-- write to aModel.bModel.fModel.text5 -->
         <input type="text" id="fModel.text5" events="change">
       </div>
+      <!-- write to aModel.text* -->
       <input type="text" id="text6">
       <input type="text" id="text7" events="change">
       <input type="text" id="text8" events="focus" render="#text7, #text7, #{{'output' + 'X'}}">
