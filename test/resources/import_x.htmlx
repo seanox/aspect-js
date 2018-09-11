@@ -1,0 +1,9 @@
+<ul>
+  <li>Spring-X</li>
+  <li>Summer-X</li>
+  <li>Autumn-X</li>
+  <li>Winter-X</li>
+</ul>
+
+{{xX:parseInt(xX)+1}}
+X:{{xX}}
