@@ -13,163 +13,78 @@
     <script src="../sources/test.js"></script>
     <script type="text/javascript">
     
+      var aModel = {
+            publishForm: function() {
+                var form = document.createElement("form");
+                var label = document.createElement("label");
+                label.textContent = "Input";
+                form.appendChild(label);
+                var input = document.createElement("input");
+                input.value = "123";
+                input.type = "text";
+                form.appendChild(input);
+                var submit = document.createElement("input");
+                submit.type = "submit";
+                form.appendChild(submit);
+                return form;
+            },
+            publishImg: function() {
+                var img = document.createElement("img");
+                img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
+                return img;
+            }
+      };    
+    
       var snapshots = new Array();
       Composite.listen(Composite.EVENT_RENDER_END, function() {
           var snapshot = document.body.textContent;
           snapshot = snapshot.replace(/^\s+/mg, "");
           snapshots.push(snapshot);
-          if (snapshots.length == 8)
-              Composite.render(document.body);
           if (snapshots.length == 9)
               Composite.render(document.body);
           if (snapshots.length == 10)
-              Test.start();
+              Composite.render(document.body);
       });
+      
+      var timeout = window.setInterval(function() {
+          if (snapshots.length != snapshots.ticks) {
+              snapshots.ticks = snapshots.length;
+              return;
+          } else window.clearInterval(timeout);
+          Test.start();
+      }, 250);
     
       var xA = 5;
       var xB = 5;
       var xC = 5;
+      var xX = 5;
       
       Test.create({test:function() {
-          Assert.assertEquals(10, snapshots.length);
-          Assert.assertEqualsTo("script[type='text/test-1']", snapshots.shift());
+          var text = document.body.textContent.replace(/^\s+/mg, "");
+          Assert.assertTrue(text.indexOf("Summer-A") >= 0);
+          Assert.assertTrue(text.indexOf("Summer-C") >= 0);
+          Assert.assertTrue(text.indexOf("Summer-X") >= 0);
       }});
       Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-2']", snapshots.shift());
+          Assert.assertNotNull(document.querySelector("img"));
       }});
       Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-3']", snapshots.shift());
+          Assert.assertNotNull(document.querySelector("form input[type='submit']"));
       }});
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
-      }});
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-5']", snapshots.shift());
-      }});
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-6']", snapshots.shift());
-      }});      
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-7']", snapshots.shift());
-      }});
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-8']", snapshots.shift());
-      }});
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-9']", snapshots.shift());
-      }});
-      Test.create({test:function() {
-          Assert.assertEqualsTo("script[type='text/test-10']", snapshots.shift());
-      }}); 
-    </script>
-    <script type="text/test-1">
-    </script>
-    <script type="text/test-2">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      {{xA:parseInt(xA)+1}}
-      A:{{xA}}
-      {{xB:0}}
-      {{xB:parseInt(xB)+1}}
-      B:{{xB}}
-      {{xC:parseInt(xC)+1}}
-      C:{{xC}}
-    </script>
-    <script type="text/test-3">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:6
-      {{xB:0}}
-      {{xB:parseInt(xB)+1}}
-      B:{{xB}}
-      {{xC:parseInt(xC)+1}}
-      C:{{xC}}
-    </script>
-    <script type="text/test-4">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:6
-      B:1
-      {{xC:parseInt(xC)+1}}
-      C:{{xC}}
-    </script>
-    <script type="text/test-5">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:6
-      B:1
-      {{xC:parseInt(xC)+1}}
-      C:{{xC}}
-    </script>
-    <script type="text/test-6">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:6
-      B:1
-      C:6
-    </script>
-    <script type="text/test-7">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:6
-      B:1
-      C:6
-    </script>
-    <script type="text/test-8">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:6
-      B:1
-      C:6
-      Spring-C
-      Summer-C
-      Autumn-C
-      Winter-C
-    </script>
-    <script type="text/test-9">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:7
-      B:1
-      C:7
-      Spring-C
-      Summer-C
-      Autumn-C
-      Winter-C
-    </script>
-    <script type="text/test-10">
-      Spring-A
-      Summer-A
-      Autumn-A
-      Winter-A
-      A:8
-      B:1
-      C:8
-      Spring-C
-      Summer-C
-      Autumn-C
-      Winter-C
     </script>
   </head>
   <body>
     <div id="A" import="resources/import_a.htmlx"></div>
     <div id="B" import="resources/import_b.htmlx"></div>
-    <div id="X" import="resources/import_x.htmlx"></div>
+    <div id="O" import="resources/import_o.htmlx"></div>
+    <article import="{{aModel.publishImg()}}">
+      loading image...  
+    </article>
+    <article import="{{aModel.publishForm()}}">
+      loading form...  
+    </article>
+    <article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_x.htmlx'}}">
+      loading resource...  
+    </article>
   </body>
 </html>
