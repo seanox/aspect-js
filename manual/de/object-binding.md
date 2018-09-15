@@ -2,6 +2,16 @@
 
 ## Inhalt
 
+* [Grundlagen](#grundlagen)
+* [Begriffe](#begriffe)
+  * [namespace](#namespace)
+  * [scope](#scope)
+  * [model](#model)
+  * [field](#field)
+  * [identifier](#identifier)
+* [Bindung](#bindung)
+* [Validierung](#validierung)
+
 ## Grundlagen
 
 Bei der Objekt-Bindung geht es um die Verknüpfung und Zuordnung von
@@ -61,6 +71,27 @@ korrespondiert mit einem HTML-Element mit gleichnamiger ID im gleichen
 Namensraum. Die ID vom Feld kann relativ sein oder einen absoluten Namensraum
 verwenden. Ist die ID relativ, wird der Namensraum durch das direkte
 Composite-Eltern-Element festgelegt.
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      <input id="fieldA" type="text" events="change"/>
+    </div>
+  </body>
+</html>
+```
+
+```javascript
+  var model = {
+      fieldA: null
+  };
+```
+
+Die Composite-Komponente übernimmt dann die einseitige und ereignisgesteuerte
+Synchronisation zwischen dem HTML-Element und der Model-Komponenten-Eigenschaft.
+Für ein HTML-Element werden dafür die entsprechenden Events über das
+gleichnamige Attribut festgelegt.    
 
 
 ### identifier
@@ -125,7 +156,7 @@ var a = {
 
 var b = {
     c: {
-      d: {}
+        d: {}
     }
 };
 ```
