@@ -241,7 +241,7 @@ ist als Composite- bzw. Condition-JavaScript möglich.
 <script type="composite/javascript" interval="1000">
   ...
 </script>
-
+```
 
 ### iterate
 
@@ -427,6 +427,7 @@ var Model = {
     },
     text1: ""
 };
+```
 
 ```html
 <form id="Model" composite>
