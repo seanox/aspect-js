@@ -10,15 +10,12 @@
 
 ## events
 
-Eingabe mit multibler synchron Ausgabe per Expression-Language mit
-Element-Bindung.
+Eingabe mit synchroner Ausgabe per Expression-Language mit Element-Bindung.
 
 ```html
 <input type="text" id="input" events="keyup mouseup change" render="#output"><br>
 <span id="output">
-  {{#input.value}}<br>
-  {{#input.value}}<br>
-  {{#input.value}}<br>
+  {{#input.value}}
 </span>
 ```
 
@@ -79,7 +76,7 @@ var matrixModel = {
 
 UI-Parameter können direkt per Expression-Language erstellt und geändert werden.
 Da die UI-Parameter im globalen Namensraum (window) existieren, können diese
-dann auch direkt im JavaScript verwendet werden.
+direkt im JavaScript verwendet werden.
 
 ```html
 {{example:0}}

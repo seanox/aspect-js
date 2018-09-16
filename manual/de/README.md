@@ -51,4 +51,3 @@ Verständnis von Rendering, Expression Language und Performance.
     * [interval](examples.md#interval)
     * [iterate](examples.md#iterate)
     * [parameter](examples.md#parameter)
-  

@@ -2,7 +2,7 @@
 
 Mit aspect-js wird der deklarative Ansatz von HTML aufgegriffen und erweitert.
 Neben der Expression-Language werden den HTML-Elementen zusätzliche Attribute
-für Funktionen und Objektbindung Attribute bereitgestellt.  
+für Funktionen und Objekt-Bindung Attribute bereitgestellt.  
 Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
 überwacht das DOM aktiv über den MutationObserver und funktioniert und reagiert
 somit rekursiv auf Veränderungen im DOM.
@@ -24,6 +24,8 @@ somit rekursiv auf Veränderungen im DOM.
   * [Tag](#tag)   
   * [Selector](#selector)
   
+TODO: Auffrischung vs. Aktualisierung (einheitlich Verwendung eines der Begriffe)  
+  
 ## Expression Language
 
 Die Expression-Language kann innerhalb vom Markup als Freitext und in den
@@ -33,7 +35,7 @@ Die direkte Verwendung als Freitext wird immer als reiner Text (plain text)
 verarbeitet. Das Hinzufügen von Markup, insbesondere HTML-Code, ist so nicht
 möglich und wir nur mit den Attributen `output` und `import` unterstützt.
 
-```
+```html
 <article title="{{Model.title}}">
   {{'Hello World!'}}
   ...
@@ -49,34 +51,36 @@ Details zu Syntax und Verwendung werden im Kapitel
 Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt. Die
 entsprechenden Deklaration können mit allen HTML-Elementen verwendet werden,
 ausgenommen sind `SCRIPT`, was nur mit Typen `composite/javascript` unterstützt
-wird, sowie `STYLE`, welches nicht unterstützt wird.  
-Attribute unterstützen Expressions.  
+wird, sowie `STYLE`, welches nicht unterstützt wird.
+Die Werte der Attribute können statische oder mit Verwendung der
+Expression-Language dynamisch sein.
 Enthält ein Attribute eine Expression, werden das Attribute und der Wert
-unveränderlich, da der Renderer diese bei jeder Auffrischung (Re-Rendering)
+unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
-    TODO: Elemente und Attribute werden vom Renderer immer initial verarbeitet.
-Spätere ÄNderungen werden vom Renderer nicht berücksichtig. Attribute mit
-Expression werden bei jedem Render-zyklus wiederhergestellt, die anderen werden
-ignoriert, Änderungen werden später nicht berücksichtig.
 
 
 ### condition
 
-Das condition-Attribut legt fest, ob ein Element aufgefrischt (Re-Rendering) 
-wird oder nicht. Der mit dem Attribut angegebene Ausdruck muss explizit `true`
-oder `false` liefern, da die Sichtbarkeit der Elemente ebenfalls explizit per
-CSS-Bedingung `[condition=true]` gesteuert wird.
+Das condition-Attribut legt fest, ob ein Element im DOM erhalten bleibt.  
+Der mit dem Attribut angegebene Ausdruck muss explizit `true` oder `false`
+liefern. Mit `false` wird ein Element temporär aus dem DOM entfernt und lässt
+sich später durch das Auffrischen des Eltern-Elements wieder einfügen, wenn der
+Ausdruck `true` liefert.  
+Eine Besonderheit stellt die Kombination mit dem Attribut [interval](#interval)
+dar, da mit dem Entfernen des Elements aus dem DOM auch der zugehörige Timer
+beendet wird. Wird das Element mit einer späteren Auffrischung wieder in das DOM
+aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
 
-```
+```html
 <article condition="{{Model.visible}}">
   ...
 </article>
 ```
 
 Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite- bzw. Condition-JavaScript möglich.
+ist als Composite--JavaScript möglich.
 
-```
+```html
 <script type="composite/javascript" condition="{{Model.visible}}">
   ...
 </script>
@@ -88,21 +92,23 @@ Details zur Verwendung von eingebettetem JavaScript werden im Kapitel
 
 ### events
 
-Diese Deklaration bindet ein oder mehre Ereignisse an ein HTML-Element.  
-Übersicht der Ereignisse: https://www.w3.org/TR/DOM-Level-3-Events  
+Diese Deklaration bindet ein oder mehre Ereignisse (siehe
+https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element.  
 Ereignisse eröffnen primäre Funktionen zur Validierung und Synchronisation von
 HTML-Elementen und den korrespondierenden JavaScript-Modellen (mehr dazu im
 Kapitel [validate](#validate) sowie die ereignisgesteuerte Aktualisierung von
 weiteren HTML-Elementen (mehr dazu im Kapitel [render](#render)).  
 
-```
+```javascript
 var Model = {
     validate: function(element, value) {
         return true;
     },
     text1: ""
 };
+```
 
+```html
 <form id="Model" composite>
   <input id="text1" type="text"
       validate events="mouseup keyup change"/>
@@ -130,7 +136,7 @@ nachgeladen. Das Laden und Ersetzen der Import-Funktion lässt sich mit dem
 condition-Attribut kombinieren und wird dann erst ausgeführt, wenn die Bedingung
 `true` ist.
 
-```
+```javascript
 var Model = {
     publishForm: function() {
         var form = document.createElement("form");
@@ -152,13 +158,15 @@ var Model = {
         return img;
     }
 };
+```
 
+```html
 <article import="{{Model.publishImg()}}">
   loading image...  
 </article>
 <article import="{{Model.publishForm()}}">
   loading form...  
-</article>e>
+</article>
 <article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
   loading resource...  
 </article>
@@ -186,7 +194,7 @@ HTML-Code als Vorlage verwendet. Während der Intervalle wird zuerst der innere
 HTML-Code geleert, die Vorlage mit jedem Intervallzyklus einzeln gerendert und
 das Ergebnis dem inneren HTML-Code hinzugefügt.
 
-```
+```html
 <span interval="1000">
   ...
 </span>
@@ -209,7 +217,7 @@ wird das Intervall mit der nächsten Anzeige erneut gestartet.
 Daher lässt sich das interval-Attribut gut mit dem condition-Attribut verwenden
 und steuern.
 
-```
+```html
 <span interval="1000" condition="{{IntevalModel.isVisible()}}">
   ...
 </span>
@@ -218,7 +226,7 @@ und steuern.
 Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
 eines permanenten Zählers sehr einfach.
 
-```
+```html
 {{count:0}}
 <span interval="1000">
   {{count:parseInt(count) +1}}^
@@ -229,7 +237,7 @@ eines permanenten Zählers sehr einfach.
 Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript
 ist als Composite- bzw. Condition-JavaScript möglich.
 
-```
+```html
 <script type="composite/javascript" interval="1000">
   ...
 </script>
@@ -246,11 +254,13 @@ Das iterate-Attribut erwartet einen Parameter-Ausdruck, zudem ein Meta-Objekt
 erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt `tempA = {item, index, data}`),
 dass den Zugriff auf Iterationszyklus ermöglich.  
 
-```
+```javascript
 var Model = {
     months: ["Spring", "Summer", "Autumn", "Winter"]
 };
+```
 
+```html
 <select iterate={{months:Model.months}}>
   <option id="{{months.index}}">
     {{months.item}}
@@ -266,7 +276,7 @@ HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element oder eine
 Knotenliste mit Elementen sein. Alle anderen Datentypen werden als Text gesetzt.
 Die Ausgabe ist exklusiv und überschreibt den vorhandenen inneren HTML-Code.
 
-```
+```javascript
 var Model = {
     publishForm: function() {
         var form = document.createElement("form");
@@ -289,7 +299,9 @@ var Model = {
     },
     publishText: "Hello World!"
 };
+```
 
+```html
 <article output="{{Model.publishImg()}}">
   loading image...  
 </article>
@@ -310,7 +322,7 @@ oder verschiedener Events aktualisiert (Re-Rerending) wird.
 Als Wert erwartet das Attribut einen CSS-Selector bzw. Query-Selector welche
 die Ziele definieren.
 
-```
+```javascript
 var Model = {
     _status1: 0,
     getStatus1: function() {
@@ -325,7 +337,9 @@ var Model = {
         return ++Model._status3;
     }
 };
-    
+```
+
+```html    
 Taget #1:
 <span id="outputText1">{{Model.status1}}</span>
 Events: Wheel
@@ -362,7 +376,7 @@ unten und von links nach rechts: 1, 1.1, 1.1.1, 1.2, 1.2.1, 2, ...
 Diese Angabe ist wichtig, wenn das Rendern und/oder die Objekt-Bindung eine
 bestimmte logische Reihenfolge einhalten muss.
 
-```
+```html
 <article sequence>
   {{index:0}}
   <div id="{{index +1}}">
@@ -393,12 +407,14 @@ Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
 bewusst nicht bereitgestellt, da diese in den meisten Fällen zu starr ist und
 diese mit geringem Aufwand als zentrale Lösung implementiert werden kann.
 
-```
+```css
 input.invalid {
     border:1px solid #FF0000;
     background:#FFE0E0;
 }
+```
 
+```javascript
 var Model = {
     validate: function(element, value) {
         var valid = !!(value || "").match(/[a-z0-9]+[\w\.\-]*@[a-z0-9]+[\w\.\-]*/i);
@@ -412,6 +428,7 @@ var Model = {
     text1: ""
 };
 
+```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       validate events="mouseup keyup change" render="#Model"/>
@@ -440,7 +457,7 @@ SCRIPT-Element enthält. Auf diese Weise kann die Ausführung vom SCRIPT-Element
 auch mit dem Attribut `condition` kombiniert werden.  
 Eingebettete Skripte müssen "ThreadSafe" sein.
 
-```
+```html
 <script type="composite/javascript">
   ...
 </script>
