@@ -2,7 +2,7 @@
 
 Mit aspect-js wird der deklarative Ansatz von HTML aufgegriffen und erweitert.
 Neben der Expression-Language werden den HTML-Elementen zusätzliche Attribute
-für Funktionen und Objekt-Bindung Attribute bereitgestellt.  
+für Funktionen und Objekt-Bindung bereitgestellt.  
 Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
 überwacht das DOM aktiv über den MutationObserver und funktioniert und reagiert
 somit rekursiv auf Veränderungen im DOM.
@@ -54,7 +54,7 @@ ausgenommen sind `SCRIPT`, was nur mit Typen `composite/javascript` unterstützt
 wird, sowie `STYLE`, welches nicht unterstützt wird.
 Die Werte der Attribute können statische oder mit Verwendung der
 Expression-Language dynamisch sein.
-Enthält ein Attribute eine Expression, werden das Attribute und der Wert
+Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
@@ -63,9 +63,9 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 Das condition-Attribut legt fest, ob ein Element im DOM erhalten bleibt.  
 Der mit dem Attribut angegebene Ausdruck muss explizit `true` oder `false`
-liefern. Mit `false` wird ein Element temporär aus dem DOM entfernt und lässt
-sich später durch das Auffrischen des Eltern-Elements wieder einfügen, wenn der
-Ausdruck `true` liefert.  
+zurückliefern. Mit `false` wird ein Element temporär aus dem DOM entfernt und
+lässt sich später durch das Auffrischen des Eltern-Elements wieder einfügen,
+wenn der Ausdruck `true` zurückliefert.  
 Eine Besonderheit stellt die Kombination mit dem Attribut [interval](#interval)
 dar, da mit dem Entfernen des Elements aus dem DOM auch der zugehörige Timer
 beendet wird. Wird das Element mit einer späteren Auffrischung wieder in das DOM
@@ -93,8 +93,8 @@ Details zur Verwendung von eingebettetem JavaScript werden im Kapitel
 ### events
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
-https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element.  
-Ereignisse eröffnen primäre Funktionen zur Validierung und Synchronisation von
+https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
+eröffnen primäre Funktionen zur Validierung und Synchronisation von
 HTML-Elementen und den korrespondierenden JavaScript-Modellen (mehr dazu im
 Kapitel [validate](#validate) sowie die ereignisgesteuerte Aktualisierung von
 weiteren HTML-Elementen (mehr dazu im Kapitel [render](#render)).  
@@ -129,8 +129,8 @@ _KeyUp_ oder _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
 Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
-Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt und
-verhält sich ähnlich wie das Attribut `output`, oder der Wert wird als entfernte
+Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt und das
+Verhalten ähnelt dem Attribut `output`, oder der Wert wird als entfernte
 Ressource mit relativer bzw. absoluter URL betrachtet und per HTTP-Methode GET
 nachgeladen. Das Laden und Ersetzen der Import-Funktion lässt sich mit dem
 condition-Attribut kombinieren und wird dann erst ausgeführt, wenn die Bedingung
@@ -175,8 +175,8 @@ var Model = {
 
 ### interval
 
-Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung (Re-Rendering)
-eines HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.
+Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
+HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
 Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
 formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
 nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
@@ -185,10 +185,9 @@ JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
 aber als exakt zu verstehen.
 Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
 verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
-Rendern vom deklariertes HTML-Element und wird beendet bzw. entfernt wenn:
-- das Element nicht mehr im DOM existiert 
-- das condition-Attribut `false` ist
-- das Element oder ein Elternteil nicht mehr sichtbar ist
+Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
+- das Element nicht mehr im DOM existiert   
+- das condition-Attribut `false` ist  
 Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
 HTML-Code als Vorlage verwendet. Während der Intervalle wird zuerst der innere
 HTML-Code geleert, die Vorlage mit jedem Intervallzyklus einzeln gerendert und
