@@ -95,14 +95,10 @@ Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-eröffnen primäre Funktionen
-
-
-
-zur Validierung und Synchronisation von
-HTML-Elementen und den korrespondierenden JavaScript-Modellen (mehr dazu im
-Abschnitt [validate](#validate) sowie die ereignisgesteuerte Aktualisierung von
-weiteren HTML-Elementen (mehr dazu im Abschnitt [render](#render)).  
+eröffnen primäre Funktionen zur ereignisgesteuerte Aktualisierung von
+anderen HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur
+Validierung und Synchronisation von HTML-Elementen und den korrespondierenden
+JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).  
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -110,7 +106,10 @@ weiteren HTML-Elementen (mehr dazu im Abschnitt [render](#render)).
       events="mouseup keyup change" render="#output1"/>
 ```
 
-
+Beispiel zur synchronen Aktualisierung vom HTML-Element _output1_ mit den
+Ereignissen _MouseUp_, _KeyUp_ oder _Change_ beim HTML-Element _text1_.  
+In dem Beispiel wird der Eingabewert von _text1_ synchron mit _output1_
+ausgegebem.
 
 ```javascript
 var Model = {
