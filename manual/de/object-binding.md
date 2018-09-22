@@ -8,8 +8,10 @@
   * [scope](#scope)
   * [model](#model)
   * [field](#field)
+  * [composite-id](#composite-id)
   * [identifier](#identifier)
 * [Bindung](#bindung)
+* [Synchronisation](#synchronisation)
 * [Validierung](#validierung)
 
 ## Grundlagen
@@ -20,6 +22,7 @@ korrespondierenden Model-Objekt im JavaScript.
 
 
 ## Begriffe
+
 
 ### namespace
 
@@ -165,4 +168,26 @@ var b = {
 ```
 
 
+## Synchronisation
+
+Neben der statischen Verknüpfung und Zuordnung von HTML-Elementen zu
+Java-Script-Modellen, umfasst die Objekt-Bindung auch die Synchronisation von
+Werten zwischen den HTML-Elementen und den Feldern der Java-Script-Modelle.  
+Die Synchronisation ist dabei an Ereignisse gebunden, die beim HTML-Element über
+das Attribut `events` festgelegt werden und somit wird die Synchronisation erst
+mit dem Eintreten eines der festgelegten Ereignisse ausgeführt.
+
+Details zur Verwendung werden im Abschnitt [events](markup.md#events)
+beschrieben.  
+
+
 ## Validierung
+
+Die Synchronisation von Werten zwischen den HTML-Elementen und den Feldern der
+Java-Script-Modelle lässt sich per Validierung kontrollieren und steuern.  
+Die Verwendung der Validierung wird beim HTML-Element über das Attribut `validate`
+festgelegt und erfordert das Attribut `events` sowie eine korrespondierende
+Methode `validate` im JavaScript-Model.
+
+Details zur Verwendung werden im Abschnitt [validate](markup.md#validate)
+beschrieben.

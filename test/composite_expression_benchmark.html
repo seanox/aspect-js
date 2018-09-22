@@ -35,9 +35,9 @@
         
         var timing = new Date().getTime();
         Test.create({test:function() {
-            Assert.assertTrue((new Date().getTime() -timing) < 1750);
+            Assert.assertTrue((new Date().getTime() -timing) < 2500);
         }}); 
-        Test.create({timeout:2500, test:function() {
+        Test.create({timeout:4500, test:function() {
             var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (var loop = 0; loop < 250; loop++)
@@ -50,6 +50,8 @@
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
+            if (Test.status().queue != null)
+                return;             
             Test.start();
         });   
     </script>

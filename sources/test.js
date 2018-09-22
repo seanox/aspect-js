@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20180906
+ *  Test 1.0 20180922
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180906
+ *  @version 1.0 20180922
  */
 if (typeof Test === "undefined") {
     
@@ -466,8 +466,7 @@ if (typeof Test === "undefined") {
                 Test.queue.progress++;
                 var meta = Test.queue.stack.shift();
                 var timeout = false;
-                if (!isNaN(meta.timeout)
-                        && meta.timeout > 0)
+                if ((meta.timeout || 0) > 0)
                     timeout = new Date().getTime() +meta.timeout;
                 Test.task = {title:null, meta:meta, running:true, timing:new Date().getTime(), timeout:timeout, duration:false, error:null};
                 Test.task.title = "#" + meta.serial;

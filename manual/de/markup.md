@@ -25,6 +25,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [Selector](#selector)
   
 TODO: Auffrischung vs. Aktualisierung (einheitlich Verwendung eines der Begriffe)  
+generi|frisch|ktualis
   
 ## Expression Language
 
@@ -42,7 +43,7 @@ möglich und wir nur mit den Attributen `output` und `import` unterstützt.
 </article>
 ```
 
-Details zu Syntax und Verwendung werden im Kapitel
+Details zu Syntax und Verwendung werden im Abschnitt
 [Expression Language](expression-language.md) beschrieben.
   
 
@@ -78,7 +79,7 @@ aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
 ```
 
 Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite--JavaScript möglich.
+ist als Composite-JavaScript möglich.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
@@ -86,7 +87,7 @@ ist als Composite--JavaScript möglich.
 </script>
 ```
 
-Details zur Verwendung von eingebettetem JavaScript werden im Kapitel
+Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 [Scripting](#scripting) beschrieben.
 
 
@@ -94,10 +95,22 @@ Details zur Verwendung von eingebettetem JavaScript werden im Kapitel
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-eröffnen primäre Funktionen zur Validierung und Synchronisation von
+eröffnen primäre Funktionen
+
+
+
+zur Validierung und Synchronisation von
 HTML-Elementen und den korrespondierenden JavaScript-Modellen (mehr dazu im
-Kapitel [validate](#validate) sowie die ereignisgesteuerte Aktualisierung von
-weiteren HTML-Elementen (mehr dazu im Kapitel [render](#render)).  
+Abschnitt [validate](#validate) sowie die ereignisgesteuerte Aktualisierung von
+weiteren HTML-Elementen (mehr dazu im Abschnitt [render](#render)).  
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+      events="mouseup keyup change" render="#output1"/>
+```
+
+
 
 ```javascript
 var Model = {
@@ -186,11 +199,12 @@ aber als exakt zu verstehen.
 Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
 verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
 Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
-- das Element nicht mehr im DOM existiert   
-- das condition-Attribut `false` ist  
+- das Element nicht mehr im DOM existiert
+- das condition-Attribut `false` ist
+
 Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
-HTML-Code als Vorlage verwendet. Während der Intervalle wird zuerst der innere
-HTML-Code geleert, die Vorlage mit jedem Intervallzyklus einzeln gerendert und
+HTML-Code als Vorlage verwendet und während der Intervalle zuerst der innere
+HTML-Code geleert, die Vorlage mit jedem Intervall-Zyklus einzeln generiert und
 das Ergebnis dem inneren HTML-Code hinzugefügt.
 
 ```html
@@ -203,18 +217,15 @@ das Ergebnis dem inneren HTML-Code hinzugefügt.
 </span>
 ```
 
-Beim SPAN-Element wird die Auffrischung (Re-Rendering) alle 1000ms automatisch
-angestossen.
+Beim SPAN-Element wird die Auffrischung alle 1000ms automatisch angestossen.
 
 Das interval-Attribut kann für einfache HTML-Elementen, wie auch komplexe und
 verschachtelte HTML-Konstrukte verwendet werden.
 
-Das eingerichtete Intervall reagiert dynamisch auch Veränderungen im DOM und
-beendet sich automatisch, wenn das Element selbst oder ein Eltern-Element nicht
-mehr sichtbar ist oder aus dem DOM entfernt wurde. Bei ausgeblendeten Elementen
-wird das Intervall mit der nächsten Anzeige erneut gestartet.  
-Daher lässt sich das interval-Attribut gut mit dem condition-Attribut verwenden
-und steuern.
+Ein aktiver Intervalle reagiert dynamisch auch Veränderungen im DOM und endet
+automatisch, wenn das HTML-Element aus dem DOM entfernt wurde und beginnt neu,
+wenn das HTML-Element dem DOM erneut hinzugefügt wird. Daher lässt sich das
+interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
 
 ```html
 <span interval="1000" condition="{{IntevalModel.isVisible()}}">
@@ -226,15 +237,15 @@ Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
 eines permanenten Zählers sehr einfach.
 
 ```html
-{{count:0}}
+{{counter:0}}
 <span interval="1000">
-  {{count:parseInt(count) +1}}^
-  {{count}}
+  {{counter:parseInt(counter) +1}}^
+  {{counter}}
 </span>
 ```
 
 Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite- bzw. Condition-JavaScript möglich.
+ist als Composite-JavaScript möglich.
 
 ```html
 <script type="composite/javascript" interval="1000">
@@ -244,14 +255,14 @@ ist als Composite- bzw. Condition-JavaScript möglich.
 
 ### iterate
 
-Iteratives Rendering basiert auf Listen, Aufzählungen und Arrays.  
-Wird ein HTML-Element als iterativ deklariert, wird sein ursprünglicher innerer
-HTML-Code als Vorlage verwendet. Während der Iteration wird beim HTML-Element
-der innere HTML-Code zunächst entfernt, die Vorlage bei jedem Iterationszyklus
-einzeln gerendert und das Ergebnis dem inneren HTML-Code hinzugefügt.
+Die iterative Generierung basiert auf Listen, Aufzählungen und Arrays.  
+Wird ein HTML-Element als iterativ deklariert, wird der initiale innerer
+HTML-Code als Vorlage verwendet und während der Iteration der innere HTML-Code
+zunächst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
+Ergebnis dem inneren HTML-Code hinzugefügt.  
 Das iterate-Attribut erwartet einen Parameter-Ausdruck, zudem ein Meta-Objekt
 erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt `tempA = {item, index, data}`),
-dass den Zugriff auf Iterationszyklus ermöglich.  
+dass den Zugriff auf die Iteration ermöglich.  
 
 ```javascript
 var Model = {
@@ -270,9 +281,9 @@ var Model = {
 
 ### output
 
-Setzt den Wert oder das Ergebnis eines Ausdrucks als inneren HTML-Code bei einem
-HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element oder eine
-Knotenliste mit Elementen sein. Alle anderen Datentypen werden als Text gesetzt.
+Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
+HTML-Code bei einem HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element
+oder eine NodeList sein. Alle anderen Datentypen werden als Text gesetzt.
 Die Ausgabe ist exklusiv und überschreibt den vorhandenen inneren HTML-Code.
 
 ```javascript
@@ -315,9 +326,9 @@ var Model = {
 
 ### render
 
-Die Deklaration mit dem Attribut `render` erfordert die Deklaration mit dem
-Attribut `events`. Das Attribut definiert, welche Ziele nach dem Auftreten eins
-oder verschiedener Events aktualisiert (Re-Rerending) wird.  
+Das Attribut `render` erfordert die Kombination mit dem Attribut `events` und
+definiert, welche Ziele nach dem Auftreten eines oder verschiedener Events
+generiert wird.  
 Als Wert erwartet das Attribut einen CSS-Selector bzw. Query-Selector welche
 die Ziele definieren.
 
@@ -361,9 +372,9 @@ Events: MouseUp KeyUp
     render="#outputText3"/>
 ```  
 
-Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen (events)
-und Zielen (render). Die Ziele sind hochzählende Textausgaben, welche auf die
-entsprechenden Ereignisse reagieren.
+Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen (`events`)
+und Zielen (`render`), die jeweils sich hochzählende Textausgaben darstellen und
+auf entsprechende Ereignisse reagieren.
 
 
 ### sequence
@@ -394,9 +405,9 @@ bestimmte logische Reihenfolge einhalten muss.
 
 ### validate
 
-Die Deklaration mit dem Attribut `validate` erfordert die Deklaration mit dem
-Attribut `events`. Das Attribut `validate` steuert die Synchronisation zwischen
-Markup eines Composites und dem korrespondierenden JavaScript-Model.  
+Das Attribut `validate` erfordert die Kombination mit dem Attribut `events` und
+definiert und steuert die Synchronisation zwischen dem Markup eines Composites
+und dem korrespondierenden JavaScript-Model.  
 Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
 validate-Methode implementieren: `boolean Model.validate(element, value)`  
 Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
@@ -404,7 +415,7 @@ Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
 
 Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
 bewusst nicht bereitgestellt, da diese in den meisten Fällen zu starr ist und
-diese mit geringem Aufwand als zentrale Lösung implementiert werden kann.
+kann mit geringem Aufwand als zentrale Lösung individuell implementiert werden.
 
 ```css
 input.invalid {
@@ -418,7 +429,7 @@ var Model = {
     validate: function(element, value) {
         var valid = !!(value || "").match(/[a-z0-9]+[\w\.\-]*@[a-z0-9]+[\w\.\-]*/i);
         if (element) {
-            element.className = (" " + element.className + " ").replace(/\s+(in){0,1}valid\s+/ig, " ").trim();
+            element.className = element.className.replace(/(^|\s+)(in){0,1}valid(?=(\s|$))/ig, " ").trim();
             element.className += valid ? " valid" : " invalid";
             element.className = element.className.trim();
         }
@@ -446,7 +457,7 @@ synchronisiert, wenn die validate-Methode den Wert `true` zurückgibt.
 
 ## Scripting
 
-Eingebettetes Scripting bringt einige Besonderheit mit sich.  
+TODO: Eingebettetes Scripting bringt einige Besonderheit mit sich.  
 Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
 ausgeführt. Daher wurde das Scripting für das Rendering angepasst und ein neuer
 Type von Scripten: `composite/javascript`. Dieser verwendet das normale JavaScript.

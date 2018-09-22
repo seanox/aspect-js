@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+    
+        var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
+        var validateEmail = function(context, element, value) {
+            var test = PATTER_EMAIL_SIMPLE.test(value);
+            element.setAttribute("title", test ? "" : context + " " + test);
+            return test;
+        };
+        
+        var test = {
+            loginA:{
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("test-loginA", element, value);
+                }
+            },
+            loginB:{
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("test-loginB", element, value);
+                }
+            },
+            loginF1:{
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("test-loginF1", element, value);
+                }
+            },
+            loginF2:{
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("test-loginF2", element, value);
+                }
+            },
+            loginF3:{
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("test-loginF3", element, value);
+                }
+            },
+            loginY:{
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("test-loginY", element, value);
+                }
+            }
+        };
+        
+        var loginX = {
+                email:null,
+                validate:function(element, value) {
+                    return validateEmail("loginX", element, value);
+                }
+            };         
+        
+        var loginY = {
+            email:null,
+            validate:function(element, value) {
+                return validateEmail("loginY", element, value);
+            }
+        };        
+        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            console.log(new Date());
+            if (Test.status().queue != null)
+                return;    
+            document.querySelector("#loginA input").typeValue("a-xxx", true);
+            document.querySelector("#loginB input").typeValue("b-xxx@xxx.xxx", true);
+            document.querySelector("#loginF1 input").typeValue("f1-xxx@", true);
+            document.querySelector("#loginF2 input").typeValue("f2-xxx@xxx.xxx", true);
+            document.querySelector("#loginF3 input").typeValue("f3-xxx", true);
+            Test.start();
+        });
+        
+        Test.create({test:function() {
+            Assert.assertTrue(!!(document.querySelector("#loginA input").getAttribute("title") || "").match(/false/));
+        }});
+        Test.create({test:function() {
+            Assert.assertFalse(document.querySelector("#loginB input").hasAttribute("title"));
+        }});
+        Test.create({test:function() {
+            Assert.assertTrue(!!(document.querySelector("#loginF1 input").getAttribute("title") || "").match(/false/));
+        }}); 
+        Test.create({test:function() {
+            Assert.assertTrue(document.querySelector("#loginF2 input").hasAttribute("title"));
+            Assert.assertTrue(document.querySelector("#loginF2 input").getAttribute("title") == "");
+        }});      
+        Test.create({test:function() {
+            Assert.assertTrue(!!(document.querySelector("#loginF3 input").getAttribute("title") || "").match(/false/));
+        }});  
+        
+        Test.create({test:function() {
+            Assert.assertEquals('{"loginA":{"email":null},"loginB":{"email":null},"loginF1":{"email":null},"loginF2":{"email":null},"loginF3":{"email":null},"loginY":{"email":null}}', test.toPlainString());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals('{"email":"f2-xxx@xxx.xxx"}', loginX.toPlainString());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals('{"email":null}', loginY.toPlainString());
+        }});        
+    </script>
+    <style type="text/css">
+      input {
+          border:1px solid;
+          margin:2px;
+      }
+      input:not([title]) {
+          background:#EEEEFF;
+          border-color:#7777AA;
+      }
+      input[title=''] {
+          background:#EEFFEE;
+          border-color:#77AA77;
+      }
+      input[title]:not([title='']) {
+          background:#FFEEEE;
+          border-color:#AA7777;
+      }
+      input[type='submit'] {
+          background:#EEEEEE;
+          border-color:#777777;
+      }      
+    </style>
+  </head>
+  <body>
+    <article id="test" composite>
+      <form id="loginA" composite>
+        <input id="email" placeholder="email"
+             validate events="keyup">
+        <input id="password" placeholder="password">
+        <input type="submit">
+      </form>
+      <form id="loginB" composite>
+        <input id="loginB.email" placeholder="email"
+             validate events="keyup">
+        <input id="password" placeholder="password">
+        <input type="submit">
+      </form>    
+      <form id="loginF1" composite>
+        <input id="loginX.email" placeholder="email"
+             validate events="keyup">
+        <input id="loginX.password" placeholder="password">
+        <input type="submit">
+      </form>    
+      <form id="loginF2" composite>
+        <input id="loginX.email" placeholder="email"
+             validate events="keyup">
+        <input id="loginX.password" placeholder="password">
+        <input type="submit">
+      </form>
+      <form id="loginF3" composite>
+        <input id="loginY.email" placeholder="email"
+             validate events="keyup">
+        <input id="loginY.password" placeholder="password">
+        <input type="submit">
+      </form>       
+    </article>
+  </body>
+</html>
