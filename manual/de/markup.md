@@ -107,9 +107,8 @@ JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).
 ```
 
 Beispiel zur synchronen Aktualisierung vom HTML-Element _output1_ mit den
-Ereignissen _MouseUp_, _KeyUp_ oder _Change_ beim HTML-Element _text1_.  
-In dem Beispiel wird der Eingabewert von _text1_ synchron mit _output1_
-ausgegebem.
+Ereignissen _MouseUp_, _KeyUp_ oder _Change_ beim HTML-Element _text1_. In dem
+Beispiel wird der Eingabewert von _text1_ synchron mit _output1_ ausgegebem.
 
 ```javascript
 var Model = {
@@ -417,22 +416,27 @@ bewusst nicht bereitgestellt, da diese in den meisten Fällen zu starr ist und
 kann mit geringem Aufwand als zentrale Lösung individuell implementiert werden.
 
 ```css
-input.invalid {
-    border:1px solid #FF0000;
-    background:#FFE0E0;
+input[type='text']:not([title]) {
+    background:#EEEEFF;
+    border-color:#7777AA;
+}
+input[type='text'][title=''] {
+    background:#EEFFEE;
+    border-color:#77AA77;
+}
+input[type='text'][title]:not([title='']) {
+    background:#FFEEEE;
+    border-color:#AA7777;
 }
 ```
 
 ```javascript
 var Model = {
     validate: function(element, value) {
-        var valid = !!(value || "").match(/[a-z0-9]+[\w\.\-]*@[a-z0-9]+[\w\.\-]*/i);
-        if (element) {
-            element.className = element.className.replace(/(^|\s+)(in){0,1}valid(?=(\s|$))/ig, " ").trim();
-            element.className += valid ? " valid" : " invalid";
-            element.className = element.className.trim();
-        }
-        return valid;
+        var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
+        var test = PATTER_EMAIL_SIMPLE.test(value);
+        element.setAttribute("title", test ? "" : "Invalid " + element.getAttribute("placeholder"));
+        return test;
     },
     text1: ""
 };
@@ -442,16 +446,18 @@ var Model = {
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       validate events="mouseup keyup change" render="#Model"/>
-  input: {{Model.text1}}    
+  Model.text1: {{Model.text1}}  
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
 
 In dem Beispiel erwartet das Eingabefeld eine E-Mail-Adresse.  
-Das Format wird fortlaufend bei der Eingabe überprüft und das Eingabefeld bei
-ungültigen Eingaben als `invalid` gekennzeichnet. Unterhalb vom Eingabefeld ist
-die Kontrollausgabe vom korrespondierenden Feld im Model. Dieses Feld wird nur
-synchronisiert, wenn die validate-Methode den Wert `true` zurückgibt.
+Das Format wird fortlaufend bei der Eingabe überprüft und bei einem ungültigen
+Werte eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
+gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.  
+Unterhalb vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
+JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode
+den Wert `true` zurückgibt.
 
 
 ## Scripting

@@ -79,15 +79,61 @@ Da die UI-Parameter im globalen Namensraum (window) existieren, können diese
 direkt im JavaScript verwendet werden.
 
 ```html
-{{example:0}}
-{{example:parseInt(example) +1}}
-{{example}}
-{{example:parseInt(example) +1}}
+{{testA:0}}
+{{testA:parseInt(testA) +1}}
+{{testA}}
+{{testA:parseInt(testA) +1}}
 <script type="composite/javascript">
-  example++;
+  testA++;
 </script>
-{{example}}
+{{testA}}
 ```
 
 
 ## validate
+
+Die Synchronisation von Werten zwischen den HTML-Elementen und den Feldern der
+Java-Script-Modelle lässt sich per Validierung kontrollieren und steuern.  
+In dem Beispiel erwartet das Eingabefeld eine E-Mail-Adresse.  
+Das Format wird fortlaufend bei der Eingabe überprüft und bei einem ungültigen
+Werte eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
+gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.  
+Unterhalb vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
+JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode
+den Wert `true` zurückgibt.
+
+```css
+input[type='text']:not([title]) {
+    background:#EEEEFF;
+    border-color:#7777AA;
+}
+input[type='text'][title=''] {
+    background:#EEFFEE;
+    border-color:#77AA77;
+}
+input[type='text'][title]:not([title='']) {
+    background:#FFEEEE;
+    border-color:#AA7777;
+}
+```
+
+```javascript
+var Model = {
+    validate: function(element, value) {
+        var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
+        var test = PATTER_EMAIL_SIMPLE.test(value);
+        element.setAttribute("title", test ? "" : "Invalid " + element.getAttribute("placeholder"));
+        return test;
+    },
+    text1: ""
+};
+```
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate events="mouseup keyup change" render="#Model"/>
+  Model.text1: {{Model.text1}}  
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
