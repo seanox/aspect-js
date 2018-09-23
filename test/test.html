@@ -193,7 +193,9 @@
           onMessage("warn", message);
       };      
       var onError = function(message) {
-          onMessage("error", message);
+          if (String(message).match(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\sTest/i))
+              onMessage("error", message);
+          else onMessage("warn", message);
       };    
       
       var onStart = function(event, status) {
