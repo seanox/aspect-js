@@ -22,6 +22,13 @@
  *  
  *      DESCRIPTION
  *      ----
+ *  With aspect-js the declarative approach of HTML is taken up and extended. In
+ *  addition to the expression language, the HTML elements are provided with
+ *  additional attributes for functions and object binding attributes.
+ *  The corresponding renderer is included in the composite implementation and
+ *  actively monitors the DOM via the MutationObserver and thus reacts
+ *  recursively to changes in the DOM.
+ *
  *  TODO:
  *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei
  *    ersten Auftreten eines Elements gelesen und können später nicht geänert
@@ -53,23 +60,13 @@
  *        The filter therefore affects the child elements.
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
- *  TODO: Hinweis zu JavaScript-Blöcken
- *        Diese werden durch das rekursive Rendering ggf. mehrfach verarbeitet.
- *        Bsp. iterate: Erst beim initialen Laden der Seite, dann beim Iterate
- *        selbst und dann beim Rescan nach Abschluss vom Iterate. Daher sollte
- *        hier besser composite/javascript verwendet werden.
- *        Der Effekt betriff alle Stellen, an denen ein Output in die Seite beim
- *        Rendern erfolgt. Diese Stellen werden nach dem Output immer gescannt ob
- *        sich hier neues Markup mit Expressions oder Markup für das Objekt-Binding
- *        ergeben hat.
- *  TODO: Check the usage of apply      
  *        
- *  Composite 1.0 20180908
+ *  Composite 1.0 20180923
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180906
+ *  @version 1.0 20180923
  */
 if (typeof Composite === "undefined") {
     
@@ -85,6 +82,9 @@ if (typeof Composite === "undefined") {
 
     /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
     Composite.selectors;
+    
+    //TODO:
+    Composite.modifiers;
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
@@ -109,9 +109,6 @@ if (typeof Composite === "undefined") {
 
     /** Constant for attribute iterate */
     Composite.ATTRIBUTE_ITERATE = "iterate";
-
-    /** Constant for attribute mount */
-    Composite.ATTRIBUTE_MOUNT = "mount";
 
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
@@ -186,8 +183,13 @@ if (typeof Composite === "undefined") {
      */
     Composite.PATTERN_COMPOSITE_SCRIPT = /^composite\/javascript$/i;
 
-    /** Pattern for a composite id */
-    Composite.PATTERN_COMPOSITE_ID = /^([a-z](?:[\w\.]*[\w])*)(?:\:\w*)*$/i;
+    /**
+     *  Pattern for a composite id
+     *      group 1: composite
+     *      group 2: id (optional)
+     *      group 3: identifier (optional)
+     */
+    Composite.PATTERN_COMPOSITE_ID = /^([a-z]\w*(?:\.\w+)*?)(?:\.(\w+))*(?:\:(\w*))*$/i;
     
     /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
@@ -204,7 +206,12 @@ if (typeof Composite === "undefined") {
     Composite.EVENT_SCAN_START = "ScanStart";
     Composite.EVENT_SCAN_NEXT = "ScanNext";
     Composite.EVENT_SCAN_END = "ScanEnd";
-    
+
+    /** Constants of events during mounting */
+    Composite.EVENT_MOUNT_START = "MountStart";
+    Composite.EVENT_MOUNT_NEXT = "MountNext";
+    Composite.EVENT_MOUNT_END = "MountEnd";
+
     /** Constants of events when using AJAX */
     Composite.EVENT_AJAX_START = "AjaxStart";
     Composite.EVENT_AJAX_RECEIVE = "AjaxReceive";
@@ -406,50 +413,126 @@ if (typeof Composite === "undefined") {
      *  During synchronization, the element must also exist as a property in the model.
      *  The object binding only connects what was implemented with the model. An automatic extension of the models at runtime by the renderer is not supported, but can be solved programmatically - this is a conscious decision!
      */
-    Composite.mount = function(selector) {
+    Composite.mount = function(selector, lock) {
         
-        if (!selector)
-            return;        
+        Composite.mount.queue = Composite.mount.queue || new Array();
         
-        Composite.mount.stack = Composite.mount.stack || new Array();
-        
-        if (typeof selector === "string") {
-            selector = selector.trim();
-            if (!selector)
-                return;
-            var nodes = document.querySelectorAll(selector);
-            nodes.forEach(function(node, index, array) {
-                Composite.asynchron(Composite.mount, false, node);
-            });
+        //The lock locks concurrent mount requests.
+        //Concurrent mounting causes unexpected effects.
+        if (Composite.mount.lock
+                && Composite.mount.lock != lock) {
+            if (!Composite.mount.queue.includes(selector))
+                Composite.mount.queue.push(selector);
             return;
         }
+
+        if (Composite.mount.lock === undefined
+                || Composite.mount.lock === false)
+            Composite.mount.lock = {ticks:1, selector:selector, share:function() {
+                this.ticks++; return this;}};
+        var lock = Composite.mount.lock;
+            
+        try {
+            
+            var event = Composite.EVENT_MOUNT_START;
+            if (lock.ticks > 1)
+                event = Composite.EVENT_MOUNT_NEXT;
+            Composite.fire(event, lock.selector);
+
+            if (typeof selector === "string") {
+                selector = selector.trim();
+                if (!selector)
+                    return;
+                var nodes = document.querySelectorAll(selector);
+                nodes.forEach(function(node, index, array) {
+                    Composite.asynchron(Composite.mount, false, node, lock.share());
+                });
+                return; 
+            }
+
+            if (!(selector instanceof Element))
+                return;
+            
+            //There must be a corresponding model class.
+            var model = Composite.mount.lookup(selector);
+            if (!(model instanceof Object)
+                    || model instanceof Element)
+                return;
+            model = model.scope;
+            
+            //No multiple object binding
+            if (Composite.mount.queue.includes(selector))
+                return;
+            
+            //Registers all events that are implemented in the model.
+            for (var entry in model)
+                if (typeof model[entry] === "function"
+                        && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
+                    selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
+
+        } finally {
         
-        if (!(selector instanceof Element))
-            return;
+            lock.ticks--;
+            if (lock.ticks >= 0)
+                return;
+
+            Composite.mount.queue = Composite.mount.queue.filter(entry => entry != lock.selector);
+            Composite.mount.lock = false;
+            Composite.fire(Composite.EVENT_MOUNT_END, lock.selector);
+            
+            selector = Composite.mount.queue.shift();
+            if (selector)
+                Composite.asynchron(Composite.mount, {arguments:[selector]});
+        }        
+    };
+    
+    /**
+     *  Determines the namespace for an element.
+     *  The namespace is created based on the parent composite elements
+     *  (elements with the attribute 'composite'), but also includes the passed
+     *  element if it is a composite itself.
+     *  The IDs of the composite elements constitute the namespace in order of
+     *  their position in the DOM.
+     *  @return the determined namespace, otherwise null
+     *  @throws An error occurs in the following cases:
+     *    - a composite does not have an ID
+     *    - the ID does not match the pattern of a Composite-ID.
+     */
+    Composite.mount.locate = function(element) {
         
-        //There must be a corresponding model class.
-        var model = Composite.mount.lookup(selector);
-        if (!(model instanceof Object)
-                || model instanceof Element)
-            return;
-        model = model.scope;
+        if (!(element instanceof Element))
+            return null;
         
-        //No multiple object binding
-        if (Composite.mount.stack.includes(selector))
-            return;
+        var namespace = null;
+        for (; element; element = element.parentNode) {
+            if (!(element instanceof Element
+                    && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)))
+                continue;
+            var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+            serial = serial.replace(/:.*$/, "").trim();
+            if (namespace)
+                namespace = "." + namespace;
+            namespace = serial + (namespace || "");
+            if (serial.indexOf(".") >= 0)
+                break;
+        }
         
-        //Marks the element as mounted.
-        selector.setAttribute(Composite.ATTRIBUTE_MOUNT, "");
-        
-        //Registers all events that are implemented in the model.
-        for (var entry in model)
-            if (typeof model[entry] === "function"
-                    && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
-                selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
+        return namespace;
     };
     
     /**
      *  Determines the object scope (namespace) for an element.
+     *  The namespace is a text string separated with dots, that represents the
+     *  path in an object model.
+     *  In the DOM (markup), the namespace is described by the sequence of the
+     *  id-attributes of composite elements. Each child in the DOM with an id
+     *  thus represents a property of the parent composite object, also named as
+     *  model. For the namespace, there is also a scope. This represents the
+     *  path as an object tree.
+     *  
+     *  TODO:
      *  The method always requires an existing model / composite in which the
      *  element is located. If the passed element uses an ID with a qualified
      *  namespace, then this is used. Otherwise, if a superordinate composite
@@ -459,43 +542,66 @@ if (typeof Composite === "undefined") {
      *  @return the created meta object, otherwise null
      */
     Composite.mount.lookup = function(element) {
-
-        if (!(element instanceof Element))
-            return null;        
         
-        var composite = null;
-        for (var node = element; !composite && node.parentNode; node = node.parentNode) {
-            if (!node.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
-                    || !node.hasAttribute(Composite.ATTRIBUTE_ID))
-                continue;
-            var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                continue;
-            composite = serial.replace(/:.*$/, "").trim();
-        }
-
-        var serial = element.getAttribute(Composite.ATTRIBUTE_ID) || "";
-        serial = serial.replace(/:.*$/, "").trim();
-        if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+        //The rules for the lookup:
+        //  - The namespace consists of a context, an ID, and an optional identifier
+        //  - context: Corresponds to the chain of superior IDs of all elements with the attribute 'composite'.
+        //  - ID: The id of an element.
+        //  - identifier: Individual identifier in an Id which is separated from the ID by a double point
+        
+        //Context and Id can contain relative and absolute values.
+        //Relative names match the pattern: xxxx
+        //Absolute namespaces also contain the dot as a separator for the individual parts.
+        //With the recursive resolution of the namespace, the higher-level composite IDs are always regarded as absolute until the first absolute composite ID occurs, then the recursive resolution is interrupted and the absolute composite ID is used as the basis for the namespace.
+        //If an element uses an absolute ID, no higher-level namespace is determined.
+        //Invalid composite Ids cause an error.
+        
+        //composite = namespache = scope
+        
+        if (!(element instanceof Element)
+                || !element.hasAttribute(Composite.ATTRIBUTE_ID))
             return null;
         
-        var namespace = function(namespace) {
-            namespace = namespace.match(/^(?:(.*)\.)*(.*)$/);
-            var model = namespace[1];
-            var field = namespace[2];
-            if (!model || !field)
-                return null;
+        var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+        serial = serial.match(Composite.PATTERN_COMPOSITE_ID);
+        if (!serial)
+            throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+
+        var scope = null;
+        var model = null;
+        var field = null;
+
+        //The determined composite-id of the element is split into composite and
+        //serial (id). The composite/model can only be determined if the element
+        //contains an serial with an absolute namespace.
+        if (serial[2]) {
+            model = serial[1];
+            field = serial[2];
+        } else field = serial[1];
+
+        //If the element contains only a serial, a relative namespace is
+        //expected, which is recursively determined from the parent elements
+        //with a composite-id. The recursion ends with the first absolute
+        //namespace/composite-id. For this, a dot must be contained in the
+        //composite-id.
+        model = model || Composite.mount.locate(element.parentNode);
+        
+        //If the namespace for a model could be determined, an attempt is made
+        //to create the object scope for it.
+        if (model) {
             var scope = Object.lookup(model);
-            if (scope  && scope.hasOwnProperty(field))
+            if (scope && scope.hasOwnProperty(field))
                 return {scope:scope, model:model, field:field};
-            return null;
-        };
-
-        var scope = namespace(composite ? composite + "." + serial : serial);
-        if (!scope
-                && composite)
-            scope = namespace(serial);
-        return scope;
+        }
+        
+        //If the model or the namespace for a model could not be confirmed, an
+        //attempt is made to determine whether the field exists in the global
+        //namespace (window).
+        var scope = Object.lookup(field);
+        if (scope && scope.hasOwnProperty(field))
+            return {scope:scope, model:window, field:field};
+        
+        return null;
     };
     
     /**
@@ -522,7 +628,8 @@ if (typeof Composite === "undefined") {
 
         if (Composite.scan.lock === undefined
                 || Composite.scan.lock === false)
-            Composite.scan.lock = {ticks:1, selector:selector, share:function() {this.ticks++; return this;}};
+            Composite.scan.lock = {ticks:1, selector:selector, share:function() {
+                this.ticks++; return this;}};
         var lock = Composite.scan.lock;
             
         try {
@@ -546,10 +653,9 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Element))
                 return;
     
-            //Find all unmounted elements with an ID in a composite, including
-            //the composite itself. Mounted elements are marked with the
-            //attribute 'mount'.
-            var nodes = selector.querySelectorAll("[" + Composite.ATTRIBUTE_ID + "]:not([" + Composite.ATTRIBUTE_MOUNT + "])");
+            //Find all elements with an ID in a composite, including the
+            //composite itself.
+            var nodes = selector.querySelectorAll("[" + Composite.ATTRIBUTE_ID + "]");
             nodes = Array.from(nodes);
             if (!selector.hasAttribute(Composite.ATTRIBUTE_MOUNT))
                 nodes.unshift(selector); 
@@ -575,13 +681,44 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO: Q: It is better to rename 'scope'?
+     *  There are several ways to customize the renderer.
+     *  
+     *      Custom-Tag
+     *      ----
+     *  TODO:  
+     *  
+     *      Custom-Selector
+     *      ----
+     *  TODO:
+     *  
+     *      Modifier
+     *      ---
+     *  Modifiers are a very special way to customize. Unlike the other ways,
+     *  here the rendering is not shifted into own implementations. With a
+     *  modifier, an element is manipulated before rendering and only if the
+     *  renderer processes the element initially. This makes it possible to make
+     *  individual changes to the attributes or the markup before the renderer
+     *  processes them. This does not affect the implementation of the
+     *  rendering. The method call with a modifier:
+     *      Composite.customize(function(element) {...});
+     *  Only arguments with a method without a return value are expected. 
+     * 
+     *  TODO:
      *  @throws An error occurs in the following cases:
      *    - namespace is not valid or is not supported
      *    - rendering function is not implemented correctly
      *  TODO: customize object binding alias -> model
      */
     Composite.customize = function(scope, rendering) {
+        
+        //If only one argument of type function is passed, the method is
+        //registered as a modifier.
+        if (typeof scope === "function"
+                && arguments.length == 1) {
+            Composite.modifiers = Composite.modifiers || new Array();
+            Composite.modifiers.push(scope);
+            return;
+        }
         
         //Custom tags, here also called macro, are based on a case-insensitive
         //tag name (key) and a render function (value). In this function, the
@@ -729,8 +866,7 @@ if (typeof Composite === "undefined") {
      *  output. The interval starts automatically with the (re)rendering of the
      *  declared HTML element and is terminated and removed when:
      *    - the element no longer exists in the DOM
-     *    - TODO: condition the condition attribute is false
-     *    - the element or a parent is no longer visible
+     *    - condition the condition attribute is false
      *      
      *      Iterate
      *      ----
@@ -787,7 +923,8 @@ if (typeof Composite === "undefined") {
 
         if (Composite.render.lock === undefined
                 || Composite.render.lock === false)
-            Composite.render.lock = {ticks:1, selector:selector, share:function() {this.ticks++; return this;}};
+            Composite.render.lock = {ticks:1, selector:selector, share:function() {
+                this.ticks++; return this;}};
         var lock = Composite.render.lock;
             
         try {
@@ -846,6 +983,13 @@ if (typeof Composite === "undefined") {
             var serial = selector.ordinal();
             var object = Composite.render.meta[serial];
             if (!object) {
+                
+                //TODO: Doku modifiers (function(selector) {ohne rückgabewert}
+                Composite.modifiers = Composite.modifiers || new Array();
+                Composite.modifiers.forEach(function(modifier, index, array) {
+                    modifier.call(null, selector);
+                });
+
                 object = {serial:serial, element:selector, attributes:{}};
                 Composite.render.meta[serial] = object;
                 if ((selector instanceof Element)
@@ -866,6 +1010,13 @@ if (typeof Composite === "undefined") {
                             object.attributes[attribute.name.toLowerCase()] = value;
                         }
                     });
+                    
+                    //The scope or namespace for the optional model (if
+                    //available) is determined. This is needed later to clean up
+                    //the models when their corresponding HTML element is
+                    //removed from the DOM.
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                        object.scope = Composite.mount.locate(selector);
                     
                     //The condition attribute is interpreted.
                     //If an HTML element uses the condition attribute, a text
@@ -1273,7 +1424,6 @@ if (typeof Composite === "undefined") {
                 } else selector.innerHTML = value;
             }
 
-            //TODO: Doku (condition)
             //The interval attribute is interpreted.
             //Interval rendering based on a window interval.
             //If an HTML element is declared as interval, its initial inner HTML
@@ -1286,7 +1436,6 @@ if (typeof Composite === "undefined") {
             //declared HTML element and is terminated and removed when:
             //  - the element no longer exists in the DOM
             //  - the condition attribute is false
-            //  - the element or a parent is no longer visible
             var interval = object.attributes[Composite.ATTRIBUTE_INTERVAL];
             if (interval
                     && !object.interval) {
@@ -1323,7 +1472,6 @@ if (typeof Composite === "undefined") {
                     console.error("Invalid interval: " + interval);
             }
             
-            //TODO: Doku
             //The iterate attribute is interpreted.
             //Iterative rendering based on lists, enumeration and arrays.
             //If an HTML element is declared iteratively, its initial inner HTML
@@ -1489,21 +1637,8 @@ if (typeof Composite === "undefined") {
     //With the start the complete body element is rendered.
     //Register the composite (re)scan with the end of the rendering.
     window.addEventListener("load", function(event) {
-        //Queue with outstanding scans.
-        Composite.scan.queue = Composite.scan.queue || new Array();
-        Composite.listen(Composite.EVENT_RENDER_START, function(event, node) {
-            Composite.scan.queue.push(node);
-        });
-        //At the end of each render cycle, scanning for elements to mount is started.
-        Composite.listen(Composite.EVENT_RENDER_END, function(event, node) {
-            var queue = new Array();
-            while (Composite.scan.queue.length > 0)
-                queue.push(Composite.scan.queue.shift());
-            queue.forEach(function(entry, index, array) {
-                Composite.asynchron(Composite.scan, false, entry);
-            });
-        });
         Composite.render(document.body);
+        Composite.scan(document.body);
     });
     
     //A MutationObserver is established to detect changes at the DOM and
@@ -1515,33 +1650,55 @@ if (typeof Composite === "undefined") {
             mutations.forEach(function(mutation) {
                 if (mutation.addedNodes) {
                     mutation.addedNodes.forEach(function(node) {
-                        //Duplicates should be prevented.
-                        if (stack.indexOf(node) >= 0)
-                            return;                
-                        stack.push(node);
-                        //Ignore all text nodes. These are filled with the final
-                        //text content during rendering, unless the content
-                        //still contains expressions
-                        if (node.nodeType == Node.TEXT_NODE
-                                && !node.nodeValue.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                            return;
-                        var serial = node.ordinal();
-                        var object = Composite.render.meta[serial];
-                        //Ignore all placeholders. The corresponding output
-                        //elements are generated when the placeholder is created
-                        //and rendered, and are then rendered initially.
-                        if (object)
-                            if (object.hasOwnProperty("template")
-                                    || object.hasOwnProperty("output")
-                                    || object.hasOwnProperty("placeholder")
-                                    || object.attributes.hasOwnProperty("value"))
+                        try {
+                            //Duplicates should be prevented.
+                            if (stack.indexOf(node) >= 0)
+                                return;                
+                            stack.push(node);
+                            //Ignore all text nodes. These are filled with the final
+                            //text content during rendering, unless the content
+                            //still contains expressions
+                            if (node.nodeType == Node.TEXT_NODE
+                                    && !node.nodeValue.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                                 return;
-                        Composite.render(node);
+                            var serial = node.ordinal();
+                            var object = Composite.render.meta[serial];
+                            //Ignore all placeholders. The corresponding output
+                            //elements are generated when the placeholder is created
+                            //and rendered, and are then rendered initially.
+                            if (object)
+                                if (object.hasOwnProperty("template")
+                                        || object.hasOwnProperty("output")
+                                        || object.hasOwnProperty("placeholder")
+                                        || object.attributes.hasOwnProperty("value"))
+                                    return;
+                            Composite.render(node);
+                        } finally {
+                            Composite.scan(node);
+                        }
                     });
                 }
                 if (mutation.removedNodes) {
                     mutation.removedNodes.forEach(function(node) {
-                        delete Composite.render.meta[node.ordinal()];
+                        var cleanup = function(node) {
+                            //Clean up all the child elements first.
+                            if (node.childNodes) {
+                                Array.from(node.childNodes).forEach(function(node) {
+                                    cleanup(node);
+                                });
+                            }
+                            //If a composite element is removed from the DOM,
+                            //the model must be unmounted.
+                            var serial = node.ordinal();
+                            var object = Composite.render.meta[serial];
+                            if (object && ("scope" in object)) {
+                                object = Object.lookup(object.scope);
+                                if (object && ("mount" in object))
+                                    object.unmount.call(null);
+                            }
+                            delete Composite.render.meta[node.ordinal()];
+                        };
+                        cleanup(node);
                     });
                 }
             }); 
@@ -1787,7 +1944,7 @@ if (typeof Expression === "undefined") {
         //    le  <=        lt    <         mod %
         //    ne  !=        not   !         or  ||
         //additional keywords without mapping:
-        //    true, false, null, instanceof, typeof, undefined
+        //    true, false, null, instanceof, typeof, undefined, new
         //Separation of script in keyword and other as partial words.
         //IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
         
@@ -1800,7 +1957,7 @@ if (typeof Expression === "undefined") {
                 var pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
                 text = text.replace(pattern, "$1\n\r" + keywords[loop +1] + "\n");
             }
-            text = text.replace(/(^|[^\w\.])(true|false|null|instanceof|typeof|undefined)(?=[^\w\.]|$)/ig, function(match, script, keyword) {
+            text = text.replace(/(^|[^\w\.])(true|false|null|instanceof|typeof|undefined|new)(?=[^\w\.]|$)/ig, function(match, script, keyword) {
                 return script + "\n\r" + keyword.toLowerCase() + "\n";
             });
             var words = new Array();
