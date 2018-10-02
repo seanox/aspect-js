@@ -31,9 +31,9 @@
           Assert.assertEquals("#x#y", Path.normalize("#x#y#z##", ""));
           Assert.assertEquals("#x", Path.normalize("#x#y#z###", ""));
           
-          Assert.assertEquals("#x#y#z", Path.normalize("#x#y#z#", "#"));
-          Assert.assertEquals("#x#y", Path.normalize("#x#y#z##", "#"));
-          Assert.assertEquals("#x", Path.normalize("#x#y#z###", "#"));
+          Assert.assertEquals("#", Path.normalize("#x#y#z#", "#"));
+          Assert.assertEquals("#", Path.normalize("#x#y#z##", "#"));
+          Assert.assertEquals("#", Path.normalize("#x#y#z###", "#"));
       }});
 
       Test.create({test:function() {
