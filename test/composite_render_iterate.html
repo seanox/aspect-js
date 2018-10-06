@@ -24,7 +24,13 @@
         
         var tempB = function() {
             return "123";
-        }
+        };
+        
+        var testS = function() {
+            var span = document.createElement("span");
+            span.textContent = "X";
+            return span;
+        };
 
         Test.create({test:function() {
             Assert.assertEquals("", OutputA1.textContent);            
@@ -75,6 +81,9 @@
         Test.create({test:function() {
             Assert.assertEquals("123", OutputB2.textContent);            
         }});
+        Test.create({test:function() {
+            Assert.assertEquals("XXX", OutputS1.textContent);            
+        }});        
         Test.create({test:function() {
             var content = document.querySelector("table").outerHTML;
             content = content.replace(/^\s+/mg, "");
@@ -178,6 +187,8 @@
       <input id="b:{{tempB.index}}" type="text" value="{{tempB.index}}: {{tempB.item}} of {{tempB.data}}">
     </div>
     <div id="OutputB2">{{tempB()}}</div>
+    
+    <span id="OutputS1" iterate="{{tempS:TestModel.listA}}" import="{{testS()}}">---</span>
     
     <table>
       <thead>
