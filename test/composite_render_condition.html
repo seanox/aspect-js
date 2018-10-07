@@ -46,21 +46,31 @@
               listE: ["a", "b", "c"]
         };
         
+        var testS = function(text) {
+            var span = document.createElement("span");
+            span.textContent = text;
+            return span;
+        };        
+        
         var snapshots = new Array();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
-            snapshots.push(snapshot);
+            if (!snapshots.includes(snapshot))
+                snapshots.push(snapshot);
         });
         
         var count = 0;
         var interval = window.setInterval(function() {
-            Composite.render("body");
-            if (++count < 4)
+            if (++count < 5)
+                Composite.render(document.body);
+            if (snapshots.length != snapshots.ticks) {
+                snapshots.ticks = snapshots.length;
                 return;
-            window.clearInterval(interval);
+            } else window.clearInterval(interval);
             Test.start();
         }, 250);
+        
         var x1 = 0;
         var x2 = 0;
         var x3 = 0;
@@ -88,20 +98,25 @@
     C1C
     D1D
     E1E
+    OnA: false
     A2AA
     B2B
     C2CC    
-    false
-    true
+    OnA: true
     O1: 1 x1++; output1.textContent = x1;
     O2: 1 x2++; output2.textContent = x2;
     O3: 1 false x3++; output3.textContent = x3;
     O4: 1 false x4++; output4.textContent = x4;
     E::E
+    S:1:1:S    
+    OnA: true
+    OnB: false
     A3-1 
     A3-2
     A3-3
     A3-4
+    OnA: false
+    OnB: true
     </script>
     <script type="text/test-2">
     A1AA
@@ -109,16 +124,21 @@
     C1C
     D1D
     E1E
+    OnA: false
     A2AA
     B2B
     C2CC    
-    false
-    true
+    OnA: true
     O1: 1 x1++; output1.textContent = x1;
     O2: 2 x2++; output2.textContent = x2;
-    O3: 1 true
-    O4: 1 true
-    E:abc:E    
+    O3: 1 true 
+    O4: 1 true 
+    E:abc:E
+    S:2:2:S    
+    OnA: true
+    OnB: true
+    OnA: true
+    OnB: false
     </script>
     <script type="text/test-3">
     A1AA
@@ -126,21 +146,26 @@
     C1C
     D1D
     E1E
+    OnA: true
     A2A
     B2BB
     C2C    
-    true
-    false
+    OnA: false
     O1: 1 x1++; output1.textContent = x1;
     O2: 3 x2++; output2.textContent = x2;
     O3: 1 false x3++; output3.textContent = x3;
     O4: 2 false x4++; output4.textContent = x4;
     E::E
+    S:3:3:S    
+    OnA: false
+    OnB: false
     A3-1 
     A3-2
     A3-3
     A3-4
-    A3-5    
+    A3-5
+    OnA: true
+    OnB: true  
     </script>
     <script type="text/test-4">
     A1AA
@@ -148,16 +173,21 @@
     C1C
     D1D
     E1E
+    OnA: true
     A2A
     B2BB
     C2C    
-    true
-    false
+    OnA: false
     O1: 1 x1++; output1.textContent = x1;
     O2: 4 x2++; output2.textContent = x2;
-    O3: 1 true
-    O4: 2 true
-    E:abc:E    
+    O3: 1 true 
+    O4: 2 true 
+    E:abc:E
+    S:4:4:S    
+    OnA: false
+    OnB: true
+    OnA: false
+    OnB: false
     </script>
     <script type="text/test-5">
     A1AA
@@ -165,20 +195,25 @@
     C1C
     D1D
     E1E
+    OnA: false
     A2AA
     B2B
     C2CC    
-    false
-    true
+    OnA: true
     O1: 1 x1++; output1.textContent = x1;
     O2: 5 x2++; output2.textContent = x2;
     O3: 1 false x3++; output3.textContent = x3;
     O4: 3 false x4++; output4.textContent = x4;
     E::E
+    S:5:5:S    
+    OnA: true
+    OnB: false
     A3-1 
     A3-2
     A3-3
-    A3-4    
+    A3-4
+    OnA: false
+    OnB: true
     </script>    
   </head>
   <body>
@@ -188,12 +223,11 @@
     D1<span condition="{{0}}">D</span>D
     E1<span condition="{{null}}">E</span>E
     
+    OnA: {{Model.onA}}
     A2<span condition="{{Model.toggleA()}}">A</span>A
     B2<span condition="{{Model.toggleA()}}">B</span>B
     C2<span condition="{{Model.toggleA()}}">C</span>C    
-    
-    {{Model.toggleA()}}
-    {{Model.toggleA()}}
+    OnA: {{Model.onA}}
     
     O1: <span id="output1">
       </span> <script type="text/javascript">x1++; output1.textContent = x1;</script>
@@ -205,7 +239,12 @@
         condition="{{Model.toggleD()}}">x4++; output4.textContent = x4;</script>
         
     E:<span iterate="{{list:Model.listE}}" condition="{{not Model.toggleE()}}"><span>{{list.item}}</span></span>:E
+    
+    {{s1:(s1 || 0) +1}}
+    S:{{s1}}:<span id="outputS1" condition="{{true}}" import="{{testS(s1)}}">---</span>:S    
 
+    OnA: {{Model.onA}}
+    OnB: {{Model.onB}}
     <span condition="{{Model.toggleB()}}">A3-1 
       <span condition="{{true}}">A3-2
         <span condition="{{true}}">A3-3
@@ -216,5 +255,8 @@
         </span>
       </span>
     </span>
+    
+    OnA: {{Model.onA}}
+    OnB: {{Model.onB}}
   </body>
 </html>

@@ -26,9 +26,9 @@
             return "123";
         };
         
-        var testS = function() {
+        var testS = function(text) {
             var span = document.createElement("span");
-            span.textContent = "X";
+            span.textContent = text + "{{s1}}";
             return span;
         };
 
@@ -82,17 +82,33 @@
             Assert.assertEquals("123", OutputB2.textContent);            
         }});
         Test.create({test:function() {
-            Assert.assertEquals("XXX", OutputS1.textContent);            
-        }});        
-        Test.create({test:function() {
             var content = document.querySelector("table").outerHTML;
             content = content.replace(/^\s+/mg, "");
             Assert.assertEqualsTo("script[type='text/test-1']", content);
         }});
+        Test.create({test:function() {
+            Assert.assertEquals("151515", OutputS1.textContent);
+            Composite.render(document.body);
+        }});   
         
+        var snapshots = new Array();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
+            var snapshot = document.body.textContent;
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            if (!snapshots.includes(snapshot))
+                snapshots.push(snapshot);
+        });        
+        
+        var count = 0;
+        var interval = window.setInterval(function() {
+            if (++count < 5)
+                Composite.render(document.body);
+            if (snapshots.length != snapshots.ticks) {
+                snapshots.ticks = snapshots.length;
+                return;
+            } else window.clearInterval(interval);
             Test.start();
-        });
+        }, 250);
     </script>
     <script type="text/test-1">
     <table>
@@ -188,7 +204,8 @@
     </div>
     <div id="OutputB2">{{tempB()}}</div>
     
-    <span id="OutputS1" iterate="{{tempS:TestModel.listA}}" import="{{testS()}}">---</span>
+    {{s1:(s1 || 0) +1}}
+    S:{{s1}}:<span id="OutputS1" iterate="{{tempS:TestModel.listA}}" import="{{testS(s1)}}">---</span>
     
     <table>
       <thead>
