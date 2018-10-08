@@ -48,8 +48,8 @@ if (typeof Namespace === "undefined") {
     /**
      *  TODO:
      *  @throws An error occurs in the following cases:
-     *    - event is not valid or is not supported
-     *    - callback function is not implemented correctly or does not exist
+     *      - event is not valid or is not supported
+     *      - callback function is not implemented correctly or does not exist
      */
     Namespace.using = function(namespace) {
         

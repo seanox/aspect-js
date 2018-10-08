@@ -38,18 +38,36 @@
                 email:null,
                 validate:function(element, value) {
                     return validateEmail("test-loginF1", element, value);
+                },
+                loginX:{
+                    email:null,
+                    validate:function(element, value) {
+                        return validateEmail("test-loginF1-loginX", element, value);
+                    },
                 }
             },
             loginF2:{
                 email:null,
                 validate:function(element, value) {
                     return validateEmail("test-loginF2", element, value);
+                },
+                loginX:{
+                    email:null,
+                    validate:function(element, value) {
+                        return validateEmail("test-loginF2-loginX", element, value);
+                    },
                 }
             },
             loginF3:{
                 email:null,
                 validate:function(element, value) {
                     return validateEmail("test-loginF3", element, value);
+                },
+                loginY:{
+                    email:null,
+                    validate:function(element, value) {
+                        return validateEmail("test-loginF3-loginY", element, value);
+                    }
                 }
             },
             loginY:{
@@ -104,11 +122,14 @@
         }});  
         
         Test.create({test:function() {
-            Assert.assertEquals('{"loginA":{"email":null},"loginB":{"email":null},"loginF1":{"email":null},"loginF2":{"email":null},"loginF3":{"email":null},"loginY":{"email":null}}', test.toPlainString());
+            Assert.assertEquals('{"loginA":{"email":null},"loginB":{"email":null},"loginF1":{"email":null,"loginX":{"email":null}},"loginF2":{"email":null,"loginX":{"email":"f2-xxx@xxx.xxx"}},"loginF3":{"email":null,"loginY":{"email":null}},"loginY":{"email":null}}', test.toPlainString());
         }});
         Test.create({test:function() {
-            Assert.assertEquals('{"email":"f2-xxx@xxx.xxx"}', loginX.toPlainString());
+            Assert.assertEquals('{"email":"f2-xxx@xxx.xxx"}', test.loginF2.loginX.toPlainString());
         }});
+        Test.create({test:function() {
+            Assert.assertEquals('{"email":null}', loginX.toPlainString());
+        }});        
         Test.create({test:function() {
             Assert.assertEquals('{"email":null}', loginY.toPlainString());
         }});        

@@ -48,6 +48,10 @@
  *        qualifier = zusätzliche Kennzeichnung damit die ID unique ist
  *    Der Qualifier wird von Composite/Object-Bindung ignoriert.
  *  TODO: Doku:
+ *        DOM und Objekt-Baum (+ virtual Paths) sind analog.
+ *        Bedeutet, Pfade und die Verschachtelung der Objekte muss der
+ *        Verschachtelung vom DOM entsprechen. 
+ *  TODO: Doku:
  *        Custom-Tag, hier muss man sich um alle attribute selbt gekuemmert werden.
  *        Composite tut hier nicht, ausser dem Aufruf der Implementierung.
  *        Es kann jedes Node-Element (auch #text) als custom-tag registriert werden.
@@ -183,13 +187,17 @@ if (typeof Composite === "undefined") {
      */
     Composite.PATTERN_COMPOSITE_SCRIPT = /^composite\/javascript$/i;
 
+    /** Pattern for a composite id */
+    Composite.PATTERN_COMPOSITE_ID = /^(?:[a-z]\w*)*$/i;
+
     /**
-     *  Pattern for a composite id
-     *      group 1: composite
-     *      group 2: id (optional)
+     *  Pattern for a element id
+     *      group 1: extended namespace (qualification towards the model)
+     *               or field without extended namespace
+     *      group 2: field, only with an extended namespace
      *      group 3: identifier (optional)
      */
-    Composite.PATTERN_COMPOSITE_ID = /^([a-z]\w*(?:\.\w+)*?)(?:\.(\w+))*(?:\:(\w*))*$/i;
+    Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z\w*\.])*?(?:[a-z]\w*))\.)*?([a-z]\w*)(?:\:(\w*))*$/i;
     
     /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
@@ -406,8 +414,8 @@ if (typeof Composite === "undefined") {
      *        - Objekte in Objekten ist durch den Namespaces moeglich (als static inner Class)
      * 
      *  @throws An error occurs in the following cases:
-     *    - namespace is not valid or is not supported
-     *    - namespace cannot be created if it already exists as a method
+     *      - namespace is not valid or is not supported
+     *      - namespace cannot be created if it already exists as a method
      *    
      *  The object binding and synchronization assume that a model corresponding to the composite exists with the same namespace.
      *  During synchronization, the element must also exist as a property in the model.
@@ -487,16 +495,22 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  Determines the namespace for an element.
+     *  TODO:
+     *  Composite ist immer relative bzw. absolute zum DOM.
+     *  Die Reihenfolge bzw. Verschachtelung der Composutes im DOM bestimmen
+     *  auch Namespace und Scope!!! 
+     *  
+     *  Determines the namespace for a composite element.
      *  The namespace is created based on the parent composite elements
      *  (elements with the attribute 'composite'), but also includes the passed
      *  element if it is a composite itself.
      *  The IDs of the composite elements constitute the namespace in order of
      *  their position in the DOM.
+     *  @param  element
      *  @return the determined namespace, otherwise null
      *  @throws An error occurs in the following cases:
-     *    - a composite does not have an ID
-     *    - the ID does not match the pattern of a Composite-ID.
+     *      - a composite does not have an ID
+     *      - the ID does not match the pattern of a Composite-ID.
      */
     Composite.mount.locate = function(element) {
         
@@ -505,8 +519,8 @@ if (typeof Composite === "undefined") {
         
         var namespace = null;
         for (; element; element = element.parentNode) {
-            if (!(element instanceof Element
-                    && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)))
+            if (!(element instanceof Element)
+                    || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
                 continue;
             var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
@@ -515,8 +529,6 @@ if (typeof Composite === "undefined") {
             if (namespace)
                 namespace = "." + namespace;
             namespace = serial + (namespace || "");
-            if (serial.indexOf(".") >= 0)
-                break;
         }
         
         return namespace;
@@ -532,6 +544,11 @@ if (typeof Composite === "undefined") {
      *  model. For the namespace, there is also a scope. This represents the
      *  path as an object tree.
      *  
+     *  TODO: Doku:
+     *  composite - rueckgabe {scope, model}
+     *  composite element - rueckgabe {composite, scope, model, field}
+     *  sonst null, wenn im Objektbaum nicht gefunden
+     *  
      *  TODO:
      *  The method always requires an existing model / composite in which the
      *  element is located. If the passed element uses an ID with a qualified
@@ -543,27 +560,35 @@ if (typeof Composite === "undefined") {
      */
     Composite.mount.lookup = function(element) {
         
-        //The rules for the lookup:
+        //TODO: The rules for the lookup:
         //  - The namespace consists of a context, an ID, and an optional identifier
         //  - context: Corresponds to the chain of superior IDs of all elements with the attribute 'composite'.
         //  - ID: The id of an element.
         //  - identifier: Individual identifier in an Id which is separated from the ID by a double point
         
-        //Context and Id can contain relative and absolute values.
-        //Relative names match the pattern: xxxx
-        //Absolute namespaces also contain the dot as a separator for the individual parts.
-        //With the recursive resolution of the namespace, the higher-level composite IDs are always regarded as absolute until the first absolute composite ID occurs, then the recursive resolution is interrupted and the absolute composite ID is used as the basis for the namespace.
-        //If an element uses an absolute ID, no higher-level namespace is determined.
-        //Invalid composite Ids cause an error.
+        //TODO: Context and Id can contain relative and absolute values.
+        //TODO: Relative names match the pattern: xxxx
+        //TODO: Absolute namespaces also contain the dot as a separator for the individual parts.
+        //TODO: With the recursive resolution of the namespace, the higher-level composite IDs are always regarded as absolute until the first absolute composite ID occurs, then the recursive resolution is interrupted and the absolute composite ID is used as the basis for the namespace.
+        //TODO: If an element uses an absolute ID, no higher-level namespace is determined.
+        //TODO: Invalid composite Ids cause an error.
         
-        //composite = namespache = scope
+        //TODO: composite = namespace/model = scope
         
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_ID))
             return null;
         
+        //Elements and composites use different ID formats.
+        //The ID of the composite corresponds to a variable or class name and is
+        //always compatible with the ID of an element. The ID of an element can
+        //contain additional information such as a qualifying namespace and an
+        //individual identifier.
+        
         var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-        serial = serial.match(Composite.PATTERN_COMPOSITE_ID);
+        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+            serial = serial.match(Composite.PATTERN_COMPOSITE_ID);
+        else serial = serial.match(Composite.PATTERN_ELEMENT_ID);
         if (!serial)
             throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
 
@@ -571,37 +596,33 @@ if (typeof Composite === "undefined") {
         var model = null;
         var field = null;
 
-        //The determined composite-id of the element is split into composite and
-        //serial (id). The composite/model can only be determined if the element
-        //contains an serial with an absolute namespace.
-        if (serial[2]) {
-            model = serial[1];
-            field = serial[2];
-        } else field = serial[1];
-
-        //If the element contains only a serial, a relative namespace is
-        //expected, which is recursively determined from the parent elements
-        //with a composite-id. The recursion ends with the first absolute
-        //namespace/composite-id. For this, a dot must be contained in the
-        //composite-id.
-        model = model || Composite.mount.locate(element.parentNode);
+        //The model (corresponds to the namespace) and scope (based on the
+        //namespace) is determined.
+        model = Composite.mount.locate(element);
+        if (!model)
+            return null;
+        scope = Object.lookup(model);
+        if (!scope)
+            return null;
         
-        //If the namespace for a model could be determined, an attempt is made
-        //to create the object scope for it.
-        if (model) {
-            var scope = Object.lookup(model);
-            if (scope && scope.hasOwnProperty(field))
-                return {scope:scope, model:model, field:field};
-        }
+        //The meta-object for the return value is created.
+        //For composite elements, this only contains the scope and model.
+        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+            return {scope:scope, model:model};
+            
+        var composite = {scope:scope, model:model}; 
         
-        //If the model or the namespace for a model could not be confirmed, an
-        //attempt is made to determine whether the field exists in the global
-        //namespace (window).
-        var scope = Object.lookup(field);
-        if (scope && scope.hasOwnProperty(field))
-            return {scope:scope, model:window, field:field};
+        //The field is determined for elements in a composite.
+        //Optionally, an extended namespace can be specified for the real model.
+        if (serial[1])
+            model += "." + serial[1];
+        scope = Object.lookup(model);
+        if (!scope)
+            return null;
+        if (!scope.hasOwnProperty(serial[2]))
+            return null;
         
-        return null;
+        return {composite:composite, scope:scope, model:model, field:serial[2]};
     };
     
     /**
@@ -661,7 +682,7 @@ if (typeof Composite === "undefined") {
                 nodes.unshift(selector); 
             nodes.forEach(function(node, index, array) {
                 var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-                if (serial.match(Composite.PATTERN_COMPOSITE_ID))
+                if (serial.match(Composite.PATTERN_ELEMENT_ID))
                     Composite.asynchron(Composite.mount, false, node);
             });
         } finally {
@@ -705,8 +726,8 @@ if (typeof Composite === "undefined") {
      * 
      *  TODO:
      *  @throws An error occurs in the following cases:
-     *    - namespace is not valid or is not supported
-     *    - rendering function is not implemented correctly
+     *      - namespace is not valid or is not supported
+     *      - rendering function is not implemented correctly
      *  TODO: customize object binding alias -> model
      */
     Composite.customize = function(scope, rendering) {
@@ -1131,6 +1152,7 @@ if (typeof Composite === "undefined") {
                 //is static. Static text nodes are marked with the attribute
                 //Composite.ATTRIBUTE_TEXT.
                 
+                //TODO: test cases
                 var content = selector.textContent;
                 if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     
@@ -1253,7 +1275,7 @@ if (typeof Composite === "undefined") {
                         //the attributes of the placeholder are available for
                         //rendering.
                         var serial = template.ordinal();
-                        var object = {serial:serial, element:template, attributes:object.attributes};
+                        var object = {serial:serial, element:template, attributes:object.attributes, lock:true};
                         Composite.render.meta[serial] = object; 
                         
                         //The placeholder output is rendered recursively and
@@ -1348,15 +1370,18 @@ if (typeof Composite === "undefined") {
             //absolute URL and will be loaded via the HTTP method GET.
             //Loading and replacing the import function can be combined with the
             //condition attribute and is only executed when the condition is
-            //true.
-            //If the content can be loaded successfully, the import attribute is
-            //removed. Recursive rendering is initiated via the MutationObserver.
+            //true. If the content can be loaded successfully, the import
+            //attribute is removed. Recursive rendering is initiated via the
+            //MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
                 if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     var context = serial + ":" + Composite.ATTRIBUTE_IMPORT;
                     value = Expression.eval(context, value);
                 }
+                //Attributes can only be deleted in objects that are not locked.
+                //Locked objects are reused and require all attributes for
+                //re-rendering. Here the attribute 'import' is affected/meant.                
                 if (value) {
                     if (!(value instanceof Element
                             || value instanceof NodeList)) {
@@ -1366,7 +1391,8 @@ if (typeof Composite === "undefined") {
                                 element.innerHTML = Composite.render.cache[url];
                                 var serial = element.ordinal();
                                 var object = Composite.render.meta[serial];
-                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                                if (!object.lock)
+                                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                                 return;
                             }
                             try {
@@ -1380,7 +1406,8 @@ if (typeof Composite === "undefined") {
                                             element.innerHTML = request.responseText;
                                             var serial = element.ordinal();
                                             var object = Composite.render.meta[serial];
-                                            delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                                            if (!object.lock)
+                                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                                             return;
                                         }
                                         function HttpRequestError(message) {
@@ -1402,7 +1429,8 @@ if (typeof Composite === "undefined") {
                     }
                     selector.appendChild(value, true);
                 }
-                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                if (!object.lock)
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
             } 
             
             //The output attribute is interpreted.
@@ -1457,7 +1485,8 @@ if (typeof Composite === "undefined") {
                             var interrupt = !document.body.contains(interval.selector);
                             if (!object)
                                 interrupt = true;
-                            if (object && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                            if (object
+                                    && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
                                     && (!object.condition.element
                                             || !document.body.contains(object.condition.element)))
                                 interrupt = true;
