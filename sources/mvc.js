@@ -23,6 +23,10 @@
  *      DESCRIPTION
  *      ----
  *  TODO:
+ *  - Virtuelle Pfade basieren auf einer SiteMap (SiteMap.customize)
+ *  - SiteMap verwendet nur gültige Pfade (existieren in SiteMap und der Pfad ist Gültig im Sinne von SiteMap.permit
+ *    Ungültige Pfad führen zur Weiterleitung zum nächst höheren validen/erlaubten Pfad
+ *  - Begriffe path + view / page + face + facetts  
  *  
  *  MVC 1.0 20180810
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -31,321 +35,506 @@
  *  @author  Seanox Software Solutions
  *  @version 1.0 20180810
  */
-if (typeof Page === "undefined") {
-    
-    Page = {};
-};    
-
-if (typeof Face === "undefined") {
-    
-    Face = {};
-    
-    //TODO:
-};
-
-if (typeof Facet === "undefined") {
-    
-    Facet = {};
-    
-    //TODO:
-};
-
 if (typeof Path === "undefined") {
     
+    /**
+     *  Static component for the use of (virtual) paths.
+     *  For more details see method Path.normalize(variants).
+     */    
     Path = {};
     
-    Path.map = {};
-    
-    Path.filter = {};
-    
     /** Pattern for a valid path. */
-    Path.PATTERN_PATH = /^(#*([\w\-]*)#*(#+[\w\-]+#*)*)*$/;
-    
-    //TODO: Q: It is better to rename 'scope'?
-    Path.customize = function(scope, acceptor) {
-        
-        if (scope == null)
-            throw new TypeError("Invalid scope: " + scope);
-        
-        if (scope instanceof String)
-            scope = new RegExp("^" + RegExp.quote(scope) + "$");
-        if (scope instanceof RegExp) {
-            if (typeif(invoke) !== "function")
-                throw new TypeError("Invalid acceptor: " + acceptor);
-            Path.filter[scope] = acceptor;
-            return;
-        }
-        
-        if (typeif(invoke) !== "function")
-            throw new TypeError("Invalid acceptor: " + acceptor);
-        if (scope == Path.locate)
-            Path.locate = acceptor; 
-        else if (scope == Path.navigate)
-            Path.navigate = acceptor;
-        else if (scope == Path.authorize)
-            Path.authorize = acceptor;
-        else throw new TypeError("Invalid scope: " + scope);
-    };
+    Path.PATTERN_PATH = /^(?:(?:#*(?:[a-z]\w*)*)(?:#+(?:[a-z]\w*)*)*)*$/;
+
+    /** Pattern for a url path. */
+    Path.PATTERN_URL = /^[a-z]+:\/.*?(#.*)*$/i;
+
+    /** Pattern for a functional path. */
+    Path.PATTERN_PATH_FUNCTIONAL = /^#{3,}$/;
     
     /**
-     *  Returns the current path as an array of path segments or checks whether
-     *  a path or sub-path is currently in use. Function and return value depend
-     *  on the passed argument.
-     *      1. Without argument, null or space(s) as path, the return value is
-     *  the current path as an array of path segments.
-     *      2. With a path the return value is a boolean value whether the path
-     *  matches exactly.
-     *      3. With a path that has dots at the end, the return value is a
-     *  boolean value whether the current path starts with the passed path.
-     *  @param  path optional, path to check
-     *  @return the current path as an array of path segments or boolean value
-     *      whether the path matches exactly or whether the current path starts
-     *      with the passed path
-     */  
-    Path.locate = function(path) {
-        
-        var locate = (window.location.hash || "").trim();
-        if (!locate.startsWith("#"))
-            locate = "#" + locate;
-        
-        path = (path || "").trim();
-        if (path == "") {
-            locate = locate.replace(/(^#+)|(#+$)/g, "");
-            if (!locate)
-                return [];
-            if (!locate.includes("#"))
-                return [locate];
-            return locate.split("#");
+     *  Normalizes a path.
+     *  Paths consist exclusively of word characters and underscores (based on
+     *  composite IDs) and use the hash character as separator and root. Between
+     *  the path segments, the hash character can also be used as a back jump
+     *  directive. The return jump then corresponds to the number of additional
+     *  hash characters.
+     *  
+     *      Note:
+     *  Paths use lowercase letters. Upper case letters are automatically
+     *  replaced by lower case letters when normalizing.
+     *  
+     *  There are four types of paths:
+     *  
+     *      Functional paths:
+     *      ----
+     *  The paths consists of three or more hash characters (###+) and are only
+     *  temporary, they serve a function call without changing the current path
+     *  (URL hash). If such a path is detected, the return value is always ###.
+     *  
+     *      Root paths:
+     *      ----
+     *  These paths are empty or contain only one hash character. The return
+     *  value is always the given root path or # if no root path was specified.
+     *  
+     *      Relative paths:
+     *      ----        
+     *  These paths begin without hash or begin with two or more hash (##+)
+     *  characters. Relative paths are prepended with the passed root.
+     *  
+     *      Absolute paths:
+     *      ----
+     *  These paths begin with one hash characters. A possibly passed root is
+     *  ignored.
+     *  
+     *  All paths are balanced. The directive of two or more hash characters is
+     *  resolved, each double hash means that the preceding path segment is
+     *  skipped. If more than two hash characters are used, it extends the jump
+     *  length.
+     *  
+     *      Examples (root #x#y#z):
+     *      ----
+     *  #a#b#c#d#e##f   #a#b#c#d#f
+     *  #a#b#c#d#e###f  #a#b#c#f
+     *  ###f            #x#f  
+     *  ####f           #f
+     *  empty           #x#y#z
+     *  #               #x#y#z
+     *  a#b#c           #x#y#z#a#b#c
+     *  
+     *  Invalid roots and paths cause an exception.
+     *  The method uses variable parameters and has the following signatures:
+     *      function(root, path) 
+     *      function(path) 
+     *  @param  root optional, otherwise # is used 
+     *  @param  path to normalize (URL is also supported, only the hash is used
+     *               here and the URL itself is ignored)
+     *  @return the normalize path
+     */
+    Path.normalize = function(variants) {
+            
+        var path = null;
+        var root = null;
+        if (arguments.length == 1) {
+            path = arguments[0];
+        } else if (arguments.length >= 1) {
+            root = arguments[0];
+            try {root = Path.normalize(root);
+            } catch (exception) {
+                throw new TypeError("Invalid root" + (String(root).trim() ? ": " + root : ""));
+            }
+            path = arguments[1];
         }
         
-        if (!path.endsWith(".")
-                && locate == path)
-            return true;
-        path = path.replace(/\.+$/, "");
-        if (locate.startsWith(path + "#") 
-                || locate == path)
-            return true;
-        
-        return false;
-    };
+        if (root == null
+                || root.match(/^(#+)*$/))
+            root = "#";
 
-    Path.navigate = function(path) {
+        if (path == null)
+            return null;
         
-        var meta = Path.normalize(path, true);
-        window.location.hash = meta.path; 
-    };
+        if (typeof path === "string"
+                && path.match(Path.PATTERN_URL))
+            path = path.replace(Path.PATTERN_URL, "$1");
+        
+        if (typeof path !== "string"
+                || !path.match(Path.PATTERN_PATH))
+            throw new TypeError("Invalid path" + (String(path).trim() ? ": " + path : ""));
+        
+        path = path.toLowerCase();
+        
+        //Functional paths are detected.
+        if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
+            return "###";
 
-    Path.permit = function(path) {
+        //Paths to the current root are detected.
+        if (path.length == 0)
+            return root;
+        
+        //Relative paths are extended with the root.
+        if (path.match(/^[^#].*$/))
+            path = root + "#" + path;
+        if (path.match(/^#{2}.*$/))
+            path = root + path;
+        
+        //Path will be balanced
+        var pattern = /#[^#]+#{2}/;
+        while (path.match(pattern))
+            path = path.replace(pattern, "#");
+        path = "#" + path.replace(/(^#+)|(#+)$/g, "");
+        
+        return path;
+    };
+};
+
+if (typeof SiteMap === "undefined") {
+    
+    /**
+     *  Static component for the use of a SiteMap for virtua paths.
+     *  SiteMap is a directory with all supported acceptors as well as all
+     *  allowed paths, views and their associations.
+     */
+    SiteMap = {};
+
+    /**
+     *  Primarily, the root is always used when loading the page, since the
+     *  renderer is executed before the MVC. Therefore, the renderer may not yet
+     *  know all the paths and authorizations. After the renderer, the MVC is
+     *  loaded and triggers the renderer again if the path requested with the
+     *  URL differs.
+     */
+    SiteMap.location = "#";
+    
+    /** Assosiative array with all real paths without views paths (key:path, value:views). */
+    SiteMap.paths;
+
+    /** Array with all view paths (sum of all paths and assigned views). */
+    SiteMap.views;
+
+    /** Array with all supported acceptors. */  
+    SiteMap.acceptors;
+    
+    /** Array with all permit functions. */
+    SiteMap.permits;
+    
+    /** Pattern for a valid path. */
+    SiteMap.PATTERN_PATH = /^#([a-z]\w*)*$/;
+
+    /** Pattern for a valid path views. */
+    SiteMap.PATTERN_PATH_VIEWS = /^(#[a-z]\w*)(\s+(#[a-z]\w*)+)*$/;
+    
+    /**
+     *  Checks a path using existing / registered permit methods.
+     *  The path is only allowed if all permit methods confirm the check with
+     *  the return value true.
+     *  @param  path to check (URL is also supported, only the hash is used
+     *               here and the URL itself is ignored)
+     *  @return true if the path has been confirmed as permitted 
+     */
+    SiteMap.permit = function(path) {
+        
+        var permits = SiteMap.permits || [];
+        while (permits.length > 0) {
+            var permit = permits.shift();
+            if (permit.call(null, path) !== true)
+                return faöse;
+        }
         return true;
     };
 
     /**
-     *  Normalizes a path.
-     *  To do this, unnecessary separators are removed and relative and
-     *  functional paths in canonical paths are changed. The methods also
-     *  support the directive #-# for navigating to parent path segments.
-     *  The number of - determines the width when jumping back to the root.
-     *      #--# is equivalent to #-#-#, #---# is equivalent to #-#-#-#, ...
-     *  The simple and long directive can be used in combination. The long
-     *  directive is a short form.  
-     *  @param  path to normalize
-     *  @return the normalize path
-     */
-    Path.normalize = function(path) {
+     *  Determines the real existing path according to the SiteMap.
+     *  The methods distinguish between absolute, relative and functional paths.
+     *  Functionals remain unchanged.
+     *  Absolute and relative paths are balanced.
+     *  Relative paths are balanced on the basis of the current work path.
+     *  All paths are checked against the SiteMap. Invalid paths are searched
+     *  for a valid partial path. To do this, the path is shortened piece by
+     *  piece. If no valid partial path can be found, the root is returned.
+     *  Without passing a path, the current work path is returned.
+     *  @param  path to check - optional (URL is also supported, only the hash
+     *               is used here and the URL itself is ignored)
+     *  @return the real path determined in the SiteMap, or the unchanged
+     *          function path.
+     */  
+    SiteMap.locate = function(path) {
         
-        if (path == null)
-            return null;
-        if (typeof path !== "string"
-                || !path.match(Path.PATTERN_PATH))
-            throw new TypeError("Invalid path" + (String(path).trim() ? ": " + path : ""));
-        path = path.trim();
+        //The path is normalized. 
+        //Invalid paths are shortened when searching for a valid partial path.
+        //Theoretically, the shortening must end automatically with the root or
+        //the current path.
+        try {path = Path.normalize(SiteMap.location, path);
+        } catch (exception) {
+            while (true) {
+                path = path.replace(/(^[^#]+$)|(#[^#]*$)/, "");
+                try {path = Path.normalize(SiteMap.location, path);
+                } catch (exception) {
+                    continue;
+                }
+                break;
+            }
+        }
         
-        //The type of path is determined.
-        //There are these types:
-        //  - absolute paths (#)
-        //  - relative paths (##)
-        //    is an extension of the current path.
-        //  - interaction paths (###)
-        //    is only temporary and is replaced by the previous path        
-        var type = Math.max(1, String(path.match(/^(?!#)|(?:#{0,3})/)).length);
-        
-        //The current path is determined.
-        var here = null;
-        if (Path.collection
-                && Path.collection[0])
-            here = Path.collection[0];
-        else here = "#" + Path.locate().join("#");
-        
-        //Relative and functional path will be completed.
-        if (type == 2)
-            path = here + "#" + path;
-        else if (type == 3)
-            path = here;
-        path = "#" + path + "#";
-        path = path.replace(/\s*#+\s*/g, "#");
-        
-        //Path will be balanced
-        var pattern = /#+(?:\-*\w\-*)+#+\-(\-*)#/;
-        while (path.match(pattern))
-            path = path.replace(pattern, "#$1#"); 
-        path = path.replace(/^(#+\-+(?=#))+/, "#");
-        path = path.replace(/(^#+)|(#+$)/g, "");
-        path = ("#" + path).replace(/\s*#+\s*/g, "#");
+        if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
+            return path;
 
-        //Internally, a second argument can be passed with the value true.
-        //Then the return value is an object with type and a canonical path,
-        //otherwise only the canonical path.
-        if (arguments.length > 1
-                && arguments[1] == true)
-            return {type:type, path:path};
-        return path;
+        while (SiteMap.views
+                && path.length > 1) {
+            if (SiteMap.views.includes(path))
+                return path;
+            path = Path.normalize(path + "##");
+        }
+        
+        return "#";
     };
 
-    Path.lock;
+    /**
+     *  Navigates to the given path, if it exists in the SiteMap.
+     *  All paths are checked against the SiteMap. Invalid paths are searched
+     *  for a valid partial path. To do this, the path is shortened piece by
+     *  piece. If no valid partial path can be found, the root is the target.
+     *  @param path (URL is also supported, only the hash is used here and the
+     *              URL itself is ignored)
+     */    
+    SiteMap.navigate = function(path) {
+        window.location.hash = SiteMap.locate(path);
+    };
+
+    /**
+     *  Checks whether a path or subpath is currently being used.
+     *  This method is used to show and hide composites depending on the current
+     *  work path.
+     *  @param  path
+     *  @return true if the path or subpath is currently used, otherwise false
+     */
+    SiteMap.lookup = function(path) {
+        
+        path = (path || "").trim().toLowerCase();
+        if (!path)
+            return false;
+        
+        var location = Path.normalize(SiteMap.location);
+        
+        var paths = Object.keys(SiteMap.paths || {});
+        paths = paths.sort(function(path, compare) {
+            return -path.length +compare.length;
+        });
+        
+        for (; paths.length > 0; paths.shift()) {
+            var item = paths[0];
+            if (!location.startsWith(item.match(/#$/) ? item : item + "#")
+                    && location != item)
+                continue;
+            if (item == path)
+                return true;
+            item = SiteMap.paths[item] || [];
+            return item.includes(path.replace(/^#+/, ""));
+        }
+        
+        return false;
+    };
     
-    Path.collection = [Path.normalize(Path.locate().join("#"))];
+    //TODO:
+    //- alle Pfade und views müssen (#[a-z]\w*)(\s+(#[a-z]\w*))* entsprechen
+    //- die map wird nur übernommen, wenn dieses komplett fehlerfrei ist, im Fehlerfall wird keiner der Einträge übernommen
+    //- optional kann eine Methode zur Validierug der Pfad übergeben werden
+    //  das besonders für Modle interessant, wenn diese eigene Pfade registrieren, können
+    //  diese auch eigene Validierungsmethoden mit bringen. Wichtig ist dann aber die
+    //  Funktionsweise der SiteMap. Diese kommuliert alle Pfade und Views und somit
+    //  ist keine spätere Trennung mehr möglich. Die Registrierten permit Methoden
+    //  werden entsprechend der Reihenfolge beim Anlegen abgearbeitet. Für einen
+    //  validen Pfad müssen alle permit-Methoden true zurückgeben, mit dem ersten
+    //  false wird die Überprunfung beendet, weitere permit methoden werden dann
+    //  nicht aufgeufen. Bedeutet, permit methoden sollten sich ausschliesslich
+    //  um das Verbot nicht aber um die Erlaubnis kümmern und im zweifel immer true zurück gebenm, da noch weitere permit.methoden von anderen Modlen folgen könnten
     
+    /**
+     *  Configures the SiteMap individually.
+     *  The configuration is passed as a meta object.
+     *  The keys (string) correspond to the paths, the values are arrays with
+     *  the valid views for a path.
+     *  
+     *      sitemap = {
+     *          "#": ["news", "products", "about", "contact", "legal"],
+     *          "products#papers": ["paperA4", "paperA5", "paperA6"],
+     *          "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+     *          "products#pens": ["pencil", "ballpoint", "stylograph"]
+     *          "legal": ["terms", "privacy"],
+     *          ...
+     *      }
+     *      
+     *  Optionally, acceptors can also be passed with the meta object.
+     *  The key (RegExp) corresponds to a path filter, the value is a method
+     *  that is executed if the current path matches the filter of an acceptor.
+     *      
+     *      sitemap = {
+     *          ...
+     *          /^mail.*$/, function() {
+     *              send a mail
+     *          },
+     *          /^phone.*$/, function() {
+     *              dial the phone number
+     *          },,
+     *          /^sms.*$/, function() {
+     *              send a sms
+     *          },
+     *          ...
+     *      }
+     *      
+     *  An acceptor is an alias/filter for a path based function
+     *  If the path corresponds to an acceptor, the stored function is called.
+     *  The return value controls what happens to the path.  
+     *  If the return value is false, the Acceptor takes over the complete path
+     *  control for the matching path. Possible following acceptors are not
+     *  used.   
+     *  If the return value is a string, this is interpreted as a new
+     *  destination and a forwarding follows. Possible following acceptors are
+     *  not used.
+     *  In all other cases, the Acceptor works in the background. Possible
+     *  following acceptors are used and the SiteMap keeps the control of the
+     *  path.
+     *  
+     *  TODO:    
+     */
+    SiteMap.customize = function(map, permit) {
+
+        if (typeof map !== "object")
+            throw new TypeError("Invalid map: " + typeof map);
+        if (permit != null
+                && typeof map !== "function")
+            throw new TypeError("Invalid permit: " + typeof permit);
+        
+        var paths = {};
+        Object.keys(SiteMap.paths || {}).forEach(function(key) {
+            paths[key] = SiteMap.paths[key];
+        });
+        var views = (SiteMap.views || []).slice();
+        var acceptors = (SiteMap.acceptors || []).slice();
+        var permits = (SiteMap.permits || []).slice();
+        
+        if (permit)
+            permits.push(permit);
+        
+        Object.keys(map).forEach(function(key) {
+            var value = map[key];
+            if (typeof key === "string"
+                && key.match(SiteMap.PATTERN_PATH)
+                && (value == null
+                        || typeof value === "string")) {
+                views.push(key);
+                paths[key] = paths[key] || [];
+                value = (value || "").toLowerCase().trim().split(/\s+/);
+                value.forEach(function(view) {
+                    if (!view.match(SiteMap.PATTERN_PATH_VIEW))
+                        throw new Error("Invalid view: " + view);
+                    if (!paths[key].includes(view))
+                        paths[key].push(view);
+                    view = Path.normalize(key, view)
+                    if (!views.includes(view))
+                        views.push(view);
+                });
+            } else if (key != null
+                    && key instanceof RegExp
+                    && typeof value === "function") {
+                acceptors[key] = value;
+            }
+        });
+        
+        SiteMap.paths = paths;
+        SiteMap.views = views;
+        SiteMap.acceptors = acceptors;
+        SiteMap.permits = SiteMap.permits;
+    };
+    
+    /**
+     *  Rendering filter for all composite elements.
+     *  The filter causes an additional condition for the SiteMap to be added to
+     *  each composite element that the renderer determines. This condition is
+     *  used to show or hide the composite elements in the DOM to the
+     *  corresponding virtual paths. The elements are identified by the serial.
+     *  The SiteMap uses a map (serial / element) as cache for fast access. The
+     *  cleaning of the cache is done by a MotationObserver.
+     */
+    Composite.customize(function(element) {
+        
+        if (!(element instanceof Element)
+                || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+            return;
+        if (element.hasAttribute("static"))
+            return;
+        
+        var path = "#" + Composite.mount.locate(element).replace(/\./g, "#").toLowerCase();
+        
+        var script = null;
+        if (element.hasAttribute(Composite.ATTRIBUTE_CONDITION)) {
+            script = element.getAttribute(Composite.ATTRIBUTE_CONDITION).trim();
+            if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
+                    match = match.substring(2, match.length -2).trim();
+                    return "{{SiteMap.lookup(\"" + path + "\") and (" + match + ")}}";
+                });
+        }
+        if (!script)
+            script = (script || "") + "{{SiteMap.lookup(\"" + path + "\")}}";
+        element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
+    });
+
+    /**
+     *  Established a listener that listens when the page loads.
+     *  The method initiates the initial usage of the path.
+     */
+    window.addEventListener("load", function(event) {
+        
+        SiteMap.navigate(window.location.hash);
+        
+        var event = document.createEvent('HTMLEvents');
+        event.initEvent("hashchange", false, true);
+        window.dispatchEvent(event);
+    });
+    
+    /**
+     *  Establishes a listener that listens to changes from the URL hash.
+     *  The method corrects invalid and unauthorized paths by forwarding them to
+     *  the next valid path, restores the view of functional paths, and
+     *  organizes partial rendering.
+     */
     window.addEventListener("hashchange", function(event) {
         
-        var hash = window.location.hash;
-        var meta = Path.normalize(window.location.hash, true);
-        var here = Path.collection[0];
-
-        //If the path does not have the expected syntax, a redirect is triggered.
-        //Functional paths are ignored.
-        if (hash != meta.path
-                && !hash.match(/^#{3,}/)) {
-            Path.navigate(meta.path);
-            return;
-        }
-
-        Path.lock = Path.lock || new Array();
+        var source = Path.normalize(SiteMap.location);
+        var locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
+        var target = SiteMap.locate(locate);
         
-        path = meta.path;
-        if (Path.lock
-                && Path.lock.length > 0
-                && Path.lock.shift() == path
-                && meta.type != 3)
+        //Discrepancies in the path cause a forwarding to a valid path.
+        if (locate != target) {
+            SiteMap.navigate(target);
             return;
-        Path.lock = new Array();
+        }        
         
         //For functional interaction paths, the old path must be restored.
         //Rendering is not necessary because the page does not change or the
         //called function has partially triggered rendering.
-        if (meta.type == 3) {
+        if (target.match(Path.PATTERN_PATH_FUNCTIONAL)) {
             var x = window.pageXOffset || document.documentElement.scrollLeft;
             var y = window.pageYOffset || document.documentElement.scrollTop;
-            Path.lock.unshift(path);
-            window.history.back();
+            window.location.replace(source);
             window.setTimeout(window.scrollTo, 0, x, y); 
             return;
         }
         
-        Path.lock.unshift(path);
-        Path.collection.unshift(path);
-        window.location.hash = path;
-        Composite.render(document.body);
-        return;
+        var acceptors = SiteMap.acceptors || [];
+        for (var loop = 0; loop < acceptors.length; loop++) {
+            var acceptor = acceptors[loop];
+            if (!acceptor.pattern.test(path))
+                continue;
+            var result = acceptor.action.call(null, path);
+            if (result === false)
+                return;
+            if (typeof result !== "string")
+                continue;
+            path = Path.normalize(result);
+            return permit(path);
+        }
+
+        SiteMap.location = target;
+        
+        if (!source.endsWith("#"))
+            source += "#";
+        if (!target.endsWith("#"))
+            target += "#";
+        
+        //The deepest similarity in both paths is used for rendering.
+        //Render as minimal as possible:
+        //  old: #a#b#c#d#e#f  new: #a#b#c#d      -> render #d
+        //  old: #a#b#c#d      new: #a#b#c#d#e#f  -> render #d
+        //  old: #a#b#c#d      new: #e#f          -> render body
+        var render = "#";
+        if (source.startsWith(target))
+            render = target;
+        else if (target.startsWith(source))
+            render = source;
+        render = render.replace(/(^#+)|(#+$)/g, "").trim();
+        if (render.length > 0)
+            Composite.render("#" + render.match(/[^#]+$/));
+        else Composite.render(document.body);
     });
 };
-
-// - SiteMap verwaltet Pfade mit Views (Path / Face + Views / Facets)
-// - SiteMap dient dazu zu Pfade auf Gueltigkeit zu pruefen
-// - SiteMap dient dazu zu Faces und Facets auf Sichtbarkeit zu pruefen
-//   Faces sind sichtbar wenn der Pfad ab Root enthalten ist, weitere Pfad-Segmente von Views kann der Pfad enthalten
-//   Facets sind sichtbar, wenn der Pfad vom Face ab Root enthalten ist, weitere Pfad-Segmente von Views kann der Pfad enthalten
-// - SiteMap basiert/verwendet/ergaenzt 'Path'
-if (typeof SiteMap === "undefined") {
-    
-    SiteMap = {};
-    
-    SiteMap.paths;
-    
-    /** Pattern for a strict valid path. */
-    SiteMap.PATTERN_PATH = /^#(\w*)(#\w+)*$/;
-    
-    /** Pattern for strict valid path views. */
-    SiteMap.PATTERN_PATH_VIEWS = /^([\w\s]|(\w(#\w)+))*$/;
-    
-    SiteMap.customize = function(paths) {
-        
-        if (typeof paths !== "object")
-            throw new TypeError("Invalid paths: " + typeof paths);        
-
-        var sitemap = {};
-        for (path in paths) {
-            if (typeof path !== "string")
-                throw new TypeError("Invalid path: " + path);
-            var views = paths[path];
-            if ((typeof views !== "string"
-                        || !views.match(SiteMap.PATTERN_PATH_VIEWS))
-                    && views != null)
-                throw new TypeError("Invalid path: " + path);
-            sitemap[path] = (views || "").trim().split(/\s+/);
-        } 
-        SiteMap.paths = sitemap;
-    };
-
-    SiteMap.validate = function(path) {
-    };
-
-    SiteMap.visible = function(path) {
-    };
-    
-    SiteMap.style = (function() {
-        
-        var style = document.createElement("style");
-        style.setAttribute("type", "text/css");
-        var script = document.querySelector("script");
-        script.parentNode.insertBefore(style, script);
-        return style;
-    })();
-    
-    window.addEventListener("hashchange", function(event) {
-        
-        var path = Path.normalize(window.location.hash);
-        var axis = Array.from(Object.getOwnPropertyNames(SiteMap.paths));
-
-        var condition = "[composite]:not([static])";
-
-        //Determine the face to the path.
-        var face = path;
-        while (face.length > 1) {
-            if (axis.includes(face))
-                break;
-            face = face.replace(/#[^#]*$/, "") || "#";
-        }
-        
-        //Allow all facets of the path.
-        var facets = SiteMap.paths[face] || [];
-        face = face.replace(/#+$/, "");
-        facets.forEach(function(facet, index, array) {
-            condition += ":not([path='" + face + "#" + facet + "'])";
-        });
-        
-        //Allow all cascaded faces to the path.
-        while (face.length > 1) {
-            condition += ":not([path='" + face + "'])";
-            face = face.replace(/#[^#]*$/, "") || "#";
-        }
-        
-        condition += "\n{display:none!important;}";
-        SiteMap.style.textContent = condition;
-    });
-};
-
-window.addEventListener("load", function(event) {
-    
-    var hash = window.location.hash;
-    var path = Path.normalize(window.location.hash);
-    
-    //If the path does not have the expected syntax, a redirect is triggered.
-    if (path != hash) {
-        Path.navigate(path);
-        return;
-    }
-    
-    var event = document.createEvent('HTMLEvents');
-    event.initEvent("hashchange", false, true);
-    window.dispatchEvent(event);
-});
