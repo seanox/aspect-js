@@ -23,17 +23,13 @@
  *      DESCRIPTION
  *      ----
  *  TODO:
- *  - Virtuelle Pfade basieren auf einer SiteMap (SiteMap.customize)
- *  - SiteMap verwendet nur gültige Pfade (existieren in SiteMap und der Pfad ist Gültig im Sinne von SiteMap.permit
- *    Ungültige Pfad führen zur Weiterleitung zum nächst höheren validen/erlaubten Pfad
- *  - Begriffe path + view / page + face + facetts  
  *  
- *  MVC 1.0 20180810
+ *  MVC 1.0 20181015
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180810
+ *  @version 1.0 20181015
  */
 if (typeof Path === "undefined") {
     
@@ -55,10 +51,10 @@ if (typeof Path === "undefined") {
     /**
      *  Normalizes a path.
      *  Paths consist exclusively of word characters and underscores (based on
-     *  composite IDs) and use the hash character as separator and root. Between
-     *  the path segments, the hash character can also be used as a back jump
-     *  directive. The return jump then corresponds to the number of additional
-     *  hash characters.
+     *  composite IDs) and must begin with a letter and use the hash character
+     *  as separator and root. Between the path segments, the hash character can
+     *  also be used as a back jump directive. The return jump then corresponds
+     *  to the number of additional hash characters.
      *  
      *      Note:
      *  Paths use lowercase letters. Upper case letters are automatically
@@ -110,6 +106,8 @@ if (typeof Path === "undefined") {
      *  @param  path to normalize (URL is also supported, only the hash is used
      *               here and the URL itself is ignored)
      *  @return the normalize path
+     *  @throws An error occurs in the following cases:
+     *      - if the root and/or the path is invalid
      */
     Path.normalize = function(variants) {
             
@@ -217,7 +215,7 @@ if (typeof SiteMap === "undefined") {
         while (permits.length > 0) {
             var permit = permits.shift();
             if (permit.call(null, path) !== true)
-                return faöse;
+                return false;
         }
         return true;
     };
@@ -314,20 +312,6 @@ if (typeof SiteMap === "undefined") {
         return false;
     };
     
-    //TODO:
-    //- alle Pfade und views müssen (#[a-z]\w*)(\s+(#[a-z]\w*))* entsprechen
-    //- die map wird nur übernommen, wenn dieses komplett fehlerfrei ist, im Fehlerfall wird keiner der Einträge übernommen
-    //- optional kann eine Methode zur Validierug der Pfad übergeben werden
-    //  das besonders für Modle interessant, wenn diese eigene Pfade registrieren, können
-    //  diese auch eigene Validierungsmethoden mit bringen. Wichtig ist dann aber die
-    //  Funktionsweise der SiteMap. Diese kommuliert alle Pfade und Views und somit
-    //  ist keine spätere Trennung mehr möglich. Die Registrierten permit Methoden
-    //  werden entsprechend der Reihenfolge beim Anlegen abgearbeitet. Für einen
-    //  validen Pfad müssen alle permit-Methoden true zurückgeben, mit dem ersten
-    //  false wird die Überprunfung beendet, weitere permit methoden werden dann
-    //  nicht aufgeufen. Bedeutet, permit methoden sollten sich ausschliesslich
-    //  um das Verbot nicht aber um die Erlaubnis kümmern und im zweifel immer true zurück gebenm, da noch weitere permit.methoden von anderen Modlen folgen könnten
-    
     /**
      *  Configures the SiteMap individually.
      *  The configuration is passed as a meta object.
@@ -338,7 +322,7 @@ if (typeof SiteMap === "undefined") {
      *          "#": ["news", "products", "about", "contact", "legal"],
      *          "products#papers": ["paperA4", "paperA5", "paperA6"],
      *          "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-     *          "products#pens": ["pencil", "ballpoint", "stylograph"]
+     *          "products#pens": ["pencil", "ballpoint", "stylograph"],
      *          "legal": ["terms", "privacy"],
      *          ...
      *      }
@@ -354,7 +338,7 @@ if (typeof SiteMap === "undefined") {
      *          },
      *          /^phone.*$/, function() {
      *              dial the phone number
-     *          },,
+     *          },
      *          /^sms.*$/, function() {
      *              send a sms
      *          },
@@ -364,17 +348,40 @@ if (typeof SiteMap === "undefined") {
      *  An acceptor is an alias/filter for a path based function
      *  If the path corresponds to an acceptor, the stored function is called.
      *  The return value controls what happens to the path.  
-     *  If the return value is false, the Acceptor takes over the complete path
-     *  control for the matching path. Possible following acceptors are not
-     *  used.   
-     *  If the return value is a string, this is interpreted as a new
-     *  destination and a forwarding follows. Possible following acceptors are
-     *  not used.
-     *  In all other cases, the Acceptor works in the background. Possible
-     *  following acceptors are used and the SiteMap keeps the control of the
-     *  path.
+     *      If the return value is false:
+     *      ----
+     *  The Acceptor takes over the complete path control for the matching path.
+     *  Possible following acceptors are not used.   
+     *      If the return value is a string:
+     *      ----
+     *  This is interpreted as a new destination and a forwarding follows.
+     *  Possible following acceptors are not used.
+     *      In all other cases:
+     *      ----
+     *  The Acceptor works in the background.
+     *  Possible following acceptors are used and the SiteMap keeps the control
+     *  of the path.
      *  
-     *  TODO:    
+     *  A permit method for paths can optionally be passed to each meta object.
+     *  This is interesting for modules that want to register and validate their
+     *  own paths. 
+     *  
+     *      Important note about how the SiteMap works:
+     *      ----
+     *  The SiteMap emanages all configurations cumulatively. All paths and
+     *  views are summarized, acceptors and permit methods are collected in the
+     *  order of their registration. A later assignment of which meta data and
+     *  permit methods were passed together with which meta object does not
+     *  exist.
+     *  
+     *  The configuration of the SiteMap is only applied if an error-free meta
+     *  object is transferred and no errors occur during processing.
+     *  
+     *  @param  map
+     *  @param  permit
+     *  @throws An error occurs in the following cases:
+     *      - if the data type of map and/or permit is invalid
+     *      - if the sntax and/or the format of views are invalid
      */
     SiteMap.customize = function(map, permit) {
 
@@ -400,11 +407,14 @@ if (typeof SiteMap === "undefined") {
             if (typeof key === "string"
                 && key.match(SiteMap.PATTERN_PATH)
                 && (value == null
-                        || typeof value === "string")) {
+                        || Array.isArray(value))) {
                 views.push(key);
                 paths[key] = paths[key] || [];
-                value = (value || "").toLowerCase().trim().split(/\s+/);
+                value = value || [];
                 value.forEach(function(view) {
+                    if (typeof view !== "string")
+                        throw new TypeError("Invalid view: " + typeof view);
+                    view = view.toLowerCase().trim();
                     if (!view.match(SiteMap.PATTERN_PATH_VIEW))
                         throw new Error("Invalid view: " + view);
                     if (!paths[key].includes(view))
