@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20181016
+ *  Composite 1.0 20180923
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181016
+ *  @version 1.0 20180923
  */
 if (typeof Composite === "undefined") {
     
@@ -1771,7 +1771,7 @@ if (typeof Expression === "undefined") {
     /** Constant for element type logic */
     Expression.TYPE_LOGIC = 9;
     
-    /** Cache (expression / script) */
+    /** Cache (expression/script) */
     Expression.cache;
     
     /**
