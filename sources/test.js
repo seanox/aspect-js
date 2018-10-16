@@ -105,7 +105,7 @@ if (typeof Test === "undefined") {
     /** The monitor to be used */
     Test.monitor;
     
-    /** Stack of created / registered test tasks (backlog) */
+    /** Stack of created/registered test tasks (backlog) */
     Test.stack;
     
     /** Queue of currently running test tasks */ 

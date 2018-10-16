@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20180923
+ *  Composite 1.0 20181016
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180923
+ *  @version 1.0 20181016
  */
 if (typeof Composite === "undefined") {
     
@@ -87,7 +87,8 @@ if (typeof Composite === "undefined") {
     /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
     Composite.selectors;
     
-    //TODO:
+    //TODO: Doku 
+    //TODO: Q: Rename in acceptors?
     Composite.modifiers;
 
     /** Assoziative array with events and their registered listerners */
@@ -377,9 +378,7 @@ if (typeof Composite === "undefined") {
         variants = variants.slice(1);
         variants.unshift(event);
         listeners.forEach(function(callback, index, array) {
-            window.setTimeout(function(callback, variants) {
-                callback.apply(null, variants);
-            }, 0, callback, variants);
+            callback.apply(null, variants);
         });        
     };
 
@@ -550,7 +549,7 @@ if (typeof Composite === "undefined") {
      *  sonst null, wenn im Objektbaum nicht gefunden
      *  
      *  TODO:
-     *  The method always requires an existing model / composite in which the
+     *  The method always requires an existing model/composite in which the
      *  element is located. If the passed element uses an ID with a qualified
      *  namespace, then this is used. Otherwise, if a superordinate composite
      *  with ID exists in the DOM, this is used as base for the namespace.
@@ -1161,7 +1160,7 @@ if (typeof Composite === "undefined") {
                     //for all expressions. In the text content from the text
                     //node, the expressions are replaced by a placeholder in the
                     //format of the expression with a serial.
-                    //Empty expressions are removed / ignored.
+                    //Empty expressions are removed/ignored.
                     
                     //All created meta objects with an expression have a special
                     //render metode for updating the text content of the text
@@ -1738,7 +1737,7 @@ if (typeof Composite === "undefined") {
 if (typeof Expression === "undefined") {    
     
     /**
-     *  Expression / Expression Language (EL) is mechanism that simplifies the
+     *  Expression/Expression Language (EL) is mechanism that simplifies the
      *  accessibility of the data stored in JavaScrript model component and other
      *  object on the client side. There are many operators that are used in EL
      *  like arithmetic and logical operators to perform an expression.

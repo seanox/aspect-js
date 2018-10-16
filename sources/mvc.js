@@ -22,14 +22,42 @@
  *  
  *      DESCRIPTION
  *      ----
- *  TODO:
+ *  The SiteMap is a static navigation component based on virtual paths and
+ *  views. Virtual paths are used to delimit pages and to focus projections.
+ *  Pages are a (complex) view and combine different fixed contents (navigation,
+ *  menu, footer, ...) as well as variable projections (faces/views), which in
+ *  turn can use sub and partial projections (facets). 
  *  
- *  MVC 1.0 20181015
+ *  Virtual paths use URL hash navigation in which the hash character is used to
+ *  separate the individual parts of the path. SiteMap monitors the URL hash and
+ *  the use of virtual paths actively with regard to validity and permission.
+ *  
+ *  Acceptors are a very special navigation function.
+ *  Acceptors can be regarded as path filters. They are based on regular
+ *  expressions and methods that are executed when the paths match a pattern.
+ *  Acceptors can argue silently in the background without influencing the
+ *  navigation of the SiteMap, or they can argue actively and take over the
+ *  navigation completely active or passive by forwarding (change/manipulation
+ *  of the destination).
+ *  
+ *  All in all, the SiteMap is comparable to a city map. The paths are streets
+ *  and create a concatenated route from the root to the destination. The
+ *  destination can be a street (face), with which all addresses/sights (views)
+ *  are indicated or the destination is a concrete address/sights (view) in a
+ *  street.
+ *  
+ *  All streets have a guard, who can forbid and allow access to the street
+ *  and/or individual addresses/sights according to permissions.
+ *  
+ *  For streets, adresses and sights you can define patterns which actively
+ *  change the routing or passively follow the route. 
+ *  
+ *  MVC 1.0 20181016
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181015
+ *  @version 1.0 20181016
  */
 if (typeof Path === "undefined") {
     
@@ -202,7 +230,7 @@ if (typeof SiteMap === "undefined") {
     SiteMap.PATTERN_PATH_VIEWS = /^(#[a-z]\w*)(\s+(#[a-z]\w*)+)*$/;
     
     /**
-     *  Checks a path using existing / registered permit methods.
+     *  Checks a path using existing/registered permit methods.
      *  The path is only allowed if all permit methods confirm the check with
      *  the return value true.
      *  @param  path to check (URL is also supported, only the hash is used
@@ -442,7 +470,7 @@ if (typeof SiteMap === "undefined") {
      *  each composite element that the renderer determines. This condition is
      *  used to show or hide the composite elements in the DOM to the
      *  corresponding virtual paths. The elements are identified by the serial.
-     *  The SiteMap uses a map (serial / element) as cache for fast access. The
+     *  The SiteMap uses a map (serial/element) as cache for fast access. The
      *  cleaning of the cache is done by a MotationObserver.
      */
     Composite.customize(function(element) {
@@ -479,6 +507,7 @@ if (typeof SiteMap === "undefined") {
         
         var event = document.createEvent('HTMLEvents');
         event.initEvent("hashchange", false, true);
+        event.newURL = window.location.hash || "";
         window.dispatchEvent(event);
     });
     
