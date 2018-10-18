@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      body div {
+        margin:1em;
+      }
+    </style>
+    <script src="../sources/extension.js"></script>
+    <script src="../sources/composite.js"></script>
+    <script src="../sources/test.js"></script>
+    <script type="text/javascript">
+    
+        var contactA = {
+                text: "",
+                data: {
+                    text: {},
+                    link: {
+                        onClick: function() {
+                            clickStack.push("contactA.link.data.onClick");                            
+                        }
+                    }
+                },
+                link: {
+                    onClick: function() {
+                        clickStack.push("contactA.link.onClick");                            
+                    }
+                }
+        };
+        
+        var contactB = {
+                text: "",
+                data: {
+                    text: {},
+                    link: contactA.data.link
+                },
+                link: contactA.link
+        };
+
+        var contactC = {
+                text: "",
+                data: {
+                    text: {},
+                    link: {
+                        onClick: function() {
+                            clickStack.push("contactC.link.data.onClick");                            
+                        }
+                    }
+                },
+                link: {
+                    onClick: function() {
+                        clickStack.push("contactC.link.onClick");                            
+                    }
+                }
+        };
+        
+        var contactD = {
+        };
+        
+        var clickStack = [];
+        
+        var contentPublish = function(context) {
+            var content = '<input type="text" id="text:{context}" events="keydown">'
+                    + '<input type="text" id="data.text:{context}" events="keydown">'
+                    + '<input type="text" id="nothing:{context}" events="keydown">'
+                    + '<input type="button" id="link:{context}" value="{context}:1">'
+                    + '<input type="button" id="data.link:{context}" value="{context}:2">';
+            var div = document.createElement("div");
+            div.innerHTML = content.replace(/\{context\}/ig, context);
+            return div;            
+        };
+        
+        var timeout = null;
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            if (timeout)
+                window.clearInterval(timeout);
+            timeout = window.setTimeout(() => {
+                document.querySelector("#link\\:A").click();
+                document.querySelector("#data\\.link\\:A").click();
+                document.querySelector("#text\\:A").typeValue("xAA", true);
+                document.querySelector("#data\\.text\\:A").typeValue("xAB", true);
+                document.querySelector("#nothing\\:A").typeValue("xAC", true);
+                
+                document.querySelector("#link\\:B").click();
+                document.querySelector("#data\\.link\\:B").click();
+                document.querySelector("#text\\:B").typeValue("xBA", true);
+                document.querySelector("#data\\.text\\:B").typeValue("xBB", true);
+                document.querySelector("#nothing\\:B").typeValue("xBC", true);
+
+                document.querySelector("#link\\:C").click();
+                document.querySelector("#data\\.link\\:C").click();
+                document.querySelector("#text\\:C").typeValue("xCA", true);
+                document.querySelector("#data\\.text\\:C").typeValue("xCB", true);
+                document.querySelector("#nothing\\:C").typeValue("xCC", true);
+                
+                document.querySelector("#link\\:D").click();
+                document.querySelector("#data\\.link\\:D").click();
+                document.querySelector("#text\\:D").typeValue("xDA", true);
+                document.querySelector("#data\\.text\\:D").typeValue("xDB", true);
+                document.querySelector("#nothing\\:D").typeValue("xDC", true);
+                
+                Test.start();
+            }, 250);
+        });     
+        
+        Test.create({test:function() {
+            var testStack = [];
+            testStack.push("contactA.link.onClick");
+            testStack.push("contactA.link.data.onClick");
+            testStack.push("contactA.link.onClick");
+            testStack.push("contactA.link.data.onClick");
+            testStack.push("contactC.link.onClick");
+            testStack.push("contactC.link.data.onClick");
+            Assert.assertEquals(testStack.join(" "), clickStack.join(" "));
+        }}); 
+        Test.create({test:function() {
+            Assert.assertEquals('{"text":"xA","data":{"text":{"value":"xA"},"link":{}},"link":{}}', contactA.toPlainString());             
+        }});         
+        Test.create({test:function() {
+            Assert.assertEquals('{"text":"xB","data":{"text":{"value":"xB"},"link":{}},"link":{}}', contactB.toPlainString());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals('{"text":"xC","data":{"text":{"value":"xC"},"link":{}},"link":{}}', contactC.toPlainString());
+        }});   
+        Test.create({test:function() {
+            Assert.assertEquals('{}', contactD.toPlainString());
+        }});           
+    </script>
+  </head>
+  <body>
+    <section id="contactA" composite
+        import="{{contentPublish('A')}}">
+    </section>
+    <section id="contactB" composite
+        import="{{contentPublish('B')}}">
+    </section>
+    <section id="contactC" composite
+        import="{{contentPublish('C')}}">
+    </section>
+    <section id="contactD" composite
+        import="{{contentPublish('D')}}">
+    </section>
+  </body>
+</html>
