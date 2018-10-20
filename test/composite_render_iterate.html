@@ -90,6 +90,15 @@
             Assert.assertEquals("151515", OutputS1.textContent);
             Composite.render(document.body);
         }});   
+        Test.create({test:function() {
+            Assert.assertEquals("", OutputC.textContent.trim());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("", OutputD.textContent.trim());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""));
+        }});
         
         var snapshots = new Array();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -221,5 +230,21 @@
         </tr>  
       </tbody>
     </table>
+    
+    <div id="OutputC">
+      <span iterate="{{tempC:null}}">
+        <a>Cx</a>  
+      </span>
+    </div>
+    <div id="OutputD">
+      <span iterate="{{tempD:[]}}">
+        <a>Dx</a>  
+      </span>
+    </div>
+    <div id="OutputE">
+      <span iterate="{{tempE:[1,2,3]}}">
+        <a>Ex</a>  
+      </span>
+    </div>    
   </body>
 </html>
