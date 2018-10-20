@@ -22,29 +22,56 @@
  *  
  *      DESCRIPTION
  *      ----
- *  TODO:
+ *  Content creates XML-based content for publication in the user interface.
+ *  The content are loaded to the current language setting of the browser via
+ *  the datasource and transformed into the final output format via Extensible
+ *  Stylesheet Language (XSLT). Individual stylesheet can be used or a
+ *  corresponding stylesheet with the same name is searched. For the final
+ *  output, the transformed result will be rendered.
  *  
- *  Content 1.0 20180604
+ *  Content 1.0 20181020
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180604
+ *  @version 1.0 20181020
  */
 if (typeof Content === "undefined") {
 
+    /** Static component for creating XML-based content for publication. */
     Content = {};
     
+    /**
+     *  Creates XML-based content for publication in the user interface.
+     *  The content are loaded to the current language setting of the browser
+     *  via the datasource and transformed into the final output format via
+     *  Extensible Stylesheet Language (XSLT). An individual stylesheet can be
+     *  passed or a corresponding stylesheet with the same name is searched.
+     *  For the final output, the transformed result is rendered.
+     *  @param  data  name of the datasource file
+     *  @param  style stylesheet for the transformation (optional)
+     *  @return the content created for publication as a node or node list.
+     */
     Content.publish = function(data, style) {
+      
+        //Rendering is performed with the same lock as the current render
+        //process when a render process is running. The result is always a deep
+        //copy, so that any temporary variables are not deleted or distorted by
+        //the subsequent rendering when they are inserted into the DOM. 
+        var render = function(content) {
+            var template = document.createElement("template");
+            template.appendChild(content);
+            Composite.render(template, true, Composite.render.lock);
+            return template.cloneNode(true).childNodes;
+        };
         
         data  = "xml://" + (data || "").trim();
         style = (style || "").trim();
         if (style == "")
-            return DataSource.fetch(data, true, true);
+            return render(DataSource.fetch(data, true, true));
 
         data  = DataSource.manipulate(data);    
         style = DataSource.manipulate("xslt://" + style);
-        
-        return DataSource.transform(data, style, true);
+        return render(DataSource.transform(data, style, true));
     };
 };
