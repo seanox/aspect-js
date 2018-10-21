@@ -14,7 +14,9 @@
   supports: condition, custom tags, events, filter, interval, iterate, rendering,
   resources messages, validation, ...
 - Model View Controller  
-  supports: events, virtual paths, sitemap, ...
+  supports: events, virtual paths, sitemap, permission concept, ...
+- Resource Bundle / Resource Messages  
+  for localization and internationalization as well for the outsourcing of texts 
 - NoSQL datasource based on XML
 - Test environment  
   something like JUnit for automated tests
@@ -68,4 +70,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 [Support](http://seanox.de/contact?support)  
 [Development](http://seanox.de/contact?development)  
 [Project](http://seanox.de/contact?service)  
-[Page](http://seanox.de/contact)  
+[Page](http://seanox.de/contact)
+
+
+# Thanks!
+TODO:
