@@ -72,7 +72,7 @@ if (typeof Messages === "undefined") {
         var root = window.location.pathname;
         var data = (root + "/data").replace(/\/+/g, "/");
         var request = new XMLHttpRequest();
-        request.open("GET", DataSource.DATA + "/locales.xml?1", false);
+        request.open("GET", DataSource.DATA + "/locales.xml", false);
         request.overrideMimeType("application/xslt+xml");
         request.send();
         var xml = request.responseXML;
