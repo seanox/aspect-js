@@ -30,7 +30,7 @@
             Assert.assertEquals("a1:7 a2:8 a3:9 b1:10 b2:7 b3:7", snapshots.shift());
         }});
         
-        var snapshots = new Array();
+        var snapshots = [];
         var timeout = null;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (timeout)

@@ -15,7 +15,7 @@
     <script type="text/javascript">
     
         var TestModel = {};
-        TestModel.ticks = new Array();
+        TestModel.ticks = [];
         TestModel.ping = function(name) {
             TestModel.ticks[name] = (TestModel.ticks[name] || "") + "x";
             return TestModel.ticks[name];

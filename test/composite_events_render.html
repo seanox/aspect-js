@@ -20,7 +20,7 @@
             return ++TestModel.ticks;
         };
 
-        TestModel.events = new Array();
+        TestModel.events = [];
         TestModel.onEvent = function(event, variants) {
             if (TestModel.events[event] === undefined)
                 TestModel.events[event] = 0;

@@ -32,7 +32,7 @@
             }
         };
 
-        var results = new Array();
+        var results = [];
         
         Test.create({test:function() {
             Assert.assertEqualsTo("script[type='text/test-1']", snapshots.shift());            
@@ -47,7 +47,7 @@
             Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
         }});
         
-        var snapshots = new Array();
+        var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");

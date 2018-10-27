@@ -100,7 +100,7 @@
             Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""));
         }});
         
-        var snapshots = new Array();
+        var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
