@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20180922
+ *  Test 1.0 20181028
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180922
+ *  @version 1.0 20181028
  */
 if (typeof Test === "undefined") {
     
@@ -274,9 +274,9 @@ if (typeof Test === "undefined") {
             throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
         
         event = event.toLowerCase();
-        Test.listeners = Test.listeners || new Array();
+        Test.listeners = Test.listeners || [];
         if (!Array.isArray(Test.listeners[event]))
-            Test.listeners[event] = new Array();
+            Test.listeners[event] = [];
         Test.listeners[event].push(callback);
     };  
     
@@ -357,7 +357,7 @@ if (typeof Test === "undefined") {
                 && meta.ignore === true)
             return;
         
-        Test.stack = Test.stack || new Array();
+        Test.stack = Test.stack || [];
         if (Test.stack.indexOf(meta) >= 0)
             return;
         if (Test.serial == undefined)
@@ -428,7 +428,7 @@ if (typeof Test === "undefined") {
             }            
         };
 
-        Test.stack = Test.stack || new Array();
+        Test.stack = Test.stack || [];
         Test.queue = Test.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
         if (Test.queue.stack.length == 0) {
             Test.queue.stack = Test.stack.slice();
@@ -565,7 +565,7 @@ if (typeof Test === "undefined") {
         while (Test.queue.lock)
             continue;
         Test.task = null;        
-        Test.queue.stack = new Array();
+        Test.queue.stack = [];
         Test.fire(Test.EVENT_INTERRUPT, Test.status());
     };
     
@@ -955,14 +955,19 @@ if (Element.prototype.typeValue === undefined) {
     };     
 };
 
-if (Object.prototype.toPlainString === undefined)
-    Object.prototype.toPlainString = function() {
-        return JSON.stringify(this);
-    };     
-
+if (Node.prototype.toPlainString === undefined)
+    Node.prototype.toPlainString = function() {
+        return (new XMLSerializer()).serializeToString(this);
+    };    
+    
 if (Element.prototype.toPlainString === undefined)
     Element.prototype.toPlainString = function() {
         return this.outerHTML;
+};    
+
+if (Object.prototype.toPlainString === undefined)
+    Object.prototype.toPlainString = function() {
+        return JSON.stringify(this);
     };     
     
 if (Element.prototype.trigger === undefined)
@@ -974,4 +979,4 @@ if (Element.prototype.trigger === undefined)
             cancelable = true;
         trigger.initEvent(event, bubbles, cancelable);
         this.dispatchEvent(trigger);
-    };     
+    };
