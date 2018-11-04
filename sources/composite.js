@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20180923
+ *  Composite 1.0 20181104
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180923
+ *  @version 1.0 20181104
  */
 if (typeof Composite === "undefined") {
     
@@ -164,8 +164,10 @@ if (typeof Composite === "undefined") {
     /**
      *  Patterns to test whether an expression is exclusive, i.e. an expression
      *  without additional text fragments before or after.
+     *  The test is based on the check that the text has an expression (group 1)
+     *  and at the end no more literal or other expressions (group 2) exist.
      */
-    Composite.PATTERN_EXPRESSION_EXCLUSIVE = /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*$/;
+    Composite.PATTERN_EXPRESSION_EXCLUSIVE = /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*(.*)$/;
     
     /**
      *  Patterns for expressions with variable.
@@ -193,9 +195,8 @@ if (typeof Composite === "undefined") {
 
     /**
      *  Pattern for a element id
-     *      group 1: extended namespace (qualification towards the model)
-     *               or field without extended namespace
-     *      group 2: field, only with an extended namespace
+     *      group 1: extended namespace, qualification towards the model (optional)
+     *      group 2: element or field, only with an extended namespace
      *      group 3: identifier (optional)
      */
     Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z\w*\.])*?(?:[a-z]\w*))\.)*?([a-z]\w*)(?:\:(\w*))*$/i;
@@ -352,9 +353,9 @@ if (typeof Composite === "undefined") {
             throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
         
         event = event.toLowerCase();
-        Composite.listeners = Composite.listeners || new Array();
+        Composite.listeners = Composite.listeners || [];
         if (!Array.isArray(Composite.listeners[event]))
-            Composite.listeners[event] = new Array();
+            Composite.listeners[event] = [];
         Composite.listeners[event].push(callback);
     };
     
@@ -422,7 +423,7 @@ if (typeof Composite === "undefined") {
      */
     Composite.mount = function(selector, lock) {
         
-        Composite.mount.queue = Composite.mount.queue || new Array();
+        Composite.mount.queue = Composite.mount.queue || [];
         
         //The lock locks concurrent mount requests.
         //Concurrent mounting causes unexpected effects.
@@ -433,17 +434,17 @@ if (typeof Composite === "undefined") {
             return;
         }
 
+        var event = Composite.EVENT_MOUNT_NEXT;
         if (Composite.mount.lock === undefined
-                || Composite.mount.lock === false)
+                || Composite.mount.lock === false) {
             Composite.mount.lock = {ticks:1, selector:selector, share:function() {
                 this.ticks++; return this;}};
+            event = Composite.EVENT_MOUNT_START;
+        }
         var lock = Composite.mount.lock;
             
         try {
             
-            var event = Composite.EVENT_MOUNT_START;
-            if (lock.ticks > 1)
-                event = Composite.EVENT_MOUNT_NEXT;
             Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
@@ -465,13 +466,13 @@ if (typeof Composite === "undefined") {
             if (!(model instanceof Object)
                     || model instanceof Element)
                 return;
-            model = model.scope;
-            
+
             //No multiple object binding
             if (Composite.mount.queue.includes(selector))
                 return;
-            
+
             //Registers all events that are implemented in the model.
+            model = model.scope[model.field];
             for (var entry in model)
                 if (typeof model[entry] === "function"
                         && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
@@ -480,7 +481,7 @@ if (typeof Composite === "undefined") {
         } finally {
         
             lock.ticks--;
-            if (lock.ticks >= 0)
+            if (lock.ticks > 0)
                 return;
 
             Composite.mount.queue = Composite.mount.queue.filter(entry => entry != lock.selector);
@@ -635,7 +636,7 @@ if (typeof Composite === "undefined") {
      */
     Composite.scan = function(selector, lock) {
         
-        Composite.scan.queue = Composite.scan.queue || new Array();
+        Composite.scan.queue = Composite.scan.queue || [];
         
         //The lock locks concurrent scan requests.
         //Concurrent scaning causes unexpected effects.
@@ -646,17 +647,17 @@ if (typeof Composite === "undefined") {
             return;
         }
 
+        var event = Composite.EVENT_SCAN_NEXT;
         if (Composite.scan.lock === undefined
-                || Composite.scan.lock === false)
+                || Composite.scan.lock === false) {
             Composite.scan.lock = {ticks:1, selector:selector, share:function() {
                 this.ticks++; return this;}};
+            event = Composite.EVENT_SCAN_START;
+        }
         var lock = Composite.scan.lock;
             
         try {
             
-            var event = Composite.EVENT_SCAN_START;
-            if (lock.ticks > 1)
-                event = Composite.EVENT_SCAN_NEXT;
             Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
@@ -687,7 +688,7 @@ if (typeof Composite === "undefined") {
         } finally {
         
             lock.ticks--;
-            if (lock.ticks >= 0)
+            if (lock.ticks > 0)
                 return;
 
             Composite.scan.queue = Composite.scan.queue.filter(entry => entry != lock.selector);
@@ -735,7 +736,7 @@ if (typeof Composite === "undefined") {
         //registered as a modifier.
         if (typeof scope === "function"
                 && arguments.length == 1) {
-            Composite.modifiers = Composite.modifiers || new Array();
+            Composite.modifiers = Composite.modifiers || [];
             Composite.modifiers.push(scope);
             return;
         }
@@ -927,7 +928,7 @@ if (typeof Composite === "undefined") {
         if (!selector)
             return;
 
-        Composite.render.queue = Composite.render.queue || new Array();
+        Composite.render.queue = Composite.render.queue || [];
         
         //The lock locks concurrent render requests.
         //Concurrent rendering causes unexpected states due to manipulations
@@ -941,17 +942,17 @@ if (typeof Composite === "undefined") {
             return;
         }
 
+        var event = Composite.EVENT_RENDER_NEXT;
         if (Composite.render.lock === undefined
-                || Composite.render.lock === false)
+                || Composite.render.lock === false) {
             Composite.render.lock = {ticks:1, selector:selector, share:function() {
                 this.ticks++; return this;}};
+            event = Composite.EVENT_RENDER_START;
+        }
         var lock = Composite.render.lock;
             
         try {
             
-            var event = Composite.EVENT_RENDER_START;
-            if (lock.ticks > 1)
-                event = Composite.EVENT_RENDER_NEXT;
             Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
@@ -992,7 +993,7 @@ if (typeof Composite === "undefined") {
             
             //Associative array for the element-related meta-objects, those
             //which are created during rendering: (key:serial, value:meta)
-            Composite.render.meta = Composite.render.meta || new Array();
+            Composite.render.meta = Composite.render.meta || [];
             
             //Register each analyzed node/element and minimizes multiple
             //analysis. For registration, the serial number of the node/element
@@ -1005,7 +1006,7 @@ if (typeof Composite === "undefined") {
             if (!object) {
                 
                 //TODO: Doku modifiers (function(selector) {ohne rückgabewert}
-                Composite.modifiers = Composite.modifiers || new Array();
+                Composite.modifiers = Composite.modifiers || [];
                 Composite.modifiers.forEach(function(modifier, index, array) {
                     modifier.call(null, selector);
                 });
@@ -1444,9 +1445,12 @@ if (typeof Composite === "undefined") {
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     var context = serial + ":" + Composite.ATTRIBUTE_OUTPUT;
                     var value = Expression.eval(context, value);
-                    if (value instanceof Element
-                            || value instanceof NodeList)
-                        selector.appendChild(value, true);
+                    if (value instanceof Node)
+                        selector.appendChild(value.cloneNode(true), true);
+                    else if (value instanceof NodeList)
+                        Array.from(value).forEach(function(node, index, array) {
+                            selector.appendChild(node.cloneNode(true), index == 0);
+                        });
                     else selector.innerHTML = String(value);
                 } else selector.innerHTML = value;
             }
@@ -1522,7 +1526,7 @@ if (typeof Composite === "undefined") {
                 if (!object.iterate) {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
                     var content = iterate.match(Composite.PATTERN_EXPRESSION_EXCLUSIVE);
-                    content = content ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE) : null;
+                    content = content && !content[2] ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE)  : null;
                     if (content) {
                         object.iterate = {name:content[1].trim(),
                                 expression:"{{" + content[2].trim() + "}}"
@@ -1551,9 +1555,9 @@ if (typeof Composite === "undefined") {
                         }
                     } finally {
                         //If necessary, restore the temporary variable.
-                        if (variable === undefined)
-                            delete window[object.iterate.name];
-                        else window[object.iterate.name] = variable;
+                        delete window[object.iterate.name];
+                        if (variable !== undefined)
+                            window[object.iterate.name] = variable;
                     }
                     //The output of iterate is rendered recursively and finally
                     //and inserted in the iterate container. Therefore,
@@ -1569,7 +1573,7 @@ if (typeof Composite === "undefined") {
             //is the text element. The result is output here as textContent.
             //Elements of type: script + style are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                var attributes = Array.from(selector.attributes || new Array());
+                var attributes = Array.from(selector.attributes || []);
                 attributes = attributes.map(entry => entry.name);
                 attributes = attributes.concat(Array.from(object.attributes));
                 if (Composite.ATTRIBUTE_VALUE in selector)
@@ -1674,7 +1678,7 @@ if (typeof Composite === "undefined") {
     //but these are detected and prevented in the Composize.render method.
     window.addEventListener("load", function(event) {
         (new MutationObserver(function(mutations) {
-            var stack = new Array();
+            var stack = [];
             mutations.forEach(function(mutation) {
                 if (mutation.addedNodes) {
                     mutation.addedNodes.forEach(function(node) {
@@ -1937,7 +1941,7 @@ if (typeof Expression === "undefined") {
             var text = entry.data;
             text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, "$1\n$2\n");
             text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, "$1\r$2\r");
-            var words = new Array();
+            var words = [];
             var pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
                 text = text.replace(pattern, function(match, script, literal) {
@@ -1976,9 +1980,9 @@ if (typeof Expression === "undefined") {
         //Separation of script in keyword and other as partial words.
         //IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
         
-        var keywords = new Array("and", "&&", "or", "||", "not", "!", "eq", "==",
+        var keywords = ["and", "&&", "or", "||", "not", "!", "eq", "==",
                 "ne", "!=", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
-                "div", "/", "mod", "%");
+                "div", "/", "mod", "%"];
         cascade.script.forEach(function(entry, index, array) {
             var text = entry.data;
             for (var loop = 0; loop < keywords.length; loop += 2) {
@@ -1988,7 +1992,7 @@ if (typeof Expression === "undefined") {
             text = text.replace(/(^|[^\w\.])(true|false|null|instanceof|typeof|undefined|new)(?=[^\w\.]|$)/ig, function(match, script, keyword) {
                 return script + "\n\r" + keyword.toLowerCase() + "\n";
             });
-            var words = new Array();
+            var words = [];
             text.split(/\n/).forEach(function(entry, index, array) {
                 var object = {type:Expression.TYPE_OTHER, data:entry};
                 if (entry.match(/^\r/)) {
@@ -2012,7 +2016,7 @@ if (typeof Expression === "undefined") {
             var text =  entry.data;
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
-            var words = new Array();
+            var words = [];
             text.split(/\n/).forEach(function(entry, index, array) {
                 var object = {type:Expression.TYPE_LOGIC, data:entry};
                 if (entry.match(/^\r\r/)) {
@@ -2033,7 +2037,7 @@ if (typeof Expression === "undefined") {
         //Step 5:
         //Create a flat sequence from the cascade.
         
-        var words = new Array();
+        var words = [];
         var merge = function(word) {
             if (Array.isArray(word))
                 word.forEach(function(entry, index, array) {
@@ -2100,7 +2104,7 @@ if (typeof Expression === "undefined") {
      */
     Expression.eval = function(variants) {
         
-        Expression.cache = Expression.cache || new Array();
+        Expression.cache = Expression.cache || [];
         
         var expression = null;
         if (arguments.length > 1)

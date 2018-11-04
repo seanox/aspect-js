@@ -99,6 +99,12 @@
         Test.create({test:function() {
             Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""));
         }});
+        Test.create({test:function() {
+            var error = String(console.cache.error);
+            Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"));
+            Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"));
+            Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"));
+        }});
         
         var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -245,6 +251,11 @@
       <span iterate="{{tempE:[1,2,3]}}">
         <a>Ex</a>  
       </span>
-    </div>    
+    </div>   
+    
+    <span iterate=" {{tempX1:[1,2,3]}} ">x1</span>
+    <span iterate=" x {{tempX2:[1,2,3]}}">x2</span>
+    <span iterate=" {{tempX3:[1,2,3]}} x">x3</span>
+    <span iterate="{{tempX4:[1,2,3]}}{{}}">x4</span>     
   </body>
 </html>

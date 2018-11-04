@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  Extension 1.0 20180804
+ *  Extension 1.0 20181104
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180804
+ *  @version 1.0 20181104
  */
 if (typeof Namespace === "undefined") {
 
@@ -108,12 +108,21 @@ if (String.prototype.capitalize === undefined) {
     };
 };
 
-//TODO:
-if (String.prototype.decodeBase64 === undefined) {
-    String.prototype.decodeBase64 = function() {
-        return decodeURIComponent(atob(this).split('').map(function(code) {
-            return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a function for encoding the string objects in hexadecimal code.
+ */      
+if (String.prototype.encodeHex === undefined) {
+    String.prototype.encodeHex = function() {
+        var text = this;
+        var result = "";
+        for (var loop = 0; loop < text.length; loop++) {
+            var digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
+            while (digit.length < 2)
+                digit = "0" + digit;            
+            result += digit;
+        }
+        return "0x" + result;
     };
 };
 
@@ -143,23 +152,14 @@ if (String.prototype.encodeBase64 === undefined) {
     };
 }; 
 
-/**
- *  Enhancement of the JavaScript API
- *  Adds a function for encoding the string objects in hexadecimal code.
- */      
-if (String.prototype.encodeHex === undefined) {
-    String.prototype.encodeHex = function() {
-        var text = this;
-        var result = "";
-        for (var loop = 0; loop < text.length; loop++) {
-            var digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
-            while (digit.length < 2)
-                digit = "0" + digit;            
-            result += digit;
-        }
-        return "0x" + result;
+//TODO:
+if (String.prototype.decodeBase64 === undefined) {
+    String.prototype.decodeBase64 = function() {
+        return decodeURIComponent(atob(this).split('').map(function(code) {
+            return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
     };
-};  
+};
 
 /**
  *  Enhancement of the JavaScript API
@@ -240,5 +240,6 @@ if (RegExp.quote === undefined) {
  *  Adds a property to get the UID for the window instance.
  */  
 if (window.serial === undefined) {
-    window.serial = Math.uniqueId();
+    var timestamp = (new Date().getTime() -946684800000).toString(36);
+    window.serial = Math.uniqueId(10) + (timestamp.length.toString(36) + timestamp).toUpperCase();
 };

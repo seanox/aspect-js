@@ -159,7 +159,7 @@ if (typeof DataSource === "undefined") {
         if (arguments.length <= 0)
             return null;
         
-        var collection = new Array();
+        var collection = [];
         if (arguments.length == 1
                 && Array.isArray(arguments[0])) {
             collection = collection.concat(arguments[0]);

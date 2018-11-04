@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20181028
+ *  Test 1.0 20181104
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181028
+ *  @version 1.0 20181104
  */
 if (typeof Test === "undefined") {
     
@@ -875,12 +875,25 @@ if (typeof Assert === "undefined") {
  */
 if (typeof parent !== "undefined") {
     
+    /** Cache for analyzing console output */
+    console.cache = {log:"", warn:"", error:"", info:""};
+    
+    /** Clears the cache from the console output. */
+    console.cache.clear = function() {
+        console.cache.log = "";
+        console.cache.warn = "";
+        console.cache.error = "";
+        console.cache.info = "";
+    };
+    
     /** 
      *  General method for redirecting console levels.
      *  @param level
      *  @param variants
      */
     console.forward = function(level, variants) {
+        
+        console.cache[level] += Array.from(variants).join(", ");
         
         var invoke;
         if (parent)
