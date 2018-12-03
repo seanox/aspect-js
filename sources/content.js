@@ -29,12 +29,12 @@
  *  corresponding stylesheet with the same name is searched. For the final
  *  output, the transformed result will be rendered.
  *  
- *  Content 1.0 20181020
+ *  Content 1.0 20181203
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181020
+ *  @version 1.0 20181203
  */
 if (typeof Content === "undefined") {
 
@@ -65,13 +65,16 @@ if (typeof Content === "undefined") {
             return template.cloneNode(true).childNodes;
         };
         
-        data  = "xml://" + (data || "").trim();
-        style = (style || "").trim();
-        if (style == "")
-            return render(DataSource.fetch(data, true, true));
-
-        data  = DataSource.manipulate(data);    
+        data = (data || "").trim();
+        if (!data)
+            throw new TypeError("Invalid data");
+        style = (style || "").trim() || data;
         style = DataSource.manipulate("xslt://" + style);
-        return render(DataSource.transform(data, style, true));
+        data = DataSource.manipulate("xml://" + data);
+        
+        var immediate = style.evaluate("string(//*[local-name()='output'][1]/@immediate)", style, null, XPathResult.ANY_TYPE, null).stringValue;
+        if (!immediate.match(/^no|off|false|0$/i))
+            return render(DataSource.transform(data, style, true));
+        return DataSource.transform(data, style, true);
     };
 };

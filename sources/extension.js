@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  Extension 1.0 20181104
+ *  Extension 1.0 20181203
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181104
+ *  @version 1.0 20181203
  */
 if (typeof Namespace === "undefined") {
 
@@ -66,7 +66,7 @@ if (typeof Namespace === "undefined") {
         namespace = namespace.replace(/^[\\\/]/, "");
         namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
             if (typeof scope[entry] === "undefined") {
-                scope[entry] = new Object();
+                scope[entry] = {};
             } else if (scope[entry] instanceof Object) {
             } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
             scope = scope[entry];
@@ -142,7 +142,10 @@ if (String.prototype.decodeHex === undefined) {
     };
 };
 
-//TODO:
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a method for encoding Base64.
+ */ 
 if (String.prototype.encodeBase64 === undefined) {
     String.prototype.encodeBase64 = function() {
         return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g,
@@ -152,7 +155,10 @@ if (String.prototype.encodeBase64 === undefined) {
     };
 }; 
 
-//TODO:
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a method for decoding Base64.
+ */ 
 if (String.prototype.decodeBase64 === undefined) {
     String.prototype.decodeBase64 = function() {
         return decodeURIComponent(atob(this).split('').map(function(code) {
@@ -173,7 +179,10 @@ if (String.prototype.encodeHtml === undefined) {
     };
 }; 
 
-//TODO:
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a method for calculating a hash value.
+ */ 
 if (String.prototype.hashCode === undefined) {
     String.prototype.hashCode = function() {
         if (this.hash == undefined)
@@ -196,7 +205,10 @@ if (String.prototype.hashCode === undefined) {
     };
 }; 
 
-//TODO:
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a decode of slash sequences (control characters).
+ */ 
 if (String.prototype.unescape === undefined) {
     String.prototype.unescape = function() {
         var text = this;
@@ -208,24 +220,36 @@ if (String.prototype.unescape === undefined) {
     };
 };
 
-//TODO:
+/**
+ *  Enhancement of the JavaScript API
+ *  Modifies the method to support note and notes as NodeList and Array.
+ *  If the option clean is used, existing children will be removed first.
+ *  @param node  node(s)
+ *  @param clean existing children will be removed first
+ */
 Element.prototype.internalAppendChild = Element.prototype.appendChild;
-Element.prototype.appendChild = function(node, exclusive) {
-    if (exclusive)
+Element.prototype.appendChild = function(node, clean) {
+    if (clean)
         this.innerHTML = "";
     if (node instanceof Node) {
         this.internalAppendChild(node);
     } else if (Array.isArray(node)
             || node instanceof NodeList
             || (Symbol && Symbol.iterator
-                    && typeof node[Symbol.iterator])) {
+                    && node && typeof node[Symbol.iterator])) {
         node = Array.from(node);
         for (var loop = 0; loop < node.length; loop++)
             this.internalAppendChild(node[loop]);
     } else this.internalAppendChild(node);
 };
 
-//TODO:
+/**
+ *  Enhancement of the JavaScript API
+ *  Returns a literal pattern for the specified text.
+ *  Metacharacters or escape sequences in the text thus lose their meaning.
+ *  @param  text text to be literalized
+ *  @return a literal pattern for the specified text 
+ */
 if (RegExp.quote === undefined) {
     RegExp.quote = function(text) {
         if (text == null

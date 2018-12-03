@@ -24,12 +24,12 @@
  *      ----
  *  TODO:
  *  
- *  DataSource 1.0 20180616
+ *  DataSource 1.0 20181203
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20180616
+ *  @version 1.0 20181203
  */
 if (typeof DataSource === "undefined") {
     
@@ -107,19 +107,19 @@ if (typeof DataSource === "undefined") {
         var processor = new XSLTProcessor();
         processor.importStylesheet(style);
         
-        var escaping = xml.evaluate("string(/*/@escaping)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
-        escaping = !!escaping.match(/^yes|on|true|1$/i);
+        var escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
+        escape = !!escape.match(/^yes|on|true|1$/i);
         
         var result = processor.transformToDocument(xml);
-        var nodes = result.querySelectorAll(escaping ? "*" : "*[escaping]");
+        var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach(function(node, index, array) {
-            if (escaping || (node.getAttribute("escaping") || "on").match(/^yes|on|true|1$/i)) {
+            if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
                 var content = node.innerHTML;
                 if (content.indexOf("<") < 0
                         && content.indexOf(">") < 0)
                     node.innerHTML = node.textContent;
             }
-            node.removeAttribute("escaping");
+            node.removeAttribute("escape");
         });
         
         if (!partial)
