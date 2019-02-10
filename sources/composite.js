@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, JavaScript Client Faces
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -64,13 +64,19 @@
  *        The filter therefore affects the child elements.
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
+ *  TODO: Doku:
+ *        Die Attribute vom Renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
+ *        werden durch den MutationObserver geschuetzt und konnen nicht manipuliert werden.
+ *  TODO: Doku:
+ *        Der TextConten von Text-Nodes mit Expression wird durch den
+ *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20181104
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Composite 1.0 20190210
+ *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181104
+ *  @version 1.0 20190210
  */
 if (typeof Composite === "undefined") {
     
@@ -87,9 +93,8 @@ if (typeof Composite === "undefined") {
     /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
     Composite.selectors;
     
-    //TODO: Doku 
-    //TODO: Q: Rename in acceptors?
-    Composite.modifiers;
+    /** Assoziative array with acceptor and their registered listerners */
+    Composite.acceptors;
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
@@ -124,9 +129,6 @@ if (typeof Composite === "undefined") {
     /** Constant for attribute render */
     Composite.ATTRIBUTE_RENDER = "render";     
     
-    /** Constant for attribute sequence */
-    Composite.ATTRIBUTE_SEQUENCE = "sequence";
-
     /** Constant for attribute text */
     Composite.ATTRIBUTE_TEXT = "text";    
 
@@ -145,7 +147,7 @@ if (typeof Composite === "undefined") {
      *  is cached in the meta object. Other attributes are only cached if they
      *  contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|sequence|render|validate$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|render|validate$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -203,6 +205,9 @@ if (typeof Composite === "undefined") {
     
     /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
+    
+    /** Pattern for a datasource url */
+    Composite.PATTERN_DATASOURCE_URL = /^\s*data:\s*\/*\s*(.*)*\s*$/i;
 
     /** Pattern for all accepted events */
     Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
@@ -384,26 +389,21 @@ if (typeof Composite === "undefined") {
     };
 
     /**
+     *  TODO: check usage, maybe is synchron better
      *  Asynchronous call of a function.
      *  In reality, it is a non-blocking function call, because asynchronous
      *  execution is not possible without Web Worker.
      *  @param task     function to be executed
-     *  @param sequence true if the execution is to be linear/sequential
      *  @param variants up to five additional optional arguments that are passed
      *                  as arguments when the callback function is called
      */
-    Composite.asynchron = function(task, sequence, variants) {
-        
-        var method = function(invoke, variants) {
-            invoke.apply(null, variants);
-        };
+    Composite.asynchron = function(task, variants) {
         
         arguments = Array.from(arguments);
         arguments = arguments.slice(2);
-        
-        if (sequence)
-            method(task, arguments);
-        else window.setTimeout(method, 0, task, arguments);
+        window.setTimeout((invoke, variants) => {
+            invoke.apply(null, variants);
+        }, 0, task, arguments);
     };
     
     /**
@@ -453,7 +453,7 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.mount, false, node, lock.share());
+                    Composite.asynchron(Composite.mount, node, lock.share());
                 });
                 return; 
             }
@@ -666,7 +666,7 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.scan, false, node, lock.share());
+                    Composite.asynchron(Composite.scan, node, lock.share());
                 });
                 return; 
             }
@@ -683,7 +683,7 @@ if (typeof Composite === "undefined") {
             nodes.forEach(function(node, index, array) {
                 var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
                 if (serial.match(Composite.PATTERN_ELEMENT_ID))
-                    Composite.asynchron(Composite.mount, false, node);
+                    Composite.asynchron(Composite.mount, node);
             });
         } finally {
         
@@ -712,15 +712,15 @@ if (typeof Composite === "undefined") {
      *      ----
      *  TODO:
      *  
-     *      Modifier
+     *      Acceptors
      *      ---
-     *  Modifiers are a very special way to customize. Unlike the other ways,
+     *  Acceptors are a very special way to customize. Unlike the other ways,
      *  here the rendering is not shifted into own implementations. With a
-     *  modifier, an element is manipulated before rendering and only if the
+     *  acceptor, an element is manipulated before rendering and only if the
      *  renderer processes the element initially. This makes it possible to make
      *  individual changes to the attributes or the markup before the renderer
      *  processes them. This does not affect the implementation of the
-     *  rendering. The method call with a modifier:
+     *  rendering. The method call with a acceptor:
      *      Composite.customize(function(element) {...});
      *  Only arguments with a method without a return value are expected. 
      * 
@@ -733,11 +733,11 @@ if (typeof Composite === "undefined") {
     Composite.customize = function(scope, rendering) {
         
         //If only one argument of type function is passed, the method is
-        //registered as a modifier.
+        //registered as a acceptor.
         if (typeof scope === "function"
                 && arguments.length == 1) {
-            Composite.modifiers = Composite.modifiers || [];
-            Composite.modifiers.push(scope);
+            Composite.acceptors = Composite.acceptors || [];
+            Composite.acceptors.push(scope);
             return;
         }
         
@@ -793,16 +793,6 @@ if (typeof Composite === "undefined") {
      *  creates a unique ID for each object. This ID can be used to compare, map
      *  and reference a wide variety of objects. Composite and rendering use
      *  serial, since this cannot be changed via the markup.  
-     *      
-     *      Sequence
-     *      ----
-     *  Sequence is a very special declaration and controls the sequence of
-     *  concurrent processing. Sequence defines that the processing of the
-     *  children of an HTML element takes place from top to bottom and from left
-     *  to right. Thus the processing of the DOM follows the serial branching:
-     *      1 - 1.1 - 1.1.1 - 1.2 - 1.2.1 - 2 - ...
-     *  This specification is important if rendering and/or the object binding
-     *  must follow a certain logical sequence.    
      *      
      *      Text Node (simple embedded expression)
      *      ----
@@ -923,7 +913,7 @@ if (typeof Composite === "undefined") {
      *      ----
      *  TODO    
      */
-    Composite.render = function(selector, sequence, lock) {
+    Composite.render = function(selector, lock) {
         
         if (!selector)
             return;
@@ -945,8 +935,21 @@ if (typeof Composite === "undefined") {
         var event = Composite.EVENT_RENDER_NEXT;
         if (Composite.render.lock === undefined
                 || Composite.render.lock === false) {
-            Composite.render.lock = {ticks:1, selector:selector, share:function() {
-                this.ticks++; return this;}};
+            Composite.render.lock = {ticks:1, selector:selector, queue:[],
+                    share:function() {
+                        this.ticks++;
+                        return this;},
+                    release:function() {
+                        this.ticks--;
+                        if (this.ticks > 0)
+                            return;
+                        Composite.render.lock = false;
+                        Composite.fire(Composite.EVENT_RENDER_END, this.selector);
+                        Composite.scan(selector);
+                        var selector = Composite.render.queue.shift();
+                        if (selector)
+                            Composite.render(selector);  
+                }};
             event = Composite.EVENT_RENDER_START;
         }
         var lock = Composite.render.lock;
@@ -961,19 +964,19 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.render, sequence, node, sequence, lock.share());
+                    Composite.render(node, lock.share());
                 });
                 return;
             }
             
             if (!(selector instanceof Node))
                 return;
-            
+
             //If a custom tag exists, the macro is executed.
             Composite.macros = Composite.macros || {};
             var macro = Composite.macros[selector.nodeName.toLowerCase()];
             if (macro) {
-                Composite.asynchron(macro, sequence, selector);
+                Composite.asynchron(macro, selector);
                 return;
             }
             
@@ -987,12 +990,12 @@ if (typeof Composite === "undefined") {
                     (function(element, macro) {
                         var nodes = element.querySelectorAll(macro.selector);
                         nodes.forEach(function(node, index, array) {
-                            Composite.asynchron(macro.rendering, sequence, node);
+                            Composite.asynchron(macro.rendering, node);
                         });
                     })(selector, Composite.selectors[macro]);
             
-            //Associative array for the element-related meta-objects, those
-            //which are created during rendering: (key:serial, value:meta)
+            //Associative array (meta store) for element-related meta-objects,
+            //those which are created during rendering: (key:serial, value:meta)
             Composite.render.meta = Composite.render.meta || [];
             
             //Register each analyzed node/element and minimizes multiple
@@ -1005,10 +1008,10 @@ if (typeof Composite === "undefined") {
             var object = Composite.render.meta[serial];
             if (!object) {
                 
-                //TODO: Doku modifiers (function(selector) {ohne rückgabewert}
-                Composite.modifiers = Composite.modifiers || [];
-                Composite.modifiers.forEach(function(modifier, index, array) {
-                    modifier.call(null, selector);
+                //TODO: Doku acceptors (function(selector) {ohne rückgabewert}
+                Composite.acceptors = Composite.acceptors || [];
+                Composite.acceptors.forEach(function(acceptor, index, array) {
+                    acceptor.call(null, selector);
                 });
 
                 object = {serial:serial, element:selector, attributes:{}};
@@ -1086,15 +1089,6 @@ if (typeof Composite === "undefined") {
                 }
             }
             
-            //The sequence attribute is interpreted.
-            //Sequence is a very special declaration and controls the sequence
-            //of concurrent processing. Sequence defines that the processing of
-            //the children of an HTML element takes place from top to bottom and
-            //from left to right. Thus the processing of the DOM follows the
-            //serial branching:
-            //    1 - 1.1 - 1.1.1 - 1.2 - 1.2.1 - 2 - ...    
-            sequence = sequence || object.attributes[Composite.ATTRIBUTE_SEQUENCE] != undefined;            
-
             //The placeholder(-output) is interpreted.
             //Placeholder output is only processed via the placeholder.
             //Therefore the placeholder output is replaced by the placeholder at
@@ -1164,7 +1158,7 @@ if (typeof Composite === "undefined") {
                     //Empty expressions are removed/ignored.
                     
                     //All created meta objects with an expression have a special
-                    //render metode for updating the text content of the text
+                    //render method for updating the text content of the text
                     //node.
                     
                     //Step 3:
@@ -1179,7 +1173,7 @@ if (typeof Composite === "undefined") {
                             return "";
                         var node = document.createTextNode("");
                         var serial = node.ordinal();
-                        var object = {serial:serial, element:node, attributes:{}, render:function() {
+                        var object = {serial:serial, element:node, attributes:{}, value:null, render:function() {
                             if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
                                 var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
                                 var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
@@ -1189,7 +1183,8 @@ if (typeof Composite === "undefined") {
                                 word = this.attributes[Composite.ATTRIBUTE_VALUE];
                                 word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
                             }
-                            this.element.textContent = word;                                     
+                            this.value = word;
+                            this.element.textContent = word;
                         }};
                         var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                         if (param) {
@@ -1281,7 +1276,7 @@ if (typeof Composite === "undefined") {
                         //The placeholder output is rendered recursively and
                         //finally and inserted in the iterate container.
                         //Therefore, rendering can be stopped afterwards.
-                        Composite.render(template, true, lock.share());
+                        Composite.render(template, lock.share());
                         object.placeholder = placeholder;
                         selector.parentNode.insertBefore(template, selector);
                         return;
@@ -1301,7 +1296,7 @@ if (typeof Composite === "undefined") {
             
             if (!(selector instanceof Element))
                 return;
-
+            
             //TODO: Doku
             //Events primarily controls the synchronization of the input values
             //of HTML elements with the fields of a model. Means that the value
@@ -1351,11 +1346,9 @@ if (typeof Composite === "undefined") {
                             }
                         }
                         if (render) {
-                            if (render.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                                var context = serial + ":" + Composite.ATTRIBUTE_RENDER;
-                                render = Expression.eval(context, render);
-                            }
-                            Composite.asynchron(Composite.render, false, render, lock.share());
+                            if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
+                            Composite.render(render, lock.share());
                         }
                     });                    
                 });
@@ -1374,37 +1367,64 @@ if (typeof Composite === "undefined") {
             //attribute is removed. Recursive rendering is initiated via the
             //MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
-                var value = (object.attributes[Composite.ATTRIBUTE_IMPORT] || "").trim();
-                if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                    var context = serial + ":" + Composite.ATTRIBUTE_IMPORT;
-                    value = Expression.eval(context, value);
-                }
-                //Attributes can only be deleted in objects that are not locked.
-                //Locked objects are reused and require all attributes for
-                //re-rendering. Here the attribute 'import' is affected/meant.                
-                if (value) {
-                    if (!(value instanceof Element
-                            || value instanceof NodeList)) {
-                        (function(element, url) {
-                            Composite.render.cache = Composite.render.cache || {};
-                            if (typeof Composite.render.cache[url] !== "undefined") {
-                                element.innerHTML = Composite.render.cache[url];
-                                var serial = element.ordinal();
-                                var object = Composite.render.meta[serial];
-                                if (!object.lock)
-                                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                                return;
-                            }
-                            try {
-                                var request = new XMLHttpRequest();
-                                request.overrideMimeType("text/plain");
-                                request.open("GET", url, true);
-                                request.onreadystatechange = function() {
+                selector.innerHTML = "";
+                var value = object.attributes[Composite.ATTRIBUTE_IMPORT];
+                if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, value);
+                //Attributes can only be deleted in objects that are not
+                //locked. Locked objects are reused and require all
+                //attributes for re-rendering. Here the attribute 'import'
+                //is affected/meant.
+                //TODO: Doku: 3 Varianten Import (Expression = Element || NodeList, data:ulr, andere url)
+                
+                Composite.render.cache = Composite.render.cache || {};
+                
+                if (!value) {
+                    if (!object.lock)
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                
+                } else if (value instanceof Element
+                        || value instanceof NodeList) {
+                    selector.appendChild(value, true);
+                    if (!object.lock)
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+
+                } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
+                    var data = String(value).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
+                    data = data.split(/\s*:+\s*/);
+                    data[0] = (data[0] || "").trim();
+                    data[1] = (data.length > 1 ? data[1] : "").trim() || data[0];
+                    if (!data[0])
+                        throw new TypeError("Invalid data url");
+                    data[0] = DataSource.manipulate("xml://" + data[0]);
+                    data[1] = DataSource.manipulate("xslt://" + data[1]);
+                    data = DataSource.transform(data[0], data[1], true);
+                    selector.appendChild(data, true);
+                    var serial = selector.ordinal();
+                    var object = Composite.render.meta[serial];
+                    if (!object.lock)
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                
+                } else if (typeof Composite.render.cache[value] !== "undefined") {
+                    selector.innerHTML = Composite.render.cache[value];
+                    var serial = selector.ordinal();
+                    var object = Composite.render.meta[serial];
+                    if (!object.lock)
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                
+                } else {
+                    window.setTimeout((selector, lock, url) => {
+                        try {
+                            var request = new XMLHttpRequest();
+                            request.overrideMimeType("text/plain");
+                            request.open("GET", url, false);
+                            request.onreadystatechange = function() {
+                                try {
                                     if (request.readyState == 4) {
                                         if (request.status == "200") {
                                             Composite.render.cache[url] = request.responseText;
-                                            element.innerHTML = request.responseText;
-                                            var serial = element.ordinal();
+                                            selector.innerHTML = request.responseText;
+                                            var serial = selector.ordinal();
                                             var object = Composite.render.meta[serial];
                                             if (!object.lock)
                                                 delete object.attributes[Composite.ATTRIBUTE_IMPORT];
@@ -1417,42 +1437,55 @@ if (typeof Composite === "undefined") {
                                         }
                                         HttpRequestError.prototype = new Error;
                                         throw new HttpRequestError("HTTP status " + request.status + " for " + url);
-                                    }
-                                };
-                                request.send(null);  
-                            } catch (error) {
-                                Composite.fire(Composite.EVENT_AJAX_ERROR, error);
-                                throw error;
-                            }
-                        })(selector, value);
-                        return;                        
-                    }
-                    selector.appendChild(value, true);
+                                    }                                    
+                                } finally {
+                                    lock.release();
+                                }
+                            };
+                            request.send(null);
+                            lock.share();
+                        } catch (error) {
+                            Composite.fire(Composite.EVENT_AJAX_ERROR, error);
+                            throw error;
+                        } finally {
+                            lock.release();
+                        }
+                    }, 0, selector, lock.share(), value);
                 }
-                if (!object.lock)
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
             } 
             
             //The output attribute is interpreted.
             //This declaration sets the value or result of an expression as the
-            //content of an element. For an expression, the result can also be
-            //an element or a node list with elements. All other data types are
-            //set as text. This output is exclusive, thus overwriting any
-            //existing content. The recursive rerendering is initiated via the
-            //MutationObserver.
+            //content of an element.
+            //The following data types are supported:
+            //  1. Node and NodeList as the result of an expression.
+            //  2. DataSource-URL loads and transforms DataSource data.
+            //  3. Everything else is output directly as string/text.
+            //The output is exclusive, thus overwriting any existing content.
+            //The recursive rerendering is initiated via the MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
+                selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
-                if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                    var context = serial + ":" + Composite.ATTRIBUTE_OUTPUT;
-                    var value = Expression.eval(context, value);
-                    if (value instanceof Node)
-                        selector.appendChild(value.cloneNode(true), true);
-                    else if (value instanceof NodeList)
-                        Array.from(value).forEach(function(node, index, array) {
-                            selector.appendChild(node.cloneNode(true), index == 0);
-                        });
-                    else selector.innerHTML = String(value);
-                } else selector.innerHTML = value;
+                if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, value);
+                if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
+                    var data = String(value).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
+                    data = data.split(/\s*:+\s*/);
+                    data[0] = (data[0] || "").trim();
+                    data[1] = (data.length > 1 ? data[1] : "").trim() || data[0];
+                    if (!data[0])
+                        throw new TypeError("Invalid data url");
+                    data[0] = DataSource.manipulate("xml://" + data[0]);
+                    data[1] = DataSource.manipulate("xslt://" + data[1]);
+                    data = DataSource.transform(data[0], data[1], true);
+                    selector.appendChild(data, true);
+                } else if (value instanceof Node)
+                    selector.appendChild(value.cloneNode(true), true);
+                else if (value instanceof NodeList)
+                    Array.from(value).forEach(function(node, index, array) {
+                        selector.appendChild(node.cloneNode(true), index == 0);
+                    });
+                else selector.innerHTML = String(value);
             }
 
             //The interval attribute is interpreted.
@@ -1548,7 +1581,7 @@ if (typeof Composite === "undefined") {
                             iterate.forEach(function(item, index, array) {
                                 window[object.iterate.name] = {item:item, index:index, data:array};
                                 var template = object.template.cloneNode(true);
-                                Composite.render(template, true, lock.share());
+                                Composite.render(template, lock.share());
                                 selector.appendChild(template.childNodes);
                                 delete Composite.render.meta[template.ordinal()];                                 
                             });
@@ -1628,7 +1661,9 @@ if (typeof Composite === "undefined") {
             }
             
             //Follow other element children recursively.
-            //Elements of type: script + style and custom tags are ignored.
+            //The following are ignored:
+            //  - Elements of type: script + style and custom tags
+            //  - Elements that are a placeholder
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
@@ -1641,77 +1676,77 @@ if (typeof Composite === "undefined") {
                             if (object.hasOwnProperty("placeholder"))
                                 return;
                     }
-                    Composite.asynchron(Composite.render, sequence, node, sequence, lock.share());
+                    Composite.render(node, lock.share());
                 });
             }
 
         } finally {
-        
-            lock.ticks--;
-            if (lock.ticks > 0)
-                return;
-            
-            Composite.render.queue = Composite.render.queue.filter(entry => entry != lock.selector);
-            Composite.render.lock = false;
-            Composite.fire(Composite.EVENT_RENDER_END, lock.selector);
-            
-            selector = Composite.render.queue.shift();
-            if (selector)
-                Composite.asynchron(Composite.render, false, selector);
+            lock.release();
         }
     };
 
-    //Register a listener when an error occurs and trigger a matching composite-event.
+    //Listener when an error occurs and triggers a matching composite-event.
     window.addEventListener("error", function(event) {
         Composite.fire(Composite.EVENT_ERROR, event);
     });
-
-    //With the start the complete body element is rendered.
-    //Register the composite (re)scan with the end of the rendering.
-    window.addEventListener("load", function(event) {
-        Composite.render(document.body);
-        Composite.scan(document.body);
-    });
     
-    //A MutationObserver is established to detect changes at the DOM and
-    //triggers (re)rendering and (re)scanning. Unwanted recursions are possible,
-    //but these are detected and prevented in the Composize.render method.
+    //MutationObserver detects changes at the DOM and triggers (re)rendering and
+    //(re)scanning and prevents manipulation of the composite attributes.
     window.addEventListener("load", function(event) {
-        (new MutationObserver(function(mutations) {
-            var stack = [];
-            mutations.forEach(function(mutation) {
-                if (mutation.addedNodes) {
-                    mutation.addedNodes.forEach(function(node) {
-                        try {
-                            //Duplicates should be prevented.
-                            if (stack.indexOf(node) >= 0)
-                                return;                
-                            stack.push(node);
-                            //Ignore all text nodes. These are filled with the final
-                            //text content during rendering, unless the content
-                            //still contains expressions
-                            if (node.nodeType == Node.TEXT_NODE
-                                    && !node.nodeValue.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                                return;
-                            var serial = node.ordinal();
-                            var object = Composite.render.meta[serial];
-                            //Ignore all placeholders. The corresponding output
-                            //elements are generated when the placeholder is created
-                            //and rendered, and are then rendered initially.
-                            if (object)
-                                if (object.hasOwnProperty("template")
-                                        || object.hasOwnProperty("output")
-                                        || object.hasOwnProperty("placeholder")
-                                        || object.attributes.hasOwnProperty("value"))
-                                    return;
+        (new MutationObserver(function(records) {
+            records.forEach(function(record) {
+
+                //Without Meta-Store, the renderer hasn't run yet.
+                //The reaction by the MutationObserver only makes sense when the
+                //renderer has run initially.
+                if (!Composite.render.meta)
+                    return;
+                
+                var serial = record.target.ordinal();
+                var object = Composite.render.meta[serial];
+                
+                //Text changes are only monitored at text nodes with expression.
+                //Manipulations are corrected/restored.
+                if (record.type == "characterData"
+                        && record.target.nodeType == Node.TEXT_NODE) {
+                    if (object && object.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
+                            && object.value !== record.target.textContent)
+                        record.target.textContent = object.value;
+                    return;
+                }
+                
+                //Changes at the renderer-specific and static attributes are
+                //monitored. Manipulations are corrected/restored.
+                if (object && record.type == "attributes") {
+                    var attribute = (record.attributeName || "").toLowerCase().trim();
+                    if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
+                        var value = record.target.getAttribute(attribute);
+                        if (object.attributes[attribute] != value)
+                            record.target.setAttribute(attribute, object.attributes[attribute]);
+                    } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
+                        record.target.removeAttribute(attribute);
+                    }
+                }
+                
+                //Theoretically, the target object may be unknown by the
+                //renderer, but normally the mutation observer reacts to the
+                //parent element when inserting new elements.
+                //Therefore, this case was not implemented.
+                
+                //All new inserted elements are rendered if they are unknown for
+                //the renderer.
+                if (record.addedNodes) {
+                    record.addedNodes.forEach(function(node) {
+                        if (node instanceof Element
+                                && !Composite.render.meta[node.ordinal()])
                             Composite.render(node);
-                        } finally {
-                            Composite.scan(node);
-                        }
                     });
                 }
-                if (mutation.removedNodes) {
-                    mutation.removedNodes.forEach(function(node) {
+                
+                //All removed elements are cleaned and if necessary the unmount
+                //method is called if an object binding exists.
+                if (record.removedNodes) {
+                    record.removedNodes.forEach(function(node) {
                         var cleanup = function(node) {
                             //Clean up all the child elements first.
                             if (node.childNodes) {
@@ -1732,19 +1767,19 @@ if (typeof Composite === "undefined") {
                         };
                         cleanup(node);
                     });
-                }
-            }); 
-        })).observe(document.body, {childList:true, subtree:true});
-    });       
+                }                
+            });
+        })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
+    });
 };
 
 if (typeof Expression === "undefined") {    
     
     /**
      *  Expression/Expression Language (EL) is mechanism that simplifies the
-     *  accessibility of the data stored in JavaScrript model component and other
-     *  object on the client side. There are many operators that are used in EL
-     *  like arithmetic and logical operators to perform an expression.
+     *  accessibility of the data stored in JavaScrript model component and
+     *  other object on the client side. There are many operators that are used
+     *  in EL like arithmetic and logical operators to perform an expression.
      */
     Expression = {};
 
