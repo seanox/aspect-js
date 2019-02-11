@@ -71,12 +71,12 @@
  *        Der TextConten von Text-Nodes mit Expression wird durch den
  *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20190210
+ *  Composite 1.0 20190211
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190210
+ *  @version 1.0 20190211
  */
 if (typeof Composite === "undefined") {
     
@@ -389,7 +389,6 @@ if (typeof Composite === "undefined") {
     };
 
     /**
-     *  TODO: check usage, maybe is synchron better
      *  Asynchronous call of a function.
      *  In reality, it is a non-blocking function call, because asynchronous
      *  execution is not possible without Web Worker.
@@ -453,7 +452,7 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.mount, node, lock.share());
+                    Composite.mount(node, lock.share());
                 });
                 return; 
             }
@@ -490,7 +489,7 @@ if (typeof Composite === "undefined") {
             
             selector = Composite.mount.queue.shift();
             if (selector)
-                Composite.asynchron(Composite.mount, {arguments:[selector]});
+                Composite.mount({arguments:[selector]});
         }        
     };
     
@@ -666,7 +665,7 @@ if (typeof Composite === "undefined") {
                     return;
                 var nodes = document.querySelectorAll(selector);
                 nodes.forEach(function(node, index, array) {
-                    Composite.asynchron(Composite.scan, node, lock.share());
+                    Composite.scan(node, lock.share());
                 });
                 return; 
             }
@@ -683,7 +682,7 @@ if (typeof Composite === "undefined") {
             nodes.forEach(function(node, index, array) {
                 var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
                 if (serial.match(Composite.PATTERN_ELEMENT_ID))
-                    Composite.asynchron(Composite.mount, node);
+                    Composite.mount(node);
             });
         } finally {
         
@@ -697,7 +696,7 @@ if (typeof Composite === "undefined") {
             
             selector = Composite.scan.queue.shift();
             if (selector)
-                Composite.asynchron(Composite.scan, {arguments:[selector]});
+                Composite.scan({arguments:[selector]});
         }
     };
     
@@ -972,27 +971,29 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Node))
                 return;
 
+            //TODO: Test
             //If a custom tag exists, the macro is executed.
             Composite.macros = Composite.macros || {};
             var macro = Composite.macros[selector.nodeName.toLowerCase()];
             if (macro) {
-                Composite.asynchron(macro, selector);
+                macro.apply(null, selector);
                 return;
             }
             
+            //TODO: Test
             //If a custom selector exists, the macro is executed.
             //Custom selector is a filter-function based on a query selector.
             //The root of the selector is the current element.
             //The filter therefore affects the child elements.
             Composite.selectors = Composite.selectors || {};
             for (var macro in Composite.selectors)
-                if (typeof macro === "object")
-                    (function(element, macro) {
-                        var nodes = element.querySelectorAll(macro.selector);
-                        nodes.forEach(function(node, index, array) {
-                            Composite.asynchron(macro.rendering, node);
-                        });
-                    })(selector, Composite.selectors[macro]);
+                if (typeof macro === "object") {
+                    var macro = Composite.selectors[macro];
+                    var nodes = selector.querySelectorAll(macro.selector);
+                    nodes.forEach(function(node, index, array) {
+                        macro.rendering.apply(null, node);
+                    });
+                }
             
             //Associative array (meta store) for element-related meta-objects,
             //those which are created during rendering: (key:serial, value:meta)
@@ -1356,16 +1357,20 @@ if (typeof Composite === "undefined") {
             
             //The import attribute is interpreted.
             //This declation loads the content and replaces the inner HTML of an
-            //element with the content. The attribute expects as value one
-            //element or more elements as node list or array -- these are then
-            //inserted directly and behave similar to the output-attribute, or
-            //the value is considered as a remote resource with relative or
-            //absolute URL and will be loaded via the HTTP method GET.
+            //element with the content.
+            //The following data types are supported:
+            //  1. Node and NodeList as the result of an expression.
+            //  2. URL (relative or absolute) loads markup/content from a remote
+            //     data source via the HTTP method GET
+            //  2. DataSource-URL loads and transforms DataSource data.
+            //  3. Everything else is output directly as string/text.
+            //The import is exclusive, similar to the output-attribute, thus
+            //overwriting any existing content. The recursive rerendering is
+            //initiated via the MutationObserver.
             //Loading and replacing the import function can be combined with the
             //condition attribute and is only executed when the condition is
             //true. If the content can be loaded successfully, the import
-            //attribute is removed. Recursive rendering is initiated via the
-            //MutationObserver.
+            //attribute is removed.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_IMPORT];
@@ -1375,8 +1380,6 @@ if (typeof Composite === "undefined") {
                 //locked. Locked objects are reused and require all
                 //attributes for re-rendering. Here the attribute 'import'
                 //is affected/meant.
-                //TODO: Doku: 3 Varianten Import (Expression = Element || NodeList, data:ulr, andere url)
-                
                 Composite.render.cache = Composite.render.cache || {};
                 
                 if (!value) {
@@ -1663,7 +1666,10 @@ if (typeof Composite === "undefined") {
             //Follow other element children recursively.
             //The following are ignored:
             //  - Elements of type: script + style and custom tags
+            //  - Elements with functions that modify the inner markup
             //  - Elements that are a placeholder
+            //These elements manipulate the inner markup.
+            //This is intercepted by the MutationObserver.
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
