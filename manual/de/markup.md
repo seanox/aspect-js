@@ -140,11 +140,12 @@ Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt und das
-Verhalten ähnelt dem Attribut `output`, oder der Wert wird als entfernte
-Ressource mit relativer bzw. absoluter URL betrachtet und per HTTP-Methode GET
-nachgeladen. Das Laden und Ersetzen der Import-Funktion lässt sich mit dem
-condition-Attribut kombinieren und wird dann erst ausgeführt, wenn die Bedingung
-`true` ist.
+Verhalten ist vergleichbar mit dem Attribut `output`, oder eine absolute oder
+relative URL zu einer entfernten Ressource, die per HTTP-Methode GET nachgeladen
+wird, oder eine DataSource-URL die einen Inhalt aus der DataSource lädt und
+transformiert.  
+In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
+kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
 
 ```javascript
 var Model = {
@@ -177,7 +178,34 @@ var Model = {
 <article import="{{Model.publishForm()}}">
   loading form...  
 </article>
+```
+
+Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
+
+```html
 <article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
+  loading resource...  
+</article>
+```
+
+Beispiel für den Import einer DataSource-Ressource.  
+Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
+abgeleitet. 
+
+```html
+<article import="{{'data:/example/content'}}">
+  loading resource...  
+</article>
+```
+
+Beispiel für den Import einer DataSource-Ressource mit spezifischer Daten- und
+Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit
+dem DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
+verwendet, von denen der erste aus die Daten und der zweite auf die
+Transformation verweist.
+
+```html
+<article import="{{'data:/example/data data:/example/style'}}">
   loading resource...  
 </article>
 ```
@@ -373,10 +401,6 @@ Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen (`events`
 und Zielen (`render`), die jeweils sich hochzählende Textausgaben darstellen und
 auf entsprechende Ereignisse reagieren.
 
-
-
-### validate
-xxx
 
 
 ### validate
