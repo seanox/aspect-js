@@ -17,7 +17,6 @@ somit rekursiv auf Veränderungen im DOM.
   * [interval](#interval)
   * [output](#output)
   * [render](#render)    
-  * [sequence](#sequence)
   * [validate](#validate)  
 * [Scripting](#scripting)
 * [Customizing](#customizing)
@@ -375,30 +374,9 @@ und Zielen (`render`), die jeweils sich hochzählende Textausgaben darstellen und
 auf entsprechende Ereignisse reagieren.
 
 
-### sequence
 
-Sequence ist eine sehr spezielle Deklaration und steuert die Reihenfolge der
-nebenläufigen DOM-Verarbeitung. Sequence legt fest, dass die Verarbeitung der
-Kinder eines HTML-Elements der seriellen Verzweigung folgt, also von oben nach
-unten und von links nach rechts: 1, 1.1, 1.1.1, 1.2, 1.2.1, 2, ...
-Diese Angabe ist wichtig, wenn das Rendern und/oder die Objekt-Bindung eine
-bestimmte logische Reihenfolge einhalten muss.
-
-```html
-<article sequence>
-  {{index:0}}
-  <div id="{{index +1}}">
-    <div id="{{index +2}}">
-      <div id="{{index +3}}"></div>
-    </div>
-    <div id="{{index +4}}">
-      <div id="{{index +5}}"></div>
-    </div>
-  </div>
-  <div id="{{index +6}}">
-  </div>
-</article>
-```
+### validate
+xxx
 
 
 ### validate
