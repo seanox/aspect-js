@@ -876,14 +876,14 @@ if (typeof Assert === "undefined") {
 if (typeof parent !== "undefined") {
     
     /** Cache for analyzing console output */
-    console.cache = {log:"", warn:"", error:"", info:""};
+    console.output = {log:"", warn:"", error:"", info:""};
     
     /** Clears the cache from the console output. */
-    console.cache.clear = function() {
-        console.cache.log = "";
-        console.cache.warn = "";
-        console.cache.error = "";
-        console.cache.info = "";
+    console.output.clear = function() {
+        console.output.log = "";
+        console.output.warn = "";
+        console.output.error = "";
+        console.output.info = "";
     };
     
     /** 
@@ -893,7 +893,7 @@ if (typeof parent !== "undefined") {
      */
     console.forward = function(level, variants) {
         
-        console.cache[level] += Array.from(variants).join(", ");
+        console.output[level] += Array.from(variants).join(", ");
         
         var invoke;
         if (parent)

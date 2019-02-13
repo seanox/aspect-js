@@ -22,7 +22,7 @@
  *  
  *      DESCRIPTION
  *      ----
- *  TODO:
+ *  General extension of the JavaScript API.
  *  
  *  Extension 1.0 20181203
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -33,7 +33,17 @@
  */
 if (typeof Namespace === "undefined") {
 
-    //TODO:
+    /**
+     *  Namespaces at object level.
+     *  Comparable to packages in other programming languages, namespaces can be
+     *  used to map hierarchical structures and to group thematically related
+     *  components and resources.
+     *  The implementation happens in JavaScript at object level.
+     *  This means that it is not a real element of the programming language,
+     *  but is represented by chained static objects.
+     *  Each level in this object chain represents a namespace.
+     *  As is typical for objects, the namespaces are separated by a dot. 
+     */
     Namespace = {};
     
     /** Pattern for the namespace separator */
@@ -46,7 +56,10 @@ if (typeof Namespace === "undefined") {
     Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
     
     /**
-     *  TODO:
+     *  Creates a namespace to pass string.
+     *  Slash and dot are supported as separators.
+     *  @param  namespace
+     *  @return the created namespace
      *  @throws An error occurs in the following cases:
      *      - event is not valid or is not supported
      *      - callback function is not implemented correctly or does not exist
@@ -223,13 +236,13 @@ if (String.prototype.unescape === undefined) {
 /**
  *  Enhancement of the JavaScript API
  *  Modifies the method to support note and notes as NodeList and Array.
- *  If the option clean is used, existing children will be removed first.
- *  @param node  node(s)
- *  @param clean existing children will be removed first
+ *  If the option exclusive is used, existing children will be removed first.
+ *  @param node      node(s)
+ *  @param exclusive existing children will be removed first
  */
 Element.prototype.internalAppendChild = Element.prototype.appendChild;
-Element.prototype.appendChild = function(node, clean) {
-    if (clean)
+Element.prototype.appendChild = function(node, exclusive) {
+    if (exclusive)
         this.innerHTML = "";
     if (node instanceof Node) {
         this.internalAppendChild(node);
