@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, JavaScript Client Faces
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -22,14 +22,27 @@
  *  
  *      DESCRIPTION
  *      ----
- *  TODO:
+ *  DataSource is a NoSQL approach to data storage based on XML data in
+ *  combination with multilingual data separation, optional aggregation and
+ *  transformation.
+ *  A combination of the approaches of a read only DBS and a CMS.
  *  
- *  DataSource 1.0 20181203
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Files are defined by locator.
+ *  A locator is a URL (xml://... or xslt://...) that is used absolute and
+ *  relative to the DataSource directory, but does not contain a locale
+ *  (language specification) in the path. The locale is determined automatically
+ *  for the language setting of the browser, or if this is not supported, the
+ *  standard from the locales.xml in the DataSource directory is used.
+ *  
+ *  The data is queried with XPath, the result can be concatenated and
+ *  aggregated and the result can be transformed with XSLT.
+ *  
+ *  DataSource 1.0 20190214
+ *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181203
+ *  @version 1.0 20190214
  */
 if (typeof DataSource === "undefined") {
     
@@ -43,6 +56,14 @@ if (typeof DataSource === "undefined") {
     
     DataSource.PATTERN_LOCATOR = /^([a-z]+):\/(\/[\w\-\/]+)$/;
     
+    DataSource.PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;    
+    
+    DataSource.ATTRIBUTE_TYPE = "type";
+    
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a method for cloning a XMLDocument.
+     */    
     if (XMLDocument.prototype.clone === undefined) {
         XMLDocument.prototype.clone = function() {
             var clone = this.implementation.createDocument(this.namespaceURI, null, null);
@@ -52,6 +73,7 @@ if (typeof DataSource === "undefined") {
         };     
     };    
     
+    /** The available languages in the 'locales.xml' with label-value pairs. */
     DataSource.locale = (function() {
         
         var request;
@@ -70,34 +92,7 @@ if (typeof DataSource === "undefined") {
         return xml.evaluate("/locales/*[@default]", xml, null, XPathResult.ANY_TYPE, null).iterateNext().nodeName.toLowerCase();
     })();
     
-    DataSource.manipulate = function(locator) {
-
-        if (typeof locator !== "string"
-                || !locator.match(DataSource.PATTERN_LOCATOR))
-            throw new Error("Invalid locator: " + String(locator));        
-        
-        var type = locator.match(DataSource.PATTERN_LOCATOR)[1];
-        var path = locator.match(DataSource.PATTERN_LOCATOR)[2];
-
-        DataSource.cache = DataSource.cache || {};
-
-        var data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
-        data = data.replace(/\/+/g, "/");
-        hash = data.hashCode();
-        if (DataSource.cache.hasOwnProperty(hash))
-            return DataSource.cache[hash];
-        
-        var request = new XMLHttpRequest();
-        request.open("GET", data, false);
-        request.overrideMimeType("application/xslt+xml");
-        request.send();
-        data = request.responseXML;
-        DataSource.cache[hash] = data; 
-        
-        return data;
-    };
-    
-    DataSource.transform = function(xml, style, partial) {
+    DataSource.transform = function(xml, style, raw) {
         
         if (!(xml instanceof XMLDocument))
             throw new TypeError("Invalid xml document");   
@@ -106,6 +101,8 @@ if (typeof DataSource === "undefined") {
 
         var processor = new XSLTProcessor();
         processor.importStylesheet(style);
+        
+        //TODO: Doku: escape
         
         var escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
         escape = !!escape.match(/^yes|on|true|1$/i);
@@ -122,7 +119,17 @@ if (typeof DataSource === "undefined") {
             node.removeAttribute("escape");
         });
         
-        if (!partial)
+        //TODO: Doku: text/javascript -> composite/javascript
+        
+        var nodes = result.querySelectorAll("script[type],script:not([type])");
+        nodes.forEach(function(node, index, array) {
+            if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
+                    || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
+                node.setAttribute("type", "composite/javascript");
+        });
+        
+        if (arguments.length > 2
+                && !!raw)
             return result;
         
         if (result.body)
@@ -133,7 +140,19 @@ if (typeof DataSource === "undefined") {
         return result.childNodes;        
     }; 
     
-    DataSource.fetch = function(locator, transform, partial) {
+    /**
+     *  Fetch the data as text to a locator.
+     *  Optionally the data can be transformed into an XMLDocument.
+     *  @param  locators  locator
+     *  @param  transform locator of style for the transformation
+     *  @param  raw
+     *      in combination with transform optionally true to return the complete
+     *      XMLDocument, otherwise only the root entity is returned as node     
+     *  @return the data as text or in combination with transform the
+     *      XMLDocument or the root entity as node
+     *  @throws Error in the case of invalid arguments
+     */    
+    DataSource.fetch = function(locator, transform, raw) {
         
         if (typeof locator !== "string"
                 || !locator.match(DataSource.PATTERN_LOCATOR))
@@ -142,19 +161,45 @@ if (typeof DataSource === "undefined") {
         var type = locator.match(DataSource.PATTERN_LOCATOR)[1];
         var path = locator.match(DataSource.PATTERN_LOCATOR)[2];
         
+        if (arguments.length == 1) {
+
+            DataSource.cache = DataSource.cache || {};
+            
+            var data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
+            data = data.replace(/\/+/g, "/");
+            hash = data.hashCode();
+            if (DataSource.cache.hasOwnProperty(hash))
+                return DataSource.cache[hash];
+            
+            var request = new XMLHttpRequest();
+            request.open("GET", data, false);
+            request.overrideMimeType("application/xslt+xml");
+            request.send();
+            data = request.responseXML;
+            DataSource.cache[hash] = data;
+            
+            return data;
+        }
+        
         if (!type.match(/^xml$/)
                 && transform)
             throw new Error("Transformation is not supported for this locator");  
 
-        var data = DataSource.manipulate(locator);
+        var data = DataSource.fetch(locator);
         if (!transform)
             return data.clone();
         
-        var style = DataSource.manipulate(locator.replace(/^[a-z]+/i, "xslt"));
-        return DataSource.transform(data, style, partial);
+        var style = DataSource.fetch(locator.replace(/^[a-z]+/i, "xslt"));
+        return DataSource.transform(data, style, raw);
     };
     
-    DataSource.collect = function(variants) {
+    /**
+     *  Collects and concatates the of multiple XML files as a new XMLDocument.
+     *  @param  locators Array or VarArg with locators
+     *  @return the created XMLDocument, otherwise null
+     *  @throws Error in the case of invalid arguments
+     */
+    DataSource.collect = function(locators) {
         
         if (arguments.length <= 0)
             return null;
