@@ -22,8 +22,8 @@
  *  
  *      DESCRIPTION
  *      ----
- *  With aspect-js the declarative approach of HTML is taken up and extended. In
- *  addition to the expression language, the HTML elements are provided with
+ *  With aspect-js the declarative approach of HTML is taken up and extended.
+ *  In addition to the expression language, the HTML elements are provided with
  *  additional attributes for functions and object binding attributes.
  *  The corresponding renderer is included in the composite implementation and
  *  actively monitors the DOM via the MutationObserver and thus reacts
@@ -71,12 +71,12 @@
  *        Der TextConten von Text-Nodes mit Expression wird durch den
  *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20190211
+ *  Composite 1.0 20190221
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190211
+ *  @version 1.0 20190221
  */
 if (typeof Composite === "undefined") {
     
@@ -268,6 +268,56 @@ if (typeof Composite === "undefined") {
         pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
         return pattern;
     })();
+    
+    //TODO:
+    Composite.lock = function(context, selector) {
+        
+        context.queue = context.queue || [];
+
+        if (context.lock === undefined
+                || context.lock === false) {
+            context.lock = {ticks:1, selector:selector, queue:[],
+                    share:function() {
+                        this.ticks++;
+                        return this;
+                    },
+                    release:function() {
+                        this.ticks--;
+                        if (this.ticks > 0)
+                            return;
+                        context.lock = false;
+                        if (context == Composite.render) {
+                            Composite.fire(Composite.EVENT_RENDER_END, this.selector);
+                            Composite.scan(this.selector);
+                        } else if (context == Composite.mount) {
+                            Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
+                        } else if (context == Composite.scan) {
+                            Composite.fire(Composite.EVENT_SCAN_END, this.selector);
+                        } else throw new Error("Invalid context: " + context);
+                        var selector = context.queue.shift();
+                        if (selector)
+                            context(selector);  
+                }};
+            
+            if (context == Composite.render)
+                Composite.fire(Composite.EVENT_RENDER_START, this.selector);
+            else if (context == Composite.mount)
+                Composite.fire(Composite.EVENT_MOUNT_START, this.selector);
+            else if (context == Composite.scan)
+                Composite.fire(Composite.EVENT_SCAN_START, this.selector);
+            else throw new Error("Invalid context: " + context);            
+        } else {
+            if (context == Composite.render)
+                Composite.fire(Composite.EVENT_RENDER_NEXT, this.selector);
+            else if (context == Composite.mount)
+                Composite.fire(Composite.EVENT_MOUNT_NEXT, this.selector);
+            else if (context == Composite.scan)
+                Composite.fire(Composite.EVENT_SCAN_NEXT, this.selector);
+            else throw new Error("Invalid context: " + context);            
+        }
+        
+        return context.lock;
+    };
 
     /**
      *  Enhancement of the JavaScript API
@@ -433,19 +483,10 @@ if (typeof Composite === "undefined") {
             return;
         }
 
-        var event = Composite.EVENT_MOUNT_NEXT;
-        if (Composite.mount.lock === undefined
-                || Composite.mount.lock === false) {
-            Composite.mount.lock = {ticks:1, selector:selector, share:function() {
-                this.ticks++; return this;}};
-            event = Composite.EVENT_MOUNT_START;
-        }
-        var lock = Composite.mount.lock;
+        var lock = Composite.lock(Composite.mount, selector);
             
         try {
             
-            Composite.fire(event, lock.selector);
-
             if (typeof selector === "string") {
                 selector = selector.trim();
                 if (!selector)
@@ -478,18 +519,7 @@ if (typeof Composite === "undefined") {
                     selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
 
         } finally {
-        
-            lock.ticks--;
-            if (lock.ticks > 0)
-                return;
-
-            Composite.mount.queue = Composite.mount.queue.filter(entry => entry != lock.selector);
-            Composite.mount.lock = false;
-            Composite.fire(Composite.EVENT_MOUNT_END, lock.selector);
-            
-            selector = Composite.mount.queue.shift();
-            if (selector)
-                Composite.mount({arguments:[selector]});
+            lock.release();
         }        
     };
     
@@ -646,18 +676,9 @@ if (typeof Composite === "undefined") {
             return;
         }
 
-        var event = Composite.EVENT_SCAN_NEXT;
-        if (Composite.scan.lock === undefined
-                || Composite.scan.lock === false) {
-            Composite.scan.lock = {ticks:1, selector:selector, share:function() {
-                this.ticks++; return this;}};
-            event = Composite.EVENT_SCAN_START;
-        }
-        var lock = Composite.scan.lock;
+        var lock = Composite.lock(Composite.scan, selector);
             
         try {
-            
-            Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
                 selector = selector.trim();
@@ -685,18 +706,7 @@ if (typeof Composite === "undefined") {
                     Composite.mount(node);
             });
         } finally {
-        
-            lock.ticks--;
-            if (lock.ticks > 0)
-                return;
-
-            Composite.scan.queue = Composite.scan.queue.filter(entry => entry != lock.selector);
-            Composite.scan.lock = false;
-            Composite.fire(Composite.EVENT_SCAN_END, lock.selector);
-            
-            selector = Composite.scan.queue.shift();
-            if (selector)
-                Composite.scan({arguments:[selector]});
+            lock.release();
         }
     };
     
@@ -931,31 +941,9 @@ if (typeof Composite === "undefined") {
             return;
         }
 
-        var event = Composite.EVENT_RENDER_NEXT;
-        if (Composite.render.lock === undefined
-                || Composite.render.lock === false) {
-            Composite.render.lock = {ticks:1, selector:selector, queue:[],
-                    share:function() {
-                        this.ticks++;
-                        return this;},
-                    release:function() {
-                        this.ticks--;
-                        if (this.ticks > 0)
-                            return;
-                        Composite.render.lock = false;
-                        Composite.fire(Composite.EVENT_RENDER_END, this.selector);
-                        Composite.scan(selector);
-                        var selector = Composite.render.queue.shift();
-                        if (selector)
-                            Composite.render(selector);  
-                }};
-            event = Composite.EVENT_RENDER_START;
-        }
-        var lock = Composite.render.lock;
+        var lock = Composite.lock(Composite.scan, selector);
             
         try {
-            
-            Composite.fire(event, lock.selector);
 
             if (typeof selector === "string") {
                 selector = selector.trim();
@@ -1009,7 +997,17 @@ if (typeof Composite === "undefined") {
             var object = Composite.render.meta[serial];
             if (!object) {
                 
-                //TODO: Doku acceptors (function(selector) {ohne rückgabewert}
+                //Acceptors are a very special way to customize. Unlike the
+                //other ways, here the rendering is not shifted into own
+                //implementations. With a acceptor, an element is manipulated
+                //before rendering and only if the renderer processes the
+                //element initially. This makes it possible to make individual
+                //changes to the attributes or the markup before the renderer
+                //processes them. This does not affect the implementation of the
+                //rendering. The method call with a acceptor:
+                //    Composite.customize(function(element) {...});
+                //Only arguments with a method without a return value are
+                //expected.                 
                 Composite.acceptors = Composite.acceptors || [];
                 Composite.acceptors.forEach(function(acceptor, index, array) {
                     acceptor.call(null, selector);
@@ -1049,9 +1047,9 @@ if (typeof Composite === "undefined") {
                     //For the placeholder, a meta object is created with all the
                     //details of the HTML element, the condition and the outer
                     //HTML code of the HTML element as a template. Then the HTML
-                    //element in the DOM is replaced by the placeholder. The
-                    //change at the DOM triggers the MutationObserver and this
-                    //then takes over the processing of the placeholder.
+                    //element in the DOM is replaced by the placeholder (text
+                    //node). The original selector is switched to the text node
+                    //and the rendering is continued with the text node.
                     var condition = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
                             ? object.attributes[Composite.ATTRIBUTE_CONDITION] : null;
                     delete object.attributes[Composite.ATTRIBUTE_CONDITION];        
@@ -1066,6 +1064,9 @@ if (typeof Composite === "undefined") {
                         delete object.attributes[Composite.ATTRIBUTE_CONDITION];
                         
                         //The placeholder and its meta object are created.
+                        //This indirectly prevents the MutationObserver from
+                        //rendering the placeholder, since the placeholder is
+                        //already known.
                         var placeholder = document.createTextNode("");
                         object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
                                 condition:condition, template:selector.cloneNode(true), output:null
@@ -1078,9 +1079,6 @@ if (typeof Composite === "undefined") {
                         //because only the new placeholder is relevant.
                         delete Composite.render.meta[serial];
                         
-                        //The HTML element is replaced by the /placeholder. This
-                        //change at the DOM triggers the MutationObserver, which
-                        //then processes the placeholder.
                         selector.parentNode.replaceChild(placeholder, selector);
                         
                         selector = placeholder;
@@ -1174,19 +1172,20 @@ if (typeof Composite === "undefined") {
                             return "";
                         var node = document.createTextNode("");
                         var serial = node.ordinal();
-                        var object = {serial:serial, element:node, attributes:{}, value:null, render:function() {
-                            if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
-                                var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                                var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
-                                window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
-                                word = "";
-                            } else {
-                                word = this.attributes[Composite.ATTRIBUTE_VALUE];
-                                word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
-                            }
-                            this.value = word;
-                            this.element.textContent = word;
-                        }};
+                        var object = {serial:serial, element:node, attributes:{}, value:null,
+                                render:function() {
+                                    if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
+                                        var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                                        var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                                        window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
+                                        word = "";
+                                    } else {
+                                        word = this.attributes[Composite.ATTRIBUTE_VALUE];
+                                        word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                                    }
+                                    this.value = word;
+                                    this.element.textContent = word;
+                                }};
                         var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                         if (param) {
                             object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
@@ -1393,15 +1392,17 @@ if (typeof Composite === "undefined") {
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
 
                 } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    var data = String(value).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
-                    data = data.split(/\s*:+\s*/);
+                    //TODO: Test Cases
+                    var data = String(value).split(/\s+/);
                     data[0] = (data[0] || "").trim();
                     data[1] = (data.length > 1 ? data[1] : "").trim() || data[0];
-                    if (!data[0])
+                    if (!(data[1]).match(Composite.PATTERN_DATASOURCE_URL))
                         throw new TypeError("Invalid data url");
-                    data[0] = DataSource.manipulate("xml://" + data[0]);
-                    data[1] = DataSource.manipulate("xslt://" + data[1]);
-                    data = DataSource.transform(data[0], data[1], true);
+                    data[0] = (data[0]).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
+                    data[0] = DataSource.fetch("xml://" + data[0]);
+                    data[1] = (data[1]).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
+                    data[1] = DataSource.fetch("xslt://" + data[1]);
+                    data = DataSource.transform(data[0], data[1]);
                     selector.appendChild(data, true);
                     var serial = selector.ordinal();
                     var object = Composite.render.meta[serial];
@@ -1478,9 +1479,9 @@ if (typeof Composite === "undefined") {
                     data[1] = (data.length > 1 ? data[1] : "").trim() || data[0];
                     if (!data[0])
                         throw new TypeError("Invalid data url");
-                    data[0] = DataSource.manipulate("xml://" + data[0]);
-                    data[1] = DataSource.manipulate("xslt://" + data[1]);
-                    data = DataSource.transform(data[0], data[1], true);
+                    data[0] = DataSource.fetch("xml://" + data[0]);
+                    data[1] = DataSource.fetch("xslt://" + data[1]);
+                    data = DataSource.transform(data[0], data[1]);
                     selector.appendChild(data, true);
                 } else if (value instanceof Node)
                     selector.appendChild(value.cloneNode(true), true);
@@ -1673,6 +1674,11 @@ if (typeof Composite === "undefined") {
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 Array.from(selector.childNodes).forEach(function(node, index, array) {
+                    //The rendering is recursive, if necessary the node is then
+                    //no longer available. For example, if a condition is
+                    //replaced by the placeholder,
+                    if (!selector.contains(node))
+                        return;
                     if (node.nodeType != Node.TEXT_NODE) {
                         var serial = node.ordinal();
                         var object = Composite.render.meta[serial];
@@ -1740,11 +1746,18 @@ if (typeof Composite === "undefined") {
                 //Therefore, this case was not implemented.
                 
                 //All new inserted elements are rendered if they are unknown for
-                //the renderer.
+                //the renderer. It is important that the new nodes are also
+                //contained in the body. This is not always the case, e.g. when
+                //recursive rendering replaces elements. So an include can load
+                //data with a condition. Nodes are created per include, which
+                //are then replaced by a placholder in the case of a condition.
+                //The MutationObserver does not run parallel, so it is called
+                //after the rendering with obsolete nodes.
                 if (record.addedNodes) {
                     record.addedNodes.forEach(function(node) {
                         if (node instanceof Element
-                                && !Composite.render.meta[node.ordinal()])
+                                && !Composite.render.meta[node.ordinal()]
+                                && document.body.contains(node))
                             Composite.render(node);
                     });
                 }
