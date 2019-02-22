@@ -71,12 +71,12 @@
  *        Der TextConten von Text-Nodes mit Expression wird durch den
  *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20190221
+ *  Composite 1.0 20190222
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190221
+ *  @version 1.0 20190222
  */
 if (typeof Composite === "undefined") {
     
@@ -207,7 +207,7 @@ if (typeof Composite === "undefined") {
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
     
     /** Pattern for a datasource url */
-    Composite.PATTERN_DATASOURCE_URL = /^\s*data:\s*\/*\s*(.*)*\s*$/i;
+    Composite.PATTERN_DATASOURCE_URL = /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i;
 
     /** Pattern for all accepted events */
     Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
@@ -296,7 +296,7 @@ if (typeof Composite === "undefined") {
                         } else throw new Error("Invalid context: " + context);
                         var selector = context.queue.shift();
                         if (selector)
-                            context(selector);  
+                            context.call(null, selector);  
                 }};
             
             if (context == Composite.render)
@@ -664,7 +664,7 @@ if (typeof Composite === "undefined") {
      *  method call.
      */
     Composite.scan = function(selector, lock) {
-        
+       
         Composite.scan.queue = Composite.scan.queue || [];
         
         //The lock locks concurrent scan requests.
@@ -941,7 +941,7 @@ if (typeof Composite === "undefined") {
             return;
         }
 
-        var lock = Composite.lock(Composite.scan, selector);
+        var lock = Composite.lock(Composite.render, selector);
             
         try {
 
@@ -1393,16 +1393,10 @@ if (typeof Composite === "undefined") {
 
                 } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
                     //TODO: Test Cases
-                    var data = String(value).split(/\s+/);
-                    data[0] = (data[0] || "").trim();
-                    data[1] = (data.length > 1 ? data[1] : "").trim() || data[0];
-                    if (!(data[1]).match(Composite.PATTERN_DATASOURCE_URL))
-                        throw new TypeError("Invalid data url");
-                    data[0] = (data[0]).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
-                    data[0] = DataSource.fetch("xml://" + data[0]);
-                    data[1] = (data[1]).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
-                    data[1] = DataSource.fetch("xslt://" + data[1]);
-                    data = DataSource.transform(data[0], data[1]);
+                    var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
+                    data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
+                    data[1] = DataSource.fetch("xml://" + data[1]);
+                    data = DataSource.transform(data[1], data[2]);
                     selector.appendChild(data, true);
                     var serial = selector.ordinal();
                     var object = Composite.render.meta[serial];
@@ -1473,15 +1467,10 @@ if (typeof Composite === "undefined") {
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, value);
                 if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    var data = String(value).replace(Composite.PATTERN_DATASOURCE_URL, "$1");
-                    data = data.split(/\s*:+\s*/);
-                    data[0] = (data[0] || "").trim();
-                    data[1] = (data.length > 1 ? data[1] : "").trim() || data[0];
-                    if (!data[0])
-                        throw new TypeError("Invalid data url");
-                    data[0] = DataSource.fetch("xml://" + data[0]);
-                    data[1] = DataSource.fetch("xslt://" + data[1]);
-                    data = DataSource.transform(data[0], data[1]);
+                    var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
+                    data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
+                    data[1] = DataSource.fetch("xml://" + data[1]);
+                    data = DataSource.transform(data[1], data[2]);
                     selector.appendChild(data, true);
                 } else if (value instanceof Node)
                     selector.appendChild(value.cloneNode(true), true);
