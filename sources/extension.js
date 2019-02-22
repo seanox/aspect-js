@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, JavaScript Client Faces
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.0 20181203
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Extension 1.0 20190213
+ *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181203
+ *  @version 1.0 20190213
  */
 if (typeof Namespace === "undefined") {
 
