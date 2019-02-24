@@ -3,8 +3,8 @@
  *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Seanox aspect-js, JavaScript Client Faces
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Seanox aspect-js, Fullstack JavaScript UI Framework
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -52,12 +52,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20181016
+ *  MVC 1.0 20190224
  *  Copyright (C) 2018 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181016
+ *  @version 1.0 20190224
  */
 if (typeof Path === "undefined") {
     
@@ -199,6 +199,12 @@ if (typeof SiteMap === "undefined") {
      *  Static component for the use of a SiteMap for virtua paths.
      *  SiteMap is a directory with all supported acceptors as well as all
      *  allowed paths, views and their associations.
+     *  
+     *  TODO: Pfad = Page | Page:View
+     *        Eine View kann zur Teil Page (Partial Page) werden, wenn der Pfad nur für View existiert,
+     *        dann aber noch ein darauf existierender Pfad, den Pfad der View aufgreift:
+     *        #[projects, ...], #projects#devwex:[...]
+     *  TODO: Begriffe einheitlich verwenden (Path, Page, Partial Page, View) 
      */
     SiteMap = {};
 
@@ -224,7 +230,7 @@ if (typeof SiteMap === "undefined") {
     SiteMap.permits;
     
     /** Pattern for a valid path. */
-    SiteMap.PATTERN_PATH = /^#([a-z]\w*)*$/;
+    SiteMap.PATTERN_PATH = /^(#([a-z]\w*)*)+$/;
 
     /** Pattern for a valid path views. */
     SiteMap.PATTERN_PATH_VIEWS = /^(#[a-z]\w*)(\s+(#[a-z]\w*)+)*$/;
@@ -253,17 +259,19 @@ if (typeof SiteMap === "undefined") {
      *  The methods distinguish between absolute, relative and functional paths.
      *  Functionals remain unchanged.
      *  Absolute and relative paths are balanced.
-     *  Relative paths are balanced on the basis of the current work path.
+     *  Relative paths are balanced on the basis of the current location.
      *  All paths are checked against the SiteMap. Invalid paths are searched
      *  for a valid partial path. To do this, the path is shortened piece by
      *  piece. If no valid partial path can be found, the root is returned.
-     *  Without passing a path, the current work path is returned.
+     *  Without passing a path, the current location is returned.
      *  @param  path to check - optional (URL is also supported, only the hash
      *               is used here and the URL itself is ignored)
      *  @return the real path determined in the SiteMap, or the unchanged
      *          function path.
      */  
-    SiteMap.locate = function(path) {
+    SiteMap.locate = function(path, strict) {
+        
+        path = path || "";
         
         //The path is normalized. 
         //Invalid paths are shortened when searching for a valid partial path.
@@ -284,9 +292,11 @@ if (typeof SiteMap === "undefined") {
         if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
             return path;
 
-        while (SiteMap.views
-                && path.length > 1) {
-            if (SiteMap.views.includes(path))
+        var paths = Object.keys(SiteMap.paths || {});
+        if (!strict)
+            paths = paths.concat(Object.keys(SiteMap.views || {}));
+        while (paths && path.length > 1) {
+            if (paths.includes(path))
                 return path;
             path = Path.normalize(path + "##");
         }
@@ -309,35 +319,71 @@ if (typeof SiteMap === "undefined") {
     /**
      *  Checks whether a path or subpath is currently being used.
      *  This method is used to show and hide composites depending on the current
-     *  work path.
+     *  location.
      *  @param  path
      *  @return true if the path or subpath is currently used, otherwise false
      */
     SiteMap.lookup = function(path) {
         
-        path = (path || "").trim().toLowerCase();
-        if (!path)
+        //Only valid paths can be confirmed.
+        path = (path || "").trim().toLowerCase()
+        if (!path.match(/^#.*$/))
             return false;
-        
+        path = path.replace(/(#.*?)#*$/, "$1");
+
+        var canonical = function(meta) {
+            if (!meta.view)
+                return meta.path;
+            if (meta.path.endsWith("#"))
+                return meta.path + meta.view;
+            return meta.path + "#" + meta.view;
+        };
+
+        var paths = SiteMap.paths || {};
+        var views = SiteMap.views || {};
+
+        //The current path is determined and it is determined whether it is a
+        //page or a view. In both cases, a meta object is created:
+        //    {path:#path, view:...}
         var location = Path.normalize(SiteMap.location);
+        if (paths.hasOwnProperty(location))
+            location = {canonical:location, path:location, view:null};
+        else if (views.hasOwnProperty(location))
+            location = {canonical:canonical(views[location]), path:views[location].path, view:views[location].view};
+        else return false;
         
-        var paths = Object.keys(SiteMap.paths || {});
-        paths = paths.sort(function(path, compare) {
-            return -path.length +compare.length;
-        });
+        //Determines whether the passed path is a page, a partial page or a view.
+        //(Partial)pages always have the higher priority for views.
+        //If nothing can be determined, there cannot be a valid path.
+        var lookup;
+        if (paths.hasOwnProperty(path))
+            lookup = {path:path, view:null, canonical:path};
+        else if (views.hasOwnProperty(path))
+            lookup = {canonical:canonical(views[path]), path:views[path].path, view:views[path].view};
+        else return false;
         
-        for (; paths.length > 0; paths.shift()) {
-            var item = paths[0];
-            if (!location.startsWith(item.match(/#$/) ? item : item + "#")
-                    && location != item)
-                continue;
-            if (item == path)
-                return true;
-            item = SiteMap.paths[item] || [];
-            return item.includes(path.replace(/^#+/, ""));
-        }
+        var partial = lookup.canonical;
+        if (!partial.endsWith("#"))
+            partial += "#";
         
-        return false;
+        //Views are only displayed if the paths match and the path does not
+        //refer to a partial page.
+        if (lookup.view
+                && location.path != lookup.path
+                && !location.canonical.startsWith(partial))
+            return false;
+
+        //Pages and part pages are only displayed if the paths match or the path
+        //starts with the passed path as a partial path.
+        if (!location.canonical.startsWith(partial)
+                && location.path != lookup.path)
+            return false;
+
+        //Invalid paths and views are excluded at this place, because they
+        //already cause a false termination of this method (return false) and do
+        //not have to be checked here anymore.
+
+        return true;
     };
     
     /**
@@ -353,25 +399,28 @@ if (typeof SiteMap === "undefined") {
      *          "products#pens": ["pencil", "ballpoint", "stylograph"],
      *          "legal": ["terms", "privacy"],
      *          ...
-     *      }
+     *      };
+     *      
+     *      SiteMap.customize({meta});
+     *      SiteMap.customize(meta);
+     *      SiteMap.customize({meta}, function);
+     *      SiteMap.customize(meta, permit);
      *      
      *  Optionally, acceptors can also be passed with the meta object.
      *  The key (RegExp) corresponds to a path filter, the value is a method
      *  that is executed if the current path matches the filter of an acceptor.
      *      
-     *      sitemap = {
-     *          ...
-     *          /^mail.*$/, function() {
-     *              send a mail
-     *          },
-     *          /^phone.*$/, function() {
+     *      SiteMap.customize(/^phone.*$/i, function(path) {
      *              dial the phone number
-     *          },
-     *          /^sms.*$/, function() {
+     *      });
+     *      SiteMap.customize(/^mail.*$/i, function(path) {
+     *              send a mail
+     *      });
+     *      SiteMap.customize(/^sms.*$/i, function(path) {
      *              send a sms
-     *          },
-     *          ...
-     *      }
+     *      });
+     *      
+     *      SiteMap.customize(RegExp, function);
      *      
      *  An acceptor is an alias/filter for a path based function
      *  If the path corresponds to an acceptor, the stored function is called.
@@ -405,62 +454,98 @@ if (typeof SiteMap === "undefined") {
      *  The configuration of the SiteMap is only applied if an error-free meta
      *  object is transferred and no errors occur during processing.
      *  
+     *  The method uses variable parameters and has the following signatures:
+     *  
+     *      function(object);
+     *      function(object, function);
+     *      function(RegExp, function);
+     *  
      *  @param  map
      *  @param  permit
      *  @throws An error occurs in the following cases:
      *      - if the data type of map and/or permit is invalid
      *      - if the sntax and/or the format of views are invalid
      */
-    SiteMap.customize = function(map, permit) {
+    SiteMap.customize = function(variants) {
+        
+        if (arguments.length > 1
+                && arguments[0] instanceof RegExp
+                && typeof arguments[1] === "function") {
+            SiteMap.acceptors = SiteMap.acceptors || [];
+            SiteMap.acceptors.push({pattern:arguments[0], action:arguments[1]});
+            return;
+        }
 
-        if (typeof map !== "object")
-            throw new TypeError("Invalid map: " + typeof map);
-        if (permit != null
-                && typeof map !== "function")
-            throw new TypeError("Invalid permit: " + typeof permit);
-        
-        var paths = {};
-        Object.keys(SiteMap.paths || {}).forEach(function(key) {
-            paths[key] = SiteMap.paths[key];
-        });
-        var views = (SiteMap.views || []).slice();
-        var acceptors = (SiteMap.acceptors || []).slice();
+        if (arguments.length < 1
+                || typeof arguments[0] !== "object")
+            throw new TypeError("Invalid map: " + typeof arguments[0]);
+        var map = arguments[0];
+
         var permits = (SiteMap.permits || []).slice();
-        
+        if (arguments.length > 1
+                && typeof arguments[1] !== "function")
+            throw new TypeError("Invalid permit: " + typeof arguments[1]);
+        var permit = arguments.length > 1 ? arguments[1] : null;
         if (permit)
             permits.push(permit);
-        
-        Object.keys(map).forEach(function(key) {
-            var value = map[key];
+
+        var paths = {};
+        Object.keys(SiteMap.paths || {}).forEach(function(key) {
             if (typeof key === "string"
-                && key.match(SiteMap.PATTERN_PATH)
-                && (value == null
-                        || Array.isArray(value))) {
-                views.push(key);
-                paths[key] = paths[key] || [];
-                value = value || [];
-                value.forEach(function(view) {
-                    if (typeof view !== "string")
-                        throw new TypeError("Invalid view: " + typeof view);
-                    view = view.toLowerCase().trim();
-                    if (!view.match(SiteMap.PATTERN_PATH_VIEW))
-                        throw new Error("Invalid view: " + view);
-                    if (!paths[key].includes(view))
-                        paths[key].push(view);
-                    view = Path.normalize(key, view)
-                    if (!views.includes(view))
-                        views.push(view);
-                });
-            } else if (key != null
-                    && key instanceof RegExp
-                    && typeof value === "function") {
-                acceptors[key] = value;
-            }
+                    && key.match(SiteMap.PATTERN_PATH))
+                paths[key] = SiteMap.paths[key];
+        });
+
+        var views = {};
+        Object.keys(SiteMap.views || {}).forEach(function(key) {
+            if (typeof key === "string"
+                && key.match(SiteMap.PATTERN_PATH))
+            views[key] = SiteMap.views[key];
+        });
+
+        Object.keys(map).forEach(function(key) {
+
+            //A map entry is based on a path (datatype string beginning with #)
+            //and an array of String or null as value. 
+            if (typeof key !== "string"
+                    || !key.match(SiteMap.PATTERN_PATH))
+                return;
+            var value = map[key];
+            if (value != null
+                    && !Array.isArray(value))
+                return;
+            
+            key = Path.normalize(key);
+            
+            //The entry is added to the path map, if necessary as empty array.
+            //Thus the following path map object will be created:
+            //    {#path:[view, view, ...], ...}
+            paths[key] = paths[key] || [];
+            
+            //In the next step, the views for a path are determined.
+            //These are added to the path in the path map if these do not
+            //already exist there. Additional a view map object will be created:
+            //    {#view-path:{path:#path, view:view}, ...}
+            value = value || [];
+            value.forEach(function(view) {
+                //Views is an array of strings with the names of the views.
+                //The names must correspond to the PATTERN_PATH_VIEW.
+                if (typeof view !== "string")
+                    throw new TypeError("Invalid view: " + typeof view);
+                view = view.toLowerCase().trim();
+                if (!view.match(SiteMap.PATTERN_PATH_VIEW))
+                    throw new Error("Invalid view: " + view);
+                //If the view does not exist at the path, the view is added.
+                if (!paths[key].includes(view))
+                    paths[key].push(view);
+                //The view map object is assembled.
+                views[Path.normalize(key, view)] = {path:key, view:view};
+            });
         });
         
         SiteMap.paths = paths;
         SiteMap.views = views;
-        SiteMap.acceptors = acceptors;
+        //TODO: ????
         SiteMap.permits = SiteMap.permits;
     };
     
@@ -502,13 +587,21 @@ if (typeof SiteMap === "undefined") {
      *  The method initiates the initial usage of the path.
      */
     window.addEventListener("load", function(event) {
-        
-        SiteMap.navigate(window.location.hash);
+
+        var source = window.location.hash;
+        var target = SiteMap.locate(source);
+
+        if (!source
+                && window.location.href.match(/[^#]#$/))
+            source = "#";
         
         var event = document.createEvent('HTMLEvents');
         event.initEvent("hashchange", false, true);
-        event.newURL = window.location.hash || "";
-        window.dispatchEvent(event);
+        event.newURL = target;
+
+        if (source != target)
+            SiteMap.navigate(target);
+        else window.dispatchEvent(event);
     });
     
     /**
@@ -536,22 +629,22 @@ if (typeof SiteMap === "undefined") {
             var x = window.pageXOffset || document.documentElement.scrollLeft;
             var y = window.pageYOffset || document.documentElement.scrollTop;
             window.location.replace(source);
-            window.setTimeout(window.scrollTo, 0, x, y); 
+            window.scrollTo(x, y);
             return;
         }
         
         var acceptors = SiteMap.acceptors || [];
         for (var loop = 0; loop < acceptors.length; loop++) {
             var acceptor = acceptors[loop];
-            if (!acceptor.pattern.test(path))
+            if (!acceptor.pattern.test(target))
                 continue;
-            var result = acceptor.action.call(null, path);
+            var result = acceptor.action.call(null, target);
             if (result === false)
                 return;
             if (typeof result !== "string")
                 continue;
-            path = Path.normalize(result);
-            return permit(path);
+            target = Path.normalize(result);
+            return permit(target);
         }
 
         SiteMap.location = target;

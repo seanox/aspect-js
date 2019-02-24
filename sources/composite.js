@@ -3,7 +3,7 @@
  *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Seanox aspect-js, JavaScript Client Faces
+ *  Seanox aspect-js, Fullstack JavaScript UI Framework
  *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
@@ -71,12 +71,12 @@
  *        Der TextConten von Text-Nodes mit Expression wird durch den
  *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20190222
+ *  Composite 1.0 20190221
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190222
+ *  @version 1.0 20190221
  */
 if (typeof Composite === "undefined") {
     
