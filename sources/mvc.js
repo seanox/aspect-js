@@ -52,12 +52,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190224
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  MVC 1.0 20190225
+ *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190224
+ *  @version 1.0 20190225
  */
 if (typeof Path === "undefined") {
     
@@ -217,6 +217,12 @@ if (typeof SiteMap === "undefined") {
      */
     SiteMap.location = "#";
     
+    /**
+     *  Internal counter of the path changes, is actually only used for
+     *  initiation/detection of the initial rendering.
+     */
+    SiteMap.ticks;
+    
     /** Assosiative array with all real paths without views paths (key:path, value:views). */
     SiteMap.paths;
 
@@ -315,21 +321,20 @@ if (typeof SiteMap === "undefined") {
     SiteMap.navigate = function(path) {
         window.location.hash = SiteMap.locate(path);
     };
-
+    
     /**
-     *  Checks whether a path or subpath is currently being used.
-     *  This method is used to show and hide composites depending on the current
-     *  location.
+     *  Returns the meta data for a path.
+     *  The meta data is an object with the following structure:
+     *      {path:..., page:..., view:...}
+     *  If no meta data can be determined because the path is invalid or not
+     *  declared in the SiteMap, null is returned.
      *  @param  path
-     *  @return true if the path or subpath is currently used, otherwise false
+     *  @return meta data object, otherwise null
      */
     SiteMap.lookup = function(path) {
         
-        //Only valid paths can be confirmed.
-        path = (path || "").trim().toLowerCase()
-        if (!path.match(/^#.*$/))
-            return false;
-        path = path.replace(/(#.*?)#*$/, "$1");
+        var paths = SiteMap.paths || {};
+        var views = SiteMap.views || {};
 
         var canonical = function(meta) {
             if (!meta.view)
@@ -339,44 +344,57 @@ if (typeof SiteMap === "undefined") {
             return meta.path + "#" + meta.view;
         };
 
-        var paths = SiteMap.paths || {};
-        var views = SiteMap.views || {};
+        if (paths.hasOwnProperty(path))
+            return {path:path, page:path, view:null};
+        else if (views.hasOwnProperty(path))
+            return {path:canonical(views[path]), page:views[path].path, view:views[path].view};
+            
+        return null;
+    };
+
+    /**
+     *  Checks whether a path or subpath is currently being used.
+     *  This is used to show/hide composites depending on the current location.
+     *  @param  path
+     *  @return true if the path or subpath is currently used, otherwise false
+     */
+    SiteMap.accept = function(path) {
+        
+        //Only valid paths can be confirmed.
+        path = (path || "").trim().toLowerCase()
+        if (!path.match(/^#.*$/))
+            return false;
+        path = path.replace(/(#.*?)#*$/, "$1");
 
         //The current path is determined and it is determined whether it is a
         //page or a view. In both cases, a meta object is created:
         //    {path:#path, view:...}
-        var location = Path.normalize(SiteMap.location);
-        if (paths.hasOwnProperty(location))
-            location = {canonical:location, path:location, view:null};
-        else if (views.hasOwnProperty(location))
-            location = {canonical:canonical(views[location]), path:views[location].path, view:views[location].view};
-        else return false;
+        var location = SiteMap.lookup(Path.normalize(SiteMap.location));
+        if (!location)
+            return false;
         
         //Determines whether the passed path is a page, a partial page or a view.
         //(Partial)pages always have the higher priority for views.
         //If nothing can be determined, there cannot be a valid path.
-        var lookup;
-        if (paths.hasOwnProperty(path))
-            lookup = {path:path, view:null, canonical:path};
-        else if (views.hasOwnProperty(path))
-            lookup = {canonical:canonical(views[path]), path:views[path].path, view:views[path].view};
-        else return false;
+        var lookup = SiteMap.lookup(path);
+        if (!lookup)
+            return false;
         
-        var partial = lookup.canonical;
+        var partial = lookup.path;
         if (!partial.endsWith("#"))
             partial += "#";
         
         //Views are only displayed if the paths match and the path does not
         //refer to a partial page.
         if (lookup.view
-                && location.path != lookup.path
-                && !location.canonical.startsWith(partial))
+                && location.page != lookup.page
+                && !location.path.startsWith(partial))
             return false;
 
         //Pages and part pages are only displayed if the paths match or the path
         //starts with the passed path as a partial path.
-        if (!location.canonical.startsWith(partial)
-                && location.path != lookup.path)
+        if (!location.path.startsWith(partial)
+                && location.page != lookup.page)
             return false;
 
         //Invalid paths and views are excluded at this place, because they
@@ -545,8 +563,7 @@ if (typeof SiteMap === "undefined") {
         
         SiteMap.paths = paths;
         SiteMap.views = views;
-        //TODO: ????
-        SiteMap.permits = SiteMap.permits;
+        SiteMap.permits = permits;
     };
     
     /**
@@ -574,11 +591,11 @@ if (typeof SiteMap === "undefined") {
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                 script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
                     match = match.substring(2, match.length -2).trim();
-                    return "{{SiteMap.lookup(\"" + path + "\") and (" + match + ")}}";
+                    return "{{SiteMap.accept(\"" + path + "\") and (" + match + ")}}";
                 });
         }
         if (!script)
-            script = (script || "") + "{{SiteMap.lookup(\"" + path + "\")}}";
+            script = (script || "") + "{{SiteMap.accept(\"" + path + "\")}}";
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
 
@@ -622,6 +639,8 @@ if (typeof SiteMap === "undefined") {
             return;
         }        
         
+        SiteMap.ticks = (SiteMap.ticks || 0) +1;
+        
         //For functional interaction paths, the old path must be restored.
         //Rendering is not necessary because the page does not change or the
         //called function has partially triggered rendering.
@@ -649,8 +668,18 @@ if (typeof SiteMap === "undefined") {
 
         SiteMap.location = target;
         
+        source = SiteMap.lookup(source);
+        target = SiteMap.lookup(target);
+        
+        //Only if the page is changed or initial, a rendering is necessary.
+        if (source.page == target.page
+                && SiteMap.ticks > 1)
+            return;
+        
+        source = source.page;
         if (!source.endsWith("#"))
             source += "#";
+        target = target.page;
         if (!target.endsWith("#"))
             target += "#";
         
@@ -658,15 +687,19 @@ if (typeof SiteMap === "undefined") {
         //Render as minimal as possible:
         //  old: #a#b#c#d#e#f  new: #a#b#c#d      -> render #d
         //  old: #a#b#c#d      new: #a#b#c#d#e#f  -> render #d
-        //  old: #a#b#c#d      new: #e#f          -> render body
+        //  old: #a#b#c#d      new: #e#f          -> render # (body)
         var render = "#";
         if (source.startsWith(target))
             render = target;
         else if (target.startsWith(source))
             render = source;
-        render = render.replace(/(^#+)|(#+$)/g, "").trim();
-        if (render.length > 0)
-            Composite.render("#" + render.match(/[^#]+$/));
+        render = render.match(/((?:(?:#[^#]+)#*$)|(?:^#$))/g)[0];
+        if (render.length > 1)
+            Composite.render(render);
         else Composite.render(document.body);
+
+        //TODO: Scroll zum Target/View
+        //      Das muss ggf. per window.setTimeout am Ende vom Rendering erfolgen,
+        //      da ggf. das Target erst mit dem Rendering entsteht
     });
 };
