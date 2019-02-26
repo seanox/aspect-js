@@ -13,9 +13,6 @@
   <property name="workspace.development" value="${workspace}/development"/>
   <property name="workspace.releases" value="${workspace}/releases"/>
     
-  <property name="build" value="${workspace}/build"/>
-  <property name="build.sources" value="${build}/sources"/>
-  
   <macrodef name="release-locate">
     <sequential>
       <copy file="${workspace.development}/release.txt" tofile="${workspace.development}/release.tmp" overwrite="true"/>
@@ -33,7 +30,9 @@
   <macrodef name="compress-javascript">
     <attribute name="file"/>
     <sequential>
-      <echo>Compressing: @{file}</echo> 
+      <echo>Compressing: @{file}</echo>
+      <replaceregexp file="@{file}" match="([^\s\\])(/\*)" flags="g" replace="\1\\\\\2" byline="false"/>
+      <replaceregexp file="@{file}" match="([^\s\\])(/)(/)" flags="g" replace="\1\\\\\2\\\\\2" byline="false"/>
       <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)\/\*.*?\*/" flags="g" replace="" byline="false"/>
       <replaceregexp file="@{file}" match="\s*//.*$" flags="g" replace="" byline="true"/>
       <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
@@ -45,27 +44,37 @@
       <replaceregexp file="@{file}" match="(?i)[\r\n]+([a-z0-9_\.]+\s*[=;])" flags="g" replace=" \1" byline="false"/>
       <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
       <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
-      <!-- TODO:
-        - move into /aspect-js/releases, rename in file_<version>_min.js
-        - copy source into /aspect-js/releases, rename in file_<version>.js
-        - create one file for all aspect-js_<version>_min.js
-      -->
     </sequential>
   </macrodef>
   
   <target name="archive">
     <release-locate/>
-    <delete dir="${build}"/> 
-    <mkdir dir="${build.sources}"/>    
-    <copy todir="${build.sources}">
-      <fileset dir="${workspace.sources}"/>
-    </copy>    
-    <compress-javascript file="${build.sources}/composite.js"/>
-    <compress-javascript file="${build.sources}/content.js"/>
-    <compress-javascript file="${build.sources}/datasource.js"/>
-    <compress-javascript file="${build.sources}/extension.js"/>
-    <compress-javascript file="${build.sources}/mvc.js"/>
-    <compress-javascript file="${build.sources}/test.js"/>
-    <compress-javascript file="${build.sources}/testutils.js"/>
+
+    <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.version}-min.js"/>
+    <concat destfile="${release.min}">
+      <fileset file="${workspace.sources}/extension.js"/>
+      <fileset file="${workspace.sources}/messages.js"/>
+      <fileset file="${workspace.sources}/datasource.js"/>
+      <fileset file="${workspace.sources}/composite.js"/>
+      <fileset file="${workspace.sources}/mvc.js"/>
+      <fileset file="${workspace.sources}/test.js"/>
+    </concat>
+    <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
+    <compress-javascript file="${release.min}"/>
+    
+    <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.version}-dev.js"/>
+    <concat destfile="${release.dev}">
+      <fileset file="${workspace.sources}/extension.js"/>
+      <fileset file="${workspace.sources}/messages.js"/>
+      <fileset file="${workspace.sources}/datasource.js"/>
+      <fileset file="${workspace.sources}/composite.js"/>
+      <fileset file="${workspace.sources}/mvc.js"/>
+      <fileset file="${workspace.sources}/test.js"/>
+    </concat>    
+    <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
+    <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+\*\s+)" flags="g" replace="\1" byline="false"/>
+    
+    <!-- TODO: build zip files for distribution (dev + min = js + licence + release.txt) -->
+    <!-- TODO: target test-dev + test-min, to build the release and configure the test environment -->
   </target>
 </project>
