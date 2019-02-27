@@ -52,12 +52,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190225
+ *  MVC 1.0 20190227
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190225
+ *  @version 1.0 20190227
  */
 if (typeof Path === "undefined") {
     
@@ -605,6 +605,13 @@ if (typeof SiteMap === "undefined") {
      */
     window.addEventListener("load", function(event) {
 
+        //Without a SiteMap the page will be rendered initially after loading.
+        //Then the page has to take control.
+        if (Object.keys(SiteMap.paths || {}).length <= 0) {
+            Composite.render(document.body);
+            return;
+        }
+
         var source = window.location.hash;
         var target = SiteMap.locate(source);
 
@@ -628,7 +635,11 @@ if (typeof SiteMap === "undefined") {
      *  organizes partial rendering.
      */
     window.addEventListener("hashchange", function(event) {
-        
+
+        //Without a SiteMap no automatic rendering can be initiated.
+        if (Object.keys(SiteMap.paths || {}).length <= 0)
+            return;
+            
         var source = Path.normalize(SiteMap.location);
         var locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
         var target = SiteMap.locate(locate);
@@ -652,6 +663,7 @@ if (typeof SiteMap === "undefined") {
             return;
         }
         
+        //TODO: ??? must be tested, look like an error, beause permit is not a function
         var acceptors = SiteMap.acceptors || [];
         for (var loop = 0; loop < acceptors.length; loop++) {
             var acceptor = acceptors[loop];

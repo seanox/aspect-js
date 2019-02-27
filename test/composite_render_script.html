@@ -8,36 +8,36 @@
         font-family:monospace;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-    Test.create({test:function() {
-        var content = OutputA.textContent.replace(/\s+/g, " ").trim();
-        Assert.assertEquals("A:A0", content);
-    }});
-    Test.create({test:function() {
-        var content = OutputB.textContent.replace(/\s+/g, " ").trim();
-        Assert.assertEquals("B:B4B5B6B7B8B9", content);
-    }});
-    Test.create({test:function() {
-        var content = OutputC.textContent.replace(/\s+/g, " ").trim();
-        Assert.assertEquals("C:C0C1C2", content);
-    }});
-    Test.create({test:function() {
-        var content = OutputD.textContent.replace(/\s+/g, " ").trim();
-        Assert.assertEquals("D:D0D2D4D6D8", content);
-    }});
+        //TODO: Add tests for import + scripts
     
-    var count = 0;
-    Composite.listen(Composite.EVENT_RENDER_END, function() {
-        if (++count <= 9)
-            Composite.render(document.body);
-        else Test.start();
-    }); 
+        Test.create({test:function() {
+            var content = OutputA.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("A:A0", content);
+        }});
+        Test.create({test:function() {
+            var content = OutputB.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("B:B4B5B6B7B8B9", content);
+        }});
+        Test.create({test:function() {
+            var content = OutputC.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("C:C0C1C2", content);
+        }});
+        Test.create({test:function() {
+            var content = OutputD.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("D:D0D2D4D6D8", content);
+        }});
     
-    var ModelA = {
+        var count = 0;
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            if (++count <= 9)
+                Composite.render(document.body);
+            else Test.start();
+        }); 
+    
+        var ModelA = {
             isVisibleA:function() {
                 return count % 2 == 0;
             },
@@ -50,7 +50,7 @@
             isVisibleD:function() {
                 return count % 2 == 0;
             }
-    };
+        };
     </script>
   </head>
   <body>

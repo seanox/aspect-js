@@ -10,8 +10,18 @@
   
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
+  <property name="workspace.test" value="${workspace}/test"/>
   <property name="workspace.development" value="${workspace}/development"/>
   <property name="workspace.releases" value="${workspace}/releases"/>
+  
+  <fileset id="fileset.sources" dir="${workspace.sources}">
+    <include name="extension.js"/>
+    <include name="datasource.js"/>
+    <include name="messages.js"/>
+    <include name="composite.js"/>
+    <include name="mvc.js"/>
+    <include name="test.js"/>
+  </fileset>   
     
   <macrodef name="release-locate">
     <sequential>
@@ -52,29 +62,26 @@
 
     <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.version}-min.js"/>
     <concat destfile="${release.min}">
-      <fileset file="${workspace.sources}/extension.js"/>
-      <fileset file="${workspace.sources}/messages.js"/>
-      <fileset file="${workspace.sources}/datasource.js"/>
-      <fileset file="${workspace.sources}/composite.js"/>
-      <fileset file="${workspace.sources}/mvc.js"/>
-      <fileset file="${workspace.sources}/test.js"/>
+      <fileset refid="fileset.sources"/> 
     </concat>
     <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <compress-javascript file="${release.min}"/>
     
     <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.version}-dev.js"/>
     <concat destfile="${release.dev}">
-      <fileset file="${workspace.sources}/extension.js"/>
-      <fileset file="${workspace.sources}/messages.js"/>
-      <fileset file="${workspace.sources}/datasource.js"/>
-      <fileset file="${workspace.sources}/composite.js"/>
-      <fileset file="${workspace.sources}/mvc.js"/>
-      <fileset file="${workspace.sources}/test.js"/>
+      <fileset refid="fileset.sources"/> 
     </concat>    
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+\*\s+)" flags="g" replace="\1" byline="false"/>
     
     <!-- TODO: build zip files for distribution (dev + min = js + licence + release.txt) -->
-    <!-- TODO: target test-dev + test-min, to build the release and configure the test environment -->
   </target>
+  
+  <target name="test-min" depends="archive">
+    <copy file="${release.min}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+  </target>
+  
+  <target name="test-dev" depends="archive">
+    <copy file="${release.dev}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+  </target>  
 </project>
