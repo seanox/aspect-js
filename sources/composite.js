@@ -71,12 +71,12 @@
  *        Der TextConten von Text-Nodes mit Expression wird durch den
  *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20190221
+ *  Composite 1.0 20190228
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190221
+ *  @version 1.0 20190228
  */
 if (typeof Composite === "undefined") {
     
@@ -1711,8 +1711,8 @@ if (typeof Composite === "undefined") {
                 if (record.type == "characterData"
                         && record.target.nodeType == Node.TEXT_NODE) {
                     if (object && object.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
-                            && object.value !== record.target.textContent)
-                        record.target.textContent = object.value;
+                            && (object.value || "") != record.target.textContent)
+                        record.target.textContent = object.value || "";
                     return;
                 }
                 

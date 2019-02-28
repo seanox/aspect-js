@@ -11,9 +11,7 @@
         display:block;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript"> 
         
         var TestModel = {
@@ -83,11 +81,10 @@
         }});
         Test.create({test:function() {
             var content = document.querySelector("table").outerHTML;
-            content = content.replace(/^\s+/mg, "");
-            Assert.assertEqualsTo("script[type='text/test-1']", content);
+            Assert.assertEquals("B202EWU5NG1620L", content.hashCode());
         }});
         Test.create({test:function() {
-            Assert.assertEquals("151515", OutputS1.textContent);
+            Assert.assertEquals("161616", OutputS1.textContent);
             Composite.render(document.body);
         }});   
         Test.create({test:function() {
@@ -100,7 +97,7 @@
             Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""));
         }});
         Test.create({test:function() {
-            var error = String(console.cache.error);
+            var error = String(console.output.error);
             Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"));
@@ -108,103 +105,18 @@
         
         var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            var snapshot = document.body.textContent;
-            snapshot = snapshot.replace(/^\s+/mg, "");
-            if (!snapshots.includes(snapshot))
+            if (snapshots.length < 5) {
+                var snapshot = document.body.textContent;
+                snapshot = snapshot.replace(/^\s+/mg, "");
                 snapshots.push(snapshot);
-        });        
-        
-        var count = 0;
-        var interval = window.setInterval(function() {
-            if (++count < 5)
-                Composite.render(document.body);
-            if (snapshots.length != snapshots.ticks) {
-                snapshots.ticks = snapshots.length;
-                return;
-            } else window.clearInterval(interval);
-            Test.start();
-        }, 250);
+                window.setTimeout(() => {
+                    Composite.render(document.body);
+                }, 250);
+                if (snapshots.length == 5)
+                    Test.start();
+            }
+        });         
     </script>
-    <script type="text/test-1">
-    <table>
-      <thead>
-        <tr>
-          <th>\</th> 
-          <th>A</th>
-          <th>B</th>
-          <th>C</th>
-          <th>D</th>
-          <th>E</th>
-          <th>F</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>1</th>
-          <td>A1</td>
-          <td>B1</td>
-          <td>C1</td>
-          <td>D1</td>
-          <td>E1</td>
-          <td>F1</td>
-        </tr>  
-        <tr>
-          <th>2</th>
-          <td>A2</td>
-          <td>B2</td>
-          <td>C2</td>
-          <td>D2</td>
-          <td>E2</td>
-          <td>F2</td>
-        </tr>  
-        <tr>
-          <th>3</th>
-          <td>A3</td>
-          <td>B3</td>
-          <td>C3</td>
-          <td>D3</td>
-          <td>E3</td>
-          <td>F3</td>
-        </tr>  
-        <tr>
-          <th>4</th>
-          <td>A4</td>
-          <td>B4</td>
-          <td>C4</td>
-          <td>D4</td>
-          <td>E4</td>
-          <td>F4</td>
-        </tr>  
-        <tr>
-          <th>5</th>
-          <td>A5</td>
-          <td>B5</td>
-          <td>C5</td>
-          <td>D5</td>
-          <td>E5</td>
-          <td>F5</td>
-        </tr>  
-        <tr>
-          <th>6</th>
-          <td>A6</td>
-          <td>B6</td>
-          <td>C6</td>
-          <td>D6</td>
-          <td>E6</td>
-          <td>F6</td>
-        </tr>  
-        <tr>
-          <th>7</th>
-          <td>A7</td>
-          <td>B7</td>
-          <td>C7</td>
-          <td>D7</td>
-          <td>E7</td>
-          <td>F7</td>
-        </tr>  
-      </tbody>
-    </table>
-  </script>
   </head>
   <body>
     <div id="OutputA1">{{tempA}}</div>
