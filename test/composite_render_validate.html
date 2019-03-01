@@ -9,9 +9,7 @@
         white-space:pre;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
         var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
@@ -132,7 +130,13 @@
         }});        
         Test.create({test:function() {
             Assert.assertEquals('{"email":null}', loginY.toPlainString());
-        }});        
+        }});     
+        
+        Test.create({test:function() {
+            Assert.assertNotNull(document.querySelector("#loginF3 input"));
+            Assert.assertNull(document.querySelector("#loginF4 input"));
+            Assert.assertNotNull(document.querySelector("#loginF5 input"));
+        }});     
     </script>
     <style type="text/css">
       input {
@@ -158,32 +162,44 @@
     </style>
   </head>
   <body>
-    <article id="test" composite>
-      <form id="loginA" composite>
+    <article id="test" composite static>
+      <form id="loginA" composite static>
         <input id="email" placeholder="email"
              validate events="keyup">
         <input id="password" placeholder="password">
         <input type="submit">
       </form>
-      <form id="loginB" composite>
+      <form id="loginB" composite static>
         <input id="loginB.email" placeholder="email"
              validate events="keyup">
         <input id="password" placeholder="password">
         <input type="submit">
       </form>    
-      <form id="loginF1" composite>
+      <form id="loginF1" composite static>
         <input id="loginX.email" placeholder="email"
              validate events="keyup">
         <input id="loginX.password" placeholder="password">
         <input type="submit">
       </form>    
-      <form id="loginF2" composite>
+      <form id="loginF2" composite static>
         <input id="loginX.email" placeholder="email"
              validate events="keyup">
         <input id="loginX.password" placeholder="password">
         <input type="submit">
       </form>
-      <form id="loginF3" composite>
+      <form id="loginF3" composite static>
+        <input id="loginY.email" placeholder="email"
+             validate events="keyup">
+        <input id="loginY.password" placeholder="password">
+        <input type="submit">
+      </form>       
+      <form id="loginF4" composite>
+        <input id="loginY.email" placeholder="email"
+             validate events="keyup">
+        <input id="loginY.password" placeholder="password">
+        <input type="submit">
+      </form>       
+      <form id="loginF5" composite static>
         <input id="loginY.email" placeholder="email"
              validate events="keyup">
         <input id="loginY.password" placeholder="password">

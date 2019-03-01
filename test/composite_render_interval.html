@@ -8,9 +8,7 @@
         font-family:monospace;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript"> 
         
         var results = [];
@@ -29,36 +27,55 @@
             if (typeof Test.started !== "undefined")
                 return;
             Test.started = true;
-            var timer = window.setInterval(function() {
-                var snapshot = document.body.textContent;
-                snapshot = snapshot.replace(/^\s+/mg, "");
-                snapshot = snapshot.replace(/(:)\s+/g, "$1 ");
-                snapshot = snapshot.replace(/\sout.*?;/g, "");
-                snapshot = snapshot.replace(/\sPlease.*$/im, "");
-                snapshot = snapshot.replace(/:\s+(\S+)/g, "=$1;");
-                snapshots.push(snapshot);
-                if (snapshots.length == 3) {
-                    aCondition = true; 
-                    Composite.render(document.body);                       
-                }
-                if (snapshots.length == 6) {
-                    aCondition = false; 
-                    Composite.render("#TestA");                       
-                }
-                if (snapshots.length == 9) {
-                    aCondition = true; 
-                    Composite.render(document.body);                       
-                }
-                if (snapshots.length < 12)
-                    return;
-                window.clearInterval(timer);
-                Test.start();
-                document.body.textContent = "Please wait, test in progress...";
-            }, 1000);            
-        });
             
+            (new MutationObserver(function(records) {
+                records.forEach(function(record) {
+                    
+                    var snapshot = document.body.textContent;
+                    snapshot = snapshot.replace(/^\s+/mg, "");
+                    snapshot = snapshot.replace(/(:)\s+/g, "$1 ");
+                    snapshot = snapshot.replace(/\sout.*?;/g, "");
+                    snapshot = snapshot.replace(/\sPlease.*$/im, "");
+                    snapshot = snapshot.replace(/:\s+(\S+)/g, "=$1;");
+                    snapshots.push(snapshot);
+                    
+                    if (snapshots.length == 25) {
+                        aCondition = true; 
+                        window.setTimeout(() => {
+                            Composite.render(document.body);
+                        }, 0);                        
+                    }
+                    if (snapshots.length == 50) {
+                        aCondition = false; 
+                        Composite.render("#TestA");                       
+                    }
+                    if (snapshots.length == 75) {
+                        aCondition = true; 
+                        window.setTimeout(() => {
+                            Composite.render(document.body);
+                        }, 0);                        
+                    }
+                    
+                    if (snapshots.length == 100)
+                        window.setTimeout(() => {
+                            document.body.textContent = "Please wait, test in progress...";
+                            Test.start();
+                        }, 0);
+                });
+            })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
+        });
+        
+        snapshots.eval = function(index) {
+            delete A;
+            delete B;
+            delete C;
+            delete S1;
+            delete S2;
+            eval(snapshots[index]);
+        };
+        
         Test.create({test:function() {
-            eval(snapshots.shift());
+            snapshots.eval(3);
             Assert.assertTrue(typeof A === 'undefined');
             Assert.assertTrue(typeof B !== 'undefined');
             Assert.assertTrue(typeof C !== 'undefined');
@@ -68,75 +85,32 @@
             Assert.assertTrue(S1 == S2 && S1 == 1);    
         }}); 
         Test.create({test:function() {
-            eval(snapshots.shift());
+            snapshots.eval(20);
             Assert.assertTrue(typeof A === 'undefined');
+        }}); 
+        Test.create({test:function() {
+            snapshots.eval(20);
             Assert.assertTrue(B > C);
             Assert.assertTrue(S1 < S2);    
         }}); 
         Test.create({test:function() {
-            eval(snapshots.shift());
-            Assert.assertTrue(typeof A === 'undefined');
-            Assert.assertTrue(B > C);
-            Assert.assertTrue(S1 < S2);    
-        }});  
-        Test.create({test:function() {
-            eval(snapshots.shift());
+            snapshots.eval(45);
             Assert.assertTrue(typeof A !== 'undefined');
-            Assert.assertTrue(A == B && B == C && A == 3);
-            Assert.assertTrue(S1 == S2 && S1 == 1);              
         }});   
         Test.create({test:function() {
-            eval(snapshots.shift());
-            Assert.assertTrue(A > B && B > C && A == 6);
-            Assert.assertTrue(S1 < S2 && S1 == 1);              
+            snapshots.eval(45);
+            Assert.assertTrue(A == 3 && B == 2 && C == 2);
+            Assert.assertTrue(S1 == 1 && S2 == 2);              
         }});   
         Test.create({test:function() {
-            eval(snapshots.shift());
-            Assert.assertTrue(A > B && B > C && A == 9);
-            Assert.assertTrue(S1 < S2 && S1 == 2);              
-        }});         
+            snapshots.eval(55);
+            Assert.assertTrue(typeof A === 'undefined');
+        }});       
         Test.create({test:function() {
-            var snapshot = snapshots.shift();
-            eval(snapshot);
-            Assert.assertFalse((/.*A=.*/).test(snapshot));
-            Assert.assertTrue(A == 9 && B > C && B == 8);
-            Assert.assertTrue(S1 < S2 && S1 == 2);              
-        }});    
-        Test.create({test:function() {
-            var snapshot = snapshots.shift();
-            eval(snapshot);
-            Assert.assertFalse((/.*A=.*/).test(snapshot));
-            Assert.assertTrue(A == 9 && B > C && B == 10);
-            Assert.assertTrue(S1 < S2 && S1 == 2);              
-        }});  
-        Test.create({test:function() {
-            var snapshot = snapshots.shift();
-            eval(snapshot);
-            Assert.assertFalse((/.*A=.*/).test(snapshot));
-            Assert.assertTrue(A == 9 && B > C && B == 12);
-            Assert.assertTrue(S1 < S2);              
-        }}); 
-        Test.create({test:function() {
-            var snapshot = snapshots.shift();
-            eval(snapshot);
-            Assert.assertTrue((/.*A=.*/).test(snapshot));
-            Assert.assertTrue(A == B && B >= C && A == 3);
-            Assert.assertTrue(S1 == S2 && S1 == 1);              
-        }});    
-        Test.create({test:function() {
-            var snapshot = snapshots.shift();
-            eval(snapshot);
-            Assert.assertTrue((/.*A=.*/).test(snapshot));
-            Assert.assertTrue(A > B && B == C && A == 6);
-            Assert.assertTrue(S1 < S2 && S1 == 1);
-        }});    
-        Test.create({test:function() {
-            var snapshot = snapshots.shift();
-            eval(snapshot);
-            Assert.assertTrue((/.*A=.*/).test(snapshot));
-            Assert.assertTrue(A > B && B > C && A == 9);
-            Assert.assertTrue(S1 < S2 && S1 == 2);            
-        }});         
+            snapshots.eval(55);
+            Assert.assertTrue(B >= C);
+            Assert.assertTrue(S1 < S2);    
+        }});       
     </script>
   </head>
   <body>

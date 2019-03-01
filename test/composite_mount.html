@@ -11,9 +11,7 @@
         margin:1em;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
         var contactA = {
@@ -133,16 +131,16 @@
     </script>
   </head>
   <body>
-    <section id="contactA" composite
+    <section id="contactA" composite static
         import="{{contentPublish('A')}}">
     </section>
-    <section id="contactB" composite
+    <section id="contactB" composite static
         import="{{contentPublish('B')}}">
     </section>
-    <section id="contactC" composite
+    <section id="contactC" composite static
         import="{{contentPublish('C')}}">
     </section>
-    <section id="contactD" composite
+    <section id="contactD" composite static
         import="{{contentPublish('D')}}">
     </section>
   </body>
