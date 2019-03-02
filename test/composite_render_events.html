@@ -11,9 +11,7 @@
         margin:1em;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
       var aModel = {
@@ -31,7 +29,10 @@
               bModel:{
                       text3:null,
                       text4:null,
-                      text9:null              
+                      text9:null,
+                      cModel:{
+                          textX:null
+                      },              
               },
               cModel:{
               },
@@ -76,7 +77,10 @@
       }});    
       Test.create({test:function() {
           Assert.assertEquals(pattern.shift(), xModel.toPlainString());
-      }});    
+      }});
+      Test.create({test:function() {
+          Assert.assertEquals(pattern.shift(), aModel.toPlainString());
+      }});       
       Test.create({test:function() {
           Assert.assertEquals("3", outputX.textContent);
       }});  
@@ -95,56 +99,63 @@
       Composite.listen(Composite.EVENT_RENDER_END, function() {
           switch (++count) {
               case 1:
-                  text3.typeTestValue();
-                  text4.typeTestValue();
-                  text6.typeTestValue();
-                  text7.typeTestValue();
-                  text8.typeTestValue();
-                  text9.typeTestValue();
-                  window["fModel.text1"].typeTestValue();
-                  window["fModel.text2"].typeTestValue();
-                  window["fModel.text5"].typeTestValue();
-                  document.querySelector("#textX").typeTestValue();
-                  Composite.render(document.body);
+                  window.setTimeout(() => {
+                      text3.typeTestValue();
+                      text4.typeTestValue();
+                      text6.typeTestValue();
+                      text7.typeTestValue();
+                      text8.typeTestValue();
+                      text9.typeTestValue();
+                      window["fModel.text1"].typeTestValue();
+                      window["fModel.text2"].typeTestValue();
+                      window["fModel.text5"].typeTestValue();
+                      document.querySelector("#textX").typeTestValue();
+                  }, 0);
                   return;
               case 2:
-                  aModel.text8_1 = aModel.text8;
-                  text8.trigger("focus"); 
+                  window.setTimeout(() => {
+                      text8.trigger("focus"); 
+                  });
                   return; 
               case 3:
-                  aModel.text8_2 = aModel.text8;
-                  window.setTimeout(Test.start, 250);
+                  window.setTimeout(() => {
+                      aModel.text8_2 = aModel.text8;
+                      window.setTimeout(() => {
+                          Test.start();
+                      }, 250);
+                  });
                   return;
           }
       });     
     </script>
     <script type="text/test">
-      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null},"cModel":{},"fModel":{"text1":null,"text2":null,"text5":null}}
+      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null,"cModel":{"textX":"textX-X"}},"cModel":{},"fModel":{"text1":"fModel.text1-X","text2":null,"text5":null}}
       {"text3":null,"text4":null,"text9":null}
       {}
-      {"text1":"fModel.text1-X","text2":"fModel.text2-X","text5":"fModel.text5-X"}
+      {"text1":null,"text2":null,"text5":null}
       {"count":3}
+      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null,"cModel":{"textX":"textX-X"}},"cModel":{},"fModel":{"text1":"fModel.text1-X","text2":null,"text5":null}}
     </script>
   </head>
   <body>
-    <div id="aModel" composite>
-      <!-- write to fModel.text1 --> 
+    <div id="aModel" composite static>
+      <!-- write to aModel.fModel.text1 --> 
       <input type="text" id="fModel.text1" events="change">
-      <div id="bModel" composite>
-        <!-- write to fModel.text2 --> 
+      <div id="bModel" composite static>
+        <!-- write to aModel.bModel.fModel.text2 --> 
         <input type="text" id="fModel.text2" events="change">
-        <div id="cModel" composite>
+        <div id="cModel" composite static>
           <!-- write to aModel.bModel.cModel.text* --> 
           <input type="text" id="text3" events="change">
           <input type="text" id="text4" events="change">
           <input type="text" id="text9" events="change">
-          <!-- write to textX -->
+          <!-- write to aModel.bModel.cModel.textX -->
           <input type="text" id="textX" events="change">
         </div>
         <!-- write to aModel.bModel.fModel.text5 -->
         <input type="text" id="fModel.text5" events="change">
       </div>
-      <!-- write to aModel.text* -->
+      <!-- write to aModel.text*** -->
       <input type="text" id="text6">
       <input type="text" id="text7" events="change">
       <input type="text" id="text8" events="focus" render="#text7, #text7, #{{'output' + 'X'}}">

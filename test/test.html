@@ -117,10 +117,10 @@
       composite_expression_lookup.html
       composite_expression_parse.html
       composite_expression_syntax.html
-     *composite_mount.html
+      composite_mount.html
      *composite_render_condition.html
      *composite_render_customize.html
-     *composite_render_events.html
+      composite_render_events.html
       composite_render_import.html
       composite_render_interval.html
       composite_render_iterate.html
@@ -162,9 +162,18 @@
               test.addEventListener("click", function(event) {
                   if (lock)
                       return;
+                  var test = event.currentTarget.textContent.match(/^[\S]+/);
+                  if (event.ctrlKey
+                          || event.shiftKey) {
+                      var target = location.href.replace(/[^\/]+$/, test);
+                      target = window.open(target, "_extern_test");
+                      if (target)
+                          target.focus();
+                      return;
+                  } 
                   faults = false;
                   document.querySelector("#output").innerHTML = "";
-                  loadTest(event.currentTarget.textContent.match(/^[\S]+/));
+                  loadTest(test);
               });
           });
           loadTest(queue.shift());
