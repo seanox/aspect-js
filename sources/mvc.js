@@ -52,12 +52,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190227
+ *  MVC 1.0 20190303
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190227
+ *  @version 1.0 20190303
  */
 if (typeof Path === "undefined") {
     
@@ -361,7 +361,7 @@ if (typeof SiteMap === "undefined") {
     SiteMap.accept = function(path) {
         
         //Only valid paths can be confirmed.
-        path = (path || "").trim().toLowerCase()
+        path = (path || "").trim().toLowerCase();
         if (!path.match(/^#.*$/))
             return false;
         path = path.replace(/(#.*?)#*$/, "$1");

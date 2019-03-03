@@ -34,6 +34,9 @@
  *  for the language setting of the browser, or if this is not supported, the
  *  standard from the locales.xml in the DataSource directory is used.
  *  
+ *  DataSource is based on static data.
+ *  Therefore, the implementation uses a cache to minimize network access.
+ *  
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
@@ -46,18 +49,25 @@
  */
 if (typeof DataSource === "undefined") {
     
+    /** Static component for the access and transforming of XML data. */  
     DataSource = {};
 
+    /** Internal cache of XML/XSLT data. */
     DataSource.cache;
     
+    /** Path of the DataSource for: root */
     DataSource.ROOT = window.location.pathname;
     
+    /** Path of the DataSource for: data (sub-directory of root) */
     DataSource.DATA = (DataSource.ROOT.replace(/[^/]*\.[^/]+$/, "") + "/data").replace(/\/+/g, "/");
     
+    /** Pattern for a DataSource locators */
     DataSource.PATTERN_LOCATOR = /^([a-z]+):\/(\/[\w\-\/]+)$/;
     
+    /** Pattern to detect JavaScript elements */
     DataSource.PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;    
     
+    /** Constant for attribute type */
     DataSource.ATTRIBUTE_TYPE = "type";
     
     /**
@@ -92,6 +102,15 @@ if (typeof DataSource === "undefined") {
         return xml.evaluate("/locales/*[@default]", xml, null, XPathResult.ANY_TYPE, null).iterateNext().nodeName.toLowerCase();
     })();
     
+    /**
+     *  Transforms an XMLDocument based on a passed stylesheet (as XMLDocument).
+     *  The result as a node. In some browsers, the XSLTProcessor may create a
+     *  container object, which is removed automatically. With the option raw
+     *  the cleanup can be deactivated.
+     *  @param  xml   data as XMLDocument
+     *  @param  style as XMLDocument 
+     *  @return the transformation result as a node
+     */
     DataSource.transform = function(xml, style, raw) {
         
         if (!(xml instanceof XMLDocument))

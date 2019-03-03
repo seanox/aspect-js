@@ -11,66 +11,68 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-      //TODO: Add tests for DataSource URL Content | Content + Style
-    
-      var aModel = {
-            publishForm: function() {
-                var form = document.createElement("form");
-                var label = document.createElement("label");
-                label.textContent = "Input";
-                form.appendChild(label);
-                var input = document.createElement("input");
-                input.value = "123";
-                input.type = "text";
-                form.appendChild(input);
-                var submit = document.createElement("input");
-                submit.type = "submit";
-                form.appendChild(submit);
-                return form;
-            },
-            publishImg: function() {
-                var img = document.createElement("img");
-                img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
-                return img;
-            }
-      };    
-    
-      var snapshots = [];
-      Composite.listen(Composite.EVENT_RENDER_END, function() {
-          var snapshot = document.body.textContent;
-          snapshot = snapshot.replace(/^\s+/mg, "");
-          snapshots.push(snapshot);
-          if (snapshots.length == 9)
-              Composite.render(document.body);
-          if (snapshots.length == 10)
-              Composite.render(document.body);
-      });
+        Test.activate();
       
-      var timeout = window.setInterval(function() {
-          if (snapshots.length != snapshots.ticks) {
-              snapshots.ticks = snapshots.length;
-              return;
-          } else window.clearInterval(timeout);
-          Test.start();
-      }, 250);
-    
-      var xA = 5;
-      var xB = 5;
-      var xC = 5;
-      var xX = 5;
+        //TODO: Add tests for DataSource URL Content | Content + Style
       
-      Test.create({test:function() {
-          var text = document.body.textContent.replace(/^\s+/mg, "");
-          Assert.assertTrue(text.indexOf("Summer-A") >= 0);
-          Assert.assertTrue(text.indexOf("Summer-C") >= 0);
-          Assert.assertTrue(text.indexOf("Summer-X") >= 0);
-      }});
-      Test.create({test:function() {
-          Assert.assertNotNull(document.querySelector("img"));
-      }});
-      Test.create({test:function() {
-          Assert.assertNotNull(document.querySelector("form input[type='submit']"));
-      }});
+        var aModel = {
+              publishForm: function() {
+                  var form = document.createElement("form");
+                  var label = document.createElement("label");
+                  label.textContent = "Input";
+                  form.appendChild(label);
+                  var input = document.createElement("input");
+                  input.value = "123";
+                  input.type = "text";
+                  form.appendChild(input);
+                  var submit = document.createElement("input");
+                  submit.type = "submit";
+                  form.appendChild(submit);
+                  return form;
+              },
+              publishImg: function() {
+                  var img = document.createElement("img");
+                  img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
+                  return img;
+              }
+        };    
+      
+        var snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            var snapshot = document.body.textContent;
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            snapshots.push(snapshot);
+            if (snapshots.length == 9)
+                Composite.render(document.body);
+            if (snapshots.length == 10)
+                Composite.render(document.body);
+        });
+        
+        var timeout = window.setInterval(function() {
+            if (snapshots.length != snapshots.ticks) {
+                snapshots.ticks = snapshots.length;
+                return;
+            } else window.clearInterval(timeout);
+            Test.start();
+        }, 250);
+      
+        var xA = 5;
+        var xB = 5;
+        var xC = 5;
+        var xX = 5;
+        
+        Test.create({test:function() {
+            var text = document.body.textContent.replace(/^\s+/mg, "");
+            Assert.assertTrue(text.indexOf("Summer-A") >= 0);
+            Assert.assertTrue(text.indexOf("Summer-C") >= 0);
+            Assert.assertTrue(text.indexOf("Summer-X") >= 0);
+        }});
+        Test.create({test:function() {
+            Assert.assertNotNull(document.querySelector("img"));
+        }});
+        Test.create({test:function() {
+            Assert.assertNotNull(document.querySelector("form input[type='submit']"));
+        }});
     </script>
   </head>
   <body>

@@ -12,6 +12,8 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
+        Test.activate();
+    
         var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
         var validateEmail = function(context, element, value) {
             var test = PATTER_EMAIL_SIMPLE.test(value);

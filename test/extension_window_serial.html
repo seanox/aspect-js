@@ -15,25 +15,27 @@
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
-    
-      Test.create({test:function() {
-          var filter = "";
-          for (var loop = 0; loop < 9; loop++) {
-              var frame = document.querySelector("#Test" + loop);
-              frame = frame.contentDocument || frame.contentWindow.document;
-              var serial = " " + frame.body.textContent + " ";
-              Assert.assertFalse(filter.includes(serial));
-              filter += serial;
-          }
-      }});
       
-      var count = 0;
-      var interval = window.setInterval(function() {
-          if (count < 10)
-              return;
-          window.clearInterval(interval);
-          Test.start(true);
-      }, 250);
+        Test.activate();
+      
+        Test.create({test:function() {
+            var filter = "";
+            for (var loop = 0; loop < 9; loop++) {
+                var frame = document.querySelector("#Test" + loop);
+                frame = frame.contentDocument || frame.contentWindow.document;
+                var serial = " " + frame.body.textContent + " ";
+                Assert.assertFalse(filter.includes(serial));
+                filter += serial;
+            }
+        }});
+        
+        var count = 0;
+        var interval = window.setInterval(function() {
+            if (count < 10)
+                return;
+            window.clearInterval(interval);
+            Test.start(true);
+        }, 250);
     </script>
   </head>
   <body>

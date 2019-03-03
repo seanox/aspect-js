@@ -14,119 +14,121 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-      var aModel = {
-              text1:null,
-              text2:null,
-              text3:null,
-              text4:null,
-              text5:null,
-              text6:null,
-              text7:null,
-              text8:null,
-              text8_1:null,
-              text8_2:null,
-              text9:null,
-              bModel:{
-                      text3:null,
-                      text4:null,
-                      text9:null,
-                      cModel:{
-                          textX:null
-                      },              
-              },
-              cModel:{
-              },
-              fModel:{
-                      text1:null,
-                      text2:null,
-                      text5:null
-              }              
-      };
-      var bModel = {
-              text3:null,
-              text4:null,
-              text9:null              
-      };
-      var cModel = {};
-      var fModel = {
-              text1:null,
-              text2:null,
-              text5:null
-      };
-      var xModel = {
-              count: 0,
-              ping: function() {
-                  return ++this.count;       
-              }
-      }
-      var textX = null;
-
-      Test.create({test:function() {
-          var a = pattern.shift().replace(/"text8_1":""/, '"text8_1":null');
-          var b = aModel.toPlainString().replace(/"text8_1":""/, '"text8_1":null');
-          Assert.assertEquals(a, b);
-      }});
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), bModel.toPlainString());
-      }});    
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), cModel.toPlainString());
-      }});    
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), fModel.toPlainString());
-      }});    
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), xModel.toPlainString());
-      }});
-      Test.create({test:function() {
-          Assert.assertEquals(pattern.shift(), aModel.toPlainString());
-      }});       
-      Test.create({test:function() {
-          Assert.assertEquals("3", outputX.textContent);
-      }});  
+        Test.activate();
       
-      Element.prototype.typeTestValue = function() {
-          this.typeValue(this.id + "-X");
-      };
-      
-      var pattern = null;
-      window.addEventListener("load", function(event) {
-          pattern = document.querySelector("script[type='text/test']").textContent.trim();
-          pattern = pattern.split(/\s*[\r\n]+\s*/m);
-      });
-
-      var count = 0;
-      Composite.listen(Composite.EVENT_RENDER_END, function() {
-          switch (++count) {
-              case 1:
-                  window.setTimeout(() => {
-                      text3.typeTestValue();
-                      text4.typeTestValue();
-                      text6.typeTestValue();
-                      text7.typeTestValue();
-                      text8.typeTestValue();
-                      text9.typeTestValue();
-                      window["fModel.text1"].typeTestValue();
-                      window["fModel.text2"].typeTestValue();
-                      window["fModel.text5"].typeTestValue();
-                      document.querySelector("#textX").typeTestValue();
-                  }, 0);
-                  return;
-              case 2:
-                  window.setTimeout(() => {
-                      text8.trigger("focus"); 
-                  });
-                  return; 
-              case 3:
-                  window.setTimeout(() => {
-                      aModel.text8_2 = aModel.text8;
-                      window.setTimeout(() => {
-                          Test.start();
-                      }, 250);
-                  });
-                  return;
-          }
-      });     
+        var aModel = {
+                text1:null,
+                text2:null,
+                text3:null,
+                text4:null,
+                text5:null,
+                text6:null,
+                text7:null,
+                text8:null,
+                text8_1:null,
+                text8_2:null,
+                text9:null,
+                bModel:{
+                        text3:null,
+                        text4:null,
+                        text9:null,
+                        cModel:{
+                            textX:null
+                        },              
+                },
+                cModel:{
+                },
+                fModel:{
+                        text1:null,
+                        text2:null,
+                        text5:null
+                }              
+        };
+        var bModel = {
+                text3:null,
+                text4:null,
+                text9:null              
+        };
+        var cModel = {};
+        var fModel = {
+                text1:null,
+                text2:null,
+                text5:null
+        };
+        var xModel = {
+                count: 0,
+                ping: function() {
+                    return ++this.count;       
+                }
+        }
+        var textX = null;
+  
+        Test.create({test:function() {
+            var a = pattern.shift().replace(/"text8_1":""/, '"text8_1":null');
+            var b = aModel.toPlainString().replace(/"text8_1":""/, '"text8_1":null');
+            Assert.assertEquals(a, b);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), bModel.toPlainString());
+        }});    
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), cModel.toPlainString());
+        }});    
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), fModel.toPlainString());
+        }});    
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), xModel.toPlainString());
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(pattern.shift(), aModel.toPlainString());
+        }});       
+        Test.create({test:function() {
+            Assert.assertEquals("3", outputX.textContent);
+        }});  
+        
+        Element.prototype.typeTestValue = function() {
+            this.typeValue(this.id + "-X");
+        };
+        
+        var pattern = null;
+        window.addEventListener("load", function(event) {
+            pattern = document.querySelector("script[type='text/test']").textContent.trim();
+            pattern = pattern.split(/\s*[\r\n]+\s*/m);
+        });
+  
+        var count = 0;
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            switch (++count) {
+                case 1:
+                    window.setTimeout(() => {
+                        text3.typeTestValue();
+                        text4.typeTestValue();
+                        text6.typeTestValue();
+                        text7.typeTestValue();
+                        text8.typeTestValue();
+                        text9.typeTestValue();
+                        window["fModel.text1"].typeTestValue();
+                        window["fModel.text2"].typeTestValue();
+                        window["fModel.text5"].typeTestValue();
+                        document.querySelector("#textX").typeTestValue();
+                    }, 0);
+                    return;
+                case 2:
+                    window.setTimeout(() => {
+                        text8.trigger("focus"); 
+                    });
+                    return; 
+                case 3:
+                    window.setTimeout(() => {
+                        aModel.text8_2 = aModel.text8;
+                        window.setTimeout(() => {
+                            Test.start();
+                        }, 250);
+                    });
+                    return;
+            }
+        });     
     </script>
     <script type="text/test">
       {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null,"cModel":{"textX":"textX-X"}},"cModel":{},"fModel":{"text1":"fModel.text1-X","text2":null,"text5":null}}
