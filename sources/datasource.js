@@ -102,7 +102,9 @@ if (typeof DataSource === "undefined") {
         var processor = new XSLTProcessor();
         processor.importStylesheet(style);
         
-        //TODO: Doku: escape
+        //The escape attribute converts text to HTML.
+        //Without the escape attribute, the HTML tag symbols < and > are masked
+        //and output as text.
         
         var escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
         escape = !!escape.match(/^yes|on|true|1$/i);
@@ -119,8 +121,10 @@ if (typeof DataSource === "undefined") {
             node.removeAttribute("escape");
         });
         
-        //TODO: Doku: text/javascript -> composite/javascript
-        
+        //JavaScript blocks are automatically changed to composite/javascript
+        //during import. Therefore imported scripts are not executed directly,
+        //but only by the renderer. This is important in combination with the
+        //condition attribute.
         var nodes = result.querySelectorAll("script[type],script:not([type])");
         nodes.forEach(function(node, index, array) {
             if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
