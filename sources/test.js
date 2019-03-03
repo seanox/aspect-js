@@ -114,6 +114,7 @@ if (typeof Test === "undefined") {
      *  call. A later deactivation of the test API is not possible.
      */
     Test.activate = function() {
+        
         if (typeof Test.activate.lock !== 'undefined')
             return;
         Test.activate.lock = true;
@@ -188,11 +189,11 @@ if (typeof Test === "undefined") {
          *      
          *  Monitors the test procedure and is informed about the various cycles
          *  during execution. The monitor also controls the data output. For
-         *  example, the output can be redirected to DOM elements. Without a monitor
-         *  the tests will also be performed, but there will be an output
-         *  about success and failure.
-         *  If no monitor is specified, the internal monitor is used with a simple
-         *  console output.     
+         *  example, the output can be redirected to DOM elements. Without a
+         *  monitor the tests will also be performed, but there will be an
+         *  output about success and failure.
+         *  If no monitor is specified, the internal monitor is used with a
+         *  simple console output.     
          *  
          *      Implementation of a monitor (as function or object):
          *      
@@ -244,10 +245,10 @@ if (typeof Test === "undefined") {
          *  task.timing     start time from the test task in milliseconds
          *  task.timeout    optional, the time in milliseconds when a timeout is
          *                  expected
-         *  task.duration   total execution time of the test task in milliseconds,
-         *                  is set with the end of the test task
-         *  task.error      optional, if an unexpected error (also asser error) has
-         *                  occurred, which terminated the test task
+         *  task.duration   total execution time of the test task in
+         *                  milliseconds, is set with the end of the test task
+         *  task.error      optional, if an unexpected error (also asser error)
+         *                  has occurred, which terminated the test task
          *  
          *  queue.timing    start time in milliseconds 
          *  queue.size      original queue length
@@ -387,9 +388,9 @@ if (typeof Test === "undefined") {
 
         /**
          *  (Re)Starts the test run.
-         *  The start can be done manually or when using the parameter auto = true,
-         *  by loading the page. If the page is already loaded, the parameter auto
-         *  is ignored and the start is executed immediately.
+         *  The start can be done manually or when using auto = true, by loading
+         *  the page. If the page is already loaded, the parameter auto is
+         *  ignored and the start is executed immediately.
          *  @param auto true, the start is triggered when the page is loaded
          */
         Test.start = function(auto) {
@@ -542,8 +543,8 @@ if (typeof Test === "undefined") {
         };
         
         /**
-         *  Suspends the current test run, which can be continued from the current
-         *  test with Test.resume().
+         *  Suspends the current test run, which can be continued from the
+         *  current test with Test.resume().
          */
         Test.suspend = function() {
 
@@ -602,10 +603,10 @@ if (typeof Test === "undefined") {
          *  task.timing     start time from the test task in milliseconds
          *  task.timeout    optional, the time in milliseconds when a timeout is
          *                  expected
-         *  task.duration   total execution time of the test task in milliseconds,
-         *                  is set with the end of the test task
-         *  task.error      optional, if an unexpected error (also asser error) has
-         *                  occurred, which terminated the test task
+         *  task.duration   total execution time of the test task in
+         *                  milliseconds, is set with the end of the test task
+         *  task.error      optional, if an unexpected error (also asser error)
+         *                  has occurred, which terminated the test task
          *  
          *  queue.timing    start time in milliseconds 
          *  queue.size      original queue length
@@ -644,392 +645,393 @@ if (typeof Test === "undefined") {
             
             return {task:task, queue:queue};
         };    
-    };
     
-    if (typeof Assert === "undefined") {
-
-        /**
-         *  A set of assertion methods useful for writing tests.
-         *  Only failed assertions are recorded.
-         *  These methods can be used directly:
-         *      Assert.assertEquals(...);
-         */ 
-        Assert = {};
-        
-        /**
-         *  Creates a new assertion based on an array of variant parameters.
-         *  Size defines the number of test values.
-         *  If more parameters are passed, the first must be the message.
-         *  @param arguments
-         *  @param size
-         */
-        Assert.create = function(arguments, size) {
-
-            var assert = {message:null, values:[], error:function() {
-                var words = Array.from(arguments);
-                words.forEach(function(argument, index, array) {
-                    array[index] = String(argument).replace(/\{(\d+)\}/g, function(match, index) {
-                        if (index > assert.values.length)
-                            return "[null]";
-                        match = String(assert.values[index]);
-                        match = match.replace(/\s*[\r\n]+\s*/g, " "); 
-                        return match;
+        if (typeof Assert === "undefined") {
+    
+            /**
+             *  A set of assertion methods useful for writing tests.
+             *  Only failed assertions are recorded.
+             *  These methods can be used directly:
+             *      Assert.assertEquals(...);
+             */ 
+            Assert = {};
+            
+            /**
+             *  Creates a new assertion based on an array of variant parameters.
+             *  Size defines the number of test values.
+             *  If more parameters are passed, the first must be the message.
+             *  @param arguments
+             *  @param size
+             */
+            Assert.create = function(arguments, size) {
+    
+                var assert = {message:null, values:[], error:function() {
+                    var words = Array.from(arguments);
+                    words.forEach(function(argument, index, array) {
+                        array[index] = String(argument).replace(/\{(\d+)\}/g, function(match, index) {
+                            if (index > assert.values.length)
+                                return "[null]";
+                            match = String(assert.values[index]);
+                            match = match.replace(/\s*[\r\n]+\s*/g, " "); 
+                            return match;
+                        });
                     });
-                });
+                    
+                    var message = "expected {1} but was {2}";
+                    if (assert.message != null) {
+                        assert.message = assert.message.trim();
+                        if (assert.message)
+                            message = assert.message;
+                    }
+                    message = "{0} failed, " + message;
+                    message = message.replace(/\{(\d+)\}/g, function(match, index) {
+                        if (index > words.length)
+                            return "[null]";
+                        match = String(words[index]);
+                        match = match.replace(/\s*[\r\n]+\s*/g, " "); 
+                        return match;                
+                    });
+                    return new Error(message);
+                }};
                 
-                var message = "expected {1} but was {2}";
-                if (assert.message != null) {
-                    assert.message = assert.message.trim();
-                    if (assert.message)
-                        message = assert.message;
-                }
-                message = "{0} failed, " + message;
-                message = message.replace(/\{(\d+)\}/g, function(match, index) {
-                    if (index > words.length)
-                        return "[null]";
-                    match = String(words[index]);
-                    match = match.replace(/\s*[\r\n]+\s*/g, " "); 
-                    return match;                
-                });
-                return new Error(message);
-            }};
-            
-            arguments = Array.from(arguments);
-            if (arguments.length > size)
-                assert.message = arguments.shift();
-            while (arguments.length > 0)
-                assert.values.push(arguments.shift());
-
-            return assert;
-        };
-        
-        /**
-         *  Asserts that an value is true.
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, value) 
-         *      function(value) 
-         *  @param message
-         *  @param value
-         */       
-        Assert.assertTrue = function(variants) {
-            
-            var assert = Assert.create(arguments, 1);
-            if (assert.values[0] === true)
-                return;
-            throw assert.error("Assert.assertTrue", "true", "{0}");
-        };
-        
-        /**
-         *  Asserts that an value is false.
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, value) 
-         *      function(value) 
-         *  @param message
-         *  @param value
-         */      
-        Assert.assertFalse = function(variants) {
-            
-            var assert = Assert.create(arguments, 1);
-            if (assert.values[0] === false)
-                return;
-            throw assert.error("Assert.assertFalse", "false", "{0}");
-        };
-
-        /**
-         *  Asserts that two values are equals.
-         *  Difference between equals and same: === / == or !== / !=
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, expected, actual) 
-         *      function(expected, actual) 
-         *  @param message
-         *  @param expected
-         *  @param actual
-         */     
-        Assert.assertEquals = function(variants) {
-            
-            var assert = Assert.create(arguments, 2);
-            if (assert.values[0] === assert.values[1])
-                return;
-            throw assert.error("Assert.assertEquals", "{0}", "{1}");
-        };
-        
-        /**
-         *  Asserts that two values are not equals.
-         *  Difference between equals and same: === / == or !== / !=
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, unexpected, actual) 
-         *      function(unexpected, actual) 
-         *  @param message
-         *  @param unexpected
-         *  @param actual
-         */      
-        Assert.assertNotEquals = function(variants) {
-            
-            var assert = Assert.create(arguments, 2);
-            if (assert.values[0] !== assert.values[1])
-                return;
-            throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
-        };
-        
-        /**
-         *  Enhancement of the Test/Assert API
-         *  Adds a equals methode for a template to the Assert objects.
-         *  Spaces at the beginning and end of lines are ignored.
-         */
-        Assert.assertEqualsTo = function(selector, actual) {
-            var element = document.querySelector(selector);
-            var content = element.innerHTML.trim().replace(/\t/g, "    ");
-            content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-            content = content.replace(/(^\s+)|(\s+$)/gm, "");
-            actual = actual.trim();
-            actual = actual.replace(/\t/g, "    ");
-            actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-            actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-            Assert.assertEquals(content, actual);    
-        };    
-
-        /**
-         *  Asserts that two values are the same.
-         *  Difference between equals and same: === / == or !== / !=
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, nexpected, actual) 
-         *      function(expected, actual) 
-         *  @param message
-         *  @param expected
-         *  @param actual
-         */      
-        Assert.assertSame = function(variants) {
-            
-            var assert = Assert.create([], arguments, 2);
-            if (assert.values[0] == assert.values[1])
-                return;
-            throw assert.error("Assert.assertSame", "{0}", "{1}");
-        };
-        
-        /**
-         *  Asserts two values are not the same.
-         *  Difference between equals and same: === / == or !== / !=
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, unexpected, actual) 
-         *      function(unexpected, actual) 
-         *  @param message
-         *  @param unexpected
-         *  @param actual
-         */      
-        Assert.assertNotSame = function(variants) {
-            
-            var assert = Assert.create(arguments, 2);
-            if (assert.values[0] != assert.values[1])
-                return;
-            throw assert.error("Assert.assertNotSame", "not {0}", "{1}");
-        };
-
-        /**
-         *  Asserts that an value is null.
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, value) 
-         *      function(value) 
-         *  @param message
-         *  @param value
-         */    
-        Assert.assertNull = function(variants) {
-            
-            var assert = Assert.create(arguments, 1);
-            if (assert.values[0] === null)
-                return;
-            throw assert.error("Assert.assertNull", "null", "{0}");
-        };
-
-        /**
-         *  Asserts that an value is not null.
-         *  If the assertion is incorrect, an error is thrown with the given message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message, value) 
-         *      function(value) 
-         *  @param message
-         *  @param value
-         */
-        Assert.assertNotNull = function(variants) {
-            
-            var assert = Assert.create(arguments, 1);
-            if (assert.values[0] !== null)
-                return;
-            throw assert.error("Assert.assertNotNull", "not null", "{0}");
-        };
-
-        /**
-         *  Fails a test with an optional message.
-         *  This assertion will be thrown a error with an optional message.
-         *  The method uses variable parameters and has the following signatures:
-         *      function(message) 
-         *      function() 
-         *  @param message
-         */
-        Assert.fail = function(message) {
-
-            if (message)
-                message = String(message).trim();
-            message = "Assert.fail" + (message ? ", " + message : "");
-            throw new Error(message);
-        }
-    };
-
-    /**
-     *  Implementation of a redirection of the console when using tests in IFrames.
-     *  Redirection  is based on calling message events in the parent document.
-     *  The message events are on methods for console levels: INFO, ERROR, WARN, LOG.
-     *  
-     *      Example:
-     *      
-     *  var onLog = function(message) {
-     *      ....
-     *  }
-     */
-    if (typeof parent !== "undefined") {
-        
-        /** Cache for analyzing console output */
-        console.output = {log:"", warn:"", error:"", info:""};
-        
-        /** Clears the cache from the console output. */
-        console.output.clear = function() {
-            console.output.log = "";
-            console.output.warn = "";
-            console.output.error = "";
-            console.output.info = "";
-        };
-        
-        /** 
-         *  General method for redirecting console levels.
-         *  @param level
-         *  @param variants
-         */
-        console.forward = function(level, variants) {
-            
-            console.output[level] += Array.from(variants).join(", ");
-            
-            var invoke;
-            if (parent)
-                invoke = parent["on" + level.capitalize()];
-            if (invoke == null)
-                invoke = console.forward[level];
-            invoke.apply(null, variants);
-        };
-        
-        /** Redirect for the level: LOG */
-        console.forward.log = console.log;
-        console.log = function(message) {
-            console.forward("log", arguments);
-        };
-        
-        /** Redirect for the level: WARN */
-        console.forward.warn = console.warn;
-        console.warn = function(message) {
-            console.forward("warn", arguments);
-        };
-        
-        /** Redirect for the level: ERROR */
-        console.forward.error = console.error;
-        console.error = function(message) {
-            console.forward("error", arguments);
-        };
-        
-        /** Redirect for the level: INFO */
-        console.forward.info = console.info;
-        console.info = function(message) {
-            console.forward("info", arguments);
-        };
-        
-        /** Registration of events for redirection */
-        if (typeof parent.onFinish === "function")
-            Test.listen(Test.EVENT_FINISH, parent.onFinish);
-        if (typeof parent.onInterrupt === "function")
-            Test.listen(Test.EVENT_INTERRUPT, parent.onInterrupt);
-        if (typeof parent.onPerform === "function")
-            Test.listen(Test.EVENT_PERFORM, parent.onPerform);
-        if (typeof parent.onResponse === "function")
-            Test.listen(Test.EVENT_RESPONSE, parent.onResponse);
-        if (typeof parent.onResume === "function")
-            Test.listen(Test.EVENT_RESUME, parent.onResume);
-        if (typeof parent.onStart === "function")
-            Test.listen(Test.EVENT_START, parent.onStart);
-        if (typeof parent.onSuspend === "function")    
-            Test.listen(Test.EVENT_SUSPEND, parent.onSuspend);
-    };
-
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a method that simulates keyboard input to the Element objects.
-     *  The following events are triggered during simulation:
-     *      focus, keydown, keyup, change
-     *  @param value simulated input value
-     *  @param clear option false suppresses emptying before input
-     */ 
-    if (Element.prototype.typeValue === undefined) {
-        Element.prototype.typeValue = function(value, clear) {
-            this.focus();
-            if (clear !== false)
-                this.value = "";
-            var element = this;
-            value = (value || "").split("");
-            value.forEach(function(digit, index, array) {
-                element.trigger("keydown");
-                element.value = (element.value || "") + digit;
-                element.trigger("keyup");
-            });
-            this.trigger("change");
-        };     
-    };
-
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a method that creates a plain string for a Node.
-     */     
-    if (Node.prototype.toPlainString === undefined)
-        Node.prototype.toPlainString = function() {
-            return (new XMLSerializer()).serializeToString(this);
-        };    
-
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a method that creates a plain string for a Element.
-     */     
-    if (Element.prototype.toPlainString === undefined)
-        Element.prototype.toPlainString = function() {
-            return this.outerHTML;
-    };   
+                arguments = Array.from(arguments);
+                if (arguments.length > size)
+                    assert.message = arguments.shift();
+                while (arguments.length > 0)
+                    assert.values.push(arguments.shift());
     
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a method that creates a plain string for a Object.
-     */      
-    if (Object.prototype.toPlainString === undefined)
-        Object.prototype.toPlainString = function() {
-            return JSON.stringify(this);
-        };     
-      
-    /**
-     *  Enhancement of the JavaScript API
-     *  Adds a method to trigger an event for elements.
-     *  @param event   type of event
-     *  @param bubbles deciding whether the event should bubble up through the
-     *                 event chain or not
-     *  @param cancel  defining whether the event can be canceled
-     */         
-    if (Element.prototype.trigger === undefined)
-        Element.prototype.trigger = function(event, bubbles, cancel) {
-            var trigger = document.createEvent("Event");
-            if (arguments.length < 2)
-                bubbles = false;
-            if (arguments.length < 3)
-                cancel = true;
-            trigger.initEvent(event, bubbles, cancel);
-            this.dispatchEvent(trigger);
-        };    
+                return assert;
+            };
+            
+            /**
+             *  Asserts that an value is true.
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, value) 
+             *      function(value) 
+             *  @param message
+             *  @param value
+             */       
+            Assert.assertTrue = function(variants) {
+                
+                var assert = Assert.create(arguments, 1);
+                if (assert.values[0] === true)
+                    return;
+                throw assert.error("Assert.assertTrue", "true", "{0}");
+            };
+            
+            /**
+             *  Asserts that an value is false.
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, value) 
+             *      function(value) 
+             *  @param message
+             *  @param value
+             */      
+            Assert.assertFalse = function(variants) {
+                
+                var assert = Assert.create(arguments, 1);
+                if (assert.values[0] === false)
+                    return;
+                throw assert.error("Assert.assertFalse", "false", "{0}");
+            };
+    
+            /**
+             *  Asserts that two values are equals.
+             *  Difference between equals and same: === / == or !== / !=
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, expected, actual) 
+             *      function(expected, actual) 
+             *  @param message
+             *  @param expected
+             *  @param actual
+             */     
+            Assert.assertEquals = function(variants) {
+                
+                var assert = Assert.create(arguments, 2);
+                if (assert.values[0] === assert.values[1])
+                    return;
+                throw assert.error("Assert.assertEquals", "{0}", "{1}");
+            };
+            
+            /**
+             *  Asserts that two values are not equals.
+             *  Difference between equals and same: === / == or !== / !=
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, unexpected, actual) 
+             *      function(unexpected, actual) 
+             *  @param message
+             *  @param unexpected
+             *  @param actual
+             */      
+            Assert.assertNotEquals = function(variants) {
+                
+                var assert = Assert.create(arguments, 2);
+                if (assert.values[0] !== assert.values[1])
+                    return;
+                throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
+            };
+            
+            /**
+             *  Enhancement of the Test/Assert API
+             *  Adds a equals methode for a template to the Assert objects.
+             *  Spaces at the beginning and end of lines are ignored.
+             */
+            Assert.assertEqualsTo = function(selector, actual) {
+                var element = document.querySelector(selector);
+                var content = element.innerHTML.trim().replace(/\t/g, "    ");
+                content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+                content = content.replace(/(^\s+)|(\s+$)/gm, "");
+                actual = actual.trim();
+                actual = actual.replace(/\t/g, "    ");
+                actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+                actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
+                Assert.assertEquals(content, actual);    
+            };    
+    
+            /**
+             *  Asserts that two values are the same.
+             *  Difference between equals and same: === / == or !== / !=
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, nexpected, actual) 
+             *      function(expected, actual) 
+             *  @param message
+             *  @param expected
+             *  @param actual
+             */      
+            Assert.assertSame = function(variants) {
+                
+                var assert = Assert.create([], arguments, 2);
+                if (assert.values[0] == assert.values[1])
+                    return;
+                throw assert.error("Assert.assertSame", "{0}", "{1}");
+            };
+            
+            /**
+             *  Asserts two values are not the same.
+             *  Difference between equals and same: === / == or !== / !=
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, unexpected, actual) 
+             *      function(unexpected, actual) 
+             *  @param message
+             *  @param unexpected
+             *  @param actual
+             */      
+            Assert.assertNotSame = function(variants) {
+                
+                var assert = Assert.create(arguments, 2);
+                if (assert.values[0] != assert.values[1])
+                    return;
+                throw assert.error("Assert.assertNotSame", "not {0}", "{1}");
+            };
+    
+            /**
+             *  Asserts that an value is null.
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, value) 
+             *      function(value) 
+             *  @param message
+             *  @param value
+             */    
+            Assert.assertNull = function(variants) {
+                
+                var assert = Assert.create(arguments, 1);
+                if (assert.values[0] === null)
+                    return;
+                throw assert.error("Assert.assertNull", "null", "{0}");
+            };
+    
+            /**
+             *  Asserts that an value is not null.
+             *  If the assertion is incorrect, an error with a message is thrown.
+             *  The method has the following various signatures:
+             *      function(message, value) 
+             *      function(value) 
+             *  @param message
+             *  @param value
+             */
+            Assert.assertNotNull = function(variants) {
+                
+                var assert = Assert.create(arguments, 1);
+                if (assert.values[0] !== null)
+                    return;
+                throw assert.error("Assert.assertNotNull", "not null", "{0}");
+            };
+    
+            /**
+             *  Fails a test with an optional message.
+             *  This assertion will be thrown a error with an optional message.
+             *  The method has the following various signatures:
+             *      function(message) 
+             *      function() 
+             *  @param message
+             */
+            Assert.fail = function(message) {
+    
+                if (message)
+                    message = String(message).trim();
+                message = "Assert.fail" + (message ? ", " + message : "");
+                throw new Error(message);
+            }
+        };
+    
+        /**
+         *  Redirection of the console when using tests in IFrames, based on
+         *  calling message events in the parent document.
+         *  The message events are on methods for levels: INFO, ERROR, WARN, LOG.
+         *  
+         *      Example:
+         *      
+         *  var onLog = function(message) {
+         *      ....
+         *  }
+         */
+        if (typeof parent !== "undefined") {
+            
+            /** Cache for analyzing console output */
+            console.output = {log:"", warn:"", error:"", info:""};
+            
+            /** Clears the cache from the console output. */
+            console.output.clear = function() {
+                console.output.log = "";
+                console.output.warn = "";
+                console.output.error = "";
+                console.output.info = "";
+            };
+            
+            /** 
+             *  General method for redirecting console levels.
+             *  @param level
+             *  @param variants
+             */
+            console.forward = function(level, variants) {
+                
+                console.output[level] += Array.from(variants).join(", ");
+                
+                var invoke;
+                if (parent)
+                    invoke = parent["on" + level.capitalize()];
+                if (invoke == null)
+                    invoke = console.forward[level];
+                invoke.apply(null, variants);
+            };
+            
+            /** Redirect for the level: LOG */
+            console.forward.log = console.log;
+            console.log = function(message) {
+                console.forward("log", arguments);
+            };
+            
+            /** Redirect for the level: WARN */
+            console.forward.warn = console.warn;
+            console.warn = function(message) {
+                console.forward("warn", arguments);
+            };
+            
+            /** Redirect for the level: ERROR */
+            console.forward.error = console.error;
+            console.error = function(message) {
+                console.forward("error", arguments);
+            };
+            
+            /** Redirect for the level: INFO */
+            console.forward.info = console.info;
+            console.info = function(message) {
+                console.forward("info", arguments);
+            };
+            
+            /** Registration of events for redirection */
+            if (typeof parent.onFinish === "function")
+                Test.listen(Test.EVENT_FINISH, parent.onFinish);
+            if (typeof parent.onInterrupt === "function")
+                Test.listen(Test.EVENT_INTERRUPT, parent.onInterrupt);
+            if (typeof parent.onPerform === "function")
+                Test.listen(Test.EVENT_PERFORM, parent.onPerform);
+            if (typeof parent.onResponse === "function")
+                Test.listen(Test.EVENT_RESPONSE, parent.onResponse);
+            if (typeof parent.onResume === "function")
+                Test.listen(Test.EVENT_RESUME, parent.onResume);
+            if (typeof parent.onStart === "function")
+                Test.listen(Test.EVENT_START, parent.onStart);
+            if (typeof parent.onSuspend === "function")    
+                Test.listen(Test.EVENT_SUSPEND, parent.onSuspend);
+        };
+    
+        /**
+         *  Enhancement of the JavaScript API
+         *  Adds a method that simulates keyboard input to the Element objects.
+         *  The following events are triggered during simulation:
+         *      focus, keydown, keyup, change
+         *  @param value simulated input value
+         *  @param clear option false suppresses emptying before input
+         */ 
+        if (Element.prototype.typeValue === undefined) {
+            Element.prototype.typeValue = function(value, clear) {
+                this.focus();
+                if (clear !== false)
+                    this.value = "";
+                var element = this;
+                value = (value || "").split("");
+                value.forEach(function(digit, index, array) {
+                    element.trigger("keydown");
+                    element.value = (element.value || "") + digit;
+                    element.trigger("keyup");
+                });
+                this.trigger("change");
+            };     
+        };
+    
+        /**
+         *  Enhancement of the JavaScript API
+         *  Adds a method that creates a plain string for a Node.
+         */     
+        if (Node.prototype.toPlainString === undefined)
+            Node.prototype.toPlainString = function() {
+                return (new XMLSerializer()).serializeToString(this);
+            };    
+    
+        /**
+         *  Enhancement of the JavaScript API
+         *  Adds a method that creates a plain string for a Element.
+         */     
+        if (Element.prototype.toPlainString === undefined)
+            Element.prototype.toPlainString = function() {
+                return this.outerHTML;
+        };   
+        
+        /**
+         *  Enhancement of the JavaScript API
+         *  Adds a method that creates a plain string for a Object.
+         */      
+        if (Object.prototype.toPlainString === undefined)
+            Object.prototype.toPlainString = function() {
+                return JSON.stringify(this);
+            };     
+          
+        /**
+         *  Enhancement of the JavaScript API
+         *  Adds a method to trigger an event for elements.
+         *  @param event   type of event
+         *  @param bubbles deciding whether the event should bubble up through
+         *                 the event chain or not
+         *  @param cancel  defining whether the event can be canceled
+         */         
+        if (Element.prototype.trigger === undefined)
+            Element.prototype.trigger = function(event, bubbles, cancel) {
+                var trigger = document.createEvent("Event");
+                if (arguments.length < 2)
+                    bubbles = false;
+                if (arguments.length < 3)
+                    cancel = true;
+                trigger.initEvent(event, bubbles, cancel);
+                this.dispatchEvent(trigger);
+            }; 
+        
+    };
 };
