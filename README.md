@@ -74,16 +74,11 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Thanks!
-<img src="https://raw.githubusercontent.com/seanox/seanox/master/sources/resources/images/thanks.png" usemap="#thanks">
-<map name="thanks">
-  <area shape="rect" coords="0,0,68,75" href="https://www.jetbrains.com/?from=seanox">
-  <area shape="rect" coords="108,0,259,75" href="https://www.novaobjects.de">
-  <area shape="rect" coords="293,0,484,75" href="https://www.t-systems.com">
-</map>
+<img src="https://raw.githubusercontent.com/seanox/seanox/master/sources/resources/images/thanks.png">
 
-JetBrains  
+[JetBrains](https://www.jetbrains.com/?from=seanox)
 Sven Lorenz  
-Andreas Mitterhofer  
+[Andreas Mitterhofer](https://www.novaobjects.de)  
 novaObjects GmbH  
 Leo Pelillo  
 Gunter Pfannm&uuml;ller  
@@ -91,4 +86,4 @@ Annette und Steffen Pokel
 Edgar R&ouml;stle  
 Michael S&auml;mann  
 Markus Schlosneck  
-T-Systems International GmbH  
+[T-Systems International GmbH](https://www.t-systems.com)
