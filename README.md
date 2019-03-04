@@ -78,8 +78,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 [JetBrains](https://www.jetbrains.com/?from=seanox)  
 Sven Lorenz  
-[Andreas Mitterhofer](https://www.novaobjects.de)  
-novaObjects GmbH  
+Andreas Mitterhofer  
+[novaObjects GmbH](https://www.novaobjects.de)  
 Leo Pelillo  
 Gunter Pfannm&uuml;ller  
 Annette und Steffen Pokel  
