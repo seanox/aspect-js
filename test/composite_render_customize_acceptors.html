@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+        
+        var insertTestValue = function(element, value) {
+            if (element.textContent.match(new RegExp(value)))
+                return;
+            var text = document.createElement("span");
+            text.textContent = value;
+            element.appendChild(text);
+        };
+        
+        var elementCount1 = 0;
+        var elementCount2 = 0;
+        var elementCount3 = 0;
+        
+        Composite.customize((element) => {
+            elementCount1++;
+        });
+        Composite.customize((element) => {
+            elementCount2++;
+            if (element instanceof Element
+                    && element.hasAttribute("value")
+                    && element.getAttribute("value") == "xx3")
+                insertTestValue(element, 3);
+        });
+        Composite.customize((element) => {
+            elementCount3++;
+        });
+        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test']", document.body.textContent);
+        }});
+        
+        Test.create({test:function() {
+            Assert.assertEquals(19, elementCount1);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(19, elementCount2);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(19, elementCount3);
+        }});
+        
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            Test.start();
+        });
+    </script>
+    <script type="text/test">
+      xa
+      xb
+      xc3
+      xd
+      xe 
+    </script>
+  </head>
+  <body>
+    <x value="xx1">xa</x>
+    <x value="xx2">xb</x>
+    <x value="xx3">xc</x>
+    <x value="xx4">xd</x>
+    <x value="xx5">xe</x>
+  </body>
+</html>

@@ -71,12 +71,12 @@
  *        Der TextConten von Text-Nodes mit Expression wird durch den
  *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
- *  Composite 1.0 20190228
+ *  Composite 1.0 20190304
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190228
+ *  @version 1.0 20190304
  */
 if (typeof Composite === "undefined") {
     
@@ -269,7 +269,20 @@ if (typeof Composite === "undefined") {
         return pattern;
     })();
     
-    //TODO:
+    /**
+     *  Lock mechanism for the render, mound and scan methods. The lock controls
+     *  that the methods are not used concurrently and/or asynchronously. Each
+     *  method opens its own transaction (lock). During a transaction, the
+     *  method call requires a lock. If this lock does not exist or differs from
+     *  the current transaction, the method call is parked in a queue until the
+     *  current lock is released. The methods themselves can call themselves
+     *  recursively and do so with the lock they know.
+     *  In addition to the lock mechanism, the methods also control the START,
+     *  NEXT, and END events.
+     *  @param  context  method (render, mound or scan)
+     *  @param  selector
+     *  @return the created lock as meta object
+     */
     Composite.lock = function(context, selector) {
         
         context.queue = context.queue || [];
@@ -723,6 +736,7 @@ if (typeof Composite === "undefined") {
      *  
      *      Acceptors
      *      ---
+     *  TODO: rendering -> callback
      *  Acceptors are a very special way to customize. Unlike the other ways,
      *  here the rendering is not shifted into own implementations. With a
      *  acceptor, an element is manipulated before rendering and only if the
@@ -736,10 +750,17 @@ if (typeof Composite === "undefined") {
      *  TODO:
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
-     *      - rendering function is not implemented correctly
+     *      - callback function is not implemented correctly
      *  TODO: customize object binding alias -> model
+     *  
+     *      Composite.customize(function); acceptor
+     *      Composite.customize(string, function); macro/tag
+     *      Composite.customize(string, function); selecttor  
+     *      
+     *  TODO: Doku: gleiche Makros überschreiben existierende
+     *  TODO: Doku: gleiche Selektoren überschreiben existierende
      */
-    Composite.customize = function(scope, rendering) {
+    Composite.customize = function(scope, callback) {
         
         //If only one argument of type function is passed, the method is
         //registered as a acceptor.
@@ -757,25 +778,25 @@ if (typeof Composite === "undefined") {
         
         if (typeof scope !== "string")
             throw new TypeError("Invalid scope: " + typeof scope);
-        if (typeof rendering !== "function"
-                && rendering !== null
-                && rendering !== undefined)
-            throw new TypeError("Invalid rendering: " + typeof rendering);
+        if (typeof callback !== "function"
+                && callback !== null
+                && callback !== undefined)
+            throw new TypeError("Invalid callback: " + typeof callback);
         scope = scope.trim();
         if (scope.length <= 0)
             throw new Error("Invalid scope");
             
         if (scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE)) {
             Composite.macros = Composite.macros || {};
-            if (rendering == null)
+            if (callback == null)
                 delete Composite.macros[scope.toLowerCase()];
-            else Composite.macros[scope.toLowerCase()] = rendering;
+            else Composite.macros[scope.toLowerCase()] = callback;
         } else {
             var hash = scope.toLowerCase().hashCode();
             Composite.selectors = Composite.selectors || {};
-            if (rendering == null)
+            if (callback == null)
                 delete Composite.selectors[hash];
-            else Composite.selectors[hash] = {selector:scope, rendering:rendering};
+            else Composite.selectors[hash] = {selector:scope, callback:callback};
         } 
     };
     
@@ -838,7 +859,7 @@ if (typeof Composite === "undefined") {
      *  otherwise the element value is not stored into the corresponding model
      *  field. If an event occurs, synchronization is performed. After that will
      *  be checked whether the render attribute exists. All selectors listed
-     *  here are then triggered for re-rendering. Re-rendering is independent of
+     *  here are then triggered for re-rendering. (Re)rendering is independent of
      *  synchronization and validation and is executed immediately after an
      *  event occurs.
      *      
@@ -873,7 +894,7 @@ if (typeof Composite === "undefined") {
      *  For an expression, the result can also be an element or a node list with
      *  elements. All other data types are set as text. This output is
      *  exclusive, thus overwriting any existing content.
-     *  The recursive rerendering is initiated via the MutationObserver.
+     *  The recursive (re)rendering is initiated via the MutationObserver.
      *      
      *      Interval
      *      ----
@@ -959,30 +980,42 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Node))
                 return;
 
-            //TODO: Test
             //If a custom tag exists, the macro is executed.
+            //Macros are completely user-specific.
+            //The return value determines whether the standard functions are
+            //used or not. Only the return value false (not void, not empty)
+            //terminates the rendering for the macro without using the standard
+            //functions.
             Composite.macros = Composite.macros || {};
             var macro = Composite.macros[selector.nodeName.toLowerCase()];
-            if (macro) {
-                macro.apply(null, selector);
+            if (macro && macro(selector) === false)
                 return;
-            }
             
-            //TODO: Test
             //If a custom selector exists, the macro is executed.
-            //Custom selector is a filter-function based on a query selector.
-            //The root of the selector is the current element.
-            //The filter therefore affects the child elements.
+            //Selectors work similar to macros.
+            //Unlike macros, selectors use a CSS selector to detect elements.
+            //This selector must match the current element from the point of
+            //view of the parent.
+            //Selectors are more flexible and multifunctional. Therefore
+            //different selectors and thus different functions can match one
+            //element. In this case, all implemented callback methods are
+            //performed.
+            //The return value determines whether the loop is aborted or not.
+            //Only the return value false (not void, not empty) terminates the
+            //loop and the rendering for the selector without using the standard
+            //functions.
             Composite.selectors = Composite.selectors || {};
-            for (var macro in Composite.selectors)
-                if (typeof macro === "object") {
-                    var macro = Composite.selectors[macro];
-                    var nodes = selector.querySelectorAll(macro.selector);
-                    nodes.forEach(function(node, index, array) {
-                        macro.rendering.apply(null, node);
-                    });
+            if (selector.parentNode) {
+                for (var macro in Composite.selectors) {
+                    macro = Composite.selectors[macro];
+                    var nodes = selector.parentNode.querySelectorAll(macro.selector);
+                    if (Array.from(nodes).includes(selector)) {
+                        if (macro.callback(selector) === false)
+                            return;
+                    }
                 }
-            
+            }
+
             //Associative array (meta store) for element-related meta-objects,
             //those which are created during rendering: (key:serial, value:meta)
             Composite.render.meta = Composite.render.meta || [];
@@ -1312,7 +1345,7 @@ if (typeof Composite === "undefined") {
             //corresponding model field.
             //If an event occurs, synchronization is performed. After that will
             //be checked whether the render attribute exists. All selectors
-            //listed here are then triggered for re-rendering. Re-rendering is
+            //listed here are then triggered for (re)rendering. (Re)rendering is
             //independent of synchronization and validation and is executed
             //immediately after an event occurs.
             var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
@@ -1364,7 +1397,7 @@ if (typeof Composite === "undefined") {
             //  2. DataSource-URL loads and transforms DataSource data.
             //  3. Everything else is output directly as string/text.
             //The import is exclusive, similar to the output-attribute, thus
-            //overwriting any existing content. The recursive rerendering is
+            //overwriting any existing content. The recursive (re)rendering is
             //initiated via the MutationObserver.
             //Loading and replacing the import function can be combined with the
             //condition attribute and is only executed when the condition is
@@ -1377,7 +1410,7 @@ if (typeof Composite === "undefined") {
                     value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, value);
                 //Attributes can only be deleted in objects that are not
                 //locked. Locked objects are reused and require all
-                //attributes for re-rendering. Here the attribute 'import'
+                //attributes for (re)rendering. Here the attribute 'import'
                 //is affected/meant.
                 Composite.render.cache = Composite.render.cache || {};
                 
@@ -1460,7 +1493,7 @@ if (typeof Composite === "undefined") {
             //  2. DataSource-URL loads and transforms DataSource data.
             //  3. Everything else is output directly as string/text.
             //The output is exclusive, thus overwriting any existing content.
-            //The recursive rerendering is initiated via the MutationObserver.
+            //The recursive (re)rendering is initiated via the MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
                 selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
@@ -1711,7 +1744,7 @@ if (typeof Composite === "undefined") {
                 if (record.type == "characterData"
                         && record.target.nodeType == Node.TEXT_NODE) {
                     if (object && object.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
-                            && (object.value || "") != record.target.textContent)
+                            && String(object.value || "") != record.target.textContent)
                         record.target.textContent = object.value || "";
                     return;
                 }

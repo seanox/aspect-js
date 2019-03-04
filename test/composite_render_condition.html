@@ -12,10 +12,10 @@
         margin:1em;
       }
     </style>
-    <script src="../sources/extension.js"></script>
-    <script src="../sources/composite.js"></script>
-    <script src="../sources/test.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript">
+    
+        Test.activate();
     
         var Model = {
               onA: false,
@@ -56,9 +56,19 @@
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
-            if (!snapshots.includes(snapshot))
-                snapshots.push(snapshot);
+            snapshots.push(snapshot);
+            if (snapshots.length < 5)
+                window.setTimeout(() => {
+                    Composite.render(document.body);
+                }, 0);
+            else if (snapshots.length == 5)
+                Test.start();
         });
+        
+        /*
+        
+        http://127.0.0.1/seanox/aspect-js/test/composite_render_condition.html
+        
         
         var count = 0;
         var interval = window.setInterval(function() {
@@ -70,6 +80,7 @@
             } else window.clearInterval(interval);
             Test.start();
         }, 250);
+        */
         
         var x1 = 0;
         var x2 = 0;
@@ -103,10 +114,10 @@
     B2B
     C2CC    
     OnA: true
-    O1: 1 x1++; output1.textContent = x1;
-    O2: 1 x2++; output2.textContent = x2;
-    O3: 1 false x3++; output3.textContent = x3;
-    O4: 1 false x4++; output4.textContent = x4;
+    O1: 1x1++; output1.textContent = x1;
+    O2: 1x2++; output2.textContent = x2;
+    O3: 1 falsex3++; output3.textContent = x3;
+    O4: 1 falsex4++; output4.textContent = x4;
     E::E
     S:1:1:S    
     OnA: true
@@ -129,8 +140,8 @@
     B2B
     C2CC    
     OnA: true
-    O1: 1 x1++; output1.textContent = x1;
-    O2: 2 x2++; output2.textContent = x2;
+    O1: 1x1++; output1.textContent = x1;
+    O2: 2x2++; output2.textContent = x2;
     O3: 1 true 
     O4: 1 true 
     E:abc:E
@@ -151,10 +162,10 @@
     B2BB
     C2C    
     OnA: false
-    O1: 1 x1++; output1.textContent = x1;
-    O2: 3 x2++; output2.textContent = x2;
-    O3: 1 false x3++; output3.textContent = x3;
-    O4: 2 false x4++; output4.textContent = x4;
+    O1: 1x1++; output1.textContent = x1;
+    O2: 3x2++; output2.textContent = x2;
+    O3: 1 falsex3++; output3.textContent = x3;
+    O4: 2 falsex4++; output4.textContent = x4;
     E::E
     S:3:3:S    
     OnA: false
@@ -178,8 +189,8 @@
     B2BB
     C2C    
     OnA: false
-    O1: 1 x1++; output1.textContent = x1;
-    O2: 4 x2++; output2.textContent = x2;
+    O1: 1x1++; output1.textContent = x1;
+    O2: 4x2++; output2.textContent = x2;
     O3: 1 true 
     O4: 2 true 
     E:abc:E
@@ -188,7 +199,7 @@
     OnB: true
     OnA: false
     OnB: false
-    </script>
+    </script> 
     <script type="text/test-5">
     A1AA
     B1B
@@ -200,10 +211,10 @@
     B2B
     C2CC    
     OnA: true
-    O1: 1 x1++; output1.textContent = x1;
-    O2: 5 x2++; output2.textContent = x2;
-    O3: 1 false x3++; output3.textContent = x3;
-    O4: 3 false x4++; output4.textContent = x4;
+    O1: 1x1++; output1.textContent = x1;
+    O2: 5x2++; output2.textContent = x2;
+    O3: 1 falsex3++; output3.textContent = x3;
+    O4: 3 falsex4++; output4.textContent = x4;
     E::E
     S:5:5:S    
     OnA: true
@@ -214,7 +225,7 @@
     A3-4
     OnA: false
     OnB: true
-    </script>    
+    </script>         
   </head>
   <body>
     A1<span condition="{{true}}">A</span>A
@@ -222,23 +233,22 @@
     C1<span condition="{{1}}">C</span>C
     D1<span condition="{{0}}">D</span>D
     E1<span condition="{{null}}">E</span>E
-    
+
     OnA: {{Model.onA}}
     A2<span condition="{{Model.toggleA()}}">A</span>A
     B2<span condition="{{Model.toggleA()}}">B</span>B
     C2<span condition="{{Model.toggleA()}}">C</span>C    
     OnA: {{Model.onA}}
     
-    O1: <span id="output1">
-      </span> <script type="text/javascript">x1++; output1.textContent = x1;</script>
-    O2: <span id="output2">
-      </span> <script type="composite/javascript">x2++; output2.textContent = x2;</script>
-    O3: <span id="output3"></span> {{Model.onC}} <script type="text/javascript"
+    O1: <span id="output1"></span><script type="text/javascript">x1++; output1.textContent = x1;</script>
+    O2: <span id="output2"></span><script type="composite/javascript">x2++; output2.textContent = x2;</script>
+    O3: <span id="output3"></span> {{Model.onC}}<script type="text/javascript"
         condition="{{Model.toggleC()}}">x3++; output3.textContent = x3;</script>
-    O4: <span id="output4"></span> {{Model.onD}} <script type="composite/javascript"
+    O4: <span id="output4"></span> {{Model.onD}}<script type="composite/javascript"
         condition="{{Model.toggleD()}}">x4++; output4.textContent = x4;</script>
         
-    E:<span iterate="{{list:Model.listE}}" condition="{{not Model.toggleE()}}"><span>{{list.item}}</span></span>:E
+    E:<span iterate="{{list:Model.listE}}"
+        condition="{{not Model.toggleE()}}"><span>{{list.item}}</span></span>:E
     
     {{s1:(s1 || 0) +1}}
     S:{{s1}}:<span id="outputS1" condition="{{true}}" import="{{testS(s1)}}">---</span>:S    
@@ -257,6 +267,6 @@
     </span>
     
     OnA: {{Model.onA}}
-    OnB: {{Model.onB}}
+    OnB: {{Model.onB}}                  
   </body>
 </html>
