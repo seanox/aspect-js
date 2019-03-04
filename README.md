@@ -76,7 +76,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 # Thanks!
 <img src="https://raw.githubusercontent.com/seanox/seanox/master/sources/resources/images/thanks.png">
 
-[JetBrains](https://www.jetbrains.com/?from=seanox)
+[JetBrains](https://www.jetbrains.com/?from=seanox)  
 Sven Lorenz  
 [Andreas Mitterhofer](https://www.novaobjects.de)  
 novaObjects GmbH  
