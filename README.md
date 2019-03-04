@@ -75,7 +75,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # Thanks!
 <a href="https://www.jetbrains.com/?from=seanox"><img src="https://raw.githubusercontent.com/seanox/share/master/images/JetBrains.png" height="64px"></a>
-<a href="https://www.novaobjects.de"><img src="https://raw.githubusercontent.com/seanox/share/master/images/novaObjects.gif" height="64px"></a>
-<a href="https://www.t-systems.com"><img src="https://raw.githubusercontent.com/seanox/share/master/images/T-Systems.png" height="64px"></a>
+<a href="https://www.novaobjects.de"><img src="https://raw.githubusercontent.com/seanox/share/master/images/novaObjects.gif" height="32px"></a>
+<a href="https://www.t-systems.com"><img src="https://raw.githubusercontent.com/seanox/share/master/images/T-Systems.png" height="32px"></a>
 
 TODO:
