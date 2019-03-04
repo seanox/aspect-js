@@ -75,6 +75,6 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # Thanks!
 
-<img src="https://raw.githubusercontent.com/seanox/share/master/images/JetBrains.png" height="64px">
+<a href="https://www.jetbrains.com/?from=seanox" target="_extern"><img src="https://raw.githubusercontent.com/seanox/share/master/images/JetBrains.png" height="64px"></a>
 
 TODO:
