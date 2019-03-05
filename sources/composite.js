@@ -64,12 +64,6 @@
  *        The filter therefore affects the child elements.
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
- *  TODO: Doku:
- *        Die Attribute vom Renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
- *        werden durch den MutationObserver geschuetzt und konnen nicht manipuliert werden.
- *  TODO: Doku:
- *        Der TextConten von Text-Nodes mit Expression wird durch den
- *        MutationObserver geschuetzt und kann nicht manipuliert werden.
  *        
  *  Composite 1.0 20190304
  *  Copyright (C) 2019 Seanox Software Solutions
@@ -470,6 +464,13 @@ if (typeof Composite === "undefined") {
     
     /**
      *  TODO:
+     *  
+     *      Queue and Lock:
+     *      ----
+     *  The method used a simple queue and transaction management so that the
+     *  concurrent execution of rendering works sequentially in the order of the
+     *  method call.
+     *  
      *  TODO: fire events render start/progress/end
      *        - jede Komponente ist statisch
      *        - Namespaces werden unterstuetzt, diese aber syntaktisch gueltig sein
@@ -726,39 +727,51 @@ if (typeof Composite === "undefined") {
     /**
      *  There are several ways to customize the renderer.
      *  
-     *      Custom-Tag
+     *      Custom Tag (Macro)
      *      ----
-     *  TODO:  
+     *  Macros are completely user-specific.
+     *  The return value determines whether the standard functions are used or
+     *  not. Only the return value false (not void, not empty) terminates the
+     *  rendering for the macro without using the standard functions of the
+     *  rendering.
+     *
+     *      Composite.customize(tag:string, function(element) {...});
      *  
-     *      Custom-Selector
+     *      Custom Selector
      *      ----
-     *  TODO:
+     *  Selectors work similar to macros.
+     *  Unlike macros, selectors use a CSS selector to detect elements.
+     *  This selector must match the current element from the point of view of
+     *  the parent. Selectors are more flexible and multifunctional. Therefore
+     *  different selectors and thus different functions can match one element.
+     *  In this case, all implemented callback methods are performed.
+     *  The return value determines whether the loop is aborted or not.
+     *  Only the return value false (not void, not empty) terminates the loop
+     *  over other selectors and the rendering for the selector without using
+     *  the standard functions of the rendering.
      *  
-     *      Acceptors
+     *      Composite.customize(selector:string, function(element) {...}); 
+     *  
+     *  Macros and selectors are based on a text key.
+     *  If this key is used more than once, existing macros and selectors will
+     *  be overwritten.    
+     *      
+     *      Custom Acceptor
      *      ---
-     *  TODO: rendering -> callback
      *  Acceptors are a very special way to customize. Unlike the other ways,
      *  here the rendering is not shifted into own implementations. With a
      *  acceptor, an element is manipulated before rendering and only if the
      *  renderer processes the element initially. This makes it possible to make
      *  individual changes to the attributes or the markup before the renderer
      *  processes them. This does not affect the implementation of the
-     *  rendering. The method call with a acceptor:
+     *  rendering.
+     *  
      *      Composite.customize(function(element) {...});
-     *  Only arguments with a method without a return value are expected. 
      * 
      *  TODO:
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - callback function is not implemented correctly
-     *  TODO: customize object binding alias -> model
-     *  
-     *      Composite.customize(function); acceptor
-     *      Composite.customize(string, function); macro/tag
-     *      Composite.customize(string, function); selecttor  
-     *      
-     *  TODO: Doku: gleiche Makros überschreiben existierende
-     *  TODO: Doku: gleiche Selektoren überschreiben existierende
      */
     Composite.customize = function(scope, callback) {
         
@@ -935,13 +948,17 @@ if (typeof Composite === "undefined") {
      *  combined with the attribute condition.
      *  Embedded scripts must be 'ThreadSafe'.
      *  
-     *      Custom Tag (Macro):
-     *      ----  
-     *  TODO
-     *      
-     *      Custom Selectors
+     *      Custom Tag (Macro)
      *      ----
-     *  TODO    
+     *  See: Composite.customize(tag:string, function(element) {...});
+     *  
+     *      Custom Selector
+     *      ----
+     *  Composite.customize(selector:string, function(element) {...}); 
+     *  
+     *      Custom Acceptor
+     *      ----  
+     *  See: Composite.customize(function(element) {...});
      */
     Composite.render = function(selector, lock) {
         
@@ -1039,8 +1056,6 @@ if (typeof Composite === "undefined") {
                 //processes them. This does not affect the implementation of the
                 //rendering. The method call with a acceptor:
                 //    Composite.customize(function(element) {...});
-                //Only arguments with a method without a return value are
-                //expected.                 
                 Composite.acceptors = Composite.acceptors || [];
                 Composite.acceptors.forEach(function(acceptor, index, array) {
                     acceptor.call(null, selector);
@@ -1178,7 +1193,6 @@ if (typeof Composite === "undefined") {
                 //is static. Static text nodes are marked with the attribute
                 //Composite.ATTRIBUTE_TEXT.
                 
-                //TODO: test cases
                 var content = selector.textContent;
                 if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     
@@ -1285,8 +1299,15 @@ if (typeof Composite === "undefined") {
                 return;
             }
             
-            //condition The condition attribute is interpreted.
-            //TODO: condition Doku
+            //The condition attribute is interpreted.
+            //The condition is a very special implementation.
+            //So it was important that a condition can remove and add a node in
+            //the DOM. To do this, a placeholder and a template are created for
+            //an element with a condition. The placeholder is a text node
+            //without content and therefore invisible in the user interface. The
+            //placeholder is the cached markup of the element.
+            //Thus the renderer can insert or remove the markup after the
+            //placeholder according to the condition.
             if (selector.nodeType == Node.TEXT_NODE
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 var placeholder = object;
@@ -1330,7 +1351,6 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Element))
                 return;
             
-            //TODO: Doku
             //Events primarily controls the synchronization of the input values
             //of HTML elements with the fields of a model. Means that the value
             //in the model only changes if an event occurs for the corresponding
@@ -1425,7 +1445,6 @@ if (typeof Composite === "undefined") {
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
 
                 } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    //TODO: Test Cases
                     var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
                     data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
                     data[1] = DataSource.fetch("xml://" + data[1]);
@@ -1726,6 +1745,10 @@ if (typeof Composite === "undefined") {
     
     //MutationObserver detects changes at the DOM and triggers (re)rendering and
     //(re)scanning and prevents manipulation of the composite attributes.
+    //  - Text-Nodes: The TextConten of text nodes with an expression is
+    //    protected by the MutationObserver and cannot be manipulated.
+    //  - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
+    //    are protected by the MutationObserver and cannot be manipulated.
     window.addEventListener("load", function(event) {
         (new MutationObserver(function(records) {
             records.forEach(function(record) {

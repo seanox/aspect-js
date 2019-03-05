@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+        
+        var raw_x = false;
+        var raw_a = "S";
+        
+        var snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            var snapshot = document.body.textContent;
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            snapshots.push(snapshot);
+            switch (snapshots.length) {
+                case 1: break;
+                case 2: raw_x = true; break;
+                case 3: break;
+                case 4: raw_x = false; break;
+            };
+            if (snapshots.length < 7) {
+                window.setTimeout(() => {
+                    Composite.render(document.body);
+                }, 0);
+            }
+            if (snapshots.length == 7) {
+                window.setTimeout(() => {
+                    Test.start();                
+                }, 0);
+            }
+        }); 
+        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-1']", snapshots.shift());  
+        }});
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-2']", snapshots.shift());  
+        }});        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-3']", snapshots.shift());
+        }});        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
+        }});        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-5']", snapshots.shift());
+        }});        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-6']", snapshots.shift());
+        }});         
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-7']", snapshots.shift());
+        }});         
+    </script>
+    <script type="text/test-1">
+      S: S
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      lorem ipsum dolor sit amet
+    </script>
+    <script type="text/test-2">
+      S: S
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      lorem ipsum dolor sit amet
+    </script>
+    <script type="text/test-3">
+      S: S
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      raw_a += "A";
+      raw_a += "B";
+      lorem ipsum dolor sit amet
+    </script>
+    <script type="text/test-4">
+      S: SAB
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      raw_a += "A";
+      raw_a += "B";
+      lorem ipsum dolor sit amet
+    </script>
+    <script type="text/test-5">
+      S: SABAB
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      lorem ipsum dolor sit amet
+    </script>
+    <script type="text/test-6">
+      S: SABAB
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      lorem ipsum dolor sit amet
+    </script>
+    <script type="text/test-7">
+      S: SABAB
+      LIST:
+      JanFebMarAprMayJuneJulyAugSeptOctNovDec
+      LIST EXT:
+      SeptOctNovMayMarJuneJulyJanFebDecAugApr
+      lorem ipsum dolor sit amet 
+    </script>
+  </head>
+  <body>
+    S: {{raw_a}}
+    <article output="xml://content_list">
+      loading resource...  
+    </article>
+    <article output="xml://content_list xslt://content_list_ext">
+      loading resource...  
+    </article>
+    <article output="xml://content_raw">
+      loading resource...  
+    </article>
+  </body>
+</html>
