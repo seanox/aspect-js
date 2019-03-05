@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<content escape="on">
+  <![CDATA[
+  <div id="datasourceRaw" condition="{{raw_x}}">
+    <script type="text/javascript">
+      raw_a += "A"; 
+    </script>
+    <script type="composite/javascript">
+      raw_a += "B";
+    </script>
+  </div>
+  <p>
+    lorem ipsum dolor sit amet
+  </p>
+  ]]>
+</content>

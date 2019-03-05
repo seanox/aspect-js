@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<list>
+  <entry value="01" name="Jan"/>
+  <entry value="02" name="Feb"/>
+  <entry value="03" name="Mar"/>
+  <entry value="04" name="Apr"/>
+  <entry value="05" name="May"/>
+  <entry value="06" name="June"/>
+  <entry value="07" name="July"/>
+  <entry value="08" name="Aug"/>
+  <entry value="09" name="Sept"/>
+  <entry value="10" name="Oct"/>
+  <entry value="11" name="Nov"/>
+  <entry value="12" name="Dec"/>
+</list>
