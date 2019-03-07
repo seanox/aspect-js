@@ -22,6 +22,7 @@
  *  
  *      DESCRIPTION
  *      ----
+ *  TODO:
  *  The SiteMap is a static navigation component based on virtual paths and
  *  views. Virtual paths are used to delimit pages and to focus projections.
  *  Pages are a (complex) view and combine different fixed contents (navigation,
@@ -52,12 +53,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190303
+ *  MVC 1.0 20190307
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190303
+ *  @version 1.0 20190307
  */
 if (typeof Path === "undefined") {
     
@@ -197,14 +198,61 @@ if (typeof SiteMap === "undefined") {
     
     /**
      *  Static component for the use of a SiteMap for virtua paths.
-     *  SiteMap is a directory with all supported acceptors as well as all
-     *  allowed paths, views and their associations.
+     *  SiteMap is a directory consisting of pages and views that are addressed
+     *  by paths.
      *  
-     *  TODO: Pfad = Page | Page:View
-     *        Eine View kann zur Teil Page (Partial Page) werden, wenn der Pfad nur für View existiert,
-     *        dann aber noch ein darauf existierender Pfad, den Pfad der View aufgreift:
-     *        #[projects, ...], #projects#devwex:[...]
-     *  TODO: Begriffe einheitlich verwenden (Path, Page, Partial Page, View) 
+     *  +---------------------------------------+
+     *  | Side                                  | 
+     *  | +-----------------------------------+ |
+     *  | | Page A / Partial Page A           | |
+     *  | | +------------+     +------------+ | |
+     *  | | |  View  A1  | ... |  View  An  | | |
+     *  | | +------------+     +------------+ | |
+     *  | | +-------------------------------+ | |
+     *  | | | Page AA                       | | | 
+     *  | | | +----------+     +----------+ | | |
+     *  | | | | View AA1 | ... | View AAn | | | |
+     *  | | | +----------+     +----------+ | | |
+     *  | | +-------------------------------+ | |
+     *  | | ...                               | |
+     *  | +-----------------------------------+ |
+     *  | ...                                   |
+     *  | +-----------------------------------+ |
+     *  | | Page n                            | |
+     *  | | ...                               | |
+     *  | +-----------------------------------+ |
+     *  +---------------------------------------+
+     *  
+     *  A page is the primary projection of the content. This projection may
+     *  contain additional sub-components, in the form of views and sub-pages.
+     *  
+     *  Views are parts of a page (projection) and are not normally a standalone
+     *  component. For example, the input mask and output table of a search can
+     *  be separate views of a page, as can articles or sections of a page.
+     *  Both page and view can be accessed via virtual paths. The path to a view
+     *  has the effect that the page is displayed with any other views, but the
+     *  requested view is displayed in the visible area and focused.
+     *  
+     *  Pages are also components that can be nested.
+     *  Thus, parent pages become partial pages when the path refers to a
+     *  subpage. A subpage is presented with all its parent partial pages. If
+     *  the parent pages contain additional views, these views are not
+     *  displayed. The parent pages are therefore only partially presented.
+     *  
+     *  With the SiteMap the structure of pages, views and the corresponding
+     *  paths are described. The SiteMap controls the page flow and the
+     *  presentation of the components corresponding to a path.
+     *  This means that you don't have to take care of showing and hiding
+     *  components yourself.
+     *  
+     *  The show and hide is hard realized in the DOM.
+     *  This means that if a component is hidden, it is physically removed from
+     *  the DOM and only added again when it is displayed.
+     *  
+     *  When it comes to controlling page flow, the SiteMap provides hooks for
+     *  permission concepts and acceptors. With both things the page flow can be
+     *  controlled and influenced. This way, the access to paths can be stopped
+     *  and/or redirected/forwarded  with own logic. 
      */
     SiteMap = {};
 
@@ -250,13 +298,30 @@ if (typeof SiteMap === "undefined") {
      *  @return true if the path has been confirmed as permitted 
      */
     SiteMap.permit = function(path) {
-        
-        var permits = SiteMap.permits || [];
-        while (permits.length > 0) {
-            var permit = permits.shift();
-            if (permit.call(null, path) !== true)
-                return false;
+
+        var acceptors = (SiteMap.acceptors || []).slice();
+        while (acceptors.length > 0) {
+            var acceptor = acceptors.shift();
+            if (!acceptor.pattern.test(path))
+                continue; 
+            acceptor = acceptor.action.call(null, path);
+            if (acceptor !== true) {
+                if (typeof acceptor === "string")
+                    acceptor = Path.normalize(acceptor);
+                return acceptor; 
+            }
         }
+        
+        var permits = (SiteMap.permits || []).slice();
+        while (permits.length > 0) {
+            var permit = permits.shift().call(null, path);
+            if (permit !== true) {
+                if (typeof permit === "string")
+                    permit = Path.normalize(permit);
+                return permit; 
+            }
+        }
+        
         return true;
     };
 
@@ -343,12 +408,25 @@ if (typeof SiteMap === "undefined") {
                 return meta.path + meta.view;
             return meta.path + "#" + meta.view;
         };
+        
+        var focus = function(focus) {
+            window.setTimeout((focus) => {
+                focus = document.querySelector("#" + focus);
+                if (focus) {
+                    focus.scrollIntoView(true);
+                    focus.focus();
+                }
+            }, 0, (focus.view || focus.page).replace(/^.*#/, ""));
+        };
 
         if (paths.hasOwnProperty(path))
-            return {path:path, page:path, view:null};
+            return {path:path, page:path, view:null, focus:function() {
+                focus(this);
+            }};
         else if (views.hasOwnProperty(path))
-            return {path:canonical(views[path]), page:views[path].path, view:views[path].view};
-            
+            return {path:canonical(views[path]), page:views[path].path, view:views[path].view, focus:function() {
+                focus(this);
+            }};
         return null;
     };
 
@@ -420,9 +498,8 @@ if (typeof SiteMap === "undefined") {
      *      };
      *      
      *      SiteMap.customize({meta});
-     *      SiteMap.customize(meta);
-     *      SiteMap.customize({meta}, function);
-     *      SiteMap.customize(meta, permit);
+     *      SiteMap.customize({meta}, function(path) {...});
+     *      SiteMap.customize(RegExp, function(path) {...});
      *      
      *  Optionally, acceptors can also be passed with the meta object.
      *  The key (RegExp) corresponds to a path filter, the value is a method
@@ -439,6 +516,9 @@ if (typeof SiteMap === "undefined") {
      *      });
      *      
      *      SiteMap.customize(RegExp, function);
+     *      
+     *  TODO: permit return final true, sonst Abbruch der Navigation, alertnativ String mit neuem Ziel
+     *  TODO: acceptor return final true, sonst Abbruch der Navigation, alertnativ String mit neuem Ziel - wie bei permit 
      *      
      *  An acceptor is an alias/filter for a path based function
      *  If the path corresponds to an acceptor, the stored function is called.
@@ -474,11 +554,9 @@ if (typeof SiteMap === "undefined") {
      *  
      *  The method uses variable parameters and has the following signatures:
      *  
-     *      function(object);
-     *      function(object, function);
-     *      function(RegExp, function);
-     *  
-     *  @param  map
+     *  @param  pattern
+     *  @param  callback
+     *  @param  meta
      *  @param  permit
      *  @throws An error occurs in the following cases:
      *      - if the data type of map and/or permit is invalid
@@ -604,6 +682,23 @@ if (typeof SiteMap === "undefined") {
      *  The method initiates the initial usage of the path.
      */
     window.addEventListener("load", function(event) {
+        
+        //When clicking on a link with the current path, the focus must be set
+        //back to page/view, as the user may have scrolled on the page.
+        //However, this is only necessary if page + view have not changed.
+        //In all other cases the Window-HashChange-Event does the same
+        document.body.addEventListener("click", function(event) {
+            if (event.target
+                    && event.target instanceof Element
+                    && event.target.hasAttribute("href")) {
+                var target = SiteMap.lookup(event.target.getAttribute("href"));
+                var source = SiteMap.lookup(Path.normalize(SiteMap.location));
+                if (source && target
+                        && source.page == target.page
+                        && source.view == target.view)
+                    target.focus();
+            }
+        });
 
         //Without a SiteMap the page will be rendered initially after loading.
         //Then the page has to take control.
@@ -663,25 +758,31 @@ if (typeof SiteMap === "undefined") {
             return;
         }
         
-        //TODO: ??? must be tested, look like an error, beause permit is not a function
-        var acceptors = SiteMap.acceptors || [];
-        for (var loop = 0; loop < acceptors.length; loop++) {
-            var acceptor = acceptors[loop];
-            if (!acceptor.pattern.test(target))
-                continue;
-            var result = acceptor.action.call(null, target);
-            if (result === false)
-                return;
-            if (typeof result !== "string")
-                continue;
-            target = Path.normalize(result);
-            return permit(target);
+        //If the permission does not match, the last safe path (SiteMap.location)
+        //is restored. Alternatively, the permit methods can also supply a new
+        //target, which is then jumped to.
+        var forward = SiteMap.permit(target);
+        if (forward !== true) {
+            if (typeof forward == "string")
+                SiteMap.navigate(forward);
+            else SiteMap.navigate(source);
+            return;
         }
-
+        
         SiteMap.location = target;
         
         source = SiteMap.lookup(source);
         target = SiteMap.lookup(target);
+        
+        //The new focus is determined and set with a delay after the rendering.
+        //This is important because the target may not exist before rendering.
+        //The focus is only changed if the page or view has changed.
+        //In the case of functional links, the focus must not be set, since it
+        //scrolls relative to the last position.
+        if (source && target
+                && (source.page != target.page
+                        || source.view != target.view))
+            target.focus();
         
         //Only if the page is changed or initial, a rendering is necessary.
         if (source.page == target.page
@@ -709,9 +810,5 @@ if (typeof SiteMap === "undefined") {
         if (render.length > 1)
             Composite.render(render);
         else Composite.render(document.body);
-
-        //TODO: Scroll zum Target/View
-        //      Das muss ggf. per window.setTimeout am Ende vom Rendering erfolgen,
-        //      da ggf. das Target erst mit dem Rendering entsteht
     });
 };
