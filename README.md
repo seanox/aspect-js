@@ -4,9 +4,9 @@
 # Features
 - Easy integration in markup and JavaScript (clean code)
 - Lightweight implementation (requires no additional frameworks)  
-  less than 64kB for all (so the plan)
+  less than 64kB for all (so the plan, but there will be a few more bytes)
 - Component based architecture
-- Modularization (supports imports at the runtime)
+- Modularization (supports imports at the runtime)  
   Component concept for smart/automatic loading of composite resources
 - Event handling
 - Expression Language  
