@@ -53,12 +53,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190307
+ *  MVC 1.0 20190310
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190307
+ *  @version 1.0 20190310
  */
 if (typeof Path === "undefined") {
     
@@ -198,49 +198,50 @@ if (typeof SiteMap === "undefined") {
     
     /**
      *  Static component for the use of a SiteMap for virtua paths.
-     *  SiteMap is a directory consisting of pages and views that are addressed
+     *  SiteMap is a directory consisting of faces and facets that are addressed
      *  by paths.
      *  
-     *  +---------------------------------------+
-     *  | Side                                  | 
-     *  | +-----------------------------------+ |
-     *  | | Page A / Partial Page A           | |
-     *  | | +------------+     +------------+ | |
-     *  | | |  View  A1  | ... |  View  An  | | |
-     *  | | +------------+     +------------+ | |
-     *  | | +-------------------------------+ | |
-     *  | | | Page AA                       | | | 
-     *  | | | +----------+     +----------+ | | |
-     *  | | | | View AA1 | ... | View AAn | | | |
-     *  | | | +----------+     +----------+ | | |
-     *  | | +-------------------------------+ | |
-     *  | | ...                               | |
-     *  | +-----------------------------------+ |
-     *  | ...                                   |
-     *  | +-----------------------------------+ |
-     *  | | Page n                            | |
-     *  | | ...                               | |
-     *  | +-----------------------------------+ |
-     *  +---------------------------------------+
+     *  +-----------------------------------------+
+     *  | Page                                    | 
+     *  | +-------------------------------------+ |
+     *  | | Face A / Partial Face A             | |
+     *  | | +-------------+     +-------------+ | |
+     *  | | |  Facet A1   | ... |  Facet An   | | |
+     *  | | +-------------+     +-------------+ | |
+     *  | | +---------------------------------+ | |
+     *  | | | Face AA                         | | | 
+     *  | | | +-----------+     +-----------+ | | |
+     *  | | | | Facet AA1 | ... | Facet AAn | | | |
+     *  | | | +-----------+     +-----------+ | | |
+     *  | | +---------------------------------+ | |
+     *  | | ...                                 | |
+     *  | +-------------------------------------+ |
+     *  | ...                                     |
+     *  | +-------------------------------------+ |
+     *  | | Face n                              | |
+     *  | | ...                                 | |
+     *  | +-------------------------------------+ |
+     *  +-----------------------------------------+
      *  
-     *  A page is the primary projection of the content. This projection may
-     *  contain additional sub-components, in the form of views and sub-pages.
+     *  A face is the primary projection of the content. This projection may
+     *  contain additional sub-components, in the form of facets and sub-faces.
      *  
-     *  Views are parts of a page (projection) and are not normally a standalone
-     *  component. For example, the input mask and output table of a search can
-     *  be separate views of a page, as can articles or sections of a page.
-     *  Both page and view can be accessed via virtual paths. The path to a view
-     *  has the effect that the page is displayed with any other views, but the
-     *  requested view is displayed in the visible area and focused.
+     *  Facets are parts of a face (projection) and are not normally a
+     *  standalone component. For example, the input mask and result table of a
+     *  search can be separate facets of a face, as can articles or sections of
+     *  a face. Both face and facet can be accessed via virtual paths. The path
+     *  to a facet has the effect that the face is displayed with any other
+     *  faces, but the requested facet is displayed in the visible area and
+     *  focused.
      *  
-     *  Pages are also components that can be nested.
-     *  Thus, parent pages become partial pages when the path refers to a
-     *  subpage. A subpage is presented with all its parent partial pages. If
-     *  the parent pages contain additional views, these views are not
-     *  displayed. The parent pages are therefore only partially presented.
+     *  Faces are also components that can be nested.
+     *  Thus, parent faces become partial faces when the path refers to a
+     *  sub-face. A sub-face is presented with all its parent partial faces. If
+     *  the parent faces contain additional facets, these facets are not
+     *  displayed. The parent faces are therefore only partially presented.
      *  
-     *  With the SiteMap the structure of pages, views and the corresponding
-     *  paths are described. The SiteMap controls the page flow and the
+     *  With the SiteMap the structure of faces, facets and the corresponding
+     *  paths are described. The SiteMap controls the face flow and the
      *  presentation of the components corresponding to a path.
      *  This means that you don't have to take care of showing and hiding
      *  components yourself.
@@ -249,8 +250,8 @@ if (typeof SiteMap === "undefined") {
      *  This means that if a component is hidden, it is physically removed from
      *  the DOM and only added again when it is displayed.
      *  
-     *  When it comes to controlling page flow, the SiteMap provides hooks for
-     *  permission concepts and acceptors. With both things the page flow can be
+     *  When it comes to controlling face flow, the SiteMap provides hooks for
+     *  permission concepts and acceptors. With both things the face flow can be
      *  controlled and influenced. This way, the access to paths can be stopped
      *  and/or redirected/forwarded  with own logic. 
      */
@@ -271,11 +272,14 @@ if (typeof SiteMap === "undefined") {
      */
     SiteMap.ticks;
     
-    /** Assosiative array with all real paths without views paths (key:path, value:views). */
+    /** Assosiative array with all real paths without facets paths (key:path, value:facets). */
     SiteMap.paths;
 
-    /** Array with all view paths (sum of all paths and assigned views). */
-    SiteMap.views;
+    /** 
+     *   Assosiative array with all paths with facet paths {path:key, facet:facet}
+     *   The sum of all paths and assigned facets).
+     */
+    SiteMap.facets;
 
     /** Array with all supported acceptors. */  
     SiteMap.acceptors;
@@ -283,11 +287,11 @@ if (typeof SiteMap === "undefined") {
     /** Array with all permit functions. */
     SiteMap.permits;
     
-    /** Pattern for a valid path. */
+    /** Pattern for a valid face path. */
     SiteMap.PATTERN_PATH = /^(#([a-z]\w*)*)+$/;
 
-    /** Pattern for a valid path views. */
-    SiteMap.PATTERN_PATH_VIEWS = /^(#[a-z]\w*)(\s+(#[a-z]\w*)+)*$/;
+    /** Pattern for a valid face path with optional facets. */
+    SiteMap.PATTERN_PATH_FACETS = /^(#[a-z]\w*)(\s+(#[a-z]\w*)+)*$/;
     
     /**
      *  Checks a path using existing/registered permit methods.
@@ -365,7 +369,7 @@ if (typeof SiteMap === "undefined") {
 
         var paths = Object.keys(SiteMap.paths || {});
         if (!strict)
-            paths = paths.concat(Object.keys(SiteMap.views || {}));
+            paths = paths.concat(Object.keys(SiteMap.facets || {}));
         while (paths && path.length > 1) {
             if (paths.includes(path))
                 return path;
@@ -390,23 +394,26 @@ if (typeof SiteMap === "undefined") {
     /**
      *  Returns the meta data for a path.
      *  The meta data is an object with the following structure:
-     *      {path:..., page:..., view:...}
+     *      {path:..., face:..., facet:...}
      *  If no meta data can be determined because the path is invalid or not
      *  declared in the SiteMap, null is returned.
-     *  @param  path
+     *  @param  path optional, without SiteMap.location is used
      *  @return meta data object, otherwise null
      */
     SiteMap.lookup = function(path) {
         
         var paths = SiteMap.paths || {};
-        var views = SiteMap.views || {};
+        var facets = SiteMap.facets || {};
+        
+        if (arguments.length <= 0)
+            path = SiteMap.location;
 
         var canonical = function(meta) {
-            if (!meta.view)
+            if (!meta.facet)
                 return meta.path;
             if (meta.path.endsWith("#"))
-                return meta.path + meta.view;
-            return meta.path + "#" + meta.view;
+                return meta.path + meta.facet;
+            return meta.path + "#" + meta.facet;
         };
         
         var focus = function(focus) {
@@ -416,15 +423,15 @@ if (typeof SiteMap === "undefined") {
                     focus.scrollIntoView(true);
                     focus.focus();
                 }
-            }, 0, (focus.view || focus.page).replace(/^.*#/, ""));
+            }, 0, (focus.facet || focus.face).replace(/^.*#/, ""));
         };
 
         if (paths.hasOwnProperty(path))
-            return {path:path, page:path, view:null, focus:function() {
+            return {path:path, face:path, facet:null, focus:function() {
                 focus(this);
             }};
-        else if (views.hasOwnProperty(path))
-            return {path:canonical(views[path]), page:views[path].path, view:views[path].view, focus:function() {
+        else if (facets.hasOwnProperty(path))
+            return {path:canonical(facets[path]), face:facets[path].path, facet:facets[path].facet, focus:function() {
                 focus(this);
             }};
         return null;
@@ -445,14 +452,14 @@ if (typeof SiteMap === "undefined") {
         path = path.replace(/(#.*?)#*$/, "$1");
 
         //The current path is determined and it is determined whether it is a
-        //page or a view. In both cases, a meta object is created:
-        //    {path:#path, view:...}
+        //face or a facet. In both cases, a meta object is created:
+        //    {path:#path, facet:...}
         var location = SiteMap.lookup(Path.normalize(SiteMap.location));
         if (!location)
             return false;
         
-        //Determines whether the passed path is a page, a partial page or a view.
-        //(Partial)pages always have the higher priority for views.
+        //Determines whether the passed path is a face, partial face or facet.
+        //(Partial)faces always have the higher priority for facets.
         //If nothing can be determined, there cannot be a valid path.
         var lookup = SiteMap.lookup(path);
         if (!lookup)
@@ -462,20 +469,20 @@ if (typeof SiteMap === "undefined") {
         if (!partial.endsWith("#"))
             partial += "#";
         
-        //Views are only displayed if the paths match and the path does not
-        //refer to a partial page.
-        if (lookup.view
-                && location.page != lookup.page
+        //Facets are only displayed if the paths match and the path does not
+        //refer to a partial face.
+        if (lookup.facet
+                && location.face != lookup.face
                 && !location.path.startsWith(partial))
             return false;
 
-        //Pages and part pages are only displayed if the paths match or the path
-        //starts with the passed path as a partial path.
+        //Faces and partial faces are only displayed if the paths match or the
+        //path starts with the passed path as a partial path.
         if (!location.path.startsWith(partial)
-                && location.page != lookup.page)
+                && location.face != lookup.face)
             return false;
 
-        //Invalid paths and views are excluded at this place, because they
+        //Invalid paths and facets are excluded at this place, because they
         //already cause a false termination of this method (return false) and do
         //not have to be checked here anymore.
 
@@ -483,10 +490,11 @@ if (typeof SiteMap === "undefined") {
     };
     
     /**
+     *  TODO:
      *  Configures the SiteMap individually.
      *  The configuration is passed as a meta object.
      *  The keys (string) correspond to the paths, the values are arrays with
-     *  the valid views for a path.
+     *  the valid facets for a path.
      *  
      *      sitemap = {
      *          "#": ["news", "products", "about", "contact", "legal"],
@@ -544,7 +552,7 @@ if (typeof SiteMap === "undefined") {
      *      Important note about how the SiteMap works:
      *      ----
      *  The SiteMap emanages all configurations cumulatively. All paths and
-     *  views are summarized, acceptors and permit methods are collected in the
+     *  facets are summarized, acceptors and permit methods are collected in the
      *  order of their registration. A later assignment of which meta data and
      *  permit methods were passed together with which meta object does not
      *  exist.
@@ -560,7 +568,7 @@ if (typeof SiteMap === "undefined") {
      *  @param  permit
      *  @throws An error occurs in the following cases:
      *      - if the data type of map and/or permit is invalid
-     *      - if the sntax and/or the format of views are invalid
+     *      - if the sntax and/or the format of facets are invalid
      */
     SiteMap.customize = function(variants) {
         
@@ -592,11 +600,11 @@ if (typeof SiteMap === "undefined") {
                 paths[key] = SiteMap.paths[key];
         });
 
-        var views = {};
-        Object.keys(SiteMap.views || {}).forEach(function(key) {
+        var facets = {};
+        Object.keys(SiteMap.facets || {}).forEach(function(key) {
             if (typeof key === "string"
-                && key.match(SiteMap.PATTERN_PATH))
-            views[key] = SiteMap.views[key];
+                    && key.match(SiteMap.PATTERN_PATH))
+                facets[key] = SiteMap.facets[key];
         });
 
         Object.keys(map).forEach(function(key) {
@@ -615,33 +623,33 @@ if (typeof SiteMap === "undefined") {
             
             //The entry is added to the path map, if necessary as empty array.
             //Thus the following path map object will be created:
-            //    {#path:[view, view, ...], ...}
+            //    {#path:[facet, facet, ...], ...}
             paths[key] = paths[key] || [];
             
-            //In the next step, the views for a path are determined.
+            //In the next step, the facets for a path are determined.
             //These are added to the path in the path map if these do not
-            //already exist there. Additional a view map object will be created:
-            //    {#view-path:{path:#path, view:view}, ...}
+            //already exist there. Additional a facet map object will be created:
+            //    {#facet-path:{path:#path, facet:facet}, ...}
             value = value || [];
-            value.forEach(function(view) {
-                //Views is an array of strings with the names of the views.
-                //The names must correspond to the PATTERN_PATH_VIEW.
-                if (typeof view !== "string")
-                    throw new TypeError("Invalid view: " + typeof view);
-                view = view.toLowerCase().trim();
-                if (!view.match(SiteMap.PATTERN_PATH_VIEW))
-                    throw new Error("Invalid view: " + view);
-                //If the view does not exist at the path, the view is added.
-                if (!paths[key].includes(view))
-                    paths[key].push(view);
-                //The view map object is assembled.
-                views[Path.normalize(key, view)] = {path:key, view:view};
+            value.forEach(function(facet) {
+                //Facets is an array of strings with the names of the facets.
+                //The names must correspond to the PATTERN_PATH_FACET.
+                if (typeof facet !== "string")
+                    throw new TypeError("Invalid facet: " + typeof facet);
+                facet = facet.toLowerCase().trim();
+                if (!facet.match(SiteMap.PATTERN_PATH_FACET))
+                    throw new Error("Invalid facet: " + facet);
+                //If the facet does not exist at the path, the facet is added.
+                if (!paths[key].includes(facet))
+                    paths[key].push(facet);
+                //The facet map object is assembled.
+                facets[Path.normalize(key, facet)] = {path:key, facet:facet};
             });
         });
         
-        SiteMap.paths = paths;
-        SiteMap.views = views;
         SiteMap.permits = permits;
+        SiteMap.paths = paths;
+        SiteMap.facets = facets;
     };
     
     /**
@@ -684,8 +692,8 @@ if (typeof SiteMap === "undefined") {
     window.addEventListener("load", function(event) {
         
         //When clicking on a link with the current path, the focus must be set
-        //back to page/view, as the user may have scrolled on the page.
-        //However, this is only necessary if page + view have not changed.
+        //back to face/facet, as the user may have scrolled on the page.
+        //However, this is only necessary if face + facet have not changed.
         //In all other cases the Window-HashChange-Event does the same
         document.body.addEventListener("click", function(event) {
             if (event.target
@@ -694,8 +702,8 @@ if (typeof SiteMap === "undefined") {
                 var target = SiteMap.lookup(event.target.getAttribute("href"));
                 var source = SiteMap.lookup(Path.normalize(SiteMap.location));
                 if (source && target
-                        && source.page == target.page
-                        && source.view == target.view)
+                        && source.face == target.face
+                        && source.facet == target.facet)
                     target.focus();
             }
         });
@@ -726,7 +734,7 @@ if (typeof SiteMap === "undefined") {
     /**
      *  Establishes a listener that listens to changes from the URL hash.
      *  The method corrects invalid and unauthorized paths by forwarding them to
-     *  the next valid path, restores the view of functional paths, and
+     *  the next valid path, restores the facet of functional paths, and
      *  organizes partial rendering.
      */
     window.addEventListener("hashchange", function(event) {
@@ -748,8 +756,8 @@ if (typeof SiteMap === "undefined") {
         SiteMap.ticks = (SiteMap.ticks || 0) +1;
         
         //For functional interaction paths, the old path must be restored.
-        //Rendering is not necessary because the page does not change or the
-        //called function has partially triggered rendering.
+        //Rendering is not necessary because the face/facet does not change or
+        //the called function has partially triggered rendering.
         if (target.match(Path.PATTERN_PATH_FUNCTIONAL)) {
             var x = window.pageXOffset || document.documentElement.scrollLeft;
             var y = window.pageYOffset || document.documentElement.scrollTop;
@@ -776,23 +784,23 @@ if (typeof SiteMap === "undefined") {
         
         //The new focus is determined and set with a delay after the rendering.
         //This is important because the target may not exist before rendering.
-        //The focus is only changed if the page or view has changed.
+        //The focus is only changed if the face or facet has changed.
         //In the case of functional links, the focus must not be set, since it
         //scrolls relative to the last position.
         if (source && target
-                && (source.page != target.page
-                        || source.view != target.view))
+                && (source.face != target.face
+                        || source.facet != target.facet))
             target.focus();
         
-        //Only if the page is changed or initial, a rendering is necessary.
-        if (source.page == target.page
+        //Only if the face is changed or initial, a rendering is necessary.
+        if (source.face == target.face
                 && SiteMap.ticks > 1)
             return;
         
-        source = source.page;
+        source = source.face;
         if (!source.endsWith("#"))
             source += "#";
-        target = target.page;
+        target = target.face;
         if (!target.endsWith("#"))
             target += "#";
         

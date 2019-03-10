@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
- *  DataSource 1.0 20190214
+ *  DataSource 1.0 20190310
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190214
+ *  @version 1.0 20190310
  */
 if (typeof DataSource === "undefined") {
     
@@ -55,12 +55,9 @@ if (typeof DataSource === "undefined") {
     /** Internal cache of XML/XSLT data. */
     DataSource.cache;
     
-    /** Path of the DataSource for: root */
-    DataSource.ROOT = window.location.pathname;
-    
-    /** Path of the DataSource for: data (sub-directory of root) */
-    DataSource.DATA = (DataSource.ROOT.replace(/[^/]*\.[^/]+$/, "") + "/data").replace(/\/+/g, "/");
-    
+    /** Path of the DataSource for: data (sub-directory of work path) */
+    DataSource.DATA = window.location.pathcontext + "/data";
+
     /** Pattern for a DataSource locators */
     DataSource.PATTERN_LOCATOR = /^([a-z]+):\/(\/[\w\-\/]+)$/;
     

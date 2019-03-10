@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20190304
+ *  Composite 1.0 20190310
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190304
+ *  @version 1.0 20190310
  */
 if (typeof Composite === "undefined") {
     
@@ -92,6 +92,9 @@ if (typeof Composite === "undefined") {
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
+    
+    /** Path of the Composite for: moduels (sub-directory of work path) */
+    Composite.MODULES = window.location.pathcontext + "/modules";
 
     /** Constant for attribute composite */
     Composite.ATTRIBUTE_COMPOSITE = "composite";
@@ -1086,8 +1089,95 @@ if (typeof Composite === "undefined") {
                     //available) is determined. This is needed later to clean up
                     //the models when their corresponding HTML element is
                     //removed from the DOM.
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                         object.scope = Composite.mount.locate(selector);
+
+                        //For components/composites, it is assumed that
+                        //resources have been outsourced. For outsourcing CSS,
+                        //JS and HTML are supported. The resources are stored in
+                        //the module directory (./modules this is relative to
+                        //the URL). The resources (response) are stored in the
+                        //render cache, but only to detect and prevent repeated
+                        //loading. The resources will only be requested once. If
+                        //they do not exist (status 404), it is not tried again.
+                        //Otherwise, an error is thrown if the request is not
+                        //answered with status 200.
+                        
+                        Composite.render.cache = Composite.render.cache || {};
+                        var context =  Composite.MODULES + "/" + selector.id;
+                        
+                        if (typeof Composite.render.cache[context + ".composite"] === "undefined") {
+                            Composite.render.cache[context + ".composite"] = null;
+                            var request = new XMLHttpRequest();
+                            request.overrideMimeType("text/plain");
+                            request.onreadystatechange = function() {
+                                
+                                if (request.readyState != 4
+                                        || request.status == "404")
+                                    return;
+
+                                if (request.status != "200") {
+                                    function HttpRequestError(message) {
+                                        this.name = "HttpRequestError";
+                                        this.message = message;
+                                        this.stack = (new Error()).stack;
+                                    }
+                                    HttpRequestError.prototype = new Error;
+                                    throw new HttpRequestError("HTTP status " + request.status + " for " + request.responseURL);
+                                }
+                                
+                                //CSS is inserted before the composite.
+
+                                //JavaScript is not inserted as an element, it
+                                //is executed directly. For this purpose eval is
+                                //used. Since the method may form its own
+                                //namespace for variables, it is important to
+                                //initialize the global variable better
+                                //with window[...].
+                                
+                                //HTML/Markup is preloaded into the render cache
+                                //if available. If markup exists for the
+                                //composite, the import attribute with the URL
+                                //is added to the item. Inserting then takes
+                                //over the import implementation, which then
+                                //also accesses the render cache.
+                                
+                                var content = request.responseText.trim();
+                                if (content) {
+                                    Composite.render.cache[request.responseURL] = request.responseText;
+                                    if (request.responseURL.match(/\.css$/)) {
+                                        var style = document.createElement("style");
+                                        style.setAttribute("type", "text/css");
+                                        style.textContent = content;
+                                        selector.parentNode.insertBefore(style, selector);
+                                    } else if (request.responseURL.match(/\.js$/)) {
+                                        eval(content);
+                                    } else if (request.responseURL.match(/\.html$/)) {
+                                        object.attributes[Composite.ATTRIBUTE_IMPORT.name.toLowerCase()] = request.responseURL;                                    
+                                    }
+                                }
+                            };
+
+                            //The sequence of loading is strictly defined.
+                            //    sequence: CSS, JS, HTML
+                            request.open("GET", context + ".css", false);
+                            request.send(null);
+                            request.open("GET", context + ".js", false);
+                            request.send(null);
+                             
+                            //HTML/Markup is only loaded if the element does not
+                            //contain a markup (inner HTML) and the attributes
+                            //import and output are not set. Thus is the
+                            //assumption that for an empty element outsourced
+                            //markup should exist.
+                            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
+                                    && !selector.innerHTML.trim()) {
+                                request.open("GET", context + ".html", false);
+                                request.send(null);
+                            }
+                        }
+                    }
                     
                     //The condition attribute is interpreted.
                     //If an HTML element uses the condition attribute, a text

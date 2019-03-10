@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.0 20190213
+ *  Extension 1.0 20190310
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190213
+ *  @version 1.0 20190310
  */
 if (typeof Namespace === "undefined") {
 
@@ -279,4 +279,15 @@ if (RegExp.quote === undefined) {
 if (window.serial === undefined) {
     var timestamp = (new Date().getTime() -946684800000).toString(36);
     window.serial = Math.uniqueId(10) + (timestamp.length.toString(36) + timestamp).toUpperCase();
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a property to get the context path.
+ *  The context path is the portion of the request URI that is used to select
+ *  the context of the request and can be compared with the current working
+ *  directory.
+ */  
+if (window.location.pathcontext === undefined) {
+    window.location.pathcontext = window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/";
 };
