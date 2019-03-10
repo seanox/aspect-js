@@ -7,6 +7,7 @@
   less than 64kB for all (so the plan)
 - Component based architecture
 - Modularization (supports imports at the runtime)
+  Component concept for smart/automatic loading of composite resources
 - Event handling
 - Expression Language  
   simple meta-language extension in combination with full JavaScript
