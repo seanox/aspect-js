@@ -1,4 +1,4 @@
-# Kompoenten
+# Komponenten
 
 Die Implementierung von aspect-js zielt auf eine modulare und auf Komponenten
 basierte Architektur. Das Framework unterstützt dazu eine deklarative
