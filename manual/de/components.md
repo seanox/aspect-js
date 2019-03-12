@@ -15,6 +15,7 @@ sowie smarte Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
   * [JavaScript](#javascript)
   * [HTML](#html)
   
+  
 ## Aufbau
 
 Eine Komponente besteht im initialen Markup aus einem als Composite

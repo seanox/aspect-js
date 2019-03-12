@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.0 20190310
+ *  Extension 1.0 20190312
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190310
+ *  @version 1.0 20190312
  */
 if (typeof Namespace === "undefined") {
 
@@ -77,7 +77,7 @@ if (typeof Namespace === "undefined") {
         
         var scope = window;
         namespace = namespace.replace(/^[\\\/]/, "");
-        namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach(function(entry, index, array) {
+        namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
             if (typeof scope[entry] === "undefined") {
                 scope[entry] = {};
             } else if (scope[entry] instanceof Object) {
@@ -161,10 +161,13 @@ if (String.prototype.decodeHex === undefined) {
  */ 
 if (String.prototype.encodeBase64 === undefined) {
     String.prototype.encodeBase64 = function() {
-        return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g,
-            function toSolidBytes(match, code) {
+        try {
+            return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
                 return String.fromCharCode('0x' + code);
             }));
+        } catch (exception) {
+            throw new Error("malformed character sequence");
+        }
     };
 }; 
 
@@ -174,9 +177,13 @@ if (String.prototype.encodeBase64 === undefined) {
  */ 
 if (String.prototype.decodeBase64 === undefined) {
     String.prototype.decodeBase64 = function() {
-        return decodeURIComponent(atob(this).split('').map(function(code) {
-            return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+        try {
+            return decodeURIComponent(atob(this).split('').map((code) => {
+                return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        } catch (exception) {
+            throw new Error("malformed character sequence");
+        }
     };
 };
 

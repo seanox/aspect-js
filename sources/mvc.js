@@ -53,12 +53,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190310
+ *  MVC 1.0 20190312
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190310
+ *  @version 1.0 20190312
  */
 if (typeof Path === "undefined") {
     
@@ -201,27 +201,28 @@ if (typeof SiteMap === "undefined") {
      *  SiteMap is a directory consisting of faces and facets that are addressed
      *  by paths.
      *  
-     *  +-----------------------------------------+
-     *  | Page                                    | 
-     *  | +-------------------------------------+ |
-     *  | | Face A / Partial Face A             | |
-     *  | | +-------------+     +-------------+ | |
-     *  | | |  Facet A1   | ... |  Facet An   | | |
-     *  | | +-------------+     +-------------+ | |
-     *  | | +---------------------------------+ | |
-     *  | | | Face AA                         | | | 
-     *  | | | +-----------+     +-----------+ | | |
-     *  | | | | Facet AA1 | ... | Facet AAn | | | |
-     *  | | | +-----------+     +-----------+ | | |
-     *  | | +---------------------------------+ | |
-     *  | | ...                                 | |
-     *  | +-------------------------------------+ |
-     *  | ...                                     |
-     *  | +-------------------------------------+ |
-     *  | | Face n                              | |
-     *  | | ...                                 | |
-     *  | +-------------------------------------+ |
-     *  +-----------------------------------------+
+     *  +-----------------------------------------------+
+     *  |  Page                                         | 
+     *  |  +-----------------------------------------+  |
+     *  |  |  Face A / Partial Face A                |  |
+     *  |  |  +-------------+       +-------------+  |  |
+     *  |  |  |  Facet A1   |  ...  |  Facet An   |  |  |
+     *  |  |  +-------------+       +-------------+  |  |
+     *  |  |                                         |  |
+     *  |  |  +-----------------------------------+  |  |
+     *  |  |  |  Face AA                          |  |  | 
+     *  |  |  |  +-----------+     +-----------+  |  |  |
+     *  |  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
+     *  |  |  |  +-----------+     +-----------+  |  |  |
+     *  |  |  +-----------------------------------+  |  |
+     *  |  |  ...                                    |  |
+     *  |  +-----------------------------------------+  |
+     *  |  ...                                          |
+     *  |  +-----------------------------------------+  |
+     *  |  |  Face n                                 |  |
+     *  |  |  ...                                    |  |
+     *  |  +-----------------------------------------+  |
+     *  +-----------------------------------------------+
      *  
      *  A face is the primary projection of the content. This projection may
      *  contain additional sub-components, in the form of facets and sub-faces.
@@ -594,20 +595,20 @@ if (typeof SiteMap === "undefined") {
             permits.push(permit);
 
         var paths = {};
-        Object.keys(SiteMap.paths || {}).forEach(function(key) {
+        Object.keys(SiteMap.paths || {}).forEach((key) => {
             if (typeof key === "string"
                     && key.match(SiteMap.PATTERN_PATH))
                 paths[key] = SiteMap.paths[key];
         });
 
         var facets = {};
-        Object.keys(SiteMap.facets || {}).forEach(function(key) {
+        Object.keys(SiteMap.facets || {}).forEach((key) => {
             if (typeof key === "string"
                     && key.match(SiteMap.PATTERN_PATH))
                 facets[key] = SiteMap.facets[key];
         });
 
-        Object.keys(map).forEach(function(key) {
+        Object.keys(map).forEach((key) => {
 
             //A map entry is based on a path (datatype string beginning with #)
             //and an array of String or null as value. 
@@ -631,7 +632,7 @@ if (typeof SiteMap === "undefined") {
             //already exist there. Additional a facet map object will be created:
             //    {#facet-path:{path:#path, facet:facet}, ...}
             value = value || [];
-            value.forEach(function(facet) {
+            value.forEach((facet) => {
                 //Facets is an array of strings with the names of the facets.
                 //The names must correspond to the PATTERN_PATH_FACET.
                 if (typeof facet !== "string")
@@ -661,7 +662,7 @@ if (typeof SiteMap === "undefined") {
      *  The SiteMap uses a map (serial/element) as cache for fast access. The
      *  cleaning of the cache is done by a MotationObserver.
      */
-    Composite.customize(function(element) {
+    Composite.customize((element) => {
         
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
@@ -675,7 +676,7 @@ if (typeof SiteMap === "undefined") {
         if (element.hasAttribute(Composite.ATTRIBUTE_CONDITION)) {
             script = element.getAttribute(Composite.ATTRIBUTE_CONDITION).trim();
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
+                script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match, offset, content) => {
                     match = match.substring(2, match.length -2).trim();
                     return "{{SiteMap.accept(\"" + path + "\") and (" + match + ")}}";
                 });
@@ -689,13 +690,13 @@ if (typeof SiteMap === "undefined") {
      *  Established a listener that listens when the page loads.
      *  The method initiates the initial usage of the path.
      */
-    window.addEventListener("load", function(event) {
+    window.addEventListener("load", (event) => {
         
         //When clicking on a link with the current path, the focus must be set
         //back to face/facet, as the user may have scrolled on the page.
         //However, this is only necessary if face + facet have not changed.
         //In all other cases the Window-HashChange-Event does the same
-        document.body.addEventListener("click", function(event) {
+        document.body.addEventListener("click", (event) => {
             if (event.target
                     && event.target instanceof Element
                     && event.target.hasAttribute("href")) {
@@ -737,7 +738,7 @@ if (typeof SiteMap === "undefined") {
      *  the next valid path, restores the facet of functional paths, and
      *  organizes partial rendering.
      */
-    window.addEventListener("hashchange", function(event) {
+    window.addEventListener("hashchange", (event) => {
 
         //Without a SiteMap no automatic rendering can be initiated.
         if (Object.keys(SiteMap.paths || {}).length <= 0)

@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20190303
+ *  Test 1.0 20190312
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190303
+ *  @version 1.0 20190312
  */
 if (typeof Test === "undefined") {
     
@@ -322,7 +322,7 @@ if (typeof Test === "undefined") {
             var listeners = Test.listeners[event.toLowerCase()];
             if (!Array.isArray(listeners))
                 return;
-            listeners.forEach(function(callback, index, array) {
+            listeners.forEach((callback, index, array) => {
                 window.setTimeout(callback, 0, event, status);
             });        
         };    
@@ -401,7 +401,7 @@ if (typeof Test === "undefined") {
             if (auto && document.readyState == "loaded") {
                 if (typeof Test.autostart === "undefined") {
                     Test.autostart = true;
-                    window.addEventListener("load", function() {
+                    window.addEventListener("load", () => {
                         Test.start();
                     });
                 }
@@ -456,7 +456,7 @@ if (typeof Test === "undefined") {
                 Test.queue.timing = new Date().getTime();
             }
             
-            Test.timeout = window.setInterval(function() {
+            Test.timeout = window.setInterval(() => {
 
                 if (!Test.task
                         || !Test.task.running
@@ -472,7 +472,7 @@ if (typeof Test === "undefined") {
                 Test.queue.lock = false;
             }, 25);
             
-            Test.interval = window.setInterval(function() {
+            Test.interval = window.setInterval(() => {
                 
                 if (!Test.queue.lock
                         && Test.queue.progress <= 0)
@@ -494,7 +494,7 @@ if (typeof Test === "undefined") {
                             && meta.name.trim().length > 0)
                         Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                     Test.fire(Test.EVENT_PERFORM, Test.status());
-                    window.setTimeout(function() {
+                    window.setTimeout(() => {
                         var task = Test.task;
                         try {task.meta.test();
                         } catch (error) {
@@ -667,8 +667,8 @@ if (typeof Test === "undefined") {
     
                 var assert = {message:null, values:[], error:function() {
                     var words = Array.from(arguments);
-                    words.forEach(function(argument, index, array) {
-                        array[index] = String(argument).replace(/\{(\d+)\}/g, function(match, index) {
+                    words.forEach((argument, index, array) => {
+                        array[index] = String(argument).replace(/\{(\d+)\}/g, (match, index) => {
                             if (index > assert.values.length)
                                 return "[null]";
                             match = String(assert.values[index]);
@@ -684,7 +684,7 @@ if (typeof Test === "undefined") {
                             message = assert.message;
                     }
                     message = "{0} failed, " + message;
-                    message = message.replace(/\{(\d+)\}/g, function(match, index) {
+                    message = message.replace(/\{(\d+)\}/g, (match, index) => {
                         if (index > words.length)
                             return "[null]";
                         match = String(words[index]);
@@ -978,7 +978,7 @@ if (typeof Test === "undefined") {
                     this.value = "";
                 var element = this;
                 value = (value || "").split("");
-                value.forEach(function(digit, index, array) {
+                value.forEach((digit, index, array) => {
                     element.trigger("keydown");
                     element.value = (element.value || "") + digit;
                     element.trigger("keyup");

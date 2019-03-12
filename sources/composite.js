@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20190310
+ *  Composite 1.0 20190312
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190310
+ *  @version 1.0 20190312
  */
 if (typeof Composite === "undefined") {
     
@@ -259,7 +259,7 @@ if (typeof Composite === "undefined") {
     
     /** Patterns with the supported events */
     Composite.PATTERN_EVENT_FUNCTIONS = (function() {
-        var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, function(match, letter) {
+        var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
            return letter.toUpperCase();
         });
         pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
@@ -443,7 +443,7 @@ if (typeof Composite === "undefined") {
         variants = Array.from(arguments);
         variants = variants.slice(1);
         variants.unshift(event);
-        listeners.forEach(function(callback, index, array) {
+        listeners.forEach((callback, index, array) => {
             callback.apply(null, variants);
         });        
     };
@@ -509,7 +509,7 @@ if (typeof Composite === "undefined") {
                 if (!selector)
                     return;
                 var nodes = document.querySelectorAll(selector);
-                nodes.forEach(function(node, index, array) {
+                nodes.forEach((node, index, array) => {
                     Composite.mount(node, lock.share());
                 });
                 return; 
@@ -702,7 +702,7 @@ if (typeof Composite === "undefined") {
                 if (!selector)
                     return;
                 var nodes = document.querySelectorAll(selector);
-                nodes.forEach(function(node, index, array) {
+                nodes.forEach((node, index, array) => {
                     Composite.scan(node, lock.share());
                 });
                 return; 
@@ -717,7 +717,7 @@ if (typeof Composite === "undefined") {
             nodes = Array.from(nodes);
             if (!selector.hasAttribute(Composite.ATTRIBUTE_MOUNT))
                 nodes.unshift(selector); 
-            nodes.forEach(function(node, index, array) {
+            nodes.forEach((node, index, array) => {
                 var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
                 if (serial.match(Composite.PATTERN_ELEMENT_ID))
                     Composite.mount(node);
@@ -991,7 +991,7 @@ if (typeof Composite === "undefined") {
                 if (!selector)
                     return;
                 var nodes = document.querySelectorAll(selector);
-                nodes.forEach(function(node, index, array) {
+                nodes.forEach((node, index, array) => {
                     Composite.render(node, lock.share());
                 });
                 return;
@@ -1060,7 +1060,7 @@ if (typeof Composite === "undefined") {
                 //rendering. The method call with a acceptor:
                 //    Composite.customize(function(element) {...});
                 Composite.acceptors = Composite.acceptors || [];
-                Composite.acceptors.forEach(function(acceptor, index, array) {
+                Composite.acceptors.forEach((acceptor, index, array) => {
                     acceptor.call(null, selector);
                 });
 
@@ -1071,7 +1071,7 @@ if (typeof Composite === "undefined") {
                     //Attribute condition is not included in the list of
                     //Composite.PATTERN_ATTRIBUTE_ACCEPT because it is used very
                     //specifically and must therefore be requested separately.
-                    Array.from(selector.attributes).forEach(function(attribute, index, array) {
+                    Array.from(selector.attributes).forEach((attribute, index, array) => {
                         var value = (attribute.value || "").trim();
                         if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                 || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
@@ -1126,7 +1126,9 @@ if (typeof Composite === "undefined") {
                                     throw new HttpRequestError("HTTP status " + request.status + " for " + request.responseURL);
                                 }
                                 
-                                //CSS is inserted before the composite.
+                                //CSS is inserted into the HEad element as a
+                                //style element. Without a head element, the
+                                //inserting causes an error.
 
                                 //JavaScript is not inserted as an element, it
                                 //is executed directly. For this purpose eval is
@@ -1146,10 +1148,13 @@ if (typeof Composite === "undefined") {
                                 if (content) {
                                     Composite.render.cache[request.responseURL] = request.responseText;
                                     if (request.responseURL.match(/\.css$/)) {
+                                        var head = document.querySelector("html head");
+                                        if (!head)
+                                            throw new Error("No head element found");
                                         var style = document.createElement("style");
                                         style.setAttribute("type", "text/css");
                                         style.textContent = content;
-                                        selector.parentNode.insertBefore(style, selector);
+                                        head.appendChild(style);
                                     } else if (request.responseURL.match(/\.js$/)) {
                                         eval(content);
                                     } else if (request.responseURL.match(/\.html$/)) {
@@ -1303,7 +1308,7 @@ if (typeof Composite === "undefined") {
                     //start with the name of the parameter and are interpreted
                     //later, but do not generate any output.
                     
-                    content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, function(match, offset, content) {
+                    content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match, offset, content) => {
                         match = match.substring(2, match.length -2).trim();
                         if (!match)
                             return "";
@@ -1341,7 +1346,7 @@ if (typeof Composite === "undefined") {
                     
                     if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                         var words = content.split(/(\{\{\d+\}\})/);
-                        words.forEach(function(word, index, array) {
+                        words.forEach((word, index, array) => {
                             if (word.match(/^\{\{\d+\}\}$/)) {
                                 var serial = parseInt(word.substring(2, word.length -2).trim());
                                 var object = Composite.render.meta[serial];
@@ -1369,7 +1374,7 @@ if (typeof Composite === "undefined") {
                         
                         //The new text nodes are inserted before the current
                         //element one.
-                        words.forEach(function(node, index, array) {
+                        words.forEach((node, index, array) => {
                             selector.parentNode.insertBefore(node, selector);
                         });
                         
@@ -1466,8 +1471,8 @@ if (typeof Composite === "undefined") {
             delete object.attributes[Composite.ATTRIBUTE_RENDER];        
             if (events) {
                 events = events.split(/\s+/);
-                events.forEach(function(event, index, array) {
-                    selector.addEventListener(event, function(event) {
+                events.forEach((event, index, array) => {
+                    selector.addEventListener(event, (event) => {
                         var target = event.currentTarget;
                         var serial = target.ordinal();
                         var object = Composite.render.meta[serial];
@@ -1713,7 +1718,7 @@ if (typeof Composite === "undefined") {
                         iterate = Expression.eval(context, object.iterate.expression);
                         if (iterate) {
                             iterate = Array.from(iterate);
-                            iterate.forEach(function(item, index, array) {
+                            iterate.forEach((item, index, array) => {
                                 window[object.iterate.name] = {item:item, index:index, data:array};
                                 var template = object.template.cloneNode(true);
                                 Composite.render(template, lock.share());
@@ -1746,10 +1751,10 @@ if (typeof Composite === "undefined") {
                 attributes = attributes.concat(Array.from(object.attributes));
                 if (Composite.ATTRIBUTE_VALUE in selector)
                     attributes.push(Composite.ATTRIBUTE_VALUE);
-                attributes = attributes.filter(function(value, index, array) {
+                attributes = attributes.filter((value, index, array) => {
                     return array.indexOf(value) === index;
                 });
-                attributes.forEach(function(attribute, index, array) {
+                attributes.forEach((attribute, index, array) => {
                     //Ignore all internal attributes
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
@@ -1804,7 +1809,7 @@ if (typeof Composite === "undefined") {
             //This is intercepted by the MutationObserver.
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                Array.from(selector.childNodes).forEach(function(node, index, array) {
+                Array.from(selector.childNodes).forEach((node, index, array) => {
                     //The rendering is recursive, if necessary the node is then
                     //no longer available. For example, if a condition is
                     //replaced by the placeholder,
@@ -1829,7 +1834,7 @@ if (typeof Composite === "undefined") {
     };
 
     //Listener when an error occurs and triggers a matching composite-event.
-    window.addEventListener("error", function(event) {
+    window.addEventListener("error", (event) => {
         Composite.fire(Composite.EVENT_ERROR, event);
     });
     
@@ -1839,9 +1844,9 @@ if (typeof Composite === "undefined") {
     //    protected by the MutationObserver and cannot be manipulated.
     //  - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
     //    are protected by the MutationObserver and cannot be manipulated.
-    window.addEventListener("load", function(event) {
-        (new MutationObserver(function(records) {
-            records.forEach(function(record) {
+    window.addEventListener("load", (event) => {
+        (new MutationObserver((records) => {
+            records.forEach((record) => {
 
                 //Without Meta-Store, the renderer hasn't run yet.
                 //The reaction by the MutationObserver only makes sense when the
@@ -1889,7 +1894,7 @@ if (typeof Composite === "undefined") {
                 //The MutationObserver does not run parallel, so it is called
                 //after the rendering with obsolete nodes.
                 if (record.addedNodes) {
-                    record.addedNodes.forEach(function(node) {
+                    record.addedNodes.forEach((node) => {
                         if (node instanceof Element
                                 && !Composite.render.meta[node.ordinal()]
                                 && document.body.contains(node))
@@ -1900,11 +1905,11 @@ if (typeof Composite === "undefined") {
                 //All removed elements are cleaned and if necessary the unmount
                 //method is called if an object binding exists.
                 if (record.removedNodes) {
-                    record.removedNodes.forEach(function(node) {
+                    record.removedNodes.forEach((node) => {
                         var cleanup = function(node) {
                             //Clean up all the child elements first.
                             if (node.childNodes) {
-                                Array.from(node.childNodes).forEach(function(node) {
+                                Array.from(node.childNodes).forEach((node) => {
                                     cleanup(node);
                                 });
                             }
@@ -2111,7 +2116,7 @@ if (typeof Expression === "undefined") {
                 cascade.logic.push(word);
         };
         
-        expression.split(/\n/).forEach(function(entry, index, array) {
+        expression.split(/\n/).forEach((entry, index, array) => {
             var object = {type:Expression.TYPE_TEXT, data:entry};
             if (entry.match(/^\{\{.*\}\}$/)) {
                 object.data = object.data.substring(2, object.data.length -2);
@@ -2126,14 +2131,14 @@ if (typeof Expression === "undefined") {
         //The expression objects are retained but their value changes from text
         //to array with literal and script as partial words.
 
-        cascade.expression.forEach(function(entry, index, array) {
+        cascade.expression.forEach((entry, index, array) => {
             var text = entry.data;
             text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, "$1\n$2\n");
             text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, "$1\r$2\r");
             var words = [];
             var pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
-                text = text.replace(pattern, function(match, script, literal) {
+                text = text.replace(pattern, (match, script, literal) => {
                     script = script.replace(/\n/g, "\'");
                     script = script.replace(/\r/g, "\"");
                     script = {type:Expression.TYPE_SCRIPT, data:script};
@@ -2172,17 +2177,17 @@ if (typeof Expression === "undefined") {
         var keywords = ["and", "&&", "or", "||", "not", "!", "eq", "==",
                 "ne", "!=", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
                 "div", "/", "mod", "%"];
-        cascade.script.forEach(function(entry, index, array) {
+        cascade.script.forEach((entry, index, array) => {
             var text = entry.data;
             for (var loop = 0; loop < keywords.length; loop += 2) {
                 var pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
                 text = text.replace(pattern, "$1\n\r" + keywords[loop +1] + "\n");
             }
-            text = text.replace(/(^|[^\w\.])(true|false|null|instanceof|typeof|undefined|new)(?=[^\w\.]|$)/ig, function(match, script, keyword) {
+            text = text.replace(/(^|[^\w\.])(true|false|null|instanceof|typeof|undefined|new)(?=[^\w\.]|$)/ig, (match, script, keyword) => {
                 return script + "\n\r" + keyword.toLowerCase() + "\n";
             });
             var words = [];
-            text.split(/\n/).forEach(function(entry, index, array) {
+            text.split(/\n/).forEach((entry, index, array) => {
                 var object = {type:Expression.TYPE_OTHER, data:entry};
                 if (entry.match(/^\r/)) {
                     object.data = entry.substring(1);
@@ -2201,12 +2206,12 @@ if (typeof Expression === "undefined") {
         //    value expression: (^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
         //The expression is followed by a non-word character or the end.
         
-        cascade.other.forEach(function(entry, index, array) {
+        cascade.other.forEach((entry, index, array) => {
             var text =  entry.data;
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
             var words = [];
-            text.split(/\n/).forEach(function(entry, index, array) {
+            text.split(/\n/).forEach((entry, index, array) => {
                 var object = {type:Expression.TYPE_LOGIC, data:entry};
                 if (entry.match(/^\r\r/)) {
                     object.data = "Expression.lookup(\"" + entry.substring(2) + "\")";
@@ -2229,11 +2234,11 @@ if (typeof Expression === "undefined") {
         var words = [];
         var merge = function(word) {
             if (Array.isArray(word))
-                word.forEach(function(entry, index, array) {
+                word.forEach((entry, index, array) => {
                     merge(entry);    
                 });
             else if (Array.isArray(word.data))
-                word.data.forEach(function(entry, index, array) {
+                word.data.forEach((entry, index, array) => {
                     merge(entry);    
                 });            
             else if (typeof word.data === "string")
@@ -2254,7 +2259,7 @@ if (typeof Expression === "undefined") {
         //text to expression.
         
         var script = "";
-        words.forEach(function(word, index, array) {
+        words.forEach((word, index, array) => {
             if (word.type == Expression.TYPE_TEXT)
                 script += "\n" + word.data + "\r";
             else if (word.type == Expression.TYPE_KEYWORD)

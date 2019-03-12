@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+
+        Test.create({test:function() {
+            Assert.assertEquals("", ("").decodeBase64());
+        }});
+        
+        Test.create({expected:/\bmalformed character sequence/i, test:function() {
+            Assert.assertNull(("äöü").decodeBase64());
+        }});        
+
+        Test.create({expected:/\bmalformed character sequence/i, test:function() {
+            Assert.assertNull(("Peter und der Wolf").decodeBase64());
+        }});        
+        
+
+        Test.create({test:function() {
+            Assert.assertEquals("", ("").encodeBase64().decodeBase64());
+            Assert.assertEquals("äöü", ("äöü").encodeBase64().decodeBase64());
+            Assert.assertEquals("Peter und der Wolf", ("Peter und der Wolf").encodeBase64().decodeBase64());
+            Assert.assertEquals("Peter\00und\01der\02Wolf", ("Peter\00und\01der\02Wolf").encodeBase64().decodeBase64());
+            Assert.assertEquals("%0D", ("%0D").encodeBase64().decodeBase64());
+            
+        }});
+
+        Test.create({test:function() {
+            Assert.assertEquals("", ("").encodeBase64());
+            Assert.assertEquals("w6TDtsO8", ("äöü").encodeBase64());
+            Assert.assertEquals("UGV0ZXIgdW5kIGRlciBXb2xm", ("Peter und der Wolf").encodeBase64());
+            Assert.assertEquals("UGV0ZXIAdW5kAWRlcgJXb2xm", ("Peter\00und\01der\02Wolf").encodeBase64());
+            Assert.assertEquals("JTBE", ("%0D").encodeBase64());
+        }});
+        Test.start(true);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

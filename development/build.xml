@@ -59,20 +59,25 @@
   
   <target name="archive">
     <release-locate/>
-
-    <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.version}-min.js"/>
-    <concat destfile="${release.min}">
-      <fileset refid="fileset.sources"/> 
-    </concat>
-    <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
-    <compress-javascript file="${release.min}"/>
     
     <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.version}-dev.js"/>
-    <concat destfile="${release.dev}">
-      <fileset refid="fileset.sources"/> 
-    </concat>    
+    <concat destfile="${release.dev}" append="false">
+      <filelist dir="${workspace.sources}">
+        <file name="extension.js"/>
+        <file name="datasource.js"/>
+        <file name="messages.js"/>
+        <file name="composite.js"/>
+        <file name="mvc.js"/>
+        <file name="test.js"/>
+      </filelist>   
+    </concat>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+\*\s+)" flags="g" replace="\1" byline="false"/>
+    
+    <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.version}-min.js"/>
+    <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
+    <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
+    <compress-javascript file="${release.min}"/>
     
     <!-- TODO: build zip files for distribution (dev + min = js + licence + release.txt) -->
   </target>

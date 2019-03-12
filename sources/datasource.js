@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
- *  DataSource 1.0 20190310
+ *  DataSource 1.0 20190312
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190310
+ *  @version 1.0 20190312
  */
 if (typeof DataSource === "undefined") {
     
@@ -127,7 +127,7 @@ if (typeof DataSource === "undefined") {
         
         var result = processor.transformToDocument(xml);
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
-        nodes.forEach(function(node, index, array) {
+        nodes.forEach((node, index, array) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
                 var content = node.innerHTML;
                 if (content.indexOf("<") < 0
@@ -142,7 +142,7 @@ if (typeof DataSource === "undefined") {
         //but only by the renderer. This is important in combination with the
         //condition attribute.
         var nodes = result.querySelectorAll("script[type],script:not([type])");
-        nodes.forEach(function(node, index, array) {
+        nodes.forEach((node, index, array) => {
             if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
                     || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
                 node.setAttribute("type", "composite/javascript");
@@ -239,7 +239,7 @@ if (typeof DataSource === "undefined") {
         if (DataSource.cache.hasOwnProperty(hash))
             return DataSource.cache[hash].clone();  
         var root = document.implementation.createDocument(null, "collection", null, null);
-        collection.forEach(function(entry, index, array) {
+        collection.forEach((entry, index, array) => {
             if (typeof entry !== "string")
                 throw TypeError("Invalid collection entry");
             root.documentElement.appendChild(
