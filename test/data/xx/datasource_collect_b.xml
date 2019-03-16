@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<test id="collect_b">
+  <title>Collect B</title>
+  <group>collect</group>
+  <text>B</text>
+</test>
