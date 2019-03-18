@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20190312
+ *  Composite 1.0 20190318
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190312
+ *  @version 1.0 20190318
  */
 if (typeof Composite === "undefined") {
     
@@ -1111,20 +1111,11 @@ if (typeof Composite === "undefined") {
                             var request = new XMLHttpRequest();
                             request.overrideMimeType("text/plain");
                             request.onreadystatechange = function() {
-                                
                                 if (request.readyState != 4
                                         || request.status == "404")
                                     return;
-
-                                if (request.status != "200") {
-                                    function HttpRequestError(message) {
-                                        this.name = "HttpRequestError";
-                                        this.message = message;
-                                        this.stack = (new Error()).stack;
-                                    }
-                                    HttpRequestError.prototype = new Error;
-                                    throw new HttpRequestError("HTTP status " + request.status + " for " + request.responseURL);
-                                }
+                                if (request.status != "200")
+                                    throw new Error("HTTP status " + request.status + " for " + request.responseURL);
                                 
                                 //CSS is inserted into the HEad element as a
                                 //style element. Without a head element, the
@@ -1166,9 +1157,9 @@ if (typeof Composite === "undefined") {
                             //The sequence of loading is strictly defined.
                             //    sequence: CSS, JS, HTML
                             request.open("GET", context + ".css", false);
-                            request.send(null);
+                            request.send();
                             request.open("GET", context + ".js", false);
-                            request.send(null);
+                            request.send();
                              
                             //HTML/Markup is only loaded if the element does not
                             //contain a markup (inner HTML) and the attributes
@@ -1179,7 +1170,7 @@ if (typeof Composite === "undefined") {
                                     && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                                     && !selector.innerHTML.trim()) {
                                 request.open("GET", context + ".html", false);
-                                request.send(null);
+                                request.send();
                             }
                         }
                     }
@@ -1563,32 +1554,15 @@ if (typeof Composite === "undefined") {
                             var request = new XMLHttpRequest();
                             request.overrideMimeType("text/plain");
                             request.open("GET", url, false);
-                            request.onreadystatechange = function() {
-                                try {
-                                    if (request.readyState == 4) {
-                                        if (request.status == "200") {
-                                            Composite.render.cache[url] = request.responseText;
-                                            selector.innerHTML = request.responseText;
-                                            var serial = selector.ordinal();
-                                            var object = Composite.render.meta[serial];
-                                            if (!object.lock)
-                                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                                            return;
-                                        }
-                                        function HttpRequestError(message) {
-                                            this.name = "HttpRequestError";
-                                            this.message = message;
-                                            this.stack = (new Error()).stack;
-                                        }
-                                        HttpRequestError.prototype = new Error;
-                                        throw new HttpRequestError("HTTP status " + request.status + " for " + url);
-                                    }                                    
-                                } finally {
-                                    lock.release();
-                                }
-                            };
-                            request.send(null);
-                            lock.share();
+                            request.send();
+                            if (request.status != "200")
+                                throw Error("HTTP status " + request.status + " for " + url);
+                            Composite.render.cache[url] = request.responseText;
+                            selector.innerHTML = request.responseText;
+                            var serial = selector.ordinal();
+                            var object = Composite.render.meta[serial];
+                            if (!object.lock)
+                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                         } catch (error) {
                             Composite.fire(Composite.EVENT_AJAX_ERROR, error);
                             throw error;
