@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
- *  DataSource 1.0 20190312
+ *  DataSource 1.0 20190318
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190312
+ *  @version 1.0 20190318
  */
 if (typeof DataSource === "undefined") {
     
@@ -100,15 +100,24 @@ if (typeof DataSource === "undefined") {
     })();
     
     /**
-     *  Transforms an XMLDocument based on a passed stylesheet (as XMLDocument).
-     *  The result as a node. In some browsers, the XSLTProcessor may create a
-     *  container object, which is removed automatically. With the option raw
-     *  the cleanup can be deactivated.
-     *  @param  xml   data as XMLDocument
-     *  @param  style as XMLDocument 
+     *  Transforms an XMLDocument based on a passed stylesheet.
+     *  The data and the stylesheet can be passed as Locator, XMLDocument and in
+     *  mix. The result as a node. In some browsers, the XSLTProcessor may
+     *  create a container object, which is removed automatically. With the
+     *  option raw the cleanup can be deactivated.
+     *  @param  xml   locator or XMLDocument
+     *  @param  style locator or XMLDocument 
      *  @return the transformation result as a node
      */
     DataSource.transform = function(xml, style, raw) {
+        
+        if (typeof xml === "string"
+                && xml.match(DataSource.PATTERN_LOCATOR))
+            xml = DataSource.fetch(xml);
+            
+        if (typeof style === "string"
+                && style.match(DataSource.PATTERN_LOCATOR))
+            style = DataSource.fetch(style);
         
         if (!(xml instanceof XMLDocument))
             throw new TypeError("Invalid xml document");   
@@ -195,6 +204,8 @@ if (typeof DataSource === "undefined") {
             request.open("GET", data, false);
             request.overrideMimeType("application/xslt+xml");
             request.send();
+            if (request.status != 200)
+                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
             data = request.responseXML;
             DataSource.cache[hash] = data;
             
@@ -215,7 +226,11 @@ if (typeof DataSource === "undefined") {
     
     /**
      *  Collects and concatates the of multiple XML files as a new XMLDocument.
-     *  @param  locators Array or VarArg with locators
+     *  The method has the following various signatures:
+     *      DataSource.collect(locator, ...);
+     *      DataSource.collect(collector, [locators]);
+     *  @param  collector name of the collector element in the XMLDocument
+     *  @param  locators  Array or VarArg with locators
      *  @return the created XMLDocument, otherwise null
      *  @throws Error in the case of invalid arguments
      */
@@ -225,25 +240,36 @@ if (typeof DataSource === "undefined") {
             return null;
         
         var collection = [];
-        if (arguments.length == 1
+
+        var collector = "collection";
+        if (arguments.length == 2
+                && typeof arguments[0] === "string"
+                && Array.isArray(arguments[1])) {
+            if (!arguments[0].match(/[a-z]\w+/i))
+                throw new TypeError("Invalid collector");
+            collector = arguments[0];
+            collection = collection.concat(arguments[1]);
+        } else if (arguments.length == 1
                 && Array.isArray(arguments[0])) {
             collection = collection.concat(arguments[0]);
-        } else if (arguments.length > 1
-                || typeof arguments[0] === "string") {
+        } else {
             for (var loop = 0; loop < arguments.length; loop++)
                 collection.push(arguments[loop]);
-        } else throw new TypeError("Invalid collection"); 
-
+        }
+        
         DataSource.cache = DataSource.cache || {};
         var hash = collection.join().hashCode();
+        collection.forEach((entry, index, array) => {
+            hash += ":" + String(entry).hashCode();
+        });
         if (DataSource.cache.hasOwnProperty(hash))
             return DataSource.cache[hash].clone();  
-        var root = document.implementation.createDocument(null, "collection", null, null);
+
+        var root = document.implementation.createDocument(null, collector, null, null);
         collection.forEach((entry, index, array) => {
             if (typeof entry !== "string")
                 throw TypeError("Invalid collection entry");
-            root.documentElement.appendChild(
-                    DataSource.fetch(entry).documentElement);
+            root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
         });
 
         DataSource.cache[hash] = root;
