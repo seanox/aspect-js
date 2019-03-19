@@ -53,12 +53,12 @@
  *  For streets, adresses and sights you can define patterns which actively
  *  change the routing or passively follow the route. 
  *  
- *  MVC 1.0 20190312
+ *  MVC 1.0 20190319
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190312
+ *  @version 1.0 20190319
  */
 if (typeof Path === "undefined") {
     
@@ -69,7 +69,7 @@ if (typeof Path === "undefined") {
     Path = {};
     
     /** Pattern for a valid path. */
-    Path.PATTERN_PATH = /^(?:(?:#*(?:[a-z]\w*)*)(?:#+(?:[a-z]\w*)*)*)*$/;
+    Path.PATTERN_PATH = /^(?:(?:#*(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)(?:#+(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)*)*$/;
 
     /** Pattern for a url path. */
     Path.PATTERN_URL = /^[a-z]+:\/.*?(#.*)*$/i;
@@ -289,10 +289,10 @@ if (typeof SiteMap === "undefined") {
     SiteMap.permits;
     
     /** Pattern for a valid face path. */
-    SiteMap.PATTERN_PATH = /^(#([a-z]\w*)*)+$/;
+    SiteMap.PATTERN_PATH = /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/;
 
     /** Pattern for a valid face path with optional facets. */
-    SiteMap.PATTERN_PATH_FACETS = /^(#[a-z]\w*)(\s+(#[a-z]\w*)+)*$/;
+    SiteMap.PATTERN_PATH_FACETS = /^(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)(\s+(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/;
     
     /**
      *  Checks a path using existing/registered permit methods.
@@ -691,6 +691,13 @@ if (typeof SiteMap === "undefined") {
      *  The method initiates the initial usage of the path.
      */
     window.addEventListener("load", (event) => {
+        
+        //Initially the page-module is loaded.
+        //The page-module is similar to an autostart, it is used to initialize
+        //the single page application. It consists of page.js and page.css.
+        //The configuration of the SiteMap and essential styles can/should be
+        //stored here.
+        Composite.render.include("page");
         
         //When clicking on a link with the current path, the focus must be set
         //back to face/facet, as the user may have scrolled on the page.
