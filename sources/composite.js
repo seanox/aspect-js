@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20190318
+ *  Composite 1.0 20190319
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190318
+ *  @version 1.0 20190319
  */
 if (typeof Composite === "undefined") {
     
@@ -1092,87 +1092,8 @@ if (typeof Composite === "undefined") {
                     if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                         object.scope = Composite.mount.locate(selector);
 
-                        //For components/composites, it is assumed that
-                        //resources have been outsourced. For outsourcing CSS,
-                        //JS and HTML are supported. The resources are stored in
-                        //the module directory (./modules this is relative to
-                        //the URL). The resources (response) are stored in the
-                        //render cache, but only to detect and prevent repeated
-                        //loading. The resources will only be requested once. If
-                        //they do not exist (status 404), it is not tried again.
-                        //Otherwise, an error is thrown if the request is not
-                        //answered with status 200.
-                        
-                        Composite.render.cache = Composite.render.cache || {};
-                        var context =  Composite.MODULES + "/" + selector.id;
-                        
-                        if (typeof Composite.render.cache[context + ".composite"] === "undefined") {
-                            Composite.render.cache[context + ".composite"] = null;
-                            var request = new XMLHttpRequest();
-                            request.overrideMimeType("text/plain");
-                            request.onreadystatechange = function() {
-                                if (request.readyState != 4
-                                        || request.status == "404")
-                                    return;
-                                if (request.status != "200")
-                                    throw new Error("HTTP status " + request.status + " for " + request.responseURL);
-                                
-                                //CSS is inserted into the HEad element as a
-                                //style element. Without a head element, the
-                                //inserting causes an error.
-
-                                //JavaScript is not inserted as an element, it
-                                //is executed directly. For this purpose eval is
-                                //used. Since the method may form its own
-                                //namespace for variables, it is important to
-                                //initialize the global variable better
-                                //with window[...].
-                                
-                                //HTML/Markup is preloaded into the render cache
-                                //if available. If markup exists for the
-                                //composite, the import attribute with the URL
-                                //is added to the item. Inserting then takes
-                                //over the import implementation, which then
-                                //also accesses the render cache.
-                                
-                                var content = request.responseText.trim();
-                                if (content) {
-                                    Composite.render.cache[request.responseURL] = request.responseText;
-                                    if (request.responseURL.match(/\.css$/)) {
-                                        var head = document.querySelector("html head");
-                                        if (!head)
-                                            throw new Error("No head element found");
-                                        var style = document.createElement("style");
-                                        style.setAttribute("type", "text/css");
-                                        style.textContent = content;
-                                        head.appendChild(style);
-                                    } else if (request.responseURL.match(/\.js$/)) {
-                                        eval(content);
-                                    } else if (request.responseURL.match(/\.html$/)) {
-                                        object.attributes[Composite.ATTRIBUTE_IMPORT.name.toLowerCase()] = request.responseURL;                                    
-                                    }
-                                }
-                            };
-
-                            //The sequence of loading is strictly defined.
-                            //    sequence: CSS, JS, HTML
-                            request.open("GET", context + ".css", false);
-                            request.send();
-                            request.open("GET", context + ".js", false);
-                            request.send();
-                             
-                            //HTML/Markup is only loaded if the element does not
-                            //contain a markup (inner HTML) and the attributes
-                            //import and output are not set. Thus is the
-                            //assumption that for an empty element outsourced
-                            //markup should exist.
-                            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                                    && !selector.innerHTML.trim()) {
-                                request.open("GET", context + ".html", false);
-                                request.send();
-                            }
-                        }
+                        //Load modules/components/composite resources.
+                        Composite.render.include(selector);
                     }
                     
                     //The condition attribute is interpreted.
@@ -1805,6 +1726,99 @@ if (typeof Composite === "undefined") {
         } finally {
             lock.release();
         }
+    };
+    
+    /**
+     *  Load modules/components/composite resources.
+     *  For components/composites, it is assumed that resources have been
+     *  outsourced. For outsourcing CSS, JS and HTML are supported.
+     *  The resources are stored in the module directory (./modules by default
+     *  is relative to the page URL). The resources (response) are stored in the
+     *  render cache, but only to detect and prevent repeated loading. The
+     *  resources will only be requested once. If they do not exist (status 404),
+     *  it is not tried again. Otherwise, an error is thrown if the request is
+     *  not answered with status 200.
+     *  @param composite
+     */
+    Composite.render.include = function(composite) {
+        
+        if (!(typeof composite == "string"
+                || composite instanceof Element))
+            throw new TypeError("Invalid composite: " + typeof composite);
+        
+        var object = null;
+        if (composite instanceof Element) {
+            object = Composite.render.meta[composite.ordinal()];   
+            if (!object)
+                throw new TypeError("Unknown composite");
+        }
+        
+        Composite.render.cache = Composite.render.cache || {};
+        var context = Composite.MODULES + "/" + (composite instanceof Element ? composite.id : composite);        
+        
+        if (typeof Composite.render.cache[context + ".composite"] === "undefined") {
+            Composite.render.cache[context + ".composite"] = null;
+            var request = new XMLHttpRequest();
+            request.overrideMimeType("text/plain");
+            
+            request.onreadystatechange = function() {
+                if (request.readyState != 4
+                        || request.status == "404")
+                    return;
+                if (request.status != "200")
+                    throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+                
+                //CSS is inserted into the HEad element as a style element.
+                //Without a head element, the inserting causes an error.
+
+                //JavaScript is not inserted as an element, it is executed
+                //directly. For this purpose eval is used. Since the method may
+                //form its own namespace for variables, it is important to
+                //initialize the global variable better with window[...].
+                
+                //HTML/Markup is preloaded into the render cache if available.
+                //If markup exists for the composite, the import attribute with
+                //the URL is added to the item. Inserting then takes over the
+                //import implementation, which then also accesses the render
+                //cache.
+                
+                var content = request.responseText.trim();
+                if (content) {
+                    Composite.render.cache[request.responseURL] = request.responseText;
+                    if (request.responseURL.match(/\.css$/)) {
+                        var head = document.querySelector("html head");
+                        if (!head)
+                            throw new Error("No head element found");
+                        var style = document.createElement("style");
+                        style.setAttribute("type", "text/css");
+                        style.textContent = content;
+                        head.appendChild(style);
+                    } else if (request.responseURL.match(/\.js$/)) {
+                        eval(content);
+                    } else if (request.responseURL.match(/\.html$/)) {
+                        object.attributes[Composite.ATTRIBUTE_IMPORT.name.toLowerCase()] = request.responseURL;                                    
+                    }
+                }
+            };
+
+            //The sequence of loading is strictly defined.
+            //    sequence: CSS, JS, HTML
+            request.open("GET", context + ".css", false);
+            request.send();
+            request.open("GET", context + ".js", false);
+            request.send();
+
+            //HTML/Markup is only loaded if it is a known composite object and
+            //the element does not contain a markup (inner HTML) and the
+            //attributes import and output are not set. Thus is the assumption
+            //that for an empty element outsourced markup should exist.
+            if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
+                    && !composite.innerHTML.trim()) {
+                request.open("GET", context + ".html", false);
+                request.send();
+            }
+        }        
     };
 
     //Listener when an error occurs and triggers a matching composite-event.
