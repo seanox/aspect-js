@@ -491,7 +491,6 @@ if (typeof SiteMap === "undefined") {
     };
     
     /**
-     *  TODO:
      *  Configures the SiteMap individually.
      *  The configuration is passed as a meta object.
      *  The keys (string) correspond to the paths, the values are arrays with
@@ -506,10 +505,35 @@ if (typeof SiteMap === "undefined") {
      *          ...
      *      };
      *      
+     *  The method has different signatures and can be called several times.
+     *  If the method is called more than once, the configurations are
+     *  concatenated and existing values in the configuration are overwritten.
+     *  
+     *  The following signatures are available:
+     *  
      *      SiteMap.customize({meta});
      *      SiteMap.customize({meta}, function(path) {...});
      *      SiteMap.customize(RegExp, function(path) {...});
+     *     
+     *      SiteMap as meta object:
+     *      ----
+     *  The first configuration describes the SiteMap as a meta object.
+     *  The meta object defines all available paths and facets for the face
+     *  flow.    
      *      
+     *      SiteMap as meta object and permit function:
+     *      ----
+     *  In the second example, a permit method is passed in addition to the
+     *  SiteMap as a meta object. This method is used to implement permission
+     *  concepts and can be used to check and manipulate paths.
+     *  Several permit methods can be registered.
+     *  All requested paths pass through the permit method(s). This can decide
+     *  what happens to the path. 
+     *  
+     *      Acceptor:
+     *      ----
+     *      
+     *  TODO:
      *  Optionally, acceptors can also be passed with the meta object.
      *  The key (RegExp) corresponds to a path filter, the value is a method
      *  that is executed if the current path matches the filter of an acceptor.
