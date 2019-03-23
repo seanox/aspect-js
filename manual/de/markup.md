@@ -24,6 +24,7 @@ somit rekursiv auf Veränderungen im DOM.
 * [Customizing](#customizing)
   * [Tag](#tag)   
   * [Selector](#selector)
+  * [Acceptor](#acceptor)
   
 TODO: Auffrischung vs. Aktualisierung (einheitlich Verwendung eines der Begriffe)  
 generi|frisch|ktualis
@@ -591,13 +592,47 @@ TODO:
 
 ### Tag
 
-TODO:
+Benutzerdefinierte Tags übernehmen das komplette Rendering in eigener
+Verantwortung. Der Rückgabewert bestimmt, ob die Standardfunktionen des
+Renderers verwendet werden oder nicht. Nur der Rückgabewert `false` (nicht
+void, nicht leer) beendet das Rendering für ein benutzerdefiniertes Tag, ohne
+die Standardfunktionen des Renderers zu verwenden.
 
+```javascript
+Composite.customize("foo", function(element) {
+    ...
+});
+```
+
+```html
+<article>
+  <foo/>  
+</article>
+```
 
 ### Selector
+
+Selektoren funktionieren ähnlich wie Benutzerdefinierte Tags.  
+Im Gegensatz zu diesen verwenden Selektoren einen CSS-Selektor, um Elemente zu
+erkennen. Dieser Selektor muss aus Sicht vom übergeordneten Eltern-Element ein
+ein Element ansprechen. Selektoren sind flexibler und multifunktionaler. Auf
+diese Art können verschiedene Selektoren mit unterschiedliche Funktionen für ein
+Element zutreffen. In diesem Fall werden alle implementierten Callback-Methoden
+ausgeführt. Selektoren werden nach der Reihenfolge ihrer Registrierung
+durchlaufen. Der Rückgabewert der Callback-Methode bestimmt dabei, ob die
+Iteration abgebrochen wird oder nicht.  
+Nur der Rückgabewert `false` (nicht void, nicht leer) beendet die Iteration
+über andere Selektoren und das Rendering für den Selektor wird ohne Verwendung
+der Standardfunktionen beendet.
 
 TODO:
 
 ### Acceptor
+
+Acceptors sind eine ganz besondere Art der Anpassung vom Rendering. Im Gegensatz
+zu den anderen Möglichkeiten geht es hier um die Manipulation von Element vor
+dem Rendering. Dadurch ist es möglich, individuelle Änderungen an den Attributen
+oder dem Markup vorzunehmen, bevor der Renderer sie verarbeitet. Dies hat keinen
+Einfluss auf die Implementierung des Renderings.
 
 TODO:
