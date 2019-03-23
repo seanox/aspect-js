@@ -632,7 +632,7 @@ TODO:
 Acceptors sind eine ganz besondere Art der Anpassung vom Rendering. Im Gegensatz
 zu den anderen Möglichkeiten geht es hier um die Manipulation von Element vor
 dem Rendering. Dadurch ist es möglich, individuelle Änderungen an den Attributen
-oder dem Markup vorzunehmen, bevor der Renderer sie verarbeitet. Dies hat keinen
-Einfluss auf die Implementierung des Renderings.
+oder dem Markup vorzunehmen, bevor der Renderer sie verarbeitet. Damit hat ein
+Acceptor keinen Einfluss auf die Implementierung vom Renderings.
 
 TODO:
