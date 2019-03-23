@@ -7,10 +7,12 @@ Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
 überwacht das DOM aktiv über den MutationObserver und funktioniert und reagiert
 somit rekursiv auf Veränderungen im DOM.
 
+
 ## Inhalt
 
 * [Expression Language](#expression-language)
 * [Attribute](#attribute)
+  * [composite](#composite)
   * [condition](#condition)
   * [events](#events)
   * [import](#import)
@@ -25,6 +27,7 @@ somit rekursiv auf Veränderungen im DOM.
   
 TODO: Auffrischung vs. Aktualisierung (einheitlich Verwendung eines der Begriffe)  
 generi|frisch|ktualis
+  
   
 ## Expression Language
 
@@ -50,13 +53,49 @@ Details zu Syntax und Verwendung werden im Abschnitt
 
 Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt. Die
 entsprechenden Deklaration können mit allen HTML-Elementen verwendet werden,
-ausgenommen sind `SCRIPT`, was nur mit Typen `composite/javascript` unterstützt
-wird, sowie `STYLE`, welches nicht unterstützt wird.
+ausgenommen sind `SCRIPT`, was nur mit Typen `composite/javascript`
+unterstützt wird, sowie `STYLE`, welches nicht unterstützt wird.
 Die Werte der Attribute können statische oder mit Verwendung der
 Expression-Language dynamisch sein.
 Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
+
+
+### composite
+
+Kennzeichnet im Markup ein Element als [Composites](composites.md).  
+
+Composite sind modulare Komponente (im Kontext der SiteMap auch als Face
+bezeichnet) und haben in aspect-js eine vielseitige Bedeutung.  
+Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
+virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die Anzeige
+der Composites hat.
+Der [Model View Controler](mvc.md#sitemap) unterstützt für Composites eine
+automatisches [Objekt-/Model-Binding](object-binding.md). Die Ressourcen 
+CSS, JS, Markup) lassen sich für Composite in das Modul-Verzeichnis auslagern
+und werden erst bei Bedarf automatisch nachgeladen. 
+
+```html
+<article composite>
+  ...
+</article>
+```
+
+Das Attribut hat keinen Wert.  
+Es kann mit dem Attribute `static` kombiniert werden.
+Dann wird das Composite als Face unabhängig von virtuellen Pfaden permanent
+angezeigt.
+
+```html
+<article composite static>
+  ...
+</article>
+```
+
+Details zur Verwendung von Composites / modularen Komponente werden in den
+Abschnitten [Composites](composites.md) und [Model View Controler](mvc.md)
+beschrieben.
 
 
 ### condition
@@ -139,13 +178,17 @@ _KeyUp_ oder _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
 Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
-Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt und das
-Verhalten ist vergleichbar mit dem Attribut `output`, oder eine absolute oder
-relative URL zu einer entfernten Ressource, die per HTTP-Methode GET nachgeladen
-wird, oder eine DataSource-URL die einen Inhalt aus der DataSource lädt und
-transformiert.  
+Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
+eine absolute oder relative URL zu einer entfernten Ressource, die per
+HTTP-Methode GET nachgeladen wird, oder eine DataSource-URL die einen Inhalt aus
+der DataSource lädt und transformiert.
+
 In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
+
+das Verhalten ist vergleichbar mit dem Attribut `output`, im Unterschied wird
+der Import für das Element nur einmalig ausgeführt.
+
 
 ```javascript
 var Model = {
@@ -193,7 +236,7 @@ Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
 abgeleitet. 
 
 ```html
-<article import="{{'data:/example/content'}}">
+<article import="{{'xml:/example/content'}}">
   loading resource...  
 </article>
 ```
@@ -205,10 +248,15 @@ verwendet, von denen der erste aus die Daten und der zweite auf die
 Transformation verweist.
 
 ```html
-<article import="{{'data:/example/data data:/example/style'}}">
+<article import="{{'xml:/example/data xslt:/example/style'}}">
   loading resource...  
 </article>
 ```
+
+Bei Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
+in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
+So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
+umschliessenden condition-Attribute aufgeführt wird.
 
 
 ### interval
@@ -286,8 +334,9 @@ HTML-Code als Vorlage verwendet und während der Iteration der innere HTML-Code
 zunächst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
 Ergebnis dem inneren HTML-Code hinzugefügt.  
 Das iterate-Attribut erwartet einen Parameter-Ausdruck, zudem ein Meta-Objekt
-erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt `tempA = {item, index, data}`),
-dass den Zugriff auf die Iteration ermöglich.  
+erstellt wird (`iterat={{tempA:Model.list}}}` erzeugt
+`tempA = {item, index, data}`), dass den Zugriff auf die Iteration
+ermöglich.  
 
 ```javascript
 var Model = {
@@ -307,9 +356,18 @@ var Model = {
 ### output
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Der Rückgabewert vom Ausdruck kann ein Element
-oder eine NodeList sein. Alle anderen Datentypen werden als Text gesetzt.
-Die Ausgabe ist exklusiv und überschreibt den vorhandenen inneren HTML-Code.
+HTML-Code bei einem HTML-Element. Als Wert werden ein Elemente oder mehre
+Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
+eine absolute oder relative URL zu einer entfernten Ressource, die per
+HTTP-Methode GET nachgeladen wird, oder eine DataSource-URL die einen Inhalt aus
+der DataSource lädt und transformiert.
+
+In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
+kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
+
+das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
+der Output für das Element immer ausgeführt.
+
 
 ```javascript
 var Model = {
@@ -331,8 +389,7 @@ var Model = {
         var img = document.createElement("img");
         img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
         return img;
-    },
-    publishText: "Hello World!"
+    }
 };
 ```
 
@@ -340,13 +397,45 @@ var Model = {
 <article output="{{Model.publishImg()}}">
   loading image...  
 </article>
-<article output="{{Model.publishText}}">
-  loading text...  
-</article>
 <article output="{{Model.publishForm()}}">
   loading form...  
 </article>
 ```
+
+Beispiel für den Output einer entfernten Ressource per HTTP-Methode GET.
+
+```html
+<article output="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
+  loading resource...  
+</article>
+```
+
+Beispiel für den Output einer DataSource-Ressource.  
+Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
+abgeleitet. 
+
+```html
+<article output="{{'xml:/example/content'}}">
+  loading resource...  
+</article>
+```
+
+Beispiel für den Output einer DataSource-Ressource mit spezifischer Daten- und
+Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit
+dem DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
+verwendet, von denen der erste aus die Daten und der zweite auf die
+Transformation verweist.
+
+```html
+<article output="{{'xml:/example/data xslt:/example/style'}}">
+  loading resource...  
+</article>
+```
+
+Bei Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
+in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
+So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
+umschliessenden condition-Attribute aufgeführt wird.
 
 
 ### render
@@ -374,14 +463,14 @@ var Model = {
 };
 ```
 
-```html    
+```html
 Taget #1:
 <span id="outputText1">{{Model.status1}}</span>
 Events: Wheel
 <input id="text1" type="text"
     events="wheel"
     render="#outputText1, #outputText2, #outputText3"/>
-
+    
 Target #2:
 <span id="outputText2">{{Model.status2}}</span>
 Events: MouseDown KeyDown
@@ -395,19 +484,19 @@ Events: MouseUp KeyUp
 <input id="text1" type="text"
     events="mouseup keyup"
     render="#outputText3"/>
-```  
+    
+```
 
-Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen (`events`)
-und Zielen (`render`), die jeweils sich hochzählende Textausgaben darstellen und
-auf entsprechende Ereignisse reagieren.
-
+Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen
+(`events`) und Zielen (`render`), die jeweils sich hochzählende Textausgaben
+darstellen und auf entsprechende Ereignisse reagieren.
 
 
 ### validate
 
-Das Attribut `validate` erfordert die Kombination mit dem Attribut `events` und
-definiert und steuert die Synchronisation zwischen dem Markup eines Composites
-und dem korrespondierenden JavaScript-Model.  
+Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`
+und definiert und steuert die Synchronisation zwischen dem Markup eines
+Composites und dem korrespondierenden JavaScript-Model.  
 Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
 validate-Methode implementieren: `boolean Model.validate(element, value)`  
 Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
@@ -464,20 +553,33 @@ den Wert `true` zurückgibt.
 
 ## Scripting
 
-TODO: Eingebettetes Scripting bringt einige Besonderheit mit sich.  
+Eingebettetes Scripting bringt einige Besonderheit mit sich.  
 Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
 ausgeführt. Daher wurde das Scripting für das Rendering angepasst und ein neuer
-Type von Scripten: `composite/javascript`. Dieser verwendet das normale JavaScript.
-Im Gegensatz zum Typ `text/javascript` erkennt der Browser diesen aber nicht und
-führt den JavaScript-Code nicht automatisch aus. Der Renderer aber erkennt den
-JavaScript-Code und führt diesen in jedem Renderzyklus aus, wenn der Zyklus ein
-SCRIPT-Element enthält. Auf diese Weise kann die Ausführung vom SCRIPT-Element
-auch mit dem Attribut `condition` kombiniert werden.  
+Type von Scripten: `composite/javascript`. Dieser verwendet das normale
+JavaScript. Im Gegensatz zum Typ `text/javascript` erkennt der Browser diesen
+aber nicht und führt den JavaScript-Code nicht automatisch aus. Der Renderer
+aber erkennt den JavaScript-Code und führt diesen in jedem Renderzyklus aus,
+wenn der Zyklus ein SCRIPT-Element enthält. Auf diese Weise kann die Ausführung
+vom SCRIPT-Element auch mit dem Attribut `condition` kombiniert werden.  
 Eingebettete Skripte müssen "ThreadSafe" sein.
 
 ```html
 <script type="composite/javascript">
   ...
+</script>
+```
+
+Da das JavaScript nicht als Element eingefügt, sondern direkt in einem eigenen
+Namensraum ausgeführt wird, ist es für globale Variablen wichtig, dass diese als
+window-Property initialisiert werden, wenn diese im späteren Programmverlauf
+benötigt werden.
+
+```html
+<script type="composite/javascript">
+  window['Foo'] = function() {
+    ...
+  }
 </script>
 ```
 
@@ -496,3 +598,6 @@ TODO:
 
 TODO:
 
+### Acceptor
+
+TODO:
