@@ -51,8 +51,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[1.0.0 dev Release Candidat - stable and final API](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-RC-dev.js)  
-[1.0.0 min Release Candidat - stable and final API](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-RC-min.js)
+[1.0.0 dev Release Candidat](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-RC-dev.js) stable and final API  
+[1.0.0 min Release Candidat](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-RC-min.js) stable and final API
 
 
 # Installation
