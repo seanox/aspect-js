@@ -11,7 +11,6 @@
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.test" value="${workspace}/test"/>
-  <property name="workspace.development" value="${workspace}/development"/>
   <property name="workspace.releases" value="${workspace}/releases"/>
   
   <fileset id="fileset.sources" dir="${workspace.sources}">
@@ -25,15 +24,15 @@
     
   <macrodef name="release-locate">
     <sequential>
-      <copy file="${workspace.development}/release.txt" tofile="${workspace.development}/release.tmp" overwrite="true"/>
-      <replaceregexp file="${workspace.development}/release.tmp"
+      <copy file="CHANGES" tofile="CHANGES.tmp" overwrite="true"/>
+      <replaceregexp file="CHANGES.tmp"
         match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
         replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
-      <replaceregexp file="${workspace.development}/release.tmp" match="x+" replace="0000" flags="g" byline="false"/>
+      <replaceregexp file="CHANGES.tmp" match="x+" replace="0000" flags="g" byline="false"/>
       <loadproperties>
-        <file file="${workspace.development}/release.tmp"/>
+        <file file="CHANGES.tmp"/>
       </loadproperties>
-      <delete file="${workspace.development}/release.tmp"/>
+      <delete file="CHANGES.tmp"/>
     </sequential>
   </macrodef> 
   
@@ -59,6 +58,8 @@
   
   <target name="archive">
     <release-locate/>
+
+    <delete dir="${workspace.releases}" excludes="*.zip"/>
     
     <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.version}-dev.js"/>
     <concat destfile="${release.dev}" append="false">
@@ -78,8 +79,21 @@
     <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
     <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <compress-javascript file="${release.min}"/>
+
+    <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
+    <copy file="LICENSE" tofile="${workspace.releases}/license.txt"/>
+    <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}.zip">
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}-*.js"/>
+      <fileset dir="${workspace.releases}" includes="release.txt"/>
+      <fileset dir="${workspace.releases}" includes="license.txt"/>
+    </zip>   
     
-    <!-- TODO: build zip files for distribution (dev + min = js + licence + release.txt) -->
+    <delete>
+      <fileset dir="${workspace.releases}">
+        <exclude name="*.js"/>
+        <exclude name="*.zip"/>
+      </fileset>
+    </delete>    
   </target>
   
   <target name="test-min" depends="archive">
