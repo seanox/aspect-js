@@ -26,9 +26,6 @@ somit rekursiv auf Veränderungen im DOM.
   * [Selector](#selector)
   * [Acceptor](#acceptor)
   
-TODO: Auffrischung vs. Aktualisierung (einheitlich Verwendung eines der Begriffe)  
-generi|frisch|ktualis
-  
   
 ## Expression Language
 
@@ -47,7 +44,7 @@ möglich und wir nur mit den Attributen `output` und `import` unterstützt.
 ```
 
 Details zu Syntax und Verwendung werden im Abschnitt
-[Expression Language](expression-language.md) beschrieben.
+[Expression Language](expressions.md) beschrieben.
   
 
 ## Attribute
@@ -134,9 +131,9 @@ Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-eröffnen primäre Funktionen zur ereignisgesteuerte Aktualisierung von
-anderen HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur
-Validierung und Synchronisation von HTML-Elementen und den korrespondierenden
+eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
+HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
+und Synchronisation von HTML-Elementen und den korrespondierenden
 JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).  
 
 ```html
@@ -145,7 +142,7 @@ JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).
       events="mouseup keyup change" render="#output1"/>
 ```
 
-Beispiel zur synchronen Aktualisierung vom HTML-Element _output1_ mit den
+Beispiel zur synchronen Auffrischung vom HTML-Element _output1_ mit den
 Ereignissen _MouseUp_, _KeyUp_ oder _Change_ beim HTML-Element _text1_. In dem
 Beispiel wird der Eingabewert von _text1_ synchron mit _output1_ ausgegebem.
 
@@ -329,7 +326,7 @@ ist als Composite-JavaScript möglich.
 
 ### iterate
 
-Die iterative Generierung basiert auf Listen, Aufzählungen und Arrays.  
+Die iterative Ausgabe basiert auf Listen, Aufzählungen und Arrays.  
 Wird ein HTML-Element als iterativ deklariert, wird der initiale innerer
 HTML-Code als Vorlage verwendet und während der Iteration der innere HTML-Code
 zunächst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
@@ -443,9 +440,9 @@ umschliessenden condition-Attribute aufgeführt wird.
 
 Das Attribut `render` erfordert die Kombination mit dem Attribut `events` und
 definiert, welche Ziele nach dem Auftreten eines oder verschiedener Events
-generiert wird.  
+aufgefrisch werden.  
 Als Wert erwartet das Attribut einen CSS-Selector bzw. Query-Selector welche
-die Ziele definieren.
+die Ziele festlegt.
 
 ```javascript
 var Model = {
@@ -614,18 +611,32 @@ Composite.customize("foo", function(element) {
 
 Selektoren funktionieren ähnlich wie Benutzerdefinierte Tags.  
 Im Gegensatz zu diesen verwenden Selektoren einen CSS-Selektor, um Elemente zu
-erkennen. Dieser Selektor muss aus Sicht vom übergeordneten Eltern-Element ein
-ein Element ansprechen. Selektoren sind flexibler und multifunktionaler. Auf
+erkennen. Dieser Selektor muss das Element aus Sicht des übergeordneten
+Eltern-Elements ansprechen. Selektoren sind flexibler und multifunktionaler. Auf
 diese Art können verschiedene Selektoren mit unterschiedliche Funktionen für ein
-Element zutreffen. In diesem Fall werden alle implementierten Callback-Methoden
-ausgeführt. Selektoren werden nach der Reihenfolge ihrer Registrierung
-durchlaufen. Der Rückgabewert der Callback-Methode bestimmt dabei, ob die
-Iteration abgebrochen wird oder nicht.  
+Element zutreffen.  
+Selectoren werden nach der Reihenfolge ihrer Registrierung iterative durchlaufen
+und deren Callback-Methoden ausgeführt. Der Rückgabewert der Callback-Methode
+bestimmt dabei, ob die Iteration abgebrochen wird oder nicht.  
 Nur der Rückgabewert `false` (nicht void, nicht leer) beendet die Iteration
 über andere Selektoren und das Rendering für den Selektor wird ohne Verwendung
 der Standardfunktionen beendet.
 
-TODO:
+```javascript
+Composite.customize("a:not([href])", function(element) {
+    ...
+});
+
+Composite.customize("a.foo", function(element) {
+    ...
+});
+```
+
+```html
+<article>
+  <a class="foo"></a>  
+</article>
+```
 
 ### Acceptor
 
@@ -635,4 +646,8 @@ dem Rendering. Dadurch ist es möglich, individuelle Änderungen an den Attributen
 oder dem Markup vorzunehmen, bevor der Renderer sie verarbeitet. Damit hat ein
 Acceptor keinen Einfluss auf die Implementierung vom Renderings.
 
-TODO:
+```javascript
+Composite.customize(function(element) {
+    ...
+});
+```
