@@ -67,9 +67,8 @@ This occurs for attributes when the Expression Language is combined with text.
 
 ### Literal
 
-Literale sind in einem Ausdruck mittels einfacher oder doppelter
-Anführungszeichenen eingebetteter Text, der die üblichen Steuerzeichen und
-Escape-Sequenzen unterstützt.
+Literals are text embedded in an expression via single or double quotation marks
+that supports the usual control characters and escape sequences.
 
 ```
 {{'Hello World!'}}
@@ -79,8 +78,8 @@ Escape-Sequenzen unterstützt.
 
 ### Keyword
 
-Folgende Standard-Keyword der JavaScript-Syntax werden in der Expression
-Language unterstützt:
+The following standard JavaScript syntax keywords are supported in the
+Expression Language:
 
 ```
 true
@@ -92,8 +91,8 @@ undefined
 new
 ```
 
-Als Vereinfachung und zur Formulierung von validem Markup wurden die
-JavaScript-Syntax für die Expression Language um folgende Keywords erweitert:
+To simplify and formulate valid markup, the JavaScript syntax for the Expression
+Language has been extended of the following keywords:
 
 ```
 and &&        empty !         div /
@@ -105,66 +104,66 @@ ne  !=        not   !         or  ||
 
 ### Value
 
-Value repräsentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
-Alles was kein Literal und Keyword ist, ist potentiell eine Value.  
-Values verweisen auf Variablen oder Objekt-Eigenschaften.  
-Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
-wenn vorhanden auf einen korrespondierenden Getter (get-Methode).  
-Kann weder eine Objekt-Eigenschaft noch eine Variable ermittelt werden, wird von
-einer Methode oder sonstiger Logik ausgegangen.
+Value represents the value of an object property or variable.  
+Anything that is not a literal and keyword is potentially a value.  
+Values refer to variables or object properties.  
+With object properties, the reference is directly to the property or, if
+available, to a corresponding getter (get method).    
+If neither an object property nor a variable can be determined, a method or
+other logic is assumed.
 
 
 ### Method
 
-Alles was kein Literal, Keyword und Value ist, ist potentiell eine Methode.  
-Kann keine Methode ermittelt werden, wird von sonstiger Logik ausgegangen.
+Everything that is not literal, keyword and value is potentially a method.  
+If no method can be determined, other logic is assumed.
 
 
 ### Logic
 
-Alles was kein Literal, Keyword, Value und Methode ist, ist potentiell Logik.  
-Sonstige Logik wird unverändert ausgeführt.
+Everything that is not literal, keyword, value and method is potentially logic.  
+Other logic is executed directly.
 
 
 ## Expressions
 
-Es gibt unterschiedliche Arten von Expressions die kombinier sind.  
-Nachfolgend werde diese mit ihrer Unterschieden und Eigenheiten erklärt.
+There are different types of expressions that can be combined.  
+In the following these are explained with their differences and peculiarities.
 
 
 ### Value-Expression
 
-Value repräsentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
-Alles was kein Literal und Keyword ist, ist potentiell eine Value.  
-Values verweisen auf Variablen oder Objekt-Eigenschaften.  
-Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
-wenn vorhanden auf einen korrespondierenden Getter (get-Methode).  
+Value represents the value of an object property or variable.  
+Anything that is not a literal and keyword is potentially a value.  
+Values refer to variables or object properties.  
+With object properties, the reference is directly to the property or, if
+available, to a corresponding getter (get method). 
 
 ```
 {{Example.object.field}}
 ```
 
-Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht verfügbar
-ist und der Rückgabewert entspricht dann `undefined`.
+The value expression is tolerant if the value or object is not available and the
+return value is then `undefined`.
 
 
 ### Method-Expression
 
-Alles was kein Literal, Keyword und Value ist, ist potentiell eine Methode. 
+Everything that is not literal, keyword and value is potentially a method
 
 ```
 {{Example.getData()}}
 ```
 
-Die Method-Expression ist streng und führt zu einem Fehler, wenn ein Objekt
-nicht verfügbar ist.
+The method expression is strict and causes an error if an object is not
+available.
 
 
 ### Element-Expression
 
-Beginnt in einer Expression eine Variable mit `#`, so verweist diese Variable
-auf ein HTML-Element mit gleichnamiger ID. Kann kein passendes HTML-Element
-gefunden werden, entspricht der Wert der Variablen `undefined`.
+If a variable starts with `#` in an expression, this variable refers to an HTML
+element with the same ID. If no matching HTML element can be found, the value of
+the variable corresponds to `undefined`.
 
 ```
 {{#ExampleElement.value}}
@@ -175,23 +174,25 @@ gefunden werden, entspricht der Wert der Variablen `undefined`.
 
 ### Variablen-Expression
 
-Mit der Expression-Language lassen sich zur Laufzeit auch globale Variablen
-erzeugen und setzen. Dazu muss die Expression mit dem Namen einer Variablen
-(Bezeichner) beginnen, die dem Muster `_*[a-z]\w*` entspricht und durch einen
-Doppelpunkt von der eigentlichen Expression getrennt ist.  
-
+With the expression language, global variables can also be created and set at
+the runtime. The expression must begin with the name of a variable (identifier)
+that corresponds to the pattern `_*[a-z]\w*` and is separated from the actual
+expression by a colon.
+  
 ```
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
-Erstellt oder setzt bei der existierenden globale Variablen `foo` den Wert mit
-`6x Hallo`.  
-Die Expression entspricht der JavaScript-Syntax: `var foo = 1 +2 +3 + 'x Hallo';`
+
+Creates or sets the value for the existing global variable `foo` with
+`6x Hallo`.    
+The expression corresponds to the JavaScript syntax: `var foo = 1 +2 +3 + 'x hello';`
+
 
 
 ### Combination
 
-Alle der gennannten Arten von Expressions lassen sich kombinieren.
+All types of expressions can be combined.
 
 ```
 {{foo:not empty Foo.data and not empty Foo.data.items ? String(Foo.data.items[0].fieldA).substring(2) : ''}}
@@ -200,10 +201,10 @@ Alle der gennannten Arten von Expressions lassen sich kombinieren.
 
 ## Integration
 
-Expressions werden durch den Renderer interpretiert, der nach dem Laden der
-Seite startet. Somit können Expressions beim Laden der Seite sichtbar sein. Hier
-empfiehlt sich die Auslagerung in die DataSource und sowie die Verwendung der
-Attribute [output](markup.md#output) und [import](markup.md#import) im Markup.
+Expressions are interpreted by the renderer that starts after loading the page.
+So expressions can be visible when loading the page. We recommend that you swap
+the data to the DataSource and use the attributes [output](markup.md#output) and
+[import](markup.md#import) in the markup.
 
 ```css
 h1:after {

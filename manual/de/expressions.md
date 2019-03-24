@@ -68,7 +68,7 @@ kombiniert wird.
 ### Literal
 
 Literale sind in einem Ausdruck mittels einfacher oder doppelter
-Anführungszeichenen eingebetteter Text, der die üblichen Steuerzeichen und
+Anführungszeichen eingebetteter Text, der die üblichen Steuerzeichen und
 Escape-Sequenzen unterstützt.
 
 ```
@@ -128,7 +128,7 @@ Sonstige Logik wird unverändert ausgeführt.
 
 ## Expressions
 
-Es gibt unterschiedliche Arten von Expressions die kombinier sind.  
+Es gibt unterschiedliche Arten von Expressions die kombinierbar sind.  
 Nachfolgend werde diese mit ihrer Unterschieden und Eigenheiten erklärt.
 
 
