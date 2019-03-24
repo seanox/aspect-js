@@ -1923,10 +1923,14 @@ if (typeof Composite === "undefined") {
 if (typeof Expression === "undefined") {    
     
     /**
-     *  Expression/Expression Language (EL) is mechanism that simplifies the
-     *  accessibility of the data stored in JavaScrript model component and
-     *  other object on the client side. There are many operators that are used
-     *  in EL like arithmetic and logical operators to perform an expression.
+     *  Expressions or the Expression Language (EL) is a simple access to the
+     *  client-side JavaScrript and thus to the models and components in the
+     *  aspect-js. The expressions support the complete JavaScript API, the is
+     *  enhanced with additional keywords, which also allows the numerous
+     *  arithmetic and logical operators can be used.
+     *  From the BODY tag on, the Expression Language can be used in the
+     *  complete markup as free text. and in all attributes. Only the STYLE and
+     *  SCRIPT, here the Expression Language is not supported.
      */
     Expression = {};
 

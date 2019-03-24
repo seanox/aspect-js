@@ -227,6 +227,10 @@ Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
 <article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
   loading resource...  
 </article>
+
+<article import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
+  loading resource...  
+</article>
 ```
 
 Beispiel für den Import einer DataSource-Ressource.  
@@ -235,6 +239,10 @@ abgeleitet.
 
 ```html
 <article import="{{'xml:/example/content'}}">
+  loading resource...  
+</article>
+
+<article import="xml:/example/content">
   loading resource...  
 </article>
 ```
@@ -247,6 +255,10 @@ Transformation verweist.
 
 ```html
 <article import="{{'xml:/example/data xslt:/example/style'}}">
+  loading resource...  
+</article>
+
+<article import="xml:/example/data xslt:/example/style">
   loading resource...  
 </article>
 ```
@@ -406,6 +418,10 @@ Beispiel für den Output einer entfernten Ressource per HTTP-Methode GET.
 <article output="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
   loading resource...  
 </article>
+
+<article output="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
+  loading resource...  
+</article>
 ```
 
 Beispiel für den Output einer DataSource-Ressource.  
@@ -414,6 +430,10 @@ abgeleitet.
 
 ```html
 <article output="{{'xml:/example/content'}}">
+  loading resource...  
+</article>
+
+<article output="xml:/example/content">
   loading resource...  
 </article>
 ```
@@ -426,6 +446,10 @@ Transformation verweist.
 
 ```html
 <article output="{{'xml:/example/data xslt:/example/style'}}">
+  loading resource...  
+</article>
+
+<article output="xml:/example/data xslt:/example/style">
   loading resource...  
 </article>
 ```
