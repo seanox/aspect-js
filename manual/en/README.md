@@ -1,6 +1,6 @@
 # Manual
 
-Machine translation with [DeepL]((https://deepl.com)).
+Machine translation with [DeepL](https://deepl.com).
 
 ## Table Of Contents 
 
