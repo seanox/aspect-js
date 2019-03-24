@@ -42,7 +42,7 @@ Words are classified according to their characteristics.
 
 ```
 +-------------------------------------------------------------+
-|            Words (alle Elemente eines Expression)           |
+|            Words (entireness of the expression)             |
 +--------+----------------------------------------------------+
 |  Text  |                     Expression                     |
 |        +-----------+----------------------------------------+
