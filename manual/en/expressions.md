@@ -1,53 +1,54 @@
 # Expression Language
 
-Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
-clientseitigen JavaScrript und damit zu den Modellen und Komponenten im
-aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt, die
-mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
-arithmetische und logische Operatoren verwendet werden können.
+Expressions or the Expression Language (EL) is a simple access to the
+client-side JavaScrript and thus to the models and components in aspect-js. In
+the expressions the complete JavaScript API is supported, which is enhanced with
+additional keywords, so that also the numerous arithmetic and logical operators
+can be used.
 
 ```
 {{'Hello World!'}}
 ```
 
-Die Expression Language kann ab dem BODY-Tag im kompletten Markup als Freitext
-sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
-SCRIPT, hier wird die Expression Language nicht unterstützt.
+
+The Expression Language can be used from the BODY tag on in the complete markup
+as free text as well as in all attributes. Only in the STYLE and SCRIPT tags the
+Expression Language is not supported.
 
 
-## Inhalt
+## Contents Overview
 
-* [Elemente](#elemente)
+* [Elements](#elements)
   * [Text](#text)
   * [Literal](#literal)
   * [Keyword](#keyword)
   * [Value](#value)
-  * [Methode](#methode)
-  * [Logik](#logik)  
+  * [Method](#method)
+  * [Logic](#logic)
 * [Expressions](#expressions)
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
   * [Variablen-Expression](#variablen-expression)    
-  * [Kombination](#kombination)    
+  * [Combination](#combination)    
 * [Integration](#integration)
   
 
-## Elemente
+## Elements
 
-Ein Ausdruck ist ein Reihe von Wörtern.  
-Ein Wort ist ein elementarer Satz oder ein Satzfragment mit mehreren Wörtern.
-Wörter werden nach ihren Eigenschaften klassifiziert.
+An expression is a sequence of words.  
+A word is an elementary set of words.
+Words are classified according to their characteristics.
 
 ```
 +-------------------------------------------------------------+
-|            Words (alle Elemente eines Expression)           |            
+|            Words (alle Elemente eines Expression)           |
 +--------+----------------------------------------------------+
 |  Text  |                     Expression                     |
 |        +-----------+----------------------------------------+
 |        |  Literal  |                 Script                 |
 |        |           +-----------+----------------------------+
-|        |           |  Keyword  |           Sonstige         |
+|        |           |  Keyword  |           Others           |
 |        |           |           +---------+----------+-------+
 |        |           |           |  Value  |  Method  | Logic |
 +--------+-----------+-----------+---------+----------+-------+
@@ -56,9 +57,8 @@ Wörter werden nach ihren Eigenschaften klassifiziert.
 
 ### Text
 
-Text ist kein regulärer Bestandteil der Expression.
-Dieser ergibt sich bei Attributen, wenn die Expression Language mit Text
-kombiniert wird.
+Text is not a regular element of the expression.
+This occurs for attributes when the Expression Language is combined with text.
 
 ```html
 <p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}.">
@@ -114,13 +114,13 @@ Kann weder eine Objekt-Eigenschaft noch eine Variable ermittelt werden, wird von
 einer Methode oder sonstiger Logik ausgegangen.
 
 
-### Methode
+### Method
 
 Alles was kein Literal, Keyword und Value ist, ist potentiell eine Methode.  
 Kann keine Methode ermittelt werden, wird von sonstiger Logik ausgegangen.
 
 
-### Logik
+### Logic
 
 Alles was kein Literal, Keyword, Value und Methode ist, ist potentiell Logik.  
 Sonstige Logik wird unverändert ausgeführt.
@@ -189,7 +189,7 @@ Erstellt oder setzt bei der existierenden globale Variablen `foo` den Wert mit
 Die Expression entspricht der JavaScript-Syntax: `var foo = 1 +2 +3 + 'x Hallo';`
 
 
-### Kombination
+### Combination
 
 Alle der gennannten Arten von Expressions lassen sich kombinieren.
 
