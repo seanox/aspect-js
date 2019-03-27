@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20190319
+ *  Composite 1.0 20190327
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190319
+ *  @version 1.0 20190327
  */
 if (typeof Composite === "undefined") {
     
@@ -226,9 +226,13 @@ if (typeof Composite === "undefined") {
 
     /** Constants of events when using AJAX */
     Composite.EVENT_AJAX_START = "AjaxStart";
+    Composite.EVENT_AJAX_PROGRESS = "AjaxProgress"
     Composite.EVENT_AJAX_RECEIVE = "AjaxReceive";
     Composite.EVENT_AJAX_SUCCESS = "AjaxSuccess";
+    Composite.EVENT_AJAX_ABORT = "AjaxAbort";
+    Composite.EVENT_AJAX_TIMEOUT = "AjaxTimeout";
     Composite.EVENT_AJAX_ERROR = "AjaxError";
+    Composite.EVENT_AJAX_END = "AjaxEnd";
 
     /** Constants of events when errors occur */
     Composite.EVENT_ERROR = "Error";
@@ -378,24 +382,49 @@ if (typeof Composite === "undefined") {
 
     /**
      *  Enhancement of the JavaScript API
-     *  Implements an own send method for event management. The original method
-     *  is reused in the background.
+     *  Implements an own open method for event management.
+     *  The original method is reused in the background.
      */ 
-    XMLHttpRequest.prototype.internalSend = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.send = function(body) {
-        Composite.fire(Composite.EVENT_AJAX_START, this); 
-        var internalOnReadyStateChange = this.onreadystatechange;
-        this.onreadystatechange = function() {
-            Composite.fire(Composite.EVENT_AJAX_RECEIVE, this);
-            if (this.readyState == 4) {
-                if (this.status == "200")
-                    Composite.fire(Composite.EVENT_AJAX_SUCCESS, this);
-                else Composite.fire(Composite.EVENT_AJAX_ERROR, this);
+    XMLHttpRequest.prototype.internalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function(variants) {
+
+        var callback = function() {
+            if (arguments.length > 0) {
+                var event = arguments[0];
+                if (event.type == "loadstart")
+                    event = Composite.EVENT_AJAX_START;
+                else if (event.type == "progress")
+                    event = Composite.EVENT_AJAX_PROGRESS; 
+                else if (event.type == "readystatechange")
+                    event = Composite.EVENT_AJAX_RECEIVE; 
+                else if (event.type == "load")
+                    event = Composite.EVENT_AJAX_SUCCESS; 
+                else if (event.type == "abort")
+                    event = Composite.EVENT_AJAX_ABORT; 
+                else if (event.type == "error")
+                    event = Composite.EVENT_AJAX_ERROR;   
+                else if (event.type == "timeout")
+                    event = Composite.EVENT_AJAX_TIMEOUT;   
+                else if (event.type == "loadend")
+                    event = Composite.EVENT_AJAX_END; 
+                else return;
+                Composite.fire(event, arguments[0]); 
             }
-            if (internalOnReadyStateChange)
-                internalOnReadyStateChange.apply(this, arguments);
         };
-        this.internalSend(body);
+        
+        if (typeof this.internalInit === "undefined") {
+            this.internalInit = true;
+            this.addEventListener("loadstart", callback);
+            this.addEventListener("progress", callback);
+            this.addEventListener("readystatechange", callback);
+            this.addEventListener("load", callback);
+            this.addEventListener("abort", callback);
+            this.addEventListener("error", callback);
+            this.addEventListener("timeout", callback);
+            this.addEventListener("loadend", callback);
+        }
+        
+        this.internalOpen.apply(this, arguments);
     };
     
     /**
