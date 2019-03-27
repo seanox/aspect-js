@@ -42,5 +42,6 @@ Machine translation with [DeepL](https://deepl.com).
 * [Model View Controler](mvc.md)
 * [Resource Bundle](messages.md)
 * [DataSource](datasource.md)
+* [Ereignisse](events.md)
 * [Test](test.md)
 * [Examples](examples.md)
