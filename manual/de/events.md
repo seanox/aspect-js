@@ -19,7 +19,7 @@ Fehlern bei der Verarbeitung, Kommunikation und dem Rendering ausgelöst werden.
   * [Composite.EVENT_MOUNT_START](#composite-event_mount_start)
   * [Composite.EVENT_MOUNT_NEXT](#composite-event_mount_next)
   * [Composite.EVENT_MOUNT_END](#composite-event_mount_end)
-* [Composite Ajax Events](#composite-ajax-events)
+* [Composite AJAX Events](#composite-ajax-events)
   * [Composite.EVENT_AJAX_START](#composite-event_ajax_start)
   * [Composite.EVENT_AJAX_PROGRESS](#composite-event_ajax_progress)
   * [Composite.EVENT_AJAX_RECEIVE](#composite-event_ajax_receive)
@@ -31,13 +31,6 @@ Fehlern bei der Verarbeitung, Kommunikation und dem Rendering ausgelöst werden.
 * [Composite Error Events](#composite-error-events)
   * [Composite.EVENT_ERROR](#composite-event_error)
 * [Test Events](#test-events)
-  * [Test.EVENT_FINISH](#test-event_finish)
-  * [Test.EVENT_INTERRUPT](#test-event_interrupt)
-  * [Test.EVENT_PERFORM](#test-event_perform)
-  * [Test.EVENT_RESPONSE](#test-event_response)
-  * [Test.EVENT_RESUME](#test-event_resume)
-  * [Test.EVENT_START](#test-event_start)
-  * [Test.EVENT_SUSPEND](#test-event_suspend)
 
 
 ## Composite Render Events
@@ -134,10 +127,10 @@ Das Ereignis tritt mit finalen Ende der Objekt-/Model-Bindung auf.
 Die Verarbeitung selbst endet vor dem Ereignis.
 
 
-## Composite Ajax Events
+## Composite AJAX Events
 
-Composite unterstützt ein einfaches und globales Event-Management für den
-XMLHttpRequest zu Implementierung Request-bezogener Anwendungslogik, z.B. für
+Die Composite-API unterstützt ein anwendungsweites Event-Management für den
+XMLHttpRequest zur Implementierung Request-bezogener Anwendungslogik, z.B. für
 Logging oder Spinner. 
 
 ```javascript
@@ -200,30 +193,26 @@ Verlauf.
 
 ## Composite Error Events
 
+Die Composite-API unterstützt ein anwendungsweites Event-Management für
+Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. für
+Logging oder Fehlerausgaben. 
+
+```javascript
+Composite.listen(Composite.EVENT_ERROR, function(Event) {
+    ...
+});
+```
+
 
 ### Composite.EVENT_ERROR
+
+Das Fehlerereignis wird bei unbehandelten Laufzeitfehlern ausgelöst.  
+Syntaktische Fehler die eine generelle Ausführung von JavaScript verhindern,
+können das Fehlerereignis nicht auslösen.
 
 
 ## Test Events
 
-
-### Test.EVENT_FINISH
-
-
-### Test.EVENT_INTERRUPT
-
-
-### Test.EVENT_PERFORM
-
-
-### Test.EVENT_RESPONSE
-
-
-### Test.EVENT_RESUME
-
-
-### Test.EVENT_START
-
-
-### Test.EVENT_SUSPEND
-        
+Innerhalb der [Test-API](test.md) gibt es weitere [Events](test.md#events).  
+Da die Test-API eigenständig betrachtet werden soll, sind die Events
+nur dort beschrieben
