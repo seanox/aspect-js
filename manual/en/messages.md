@@ -1,4 +1,4 @@
-# Messages
+# Resource Bundle (Messages)
 
 (Resource)Messages is a static DataSource extension for internationalization
 and localization. The implementation is based on a set of key-value or
@@ -41,7 +41,7 @@ the browser. If the language set there is not supported, the language declared
 as 'default' is used.
 
 After loading the application, Messages are available as an assosiative array
-and can be used directly in JavaScript and Markup via Expression Language.
+and can be used in JavaScript directly and in the Markup as Expression Language.
 
 ```javascript
 Messages["contact.title"];
