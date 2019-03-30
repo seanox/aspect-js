@@ -22,12 +22,23 @@
  *  
  *      DESCRIPTION
  *      ----
- *  (Resource)Messages is a static datasource extension for internationalization
+ *  (Resource)Messages is a static DataSource extension for internationalization
  *  and localization. The implementation is based on a set of key-value or
- *  label-value data which is stored in the locales.xml of the datasource.
- *  The elements for the supported languages exist in this file under locales.
- *  These elements are extended by a set of key-value entries for the (eesource)
- *  messages.
+ *  label-value data which is stored in the locales.xml of the DataSource.
+ *  
+ *      +- data
+ *      |  |
+ *      |  +- de...
+ *      |  +- en...
+ *      |  +- locales.xml
+ *      |
+ *      +- modules
+ *      +- resources
+ *      +- index.html
+ *  
+ *  The elements for the supported languages are organized in locales in this
+ *  file. Locales is a set of supported country codes. In each country code, the
+ *  key values are recorded as label entries.  
  *    
  *  <?xml version="1.0" encoding="ISO-8859-1"?>
  *  <locales>
@@ -45,11 +56,15 @@
  *  
  *  The language is selected automatically on the basis of the language setting
  *  of the browser. If the language set there is not supported, the language
- *  declared as "default" is used.
+ *  declared as 'default' is used.
  *  
- *  After loading the file, the messages are available as an assosiative array.
+ *  After loading the application, Messages are available as an assosiative
+ *  array and can be used directly in JavaScript and Markup via Expression
+ *  Language.
  *  
- *      Messages["contact.title"];
+ *  Messages["contact.title"];
+ *      
+ *  <h1 output="{{Messages['contact.title']}}"/>
  *  
  *  Messages 1.0 20181021
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -61,7 +76,7 @@
 if (typeof Messages === "undefined") {
     
     /**
-     *  (Resource)Messages is a static datasource extension for localization and
+     *  (Resource)Messages is a static DataSource extension for localization and
      *  internationalization. The implementation is based on a set of key-value
      *  or label-value data.
      */

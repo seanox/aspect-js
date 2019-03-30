@@ -65,12 +65,12 @@
  *        Custom Selector wird nach Custom-Tag ausgefuehrt.
  *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
  *        
- *  Composite 1.0 20190327
+ *  Composite 1.0 20190330
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190327
+ *  @version 1.0 20190330
  */
 if (typeof Composite === "undefined") {
     
@@ -228,7 +228,7 @@ if (typeof Composite === "undefined") {
     Composite.EVENT_AJAX_START = "AjaxStart";
     Composite.EVENT_AJAX_PROGRESS = "AjaxProgress"
     Composite.EVENT_AJAX_RECEIVE = "AjaxReceive";
-    Composite.EVENT_AJAX_SUCCESS = "AjaxSuccess";
+    Composite.EVENT_AJAX_LOAD = "AjaxLoad";
     Composite.EVENT_AJAX_ABORT = "AjaxAbort";
     Composite.EVENT_AJAX_TIMEOUT = "AjaxTimeout";
     Composite.EVENT_AJAX_ERROR = "AjaxError";
@@ -398,7 +398,7 @@ if (typeof Composite === "undefined") {
                 else if (event.type == "readystatechange")
                     event = Composite.EVENT_AJAX_RECEIVE; 
                 else if (event.type == "load")
-                    event = Composite.EVENT_AJAX_SUCCESS; 
+                    event = Composite.EVENT_AJAX_LOAD; 
                 else if (event.type == "abort")
                     event = Composite.EVENT_AJAX_ABORT; 
                 else if (event.type == "error")
