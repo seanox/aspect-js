@@ -5,7 +5,9 @@ TODO:
 
 ## Contents Overview
 
-TODO:
+* [Virtual Paths](#virtual-paths)
+* [SiteMap](#sitemap)
+* [Object-/Model-Binding](#object-model-binding)
 
 
 ## Virtual Paths
@@ -74,3 +76,12 @@ When it comes to controlling face flow, the SiteMap provides hooks for
 permission concepts and acceptors. With both things the face flow can be
 controlled and influenced. This way, the access to paths can be stopped and/or
 redirected/forwarded  with own logic. 
+
+
+## Object-/Model-Binding
+
+The Object-/Model-Binding part also belongs to the Model View Controller and  is
+taken over by the Composite API in this implementation. SiteMap is an extension
+and is based on the Composite API.  
+For a better understanding, the functionality is described here in the Model
+View Controler.

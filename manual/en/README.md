@@ -68,5 +68,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [Composite Error Events](composite.md#composite-error-events)
       * [Composite.EVENT_ERROR](composite.md#composite-event_error)
 * [Model View Controler](mvc.md)
+  * [Virtual Paths](mvc.md#virtual-paths)
+  * [SiteMap](mvc.md#sitemap)
+  * [Object-/Model-Binding](mvc.md#object-model-binding)
 * [Test](test.md)
 * [Examples](examples.md)
