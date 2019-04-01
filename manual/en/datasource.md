@@ -24,7 +24,7 @@ similar to SQL.
 * [Locator](#locator)
 * [fetch](#fetch)
 * [transform](#transform)
-* [collect}(#collect)
+* [collect](#collect)
 
 
 ## Data Storage

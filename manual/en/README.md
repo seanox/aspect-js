@@ -46,7 +46,7 @@ Machine translation with [DeepL](https://deepl.com).
   * [Locator](datasource.md#locator)
   * [fetch](datasource.md#fetch)
   * [transform](datasource.md#transform)
-  * [collect}(#collect)
+  * [collect](datasource.md#collect)
 * [Resource Bundle](messages.md)
 * [Composite](composite.md)
   * [Events](composite.md#events)
