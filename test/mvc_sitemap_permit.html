@@ -27,6 +27,11 @@
           "#error": null
       });
       
+      var timing = new Date().getTime();
+      var meta = {};
+      meta["#x" + timing] = null;
+      SiteMap.customize(meta);      
+      
       var logging = function(message) {
           document.body.innerHTML += "\r\n" + message;
           document.body.innerHTML = document.body.innerHTML.trim();
@@ -37,7 +42,6 @@
               return;
           var target = targets.shift();
           logging("A: " + target);
-          document.body.innerHTML = document.body.innerHTML.trim();
           window.location.href = target;
           if (targets.length <= 0) {
               window.setTimeout((target) => {
@@ -74,8 +78,9 @@
           targets.push("#projects#wotexx#features");      
           targets.push("#projects#wotexx#licence");
           
-          window.location.href = "#" + new Date().getTime();
-          autoforward();
+          window.location.href = "#x" + timing;
+          window.location.href = "#";
+          window.setTimeout(autoforward, 250);          
       });
 
       window.addEventListener("hashchange", (event) => {
@@ -98,10 +103,10 @@
       }});      
     </script>
     <script type="text/test">
+B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#
+B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#x0000
+B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#
 A: #
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#0000
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#
 A: #project
 B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#project
 B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#

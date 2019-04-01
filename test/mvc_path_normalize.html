@@ -111,6 +111,13 @@
             Assert.assertNull(Path.normalize("#1#2#3", "#"));
         }});      
         
+        Test.create({test:function() {
+            Assert.assertEquals("#a#b#c#d", Path.normalize("#a#b#c#d"));
+            Assert.assertEquals("#a#b#c#x", Path.normalize("#a#b#c#d##x"));
+            Assert.assertEquals("#a#b#x", Path.normalize("#a#b#c#d###x"));
+            Assert.assertEquals("#a#x", Path.normalize("#a#b#c#d####x"));
+        }});      
+
         Test.start(true);
     </script>
   </head>

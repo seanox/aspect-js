@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+      Test.activate();
+      
+      SiteMap.customize({
+          "#": null,
+          "#a": null,
+          "#a#b": null,
+          "#a#b#c": null,
+          "#a#b#c#d": null,
+          "#a#b#c#d#e": null,
+          "#a#b#x": null,
+          "#a#b#x#y": null,
+          "#a#b#x#y#z": null
+      });
+      
+      var timing = new Date().getTime();
+      var meta = {};
+      meta["#x" + timing] = null;
+      SiteMap.customize(meta);      
+      
+      var logging = function(message) {
+          document.body.innerHTML += "\r\n" + message;
+          document.body.innerHTML = document.body.innerHTML.trim();
+      };
+      
+      var autoforward = function() {
+          if (targets.length <= 0)
+              return;
+          var target = targets.shift();
+          var direct = !target.startsWith("A");
+          target = target.substring(2);
+          logging((direct ? "A:" : "B:") + target);
+          if (direct)
+              window.location.href = target;
+          else SiteMap.navigate(target);
+          if (targets.length <= 0) {
+              window.setTimeout((target) => {
+                  Test.start(); 
+              }, 250);
+          } else {
+              window.setTimeout((target) => {
+                  autoforward(); 
+              }, 125);
+          }
+      };
+      
+      var targets;
+      window.addEventListener("load", (event) => {
+          targets = [];
+
+          targets.push("A #a#b#c#d");
+          targets.push("A ##");
+          targets.push("A #a#b#c#d");
+          targets.push("A ###x");
+          targets.push("A y#z");
+          targets.push("A ####c");
+          targets.push("A #a#b#c#d");  
+          targets.push("A ####b");
+          
+          targets.push("B #a#b#c#d");
+          targets.push("B ##");
+          targets.push("B ##x");
+          targets.push("B #a#b#x#y#z");
+          targets.push("B ####c");
+          targets.push("B #a#b#c#d");  
+          targets.push("B ####b");          
+          
+          window.location.href = "#x" + timing;
+          window.location.href = "#";
+          window.setTimeout(autoforward, 250);  
+      });
+
+      window.addEventListener("hashchange", (event) => {
+          if (event.newURL.match(/^\w+:\/\//))
+              logging("C: " + event.newURL.replace(/\d+$/, "0000"));
+      });
+      
+      Test.create({test:function() {
+          var content = document.body.innerHTML;
+          Assert.assertEqualsTo("script[type='text/test']", content);            
+      }});
+      
+      var errors = "";
+      Composite.listen(Composite.EVENT_ERROR, function(event, error) {
+          errors += "\r\n" + error.message;
+          errors = errors.trim();          
+      });
+      Test.create({test:function() {
+          Assert.assertEquals("", errors);
+      }});      
+    </script>
+    <script type="text/test">
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#x0000
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+B:#a#b#c#d
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+B:##
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+B:#a#b#c#d
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+B:###x
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+B:y#z
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
+B:####c
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+B:#a#b#c#d
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+B:####b
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+A:#a#b#c#d
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+A:##
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+A:##x
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##x
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+A:#a#b#x#y#z
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
+A:####c
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####c
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+A:#a#b#c#d
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+A:####b
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####b
+C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
