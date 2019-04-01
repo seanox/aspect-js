@@ -22,48 +22,81 @@
  *  
  *      DESCRIPTION
  *      ----
- *  TODO:
- *  The SiteMap is a static navigation component based on virtual paths and
- *  views. Virtual paths are used to delimit pages and to focus projections.
- *  Pages are a (complex) view and combine different fixed contents (navigation,
- *  menu, footer, ...) as well as variable projections (faces/views), which in
- *  turn can use sub and partial projections (facets). 
+ *  Static component for the use of a SiteMap for virtual paths.
+ *  SiteMap is a directory consisting of faces and facets that are addressed by
+ *  paths.
  *  
- *  Virtual paths use URL hash navigation in which the hash character is used to
- *  separate the individual parts of the path. SiteMap monitors the URL hash and
- *  the use of virtual paths actively with regard to validity and permission.
+ *      +-----------------------------------------------+
+ *      |  Page                                         |
+ *      |  +-----------------------------------------+  |
+ *      |  |  Face A / Partial Face A                |  |
+ *      |  |  +-------------+       +-------------+  |  |
+ *      |  |  |  Facet A1   |  ...  |  Facet An   |  |  |
+ *      |  |  +-------------+       +-------------+  |  |
+ *      |  |                                         |  |
+ *      |  |  +-----------------------------------+  |  |
+ *      |  |  |  Face AA                          |  |  |
+ *      |  |  |  +-----------+     +-----------+  |  |  |
+ *      |  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
+ *      |  |  |  +-----------+     +-----------+  |  |  |
+ *      |  |  +-----------------------------------+  |  |
+ *      |  |  ...                                    |  |
+ *      |  +-----------------------------------------+  |
+ *      |  ...                                          |
+ *      |  +-----------------------------------------+  |
+ *      |  |  Face n                                 |  |
+ *      |  |  ...                                    |  |
+ *      |  +-----------------------------------------+  |
+ *      +-----------------------------------------------+
+ *      
+ *  A face is the primary projection of the content. This projection may contain
+ *  additional sub-components, in form of facets and sub-faces.
  *  
- *  Acceptors are a very special navigation function.
- *  Acceptors can be regarded as path filters. They are based on regular
- *  expressions and methods that are executed when the paths match a pattern.
- *  Acceptors can argue silently in the background without influencing the
- *  navigation of the SiteMap, or they can argue actively and take over the
- *  navigation completely active or passive by forwarding (change/manipulation
- *  of the destination).
+ *  Facets are parts of a face (projection) and are not normally a standalone
+ *  component. For example, the input mask and result table of a search can be
+ *  separate facets of a face, as can articles or sections of a face. Both face
+ *  and facet can be accessed via virtual paths. The path to a facet has the
+ *  effect that the face is displayed with any other faces, but the requested
+ *  facet is displayed in the visible area and focused.
  *  
- *  All in all, the SiteMap is comparable to a city map. The paths are streets
- *  and create a concatenated route from the root to the destination. The
- *  destination can be a street (face), with which all addresses/sights (views)
- *  are indicated or the destination is a concrete address/sights (view) in a
- *  street.
+ *  Faces are also components that can be nested.
+ *  Thus, parent faces become partial faces when the path refers to a sub-face.
+ *  A sub-face is presented with all its parent partial faces. If the parent
+ *  faces contain additional facets, these facets are not displayed. The parent
+ *  faces are therefore only partially presented.
+ *
+ *  With the SiteMap the structure of faces, facets and the corresponding paths
+ *  are described. The SiteMap controls the face flow and the presentation of
+ *  the components corresponding to a path. 
+ *  This means that you don't have to take care of showing and hiding components
+ *  yourself.
  *  
- *  All streets have a guard, who can forbid and allow access to the street
- *  and/or individual addresses/sights according to permissions.
+ *  The show and hide is hard realized in the DOM.
+ *  This means that if a component is hidden, it is physically removed from the
+ *  DOM and only added again when it is displayed.
  *  
- *  For streets, adresses and sights you can define patterns which actively
- *  change the routing or passively follow the route. 
+ *  When it comes to controlling face flow, the SiteMap provides hooks for
+ *  permission concepts and acceptors. With both things the face flow can be
+ *  controlled and influenced. This way, the access to paths can be stopped
+ *  and/or redirected/forwarded  with own logic. 
  *  
- *  MVC 1.0 20190319
+ *  The Object-/Model-Binding part also belongs to the Model View Controller and
+ *  is taken over by the Composite API in this implementation. SiteMap is an
+ *  extension and is based on the Composite API.
+ *  
+ *  MVC 1.0 20190401
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190319
+ *  @version 1.0 20190401
  */
 if (typeof Path === "undefined") {
     
     /**
      *  Static component for the use of (virtual) paths.
+     *  Paths are a reference to a target in face flow. The target can be a
+     *  face, a facet or a function.
      *  For more details see method Path.normalize(variants).
      */    
     Path = {};
@@ -82,8 +115,8 @@ if (typeof Path === "undefined") {
      *  Paths consist exclusively of word characters and underscores (based on
      *  composite IDs) and must begin with a letter and use the hash character
      *  as separator and root. Between the path segments, the hash character can
-     *  also be used as a back jump directive. The return jump then corresponds
-     *  to the number of additional hash characters.
+     *  also be used as a back jump (parent) directive. The back jump then
+     *  corresponds to the number of additional hash characters.
      *  
      *      Note:
      *  Paths use lowercase letters. Upper case letters are automatically
@@ -197,35 +230,12 @@ if (typeof Path === "undefined") {
 if (typeof SiteMap === "undefined") {
     
     /**
-     *  Static component for the use of a SiteMap for virtua paths.
+     *  Static component for the use of a SiteMap for virtual paths.
      *  SiteMap is a directory consisting of faces and facets that are addressed
      *  by paths.
      *  
-     *  +-----------------------------------------------+
-     *  |  Page                                         | 
-     *  |  +-----------------------------------------+  |
-     *  |  |  Face A / Partial Face A                |  |
-     *  |  |  +-------------+       +-------------+  |  |
-     *  |  |  |  Facet A1   |  ...  |  Facet An   |  |  |
-     *  |  |  +-------------+       +-------------+  |  |
-     *  |  |                                         |  |
-     *  |  |  +-----------------------------------+  |  |
-     *  |  |  |  Face AA                          |  |  | 
-     *  |  |  |  +-----------+     +-----------+  |  |  |
-     *  |  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
-     *  |  |  |  +-----------+     +-----------+  |  |  |
-     *  |  |  +-----------------------------------+  |  |
-     *  |  |  ...                                    |  |
-     *  |  +-----------------------------------------+  |
-     *  |  ...                                          |
-     *  |  +-----------------------------------------+  |
-     *  |  |  Face n                                 |  |
-     *  |  |  ...                                    |  |
-     *  |  +-----------------------------------------+  |
-     *  +-----------------------------------------------+
-     *  
      *  A face is the primary projection of the content. This projection may
-     *  contain additional sub-components, in the form of facets and sub-faces.
+     *  contain additional sub-components, in form of facets and sub-faces.
      *  
      *  Facets are parts of a face (projection) and are not normally a
      *  standalone component. For example, the input mask and result table of a
@@ -285,9 +295,6 @@ if (typeof SiteMap === "undefined") {
     /** Array with all supported acceptors. */  
     SiteMap.acceptors;
     
-    /** Array with all permit functions. */
-    SiteMap.permits;
-    
     /** Pattern for a valid face path. */
     SiteMap.PATTERN_PATH = /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/;
 
@@ -307,23 +314,14 @@ if (typeof SiteMap === "undefined") {
         var acceptors = (SiteMap.acceptors || []).slice();
         while (acceptors.length > 0) {
             var acceptor = acceptors.shift();
-            if (!acceptor.pattern.test(path))
+            if (acceptor.pattern
+                    && !acceptor.pattern.test(path))
                 continue; 
             acceptor = acceptor.action.call(null, path);
             if (acceptor !== true) {
                 if (typeof acceptor === "string")
                     acceptor = Path.normalize(acceptor);
                 return acceptor; 
-            }
-        }
-        
-        var permits = (SiteMap.permits || []).slice();
-        while (permits.length > 0) {
-            var permit = permits.shift().call(null, path);
-            if (permit !== true) {
-                if (typeof permit === "string")
-                    permit = Path.normalize(permit);
-                return permit; 
             }
         }
         
@@ -419,7 +417,7 @@ if (typeof SiteMap === "undefined") {
         
         var focus = function(focus) {
             window.setTimeout((focus) => {
-                focus = document.querySelector("#" + focus);
+                focus = focus ? document.querySelector("#" + focus) : focus;
                 if (focus) {
                     focus.scrollIntoView(true);
                     focus.focus();
@@ -529,15 +527,35 @@ if (typeof SiteMap === "undefined") {
      *  Several permit methods can be registered.
      *  All requested paths pass through the permit method(s). This can decide
      *  what happens to the path. 
+     *  From the permit method a return value is expected, which can have the
+     *  following characteristics:
+     *  
+     *      true:
+     *  The validation is successful and the iteration via further permit method
+     *  is continued. If all permit methods return true and thus confirm the
+     *  path, it is used.
+     *       
+     *      String:
+     *  The validation (iteration over further permit-merhodes) will be aborted
+     *  and it will be forwarded to the path corresponding to the string. 
+
+     *      In all other cases:
+     *  The path is regarded as invalid/unauthorized, the validation (iteration
+     *  over further permit-merhodes) will be aborted and is forwarded to the
+     *  original path.
+     *  
+     *  A permit method for paths can optionally be passed to each meta object.
+     *  This is interesting for modules that want to register and validate their
+     *  own paths.
      *  
      *      Acceptor:
      *      ----
-     *      
-     *  TODO:
-     *  Optionally, acceptors can also be passed with the meta object.
-     *  The key (RegExp) corresponds to a path filter, the value is a method
-     *  that is executed if the current path matches the filter of an acceptor.
-     *      
+     *  Acceptors work in a similar way to permit methods.
+     *  In difference, permit methods are called for each path and acceptors are
+     *  only called for those that match the RegExp pattern.
+     *  Also from the permit method a return value is expected, which can have
+     *  the following characteristics -- see SiteMap with permit function.
+     *  
      *      SiteMap.customize(/^phone.*$/i, function(path) {
      *              dial the phone number
      *      });
@@ -549,57 +567,38 @@ if (typeof SiteMap === "undefined") {
      *      });
      *      
      *      SiteMap.customize(RegExp, function);
-     *      
-     *  TODO: permit return final true, sonst Abbruch der Navigation, alertnativ String mit neuem Ziel
-     *  TODO: acceptor return final true, sonst Abbruch der Navigation, alertnativ String mit neuem Ziel - wie bei permit 
-     *      
-     *  An acceptor is an alias/filter for a path based function
-     *  If the path corresponds to an acceptor, the stored function is called.
-     *  The return value controls what happens to the path.  
-     *      If the return value is false:
-     *      ----
-     *  The Acceptor takes over the complete path control for the matching path.
-     *  Possible following acceptors are not used.   
-     *      If the return value is a string:
-     *      ----
-     *  This is interpreted as a new destination and a forwarding follows.
-     *  Possible following acceptors are not used.
-     *      In all other cases:
-     *      ----
-     *  The Acceptor works in the background.
-     *  Possible following acceptors are used and the SiteMap keeps the control
-     *  of the path.
-     *  
-     *  A permit method for paths can optionally be passed to each meta object.
-     *  This is interesting for modules that want to register and validate their
-     *  own paths. 
+     * 
+     *  Permit methods and acceptors are regarded as one set and called in the
+     *  order of their registration. 
      *  
      *      Important note about how the SiteMap works:
      *      ----
-     *  The SiteMap emanages all configurations cumulatively. All paths and
+     *  The SiteMap collects all configurations cumulatively. All paths and
      *  facets are summarized, acceptors and permit methods are collected in the
-     *  order of their registration. A later assignment of which meta data and
-     *  permit methods were passed together with which meta object does not
-     *  exist.
+     *  order of their registration. A later determination of which metadata was
+     *  registered with which permit methods is not possible.
      *  
      *  The configuration of the SiteMap is only applied if an error-free meta
-     *  object is transferred and no errors occur during processing.
+     *  object is passed and no errors occur during processing.
      *  
-     *  The method uses variable parameters and has the following signatures:
-     *  
+     *  The method uses variable parameters as and according to the previous
+     *  description.
+     *
      *  @param  pattern
      *  @param  callback
      *  @param  meta
      *  @param  permit
      *  @throws An error occurs in the following cases:
+     *      - if the data type of acceptor and/or callback is invalid
      *      - if the data type of map and/or permit is invalid
-     *      - if the sntax and/or the format of facets are invalid
+     *      - if the syntax and/or the format of facets are invalid
      */
     SiteMap.customize = function(variants) {
         
         if (arguments.length > 1
-                && arguments[0] instanceof RegExp
-                && typeof arguments[1] === "function") {
+                && arguments[0] instanceof RegExp) {
+            if (typeof arguments[1] !== "function")
+                throw new TypeError("Invalid acceptor: " + typeof arguments[1]);
             SiteMap.acceptors = SiteMap.acceptors || [];
             SiteMap.acceptors.push({pattern:arguments[0], action:arguments[1]});
             return;
@@ -610,14 +609,13 @@ if (typeof SiteMap === "undefined") {
             throw new TypeError("Invalid map: " + typeof arguments[0]);
         var map = arguments[0];
 
-        var permits = (SiteMap.permits || []).slice();
-        if (arguments.length > 1
-                && typeof arguments[1] !== "function")
-            throw new TypeError("Invalid permit: " + typeof arguments[1]);
-        var permit = arguments.length > 1 ? arguments[1] : null;
-        if (permit)
-            permits.push(permit);
-
+        var acceptors = (SiteMap.acceptors || []).slice();
+        if (arguments.length > 1) {
+            if (typeof arguments[1] !== "function")
+                throw new TypeError("Invalid permit: " + typeof arguments[1]);
+            acceptors.push({pattern:null, action:arguments[1]});
+        }
+        
         var paths = {};
         Object.keys(SiteMap.paths || {}).forEach((key) => {
             if (typeof key === "string"
@@ -672,7 +670,7 @@ if (typeof SiteMap === "undefined") {
             });
         });
         
-        SiteMap.permits = permits;
+        SiteMap.acceptors = acceptors;
         SiteMap.paths = paths;
         SiteMap.facets = facets;
     };
@@ -803,9 +801,7 @@ if (typeof SiteMap === "undefined") {
         //target, which is then jumped to.
         var forward = SiteMap.permit(target);
         if (forward !== true) {
-            if (typeof forward == "string")
-                SiteMap.navigate(forward);
-            else SiteMap.navigate(source);
+            SiteMap.navigate(typeof forward == "string" ? forward : source);
             return;
         }
         
@@ -846,9 +842,9 @@ if (typeof SiteMap === "undefined") {
             render = target;
         else if (target.startsWith(source))
             render = source;
-        render = render.match(/((?:(?:#[^#]+)#*$)|(?:^#$))/g)[0];
-        if (render.length > 1)
-            Composite.render(render);
+        render = render.match(/((?:#[^#]+)|(?:^))#*$/)[0];
+        if (render && render[1])
+            Composite.render(render[1]);
         else Composite.render(document.body);
     });
 };
