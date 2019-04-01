@@ -85,14 +85,13 @@ characters and are relative to the current path.
 ```
 <a href="##">Back to the parent.</a>
 <a href="##x">Back to the parent + z.</a>
-<a href="x#y#z">Goto the current + x + y + z.</a>
 ```
 
 Relative paths without hash at the beginning are possible, but only work with
 `SiteMap.navigate(path)`.
 
 ```javascript
-SiteMap.navigate(""x#y#z"");
+SiteMap.navigate("x#y#z");
 ```
 
 
