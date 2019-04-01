@@ -14,7 +14,7 @@ TODO:
   * [Configuration](#configuration)
     * [Face Flow](#face-flow)
     * [Permissions](#permissions)
-    * [Aermissions](#acceptors)
+    * [Acceptors](#acceptors)
   * [Navigation](#navigation)
   * [Permission Concept](#permission-concept)
   * [Acceptors](#acceptors-1)
