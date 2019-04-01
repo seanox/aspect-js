@@ -40,20 +40,23 @@
           if (targets.length <= 0)
               return;
           var target = targets.shift();
-          var direct = !target.startsWith("A");
+          var mode = String(target.match(/^[A-Z]/));
           target = target.substring(2);
-          logging((direct ? "A:" : "B:") + target);
-          if (direct)
+          logging(mode + ": " + target);
+          if (mode == "A")
+              SiteMap.navigate(target);
+          else if (mode == "B")
               window.location.href = target;
-          else SiteMap.navigate(target);
+          else if (mode == "C")
+              window.location.hash = target;
           if (targets.length <= 0) {
               window.setTimeout((target) => {
                   Test.start(); 
-              }, 250);
+              }, 50);
           } else {
               window.setTimeout((target) => {
                   autoforward(); 
-              }, 125);
+              }, 25);
           }
       };
       
@@ -77,6 +80,15 @@
           targets.push("B ####c");
           targets.push("B #a#b#c#d");  
           targets.push("B ####b");          
+
+          targets.push("C #a#b#c#d");
+          targets.push("C ##");
+          targets.push("C #a#b#c#d");
+          targets.push("C ###x");
+          targets.push("C y#z");
+          targets.push("C ####c");
+          targets.push("C #a#b#c#d");  
+          targets.push("C ####b");          
           
           window.location.href = "#x" + timing;
           window.location.href = "#";
@@ -85,7 +97,7 @@
 
       window.addEventListener("hashchange", (event) => {
           if (event.newURL.match(/^\w+:\/\//))
-              logging("C: " + event.newURL.replace(/\d+$/, "0000"));
+              logging("X: " + event.newURL.replace(/\d+$/, "0000"));
       });
       
       Test.create({test:function() {
@@ -103,43 +115,64 @@
       }});      
     </script>
     <script type="text/test">
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#x0000
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
-B:#a#b#c#d
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
-B:##
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
-B:#a#b#c#d
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
-B:###x
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
-B:y#z
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
-B:####c
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
-B:#a#b#c#d
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
-B:####b
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
-A:#a#b#c#d
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
-A:##
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
-A:##x
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##x
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
-A:#a#b#x#y#z
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
-A:####c
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####c
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
-A:#a#b#c#d
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
-A:####b
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####b
-C: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#x0000
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+A: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+A: ##
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+A: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+A: ###x
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+A: y#z
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
+A: ####c
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+A: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+A: ####b
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+B: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+B: ##
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+B: ##x
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##x
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+B: #a#b#x#y#z
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
+B: ####c
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####c
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+B: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+B: ####b
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####b
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+C: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+C: ##
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+C: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+C: ###x
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html###x
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+C: y#z
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#y#z
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+C: ####c
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####c
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+C: #a#b#c#d
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+C: ####b
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####b
+X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
     </script>
   </head>
   <body>

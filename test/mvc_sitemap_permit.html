@@ -25,6 +25,10 @@
           "#projects#wotexx": ["description", "features", "licence", "requirement", "download"],
           "#legal": ["terms", "privacy"],
           "#error": null
+      }, (path) => {
+          if (!path.match(/test/))
+              return true;
+          return false;
       });
       
       var timing = new Date().getTime();
@@ -46,11 +50,11 @@
           if (targets.length <= 0) {
               window.setTimeout((target) => {
                   Test.start(); 
-              }, 250);
+              }, 50);
           } else {
               window.setTimeout((target) => {
                   autoforward(); 
-              }, 125);
+              }, 25);
           }
       };
 
@@ -77,6 +81,7 @@
           targets.push("#projects#wotexx#description");      
           targets.push("#projects#wotexx#features");      
           targets.push("#projects#wotexx#licence");
+          targets.push("#projects#test#description");
           
           window.location.href = "#x" + timing;
           window.location.href = "#";
@@ -151,6 +156,10 @@ A: #projects#wotexx#features
 B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#projects#wotexx#features
 A: #projects#wotexx#licence
 B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#projects#wotexx#licence
+A: #projects#test#description
+B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#projects#test#description
+B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#projects#test
+B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_permit.html#projects
     </script>
   </head>
   <body>
