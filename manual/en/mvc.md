@@ -12,6 +12,9 @@ TODO:
   * [Absolute Path](#absolute-path)
 * [SiteMap](#sitemap)
   * [Configuration](#configuration)
+    * [SiteMap](#sitemap)
+    * [Permissions](#permissions)
+    * [Aermissions](#acceptors)
   * [Navigation](#navigation)
   * [Permission Concept](#permission-concept)
   * [Acceptors](#acceptors)
@@ -172,8 +175,66 @@ redirected/forwarded  with own logic.
 
 ### Configuration
 
+For the configuration of the SiteMap the method `SiteMap.customize(...)` is
+used. With this method it is possible to define and register the SiteMap (paths,
+faces, facets), the permissions and the acceptors, for which the method has
+different signatures.  
+
+The configuration can be called several times, even at runtime. The SiteMap
+collects all configurations cumulatively. All paths and facets are summarized,
+acceptors and permit methods are collected in the order of their registration.  
+However, a later determination of which metadata was registered with which
+permit methods is not possible.
+
+The configuration of the SiteMap is only applied if an error-free meta object is
+passed and no errors occur during processing.
+
+
+#### SiteMap
+
+The configuration is based on a meta object that is passed to method
+`SiteMap.customize({meta})`.  
+The keys (string) correspond to the paths, the values are arrays with the valid
+facets for a path.
+
+```javascript
+var sitemap = {
+    "#": ["news", "products", "about", "contact", "legal"],
+    "products#papers": ["paperA4", "paperA5", "paperA6"],
+    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "products#pens": ["pencil", "ballpoint", "stylograph"],
+    "legal": ["terms", "privacy"],
+    ...
+};
+
+SiteMap.customize(sitemap);
+```
+
+Or a littel shorter the direct call of the customize method:
+
+```javascript
+SiteMap.customize({
+    "#": ["news", "products", "about", "contact", "legal"],
+    "products#papers": ["paperA4", "paperA5", "paperA6"],
+    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "products#pens": ["pencil", "ballpoint", "stylograph"],
+    "legal": ["terms", "privacy"],
+    ...
+});
+```
+
 TODO:
 
+
+#### Permissions
+
+TODO:
+
+
+#### Acceptors
+
+TODO:
+     
 
 ### Navigation
 
