@@ -38,7 +38,7 @@ values are recorded as label entries.
 
 The language is selected automatically on the basis of the language setting of
 the browser. If the language set there is not supported, the language declared
-as 'default' is used.
+as `default` is used.
 
 After loading the application, Messages are available as an assosiative array
 and can be used in JavaScript directly and in the Markup as Expression Language.
