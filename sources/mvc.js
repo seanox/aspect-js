@@ -78,7 +78,7 @@
  *  When it comes to controlling face flow, the SiteMap provides hooks for
  *  permission concepts and acceptors. With both things the face flow can be
  *  controlled and influenced. This way, the access to paths can be stopped
- *  and/or redirected/forwarded  with own logic. 
+ *  and/or redirected/forwarded with own logic. 
  *  
  *  The Object-/Model-Binding part also belongs to the Model View Controller and
  *  is taken over by the Composite API in this implementation. SiteMap is an
@@ -264,7 +264,7 @@ if (typeof SiteMap === "undefined") {
      *  When it comes to controlling face flow, the SiteMap provides hooks for
      *  permission concepts and acceptors. With both things the face flow can be
      *  controlled and influenced. This way, the access to paths can be stopped
-     *  and/or redirected/forwarded  with own logic. 
+     *  and/or redirected/forwarded with own logic. 
      */
     SiteMap = {};
 
@@ -796,12 +796,15 @@ if (typeof SiteMap === "undefined") {
             return;
         }
         
-        //If the permission does not match, the last safe path (SiteMap.location)
-        //is restored. Alternatively, the permit methods can also supply a new
-        //target, which is then jumped to.
+        //If the permission is not confirmed, will be forwarded to the next
+        //higher known/permitted path, based on the requested path.
+        //Alternatively, the permit methods can also supply a new target, which
+        //is then jumped to.
         var forward = SiteMap.permit(target);
         if (forward !== true) {
-            SiteMap.navigate(typeof forward == "string" ? forward : source);
+            if (typeof forward == "string")
+                SiteMap.navigate(forward);
+            else SiteMap.navigate(target != "#" ? target + "##" : "#");
             return;
         }
         
