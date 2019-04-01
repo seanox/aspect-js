@@ -12,12 +12,12 @@ TODO:
   * [Absolute Path](#absolute-path)
 * [SiteMap](#sitemap)
   * [Configuration](#configuration)
-    * [SiteMap](#sitemap)
+    * [Face Flow](#face-flow)
     * [Permissions](#permissions)
     * [Aermissions](#acceptors)
   * [Navigation](#navigation)
   * [Permission Concept](#permission-concept)
-  * [Acceptors](#acceptors)
+  * [Acceptors](#acceptors-1)
 * [Object-/Model-Binding](#object-model-binding)
 
 
@@ -67,7 +67,7 @@ This is useful for functional links, e.g. to open a popup or to send a
 mail in the background.
 
 ```
-<a href="###">Do something, the logic is in the model.</a>
+<a href="###">Do something, the logic is in the model</a>
 ```
 
 
@@ -76,7 +76,7 @@ mail in the background.
 These paths are empty or contain only one hash character.
 
 ```
-<a href="#">Back to the root.</a>
+<a href="#">Back to the root</a>
 ```
 
 
@@ -86,8 +86,8 @@ These paths begin without hash or begin with two or more hash (`##+`)
 characters and are relative to the current path.
      
 ```
-<a href="##">Back to the parent.</a>
-<a href="##x">Back to the parent + z.</a>
+<a href="##">Back to the parent</a>
+<a href="##x">Back to the parent + z</a>
 ```
 
 Relative paths without hash at the beginning are possible, but only work with
@@ -105,8 +105,8 @@ All paths will be balanced, meaning the directives with multiple hash characters
 are resolved.
 
 ```
-<a href="#">Back to the root.</a>
-<a href="#a#b#c">Back to the root + a + b + c.</a>
+<a href="#">Back to the root</a>
+<a href="#a#b#c">Back to the root + a + b + c</a>
 ```
 
 
@@ -176,9 +176,9 @@ redirected/forwarded  with own logic.
 ### Configuration
 
 For the configuration of the SiteMap the method `SiteMap.customize(...)` is
-used. With this method it is possible to define and register the SiteMap (paths,
-faces, facets), the permissions and the acceptors, for which the method has
-different signatures.  
+used. With this method it is possible to define and register the face flow
+(paths, faces, facets), the permissions and the acceptors, for which the method
+has different signatures.  
 
 The configuration can be called several times, even at runtime. The SiteMap
 collects all configurations cumulatively. All paths and facets are summarized,
@@ -190,15 +190,20 @@ The configuration of the SiteMap is only applied if an error-free meta object is
 passed and no errors occur during processing.
 
 
-#### SiteMap
+#### Face Flow
 
 The configuration is based on a meta object that is passed to method
 `SiteMap.customize({meta})`.  
 The keys (string) correspond to the paths, the values are arrays with the valid
-facets for a path.
+facets for a path. Facets do not need their own path, which is automatically
+derived/created. Paths are only needed for faces.
 
 ```javascript
-var sitemap = {
+SiteMap.customize({...});
+```
+
+```javascript
+var map = {
     "#": ["news", "products", "about", "contact", "legal"],
     "products#papers": ["paperA4", "paperA5", "paperA6"],
     "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
@@ -207,7 +212,7 @@ var sitemap = {
     ...
 };
 
-SiteMap.customize(sitemap);
+SiteMap.customize(map);
 ```
 
 Or a littel shorter the direct call of the customize method:
@@ -223,32 +228,113 @@ SiteMap.customize({
 });
 ```
 
-TODO:
+__Important: The navigation only accepts paths that are defined in face-flow.__  
+__Invalid paths are forwarded to the next higher known/permitted path, based__
+__on the requested path.__
 
 
 #### Permissions
 
-TODO:
+The permission concept is based on permit method(s) that are passed together
+with the face flow meta object.
+
+```javascript
+SiteMap.customize({...}, function(path) {...});
+```
+
+```javascript
+SiteMap.customize({
+    "#": ["news", "products", "about", "contact", "legal"],
+    "products#papers": ["paperA4", "paperA5", "paperA6"],
+    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "products#pens": ["pencil", "ballpoint", "stylograph"],
+    "legal": ["terms", "privacy"], ...},
+    
+    function(path) {
+        ...
+});
+```
+
+All requested paths pass through the permit method(s). This can decide what
+happens to the path. From the permit method a return value is expected, which
+can have the following characteristics:
+
+__True__ The validation is successful and the iteration via further permit
+method is continued. If all permit methods return true and thus confirm the
+path, it is used.
+
+__String__ The validation (iteration over further permit-merhodes) will be
+aborted and it will be forwarded to the path corresponding to the string. 
+
+__Otherwise__ The path is regarded as invalid/unauthorized, the validation
+(iteration over further permit-merhodes) will be aborted and is forwarded to the
+original path.
 
 
 #### Acceptors
 
-TODO:
-     
+Acceptors work in a similar way to permit methods.  
+In difference, permit methods are called for each path and acceptors are only
+called for those that match the RegExp pattern. Also from the permit method a
+return value is expected, which have the same characteristics of
+[Permissions](#permissions). 
+
+```javascript
+SiteMap.customize(RegExp, function(path) {...});
+```
+
+```javascript
+SiteMap.customize(/^phone.*$/i, function(path) {
+    dial the phone number
+});
+SiteMap.customize(/^mail.*$/i, function(path) {
+    send a mail
+});
+```
 
 ### Navigation
 
-TODO:
+The navigation can be effected by changing the URL hash in the browser (direct
+input), by using hash links, and in JavaScript with `window.location.hash`,
+`window.location.href` and `SiteMap.navigate(path)`.
+
+```
+<a href="#a#b#c">Goto root + a + b + c</a>
+<a href="##">Back to the parent</a>
+<a href="##x">Back to the parent + z</a>
+```
+
+```javascript
+SiteMap.navigate("#a#b#c");
+SiteMap.navigate("##");
+SiteMap.navigate("##x");
+```
+
+Relative paths without hash at the beginning are possible, but only work with
+`SiteMap.navigate(path)`.
+
+```javascript
+SiteMap.navigate("x#y#z");
+```
 
 
 ### Permission Concept
 
-TODO:
+The permission concept is based on permit methods, which are defined as callback
+methods with the configuration of the face flow. Several permit methods can be
+defined, which are verified with each requested path. Only if all permit methods
+confirm the requested path with `true`, it will be used and the renderer will
+render the dependent faces and facets and makes them visible.  
+More details can be found in chapter [Permissions](#permissions).
 
 
 ### Acceptors
 
-TODO:
+Acceptors are executed together with the permission concept.  
+They have the same effect, but only affect paths that correspond to a regular
+expression. Acceptors can be used to confirm permissions and/or for hidden
+background activities.  
+More details can be found in chapter [Acceptors](#acceptors).
 
 
 ## Object-/Model-Binding
@@ -258,3 +344,5 @@ taken over by the Composite API in this implementation. SiteMap is an extension
 and is based on the Composite API.  
 For a better understanding, the functionality is described here in the Model
 View Controler.
+
+TODO:
