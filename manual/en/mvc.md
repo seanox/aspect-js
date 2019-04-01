@@ -6,18 +6,111 @@ TODO:
 ## Contents Overview
 
 * [Virtual Paths](#virtual-paths)
+  * [Functional Path](#functional-path)
+  * [Root Path](#root-path)
+  * [Relative Path](#relative-path)
+  * [Absolute Path](#absolute-path)
 * [SiteMap](#sitemap)
+  * [Configuration](#configuration)
+  * [Navigation](#navigation)
+  * [Permission Concept](#permission-concept)
+  * [Acceptors](#acceptors)
 * [Object-/Model-Binding](#object-model-binding)
 
 
 ## Virtual Paths
 
-TODO:
+Paths are a reference to a target in face flow.  
+The target can be a face, a facet or a function.
+
+Paths consist exclusively of word characters and underscores (based on composite
+IDs) and must begin with a letter and use the hash character as separator and
+root.
+
+```
+#a#b#c#d
+```
+
+Paths use as lowercase letters. Upper case letters are automatically replaced by
+lower case letters when normalizing.
+
+```
+#a#b#c#d == #A#b#C#d
+```
+
+Between the path segments, the hash character can also be used as a back jump
+(parent) directive. The back jump then corresponds to the number of additional
+hash characters.
+
+```
+#a#b#c#d##x   -> #a#b#c#x
+#a#b#c#d###x  -> #a#b#x
+#a#b#c#d####x -> #a#x
+```
+
+The navigation can be effected by changing the URL hash in the browser (direct
+input), by using hash links, and in JavaScript with `window.location.hash`,
+`window.location.href` and `SiteMap.navigate(path)`.
+
+There are different types of paths, which are explained below.
+
+
+### Functional Path
+
+The path consists of three or more hash characters (`###+`) and are only
+temporary, they serve a function call without changing the current path (URL
+hash).  
+This is useful for functional links, e.g. to open a popup or to send a
+mail in the background.
+
+```
+<a href="###">Do something, the logic is in the model.</a>
+```
+
+
+### Root Path
+
+These paths are empty or contain only one hash character.
+
+```
+<a href="#">Back to the root.</a>
+```
+
+
+### Relative Path
+
+These paths begin without hash or begin with two or more hash (`##+`)
+characters and are relative to the current path.
+     
+```
+<a href="##">Back to the parent.</a>
+<a href="##x">Back to the parent + z.</a>
+<a href="x#y#z">Goto the current + x + y + z.</a>
+```
+
+Relative paths without hash at the beginning are possible, but only work with
+`SiteMap.navigate(path)`.
+
+```javascript
+SiteMap.navigate(""x#y#z"");
+```
+
+
+### Absolute Path
+
+These paths begin with one hash characters.
+All paths will be balanced, meaning the directives with multiple hash characters
+are resolved.
+
+```
+<a href="#">Back to the root.</a>
+<a href="#a#b#c">Back to the root + a + b + c.</a>
+```
 
 
 ## SiteMap
 
-Static component for the use of a SiteMap for virtua paths.
+Static component for the use of a SiteMap for virtual paths.
 SiteMap is a directory consisting of faces and facets that are addressed by
 paths.
 
@@ -75,7 +168,27 @@ and only added again when it is displayed.
 When it comes to controlling face flow, the SiteMap provides hooks for
 permission concepts and acceptors. With both things the face flow can be
 controlled and influenced. This way, the access to paths can be stopped and/or
-redirected/forwarded  with own logic. 
+redirected/forwarded  with own logic.
+
+
+### Configuration
+
+TODO:
+
+
+### Navigation
+
+TODO:
+
+
+### Permission Concept
+
+TODO:
+
+
+### Acceptors
+
+TODO:
 
 
 ## Object-/Model-Binding
