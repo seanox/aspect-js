@@ -243,6 +243,22 @@ __Invalid paths are forwarded to the next higher known/permitted path, based__
 __on the requested path.__
 
 
+__Important: Without a face-flow there will be no valid paths.__  
+__Should a user interface or components be used without face-flow, they must__
+__be marked as static, otherwise the components will be hidden (removed from__
+__the DOM).__
+
+```html
+<html>
+  <body>
+    <form id="model" composite static>
+      ...
+    </form>
+  </body>
+</html>
+```
+
+
 #### Permissions
 
 The permission concept is based on permit method(s) that are passed together
@@ -411,19 +427,138 @@ The implementation of both methods is optional.
   };
 ```
 
+
 #### field
+
+TODO;
 
 
 #### composite-id
 
+The Composite-ID is an application-wide unique identifier.  
+It is a sequence of characters or words consisting of letters, numbers, and
+underscores that contains at least one character, begins with a letter, and ends
+with a letter or number. A Composite-ID is formed by combining the attributes
+`ID` and `composite`.
+
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      ...
+    </form>
+  </body>
+</html>
+```
+
+The Composite-ID is important for MVC and is required for object/model binding,
+synchronization and validation. Therefore, it is important that the sequence of
+characters within the JavaScript namespace is valid and unique. The identifier
+is also used for face flow to identify and control faces and facets and in
+general to identify and control models/components.
+
 
 #### identifier
+
+The identifier is a unique value with the same requirements as a Composite-ID.
+It is important for the assignment and binding of fields and properties for
+object/model binding, validation and synchronization.
+
+```html
+<html>
+  <body>
+    <form id="model" composite static>
+      <input type="text" id="fieldA">
+      ...
+    </form>
+  </body>
+</html>
+```
+
+In some cases the identifier cannot be uniquely named, so in cases where the
+target in the object is an array and/or the identifier is used in an iteration
+In these cases, the identifier can be extended by an additional personal/unique
+identifier, separated by a colon. 
+ 
+```html
+<html>
+  <body>
+    <form id="model" composite static iterate="{{set:['A','B','C']}}">
+      <input type="text" id="fieldA:{{set.value}}">
+      ...
+    </form>
+  </body>
+</html>
+```
 
 
 ### Binding
 
+TODO:
+
+Example for a relative namespace `a.b.c`:
+
+```html
+<html>
+  <body>
+    <div id="a">
+      <div id="b">
+        <div id="c"></div>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+```javascript
+var a = {
+    b: {
+        c: {}
+    }
+};
+```
+
+Example for a mix of relative and absolute namespaces `a.b` and `b.c.d`:
+
+```html
+<html>
+  <body>
+    <div id="a">
+      <div id="b">
+        <div id="b.c">
+          <div id="d"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+```javascript
+var a = {
+    b: {
+    }
+};
+
+var b = {
+    c: {
+        d: {}
+    }
+};
+```
+
 
 ### Synchronization
+
+In addition to the static linking and assignment of HTML elements to JavaScript
+models, the object binding also includes the synchronization of values between
+the HTML elements and the fields of the JavaScript models.  
+The synchronization depends on events that are defined for the HTML element with
+the attribute `events` and so the synchronization is executed only when one of
+the defined events occurs.
+
+More details about the usage can be found in chapter
+[events](markup.md#events).
 
 
 ### Validation
