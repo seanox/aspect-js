@@ -115,7 +115,7 @@ if (typeof Test === "undefined") {
      */
     Test.activate = function() {
         
-        if (typeof Test.activate.lock !== 'undefined')
+        if (typeof Test.activate.lock !== "undefined")
             return;
         Test.activate.lock = true;
         

@@ -752,7 +752,7 @@ if (typeof SiteMap === "undefined") {
                 && window.location.href.match(/[^#]#$/))
             source = "#";
         
-        var event = document.createEvent('HTMLEvents');
+        var event = document.createEvent("HTMLEvents");
         event.initEvent("hashchange", false, true);
         event.newURL = target;
 

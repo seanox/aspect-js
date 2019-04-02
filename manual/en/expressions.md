@@ -57,7 +57,7 @@ Words are classified according to their characteristics.
 
 ### Text
 
-Text is not a regular element of the expression.
+Text is not a regular element of the expression.  
 This occurs for attributes when the Expression Language is combined with text.
 
 ```html

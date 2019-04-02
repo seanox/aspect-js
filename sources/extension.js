@@ -163,7 +163,7 @@ if (String.prototype.encodeBase64 === undefined) {
     String.prototype.encodeBase64 = function() {
         try {
             return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
-                return String.fromCharCode('0x' + code);
+                return String.fromCharCode("0x" + code);
             }));
         } catch (exception) {
             throw new Error("malformed character sequence");
@@ -178,9 +178,9 @@ if (String.prototype.encodeBase64 === undefined) {
 if (String.prototype.decodeBase64 === undefined) {
     String.prototype.decodeBase64 = function() {
         try {
-            return decodeURIComponent(atob(this).split('').map((code) => {
-                return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
+            return decodeURIComponent(atob(this).split("").map((code) => {
+                return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
+            }).join(""));
         } catch (exception) {
             throw new Error("malformed character sequence");
         }

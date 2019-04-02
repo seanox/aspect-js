@@ -107,6 +107,9 @@ if (typeof DataSource === "undefined") {
      *  option raw the cleanup can be deactivated.
      *  @param  xml   locator or XMLDocument
      *  @param  style locator or XMLDocument 
+     *  @param  raw   option in combination with transform
+     *      true returns the complete XML document, otherwise only the root
+     *      entity as node 
      *  @return the transformation result as a node
      */
     DataSource.transform = function(xml, style, raw) {
@@ -170,15 +173,15 @@ if (typeof DataSource === "undefined") {
     }; 
     
     /**
-     *  Fetch the data as text to a locator.
-     *  Optionally the data can be transformed into an XMLDocument.
+     *  Fetch the data to a locator as XMLDocument.
+     *  Optionally the data can be transformed via XSLT.
      *  @param  locators  locator
-     *  @param  transform locator of style for the transformation
-     *  @param  raw
-     *      in combination with transform optionally true to return the complete
-     *      XMLDocument, otherwise only the root entity is returned as node     
-     *  @return the data as text or in combination with transform the
-     *      XMLDocument or the root entity as node
+     *  @param  transform locator of the transformation style
+     *  @param  raw       option in combination with transform
+     *      true returns the complete XML document, otherwise only the root
+     *      entity as node
+     *  @return the fetched data, optionally transformed, as XMLDocument or the
+     *      root entity as a node when the combination transform and raw is used
      *  @throws Error in the case of invalid arguments
      */    
     DataSource.fetch = function(locator, transform, raw) {
@@ -225,7 +228,7 @@ if (typeof DataSource === "undefined") {
     };
     
     /**
-     *  Collects and concatates the of multiple XML files as a new XMLDocument.
+     *  Collects and concatenates multiple XML files in a new XMLDocument.
      *  The method has the following various signatures:
      *      DataSource.collect(locator, ...);
      *      DataSource.collect(collector, [locators]);

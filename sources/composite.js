@@ -800,7 +800,6 @@ if (typeof Composite === "undefined") {
      *  
      *      Composite.customize(function(element) {...});
      * 
-     *  TODO:
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - callback function is not implemented correctly
@@ -878,7 +877,8 @@ if (typeof Composite === "undefined") {
      *  analyzed and, if necessary, splitted into static content, dynamic
      *  content and parameters. To do this, the original text node is replaced
      *  by new separate text nodes:
-     *      e.g. "text {{expr}} + {{var:expr}}" -> ["text ", {{expr}}, " + ", {{var:expr}}]
+     *      e.g. "text {{expr}} + {{var:expr}}"
+     *               -> ["text ", {{expr}}, " + ", {{var:expr}}]
      *  When the text nodes are split, meta objects are created for them. The
      *  meta objects are compatible with the meta objects of the rendering
      *  methods but use the additional attributes:
@@ -904,20 +904,19 @@ if (typeof Composite === "undefined") {
      *  otherwise the element value is not stored into the corresponding model
      *  field. If an event occurs, synchronization is performed. After that will
      *  be checked whether the render attribute exists. All selectors listed
-     *  here are then triggered for re-rendering. (Re)rendering is independent of
-     *  synchronization and validation and is executed immediately after an
+     *  here are then triggered for re-rendering. (Re)rendering is independent
+     *  of synchronization and validation and is executed immediately after an
      *  event occurs.
      *      
      *      Condition
      *      ----
-     *  TODO: condition
      *  The declaration can be used with all HTML elements, but not with script
      *  and style. The condition defines whether an element is (re)rendered or
      *  not. As result of the expression true/false is expected and will be se
      *  as an absolute value for the condition attribute - only true or false.
      *  Elements are hidden with the condition attribute via CSS and only
-     *  explicitly displayed with [condition=true]. JavaScript elements are
-     *  executed or not.     
+     *  explicitly displayed with [condition=true].
+     *  JavaScript (composite/javascript) elements are executed or not.     
      *      
      *      Import
      *      ----
@@ -927,11 +926,11 @@ if (typeof Composite === "undefined") {
      *  and behave similar to the output-attribute, or the value is considered
      *  as a remote resource with relative or absolute URL and will be loaded
      *  via the HTTP method GET.
-     *  TODO: condition
-     *  Loading and replacing the import function can be combined with the
-     *  condition attribute and is only executed when the condition is true.
-     *  If the content can be loaded successfully, the import attribute is
-     *  removed. Recursive rendering is initiated via the MutationObserver.
+     *  If the content was successfully imported and inserted, the import
+     *  attribute is removed. Recursive rendering is initiated by the
+     *  MutationObserver.
+     *  The import attribute can be combined with the condition attribute so
+     *  that the import is only executed if the condition is true.
      *  
      *      Output
      *      ----

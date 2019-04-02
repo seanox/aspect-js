@@ -1,4 +1,4 @@
-#Datasource
+# DataSource
 
 DataSource is a NoSQL approach to data storage based on XML data in combination
 with multilingual data separation, optional aggregation and transformation. A
@@ -22,6 +22,7 @@ similar to SQL.
 * [Data Storage](#data-storage)
 * [Locales](#locales)
 * [Locator](#locator)
+* [XPath](#xpath)
 * [fetch](#fetch)
 * [transform](#transform)
 * [collect](#collect)
@@ -44,16 +45,12 @@ files. Optionally, a transformation with XSLT is possible.
 |  |  +- fileA.xslt
 |  |  +- directory...
 |  |  ...
-|  |
 |  +- en
 |  |  |
 |  |  +- fileA.xml
 |  |  +- fileA.xslt
 |  |  +- directory...
 |  |  ...
-|  |
-|  ...
-|  |  
 |  +- locales.xml
 |
 +- modules
@@ -101,19 +98,199 @@ the files in the data storage.
 xml://fileA -> ./data/en/fileA.xml
 xsl://fileA -> ./data/en/fileA.xsl
 
-xsl://foo/fileA -> ./data/en/foo/fileA.xsl
+xml://foo/fileA -> ./data/en/foo/fileA.xml
 ```
+
+
+## XPath
+
+XPath is used as a functional query language and for the transformation of
+dynamic content.  
+For more information please read:
+[https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
+
 
 ## fetch
 
-TODO:
+The data is fetched with a locator through the fetch method.    
+The return value is an XMLDocument that can then be used in detail with XPath.
+
+```javascript
+var xml = DataSource.fetch("xml://paper");
+xml.evaluate(...);
+```
+
+Optionally the result can be transformed via XSLT.  
+This requires a locator for a stylesheet.
+
+```javascript
+DataSource.fetch("xml://paper", "xslt://article");
+```
+
+During the transformation a new XMLDocument is created. Depending on the browser
+and XSLT processor, the structure of XMLDocument is different. Therefore, by
+default the root entity will be returned as a node. The behavior can be changed
+with option `raw`. If this is `true`, the XMLDocument is returned as original.
+
+```javascript
+DataSource.fetch("xml://paper", "xslt://article", true);
+```
+
+More details about the special features of the transformation can be found in
+chapter [transform](#transform).
 
 
 ## transform
 
-TODO:
+The transformation via XSLT (1.0) of XML data provides an additional way for
+generating dynamically data and content and can already be done with the fetch
+method, which is based on locators. Sometimes it is necessary to work directly
+with the XMLDocument. In these cases the transform method can be used, because
+the method accepts XMLDocument as well locator (also in mix).  
+
+```javascript
+DataSource.fetch("xml://paper", "xslt://article");
+DataSource.fetch("xml://paper", "xslt://article", true);
+
+DataSource.fetch(xml, style);
+DataSource.fetch(xml, style, true);
+```
+
+During the transformation a new XMLDocument is created. Depending on the browser
+and XSLT processor, the structure of XMLDocument is different. Therefore, by
+default the root entity will be returned as a node. The behavior can be changed
+with option `raw`. If this is `true`, the XMLDocument is returned as original.
+
+Another feature concerns JavaScript elements.  
+These are automatically changed to composite/javascript so that they are not
+executed automatically when embedding, but are deliberately interpreted by the
+renderer. This is important when using [condition](markup.md#condition).
+
+Another feature concerns JavaScript elements.  
+These are automatically changed to composite/javascript so that they are not
+executed automatically when embedding, but are deliberately interpreted by the
+renderer. This is important when using [condition](markup.md#condition).
+
+Another feature concerns the creation/output of text during the transformation.  
+The XSLT Processor always generates XML valid text output. Any XML syntax in a
+text is automatically masked. This makes the generation of markup difficult.  
+The attribute `escape` was introduced for this purpose and can be used in XML
+and XSLT files. The attribute expects the values `yes`, `on`, `true` or `1`.  
+In this case the automatic escaping is cancelled or undone.
+
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="html"/>
+  <xsl:template match="/">
+    <header>
+      <h1>Title</h1>
+    </header>
+    <article escape="on">
+      <xsl:value-of select="/content"/>
+    </article>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<article escape="on">
+  <![CDATA[
+  <p>
+    Seanox aspect-js is a JavasScript framework for implementing  
+    dynamic interfaces for web browsers.  
+    The framework takes the declarative approach of HTML and combines  
+    markup and JavaScript via the model view controler to components  
+    that are addressed directly or via virtual paths.  
+    The framework provides an expression language based on JavaScript.
+  </p>
+  <a href="https://github.com/seanox/aspect-js">read more</a>
+  ]]>
+</article>
+```
 
 
 ## collect
 
-TODO:
+Content from multiple XML files can be collected and concatenated into a new
+XMLDocument. The various contents are combined under one collector, whose name
+can be defined yourself.
+
+As an example, 3 XML files: paper.xml, envelope.xml, pen.xml
+
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<article>
+  <id>100</id>
+  <description>Paper</description>
+  <price>1.00</price>
+</article>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<article>
+  <id>200</id>
+  <description>Envelope</description>
+  <price>2.00</price>
+</article>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<article>
+  <id>300</id>
+  <description>Pen</description>
+  <price>3.00</price>
+</article>
+```
+
+Collecting with the standard collector.
+
+```javascript
+DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
+```
+
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<collector>
+  <article>
+    <id>100</id>
+    <description>Paper</description>
+    <price>1.00</price>
+  </article>
+  <article>
+    <id>200</id>
+    <description>Envelope</description>
+    <price>2.00</price>
+  </article>
+  <article>
+    <id>300</id>
+    <description>Pen</description>
+    <price>3.00</price>
+  </article>
+</collector>  
+```
+
+Collecting with an own articles collector.
+
+```javascript
+DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
+```
+
+```xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<articles>
+  <article>
+    <id>100</id>
+    <description>Paper</description>
+    <price>1.00</price>
+  </article>
+  <article>
+    <id>200</id>
+    <description>Envelope</description>
+    <price>2.00</price>
+  </article>
+  <article>
+    <id>300</id>
+    <description>Pen</description>
+    <price>3.00</price>
+  </article>
+</articles>  
+```
