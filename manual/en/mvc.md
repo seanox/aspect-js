@@ -19,6 +19,16 @@ TODO:
   * [Permission Concept](#permission-concept)
   * [Acceptors](#acceptors-1)
 * [Object-/Model-Binding](#object-model-binding)
+  * [Terms](#terms)
+    * [namespace](#namespace)
+    * [scope](#scope)
+    * [model](#model)
+    * [field](#field)
+    * [composite-id](#composite-id)
+    * [identifier](#identifier)
+  * [Binding](#binding)
+  * [Synchronization](#synchronization)
+  * [Validation](#validation)
 
 
 ## Virtual Paths
@@ -346,3 +356,14 @@ For a better understanding, the functionality is described here in the Model
 View Controler.
 
 TODO:
+
+### Terms
+#### namespace
+#### scope
+#### model
+#### field
+#### composite-id
+#### identifier
+### Binding
+### Synchronization
+### Validation
