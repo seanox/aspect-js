@@ -334,7 +334,8 @@ The permission concept is based on permit methods, which are defined as callback
 methods with the configuration of the face flow. Several permit methods can be
 defined, which are verified with each requested path. Only if all permit methods
 confirm the requested path with `true`, it will be used and the renderer will
-render the dependent faces and facets and makes them visible.  
+render the dependent faces and facets and makes them visible.
+ 
 More details can be found in chapter [Permissions](#permissions).
 
 
@@ -344,10 +345,15 @@ Acceptors are executed together with the permission concept.
 They have the same effect, but only affect paths that correspond to a regular
 expression. Acceptors can be used to confirm permissions and/or for hidden
 background activities.  
+
 More details can be found in chapter [Acceptors](#acceptors).
 
 
 ## Object-/Model-Binding
+
+Object binding is about linking and assigning HTML elements that contain the
+`composite` attribute and for which corresponding model objects exist in
+JavaScript.
 
 The Object-/Model-Binding part also belongs to the Model View Controller and  is
 taken over by the Composite API in this implementation. SiteMap is an extension
@@ -355,15 +361,78 @@ and is based on the Composite API.
 For a better understanding, the functionality is described here in the Model
 View Controler.
 
-TODO:
 
 ### Terms
+
+
 #### namespace
+
+The namespace is a sequence of characters or words consisting of letters,
+numbers, and an underscore that describes the path in an object tree.  
+The dot is used as a separator, it defines the boundary from one level to the
+next in the object tree.  
+Each element in the namespace must contain at least one character, begin with a
+letter, and end with a letter or number.
+
+
 #### scope
+
+The `scope` is based on `namespace` and represents it on the object level.  
+Means the `namespace` is the description text, the `scope` is the result if
+the `namespace` was resolved in the object tree.
+
+
 #### model
+
+The model (model component / component) is a static JavaScript object in any
+namespace and provides the logic for the user interface (UI component) and the
+transition from user interface to business logic and/or the backend.  
+The linking and/or binding of markup and JavaSchript model is done by the
+Composite-API. For this purpose, an HTML element must be marked with the
+attribute `composite` and have a valid Composite-ID. The Composite-ID must
+meet the requirements of the namespace.
+
+More details about the binding of object, field and value can be found in
+chapter [Binding](#binding).
+
+The Composite-API can distinguish between the presence and absence of model
+components in the user interface due to their existence in the DOM. The model
+component is informed about the static method `mount` when it appears in the
+DOM and about the static method `unmount` when it is removed from the DOM. With
+which the model component can be prepared or finalized.  
+The implementation of both methods is optional.
+
+```javascript
+  var model = {
+      mount: function() {
+      },
+      unmount: function() {
+      }
+  };
+```
+
 #### field
+
+
 #### composite-id
+
+
 #### identifier
+
+
 ### Binding
+
+
 ### Synchronization
+
+
 ### Validation
+
+The synchronization of values between the HTML elements and the fields of the 
+JavaScript models can be monitored and controlled by validation.  
+The use of validation is defined in the HTML element via the `validate`
+attribute and requires the `events` attribute and a corresponding validate
+method in the JavaScript model.
+  
+More details about the usage can be found in chapter
+[validate](markup.md#validate).
