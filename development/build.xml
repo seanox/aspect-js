@@ -21,6 +21,19 @@
     <include name="mvc.js"/>
     <include name="test.js"/>
   </fileset>   
+  
+  <fileset id="fileset.project" dir="${workspace}">
+    <include name="development/build.xml"/>
+    <include name="manual/**/*.md"/>
+    <include name="sources/*.js"/>
+    <include name="test/**/*.*"/>
+    <include name=".project"/>
+    <include name="CHANGES"/>
+    <include name="LICENSE"/>
+    <include name="README.md"/>
+    <exclude name="**/aspect-js.js"/>
+    <exclude name="**/*.zip"/>
+  </fileset>   
     
   <macrodef name="release-locate">
     <sequential>
@@ -93,7 +106,16 @@
         <exclude name="*.js"/>
         <exclude name="*.zip"/>
       </fileset>
-    </delete>    
+    </delete>
+    
+    <delete dir="${workspace.releases}/temp"/>
+    <mkdir dir="${workspace.releases}/temp/${ant.project.name}-${release.version}"/>
+    <copy todir="${workspace.releases}/temp/${ant.project.name}-${release.version}">
+      <fileset refid="fileset.project"/>
+    </copy>
+    <zip basedir="${workspace.releases}/temp"
+        destfile="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"/>
+    <delete dir="${workspace.releases}/temp"/>
   </target>
   
   <target name="test-min" depends="archive">
