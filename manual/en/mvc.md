@@ -27,6 +27,7 @@ TODO:
     * [composite-id](#composite-id)
     * [identifier](#identifier)
     * [qualifier](#qualifier)
+    * [composite](#composite)
   * [Binding](#binding)
   * [Synchronization](#synchronization)
   * [Validation](#validation)
@@ -527,7 +528,20 @@ Qualifiers are ignored during object/model binding.
 ```
 
 
+#### composite
+
+Composite describes the construct of markup, JavaScript model, and possibly
+existing module resources. It describes all components and modules without
+direct reference to a concrete perspective.
+ 
+
 ### Binding
+
+The object/model binding is about connecting markup/HTML elements with
+JavaScript models. The models, also known as components, are static
+constructs/classes in which properties and logic corresponding to the markup/DOM
+are implemented. This avoids manual implementation and declaration of events as
+well as synchronization and interaction between UI and the application logic.
 
 TODO:
 
