@@ -28,42 +28,87 @@
  *  The corresponding renderer is included in the composite implementation and
  *  actively monitors the DOM via the MutationObserver and thus reacts
  *  recursively to changes in the DOM.
+ *  
+ *  
+ *      TERMS
+ *      ----
+ *      
+ *          namespace
+ *          ----
+ *  The namespace is a sequence of characters or words consisting of letters,
+ *  numbers, and an underscore that describes the path in an object tree. The
+ *  dot is used as a separator, it defines the boundary from one level to the
+ *  next in the object tree. Each element in the namespace must contain at least
+ *  one character, begin with a letter, and end with a letter or number.
+ *  
+ *          scope
+ *          ----
+ *  The scope is based on namespace and represents it on the object level. Means
+ *  the namespace is the description text, the scope is the result if the 
+ *  namespace was resolved in the object tree.
+ *  
+ *          model
+ *          ----
+ *  The model (model component / component) is a static JavaScript object in any
+ *  namespace and provides the logic for the user interface (UI component) and
+ *  the transition from user interface to business logic and/or the backend. The
+ *  linking and/or binding of markup and JavaSchript model is done by the
+ *  Composite-API. For this purpose, an HTML element must be marked with the
+ *  attribute `composite` and have a valid Composite-ID. The Composite-ID must
+ *  meet the requirements of the namespace.
+ *  
+ *          field
+ *          ----
+ *  A field is a property of a static model (model component / component). It
+ *  corresponds to an HTML element with the same ID in the same namespace. The
+ *  ID of the field can be relative or use an absolute namespace. If the ID is
+ *  relative, the namespace is defined by the parent composite element.
+ *  
+ *          composite-id
+ *          ----
+ *  The Composite-ID is an application-wide unique identifier.
+ *  It is a sequence of characters or words consisting of letters, numbers, and
+ *  underscores that contains at least one character, begins with a letter, and
+ *  ends with a letter or number. A Composite-ID is formed by combining the
+ *  attributes `ID` and `composite`.
  *
- *  TODO:
- *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei
- *    ersten Auftreten eines Elements gelesen und können später nicht geänert
- *    werden, da sie dann aus Element-Cache verwendet werden 
- *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese
- *    eine Expression enthalten
- *  - Die Welt ist statisch. So auch aspect-js und alle Komponenten.
- *    Das erspart die Verwaltung und Einrichtung von Instanzen.
- *  - Rendering: Clean Code
- *    Nur fuer aspect-js verwendete Attribute werden in Meta-Objketen zu den Elementen
- *    zwischengespeichert und koennen/sollen im Markup nach Verwendung entfernt
- *    werden. An einem Element befindliche aspect-js-Attribute sind ein
- *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
- *  - Object-Bindung
- *    Die Composite-ID setzt sich wie folgt zusammen: namespace:qualifier
- *        nameSpace = package + class
- *        qualifier = zusätzliche Kennzeichnung damit die ID unique ist
- *    Der Qualifier wird von Composite/Object-Bindung ignoriert.
- *  TODO: Doku:
- *        DOM und Objekt-Baum (+ virtual Paths) sind analog.
- *        Bedeutet, Pfade und die Verschachtelung der Objekte muss der
- *        Verschachtelung vom DOM entsprechen. 
- *  TODO: Doku:
- *        Custom-Tag, hier muss man sich um alle attribute selbt gekuemmert werden.
- *        Composite tut hier nicht, ausser dem Aufruf der Implementierung.
- *        Es kann jedes Node-Element (auch #text) als custom-tag registriert werden.
- *        Die Attribute werden durch Composite nicht manipuliert oder interpretiert.
- *        Das ueberschreiben von eigenen Tags, wie z.B. "param" ist moeglich, aber nicht empfehlenswert.
- *  TODO: Doku:
- *        If a custom selector exists, the macro is executed.
- *        Custom selector is a filter-function based on a query selector.
- *        The root of the selector is the current element.
- *        The filter therefore affects the child elements.
- *        Custom Selector wird nach Custom-Tag ausgefuehrt.
- *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
+ *          identifier
+ *          ----
+ *  The identifier is a unique value with the same requirements as a
+ *  Composite-ID. It is important for the assignment and binding of fields and
+ *  properties for object/model binding, validation and synchronization.
+ *  
+ *          qualifier
+ *          ----
+ *  In some cases the identifier cannot be uniquely named, so in cases where the
+ *  target in the object is an array and/or the identifier is used in an
+ *  iteration. In these cases, the identifier can be extended by an additional
+ *  unique qualifier, separated by a colon.
+ *  Qualifiers are ignored during object/model binding.
+ *  
+ *  
+ *      PRINCIPLES
+ *      ----
+ *      
+ *  The world is static. So also aspect-js and all components. This avoids the
+ *  management and establishment of instances.
+ *  
+ *  Composite attributes are elementary and immutable.
+ *  They are read the first time an element occurs and stored in the object
+ *  cache. Therefore, these attributes cannot be changed later because they are
+ *  then used from the object cache.
+ *  
+ *  Attributes of elements are elementary and immutable even if they contain an
+ *  expression.
+ *  
+ *  Clean Code Rendering - The aspect-js relevant attributes are stored in meta
+ *  objects to each element and are removed in the markup. The following
+ *  attributes are essential: composite, id -- they are cached and remain at the
+ *  markup, these cannot be changed. the MutationObserver will restore them.
+ *  
+ *  Markup/DOM, object tree and virtual paths are analog/homogeneous.
+ *  Thus virtual paths, object structure in JavaScript (namespace) and the
+ *  nesting of the DOM must match.
  *        
  *  Composite 1.0 20190401
  *  Copyright (C) 2019 Seanox Software Solutions
@@ -701,7 +746,9 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO: (Re)Index new composite elements in the DOM.
+     *  Scans the as selector passed element with all its children for composite
+     *  elements where an object/model binding is possible. The binding itself
+     *  is delegated to the mount method.
      *   
      *      Queue and Lock:
      *      ----

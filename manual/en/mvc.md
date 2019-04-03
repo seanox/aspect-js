@@ -26,6 +26,7 @@ TODO:
     * [field](#field)
     * [composite-id](#composite-id)
     * [identifier](#identifier)
+    * [qualifier](#qualifier)
   * [Binding](#binding)
   * [Synchronization](#synchronization)
   * [Validation](#validation)
@@ -238,15 +239,15 @@ SiteMap.customize({
 });
 ```
 
-__Important: The navigation only accepts paths that are defined in face-flow.__  
-__Invalid paths are forwarded to the next higher known/permitted path, based__
-__on the requested path.__
+__Important__  
+The navigation only accepts paths that are defined in face-flow. Invalid paths
+are forwarded to the next higher known/permitted path, based on the requested
+path.
 
-
-__Important: Without a face-flow there will be no valid paths.__  
-__Should a user interface or components be used without face-flow, they must__
-__be marked as static, otherwise the components will be hidden (removed from__
-__the DOM).__
+__Important__  
+Without a face-flow there will be no valid paths. Should a user interface or
+components be used without face-flow, they must be marked as __static__,
+otherwise the components will be hidden (removed from the DOM).
 
 ```html
 <html>
@@ -393,9 +394,9 @@ letter, and end with a letter or number.
 
 #### scope
 
-The `scope` is based on `namespace` and represents it on the object level.  
-Means the `namespace` is the description text, the `scope` is the result if
-the `namespace` was resolved in the object tree.
+The scope is based on namespace and represents it on the object level.  
+Means the namespace is the description text, the scope is the result if the
+namespace was resolved in the object tree.
 
 
 #### model
@@ -430,8 +431,33 @@ The implementation of both methods is optional.
 
 #### field
 
-TODO;
+A field is a property of a static model (model component / component). It
+corresponds to an HTML element with the same ID in the same namespace. The ID of
+the field can be relative or use an absolute namespace. If the ID is relative,
+the namespace is defined by the parent composite element.
 
+```javascript
+  var model = {
+      fieldA: null
+  };
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      <input id="fieldA" type="text" events="change"/>
+    </div>
+  </body>
+</html>
+```
+
+The Composite-API synchronizes event-driven between the HTML element and the
+model component property. For an HTML element, the corresponding events are
+defined using the attribute of the same name.  
+Synchronization only works in one direction, from the HTML element to the
+property of the model component.
+  
 
 #### composite-id
 
@@ -475,10 +501,19 @@ object/model binding, validation and synchronization.
 </html>
 ```
 
+
+#### qualifier
+
 In some cases the identifier cannot be uniquely named, so in cases where the
-target in the object is an array and/or the identifier is used in an iteration
-In these cases, the identifier can be extended by an additional personal/unique
-identifier, separated by a colon. 
+target in the object is an array and/or the identifier is used in an iteration.
+In these cases, the identifier can be extended by an additional unique
+qualifier, separated by a colon.
+Qualifiers are ignored during object/model binding. 
+
+```html
+<input type="text" id="identifier">
+<input type="text" id="identifier:qualifier">
+```
  
 ```html
 <html>

@@ -889,7 +889,7 @@ if (typeof Test === "undefined") {
          *      Example:
          *      
          *  var onLog = function(message) {
-         *      ....
+         *      ...
          *  }
          */
         if (typeof parent !== "undefined") {
