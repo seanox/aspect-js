@@ -420,12 +420,12 @@ which the model component can be prepared or finalized.
 The implementation of both methods is optional.
 
 ```javascript
-  var model = {
-      mount: function() {
-      },
-      unmount: function() {
-      }
-  };
+var model = {
+    mount: function() {
+    },
+    unmount: function() {
+    }
+};
 ```
 
 
@@ -437,9 +437,9 @@ the field can be relative or use an absolute namespace. If the ID is relative,
 the namespace is defined by the parent composite element.
 
 ```javascript
-  var model = {
-      fieldA: null
-  };
+var model = {
+    fieldA: null
+};
 ```
 
 ```html
