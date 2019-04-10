@@ -84,12 +84,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.0 20190401
+ *  MVC 1.0 20190410
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190401
+ *  @version 1.0 20190410
  */
 if (typeof Path === "undefined") {
     
@@ -692,7 +692,7 @@ if (typeof SiteMap === "undefined") {
         if (element.hasAttribute("static"))
             return;
         
-        var path = "#" + Composite.mount.locate(element).replace(/\./g, "#").toLowerCase();
+        var path = "#" + Composite.mount.locate(element).model.replace(/\./g, "#").toLowerCase();
         
         var script = null;
         if (element.hasAttribute(Composite.ATTRIBUTE_CONDITION)) {

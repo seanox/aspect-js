@@ -12,107 +12,107 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-      Test.activate();
-      
-      SiteMap.customize({
-          "#": null,
-          "#a": null,
-          "#a#b": null,
-          "#a#b#c": null,
-          "#a#b#c#d": null,
-          "#a#b#c#d#e": null,
-          "#a#b#x": null,
-          "#a#b#x#y": null,
-          "#a#b#x#y#z": null
-      });
-      
-      var timing = new Date().getTime();
-      var meta = {};
-      meta["#x" + timing] = null;
-      SiteMap.customize(meta);      
-      
-      var logging = function(message) {
-          document.body.innerHTML += "\r\n" + message;
-          document.body.innerHTML = document.body.innerHTML.trim();
-      };
-      
-      var autoforward = function() {
-          if (targets.length <= 0)
-              return;
-          var target = targets.shift();
-          var mode = String(target.match(/^[A-Z]/));
-          target = target.substring(2);
-          logging(mode + ": " + target);
-          if (mode == "A")
-              SiteMap.navigate(target);
-          else if (mode == "B")
-              window.location.href = target;
-          else if (mode == "C")
-              window.location.hash = target;
-          if (targets.length <= 0) {
-              window.setTimeout((target) => {
-                  Test.start(); 
-              }, 50);
-          } else {
-              window.setTimeout((target) => {
-                  autoforward(); 
-              }, 25);
-          }
-      };
-      
-      var targets;
-      window.addEventListener("load", (event) => {
-          targets = [];
-
-          targets.push("A #a#b#c#d");
-          targets.push("A ##");
-          targets.push("A #a#b#c#d");
-          targets.push("A ###x");
-          targets.push("A y#z");
-          targets.push("A ####c");
-          targets.push("A #a#b#c#d");  
-          targets.push("A ####b");
-          
-          targets.push("B #a#b#c#d");
-          targets.push("B ##");
-          targets.push("B ##x");
-          targets.push("B #a#b#x#y#z");
-          targets.push("B ####c");
-          targets.push("B #a#b#c#d");  
-          targets.push("B ####b");          
-
-          targets.push("C #a#b#c#d");
-          targets.push("C ##");
-          targets.push("C #a#b#c#d");
-          targets.push("C ###x");
-          targets.push("C y#z");
-          targets.push("C ####c");
-          targets.push("C #a#b#c#d");  
-          targets.push("C ####b");          
-          
-          window.location.href = "#x" + timing;
-          window.location.href = "#";
-          window.setTimeout(autoforward, 250);  
-      });
-
-      window.addEventListener("hashchange", (event) => {
-          if (event.newURL.match(/^\w+:\/\//))
-              logging("X: " + event.newURL.replace(/\d+$/, "0000"));
-      });
-      
-      Test.create({test:function() {
-          var content = document.body.innerHTML;
-          Assert.assertEqualsTo("script[type='text/test']", content);            
-      }});
-      
-      var errors = "";
-      Composite.listen(Composite.EVENT_ERROR, function(event, error) {
-          errors += "\r\n" + error.message;
-          errors = errors.trim();          
-      });
-      Test.create({test:function() {
-          Assert.assertEquals("", errors);
-      }});      
+        Test.activate();
+        
+        SiteMap.customize({
+            "#": null,
+            "#a": null,
+            "#a#b": null,
+            "#a#b#c": null,
+            "#a#b#c#d": null,
+            "#a#b#c#d#e": null,
+            "#a#b#x": null,
+            "#a#b#x#y": null,
+            "#a#b#x#y#z": null
+        });
+        
+        var timing = new Date().getTime();
+        var meta = {};
+        meta["#x" + timing] = null;
+        SiteMap.customize(meta);      
+        
+        var logging = function(message) {
+            document.body.innerHTML += "\r\n" + message;
+            document.body.innerHTML = document.body.innerHTML.trim();
+        };
+        
+        var autoforward = function() {
+            if (targets.length <= 0)
+                return;
+            var target = targets.shift();
+            var mode = String(target.match(/^[A-Z]/));
+            target = target.substring(2);
+            logging(mode + ": " + target);
+            if (mode == "A")
+                SiteMap.navigate(target);
+            else if (mode == "B")
+                window.location.href = target;
+            else if (mode == "C")
+                window.location.hash = target;
+            if (targets.length <= 0) {
+                window.setTimeout((target) => {
+                    Test.start(); 
+                }, 50);
+            } else {
+                window.setTimeout((target) => {
+                    autoforward(); 
+                }, 25);
+            }
+        };
+        
+        var targets;
+        window.addEventListener("load", (event) => {
+            targets = [];
+  
+            targets.push("A #a#b#c#d");
+            targets.push("A ##");
+            targets.push("A #a#b#c#d");
+            targets.push("A ###x");
+            targets.push("A y#z");
+            targets.push("A ####c");
+            targets.push("A #a#b#c#d");  
+            targets.push("A ####b");
+            
+            targets.push("B #a#b#c#d");
+            targets.push("B ##");
+            targets.push("B ##x");
+            targets.push("B #a#b#x#y#z");
+            targets.push("B ####c");
+            targets.push("B #a#b#c#d");  
+            targets.push("B ####b");          
+  
+            targets.push("C #a#b#c#d");
+            targets.push("C ##");
+            targets.push("C #a#b#c#d");
+            targets.push("C ###x");
+            targets.push("C y#z");
+            targets.push("C ####c");
+            targets.push("C #a#b#c#d");  
+            targets.push("C ####b");          
+            
+            window.location.href = "#x" + timing;
+            window.location.href = "#";
+            window.setTimeout(autoforward, 250);  
+        });
+  
+        window.addEventListener("hashchange", (event) => {
+            if (event.newURL.match(/^\w+:\/\//))
+                logging("X: " + event.newURL.replace(/\d+$/, "0000"));
+        });
+        
+        Test.create({test:function() {
+            var content = document.body.innerHTML;
+            Assert.assertEqualsTo("script[type='text/test']", content);            
+        }});
+        
+        var errors = "";
+        Composite.listen(Composite.EVENT_ERROR, function(event, error) {
+            errors += "\r\n" + error.message;
+            errors = errors.trim();          
+        });
+        Test.create({test:function() {
+            Assert.assertEquals("", errors);
+        }});      
     </script>
     <script type="text/test">
 X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
