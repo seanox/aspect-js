@@ -22,7 +22,12 @@
                     text: {},
                     link: {
                         onClick: function() {
-                            clickStack.push("contactA.link.data.onClick");                            
+                            clickStack.push("contactA.data.link.onClick");                            
+                        }
+                    },
+                    button: {
+                        onClick: function() {
+                            clickStack.push("contactA.data.button.onClick");                            
                         }
                     }
                 },
@@ -48,7 +53,7 @@
                     text: {},
                     link: {
                         onClick: function() {
-                            clickStack.push("contactC.link.data.onClick");                            
+                            clickStack.push("contactC.data.link.onClick");                            
                         }
                     }
                 },
@@ -64,7 +69,7 @@
         
         var clickStack = [];
         
-        var contentPublish = function(context) {
+        var publish = function(context) {
             var content = '<input type="text" id="text:{context}" events="keydown">'
                     + '<input type="text" id="data.text:{context}" events="keydown">'
                     + '<input type="text" id="nothing:{context}" events="keydown">'
@@ -104,6 +109,9 @@
                 document.querySelector("#data\\.text\\:D").typeValue("xDB", true);
                 document.querySelector("#nothing\\:D").typeValue("xDC", true);
                 
+                document.querySelector("[xxx='buttonA1']").click();
+                document.querySelector("[xxx='buttonA2']").click();
+                
                 Test.start();
             }, 250);
         });     
@@ -111,15 +119,16 @@
         Test.create({test:function() {
             var testStack = [];
             testStack.push("contactA.link.onClick");
-            testStack.push("contactA.link.data.onClick");
+            testStack.push("contactA.data.link.onClick");
             testStack.push("contactA.link.onClick");
-            testStack.push("contactA.link.data.onClick");
+            testStack.push("contactA.data.link.onClick");
             testStack.push("contactC.link.onClick");
-            testStack.push("contactC.link.data.onClick");
+            testStack.push("contactC.data.link.onClick");
+            testStack.push("contactA.data.button.onClick");
             Assert.assertEquals(testStack.join(" "), clickStack.join(" "));
         }}); 
         Test.create({test:function() {
-            Assert.assertEquals('{"text":"xA","data":{"text":{"value":"xA"},"link":{}},"link":{}}', contactA.toPlainString());             
+            Assert.assertEquals('{"text":"xA","data":{"text":{"value":"xA"},"link":{},"button":{}},"link":{}}', contactA.toPlainString());             
         }});         
         Test.create({test:function() {
             Assert.assertEquals('{"text":"xB","data":{"text":{"value":"xB"},"link":{}},"link":{}}', contactB.toPlainString());
@@ -134,16 +143,18 @@
   </head>
   <body>
     <section id="contactA" composite static
-        import="{{contentPublish('A')}}">
+        import="{{publish('A')}}">
     </section>
     <section id="contactB" composite static
-        import="{{contentPublish('B')}}">
+        import="{{publish('B')}}">
     </section>
     <section id="contactC" composite static
-        import="{{contentPublish('C')}}">
+        import="{{publish('C')}}">
     </section>
     <section id="contactD" composite static
-        import="{{contentPublish('D')}}">
+        import="{{publish('D')}}">
     </section>
+    <button id="contactA.button" xxx="buttonA1">buttonA1</button>
+    <button id="contactA.data.button" xxx="buttonA2">buttonA2</button>
   </body>
 </html>

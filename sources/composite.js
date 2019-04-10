@@ -86,6 +86,12 @@
  *  unique qualifier, separated by a colon.
  *  Qualifiers are ignored during object/model binding.
  *  
+ *          composite
+ *          ----
+ *  Composite describes the construct of markup, JavaScript model, and possibly
+ *  existing module resources. It describes a component/module without direct
+ *  reference to a concrete perspective.
+ *  
  *  
  *      PRINCIPLES
  *      ----
@@ -110,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190401
+ *  Composite 1.0 20190410
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190401
+ *  @version 1.0 20190410
  */
 if (typeof Composite === "undefined") {
     
@@ -239,11 +245,11 @@ if (typeof Composite === "undefined") {
 
     /**
      *  Pattern for a element id
-     *      group 1: extended namespace, qualification towards the model (optional)
-     *      group 2: element or field, only with an extended namespace
-     *      group 3: identifier (optional)
+     *      group 1: model, optionally with (full qualified) namespace
+     *      group 2: identifier (element or field), only with an extended namespace
+     *      group 3: qualifier (optional)
      */
-    Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z\w*\.])*?(?:[a-z]\w*))\.)*?([a-z]\w*)(?:\:(\w*))*$/i;
+    Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z]\w*)(?:\.(?:[a-z]\w*))*)\.)*([a-z]\w*)(?:\:(\w*))*$/i;
     
     /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
@@ -540,26 +546,64 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO:
+     *  Mounts the as selector passed element with all its children where an
+     *  object/model binding is possible.
+     *  
+     *  The object/model binding is about connecting markup/HTML elements with
+     *  JavaScript models. The models, also known as components, are static
+     *  constructs/classes in which properties and logic corresponding to the
+     *  markup/DOM are implemented. This avoids manual implementation and
+     *  declaration of events as well as synchronization and interaction between
+     *  UI and the application logic.
+     *  
+     *      Principles
+     *      ----
+     *  Components are a static JavaScript models.
+     *  Namespaces are supported, but they must be syntactically valid.
+     *  Objects in objects is possible through the namespaces (as static inner
+     *  class).
+     *  
+     *      Binding
+     *      ----
+     *  The object constraint only includes what has been implemented in the
+     *  model (snapshot). An automatic extension of the models at runtime by the
+     *  renderer is not detected/supported, but can be implemented in the
+     *  application logic - this is a conscious decision!
+     *      Case study:
+     *  In the markup there is a composite with a field x. There is a
+     *  corresponding JavaScript model for the composite but without the field
+     *  x. The renderer will mount the composite with the JavaScript model, the
+     *  field x will not be found in the model and will be ignored. At runtime,
+     *  the model is modified later and the field x is added. The renderer will
+     *  not detect the change in the model and the field x will not be mounted
+     *  during re-rendering. Only when the composite is completely removed from
+     *  the DOM (e.g. by a condition) and then newly added to the DOM, the field
+     *  x is also mounted, because the renderer then uses the current snapshot
+     *  of the model and the field x also exists in the model.
+     *  
+     *      Synchronization
+     *      ----
+     *  The object binding and synchronization assume that a model corresponding
+     *  to the composite exists with the same namespace. During synchronization,
+     *  the element must also exist as a property in the model.
+     *  
+     *      Events
+     *      ----
+     *  Composite.EVENT_MOUNT_START
+     *  Composite.EVENT_MOUNT_NEXT
+     *  Composite.EVENT_MOUNT_END
      *  
      *      Queue and Lock:
      *      ----
      *  The method used a simple queue and transaction management so that the
      *  concurrent execution of rendering works sequentially in the order of the
      *  method call.
-     *  
-     *  TODO: fire events render start/progress/end
-     *        - jede Komponente ist statisch
-     *        - Namespaces werden unterstuetzt, diese aber syntaktisch gueltig sein
-     *        - Objekte in Objekten ist durch den Namespaces moeglich (als static inner Class)
      * 
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - namespace cannot be created if it already exists as a method
-     *    
-     *  The object binding and synchronization assume that a model corresponding to the composite exists with the same namespace.
-     *  During synchronization, the element must also exist as a property in the model.
-     *  The object binding only connects what was implemented with the model. An automatic extension of the models at runtime by the renderer is not supported, but can be solved programmatically - this is a conscious decision!
+     *      
+     *  TODO: Doku, mount funktioniert für alle Elemente mit ID, nicht nur Composite-Childs    
      */
     Composite.mount = function(selector, lock) {
         
@@ -628,6 +672,7 @@ if (typeof Composite === "undefined") {
      *  their position in the DOM.
      *  @param  element
      *  @return the determined namespace, otherwise null
+     *          TODO: return meta {composite:null, model:meta[1], field:meta[2], name:meta[3]};
      *  @throws An error occurs in the following cases:
      *      - a composite does not have an ID
      *      - the ID does not match the pattern of a Composite-ID.
@@ -636,22 +681,74 @@ if (typeof Composite === "undefined") {
         
         if (!(element instanceof Element))
             return null;
-        
-        var namespace = null;
-        for (; element; element = element.parentNode) {
-            if (!(element instanceof Element)
-                    || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-                continue;
-            var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+
+        var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+
+        //Composites have a meta object where only composite and model are filled.
+        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
-            serial = serial.replace(/:.*$/, "").trim();
-            if (namespace)
-                namespace = "." + namespace;
-            namespace = serial + (namespace || "");
+            if (!Object.lookup(serial))
+                return null;
+            return {composite:serial, model:serial, field:null, name:null};
+        }
+
+        //Splitting of the element ID into:
+        //   model, identifierm, qualifier (optional)
+        var meta = serial.match(Composite.PATTERN_ELEMENT_ID);
+        if (!meta)
+            return null;
+        
+        meta = {composite:null, model:meta[1], field:meta[2], name:meta[3]};
+        
+        for (var scope = element; scope; scope = scope.parentNode) {
+            if (!(scope instanceof Element)
+                    || !scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+                continue;
+            var serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+            serial = serial.replace(/:.*$/, "");
+            if (meta.composite)
+                meta.composite = "." + meta.composite;
+            meta.composite = serial + (meta.composite || "");
         }
         
-        return namespace;
+        if (meta.composite
+                && !Object.lookup(meta.composite))
+            return null;
+        
+        //TODO: Ergaenzen in Doku (mvc.bd binding)
+        //If the ID contains a dot (meta.model exists), it can be an ID with an
+        //absolute namespace or the ID is relative to the namespace of the
+        //composite. Both cases will be evaluated. The ID with the relative
+        //namespace of the composite has higher priority.
+        //So after the last dot the ID of the element and before it the
+        //namespace must be contained. The id will be removed at the end and the
+        //namespace remains.
+        //The qualifier is passed through in both cases, but not tested.
+        if (meta.model) {
+            if (meta.composite
+                    && Object.lookup(meta.composite + "." + meta.model))
+                meta.model = meta.composite + "." + meta.model;
+            var scope = Object.lookup(meta.model);
+            if (scope)
+                if (scope.hasOwnProperty(meta.field))
+                    return meta;
+            return null;
+        }
+
+        //Without an additional namespace, the field must exist relative to the
+        //composite. The composite thus represents the complete namespace.
+        //The qualifier is passed through in both cases, but not tested.
+        if (!meta.composite)
+            return null;
+        meta.model = meta.composite;
+        var scope = Object.lookup(meta.model);
+        if (scope)
+            if (scope.hasOwnProperty(meta.field))
+                return meta;
+        return null;
     };
     
     /**
@@ -684,7 +781,7 @@ if (typeof Composite === "undefined") {
         //  - The namespace consists of a context, an ID, and an optional identifier
         //  - context: Corresponds to the chain of superior IDs of all elements with the attribute 'composite'.
         //  - ID: The id of an element.
-        //  - identifier: Individual identifier in an Id which is separated from the ID by a double point
+        //  - qualifier: Individual identifier in an Id which is separated from the ID by a double point
         
         //TODO: Context and Id can contain relative and absolute values.
         //TODO: Relative names match the pattern: xxxx
@@ -704,51 +801,44 @@ if (typeof Composite === "undefined") {
         //always compatible with the ID of an element. The ID of an element can
         //contain additional information such as a qualifying namespace and an
         //individual identifier.
-        
         var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             serial = serial.match(Composite.PATTERN_COMPOSITE_ID);
         else serial = serial.match(Composite.PATTERN_ELEMENT_ID);
         if (!serial)
             throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
-
-        var scope = null;
-        var model = null;
-        var field = null;
-
-        //The model (corresponds to the namespace) and scope (based on the
-        //namespace) is determined.
-        model = Composite.mount.locate(element);
-        if (!model)
+        
+        //Determines the meta-data for the model:
+        //    composite (optional), model, field, name (optional)
+        //Locale only returns a meta-object if a corresponding JavaScript model
+        //exists for the markup/DOM.
+        var meta = Composite.mount.locate(element);
+        if (!meta)
             return null;
-        scope = Object.lookup(model);
+        
+        scope = Object.lookup(meta.model);
         if (!scope)
             return null;
         
         //The meta-object for the return value is created.
         //For composite elements, this only contains the scope and model.
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-            return {scope:scope, model:model};
-            
-        var composite = {scope:scope, model:model}; 
-        
-        //The field is determined for elements in a composite.
-        //Optionally, an extended namespace can be specified for the real model.
-        if (serial[1])
-            model += "." + serial[1];
-        scope = Object.lookup(model);
-        if (!scope)
-            return null;
-        if (!scope.hasOwnProperty(serial[2]))
-            return null;
-        
-        return {composite:composite, scope:scope, model:model, field:serial[2]};
+            return {scope:scope, model:meta.model};
+
+        return {composite:{scope:scope, model:meta.model},
+            scope:scope, model:meta.model, field:meta.field, name:meta.name};
     };
     
     /**
      *  Scans the as selector passed element with all its children for composite
      *  elements where an object/model binding is possible. The binding itself
      *  is delegated to the mount method.
+     *  
+     *      Events
+     *      ----
+     *  Composite.EVENT_SCAN_START
+     *  Composite.EVENT_SCAN_NEXT
+     *  Composite.EVENT_SCAN_END
      *   
      *      Queue and Lock:
      *      ----
@@ -1028,15 +1118,24 @@ if (typeof Composite === "undefined") {
      *  
      *      Custom Tag (Macro)
      *      ----
-     *  See: Composite.customize(tag:string, function(element) {...});
+     *  More details about the usage can be found in:
+     *      Composite.customize(tag:string, function(element) {...});
      *  
      *      Custom Selector
      *      ----
-     *  Composite.customize(selector:string, function(element) {...}); 
+     *  More details about the usage can be found in
+     *      Composite.customize(selector:string, function(element) {...}); 
      *  
      *      Custom Acceptor
      *      ----  
-     *  See: Composite.customize(function(element) {...});
+     *  More details about the usage can be found in
+     *      Composite.customize(function(element) {...});
+     *      
+     *      Events
+     *      ----
+     *  Composite.EVENT_RENDER_START
+     *  Composite.EVENT_RENDER_NEXT
+     *  Composite.EVENT_RENDER_END
      */
     Composite.render = function(selector, lock) {
         
