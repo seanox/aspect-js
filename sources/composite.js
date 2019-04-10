@@ -728,13 +728,16 @@ if (typeof Composite === "undefined") {
         //namespace remains.
         //The qualifier is passed through in both cases, but not tested.
         if (meta.model) {
-            if (meta.composite
-                    && Object.lookup(meta.composite + "." + meta.model))
-                meta.model = meta.composite + "." + meta.model;
-            var scope = Object.lookup(meta.model);
-            if (scope)
-                if (scope.hasOwnProperty(meta.field))
+            if (meta.composite) {
+                var scope = Object.lookup(meta.composite + "." + meta.model);
+                if (scope && scope.hasOwnProperty(meta.field)) {
+                    meta.model = meta.composite + "." + meta.model;
                     return meta;
+                }
+            }
+            var scope = Object.lookup(meta.model);
+            if (scope && scope.hasOwnProperty(meta.field))
+                return meta;
             return null;
         }
 
@@ -745,9 +748,8 @@ if (typeof Composite === "undefined") {
             return null;
         meta.model = meta.composite;
         var scope = Object.lookup(meta.model);
-        if (scope)
-            if (scope.hasOwnProperty(meta.field))
-                return meta;
+        if (scope && scope.hasOwnProperty(meta.field))
+            return meta;
         return null;
     };
     
