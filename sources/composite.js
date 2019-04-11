@@ -57,11 +57,11 @@
  *  attribute `composite` and have a valid Composite-ID. The Composite-ID must
  *  meet the requirements of the namespace.
  *  
- *          field
+ *          member
  *          ----
- *  A field is a property of a static model (model component / component). It
+ *  A member is a property of a static model (model component / component). It
  *  corresponds to an HTML element with the same ID in the same namespace. The
- *  ID of the field can be relative or use an absolute namespace. If the ID is
+ *  ID of the member can be relative or use an absolute namespace. If the ID is
  *  relative, the namespace is defined by the parent composite element.
  *  
  *          composite-id
@@ -75,7 +75,7 @@
  *          identifier
  *          ----
  *  The identifier is a unique value with the same requirements as a
- *  Composite-ID. It is important for the assignment and binding of fields and
+ *  Composite-ID. It is important for the assignment and binding of members and
  *  properties for object/model binding, validation and synchronization.
  *  
  *          qualifier
@@ -116,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190410
+ *  Composite 1.0 20190411
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190410
+ *  @version 1.0 20190411
  */
 if (typeof Composite === "undefined") {
     
@@ -246,7 +246,7 @@ if (typeof Composite === "undefined") {
     /**
      *  Pattern for a element id
      *      group 1: model, optionally with (full qualified) namespace
-     *      group 2: identifier (element or field), only with an extended namespace
+     *      group 2: identifier (element, field, member, ...), only with an extended namespace
      *      group 3: qualifier (optional)
      */
     Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z]\w*)(?:\.(?:[a-z]\w*))*)\.)*([a-z]\w*)(?:\:(\w*))*$/i;
@@ -570,16 +570,16 @@ if (typeof Composite === "undefined") {
      *  renderer is not detected/supported, but can be implemented in the
      *  application logic - this is a conscious decision!
      *      Case study:
-     *  In the markup there is a composite with a field x. There is a
-     *  corresponding JavaScript model for the composite but without the field
+     *  In the markup there is a composite with a member x. There is a
+     *  corresponding JavaScript model for the composite but without the member
      *  x. The renderer will mount the composite with the JavaScript model, the
-     *  field x will not be found in the model and will be ignored. At runtime,
-     *  the model is modified later and the field x is added. The renderer will
-     *  not detect the change in the model and the field x will not be mounted
+     *  member x will not be found in the model and will be ignored. At runtime,
+     *  the model is modified later and the member x is added. The renderer will
+     *  not detect the change in the model and the member x will not be mounted
      *  during re-rendering. Only when the composite is completely removed from
-     *  the DOM (e.g. by a condition) and then newly added to the DOM, the field
-     *  x is also mounted, because the renderer then uses the current snapshot
-     *  of the model and the field x also exists in the model.
+     *  the DOM (e.g. by a condition) and then newly added to the DOM, the
+     *  member x is also mounted, because the renderer then uses the current
+     *  snapshot of the model and the member x also exists in the model.
      *  
      *      Synchronization
      *      ----
@@ -645,12 +645,27 @@ if (typeof Composite === "undefined") {
             //No multiple object binding
             if (Composite.mount.queue.includes(selector))
                 return;
-
+            
+            var serial = selector.ordinal();
+            var object = Composite.render.meta[serial] || {};
+            var events = object.events || {};
+            
             //Registers all events that are implemented in the model.
-            model = model.scope[model.field];
+            //With the attribute 'events' the events are registered and executed
+            //during the rendering. The reason is the combination of the
+            //attributes events + render. The re-rendering of the targets only
+            //makes sense after executing the event methods. Only in this way
+            //can the results and changes that the event methods cause be used
+            //in the re-rendering. In this case, all event-methods which are
+            //used during the rendering are registered and collected. Only event
+            //methods that are not registered during rendering can be registered
+            //here.
+            
+            model = model.scope[model.member];
             for (var entry in model)
                 if (typeof model[entry] === "function"
-                        && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
+                        && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)
+                        && typeof events[entry.substring(2).toLowerCase()] !== "function")
                     selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
 
         } finally {
@@ -672,7 +687,7 @@ if (typeof Composite === "undefined") {
      *  their position in the DOM.
      *  @param  element
      *  @return the determined namespace, otherwise null
-     *          TODO: return meta {composite:null, model:meta[1], field:meta[2], name:meta[3]};
+     *          TODO: return meta {composite:null, model:meta[1], member:meta[2], name:meta[3]};
      *  @throws An error occurs in the following cases:
      *      - a composite does not have an ID
      *      - the ID does not match the pattern of a Composite-ID.
@@ -690,7 +705,7 @@ if (typeof Composite === "undefined") {
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
             if (!Object.lookup(serial))
                 return null;
-            return {composite:serial, model:serial, field:null, name:null};
+            return {composite:serial, model:serial, member:null, name:null};
         }
 
         //Splitting of the element ID into:
@@ -699,7 +714,7 @@ if (typeof Composite === "undefined") {
         if (!meta)
             return null;
         
-        meta = {composite:null, model:meta[1], field:meta[2], name:meta[3]};
+        meta = {composite:null, model:meta[1], member:meta[2], name:meta[3]};
         
         for (var scope = element; scope; scope = scope.parentNode) {
             if (!(scope instanceof Element)
@@ -730,25 +745,25 @@ if (typeof Composite === "undefined") {
         if (meta.model) {
             if (meta.composite) {
                 var scope = Object.lookup(meta.composite + "." + meta.model);
-                if (scope && scope.hasOwnProperty(meta.field)) {
+                if (scope && scope.hasOwnProperty(meta.member)) {
                     meta.model = meta.composite + "." + meta.model;
                     return meta;
                 }
             }
             var scope = Object.lookup(meta.model);
-            if (scope && scope.hasOwnProperty(meta.field))
+            if (scope && scope.hasOwnProperty(meta.member))
                 return meta;
             return null;
         }
 
-        //Without an additional namespace, the field must exist relative to the
+        //Without an additional namespace, the member must exist relative to the
         //composite. The composite thus represents the complete namespace.
         //The qualifier is passed through in both cases, but not tested.
         if (!meta.composite)
             return null;
         meta.model = meta.composite;
         var scope = Object.lookup(meta.model);
-        if (scope && scope.hasOwnProperty(meta.field))
+        if (scope && scope.hasOwnProperty(meta.member))
             return meta;
         return null;
     };
@@ -765,7 +780,7 @@ if (typeof Composite === "undefined") {
      *  
      *  TODO: Doku:
      *  composite - rueckgabe {scope, model}
-     *  composite element - rueckgabe {composite, scope, model, field}
+     *  composite element - rueckgabe {composite, scope, model, member}
      *  sonst null, wenn im Objektbaum nicht gefunden
      *  
      *  TODO:
@@ -773,7 +788,7 @@ if (typeof Composite === "undefined") {
      *  element is located. If the passed element uses an ID with a qualified
      *  namespace, then this is used. Otherwise, if a superordinate composite
      *  with ID exists in the DOM, this is used as base for the namespace.
-     *  Returns an meta object with scope, model and field, otherwise null.
+     *  Returns an meta object with scope, model and member, otherwise null.
      *  @param  element element
      *  @return the created meta object, otherwise null
      */
@@ -811,7 +826,7 @@ if (typeof Composite === "undefined") {
             throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
         
         //Determines the meta-data for the model:
-        //    composite (optional), model, field, name (optional)
+        //    composite (optional), model, member, name (optional)
         //Locale only returns a meta-object if a corresponding JavaScript model
         //exists for the markup/DOM.
         var meta = Composite.mount.locate(element);
@@ -828,7 +843,7 @@ if (typeof Composite === "undefined") {
             return {scope:scope, model:meta.model};
 
         return {composite:{scope:scope, model:meta.model},
-            scope:scope, model:meta.model, field:meta.field, name:meta.name};
+            scope:scope, model:meta.model, member:meta.member, name:meta.name};
     };
     
     /**
@@ -1032,16 +1047,16 @@ if (typeof Composite === "undefined") {
      *      Events + Validate + Render
      *      ----
      *  Events primarily controls the synchronization of the input values of
-     *  HTML elements with the fields of a model. Means that the value in the
+     *  HTML elements with the members of a model. Means that the value in the
      *  model only changes if an event occurs for the corresponding HTML
      *  element. Synchronization is performed at a low level. Means that the
-     *  fields are synchronized directly and without the use of get and set
+     *  members are synchronized directly and without the use of get and set
      *  methods. For a better control a declarative validation is supported. If
      *  the attribute 'validate' exists, the value for this is ignored, the
      *  static method <Model>.validate(element, value) is  called in the
      *  corresponding model. This call must return a true value as the result,
      *  otherwise the element value is not stored into the corresponding model
-     *  field. If an event occurs, synchronization is performed. After that will
+     *  member. If an event occurs, synchronization is performed. After that will
      *  be checked whether the render attribute exists. All selectors listed
      *  here are then triggered for re-rendering. (Re)rendering is independent
      *  of synchronization and validation and is executed immediately after an
@@ -1535,17 +1550,17 @@ if (typeof Composite === "undefined") {
                 return;
             
             //Events primarily controls the synchronization of the input values
-            //of HTML elements with the fields of a model. Means that the value
+            //of HTML elements with the members of a model. Means that the value
             //in the model only changes if an event occurs for the corresponding
             //HTML element. Synchronization is performed at a low level. Means
-            //that the fields are synchronized directly and without the use of
+            //that the members are synchronized directly and without the use of
             //get and set methods.
             //For a better control a declarative validation is supported.
             //If the attribute 'validate' exists, the value for this is ignored,
             //the static method <Model>.validate(element, value) is  called in
             //the corresponding model. This call must return a true value as the
             //result, otherwise the element value is not stored into the
-            //corresponding model field.
+            //corresponding model member.
             //If an event occurs, synchronization is performed. After that will
             //be checked whether the render attribute exists. All selectors
             //listed here are then triggered for (re)rendering. (Re)rendering is
@@ -1560,27 +1575,52 @@ if (typeof Composite === "undefined") {
             if (events) {
                 events = events.split(/\s+/);
                 events.forEach((event, index, array) => {
-                    selector.addEventListener(event, (event) => {
+                    var meta = Composite.mount.lookup(selector);
+                    
+                    //With the attribute 'events' the events are registered and
+                    //executed here. Because the propagation, capture and
+                    //bubbling phases should not be disturbed during the event.
+                    //During binding, the logic checks which events have already
+                    //been registered so that the implemented event methods in
+                    //the model are not called more than once.
+                    if (meta && meta.scope && meta.member
+                            && typeof meta.scope[meta.member] === "object"
+                            && meta.scope[meta.member] != null) {
+                        var invoke = "on" + event.capitalize();
+                        if (invoke.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                            if (typeof meta.scope[meta.member][invoke] === "function") {
+                                object.events = object.events || {};
+                                object.events[event.toLowerCase()] = meta.scope[meta.member][invoke]; 
+                            }
+                        }
+                    }
+                    
+                    selector.addEventListener(event.toLowerCase(), (event) => {
                         var target = event.currentTarget;
                         var serial = target.ordinal();
                         var object = Composite.render.meta[serial];
                         if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
                                 && Composite.ATTRIBUTE_VALUE in target
                                 && typeof target[Composite.ATTRIBUTE_VALUE] !== "function") {
-                            var model = Composite.mount.lookup(target);
-                            if (model) {
+                            var meta = Composite.mount.lookup(target);
+                            if (meta) {
                                 var valid = false;
                                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                                        && typeof model.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                                    valid = model.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
+                                        && typeof meta.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
+                                    valid = meta.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
                                 } else valid = true;
                                 if (valid) {
-                                    if (model.scope[model.field] instanceof Object)
-                                        model.scope[model.field].value = target.value;
-                                    else model.scope[model.field] = target.value
+                                    if (meta.scope[meta.member] instanceof Object)
+                                        meta.scope[meta.member].value = target.value;
+                                    else meta.scope[meta.member] = target.value
                                 }
                             }
                         }
+                        
+                        var events = object.events || {};
+                        if (typeof events[event.type] === "function")
+                            events[event.type].call(null, event);
+                        
                         if (render) {
                             if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                                 render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
@@ -2142,11 +2182,11 @@ if (typeof Expression === "undefined") {
     
     /**
      *  Resolves a value-expression recursively if necessary.
-     *  Value expressions refer to a field in a static model.
+     *  Value expressions refer to a member in a static model.
      *  The value is retrieved using a corresponding get- or is-function or, if
-     *  this is not available, the value is retrieved directly from the field.
-     *  For the get- and is-functions, the first character is changed from field
-     *  name to uppercase and prefixed with 'get' or 'is'.
+     *  this is not available, the value is retrieved directly from the member.
+     *  For the get- and is-functions, the first character is changed from
+     *  member name to uppercase and prefixed with 'get' or 'is'.
      *      e.g. {{Model.value}} -> Model.getValue()
      *           {{Model.value}} -> Model.isValue()
      *  In addition to the namespace of JavaScript, the method also supports DOM
