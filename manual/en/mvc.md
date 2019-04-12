@@ -2,6 +2,23 @@
 
 TODO:
 
+```
++-------------------------------+-------------+-----------------------------+
+|  View                         |  Controler  |  Model                      |
++-------------------------------+-------------+-----------------------------+
+|  Markup                       |  Composite  |  JavaScript                 |
+|                               |   SiteMap   |                             |
++-------------------------------+-------------+-----------------------------+
+|  <form id="model" composite>  |  aspect-js  |  var model = {              |
+|    <input id="message"/>      |             |    message:"",              | 
+|    <button id="submit"/>      |             |    submit: {                |
+|  </form>                      |             |      onClick: function() {  |
+|                               |             |      }                      |
+|                               |             |    }                        |
+|                               |             |  }                          |
++-------------------------------+-------------+-----------------------------+
+```
+
 
 ## Contents Overview
 
@@ -29,8 +46,11 @@ TODO:
     * [qualifier](#qualifier)
     * [composite](#composite)
   * [Binding](#binding)
+  * [Dock](#dock)
+  * [Undock](#undock)
   * [Synchronization](#synchronization)
   * [Validation](#validation)
+  * [Events](#events)
 
 
 ## Virtual Paths
@@ -240,15 +260,13 @@ SiteMap.customize({
 });
 ```
 
-__Important__  
-The navigation only accepts paths that are defined in face-flow. Invalid paths
-are forwarded to the next higher known/permitted path, based on the requested
-path.
+__The navigation only accepts paths that are defined in face-flow. Invalid__
+__paths are forwarded to the next higher known/permitted path, based on the__
+__requested path.__
 
-__Important__  
-Without a face-flow there will be no valid paths. Should a user interface or
-components be used without face-flow, they must be marked as __static__,
-otherwise the components will be hidden (removed from the DOM).
+__Without a face-flow there will be no valid paths. Should a user interface or__
+__components be used without face-flow, they must be marked as ___static___,__
+__otherwise the components will be hidden (removed from the DOM).__
 
 ```html
 <html>
@@ -415,16 +433,16 @@ chapter [Binding](#binding).
 
 The Composite-API can distinguish between the presence and absence of model
 components in the user interface due to their existence in the DOM. The model
-component is informed about the static method `mount` when it appears in the
-DOM and about the static method `unmount` when it is removed from the DOM. With
+component is informed about the static method `dock` when it appears in the DOM
+and about the static method `undock` when it is removed from the DOM. With
 which the model component can be prepared or finalized.  
 The implementation of both methods is optional.
 
 ```javascript
 var model = {
-    mount: function() {
+    dock: function() {
     },
-    unmount: function() {
+    undock: function() {
     }
 };
 ```
@@ -531,8 +549,8 @@ Qualifiers are ignored during object/model binding.
 #### composite
 
 Composite describes the construct of markup, JavaScript model, and possibly
-existing module resources. It describes all components and modules without
-direct reference to a concrete perspective.
+existing module resources. It describes a component/module without direct
+reference to a concrete perspective.
  
 
 ### Binding
@@ -542,6 +560,9 @@ JavaScript models. The models, also known as components, are static
 constructs/classes in which properties and logic corresponding to the markup/DOM
 are implemented. This avoids manual implementation and declaration of events as
 well as synchronization and interaction between UI and the application logic.
+
+__The binding requires a composite. Only elements of the type composite or__
+__their children are included for the object/model binding.__
 
 TODO:
 
@@ -596,6 +617,15 @@ var b = {
 };
 ```
 
+### Dock
+
+TODO:
+
+
+### Undock
+
+TODO:
+
 
 ### Synchronization
 
@@ -620,3 +650,36 @@ method in the JavaScript model.
   
 More details about the usage can be found in chapter
 [validate](markup.md#validate).
+
+
+### Events
+
+TODO:
+
+
+```javascript
+var contact= {
+    mail: {
+        onClick: function(event) {
+            var mail = "mailto:mail@local?subject=Test&body=Greetings";
+            document.location.href = mail;
+            return false;
+        }
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="contact" composite static>
+      <p>
+        Example for use of events.
+      </p>
+      <button id="mail">
+        Click Me!
+      </button>
+    </div>
+  </body>
+</html>
+```
