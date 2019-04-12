@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      body div {
+        margin:1em;
+      }
+      body * {
+        display:block;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+        
+        var stack = ["Step:0"];
+    
+        var modelA = {
+            status:true,
+            dock: function() {
+                stack.push("A:dock");
+            },
+            undock: function() {
+                stack.push("A:undock");
+            },
+            button: {
+                onClick: function() {
+                    stack.push("A:onClick");
+                    modelA.status = !modelA.status;
+                }
+            }
+        };
+        
+        var modelB = {
+            status:true,
+            undock: function() {
+                stack.push("B:undock");
+            },
+            button: {
+                onClick: function() {
+                    stack.push("B:onClick");
+                    modelB.status = !modelB.status;
+                }
+            }
+        }; 
+        
+        var modelC = {
+            status:true,
+            dock: function() {
+                stack.push("C:dock");
+            },
+            button: {
+                onClick: function() {
+                    stack.push("C:onClick");
+                    modelC.status = !modelC.status;
+                }
+            }
+        };
+        
+        var modelD = {
+            status:true,
+            button: {
+                onClick: function() {
+                    stack.push("D:onClick");
+                    modelD.status = !modelD.status;
+                }
+            }
+        };
+        
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-1']", stack.join("\n")); 
+        }});         
+
+        Test.create({test:function() {
+            Assert.assertEqualsTo("script[type='text/test-2']", snapshots.join("\n")); 
+        }});  
+        
+        var count = 0;
+        var snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            snapshots.push(document.body.textContent.replace(/^\s+/mg, ""));
+            stack.push("Step:" + (count +1));
+            switch (++count) {
+                case 1:
+                case 2:
+                case 3:
+                    window.setTimeout(() => {
+                        document.querySelector("#modelA\\.button").click();
+                    }, 0);
+                    return;
+                case 4:
+                case 5:
+                case 6:
+                    window.setTimeout(() => {
+                        document.querySelector("#modelB\\.button").click();
+                    }, 0);
+                    return;
+                case 7:
+                case 8:
+                case 9:
+                    window.setTimeout(() => {
+                        document.querySelector("#modelC\\.button").click();
+                    }, 0);
+                    return;     
+                case 10:
+                case 11:
+                case 12:
+                    window.setTimeout(() => {
+                        document.querySelector("#modelD\\.button").click();
+                    }, 0);
+                    return;  
+                case 13: 
+                case 14: 
+                case 15:
+                    window.setTimeout(() => {
+                        document.querySelector("#modelX\\.button").click();
+                    }, 0);
+                    return; 
+                case 16:
+                    Test.start();
+                    return; 
+            };
+        });        
+    </script>
+    <script type="text/test-1">
+Step:0
+A:dock
+C:dock
+Step:1
+A:onClick
+Step:2
+A:undock
+A:onClick
+A:dock
+Step:3
+A:onClick
+Step:4
+A:undock
+B:onClick
+Step:5
+B:undock
+B:onClick
+Step:6
+B:onClick
+Step:7
+B:undock
+C:onClick
+Step:8
+C:onClick
+C:dock
+Step:9
+C:onClick
+Step:10
+D:onClick
+Step:11
+D:onClick
+Step:12
+D:onClick
+Step:13
+Step:14
+Step:15
+Step:16
+    </script>
+    <script type="text/test-2">
+Model on
+Model-A
+Model on
+Model-B
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model on
+Model-B
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model on
+Model-A
+Model on
+Model-B
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model on
+Model-B
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model on
+Model-B
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model off
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model on
+Model-C
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model off
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model off
+Model off
+Model off
+
+Model off
+Model off
+Model off
+Model on
+Model-D
+Model off
+
+Model off
+Model off
+Model off
+Model off
+Model off
+
+Model off
+Model off
+Model off
+Model off
+Model off
+
+Model off
+Model off
+Model off
+Model off
+Model off
+
+Model off
+Model off
+Model off
+Model off
+Model off
+    </script>
+  </head>
+  <body>
+    <button id="modelA.button" events="click" render="body">
+      Model {{modelA.status ? 'on' : 'off'}}</button>
+    <section id="modelA" composite static condition="{{modelA.status}}">
+      Model-A
+    </section>
+
+    <button id="modelB.button" events="click" render="body">
+      Model {{modelB.status ? 'on' : 'off'}}</button>
+    <section id="modelB" composite static condition="{{modelB.status}}">
+      Model-B
+    </section>
+    
+    <button id="modelC.button" events="click" render="body">
+      Model {{modelC.status ? 'on' : 'off'}}</button>
+    <section id="modelC" composite static condition="{{modelC.status}}">
+      Model-C
+    </section>
+    
+    <button id="modelD.button" events="click" render="body">
+      Model {{modelD.status ? 'on' : 'off'}}</button>
+    <section id="modelD" composite static condition="{{modelD.status}}">
+      Model-D
+    </section>    
+            
+    <button id="modelX.button" events="click" render="body">
+      Model {{modelX.status ? 'on' : 'off'}}</button>
+    <section id="modelX" composite static condition="{{modelX.status}}">
+      Model-X
+    </section>
+  </body>
+</html>

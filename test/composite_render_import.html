@@ -14,25 +14,25 @@
         Test.activate();
       
         var aModel = {
-              publishForm: function() {
-                  var form = document.createElement("form");
-                  var label = document.createElement("label");
-                  label.textContent = "Input";
-                  form.appendChild(label);
-                  var input = document.createElement("input");
-                  input.value = "123";
-                  input.type = "text";
-                  form.appendChild(input);
-                  var submit = document.createElement("input");
-                  submit.type = "submit";
-                  form.appendChild(submit);
-                  return form;
-              },
-              publishImg: function() {
-                  var img = document.createElement("img");
-                  img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
-                  return img;
-              }
+            publishForm: function() {
+                var form = document.createElement("form");
+                var label = document.createElement("label");
+                label.textContent = "Input";
+                form.appendChild(label);
+                var input = document.createElement("input");
+                input.value = "123";
+                input.type = "text";
+                form.appendChild(input);
+                var submit = document.createElement("input");
+                submit.type = "submit";
+                form.appendChild(submit);
+                return form;
+            },
+            publishImg: function() {
+                var img = document.createElement("img");
+                img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
+                return img;
+            }
         };    
       
         var snapshots = [];

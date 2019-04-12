@@ -17,51 +17,51 @@
         Test.activate();
     
         var contactA = {
-                text: "",
-                data: {
-                    text: {},
-                    link: {
-                        onClick: function() {
-                            clickStack.push("contactA.data.link.onClick");                            
-                        }
-                    },
-                    button: {
-                        onClick: function() {
-                            clickStack.push("contactA.data.button.onClick");                            
-                        }
-                    }
-                },
+            text: "",
+            data: {
+                text: {},
                 link: {
                     onClick: function() {
-                        clickStack.push("contactA.link.onClick");                            
+                        clickStack.push("contactA.data.link.onClick");                            
+                    }
+                },
+                button: {
+                    onClick: function() {
+                        clickStack.push("contactA.data.button.onClick");                            
                     }
                 }
+            },
+            link: {
+                onClick: function() {
+                    clickStack.push("contactA.link.onClick");                            
+                }
+            }
         };
         
         var contactB = {
-                text: "",
-                data: {
-                    text: {},
-                    link: contactA.data.link
-                },
-                link: contactA.link
+            text: "",
+            data: {
+                text: {},
+                link: contactA.data.link
+            },
+            link: contactA.link
         };
 
         var contactC = {
-                text: "",
-                data: {
-                    text: {},
-                    link: {
-                        onClick: function() {
-                            clickStack.push("contactC.data.link.onClick");                            
-                        }
-                    }
-                },
+            text: "",
+            data: {
+                text: {},
                 link: {
                     onClick: function() {
-                        clickStack.push("contactC.link.onClick");                            
+                        clickStack.push("contactC.data.link.onClick");                            
                     }
                 }
+            },
+            link: {
+                onClick: function() {
+                    clickStack.push("contactC.link.onClick");                            
+                }
+            }
         };
         
         var contactD = {
