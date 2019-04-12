@@ -1,23 +1,55 @@
 # Model View Controler
 
-TODO:
+The Model View Controller (MVC) is a design pattern for separating interaction,
+data, and presentation.
 
 ```
-+-------------------------------+-------------+-----------------------------+
-|  View                         |  Controler  |  Model                      |
-+-------------------------------+-------------+-----------------------------+
-|  Markup                       |  Composite  |  JavaScript                 |
-|                               |   SiteMap   |                             |
-+-------------------------------+-------------+-----------------------------+
-|  <form id="model" composite>  |  aspect-js  |  var model = {              |
-|    <input id="message"/>      |             |    message:"",              | 
-|    <button id="submit"/>      |             |    submit: {                |
-|  </form>                      |             |      onClick: function() {  |
-|                               |             |      }                      |
-|                               |             |    }                        |
-|                               |             |  }                          |
-+-------------------------------+-------------+-----------------------------+
++-------------------------------+--------------+-----------------------------+
+|  View                         |  Controller  |  Model                      |
++-------------------------------+--------------+-----------------------------+
+|  Markup                       |  Composite   |  JavaScript                 |
+|                               |  SiteMap     |                             |
++-------------------------------+--------------+-----------------------------+
+|  <form id="model" composite>  |  aspect-js   |  var model = {              |
+|    <input id="message"/>      |              |    message:"",              | 
+|    <button id="submit"/>      |              |    submit: {                |
+|  </form>                      |              |      onClick: function() {  |
+|                               |              |      }                      |
+|                               |              |    }                        |
+|                               |              |  }                          |
++-------------------------------+--------------+-----------------------------+
 ```
+
+
+## Controller
+
+For this we have to distinguish between I/O controller and application
+controller. The original MVC design pattern refers to the I/O controller for
+transmitting the interactions. Because the this I/O controller is part of the
+operating system and the browser, the controller in aspect-js refers to the
+application controller. The application controller controls the flow within an
+application (face flow), takes over the binding of markup and JavaScript as well
+as the control of the data flow between view and model.
+
+
+## Model
+The model is a displayable/projectable object.  
+It receives (status) changes and interactions of the view, which are transmitted
+by the controller, or provides the view with an interface to data as well as
+functions and services of the middleware. The model primarily serves the view
+for the representation and management of the states, for business functionality
+it uses additional components.  
+In aspect-js the models are represented by static JavaScript objects.  
+Conceptually the implementation of the design pattern facade and delegation is
+planned, so that the static models internally use additional components and
+abstraction.
+
+
+## View
+The view is exclusively responsible for the presentation or projection of a
+model. Projection is an important term because the way in which a model is
+presented is not restricted.  
+In aspect-js the views are represented by the markup.
 
 
 ## Contents Overview
