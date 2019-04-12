@@ -619,12 +619,76 @@ var b = {
 
 ### Dock
 
-TODO:
+Models are static components and consist of Markup as composite and JavaScript
+and more. Models therefore have no instances. If a composite is used in the DOM,
+the corresponding module is docked and if the composite is removed from the DOM,
+the corresponding module is undocked.  
+In both cases, the model can implement appropriate methods.  
+The dock-method is executed before rendering, before inserting the composite
+into the DOM, or after loading the page during initial rendering, and can be
+used to prepare the view. The undock-method is executed after the composite is
+removed from the DOM and can be used to postprocess/clean the view.   
+
+```javascript
+var model = {
+    dock: function() {
+        ...
+    },
+    undock: function() {
+        ...
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+For a composite in combination with a condition, the call of the methods depends
+on the result of the condition.
 
 
 ### Undock
 
-TODO:
+Models are static components and consist of Markup as composite and JavaScript
+and more. Models therefore have no instances. If a composite is used in the DOM,
+the corresponding module is docked and if the composite is removed from the DOM,
+the corresponding module is undocked.  
+In both cases, the model can implement appropriate methods.  
+The dock-method is executed before rendering, before inserting the composite
+into the DOM, or after loading the page during initial rendering, and can be
+used to prepare the view. The undock-method is executed after the composite is
+removed from the DOM and can be used to postprocess/clean the view.   
+
+```javascript
+var model = {
+    dock: function() {
+        ...
+    },
+    undock: function() {
+        ...
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+For a composite in combination with a condition, the call of the methods depends
+on the result of the condition.
 
 
 ### Synchronization
