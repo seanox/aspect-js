@@ -18,32 +18,32 @@
         Test.activate();
     
         var Model = {
-              onA: false,
-              toggleA: function() {
-                  this.onA = !this.onA;
-                  return this.onA;
-              },
-              onB: false,
-              toggleB: function() {
-                  this.onB = !this.onB;
-                  return this.onB;
-              },
-              onC: false,
-              toggleC: function() {
-                  this.onC = !this.onC;
-                  return this.onC;
-              },
-              onD: false,
-              toggleD: function() {
-                  this.onD = !this.onD;
-                  return this.onD;
-              },
-              onE: false,
-              toggleE: function() {
-                  this.onE = !this.onE;
-                  return this.onE;
-              },
-              listE: ["a", "b", "c"]
+            onA: false,
+            toggleA: function() {
+                this.onA = !this.onA;
+                return this.onA;
+            },
+            onB: false,
+            toggleB: function() {
+                this.onB = !this.onB;
+                return this.onB;
+            },
+            onC: false,
+            toggleC: function() {
+                this.onC = !this.onC;
+                return this.onC;
+            },
+            onD: false,
+            toggleD: function() {
+                this.onD = !this.onD;
+                return this.onD;
+            },
+            onE: false,
+            toggleE: function() {
+                this.onE = !this.onE;
+                return this.onE;
+            },
+            listE: ["a", "b", "c"]
         };
         
         var testS = function(text) {
@@ -64,24 +64,7 @@
             else if (snapshots.length == 5)
                 Test.start();
         });
-        
-        /*
-        
-        http://127.0.0.1/seanox/aspect-js/test/composite_render_condition.html
-        
-        
-        var count = 0;
-        var interval = window.setInterval(function() {
-            if (++count < 5)
-                Composite.render(document.body);
-            if (snapshots.length != snapshots.ticks) {
-                snapshots.ticks = snapshots.length;
-                return;
-            } else window.clearInterval(interval);
-            Test.start();
-        }, 250);
-        */
-        
+
         var x1 = 0;
         var x2 = 0;
         var x3 = 0;
@@ -104,127 +87,127 @@
         }});
     </script>
     <script type="text/test-1">
-    A1AA
-    B1B
-    C1C
-    D1D
-    E1E
-    OnA: false
-    A2AA
-    B2B
-    C2CC    
-    OnA: true
-    O1: 1x1++; output1.textContent = x1;
-    O2: 1x2++; output2.textContent = x2;
-    O3: 1 falsex3++; output3.textContent = x3;
-    O4: 1 falsex4++; output4.textContent = x4;
-    E::E
-    S:1:1:S    
-    OnA: true
-    OnB: false
-    A3-1 
-    A3-2
-    A3-3
-    A3-4
-    OnA: false
-    OnB: true
+A1AA
+B1B
+C1C
+D1D
+E1E
+OnA: false
+A2AA
+B2B
+C2CC    
+OnA: true
+O1: 1x1++; output1.textContent = x1;
+O2: 1x2++; output2.textContent = x2;
+O3: 1 falsex3++; output3.textContent = x3;
+O4: 1 falsex4++; output4.textContent = x4;
+E::E
+S:1:1:S    
+OnA: true
+OnB: false
+A3-1 
+A3-2
+A3-3
+A3-4
+OnA: false
+OnB: true    
     </script>
     <script type="text/test-2">
-    A1AA
-    B1B
-    C1C
-    D1D
-    E1E
-    OnA: false
-    A2AA
-    B2B
-    C2CC    
-    OnA: true
-    O1: 1x1++; output1.textContent = x1;
-    O2: 2x2++; output2.textContent = x2;
-    O3: 1 true 
-    O4: 1 true 
-    E:abc:E
-    S:2:2:S    
-    OnA: true
-    OnB: true
-    OnA: true
-    OnB: false
+A1AA
+B1B
+C1C
+D1D
+E1E
+OnA: false
+A2AA
+B2B
+C2CC    
+OnA: true
+O1: 1x1++; output1.textContent = x1;
+O2: 2x2++; output2.textContent = x2;
+O3: 1 true 
+O4: 1 true 
+E:abc:E
+S:2:2:S    
+OnA: true
+OnB: true
+OnA: true
+OnB: false
     </script>
     <script type="text/test-3">
-    A1AA
-    B1B
-    C1C
-    D1D
-    E1E
-    OnA: true
-    A2A
-    B2BB
-    C2C    
-    OnA: false
-    O1: 1x1++; output1.textContent = x1;
-    O2: 3x2++; output2.textContent = x2;
-    O3: 1 falsex3++; output3.textContent = x3;
-    O4: 2 falsex4++; output4.textContent = x4;
-    E::E
-    S:3:3:S    
-    OnA: false
-    OnB: false
-    A3-1 
-    A3-2
-    A3-3
-    A3-4
-    A3-5
-    OnA: true
-    OnB: true  
+A1AA
+B1B
+C1C
+D1D
+E1E
+OnA: true
+A2A
+B2BB
+C2C    
+OnA: false
+O1: 1x1++; output1.textContent = x1;
+O2: 3x2++; output2.textContent = x2;
+O3: 1 falsex3++; output3.textContent = x3;
+O4: 2 falsex4++; output4.textContent = x4;
+E::E
+S:3:3:S    
+OnA: false
+OnB: false
+A3-1 
+A3-2
+A3-3
+A3-4
+A3-5
+OnA: true
+OnB: true      
     </script>
     <script type="text/test-4">
-    A1AA
-    B1B
-    C1C
-    D1D
-    E1E
-    OnA: true
-    A2A
-    B2BB
-    C2C    
-    OnA: false
-    O1: 1x1++; output1.textContent = x1;
-    O2: 4x2++; output2.textContent = x2;
-    O3: 1 true 
-    O4: 2 true 
-    E:abc:E
-    S:4:4:S    
-    OnA: false
-    OnB: true
-    OnA: false
-    OnB: false
+A1AA
+B1B
+C1C
+D1D
+E1E
+OnA: true
+A2A
+B2BB
+C2C    
+OnA: false
+O1: 1x1++; output1.textContent = x1;
+O2: 4x2++; output2.textContent = x2;
+O3: 1 true 
+O4: 2 true 
+E:abc:E
+S:4:4:S    
+OnA: false
+OnB: true
+OnA: false
+OnB: false 
     </script> 
     <script type="text/test-5">
-    A1AA
-    B1B
-    C1C
-    D1D
-    E1E
-    OnA: false
-    A2AA
-    B2B
-    C2CC    
-    OnA: true
-    O1: 1x1++; output1.textContent = x1;
-    O2: 5x2++; output2.textContent = x2;
-    O3: 1 falsex3++; output3.textContent = x3;
-    O4: 3 falsex4++; output4.textContent = x4;
-    E::E
-    S:5:5:S    
-    OnA: true
-    OnB: false
-    A3-1 
-    A3-2
-    A3-3
-    A3-4
-    OnA: false
-    OnB: true
+A1AA
+B1B
+C1C
+D1D
+E1E
+OnA: false
+A2AA
+B2B
+C2CC    
+OnA: true
+O1: 1x1++; output1.textContent = x1;
+O2: 5x2++; output2.textContent = x2;
+O3: 1 falsex3++; output3.textContent = x3;
+O4: 3 falsex4++; output4.textContent = x4;
+E::E
+S:5:5:S    
+OnA: true
+OnB: false
+A3-1 
+A3-2
+A3-3
+A3-4
+OnA: false
+OnB: true
     </script>         
   </head>
   <body>
@@ -265,7 +248,7 @@
         </span>
       </span>
     </span>
-    
+
     OnA: {{Model.onA}}
     OnB: {{Model.onB}}                  
   </body>
