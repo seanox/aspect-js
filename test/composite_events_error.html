@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+      iframe {
+        height:2em;
+      }      
+    </style>
+    <script src="aspect-js.js"></script>
+
+    <script type="text/javascript">
+    
+        Test.activate();
+        
+        Test.create({test:function() {
+            var filter = "";
+            for (var loop = 1; loop < 3; loop++) {
+                var frame = document.querySelector("iframe:nth-child(" + loop + ")");
+                frame = frame.contentDocument || frame.contentWindow.document;
+                var text = frame.body.textContent;
+                Assert.assertTrue(!!text.match(/TypeError|ReferenceError/));
+            }
+        }});
+        
+        var count = 0;
+        var interval = window.setInterval(function() {
+            if (count < 3)
+                return;
+            window.clearInterval(interval);
+            Test.start(true);
+        }, 250);
+    </script>
+  </head>
+  <body>
+    <iframe src="composite_events_error_1.html"></iframe>
+    <iframe src="composite_events_error_2.html"></iframe>
+    <iframe src="composite_events_error_3.html"></iframe>
+  </body>
+</html>
