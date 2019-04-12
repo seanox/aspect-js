@@ -1,4 +1,4 @@
-# Model View Controler
+# Model View Controller
 
 The Model View Controller (MVC) is a design pattern for separating interaction,
 data, and presentation.
