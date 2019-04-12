@@ -8,6 +8,7 @@ data, and presentation.
 |  View                         |  Controller  |  Model                      |
 +-------------------------------+--------------+-----------------------------+
 |  Markup                       |  Composite   |  JavaScript                 |
+|                               |  Path        |                             |
 |                               |  SiteMap     |                             |
 +-------------------------------+--------------+-----------------------------+
 |  <form id="model" composite>  |  aspect-js   |  var model = {              |
@@ -718,7 +719,12 @@ More details about the usage can be found in chapter
 
 ### Events
 
-TODO:
+Events, more precisely the interaction between view and model, are also
+considered during object/model binding. The methods for interaction will be
+implemented only in the model. In the markup itself, no declaration is required.
+The object/model binding knows the available events for HTML. During binding,
+the model is searched for corresponding methods that will be registered as event
+listeners.
 
 
 ```javascript
