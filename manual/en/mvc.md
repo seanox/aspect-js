@@ -25,7 +25,7 @@ data, and presentation.
 
 For this we have to distinguish between I/O controller and application
 controller. The original MVC design pattern refers to the I/O controller for
-transmitting the interactions. Because the this I/O controller is part of the
+transmitting the interactions. Because this I/O controller is part of the
 operating system and the browser, the controller in aspect-js refers to the
 application controller. The application controller controls the flow within an
 application (face flow), takes over the binding of markup and JavaScript as well
