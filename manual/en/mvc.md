@@ -753,3 +753,21 @@ var contact= {
   </body>
 </html>
 ```
+
+IDs with absolute and relative namespaces also support allocation/use outside of
+the composite.
+
+```html
+<html>
+  <body>
+    <div id="contact" composite static>
+      <p>
+        Example for use of events.
+      </p>
+    </div>
+    <button id="contact.mail">
+      Click Me!
+    </button>
+  </body>
+</html>
+```
