@@ -116,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190411
+ *  Composite 1.0 20190412
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190411
+ *  @version 1.0 20190412
  */
 if (typeof Composite === "undefined") {
     
@@ -143,6 +143,15 @@ if (typeof Composite === "undefined") {
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
+    
+    /** 
+     *  Array with docked models.
+     *  The array is used for the logic to call the dock and undock methods,
+     *  because the static models themselves have no status and the decision
+     *  about the current existence in the DOM is not stable.
+     *  All docked models are included in the array.
+     */
+    Composite.models;
     
     /** Path of the Composite for: moduels (sub-directory of work path) */
     Composite.MODULES = window.location.pathcontext + "/modules";
@@ -1276,16 +1285,9 @@ if (typeof Composite === "undefined") {
                         }
                     });
                     
-                    //The scope or namespace for the optional model (if
-                    //available) is determined. This is needed later to clean up
-                    //the models when their corresponding HTML element is
-                    //removed from the DOM.
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                        object.scope = Composite.mount.locate(selector);
-
-                        //Load modules/components/composite resources.
+                    //Load modules/components/composite resources.
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
                         Composite.render.include(selector);
-                    }
                     
                     //The condition attribute is interpreted.
                     //If an HTML element uses the condition attribute, a text
@@ -1497,6 +1499,29 @@ if (typeof Composite === "undefined") {
                 return;
             }
             
+            //Only composites are docked as models.
+            //Composites without conditions are docked by the renderer at first
+            //detection. Composites with condition are docked and undocked
+            //depending on the result of the condition.
+            
+            var dock = function(object) {
+                Composite.models = Composite.models || [];
+                if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
+                        || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ID)
+                        || Composite.models.includes(object.attributes[Composite.ATTRIBUTE_ID]))
+                    return;
+                Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
+                var meta = Composite.mount.lookup(object.template || object);
+                if (meta && meta.model && meta.scope
+                        && typeof meta.scope.dock === "function")
+                    meta.scope.dock.call(null);
+            };
+            
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION))
+                dock(object);
+            
             //The condition attribute is interpreted.
             //The condition is a very special implementation.
             //So it was important that a condition can remove and add a node in
@@ -1510,6 +1535,10 @@ if (typeof Composite === "undefined") {
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 var placeholder = object;
                 if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
+                    
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                        dock(object);
+                    
                     if (!placeholder.output
                             || !document.body.contains(placeholder.output)) {
                         //The placeholder output is rendered recursively and
@@ -1540,7 +1569,6 @@ if (typeof Composite === "undefined") {
                     if (!placeholder.output)
                         return;
                     selector.parentNode.removeChild(placeholder.output);
-                    delete Composite.render.meta[placeholder.output.ordinal()];
                     delete placeholder.output;
                     return;
                 }
@@ -1834,6 +1862,7 @@ if (typeof Composite === "undefined") {
                                 var template = object.template.cloneNode(true);
                                 Composite.render(template, lock.share());
                                 selector.appendChild(template.childNodes);
+                                //TODO: check delete Composite.render.meta
                                 delete Composite.render.meta[template.ordinal()];                                 
                             });
                         }
@@ -2106,7 +2135,7 @@ if (typeof Composite === "undefined") {
                     });
                 }
                 
-                //All removed elements are cleaned and if necessary the unmount
+                //All removed elements are cleaned and if necessary the undock
                 //method is called if an object binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
@@ -2117,15 +2146,36 @@ if (typeof Composite === "undefined") {
                                     cleanup(node);
                                 });
                             }
-                            //If a composite element is removed from the DOM,
-                            //the model must be unmounted.
+                            
+                            //Composites/models must be undocked when they are
+                            //removed from the DOM. The following implementation
+                            //is based on the assumption that composites with
+                            //and without conditions are removed from the DOM.
+                            //For composites with condition, it must be noted
+                            //that the composite is initially replaced by a
+                            //placeholder. During replacement, the initial
+                            //composite is removed, which can cause an unwanted
+                            //undocking. Therefore, the logic is based on the
+                            //assumption that each composite has a meta object.
+                            //When replacing the original composite, the
+                            //corresponding meta object is also deleted, so that
+                            //the MutationObserver detects the composite to be
+                            //removed in the DOM, but undocking is not performed
+                            //without the matching meta object.
+
                             var serial = node.ordinal();
                             var object = Composite.render.meta[serial];
-                            if (object && ("scope" in object)) {
-                                object = Object.lookup(object.scope);
-                                if (object && ("mount" in object))
-                                    object.unmount.call(null);
+                            if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                                var meta = Composite.mount.lookup(node);
+                                if (meta && meta.model
+                                        && Composite.models.includes(meta.model)) {
+                                    Composite.models = Composite.models.filter(model => model != meta.model);
+                                    if (meta.scope
+                                            && typeof meta.scope.undock === "function")
+                                    meta.scope.undock.call(null);
+                                }
                             }
+                            
                             delete Composite.render.meta[node.ordinal()];
                         };
                         cleanup(node);
