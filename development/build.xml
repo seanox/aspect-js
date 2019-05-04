@@ -69,6 +69,51 @@
     </sequential>
   </macrodef>
   
+  <target name="changes">
+    <replaceregexp file="${workspace}/CHANGES" match="&#x00E4;" replace="ae" flags="g"/>
+    <replaceregexp file="${workspace}/CHANGES" match="&#x00C4;" replace="Ae" flags="g"/>
+    <replaceregexp file="${workspace}/CHANGES" match="&#x00F6;" replace="oe" flags="g"/>
+    <replaceregexp file="${workspace}/CHANGES" match="&#x00D6;" replace="Oe" flags="g"/>
+    <replaceregexp file="${workspace}/CHANGES" match="&#x00FC;" replace="ue" flags="g"/>
+    <replaceregexp file="${workspace}/CHANGES" match="&#x00DC;" replace="Ue" flags="g"/>
+      
+    <copy file="${workspace}/CHANGES" tofile="${workspace}/CHANGES.tmp" overwrite="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^\s+" replace="" byline="false"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)^(.*?)[\r\n]+\d[\d\. x]+.*$" replace="\1" byline="false"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(.*?)\s*$" replace="\1  " flags="g" byline="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(\d[\.\d x]+)[^\r\n]*" replace="## \1" byline="false"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^ +([A-Z]+:.*)\s*$" replace="\1" byline="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)[\r\n]+ [^\r\n]+" replace="" flags="g" byline="false"/>  
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(## \d[\.\d]+ \d+)(  )" replace="\1 (summary of the current version)\2" flags="g" byline="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(## \d[\.\d]+ [\dx]+)(  )" replace="\1 (summary of the next version)\2" flags="g" byline="true"/>
+    <loadresource property="changes">
+      <file file="${workspace}/CHANGES.tmp"/>
+    </loadresource>
+    <delete file="${workspace}/CHANGES.tmp"/>
+    <replaceregexp file="${workspace}/README.md"
+      match="(?si)(# Changes \(Change Log\)\s+).*?(\[Read more\])" flags="g" byline="false"
+      replace="\1${changes}${line.separator}${line.separator}\2"/>
+    <tstamp>
+      <format property="now.year" pattern="yyyy"/>
+    </tstamp>    
+    <replaceregexp file="${workspace}/README.md"
+      match="(?si)(?&lt;=\(C\)\s)\d{4}\b" flags="g" byline="true"
+      replace="${now.year}"/>  
+    
+    <copy file="${workspace}/CHANGES" tofile="${workspace}/CHANGES.tmp" overwrite="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)(?:^|^(?:.*?[\r\n]+))(\d(?:\.\d)+) \d+\s.*$" replace="release.version.current=\1" byline="false"/>
+    <loadproperties>
+      <file file="${workspace}/CHANGES.tmp"/>
+    </loadproperties>
+    <delete file="${workspace}/CHANGES.tmp"/>
+    <replaceregexp file="${workspace}/README.md"
+      match="(Seanox aspect-js )\d+(\.\d+)*" flags="g" byline="false"
+      replace="\1${release.version.current}"/>
+    <replaceregexp file="${workspace}/README.md"
+      match="(seanox-aspect-js-(?:test-)*)\d+(?:\.\d+)*((?:-src)*\.zip)" flags="g" byline="false"
+      replace="\1${release.version.current}\2"/>
+  </target>  
+  
   <target name="archive">
     <release-locate/>
 
