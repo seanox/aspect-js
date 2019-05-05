@@ -19,11 +19,11 @@ similar to SQL.
 
 
 ## Contents Overview
-* [Data Storage](#data-storage)
-* [Locales](#locales)
-* [Locator](#locator)
-* [XPath](#xpath)
-* [fetch](#fetch)
+* [Data Storage](#Data-Storage)
+* [Locales](#Locales)
+* [Locator](#Locator)
+* [XPath](#XPath)
+* [fetch](#Fetch)
 * [transform](#transform)
 * [collect](#collect)
 

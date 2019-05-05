@@ -4,21 +4,21 @@ The Model View Controller (MVC) is a design pattern for separating interaction,
 data, and presentation.
 
 ```
-+-------------------------------+--------------+-----------------------------+
-|  View                         |  Controller  |  Model                      |
-+-------------------------------+--------------+-----------------------------+
-|  Markup                       |  Composite   |  JavaScript                 |
-|                               |  Path        |                             |
-|                               |  SiteMap     |                             |
-+-------------------------------+--------------+-----------------------------+
-|  <form id="model" composite>  |  aspect-js   |  var model = {              |
-|    <input id="message"/>      |              |    message:"",              | 
-|    <button id="submit"/>      |              |    submit: {                |
-|  </form>                      |              |      onClick: function() {  |
-|                               |              |      }                      |
-|                               |              |    }                        |
-|                               |              |  }                          |
-+-------------------------------+--------------+-----------------------------+
++-------------------------------------------+--------------+-----------------------------+
+|  View                                     |  Controller  |  Model                      |
++-------------------------------------------+--------------+-----------------------------+
+|  Markup                                   |  Composite   |  JavaScript                 |
+|                                           |  Path        |                             |
+|                                           |  SiteMap     |                             |
++-------------------------------------------+--------------+-----------------------------+
+|  <form id="model" composite>              |  aspect-js   |  var model = {              |
+|    <input id="message" events="change"/>  |              |    message:"",              | 
+|    <button id="submit"/>                  |              |    submit: {                |
+|  </form>                                  |              |      onClick: function() {  |
+|                                           |              |      }                      |
+|                                           |              |    }                        |
+|                                           |              |  }                          |
++-------------------------------------------+--------------+-----------------------------+
 ```
 
 
@@ -60,23 +60,31 @@ representation/projection, which will be explained later.
 In aspect-js the views are represented by the markup.
 
 
-## TODO: Contents Overview
+## Contents Overview
 
-* [Virtual Paths](#virtual-paths)
-  * [Functional Path](#functional-path)
-  * [Root Path](#root-path)
-  * [Relative Path](#relative-path)
-  * [Absolute Path](#absolute-path)
-* [SiteMap](#sitemap)
-  * [Configuration](#configuration)
-    * [Face Flow](#face-flow)
-    * [Permissions](#permissions)
-    * [Acceptors](#acceptors)
-  * [Navigation](#navigation)
-  * [Permission Concept](#permission-concept)
-  * [Acceptors](#acceptors-1)
-* [Object-/Model-Binding](#object-model-binding)
-  * [Terms](#terms)
+* [Controller](#Controller)
+* [Model](#Model)
+* [View](#View)
+* [SiteMap](#SiteMap)
+  * [Terms](#Terms)
+    * [Page](#Page)
+    * [Face](#Face)
+    * [Facets](#Facets)
+    * [Face Flow](#FaceFlow)
+  * [Configuration](#Configuration)
+    * [Face Flow](#FaceFlow-1)
+    * [Permissions](#Permissions)
+    * [Acceptors](#Acceptors)
+  * [Navigation](#Navigation)
+  * [Permission Concept](#Permission Concept)
+  * [Acceptors](#Acceptors)
+* [Virtual Paths](#VirtualPaths)
+  * [Functional Path](#FunctionalPath)
+  * [Root Path](#RootPath)
+  * [Relative Path](#RelativePath)
+  * [Absolute Path](#AbsolutePath)
+* [Object-/Model-Binding](#Object-Model-Binding)
+  * [Terms](#Terms)
     * [namespace](#namespace)
     * [scope](#scope)
     * [model](#model)
@@ -85,12 +93,12 @@ In aspect-js the views are represented by the markup.
     * [identifier](#identifier)
     * [qualifier](#qualifier)
     * [composite](#composite)
-  * [Binding](#binding)
-  * [Dock](#dock)
-  * [Undock](#undock)
-  * [Synchronization](#synchronization)
-  * [Validation](#validation)
-  * [Events](#events)
+  * [Binding](#Binding)
+  * [Dock](#Dock)
+  * [Undock](#Undock)
+  * [Synchronization](#Synchronization)
+  * [Validation](#Validation)
+  * [Events](#Events)
 
 
 ## SiteMap
@@ -351,6 +359,12 @@ More details can be found in chapter [Acceptors](#acceptors).
 
 
 ## Virtual Paths
+
+Virtual paths are based on the anchor part of a URL.
+
+```
+http://example.local/page.html#a#b#c#d
+```
 
 Paths are a reference to a target in face-flow.  
 The target can be a face, a facet or a function.
@@ -639,8 +653,8 @@ var model = {
 <html>
   <body>
     <form id="model" composite>
-      <input type="text" id="message" value="{{model.text.value}}"/>
-      <input type="submit" id="submit" events="click"/>
+      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="submit" id="submit"/>
       ...
     </form>
   </body>
@@ -681,12 +695,12 @@ var model = {
 <html>
   <body>
     <form id="model" composite>
-      <input type="text" id="message" value="{{model.text.value}}"/>
-      <input type="text" id="subModel.subMessage" value="{{model.subModel.subMessage.value}}"/>
-      <input type="submit" id="submit" events="click"/>
+      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="text" id="subModel.subMessage" value="{{model.subModel.subMessage.value}} events="change"/>
+      <input type="submit" id="submit"/>
       ...
     </form>
-    <input type="button" id="model.subModel.subButton" events="click"/>
+    <input type="button" id="model.subModel.subButton"/>
   </body>
 </html>
 ```
