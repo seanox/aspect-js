@@ -30,7 +30,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2018 Seanox Software Solutions
+Copyright (C) 2019 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -51,8 +51,13 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[1.0.0 dev Release Candidat](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-RC-dev.js) stable and final API  
-[1.0.0 min Release Candidat](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-RC-min.js) stable and final API
+[Seanox aspect-js 1.0.0 RC](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.zip) Release Candidat, stable and final API   
+[Seanox aspect-js 1.0.0 RC Sources](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-src.zip) Release Candidat, stable and final API
+
+
+# Links
+[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.js) Release Candidat, stable and final API  
+[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-min.js)  Release Candidat, stable and final API
 
 
 # Installation
