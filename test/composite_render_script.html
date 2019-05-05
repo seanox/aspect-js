@@ -12,8 +12,13 @@
     <script type="text/javascript">
     
         Test.activate();
-    
-        //TODO: Add tests for import + scripts
+        
+        var importAv = 1;
+        var importAx = 2;
+        var importBv = 3;
+        var importBx = 4;
+        var importCv = 5;        
+        var importCx = 6;
     
         Test.create({test:function() {
             var content = OutputA.textContent.replace(/\s+/g, " ").trim();
@@ -31,7 +36,24 @@
             var content = OutputD.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("D:D0D2D4D6D8", content);
         }});
-    
+        
+        Test.create({test:function() {
+            Assert.assertEquals(1, importAv);
+            Assert.assertEquals(2, importAx);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(3, importBv);
+            Assert.assertEquals(4, importBx);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(300, importCv);
+            Assert.assertEquals(15, importCx);
+        }});
+        Test.create({test:function() {
+            var content = document.querySelector("#OutputE ~ div").innerHTML.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("importAv = 100; importAx++; <script type=\"text/javascript\"> importBv = 200; importBx++; <\/script> <script type=\"composite/javascript\"> importCv = 300; importCx++; <\/script>", content);
+        }});       
+        
         var count = 0;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (++count <= 9)
@@ -80,5 +102,7 @@
          OutputD.textContent += "D" + count;        
       </script>
     </div>
+    <div id="OutputE">E:</div>
+    <div import="composite_render_script.import"></div>    
   </body>
 </html>
