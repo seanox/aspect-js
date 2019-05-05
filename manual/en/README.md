@@ -89,7 +89,7 @@ Machine translation with [DeepL](https://deepl.com).
       * [Permissions](mvc.md#Permissions)
       * [Acceptors](mvc.md#Acceptors)
     * [Navigation](mvc.md#Navigation)
-    * [Permission Concept](mvc.md#Permission Concept)
+    * [Permission Concept](mvc.md#Permission-Concept)
     * [Acceptors](mvc.md#Acceptors)
   * [Virtual Paths](mvc.md#VirtualPaths)
     * [Functional Path](mvc.md#FunctionalPath)

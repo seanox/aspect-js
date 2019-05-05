@@ -76,7 +76,7 @@ In aspect-js the views are represented by the markup.
     * [Permissions](#Permissions)
     * [Acceptors](#Acceptors)
   * [Navigation](#Navigation)
-  * [Permission Concept](#Permission Concept)
+  * [Permission Concept](#Permission-Concept)
   * [Acceptors](#Acceptors)
 * [Virtual Paths](#VirtualPaths)
   * [Functional Path](#FunctionalPath)
