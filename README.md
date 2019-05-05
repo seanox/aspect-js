@@ -51,13 +51,15 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox aspect-js 1.0.0 RC](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.zip) Release Candidat, stable and final API   
-[Seanox aspect-js 1.0.0 RC Sources](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-src.zip) Release Candidat, stable and final API
+## Release Candidat, stable and final API
+[Seanox aspect-js 1.0.0 RC](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.zip)  
+[Seanox aspect-js 1.0.0 RC Sources](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-src.zip)
 
 
 # Links
-[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.js) Release Candidat, stable and final API  
-[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-min.js)  Release Candidat, stable and final API
+## Release Candidat, stable and final API
+[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.js)  
+[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-min.js)  
 
 
 # Installation
