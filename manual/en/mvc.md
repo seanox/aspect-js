@@ -360,10 +360,19 @@ More details can be found in chapter [Acceptors](#acceptors).
 
 ## Virtual Paths
 
-Virtual paths are based on the anchor part of a URL.
+Virtual paths are used for navigation and control of face flow.   
+For SPAs (Single-Page-Applications) the anchor part of the URL is used for the
+paths.
 
 ```
-http://example.local/page.html#a#b#c#d
+https://example.local/example/#path
+```
+
+In accordance with the file system, also here absolute and relative paths as
+well as functional paths are supported..
+
+```
+https://seanox.local/example/#path#sub-path
 ```
 
 Paths are a reference to a target in face-flow.  
@@ -371,7 +380,7 @@ The target can be a face, a facet or a function.
 
 Paths consist exclusively of word characters and underscores (based on composite
 IDs) and must begin with a letter and use the hash character as separator and
-root.
+root. Spaces are not supported.
 
 ```
 #a#b#c#d
