@@ -22,6 +22,7 @@
  *  
  *      DESCRIPTION
  *      ----
+ *  
  *  With aspect-js the declarative approach of HTML is taken up and extended.
  *  In addition to the expression language, the HTML elements are provided with
  *  additional attributes for functions and object binding attributes.
@@ -57,26 +58,12 @@
  *  attribute `composite` and have a valid Composite-ID. The Composite-ID must
  *  meet the requirements of the namespace.
  *  
- *          member
+ *          property
  *          ----
- *  A member is a property of a static model (model component / component). It
+ *  Is a property in a static model (model component / component). It
  *  corresponds to an HTML element with the same ID in the same namespace. The
- *  ID of the member can be relative or use an absolute namespace. If the ID is
- *  relative, the namespace is defined by the parent composite element.
- *  
- *          composite-id
- *          ----
- *  The Composite-ID is an application-wide unique identifier.
- *  It is a sequence of characters or words consisting of letters, numbers, and
- *  underscores that contains at least one character, begins with a letter, and
- *  ends with a letter or number. A Composite-ID is formed by combining the
- *  attributes `ID` and `composite`.
- *
- *          identifier
- *          ----
- *  The identifier is a unique value with the same requirements as a
- *  Composite-ID. It is important for the assignment and binding of members and
- *  properties for object/model binding, validation and synchronization.
+ *  ID of the property can be relative or use an absolute namespace. If the ID
+ *  is relative, the namespace is defined by the parent composite element.
  *  
  *          qualifier
  *          ----
@@ -86,11 +73,25 @@
  *  unique qualifier, separated by a colon.
  *  Qualifiers are ignored during object/model binding.
  *  
+ *          identifier
+ *          ----
+ *  The identifier is a unique value with the same requirements as a
+ *  Composite-ID. It is important for the assignment and binding of properties
+ *  for object/model binding, validation and synchronization.
+ *  
  *          composite
  *          ----
  *  Composite describes the construct of markup, JavaScript model, and possibly
  *  existing module resources. It describes a component/module without direct
  *  reference to a concrete perspective.
+ *  
+ *          composite-id
+ *          ----
+ *  The Composite-ID is an application-wide unique identifier.
+ *  It is a sequence of characters or words consisting of letters, numbers, and
+ *  underscores that contains at least one character, begins with a letter, and
+ *  ends with a letter or number. A Composite-ID is formed by combining the
+ *  attributes `ID` and `composite`.
  *  
  *  
  *      PRINCIPLES
@@ -255,7 +256,7 @@ if (typeof Composite === "undefined") {
     /**
      *  Pattern for a element id
      *      group 1: model, optionally with (full qualified) namespace
-     *      group 2: identifier (element, field, member, ...), only with an extended namespace
+     *      group 2: property, only with an extended namespace
      *      group 3: qualifier (optional)
      */
     Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z]\w*)(?:\.(?:[a-z]\w*))*)\.)*([a-z]\w*)(?:\:(\w*))*$/i;
@@ -556,7 +557,8 @@ if (typeof Composite === "undefined") {
     
     /**
      *  Mounts the as selector passed element with all its children where an
-     *  object/model binding is possible.
+     *  object/model binding is possible. Mount is possible for all elements
+     *  with an ID, not only for composite objects and their children.
      *  
      *  The object/model binding is about connecting markup/HTML elements with
      *  JavaScript models. The models, also known as components, are static
@@ -579,16 +581,17 @@ if (typeof Composite === "undefined") {
      *  renderer is not detected/supported, but can be implemented in the
      *  application logic - this is a conscious decision!
      *      Case study:
-     *  In the markup there is a composite with a member x. There is a
-     *  corresponding JavaScript model for the composite but without the member
-     *  x. The renderer will mount the composite with the JavaScript model, the
-     *  member x will not be found in the model and will be ignored. At runtime,
-     *  the model is modified later and the member x is added. The renderer will
-     *  not detect the change in the model and the member x will not be mounted
-     *  during re-rendering. Only when the composite is completely removed from
-     *  the DOM (e.g. by a condition) and then newly added to the DOM, the
-     *  member x is also mounted, because the renderer then uses the current
-     *  snapshot of the model and the member x also exists in the model.
+     *  In the markup there is a composite with a property x. There is a
+     *  corresponding JavaScript model for the composite but without the
+     *  property x. The renderer will mount the composite with the JavaScript
+     *  model, the property x will not be found in the model and will be
+     *  ignored. At runtime, the model is modified later and the property x is
+     *  added. The renderer will not detect the change in the model and the
+     *  property x will not be mounted during re-rendering. Only when the
+     *  composite is completely removed from the DOM (e.g. by a condition) and
+     *  then newly added to the DOM, the property x is also mounted, because the
+     *  renderer then uses the current snapshot of the model and the property x
+     *  also exists in the model.
      *  
      *      Synchronization
      *      ----
@@ -611,8 +614,6 @@ if (typeof Composite === "undefined") {
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - namespace cannot be created if it already exists as a method
-     *      
-     *  TODO: Doku, mount funktioniert für alle Elemente mit ID, nicht nur Composite-Childs    
      */
     Composite.mount = function(selector, lock) {
         
@@ -670,7 +671,7 @@ if (typeof Composite === "undefined") {
             //methods that are not registered during rendering can be registered
             //here.
             
-            model = model.scope[model.member];
+            model = model.scope[model.property];
             for (var entry in model)
                 if (typeof model[entry] === "function"
                         && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)
@@ -683,23 +684,23 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO:
-     *  Composite ist immer relative bzw. absolute zum DOM.
-     *  Die Reihenfolge bzw. Verschachtelung der Composutes im DOM bestimmen
-     *  auch Namespace und Scope!!! 
-     *  
-     *  Determines the namespace for a composite element.
+     *  Determines the namespace for a composite element as meta object.
+     *
+     *  Composite:
+     *      {composite:scope, model:model}
+     *  Composite Element:
+     *      {composite:scope, model:model, property:identifier, name:qualifier}
+     *
      *  The namespace is created based on the parent composite elements
      *  (elements with the attribute 'composite'), but also includes the passed
      *  element if it is a composite itself.
      *  The IDs of the composite elements constitute the namespace in order of
      *  their position in the DOM.
      *  @param  element
-     *  @return the determined namespace, otherwise null
-     *          TODO: return meta {composite:null, model:meta[1], member:meta[2], name:meta[3]};
+     *  @return the determined namespace as meta object, otherwise null
      *  @throws An error occurs in the following cases:
      *      - a composite does not have an ID
-     *      - the ID does not match the pattern of a Composite-ID.
+     *      - in the case of an invalid composite ID
      */
     Composite.mount.locate = function(element) {
         
@@ -714,16 +715,16 @@ if (typeof Composite === "undefined") {
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
             if (!Object.lookup(serial))
                 return null;
-            return {composite:serial, model:serial, member:null, name:null};
+            return {composite:serial, model:serial, property:null, name:null};
         }
 
         //Splitting of the element ID into:
-        //   model, identifierm, qualifier (optional)
+        //   model, property, qualifier (optional)
         var meta = serial.match(Composite.PATTERN_ELEMENT_ID);
         if (!meta)
             return null;
         
-        meta = {composite:null, model:meta[1], member:meta[2], name:meta[3]};
+        meta = {composite:null, model:meta[1], property:meta[2], name:meta[3]};
         
         for (var scope = element; scope; scope = scope.parentNode) {
             if (!(scope instanceof Element)
@@ -742,7 +743,6 @@ if (typeof Composite === "undefined") {
                 && !Object.lookup(meta.composite))
             return null;
         
-        //TODO: Ergaenzen in Doku (mvc.bd binding)
         //If the ID contains a dot (meta.model exists), it can be an ID with an
         //absolute namespace or the ID is relative to the namespace of the
         //composite. Both cases will be evaluated. The ID with the relative
@@ -754,69 +754,56 @@ if (typeof Composite === "undefined") {
         if (meta.model) {
             if (meta.composite) {
                 var scope = Object.lookup(meta.composite + "." + meta.model);
-                if (scope && scope.hasOwnProperty(meta.member)) {
+                if (scope && scope.hasOwnProperty(meta.property)) {
                     meta.model = meta.composite + "." + meta.model;
                     return meta;
                 }
             }
             var scope = Object.lookup(meta.model);
-            if (scope && scope.hasOwnProperty(meta.member))
+            if (scope && scope.hasOwnProperty(meta.property))
                 return meta;
             return null;
         }
 
-        //Without an additional namespace, the member must exist relative to the
-        //composite. The composite thus represents the complete namespace.
+        //Without an additional namespace, the property must exist relative to
+        //the composite. The composite thus represents the complete namespace.
         //The qualifier is passed through in both cases, but not tested.
         if (!meta.composite)
             return null;
         meta.model = meta.composite;
         var scope = Object.lookup(meta.model);
-        if (scope && scope.hasOwnProperty(meta.member))
+        if (scope && scope.hasOwnProperty(meta.property))
             return meta;
         return null;
     };
     
     /**
-     *  Determines the object scope (namespace) for an element.
-     *  The namespace is a text string separated with dots, that represents the
-     *  path in an object model.
-     *  In the DOM (markup), the namespace is described by the sequence of the
-     *  id-attributes of composite elements. Each child in the DOM with an id
-     *  thus represents a property of the parent composite object, also named as
-     *  model. For the namespace, there is also a scope. This represents the
-     *  path as an object tree.
+     *  Determines the meta informations as object for an element.
      *  
-     *  TODO: Doku:
-     *  composite - rueckgabe {scope, model}
-     *  composite element - rueckgabe {composite, scope, model, member}
-     *  sonst null, wenn im Objektbaum nicht gefunden
+     *      {scope:scope, model:model, property:property, name:identifier}
+     *      
+     *  The method always requires a corresponding JavaScript model and an
+     *  element with an ID. The ID can be relative or absolute/full qualified.
+     *  For relative IDs, the namespace is determined from the higher-level
+     *  composite structure in the DOM. Absolute IDs refer directly to the
+     *  namespace to be used. If no corresponding namespace/JavaScript model can
+     *  be determined, the method returns null.
      *  
-     *  TODO:
-     *  The method always requires an existing model/composite in which the
-     *  element is located. If the passed element uses an ID with a qualified
-     *  namespace, then this is used. Otherwise, if a superordinate composite
-     *  with ID exists in the DOM, this is used as base for the namespace.
-     *  Returns an meta object with scope, model and member, otherwise null.
+     *  Absolute namespaces contain a dot as a package separator.
+
+     *  The recursive determinaton of the namespace, the higher-level composite
+     *  IDs are always regarded as absolute until the first absolute composite
+     *  ID occurs, then the recursion/determinaton is interrupted and the
+     *  absolute composite ID is used as the basis for the namespace.
+     *  Means, it is primarily always searched for an independent model in
+     *  JavaScript and only alternatively for a sub-model (inner class).
+     *      
      *  @param  element element
      *  @return the created meta object, otherwise null
+     *  @throws An error occurs in the following cases:
+     *      - in the case of an invalid composite ID 
      */
     Composite.mount.lookup = function(element) {
-        
-        //TODO: The rules for the lookup:
-        //  - The namespace consists of a context, an ID, and an optional identifier
-        //  - context: Corresponds to the chain of superior IDs of all elements with the attribute 'composite'.
-        //  - ID: The id of an element.
-        //  - qualifier: Individual identifier in an Id which is separated from the ID by a double point
-        
-        //TODO: Context and Id can contain relative and absolute values.
-        //TODO: Relative names match the pattern: xxxx
-        //TODO: Absolute namespaces also contain the dot as a separator for the individual parts.
-        //TODO: With the recursive resolution of the namespace, the higher-level composite IDs are always regarded as absolute until the first absolute composite ID occurs, then the recursive resolution is interrupted and the absolute composite ID is used as the basis for the namespace.
-        //TODO: If an element uses an absolute ID, no higher-level namespace is determined.
-        //TODO: Invalid composite Ids cause an error.
-        
-        //TODO: composite = namespace/model = scope
         
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_ID))
@@ -835,7 +822,7 @@ if (typeof Composite === "undefined") {
             throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
         
         //Determines the meta-data for the model:
-        //    composite (optional), model, member, name (optional)
+        //    composite (optional), model, property, name (optional)
         //Locale only returns a meta-object if a corresponding JavaScript model
         //exists for the markup/DOM.
         var meta = Composite.mount.locate(element);
@@ -852,7 +839,7 @@ if (typeof Composite === "undefined") {
             return {scope:scope, model:meta.model};
 
         return {composite:{scope:scope, model:meta.model},
-            scope:scope, model:meta.model, member:meta.member, name:meta.name};
+            scope:scope, model:meta.model, property:meta.property, name:meta.name};
     };
     
     /**
@@ -1056,20 +1043,20 @@ if (typeof Composite === "undefined") {
      *      Events + Validate + Render
      *      ----
      *  Events primarily controls the synchronization of the input values of
-     *  HTML elements with the members of a model. Means that the value in the
-     *  model only changes if an event occurs for the corresponding HTML
+     *  HTML elements with the properties of a model. Means that the value in
+     *  the model only changes if an event occurs for the corresponding HTML
      *  element. Synchronization is performed at a low level. Means that the
-     *  members are synchronized directly and without the use of get and set
+     *  properties are synchronized directly and without the use of get and set
      *  methods. For a better control a declarative validation is supported. If
      *  the attribute 'validate' exists, the value for this is ignored, the
      *  static method <Model>.validate(element, value) is  called in the
      *  corresponding model. This call must return a true value as the result,
      *  otherwise the element value is not stored into the corresponding model
-     *  member. If an event occurs, synchronization is performed. After that will
-     *  be checked whether the render attribute exists. All selectors listed
-     *  here are then triggered for re-rendering. (Re)rendering is independent
-     *  of synchronization and validation and is executed immediately after an
-     *  event occurs.
+     *  property. If an event occurs, synchronization is performed. After that
+     *  will be checked whether the render attribute exists. All selectors
+     *  listed here are then triggered for re-rendering. (Re)rendering is
+     *  independent of synchronization and validation and is executed
+     *  immediately after an event occurs.
      *      
      *      Condition
      *      ----
@@ -1511,7 +1498,7 @@ if (typeof Composite === "undefined") {
                         || Composite.models.includes(object.attributes[Composite.ATTRIBUTE_ID]))
                     return;
                 Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
-                var meta = Composite.mount.lookup(object.template || object);
+                var meta = Composite.mount.lookup(object.template || object.element);
                 if (meta && meta.model && meta.scope
                         && typeof meta.scope.dock === "function")
                     meta.scope.dock.call(null);
@@ -1578,17 +1565,17 @@ if (typeof Composite === "undefined") {
                 return;
             
             //Events primarily controls the synchronization of the input values
-            //of HTML elements with the members of a model. Means that the value
-            //in the model only changes if an event occurs for the corresponding
-            //HTML element. Synchronization is performed at a low level. Means
-            //that the members are synchronized directly and without the use of
-            //get and set methods.
+            //of HTML elements with the properties of a model. Means that the
+            //value in the model only changes if an event occurs for the
+            //corresponding HTML element. Synchronization is performed at a low
+            //level. Means that the properties are synchronized directly and
+            //without the use of get and set methods.
             //For a better control a declarative validation is supported.
             //If the attribute 'validate' exists, the value for this is ignored,
             //the static method <Model>.validate(element, value) is  called in
             //the corresponding model. This call must return a true value as the
             //result, otherwise the element value is not stored into the
-            //corresponding model member.
+            //corresponding model property.
             //If an event occurs, synchronization is performed. After that will
             //be checked whether the render attribute exists. All selectors
             //listed here are then triggered for (re)rendering. (Re)rendering is
@@ -1611,14 +1598,14 @@ if (typeof Composite === "undefined") {
                     //During binding, the logic checks which events have already
                     //been registered so that the implemented event methods in
                     //the model are not called more than once.
-                    if (meta && meta.scope && meta.member
-                            && typeof meta.scope[meta.member] === "object"
-                            && meta.scope[meta.member] != null) {
+                    if (meta && meta.scope && meta.property
+                            && typeof meta.scope[meta.property] === "object"
+                            && meta.scope[meta.property] != null) {
                         var invoke = "on" + event.capitalize();
                         if (invoke.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
-                            if (typeof meta.scope[meta.member][invoke] === "function") {
+                            if (typeof meta.scope[meta.property][invoke] === "function") {
                                 object.events = object.events || {};
-                                object.events[event.toLowerCase()] = meta.scope[meta.member][invoke]; 
+                                object.events[event.toLowerCase()] = meta.scope[meta.property][invoke]; 
                             }
                         }
                     }
@@ -1638,9 +1625,9 @@ if (typeof Composite === "undefined") {
                                     valid = meta.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
                                 } else valid = true;
                                 if (valid) {
-                                    if (meta.scope[meta.member] instanceof Object)
-                                        meta.scope[meta.member].value = target.value;
-                                    else meta.scope[meta.member] = target.value
+                                    if (meta.scope[meta.property] instanceof Object)
+                                        meta.scope[meta.property].value = target.value;
+                                    else meta.scope[meta.property] = target.value
                                 }
                             }
                         }
@@ -1862,7 +1849,6 @@ if (typeof Composite === "undefined") {
                                 var template = object.template.cloneNode(true);
                                 Composite.render(template, lock.share());
                                 selector.appendChild(template.childNodes);
-                                //TODO: check delete Composite.render.meta
                                 delete Composite.render.meta[template.ordinal()];                                 
                             });
                         }
@@ -2232,11 +2218,11 @@ if (typeof Expression === "undefined") {
     
     /**
      *  Resolves a value-expression recursively if necessary.
-     *  Value expressions refer to a member in a static model.
+     *  Value expressions refer to a property in a static model.
      *  The value is retrieved using a corresponding get- or is-function or, if
-     *  this is not available, the value is retrieved directly from the member.
-     *  For the get- and is-functions, the first character is changed from
-     *  member name to uppercase and prefixed with 'get' or 'is'.
+     *  this is not available, the value is retrieved directly from the
+     *  property. For the get- and is-functions, the first character is changed
+     *  from property name to uppercase and prefixed with 'get' or 'is'.
      *      e.g. {{Model.value}} -> Model.getValue()
      *           {{Model.value}} -> Model.isValue()
      *  In addition to the namespace of JavaScript, the method also supports DOM
@@ -2465,7 +2451,7 @@ if (typeof Expression === "undefined") {
         //The expression is followed by a non-word character or the end.
         
         cascade.other.forEach((entry, index, array) => {
-            var text =  entry.data;
+            var text = entry.data;
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
             var words = [];
