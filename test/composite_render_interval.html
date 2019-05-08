@@ -101,8 +101,13 @@
         }});   
         Test.create({test:function() {
             snapshots.eval(45);
-            Assert.assertTrue(A == 3 && B == 2 && C == 2);
-            Assert.assertTrue(S1 == 1 && S2 == 2);              
+            if (navigator.userAgentType == "edge") {
+                Assert.assertTrue(A == 2 && B == 2 && C == 2);
+                Assert.assertTrue(S1 == 1 && S2 == 1);              
+            } else {
+              Assert.assertTrue(A == 3 && B == 2 && C == 2);
+              Assert.assertTrue(S1 == 1 && S2 == 2);              
+            }
         }});   
         Test.create({test:function() {
             snapshots.eval(55);
