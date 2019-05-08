@@ -26,7 +26,9 @@
         }
         
         Test.create({test:function() {
-            var content = Output.textContent.replace(/\s+/g, " ").trim();
+            var content = Output.textContent;
+            content = content.replace(/undefined/, "");
+            content = content.replace(/\s+/g, " ").trim();
             Assert.assertEquals("ma mb true EA EA mercedes", content);
         }});         
         Composite.listen(Composite.EVENT_RENDER_END, function() {

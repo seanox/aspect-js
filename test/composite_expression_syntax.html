@@ -16,8 +16,8 @@
         Test.activate();
 
         Test.create({test:function() {
-            var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
-            Assert.assertEqualsTo("script[type='text/test-" + type + "']", normalizeOutput(document.body.innerHTML));
+            document.body.innerHTML = normalizeOutput(document.body.innerHTML);
+            Assert.assertEqualsTo("script[type='text/test-" + navigator.userAgentType + "']", document.body.innerHTML);
         }});         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
@@ -63,26 +63,26 @@
     ----
     undefined true
     undefined true 
-    Expected ';'
+    Unexpected identifier after numeric literal
     1le2 true
-    Expected ';'
+    Unexpected identifier after numeric literal
     1ne2 true
     
     true true
-    Expected ';'
+    Unexpected identifier after numeric literal
     2ge1 true 
-    Expected ';'
+    Unexpected identifier after numeric literal
     1lt2 true
     true true
     Expected ';'
     Expression.lookup("notempty")'x' true    
     
-    Expected ')'
+    Unexpected identifier after numeric literal
     (25div5)Expression.lookup("eq5") Expected ';'
     (25 /5)Expression.lookup("eq5")
-    Expected ';'
+    Unexpected identifier after numeric literal
     2gt1 true 
-    Expected ')'
+    Unexpected identifier after numeric literal
     (10mod3)Expression.lookup("eq1") Expected ';'
     (10%3)Expression.lookup("eq1")
     undefined true

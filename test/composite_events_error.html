@@ -20,11 +20,11 @@
         
         Test.create({test:function() {
             var filter = "";
-            for (var loop = 1; loop < 3; loop++) {
+            for (var loop = 1; loop <= 3; loop++) {
                 var frame = document.querySelector("iframe:nth-child(" + loop + ")");
                 frame = frame.contentDocument || frame.contentWindow.document;
                 var text = frame.body.textContent;
-                Assert.assertTrue(!!text.match(/TypeError|ReferenceError/));
+                Assert.assertTrue(!!text.match(/TypeError|ReferenceError|not defined|undefined or null reference/));
             }
         }});
         

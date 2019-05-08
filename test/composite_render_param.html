@@ -20,8 +20,7 @@
     
         Test.create({test:function() {
             var content = document.body.innerHTML;
-            var type = String(navigator.userAgent.match(/edge/i) || navigator.userAgent.match(/chrome/i) || "firefox").toLowerCase();
-            Assert.assertEqualsTo("script[type='text/test-" + type + "']", content);            
+            Assert.assertEqualsTo("script[type='text/test-" + navigator.userAgentType + "']", content);            
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {

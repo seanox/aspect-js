@@ -232,8 +232,7 @@
       var onPerform = function(event, status) {
           var test = locateTest();
           test = document.querySelector("#" + test.hashCode());
-          
-          document.querySelector("#progress").scrollTop = test.offsetTop; 
+          test.scrollIntoView(false);
           
           var meter = test.querySelector("meter");
           meter.max = status.queue.size;
