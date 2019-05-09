@@ -107,7 +107,8 @@
         
         Test.create({test:function() {
             var content = document.body.innerHTML;
-            Assert.assertEqualsTo("script[type='text/test']", content);            
+            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
+            Assert.assertEqualsTo("script[type='text/test']", content);                  
         }});    
         
         var errors = "";
@@ -120,9 +121,6 @@
         }});       
     </script>
     <script type="text/test">
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#x0000
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#
 A: #
 A: #project
 B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#project

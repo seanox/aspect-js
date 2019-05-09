@@ -102,6 +102,7 @@
         
         Test.create({test:function() {
             var content = document.body.innerHTML;
+            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
             Assert.assertEqualsTo("script[type='text/test']", content);            
         }});
         
@@ -115,9 +116,6 @@
         }});      
     </script>
     <script type="text/test">
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#x0000
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
 A: #a#b#c#d
 X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
 A: ##
