@@ -21,13 +21,19 @@
         };
         
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test']", document.body.innerHTML);
+            try {Assert.assertEqualsTo("script[type='text/test-1']", document.body.innerHTML);
+            } catch (exception) {
+                try {Assert.assertEqualsTo("script[type='text/test-2']", document.body.innerHTML);
+                } catch (exception) {
+                    throw exception;
+                }
+            }
         }}); 
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
         }); 
     </script>
-    <script type="text/test">
+    <script type="text/test-1">
     A:1-{{TestModel.ping()}} 
     B:2-{{TestModel.ping()}} 
     C:3-{{TestModel.ping()}}
@@ -35,6 +41,15 @@
     D:<input type="text" value="4-{{TestModel.ping()}}">
     E:<input type="text" value="5-{{TestModel.ping()}}">
     F:<input type="text" value="6-{{TestModel.ping()}}">
+    </script>
+    <script type="text/test-2">
+    A:1-{{TestModel.ping()}} 
+    B:2-{{TestModel.ping()}} 
+    C:3-{{TestModel.ping()}}
+    
+    D:<input value="4-{{TestModel.ping()}}" type="text">
+    E:<input value="5-{{TestModel.ping()}}" type="text">
+    F:<input value="6-{{TestModel.ping()}}" type="text">
     </script>
   </head>
   <body>
