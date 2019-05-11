@@ -16,7 +16,8 @@
         Test.activate();
     
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-" + navigator.userAgentType + "']", document.body.innerHTML);
+            var pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt");
+            Assert.assertSameText(pattern, document.body.innerHTML);
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -29,21 +30,6 @@
             element.typeValue("Hallo Berlin");
             Test.start();
         });
-    </script>
-    <script type="text/test-edge">
-      A1-O: Hallo Berlin
-      A1-I: <input id="InputTextA" type="text" value="A1">
-      A1-O: Hallo Berlin
-    </script>
-    <script type="text/test-chrome">
-      A1-O: Hallo Berlin
-      A1-I: <input type="text" id="InputTextA" value="A1">
-      A1-O: Hallo Berlin
-    </script>
-    <script type="text/test-firefox">
-      A1-O: Hallo Berlin
-      A1-I: <input type="text" id="InputTextA" value="A1">
-      A1-O: Hallo Berlin
     </script>
   </head>
   <body>

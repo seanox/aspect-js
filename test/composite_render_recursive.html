@@ -21,31 +21,13 @@
         };
         
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-" + navigator.userAgentType + "']", document.body.innerHTML);
+            Assert.assertEqualsTo("script[type='text/test']", document.body.innerHTML);
         }}); 
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();
         }); 
     </script>
-    <script type="text/test-edge">
-    A:1-{{TestModel.ping()}} 
-    B:2-{{TestModel.ping()}} 
-    C:3-{{TestModel.ping()}}
-    
-    D:<input type="text" value="4-{{TestModel.ping()}}">
-    E:<input type="text" value="5-{{TestModel.ping()}}">
-    F:<input type="text" value="6-{{TestModel.ping()}}">
-    </script>
-    <script type="text/test-chrome">
-    A:1-{{TestModel.ping()}} 
-    B:2-{{TestModel.ping()}} 
-    C:3-{{TestModel.ping()}}
-    
-    D:<input type="text" value="4-{{TestModel.ping()}}">
-    E:<input type="text" value="5-{{TestModel.ping()}}">
-    F:<input type="text" value="6-{{TestModel.ping()}}">
-    </script>
-    <script type="text/test-firefox">
+    <script type="text/test">
     A:1-{{TestModel.ping()}} 
     B:2-{{TestModel.ping()}} 
     C:3-{{TestModel.ping()}}
