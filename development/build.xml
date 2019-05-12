@@ -24,7 +24,7 @@
   
   <fileset id="fileset.project" dir="${workspace}">
     <include name="development/build.xml"/>
-    <include name="manual/**/*.md"/>
+    <!-- include name="manual/**/*.md"/ -->
     <include name="sources/*.js"/>
     <include name="test/**/*.*"/>
     <include name=".project"/>
@@ -42,6 +42,15 @@
         match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
         replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
       <replaceregexp file="CHANGES.tmp" match="x+" replace="0000" flags="g" byline="false"/>
+      <loadproperties>
+        <file file="CHANGES.tmp"/>
+      </loadproperties>
+      <delete file="CHANGES.tmp"/>
+      <echo file="CHANGES.tmp" message="release.major=${release.version}"/>
+      <replaceregexp file="CHANGES.tmp"
+        match="(?&lt;=\d+)\." byline="true" replace="&#x000D;release.minor="/>
+      <replaceregexp file="CHANGES.tmp"
+        match="(?&lt;=\d+)\." byline="true" replace="&#x000D;release.patch="/>
       <loadproperties>
         <file file="CHANGES.tmp"/>
       </loadproperties>
@@ -106,7 +115,7 @@
 
     <delete dir="${workspace.releases}" excludes="*.zip"/>
     
-    <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.version}.js"/>
+    <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.major}.x.js"/>
     <concat destfile="${release.dev}" append="false">
       <filelist dir="${workspace.sources}">
         <file name="extension.js"/>
@@ -120,7 +129,7 @@
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+\*\s+)" flags="g" replace="\1" byline="false"/>
     
-    <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.version}-min.js"/>
+    <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.major}.x-min.js"/>
     <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
     <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <compress-javascript file="${release.min}"/>
@@ -128,7 +137,8 @@
     <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
     <copy file="LICENSE" tofile="${workspace.releases}/license.txt"/>
     <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}.zip">
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}-*.js"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
       <fileset dir="${workspace.releases}" includes="release.txt"/>
       <fileset dir="${workspace.releases}" includes="license.txt"/>
     </zip>   

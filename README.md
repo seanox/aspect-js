@@ -51,21 +51,17 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-## Release Candidat, stable and final API
-[Seanox aspect-js 1.0.0 RC](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.zip)  
-[Seanox aspect-js 1.0.0 RC Sources](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-src.zip)
+[Seanox aspect-js 1.0.0](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0.zip)  
+[Seanox aspect-js 1.0.0 Sources](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-src.zip)
 
 
-# Links
-## Release Candidat, stable and final API
-[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC.js)  
-[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-RC-min.js)  
+# Release Channels
+[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x.js)  
+[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js)  
 
-
-# Installation
-
-
-# Configuration
+The release channels continuously provide the newest final major versions, which
+are downward compatible with relation to the major version.    
+Seanox aspect-js is always up to date when using the release channels.
 
 
 # Manuals
