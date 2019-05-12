@@ -716,10 +716,10 @@ if (typeof SiteMap === "undefined") {
         
         //Initially the page-module is loaded.
         //The page-module is similar to an autostart, it is used to initialize
-        //the single page application. It consists of page.js and page.css.
+        //the single page application. It consists of common.js and common.css.
         //The configuration of the SiteMap and essential styles can/should be
         //stored here.
-        Composite.render.include("page");
+        Composite.render.include("common");
         
         //When clicking on a link with the current path, the focus must be set
         //back to face/facet, as the user may have scrolled on the page.
