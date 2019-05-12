@@ -67,7 +67,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 [https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js)  
 
 The release channels continuously provide the newest final major versions, which
-are downward compatible with relation to the major version.    
+are downward compatible to the major version.    
 Seanox aspect-js is always up to date when using the release channels.
 
 
