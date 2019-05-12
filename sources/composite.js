@@ -67,17 +67,11 @@
  *  
  *          qualifier
  *          ----
- *  In some cases the identifier cannot be uniquely named, so in cases where the
- *  target in the object is an array and/or the identifier is used in an
- *  iteration. In these cases, the identifier can be extended by an additional
- *  unique qualifier, separated by a colon.
+ *  In some cases, the identifier (ID) may not be unique. For example, in cases
+ *  where properties are arrays or an iteration is used. In these cases the
+ *  identifier can be extended by an additional unique qualifier separated by a
+ *  colon.
  *  Qualifiers are ignored during object/model binding.
- *  
- *          identifier
- *          ----
- *  The identifier is a unique value with the same requirements as a
- *  Composite-ID. It is important for the assignment and binding of properties
- *  for object/model binding, validation and synchronization.
  *  
  *          composite
  *          ----
@@ -687,9 +681,9 @@ if (typeof Composite === "undefined") {
      *  Determines the namespace for a composite element as meta object.
      *
      *  Composite:
-     *      {composite:scope, model:model}
+     *      {composite:scope, model}
      *  Composite Element:
-     *      {composite:scope, model:model, property:identifier, name:qualifier}
+     *      {composite:scope, model, property, name:qualifier}
      *
      *  The namespace is created based on the parent composite elements
      *  (elements with the attribute 'composite'), but also includes the passed
@@ -780,7 +774,7 @@ if (typeof Composite === "undefined") {
     /**
      *  Determines the meta informations as object for an element.
      *  
-     *      {scope:scope, model:model, property:property, name:identifier}
+     *      {scope, model, property, name:qualifier}
      *      
      *  The method always requires a corresponding JavaScript model and an
      *  element with an ID. The ID can be relative or absolute/full qualified.
