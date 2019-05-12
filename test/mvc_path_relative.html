@@ -103,6 +103,8 @@
         Test.create({test:function() {
             var content = document.body.innerHTML;
             content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
+            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
+            document.body.textContent = content;
             Assert.assertEqualsTo("script[type='text/test']", content);            
         }});
         
@@ -117,60 +119,60 @@
     </script>
     <script type="text/test">
 A: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 A: ##
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+X: http://.../mvc_path_relative.html#a#b#c
 A: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 A: ###x
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+X: http://.../mvc_path_relative.html#a#b#x
 A: y#z
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
+X: http://.../mvc_path_relative.html#a#b#x#y#z
 A: ####c
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+X: http://.../mvc_path_relative.html#a#b#c
 A: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 A: ####b
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+X: http://.../mvc_path_relative.html#a#b
 B: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 B: ##
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+X: http://.../mvc_path_relative.html##
+X: http://.../mvc_path_relative.html#a#b#c
 B: ##x
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##x
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+X: http://.../mvc_path_relative.html##x
+X: http://.../mvc_path_relative.html#a#b#x
 B: #a#b#x#y#z
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x#y#z
+X: http://.../mvc_path_relative.html#a#b#x#y#z
 B: ####c
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####c
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+X: http://.../mvc_path_relative.html####c
+X: http://.../mvc_path_relative.html#a#b#c
 B: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 B: ####b
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####b
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+X: http://.../mvc_path_relative.html####b
+X: http://.../mvc_path_relative.html#a#b
 C: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 C: ##
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html##
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c
+X: http://.../mvc_path_relative.html##
+X: http://.../mvc_path_relative.html#a#b#c
 C: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 C: ###x
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html###x
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#x
+X: http://.../mvc_path_relative.html###x
+X: http://.../mvc_path_relative.html#a#b#x
 C: y#z
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#y#z
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+X: http://.../mvc_path_relative.html#y#z
+X: http://.../mvc_path_relative.html#
 C: ####c
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####c
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#
+X: http://.../mvc_path_relative.html####c
+X: http://.../mvc_path_relative.html#
 C: #a#b#c#d
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b#c#d
+X: http://.../mvc_path_relative.html#a#b#c#d
 C: ####b
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html####b
-X: http://127.0.0.1/seanox/aspect-js/test/mvc_path_relative.html#a#b
+X: http://.../mvc_path_relative.html####b
+X: http://.../mvc_path_relative.html#a#b
     </script>
   </head>
   <body>

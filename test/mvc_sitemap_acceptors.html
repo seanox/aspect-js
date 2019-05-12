@@ -108,6 +108,8 @@
         Test.create({test:function() {
             var content = document.body.innerHTML;
             content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
+            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
+            document.body.textContent = content;
             Assert.assertEqualsTo("script[type='text/test']", content);                  
         }});    
         
@@ -123,69 +125,69 @@
     <script type="text/test">
 A: #
 A: #project
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#project
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#
+B: http://.../mvc_sitemap_acceptors.html#project
+B: http://.../mvc_sitemap_acceptors.html#
 A: #projects
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects
+B: http://.../mvc_sitemap_acceptors.html#projects
 A: #projects#xyz
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#xyz
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects
+B: http://.../mvc_sitemap_acceptors.html#projects#xyz
+B: http://.../mvc_sitemap_acceptors.html#projects
 A: #projects#devwex
 F: #projects#devwex
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex
 A: #projects#devwexx
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwexx
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects
+B: http://.../mvc_sitemap_acceptors.html#projects#devwexx
+B: http://.../mvc_sitemap_acceptors.html#projects
 A: #projects#devwex#xyz
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#xyz
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#xyz
 F: #projects#devwex
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex
 A: #projects#devwex#description
 C: #projects#devwex#description
 F: #projects#devwex#description
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#description
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
 A: #projects#devwex#description#features
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#description#features
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description#features
 C: #projects#devwex#description
 F: #projects#devwex#description
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#description
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
 A: #projects#devwex#description#features#licence
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#description#features#licence
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description#features#licence
 C: #projects#devwex#description
 F: #projects#devwex#description
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#description
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
 A: #projects#devwex#features
 C: #projects#devwex#features
 F: #projects#devwex#features
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#features
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#features
 A: #projects#devwex#licence
 F: #projects#devwex#licence
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#devwex#licence
+B: http://.../mvc_sitemap_acceptors.html#projects#devwex#licence
 A: #projects#review
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#review
+B: http://.../mvc_sitemap_acceptors.html#projects#review
 A: #projects#review#description
 C: #projects#review#description
 D: #projects#review#description
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#review#description
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#review
+B: http://.../mvc_sitemap_acceptors.html#projects#review#description
+B: http://.../mvc_sitemap_acceptors.html#projects#review
 A: #projects#review#features
 C: #projects#review#features
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#review#features
+B: http://.../mvc_sitemap_acceptors.html#projects#review#features
 A: #projects#review#licence
 E: #projects#review#licence
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#review#licence
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#legal#terms
+B: http://.../mvc_sitemap_acceptors.html#projects#review#licence
+B: http://.../mvc_sitemap_acceptors.html#legal#terms
 A: #projects#wotexx
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#wotexx
+B: http://.../mvc_sitemap_acceptors.html#projects#wotexx
 A: #projects#wotexx#description
 C: #projects#wotexx#description
 F: #projects#wotexx#description
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#wotexx#description
+B: http://.../mvc_sitemap_acceptors.html#projects#wotexx#description
 A: #projects#wotexx#features
 C: #projects#wotexx#features
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#wotexx#features
+B: http://.../mvc_sitemap_acceptors.html#projects#wotexx#features
 A: #projects#wotexx#licence
-B: http://127.0.0.1/seanox/aspect-js/test/mvc_sitemap_acceptors.html#projects#wotexx#licence 
+B: http://.../mvc_sitemap_acceptors.html#projects#wotexx#licence 
     </script>
   </head>
   <body>

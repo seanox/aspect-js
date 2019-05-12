@@ -22,6 +22,10 @@ if (Test.read === undefined) {
     Test.read = function(content) {
         var request = new XMLHttpRequest();
         request.overrideMimeType("text/plain");
+        if (content)
+            if (content.match(/\?/))
+                content += "&" + new Date().getTime();
+            else content = "?" + new Date().getTime();
         request.open("GET", content, false);
         request.send();
         if (request.status != "200")
