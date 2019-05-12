@@ -106,7 +106,10 @@
                 Assert.assertTrue(S1 == 1 && S2 == 1);              
             } else if (navigator.engine == "blink") {
                 Assert.assertTrue(A == 3 && B == 2 && C == 1);
-                Assert.assertTrue(S1 == 1 && S2 == 2);      
+                Assert.assertTrue(S1 == 1 && S2 == 2); 
+            } else if (navigator.engine == "webkit") {
+                Assert.assertTrue(A == 3 && B == 2 && C == 1);
+                Assert.assertTrue(S1 == 1 && S2 == 2);                 
             } else {
                 Assert.assertTrue(A == 3 && B == 2 && C == 2);
                 Assert.assertTrue(S1 == 1 && S2 == 2);              

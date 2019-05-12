@@ -16,9 +16,9 @@
         Test.activate();
 
         Test.create({test:function() {
-            document.body.innerHTML = normalizeOutput(document.body.innerHTML);
+            document.body.textContent = normalizeOutput(document.body.innerHTML);
             var pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.innerHTML);
+            Assert.assertSameText(pattern, document.body.textContent);
         }});         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             Test.start();

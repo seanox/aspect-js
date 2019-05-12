@@ -25,7 +25,7 @@ if (Test.read === undefined) {
         if (content)
             if (content.match(/\?/))
                 content += "&" + new Date().getTime();
-            else content = "?" + new Date().getTime();
+            else content += "?" + new Date().getTime();
         request.open("GET", content, false);
         request.send();
         if (request.status != "200")
