@@ -163,7 +163,7 @@ if (String.prototype.encodeBase64 === undefined) {
     String.prototype.encodeBase64 = function() {
         try {
             return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
-                return String.fromCharCode('0x' + code);
+                return String.fromCharCode("0x" + code);
             }));
         } catch (exception) {
             throw new Error("malformed character sequence");
@@ -178,9 +178,9 @@ if (String.prototype.encodeBase64 === undefined) {
 if (String.prototype.decodeBase64 === undefined) {
     String.prototype.decodeBase64 = function() {
         try {
-            return decodeURIComponent(atob(this).split('').map((code) => {
-                return '%' + ('00' + code.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
+            return decodeURIComponent(atob(this).split("").map((code) => {
+                return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
+            }).join(""));
         } catch (exception) {
             throw new Error("malformed character sequence");
         }
@@ -385,6 +385,9 @@ if (typeof DataSource === "undefined") {
      *  option raw the cleanup can be deactivated.
      *  @param  xml   locator or XMLDocument
      *  @param  style locator or XMLDocument 
+     *  @param  raw   option in combination with transform
+     *      true returns the complete XML document, otherwise only the root
+     *      entity as node 
      *  @return the transformation result as a node
      */
     DataSource.transform = function(xml, style, raw) {
@@ -448,15 +451,15 @@ if (typeof DataSource === "undefined") {
     }; 
     
     /**
-     *  Fetch the data as text to a locator.
-     *  Optionally the data can be transformed into an XMLDocument.
+     *  Fetch the data to a locator as XMLDocument.
+     *  Optionally the data can be transformed via XSLT.
      *  @param  locators  locator
-     *  @param  transform locator of style for the transformation
-     *  @param  raw
-     *      in combination with transform optionally true to return the complete
-     *      XMLDocument, otherwise only the root entity is returned as node     
-     *  @return the data as text or in combination with transform the
-     *      XMLDocument or the root entity as node
+     *  @param  transform locator of the transformation style
+     *  @param  raw       option in combination with transform
+     *      true returns the complete XML document, otherwise only the root
+     *      entity as node
+     *  @return the fetched data, optionally transformed, as XMLDocument or the
+     *      root entity as a node when the combination transform and raw is used
      *  @throws Error in the case of invalid arguments
      */    
     DataSource.fetch = function(locator, transform, raw) {
@@ -503,7 +506,7 @@ if (typeof DataSource === "undefined") {
     };
     
     /**
-     *  Collects and concatates the of multiple XML files as a new XMLDocument.
+     *  Collects and concatenates multiple XML files in a new XMLDocument.
      *  The method has the following various signatures:
      *      DataSource.collect(locator, ...);
      *      DataSource.collect(collector, [locators]);
@@ -556,12 +559,23 @@ if (typeof DataSource === "undefined") {
 };
 
 /**
- *  (Resource)Messages is a static datasource extension for internationalization
+ *  (Resource)Messages is a static DataSource extension for internationalization
  *  and localization. The implementation is based on a set of key-value or
- *  label-value data which is stored in the locales.xml of the datasource.
- *  The elements for the supported languages exist in this file under locales.
- *  These elements are extended by a set of key-value entries for the (eesource)
- *  messages.
+ *  label-value data which is stored in the locales.xml of the DataSource.
+ *  
+ *      +- data
+ *      |  |
+ *      |  +- de...
+ *      |  +- en...
+ *      |  +- locales.xml
+ *      |
+ *      +- modules
+ *      +- resources
+ *      +- index.html
+ *  
+ *  The elements for the supported languages are organized in locales in this
+ *  file. Locales is a set of supported country codes. In each country code, the
+ *  key values are recorded as label entries.  
  *    
  *  <?xml version="1.0" encoding="ISO-8859-1"?>
  *  <locales>
@@ -579,11 +593,15 @@ if (typeof DataSource === "undefined") {
  *  
  *  The language is selected automatically on the basis of the language setting
  *  of the browser. If the language set there is not supported, the language
- *  declared as "default" is used.
+ *  declared as 'default' is used.
  *  
- *  After loading the file, the messages are available as an assosiative array.
+ *  After loading the application, Messages are available as an assosiative
+ *  array and can be used directly in JavaScript and Markup via Expression
+ *  Language.
  *  
- *      Messages["contact.title"];
+ *  Messages["contact.title"];
+ *      
+ *  <h1 output="{{Messages['contact.title']}}"/>
  *  
  *  Messages 1.0 20181021
  *  Copyright (C) 2018 Seanox Software Solutions
@@ -595,7 +613,7 @@ if (typeof DataSource === "undefined") {
 if (typeof Messages === "undefined") {
     
     /**
-     *  (Resource)Messages is a static datasource extension for localization and
+     *  (Resource)Messages is a static DataSource extension for localization and
      *  internationalization. The implementation is based on a set of key-value
      *  or label-value data.
      */
@@ -631,55 +649,100 @@ if (typeof Messages === "undefined") {
 };
 
 /**
- *  With aspect-js the declarative approach of HTML is taken up and extended.
+ *  *  With aspect-js the declarative approach of HTML is taken up and extended.
  *  In addition to the expression language, the HTML elements are provided with
  *  additional attributes for functions and object binding attributes.
  *  The corresponding renderer is included in the composite implementation and
  *  actively monitors the DOM via the MutationObserver and thus reacts
  *  recursively to changes in the DOM.
- *
- *  TODO:
- *  - Composite-Attribute sind elementar und unveränderlich, sie werden bei
- *    ersten Auftreten eines Elements gelesen und können später nicht geänert
- *    werden, da sie dann aus Element-Cache verwendet werden 
- *  - Element-Attribute sind auch dann elementar und unveränderlich, wenn diese
- *    eine Expression enthalten
- *  - Die Welt ist statisch. So auch aspect-js und alle Komponenten.
- *    Das erspart die Verwaltung und Einrichtung von Instanzen.
- *  - Rendering: Clean Code
- *    Nur fuer aspect-js verwendete Attribute werden in Meta-Objketen zu den Elementen
- *    zwischengespeichert und koennen/sollen im Markup nach Verwendung entfernt
- *    werden. An einem Element befindliche aspect-js-Attribute sind ein
- *    Kennzeichen, dass diese noch nicht verarbeitet wurden.
- *  - Object-Bindung
- *    Die Composite-ID setzt sich wie folgt zusammen: namespace:qualifier
- *        nameSpace = package + class
- *        qualifier = zusätzliche Kennzeichnung damit die ID unique ist
- *    Der Qualifier wird von Composite/Object-Bindung ignoriert.
- *  TODO: Doku:
- *        DOM und Objekt-Baum (+ virtual Paths) sind analog.
- *        Bedeutet, Pfade und die Verschachtelung der Objekte muss der
- *        Verschachtelung vom DOM entsprechen. 
- *  TODO: Doku:
- *        Custom-Tag, hier muss man sich um alle attribute selbt gekuemmert werden.
- *        Composite tut hier nicht, ausser dem Aufruf der Implementierung.
- *        Es kann jedes Node-Element (auch #text) als custom-tag registriert werden.
- *        Die Attribute werden durch Composite nicht manipuliert oder interpretiert.
- *        Das ueberschreiben von eigenen Tags, wie z.B. "param" ist moeglich, aber nicht empfehlenswert.
- *  TODO: Doku:
- *        If a custom selector exists, the macro is executed.
- *        Custom selector is a filter-function based on a query selector.
- *        The root of the selector is the current element.
- *        The filter therefore affects the child elements.
- *        Custom Selector wird nach Custom-Tag ausgefuehrt.
- *        Auch hier, sind die Attribute eines Elements noch unveraendert (also Stand vor dem Rendering).
+ *  
+ *  
+ *      TERMS
+ *      ----
+ *      
+ *          namespace
+ *          ----
+ *  The namespace is a sequence of characters or words consisting of letters,
+ *  numbers, and an underscore that describes the path in an object tree. The
+ *  dot is used as a separator, it defines the boundary from one level to the
+ *  next in the object tree. Each element in the namespace must contain at least
+ *  one character, begin with a letter, and end with a letter or number.
+ *  
+ *          scope
+ *          ----
+ *  The scope is based on namespace and represents it on the object level. Means
+ *  the namespace is the description text, the scope is the result if the 
+ *  namespace was resolved in the object tree.
+ *  
+ *          model
+ *          ----
+ *  The model (model component / component) is a static JavaScript object in any
+ *  namespace and provides the logic for the user interface (UI component) and
+ *  the transition from user interface to business logic and/or the backend. The
+ *  linking and/or binding of markup and JavaSchript model is done by the
+ *  Composite-API. For this purpose, an HTML element must be marked with the
+ *  attribute `composite` and have a valid Composite-ID. The Composite-ID must
+ *  meet the requirements of the namespace.
+ *  
+ *          property
+ *          ----
+ *  Is a property in a static model (model component / component). It
+ *  corresponds to an HTML element with the same ID in the same namespace. The
+ *  ID of the property can be relative or use an absolute namespace. If the ID
+ *  is relative, the namespace is defined by the parent composite element.
+ *  
+ *          qualifier
+ *          ----
+ *  In some cases, the identifier (ID) may not be unique. For example, in cases
+ *  where properties are arrays or an iteration is used. In these cases the
+ *  identifier can be extended by an additional unique qualifier separated by a
+ *  colon.
+ *  Qualifiers are ignored during object/model binding.
+ *  
+ *          composite
+ *          ----
+ *  Composite describes the construct of markup, JavaScript model, and possibly
+ *  existing module resources. It describes a component/module without direct
+ *  reference to a concrete perspective.
+ *  
+ *          composite-id
+ *          ----
+ *  The Composite-ID is an application-wide unique identifier.
+ *  It is a sequence of characters or words consisting of letters, numbers, and
+ *  underscores that contains at least one character, begins with a letter, and
+ *  ends with a letter or number. A Composite-ID is formed by combining the
+ *  attributes `ID` and `composite`.
+ *  
+ *  
+ *      PRINCIPLES
+ *      ----
+ *      
+ *  The world is static. So also aspect-js and all components. This avoids the
+ *  management and establishment of instances.
+ *  
+ *  Composite attributes are elementary and immutable.
+ *  They are read the first time an element occurs and stored in the object
+ *  cache. Therefore, these attributes cannot be changed later because they are
+ *  then used from the object cache.
+ *  
+ *  Attributes of elements are elementary and immutable even if they contain an
+ *  expression.
+ *  
+ *  Clean Code Rendering - The aspect-js relevant attributes are stored in meta
+ *  objects to each element and are removed in the markup. The following
+ *  attributes are essential: composite, id -- they are cached and remain at the
+ *  markup, these cannot be changed. the MutationObserver will restore them.
+ *  
+ *  Markup/DOM, object tree and virtual paths are analog/homogeneous.
+ *  Thus virtual paths, object structure in JavaScript (namespace) and the
+ *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190319
+ *  Composite 1.0 20190412
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190319
+ *  @version 1.0 20190412
  */
 if (typeof Composite === "undefined") {
     
@@ -701,6 +764,15 @@ if (typeof Composite === "undefined") {
 
     /** Assoziative array with events and their registered listerners */
     Composite.listeners;
+    
+    /** 
+     *  Array with docked models.
+     *  The array is used for the logic to call the dock and undock methods,
+     *  because the static models themselves have no status and the decision
+     *  about the current existence in the DOM is not stable.
+     *  All docked models are included in the array.
+     */
+    Composite.models;
     
     /** Path of the Composite for: moduels (sub-directory of work path) */
     Composite.MODULES = window.location.pathcontext + "/modules";
@@ -803,11 +875,11 @@ if (typeof Composite === "undefined") {
 
     /**
      *  Pattern for a element id
-     *      group 1: extended namespace, qualification towards the model (optional)
-     *      group 2: element or field, only with an extended namespace
-     *      group 3: identifier (optional)
+     *      group 1: model, optionally with (full qualified) namespace
+     *      group 2: property, only with an extended namespace
+     *      group 3: qualifier (optional)
      */
-    Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z\w*\.])*?(?:[a-z]\w*))\.)*?([a-z]\w*)(?:\:(\w*))*$/i;
+    Composite.PATTERN_ELEMENT_ID = /^(?:((?:[a-z]\w*)(?:\.(?:[a-z]\w*))*)\.)*([a-z]\w*)(?:\:(\w*))*$/i;
     
     /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
@@ -835,9 +907,13 @@ if (typeof Composite === "undefined") {
 
     /** Constants of events when using AJAX */
     Composite.EVENT_AJAX_START = "AjaxStart";
+    Composite.EVENT_AJAX_PROGRESS = "AjaxProgress";
     Composite.EVENT_AJAX_RECEIVE = "AjaxReceive";
-    Composite.EVENT_AJAX_SUCCESS = "AjaxSuccess";
+    Composite.EVENT_AJAX_LOAD = "AjaxLoad";
+    Composite.EVENT_AJAX_ABORT = "AjaxAbort";
+    Composite.EVENT_AJAX_TIMEOUT = "AjaxTimeout";
     Composite.EVENT_AJAX_ERROR = "AjaxError";
+    Composite.EVENT_AJAX_END = "AjaxEnd";
 
     /** Constants of events when errors occur */
     Composite.EVENT_ERROR = "Error";
@@ -987,24 +1063,49 @@ if (typeof Composite === "undefined") {
 
     /**
      *  Enhancement of the JavaScript API
-     *  Implements an own send method for event management. The original method
-     *  is reused in the background.
+     *  Implements an own open method for event management.
+     *  The original method is reused in the background.
      */ 
-    XMLHttpRequest.prototype.internalSend = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.send = function(body) {
-        Composite.fire(Composite.EVENT_AJAX_START, this); 
-        var internalOnReadyStateChange = this.onreadystatechange;
-        this.onreadystatechange = function() {
-            Composite.fire(Composite.EVENT_AJAX_RECEIVE, this);
-            if (this.readyState == 4) {
-                if (this.status == "200")
-                    Composite.fire(Composite.EVENT_AJAX_SUCCESS, this);
-                else Composite.fire(Composite.EVENT_AJAX_ERROR, this);
+    XMLHttpRequest.prototype.internalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function(variants) {
+
+        var callback = function() {
+            if (arguments.length > 0) {
+                var event = arguments[0];
+                if (event.type == "loadstart")
+                    event = Composite.EVENT_AJAX_START;
+                else if (event.type == "progress")
+                    event = Composite.EVENT_AJAX_PROGRESS; 
+                else if (event.type == "readystatechange")
+                    event = Composite.EVENT_AJAX_RECEIVE; 
+                else if (event.type == "load")
+                    event = Composite.EVENT_AJAX_LOAD; 
+                else if (event.type == "abort")
+                    event = Composite.EVENT_AJAX_ABORT; 
+                else if (event.type == "error")
+                    event = Composite.EVENT_AJAX_ERROR;   
+                else if (event.type == "timeout")
+                    event = Composite.EVENT_AJAX_TIMEOUT;   
+                else if (event.type == "loadend")
+                    event = Composite.EVENT_AJAX_END; 
+                else return;
+                Composite.fire(event, arguments[0]); 
             }
-            if (internalOnReadyStateChange)
-                internalOnReadyStateChange.apply(this, arguments);
         };
-        this.internalSend(body);
+        
+        if (typeof this.internalInit === "undefined") {
+            this.internalInit = true;
+            this.addEventListener("loadstart", callback);
+            this.addEventListener("progress", callback);
+            this.addEventListener("readystatechange", callback);
+            this.addEventListener("load", callback);
+            this.addEventListener("abort", callback);
+            this.addEventListener("error", callback);
+            this.addEventListener("timeout", callback);
+            this.addEventListener("loadend", callback);
+        }
+        
+        this.internalOpen.apply(this, arguments);
     };
     
     /**
@@ -1075,26 +1176,64 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO:
+     *  Mounts the as selector passed element with all its children where an
+     *  object/model binding is possible. Mount is possible for all elements
+     *  with an ID, not only for composite objects and their children.
+     *  
+     *  The object/model binding is about connecting markup/HTML elements with
+     *  JavaScript models. The models, also known as components, are static
+     *  constructs/classes in which properties and logic corresponding to the
+     *  markup/DOM are implemented. This avoids manual implementation and
+     *  declaration of events as well as synchronization and interaction between
+     *  UI and the application logic.
+     *  
+     *      Principles
+     *      ----
+     *  Components are a static JavaScript models.
+     *  Namespaces are supported, but they must be syntactically valid.
+     *  Objects in objects is possible through the namespaces (as static inner
+     *  class).
+     *  
+     *      Binding
+     *      ----
+     *  The object constraint only includes what has been implemented in the
+     *  model (snapshot). An automatic extension of the models at runtime by the
+     *  renderer is not detected/supported, but can be implemented in the
+     *  application logic - this is a conscious decision!
+     *      Case study:
+     *  In the markup there is a composite with a property x. There is a
+     *  corresponding JavaScript model for the composite but without the
+     *  property x. The renderer will mount the composite with the JavaScript
+     *  model, the property x will not be found in the model and will be
+     *  ignored. At runtime, the model is modified later and the property x is
+     *  added. The renderer will not detect the change in the model and the
+     *  property x will not be mounted during re-rendering. Only when the
+     *  composite is completely removed from the DOM (e.g. by a condition) and
+     *  then newly added to the DOM, the property x is also mounted, because the
+     *  renderer then uses the current snapshot of the model and the property x
+     *  also exists in the model.
+     *  
+     *      Synchronization
+     *      ----
+     *  The object binding and synchronization assume that a model corresponding
+     *  to the composite exists with the same namespace. During synchronization,
+     *  the element must also exist as a property in the model.
+     *  
+     *      Events
+     *      ----
+     *  Composite.EVENT_MOUNT_START
+     *  Composite.EVENT_MOUNT_NEXT
+     *  Composite.EVENT_MOUNT_END
      *  
      *      Queue and Lock:
      *      ----
      *  The method used a simple queue and transaction management so that the
      *  concurrent execution of rendering works sequentially in the order of the
      *  method call.
-     *  
-     *  TODO: fire events render start/progress/end
-     *        - jede Komponente ist statisch
-     *        - Namespaces werden unterstuetzt, diese aber syntaktisch gueltig sein
-     *        - Objekte in Objekten ist durch den Namespaces moeglich (als static inner Class)
      * 
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - namespace cannot be created if it already exists as a method
-     *    
-     *  The object binding and synchronization assume that a model corresponding to the composite exists with the same namespace.
-     *  During synchronization, the element must also exist as a property in the model.
-     *  The object binding only connects what was implemented with the model. An automatic extension of the models at runtime by the renderer is not supported, but can be solved programmatically - this is a conscious decision!
      */
     Composite.mount = function(selector, lock) {
         
@@ -1136,12 +1275,27 @@ if (typeof Composite === "undefined") {
             //No multiple object binding
             if (Composite.mount.queue.includes(selector))
                 return;
-
+            
+            var serial = selector.ordinal();
+            var object = Composite.render.meta[serial] || {};
+            var events = object.events || {};
+            
             //Registers all events that are implemented in the model.
-            model = model.scope[model.field];
+            //With the attribute 'events' the events are registered and executed
+            //during the rendering. The reason is the combination of the
+            //attributes events + render. The re-rendering of the targets only
+            //makes sense after executing the event methods. Only in this way
+            //can the results and changes that the event methods cause be used
+            //in the re-rendering. In this case, all event-methods which are
+            //used during the rendering are registered and collected. Only event
+            //methods that are not registered during rendering can be registered
+            //here.
+            
+            model = model.scope[model.property];
             for (var entry in model)
                 if (typeof model[entry] === "function"
-                        && entry.match(Composite.PATTERN_EVENT_FUNCTIONS))
+                        && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)
+                        && typeof events[entry.substring(2).toLowerCase()] !== "function")
                     selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
 
         } finally {
@@ -1150,85 +1304,126 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO:
-     *  Composite ist immer relative bzw. absolute zum DOM.
-     *  Die Reihenfolge bzw. Verschachtelung der Composutes im DOM bestimmen
-     *  auch Namespace und Scope!!! 
-     *  
-     *  Determines the namespace for a composite element.
+     *  Determines the namespace for a composite element as meta object.
+     *
+     *  Composite:
+     *      {composite:scope, model}
+     *  Composite Element:
+     *      {composite:scope, model, property, name:qualifier}
+     *
      *  The namespace is created based on the parent composite elements
      *  (elements with the attribute 'composite'), but also includes the passed
      *  element if it is a composite itself.
      *  The IDs of the composite elements constitute the namespace in order of
      *  their position in the DOM.
      *  @param  element
-     *  @return the determined namespace, otherwise null
+     *  @return the determined namespace as meta object, otherwise null
      *  @throws An error occurs in the following cases:
      *      - a composite does not have an ID
-     *      - the ID does not match the pattern of a Composite-ID.
+     *      - in the case of an invalid composite ID
      */
     Composite.mount.locate = function(element) {
         
         if (!(element instanceof Element))
             return null;
-        
-        var namespace = null;
-        for (; element; element = element.parentNode) {
-            if (!(element instanceof Element)
-                    || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-                continue;
-            var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+
+        var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+
+        //Composites have a meta object where only composite and model are filled.
+        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
-            serial = serial.replace(/:.*$/, "").trim();
-            if (namespace)
-                namespace = "." + namespace;
-            namespace = serial + (namespace || "");
+            if (!Object.lookup(serial))
+                return null;
+            return {composite:serial, model:serial, property:null, name:null};
+        }
+
+        //Splitting of the element ID into:
+        //   model, property, qualifier (optional)
+        var meta = serial.match(Composite.PATTERN_ELEMENT_ID);
+        if (!meta)
+            return null;
+        
+        meta = {composite:null, model:meta[1], property:meta[2], name:meta[3]};
+        
+        for (var scope = element; scope; scope = scope.parentNode) {
+            if (!(scope instanceof Element)
+                    || !scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+                continue;
+            var serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+            serial = serial.replace(/:.*$/, "");
+            if (meta.composite)
+                meta.composite = "." + meta.composite;
+            meta.composite = serial + (meta.composite || "");
         }
         
-        return namespace;
+        if (meta.composite
+                && !Object.lookup(meta.composite))
+            return null;
+        
+        //If the ID contains a dot (meta.model exists), it can be an ID with an
+        //absolute namespace or the ID is relative to the namespace of the
+        //composite. Both cases will be evaluated. The ID with the relative
+        //namespace of the composite has higher priority.
+        //So after the last dot the ID of the element and before it the
+        //namespace must be contained. The id will be removed at the end and the
+        //namespace remains.
+        //The qualifier is passed through in both cases, but not tested.
+        if (meta.model) {
+            if (meta.composite) {
+                var scope = Object.lookup(meta.composite + "." + meta.model);
+                if (scope && scope.hasOwnProperty(meta.property)) {
+                    meta.model = meta.composite + "." + meta.model;
+                    return meta;
+                }
+            }
+            var scope = Object.lookup(meta.model);
+            if (scope && scope.hasOwnProperty(meta.property))
+                return meta;
+            return null;
+        }
+
+        //Without an additional namespace, the property must exist relative to
+        //the composite. The composite thus represents the complete namespace.
+        //The qualifier is passed through in both cases, but not tested.
+        if (!meta.composite)
+            return null;
+        meta.model = meta.composite;
+        var scope = Object.lookup(meta.model);
+        if (scope && scope.hasOwnProperty(meta.property))
+            return meta;
+        return null;
     };
     
     /**
-     *  Determines the object scope (namespace) for an element.
-     *  The namespace is a text string separated with dots, that represents the
-     *  path in an object model.
-     *  In the DOM (markup), the namespace is described by the sequence of the
-     *  id-attributes of composite elements. Each child in the DOM with an id
-     *  thus represents a property of the parent composite object, also named as
-     *  model. For the namespace, there is also a scope. This represents the
-     *  path as an object tree.
+     *  Determines the meta informations as object for an element.
      *  
-     *  TODO: Doku:
-     *  composite - rueckgabe {scope, model}
-     *  composite element - rueckgabe {composite, scope, model, field}
-     *  sonst null, wenn im Objektbaum nicht gefunden
+     *      {scope, model, property, name:qualifier}
+     *      
+     *  The method always requires a corresponding JavaScript model and an
+     *  element with an ID. The ID can be relative or absolute/full qualified.
+     *  For relative IDs, the namespace is determined from the higher-level
+     *  composite structure in the DOM. Absolute IDs refer directly to the
+     *  namespace to be used. If no corresponding namespace/JavaScript model can
+     *  be determined, the method returns null.
      *  
-     *  TODO:
-     *  The method always requires an existing model/composite in which the
-     *  element is located. If the passed element uses an ID with a qualified
-     *  namespace, then this is used. Otherwise, if a superordinate composite
-     *  with ID exists in the DOM, this is used as base for the namespace.
-     *  Returns an meta object with scope, model and field, otherwise null.
+     *  Absolute namespaces contain a dot as a package separator.
+
+     *  The recursive determinaton of the namespace, the higher-level composite
+     *  IDs are always regarded as absolute until the first absolute composite
+     *  ID occurs, then the recursion/determinaton is interrupted and the
+     *  absolute composite ID is used as the basis for the namespace.
+     *  Means, it is primarily always searched for an independent model in
+     *  JavaScript and only alternatively for a sub-model (inner class).
+     *      
      *  @param  element element
      *  @return the created meta object, otherwise null
+     *  @throws An error occurs in the following cases:
+     *      - in the case of an invalid composite ID 
      */
     Composite.mount.lookup = function(element) {
-        
-        //TODO: The rules for the lookup:
-        //  - The namespace consists of a context, an ID, and an optional identifier
-        //  - context: Corresponds to the chain of superior IDs of all elements with the attribute 'composite'.
-        //  - ID: The id of an element.
-        //  - identifier: Individual identifier in an Id which is separated from the ID by a double point
-        
-        //TODO: Context and Id can contain relative and absolute values.
-        //TODO: Relative names match the pattern: xxxx
-        //TODO: Absolute namespaces also contain the dot as a separator for the individual parts.
-        //TODO: With the recursive resolution of the namespace, the higher-level composite IDs are always regarded as absolute until the first absolute composite ID occurs, then the recursive resolution is interrupted and the absolute composite ID is used as the basis for the namespace.
-        //TODO: If an element uses an absolute ID, no higher-level namespace is determined.
-        //TODO: Invalid composite Ids cause an error.
-        
-        //TODO: composite = namespace/model = scope
         
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_ID))
@@ -1239,49 +1434,44 @@ if (typeof Composite === "undefined") {
         //always compatible with the ID of an element. The ID of an element can
         //contain additional information such as a qualifying namespace and an
         //individual identifier.
-        
         var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             serial = serial.match(Composite.PATTERN_COMPOSITE_ID);
         else serial = serial.match(Composite.PATTERN_ELEMENT_ID);
         if (!serial)
             throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
-
-        var scope = null;
-        var model = null;
-        var field = null;
-
-        //The model (corresponds to the namespace) and scope (based on the
-        //namespace) is determined.
-        model = Composite.mount.locate(element);
-        if (!model)
+        
+        //Determines the meta-data for the model:
+        //    composite (optional), model, property, name (optional)
+        //Locale only returns a meta-object if a corresponding JavaScript model
+        //exists for the markup/DOM.
+        var meta = Composite.mount.locate(element);
+        if (!meta)
             return null;
-        scope = Object.lookup(model);
+        
+        scope = Object.lookup(meta.model);
         if (!scope)
             return null;
         
         //The meta-object for the return value is created.
         //For composite elements, this only contains the scope and model.
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-            return {scope:scope, model:model};
-            
-        var composite = {scope:scope, model:model}; 
-        
-        //The field is determined for elements in a composite.
-        //Optionally, an extended namespace can be specified for the real model.
-        if (serial[1])
-            model += "." + serial[1];
-        scope = Object.lookup(model);
-        if (!scope)
-            return null;
-        if (!scope.hasOwnProperty(serial[2]))
-            return null;
-        
-        return {composite:composite, scope:scope, model:model, field:serial[2]};
+            return {scope:scope, model:meta.model};
+
+        return {composite:{scope:scope, model:meta.model},
+            scope:scope, model:meta.model, property:meta.property, name:meta.name};
     };
     
     /**
-     *  TODO: (Re)Index new composite elements in the DOM.
+     *  Scans the as selector passed element with all its children for composite
+     *  elements where an object/model binding is possible. The binding itself
+     *  is delegated to the mount method.
+     *  
+     *      Events
+     *      ----
+     *  Composite.EVENT_SCAN_START
+     *  Composite.EVENT_SCAN_NEXT
+     *  Composite.EVENT_SCAN_END
      *   
      *      Queue and Lock:
      *      ----
@@ -1380,7 +1570,6 @@ if (typeof Composite === "undefined") {
      *  
      *      Composite.customize(function(element) {...});
      * 
-     *  TODO:
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - callback function is not implemented correctly
@@ -1458,7 +1647,8 @@ if (typeof Composite === "undefined") {
      *  analyzed and, if necessary, splitted into static content, dynamic
      *  content and parameters. To do this, the original text node is replaced
      *  by new separate text nodes:
-     *      e.g. "text {{expr}} + {{var:expr}}" -> ["text ", {{expr}}, " + ", {{var:expr}}]
+     *      e.g. "text {{expr}} + {{var:expr}}"
+     *               -> ["text ", {{expr}}, " + ", {{var:expr}}]
      *  When the text nodes are split, meta objects are created for them. The
      *  meta objects are compatible with the meta objects of the rendering
      *  methods but use the additional attributes:
@@ -1473,31 +1663,30 @@ if (typeof Composite === "undefined") {
      *      Events + Validate + Render
      *      ----
      *  Events primarily controls the synchronization of the input values of
-     *  HTML elements with the fields of a model. Means that the value in the
-     *  model only changes if an event occurs for the corresponding HTML
+     *  HTML elements with the properties of a model. Means that the value in
+     *  the model only changes if an event occurs for the corresponding HTML
      *  element. Synchronization is performed at a low level. Means that the
-     *  fields are synchronized directly and without the use of get and set
+     *  properties are synchronized directly and without the use of get and set
      *  methods. For a better control a declarative validation is supported. If
      *  the attribute 'validate' exists, the value for this is ignored, the
      *  static method <Model>.validate(element, value) is  called in the
      *  corresponding model. This call must return a true value as the result,
      *  otherwise the element value is not stored into the corresponding model
-     *  field. If an event occurs, synchronization is performed. After that will
-     *  be checked whether the render attribute exists. All selectors listed
-     *  here are then triggered for re-rendering. (Re)rendering is independent of
-     *  synchronization and validation and is executed immediately after an
-     *  event occurs.
+     *  property. If an event occurs, synchronization is performed. After that
+     *  will be checked whether the render attribute exists. All selectors
+     *  listed here are then triggered for re-rendering. (Re)rendering is
+     *  independent of synchronization and validation and is executed
+     *  immediately after an event occurs.
      *      
      *      Condition
      *      ----
-     *  TODO: condition
      *  The declaration can be used with all HTML elements, but not with script
      *  and style. The condition defines whether an element is (re)rendered or
      *  not. As result of the expression true/false is expected and will be se
      *  as an absolute value for the condition attribute - only true or false.
      *  Elements are hidden with the condition attribute via CSS and only
-     *  explicitly displayed with [condition=true]. JavaScript elements are
-     *  executed or not.     
+     *  explicitly displayed with [condition=true].
+     *  JavaScript (composite/javascript) elements are executed or not.     
      *      
      *      Import
      *      ----
@@ -1507,11 +1696,11 @@ if (typeof Composite === "undefined") {
      *  and behave similar to the output-attribute, or the value is considered
      *  as a remote resource with relative or absolute URL and will be loaded
      *  via the HTTP method GET.
-     *  TODO: condition
-     *  Loading and replacing the import function can be combined with the
-     *  condition attribute and is only executed when the condition is true.
-     *  If the content can be loaded successfully, the import attribute is
-     *  removed. Recursive rendering is initiated via the MutationObserver.
+     *  If the content was successfully imported and inserted, the import
+     *  attribute is removed. Recursive rendering is initiated by the
+     *  MutationObserver.
+     *  The import attribute can be combined with the condition attribute so
+     *  that the import is only executed if the condition is true.
      *  
      *      Output
      *      ----
@@ -1562,15 +1751,24 @@ if (typeof Composite === "undefined") {
      *  
      *      Custom Tag (Macro)
      *      ----
-     *  See: Composite.customize(tag:string, function(element) {...});
+     *  More details about the usage can be found in:
+     *      Composite.customize(tag:string, function(element) {...});
      *  
      *      Custom Selector
      *      ----
-     *  Composite.customize(selector:string, function(element) {...}); 
+     *  More details about the usage can be found in
+     *      Composite.customize(selector:string, function(element) {...}); 
      *  
      *      Custom Acceptor
      *      ----  
-     *  See: Composite.customize(function(element) {...});
+     *  More details about the usage can be found in
+     *      Composite.customize(function(element) {...});
+     *      
+     *      Events
+     *      ----
+     *  Composite.EVENT_RENDER_START
+     *  Composite.EVENT_RENDER_NEXT
+     *  Composite.EVENT_RENDER_END
      */
     Composite.render = function(selector, lock) {
         
@@ -1694,16 +1892,9 @@ if (typeof Composite === "undefined") {
                         }
                     });
                     
-                    //The scope or namespace for the optional model (if
-                    //available) is determined. This is needed later to clean up
-                    //the models when their corresponding HTML element is
-                    //removed from the DOM.
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                        object.scope = Composite.mount.locate(selector);
-
-                        //Load modules/components/composite resources.
+                    //Load modules/components/composite resources.
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
                         Composite.render.include(selector);
-                    }
                     
                     //The condition attribute is interpreted.
                     //If an HTML element uses the condition attribute, a text
@@ -1915,6 +2106,29 @@ if (typeof Composite === "undefined") {
                 return;
             }
             
+            //Only composites are docked as models.
+            //Composites without conditions are docked by the renderer at first
+            //detection. Composites with condition are docked and undocked
+            //depending on the result of the condition.
+            
+            var dock = function(object) {
+                Composite.models = Composite.models || [];
+                if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
+                        || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ID)
+                        || Composite.models.includes(object.attributes[Composite.ATTRIBUTE_ID]))
+                    return;
+                Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
+                var meta = Composite.mount.lookup(object.template || object.element);
+                if (meta && meta.model && meta.scope
+                        && typeof meta.scope.dock === "function")
+                    meta.scope.dock.call(null);
+            };
+            
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION))
+                dock(object);
+            
             //The condition attribute is interpreted.
             //The condition is a very special implementation.
             //So it was important that a condition can remove and add a node in
@@ -1928,6 +2142,10 @@ if (typeof Composite === "undefined") {
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 var placeholder = object;
                 if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
+                    
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                        dock(object);
+                    
                     if (!placeholder.output
                             || !document.body.contains(placeholder.output)) {
                         //The placeholder output is rendered recursively and
@@ -1958,7 +2176,6 @@ if (typeof Composite === "undefined") {
                     if (!placeholder.output)
                         return;
                     selector.parentNode.removeChild(placeholder.output);
-                    delete Composite.render.meta[placeholder.output.ordinal()];
                     delete placeholder.output;
                     return;
                 }
@@ -1968,17 +2185,17 @@ if (typeof Composite === "undefined") {
                 return;
             
             //Events primarily controls the synchronization of the input values
-            //of HTML elements with the fields of a model. Means that the value
-            //in the model only changes if an event occurs for the corresponding
-            //HTML element. Synchronization is performed at a low level. Means
-            //that the fields are synchronized directly and without the use of
-            //get and set methods.
+            //of HTML elements with the properties of a model. Means that the
+            //value in the model only changes if an event occurs for the
+            //corresponding HTML element. Synchronization is performed at a low
+            //level. Means that the properties are synchronized directly and
+            //without the use of get and set methods.
             //For a better control a declarative validation is supported.
             //If the attribute 'validate' exists, the value for this is ignored,
             //the static method <Model>.validate(element, value) is  called in
             //the corresponding model. This call must return a true value as the
             //result, otherwise the element value is not stored into the
-            //corresponding model field.
+            //corresponding model property.
             //If an event occurs, synchronization is performed. After that will
             //be checked whether the render attribute exists. All selectors
             //listed here are then triggered for (re)rendering. (Re)rendering is
@@ -1993,27 +2210,52 @@ if (typeof Composite === "undefined") {
             if (events) {
                 events = events.split(/\s+/);
                 events.forEach((event, index, array) => {
-                    selector.addEventListener(event, (event) => {
+                    var meta = Composite.mount.lookup(selector);
+                    
+                    //With the attribute 'events' the events are registered and
+                    //executed here. Because the propagation, capture and
+                    //bubbling phases should not be disturbed during the event.
+                    //During binding, the logic checks which events have already
+                    //been registered so that the implemented event methods in
+                    //the model are not called more than once.
+                    if (meta && meta.scope && meta.property
+                            && typeof meta.scope[meta.property] === "object"
+                            && meta.scope[meta.property] != null) {
+                        var invoke = "on" + event.capitalize();
+                        if (invoke.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                            if (typeof meta.scope[meta.property][invoke] === "function") {
+                                object.events = object.events || {};
+                                object.events[event.toLowerCase()] = meta.scope[meta.property][invoke]; 
+                            }
+                        }
+                    }
+                    
+                    selector.addEventListener(event.toLowerCase(), (event) => {
                         var target = event.currentTarget;
                         var serial = target.ordinal();
                         var object = Composite.render.meta[serial];
                         if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
                                 && Composite.ATTRIBUTE_VALUE in target
                                 && typeof target[Composite.ATTRIBUTE_VALUE] !== "function") {
-                            var model = Composite.mount.lookup(target);
-                            if (model) {
+                            var meta = Composite.mount.lookup(target);
+                            if (meta) {
                                 var valid = false;
                                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                                        && typeof model.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                                    valid = model.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
+                                        && typeof meta.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
+                                    valid = meta.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
                                 } else valid = true;
                                 if (valid) {
-                                    if (model.scope[model.field] instanceof Object)
-                                        model.scope[model.field].value = target.value;
-                                    else model.scope[model.field] = target.value
+                                    if (meta.scope[meta.property] instanceof Object)
+                                        meta.scope[meta.property].value = target.value;
+                                    else meta.scope[meta.property] = target.value
                                 }
                             }
                         }
+                        
+                        var events = object.events || {};
+                        if (typeof events[event.type] === "function")
+                            events[event.type].call(null, event);
+                        
                         if (render) {
                             if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                                 render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
@@ -2499,7 +2741,7 @@ if (typeof Composite === "undefined") {
                     });
                 }
                 
-                //All removed elements are cleaned and if necessary the unmount
+                //All removed elements are cleaned and if necessary the undock
                 //method is called if an object binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
@@ -2510,15 +2752,36 @@ if (typeof Composite === "undefined") {
                                     cleanup(node);
                                 });
                             }
-                            //If a composite element is removed from the DOM,
-                            //the model must be unmounted.
+                            
+                            //Composites/models must be undocked when they are
+                            //removed from the DOM. The following implementation
+                            //is based on the assumption that composites with
+                            //and without conditions are removed from the DOM.
+                            //For composites with condition, it must be noted
+                            //that the composite is initially replaced by a
+                            //placeholder. During replacement, the initial
+                            //composite is removed, which can cause an unwanted
+                            //undocking. Therefore, the logic is based on the
+                            //assumption that each composite has a meta object.
+                            //When replacing the original composite, the
+                            //corresponding meta object is also deleted, so that
+                            //the MutationObserver detects the composite to be
+                            //removed in the DOM, but undocking is not performed
+                            //without the matching meta object.
+
                             var serial = node.ordinal();
                             var object = Composite.render.meta[serial];
-                            if (object && ("scope" in object)) {
-                                object = Object.lookup(object.scope);
-                                if (object && ("mount" in object))
-                                    object.unmount.call(null);
+                            if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                                var meta = Composite.mount.lookup(node);
+                                if (meta && meta.model
+                                        && Composite.models.includes(meta.model)) {
+                                    Composite.models = Composite.models.filter(model => model != meta.model);
+                                    if (meta.scope
+                                            && typeof meta.scope.undock === "function")
+                                    meta.scope.undock.call(null);
+                                }
                             }
+                            
                             delete Composite.render.meta[node.ordinal()];
                         };
                         cleanup(node);
@@ -2575,11 +2838,11 @@ if (typeof Expression === "undefined") {
     
     /**
      *  Resolves a value-expression recursively if necessary.
-     *  Value expressions refer to a field in a static model.
+     *  Value expressions refer to a property in a static model.
      *  The value is retrieved using a corresponding get- or is-function or, if
-     *  this is not available, the value is retrieved directly from the field.
-     *  For the get- and is-functions, the first character is changed from field
-     *  name to uppercase and prefixed with 'get' or 'is'.
+     *  this is not available, the value is retrieved directly from the
+     *  property. For the get- and is-functions, the first character is changed
+     *  from property name to uppercase and prefixed with 'get' or 'is'.
      *      e.g. {{Model.value}} -> Model.getValue()
      *           {{Model.value}} -> Model.isValue()
      *  In addition to the namespace of JavaScript, the method also supports DOM
@@ -2808,7 +3071,7 @@ if (typeof Expression === "undefined") {
         //The expression is followed by a non-word character or the end.
         
         cascade.other.forEach((entry, index, array) => {
-            var text =  entry.data;
+            var text = entry.data;
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
             var words = [];
@@ -2927,48 +3190,81 @@ if (typeof Expression === "undefined") {
 };
 
 /**
- *  TODO:
- *  The SiteMap is a static navigation component based on virtual paths and
- *  views. Virtual paths are used to delimit pages and to focus projections.
- *  Pages are a (complex) view and combine different fixed contents (navigation,
- *  menu, footer, ...) as well as variable projections (faces/views), which in
- *  turn can use sub and partial projections (facets). 
+ *  Static component for the use of a SiteMap for virtual paths.
+ *  SiteMap is a directory consisting of faces and facets that are addressed by
+ *  paths.
  *  
- *  Virtual paths use URL hash navigation in which the hash character is used to
- *  separate the individual parts of the path. SiteMap monitors the URL hash and
- *  the use of virtual paths actively with regard to validity and permission.
+ *      +-----------------------------------------------+
+ *      |  Page                                         |
+ *      |  +-----------------------------------------+  |
+ *      |  |  Face A / Partial Face A                |  |
+ *      |  |  +-------------+       +-------------+  |  |
+ *      |  |  |  Facet A1   |  ...  |  Facet An   |  |  |
+ *      |  |  +-------------+       +-------------+  |  |
+ *      |  |                                         |  |
+ *      |  |  +-----------------------------------+  |  |
+ *      |  |  |  Face AA                          |  |  |
+ *      |  |  |  +-----------+     +-----------+  |  |  |
+ *      |  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
+ *      |  |  |  +-----------+     +-----------+  |  |  |
+ *      |  |  +-----------------------------------+  |  |
+ *      |  |  ...                                    |  |
+ *      |  +-----------------------------------------+  |
+ *      |  ...                                          |
+ *      |  +-----------------------------------------+  |
+ *      |  |  Face n                                 |  |
+ *      |  |  ...                                    |  |
+ *      |  +-----------------------------------------+  |
+ *      +-----------------------------------------------+
+ *      
+ *  A face is the primary projection of the content. This projection may contain
+ *  additional sub-components, in form of facets and sub-faces.
  *  
- *  Acceptors are a very special navigation function.
- *  Acceptors can be regarded as path filters. They are based on regular
- *  expressions and methods that are executed when the paths match a pattern.
- *  Acceptors can argue silently in the background without influencing the
- *  navigation of the SiteMap, or they can argue actively and take over the
- *  navigation completely active or passive by forwarding (change/manipulation
- *  of the destination).
+ *  Facets are parts of a face (projection) and are not normally a standalone
+ *  component. For example, the input mask and result table of a search can be
+ *  separate facets of a face, as can articles or sections of a face. Both face
+ *  and facet can be accessed via virtual paths. The path to a facet has the
+ *  effect that the face is displayed with any other faces, but the requested
+ *  facet is displayed in the visible area and focused.
  *  
- *  All in all, the SiteMap is comparable to a city map. The paths are streets
- *  and create a concatenated route from the root to the destination. The
- *  destination can be a street (face), with which all addresses/sights (views)
- *  are indicated or the destination is a concrete address/sights (view) in a
- *  street.
+ *  Faces are also components that can be nested.
+ *  Thus, parent faces become partial faces when the path refers to a sub-face.
+ *  A sub-face is presented with all its parent partial faces. If the parent
+ *  faces contain additional facets, these facets are not displayed. The parent
+ *  faces are therefore only partially presented.
+ *
+ *  With the SiteMap the structure of faces, facets and the corresponding paths
+ *  are described. The SiteMap controls the face flow and the presentation of
+ *  the components corresponding to a path. 
+ *  This means that you don't have to take care of showing and hiding components
+ *  yourself.
  *  
- *  All streets have a guard, who can forbid and allow access to the street
- *  and/or individual addresses/sights according to permissions.
+ *  The show and hide is hard realized in the DOM.
+ *  This means that if a component is hidden, it is physically removed from the
+ *  DOM and only added again when it is displayed.
  *  
- *  For streets, adresses and sights you can define patterns which actively
- *  change the routing or passively follow the route. 
+ *  When it comes to controlling face flow, the SiteMap provides hooks for
+ *  permission concepts and acceptors. With both things the face flow can be
+ *  controlled and influenced. This way, the access to paths can be stopped
+ *  and/or redirected/forwarded with own logic. 
  *  
- *  MVC 1.0 20190319
+ *  The Object-/Model-Binding part also belongs to the Model View Controller and
+ *  is taken over by the Composite API in this implementation. SiteMap is an
+ *  extension and is based on the Composite API.
+ *  
+ *  MVC 1.0 20190410
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190319
+ *  @version 1.0 20190410
  */
 if (typeof Path === "undefined") {
     
     /**
      *  Static component for the use of (virtual) paths.
+     *  Paths are a reference to a target in face flow. The target can be a
+     *  face, a facet or a function.
      *  For more details see method Path.normalize(variants).
      */    
     Path = {};
@@ -2987,8 +3283,8 @@ if (typeof Path === "undefined") {
      *  Paths consist exclusively of word characters and underscores (based on
      *  composite IDs) and must begin with a letter and use the hash character
      *  as separator and root. Between the path segments, the hash character can
-     *  also be used as a back jump directive. The return jump then corresponds
-     *  to the number of additional hash characters.
+     *  also be used as a back jump (parent) directive. The back jump then
+     *  corresponds to the number of additional hash characters.
      *  
      *      Note:
      *  Paths use lowercase letters. Upper case letters are automatically
@@ -3102,35 +3398,12 @@ if (typeof Path === "undefined") {
 if (typeof SiteMap === "undefined") {
     
     /**
-     *  Static component for the use of a SiteMap for virtua paths.
+     *  Static component for the use of a SiteMap for virtual paths.
      *  SiteMap is a directory consisting of faces and facets that are addressed
      *  by paths.
      *  
-     *  +-----------------------------------------------+
-     *  |  Page                                         | 
-     *  |  +-----------------------------------------+  |
-     *  |  |  Face A / Partial Face A                |  |
-     *  |  |  +-------------+       +-------------+  |  |
-     *  |  |  |  Facet A1   |  ...  |  Facet An   |  |  |
-     *  |  |  +-------------+       +-------------+  |  |
-     *  |  |                                         |  |
-     *  |  |  +-----------------------------------+  |  |
-     *  |  |  |  Face AA                          |  |  | 
-     *  |  |  |  +-----------+     +-----------+  |  |  |
-     *  |  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
-     *  |  |  |  +-----------+     +-----------+  |  |  |
-     *  |  |  +-----------------------------------+  |  |
-     *  |  |  ...                                    |  |
-     *  |  +-----------------------------------------+  |
-     *  |  ...                                          |
-     *  |  +-----------------------------------------+  |
-     *  |  |  Face n                                 |  |
-     *  |  |  ...                                    |  |
-     *  |  +-----------------------------------------+  |
-     *  +-----------------------------------------------+
-     *  
      *  A face is the primary projection of the content. This projection may
-     *  contain additional sub-components, in the form of facets and sub-faces.
+     *  contain additional sub-components, in form of facets and sub-faces.
      *  
      *  Facets are parts of a face (projection) and are not normally a
      *  standalone component. For example, the input mask and result table of a
@@ -3159,7 +3432,7 @@ if (typeof SiteMap === "undefined") {
      *  When it comes to controlling face flow, the SiteMap provides hooks for
      *  permission concepts and acceptors. With both things the face flow can be
      *  controlled and influenced. This way, the access to paths can be stopped
-     *  and/or redirected/forwarded  with own logic. 
+     *  and/or redirected/forwarded with own logic. 
      */
     SiteMap = {};
 
@@ -3190,9 +3463,6 @@ if (typeof SiteMap === "undefined") {
     /** Array with all supported acceptors. */  
     SiteMap.acceptors;
     
-    /** Array with all permit functions. */
-    SiteMap.permits;
-    
     /** Pattern for a valid face path. */
     SiteMap.PATTERN_PATH = /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/;
 
@@ -3212,23 +3482,14 @@ if (typeof SiteMap === "undefined") {
         var acceptors = (SiteMap.acceptors || []).slice();
         while (acceptors.length > 0) {
             var acceptor = acceptors.shift();
-            if (!acceptor.pattern.test(path))
+            if (acceptor.pattern
+                    && !acceptor.pattern.test(path))
                 continue; 
             acceptor = acceptor.action.call(null, path);
             if (acceptor !== true) {
                 if (typeof acceptor === "string")
                     acceptor = Path.normalize(acceptor);
                 return acceptor; 
-            }
-        }
-        
-        var permits = (SiteMap.permits || []).slice();
-        while (permits.length > 0) {
-            var permit = permits.shift().call(null, path);
-            if (permit !== true) {
-                if (typeof permit === "string")
-                    permit = Path.normalize(permit);
-                return permit; 
             }
         }
         
@@ -3324,7 +3585,7 @@ if (typeof SiteMap === "undefined") {
         
         var focus = function(focus) {
             window.setTimeout((focus) => {
-                focus = document.querySelector("#" + focus);
+                focus = focus ? document.querySelector("#" + focus) : focus;
                 if (focus) {
                     focus.scrollIntoView(true);
                     focus.focus();
@@ -3434,15 +3695,35 @@ if (typeof SiteMap === "undefined") {
      *  Several permit methods can be registered.
      *  All requested paths pass through the permit method(s). This can decide
      *  what happens to the path. 
+     *  From the permit method a return value is expected, which can have the
+     *  following characteristics:
+     *  
+     *      true:
+     *  The validation is successful and the iteration via further permit method
+     *  is continued. If all permit methods return true and thus confirm the
+     *  path, it is used.
+     *       
+     *      String:
+     *  The validation (iteration over further permit-merhodes) will be aborted
+     *  and it will be forwarded to the path corresponding to the string. 
+
+     *      In all other cases:
+     *  The path is regarded as invalid/unauthorized, the validation (iteration
+     *  over further permit-merhodes) will be aborted and is forwarded to the
+     *  original path.
+     *  
+     *  A permit method for paths can optionally be passed to each meta object.
+     *  This is interesting for modules that want to register and validate their
+     *  own paths.
      *  
      *      Acceptor:
      *      ----
-     *      
-     *  TODO:
-     *  Optionally, acceptors can also be passed with the meta object.
-     *  The key (RegExp) corresponds to a path filter, the value is a method
-     *  that is executed if the current path matches the filter of an acceptor.
-     *      
+     *  Acceptors work in a similar way to permit methods.
+     *  In difference, permit methods are called for each path and acceptors are
+     *  only called for those that match the RegExp pattern.
+     *  Also from the permit method a return value is expected, which can have
+     *  the following characteristics -- see SiteMap with permit function.
+     *  
      *      SiteMap.customize(/^phone.*$/i, function(path) {
      *              dial the phone number
      *      });
@@ -3454,57 +3735,38 @@ if (typeof SiteMap === "undefined") {
      *      });
      *      
      *      SiteMap.customize(RegExp, function);
-     *      
-     *  TODO: permit return final true, sonst Abbruch der Navigation, alertnativ String mit neuem Ziel
-     *  TODO: acceptor return final true, sonst Abbruch der Navigation, alertnativ String mit neuem Ziel - wie bei permit 
-     *      
-     *  An acceptor is an alias/filter for a path based function
-     *  If the path corresponds to an acceptor, the stored function is called.
-     *  The return value controls what happens to the path.  
-     *      If the return value is false:
-     *      ----
-     *  The Acceptor takes over the complete path control for the matching path.
-     *  Possible following acceptors are not used.   
-     *      If the return value is a string:
-     *      ----
-     *  This is interpreted as a new destination and a forwarding follows.
-     *  Possible following acceptors are not used.
-     *      In all other cases:
-     *      ----
-     *  The Acceptor works in the background.
-     *  Possible following acceptors are used and the SiteMap keeps the control
-     *  of the path.
-     *  
-     *  A permit method for paths can optionally be passed to each meta object.
-     *  This is interesting for modules that want to register and validate their
-     *  own paths. 
+     * 
+     *  Permit methods and acceptors are regarded as one set and called in the
+     *  order of their registration. 
      *  
      *      Important note about how the SiteMap works:
      *      ----
-     *  The SiteMap emanages all configurations cumulatively. All paths and
+     *  The SiteMap collects all configurations cumulatively. All paths and
      *  facets are summarized, acceptors and permit methods are collected in the
-     *  order of their registration. A later assignment of which meta data and
-     *  permit methods were passed together with which meta object does not
-     *  exist.
+     *  order of their registration. A later determination of which metadata was
+     *  registered with which permit methods is not possible.
      *  
      *  The configuration of the SiteMap is only applied if an error-free meta
-     *  object is transferred and no errors occur during processing.
+     *  object is passed and no errors occur during processing.
      *  
-     *  The method uses variable parameters and has the following signatures:
-     *  
+     *  The method uses variable parameters as and according to the previous
+     *  description.
+     *
      *  @param  pattern
      *  @param  callback
      *  @param  meta
      *  @param  permit
      *  @throws An error occurs in the following cases:
+     *      - if the data type of acceptor and/or callback is invalid
      *      - if the data type of map and/or permit is invalid
-     *      - if the sntax and/or the format of facets are invalid
+     *      - if the syntax and/or the format of facets are invalid
      */
     SiteMap.customize = function(variants) {
         
         if (arguments.length > 1
-                && arguments[0] instanceof RegExp
-                && typeof arguments[1] === "function") {
+                && arguments[0] instanceof RegExp) {
+            if (typeof arguments[1] !== "function")
+                throw new TypeError("Invalid acceptor: " + typeof arguments[1]);
             SiteMap.acceptors = SiteMap.acceptors || [];
             SiteMap.acceptors.push({pattern:arguments[0], action:arguments[1]});
             return;
@@ -3515,14 +3777,13 @@ if (typeof SiteMap === "undefined") {
             throw new TypeError("Invalid map: " + typeof arguments[0]);
         var map = arguments[0];
 
-        var permits = (SiteMap.permits || []).slice();
-        if (arguments.length > 1
-                && typeof arguments[1] !== "function")
-            throw new TypeError("Invalid permit: " + typeof arguments[1]);
-        var permit = arguments.length > 1 ? arguments[1] : null;
-        if (permit)
-            permits.push(permit);
-
+        var acceptors = (SiteMap.acceptors || []).slice();
+        if (arguments.length > 1) {
+            if (typeof arguments[1] !== "function")
+                throw new TypeError("Invalid permit: " + typeof arguments[1]);
+            acceptors.push({pattern:null, action:arguments[1]});
+        }
+        
         var paths = {};
         Object.keys(SiteMap.paths || {}).forEach((key) => {
             if (typeof key === "string"
@@ -3577,7 +3838,7 @@ if (typeof SiteMap === "undefined") {
             });
         });
         
-        SiteMap.permits = permits;
+        SiteMap.acceptors = acceptors;
         SiteMap.paths = paths;
         SiteMap.facets = facets;
     };
@@ -3599,7 +3860,7 @@ if (typeof SiteMap === "undefined") {
         if (element.hasAttribute("static"))
             return;
         
-        var path = "#" + Composite.mount.locate(element).replace(/\./g, "#").toLowerCase();
+        var path = "#" + Composite.mount.locate(element).model.replace(/\./g, "#").toLowerCase();
         
         var script = null;
         if (element.hasAttribute(Composite.ATTRIBUTE_CONDITION)) {
@@ -3623,10 +3884,10 @@ if (typeof SiteMap === "undefined") {
         
         //Initially the page-module is loaded.
         //The page-module is similar to an autostart, it is used to initialize
-        //the single page application. It consists of page.js and page.css.
+        //the single page application. It consists of common.js and common.css.
         //The configuration of the SiteMap and essential styles can/should be
         //stored here.
-        Composite.render.include("page");
+        Composite.render.include("common");
         
         //When clicking on a link with the current path, the focus must be set
         //back to face/facet, as the user may have scrolled on the page.
@@ -3659,7 +3920,7 @@ if (typeof SiteMap === "undefined") {
                 && window.location.href.match(/[^#]#$/))
             source = "#";
         
-        var event = document.createEvent('HTMLEvents');
+        var event = document.createEvent("HTMLEvents");
         event.initEvent("hashchange", false, true);
         event.newURL = target;
 
@@ -3703,14 +3964,15 @@ if (typeof SiteMap === "undefined") {
             return;
         }
         
-        //If the permission does not match, the last safe path (SiteMap.location)
-        //is restored. Alternatively, the permit methods can also supply a new
-        //target, which is then jumped to.
+        //If the permission is not confirmed, will be forwarded to the next
+        //higher known/permitted path, based on the requested path.
+        //Alternatively, the permit methods can also supply a new target, which
+        //is then jumped to.
         var forward = SiteMap.permit(target);
         if (forward !== true) {
             if (typeof forward == "string")
                 SiteMap.navigate(forward);
-            else SiteMap.navigate(source);
+            else SiteMap.navigate(target != "#" ? target + "##" : "#");
             return;
         }
         
@@ -3751,9 +4013,9 @@ if (typeof SiteMap === "undefined") {
             render = target;
         else if (target.startsWith(source))
             render = source;
-        render = render.match(/((?:(?:#[^#]+)#*$)|(?:^#$))/g)[0];
-        if (render.length > 1)
-            Composite.render(render);
+        render = render.match(/((?:#[^#]+)|(?:^))#*$/)[0];
+        if (render && render[1])
+            Composite.render(render[1]);
         else Composite.render(document.body);
     });
 };
@@ -3852,7 +4114,7 @@ if (typeof Test === "undefined") {
      */
     Test.activate = function() {
         
-        if (typeof Test.activate.lock !== 'undefined')
+        if (typeof Test.activate.lock !== "undefined")
             return;
         Test.activate.lock = true;
         
@@ -4626,7 +4888,7 @@ if (typeof Test === "undefined") {
          *      Example:
          *      
          *  var onLog = function(message) {
-         *      ....
+         *      ...
          *  }
          */
         if (typeof parent !== "undefined") {
