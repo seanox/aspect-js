@@ -136,6 +136,12 @@
 
     <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
     <copy file="LICENSE" tofile="${workspace.releases}/license.txt"/>
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
+      <fileset dir="${workspace.releases}" includes="release.txt"/>
+      <fileset dir="${workspace.releases}" includes="license.txt"/>
+    </touch>     
     <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}.zip">
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
@@ -155,9 +161,19 @@
     <copy todir="${workspace.releases}/temp/${ant.project.name}-${release.version}">
       <fileset refid="fileset.project"/>
     </copy>
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${workspace.releases}/temp"/>
+    </touch>     
     <zip basedir="${workspace.releases}/temp"
         destfile="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"/>
     <delete dir="${workspace.releases}/temp"/>
+    
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}-src.zip"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}.zip"/>
+    </touch>         
   </target>
   
   <target name="test-min" depends="archive">
