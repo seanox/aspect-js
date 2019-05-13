@@ -77,7 +77,7 @@ directory and are only loaded automatically when necessary.
 ```
 
 The attribute has no value.  
-It can be combined with the `static` attribute.
+It can be combined with the `static` attribute.  
 Then the composite becomes permanently visible as a face independent of virtual
 paths.
 
@@ -89,5 +89,37 @@ paths.
 
 Details on the use of composites / modular components are described in the
 sections [Composites](composites.md) and [Model View Controler](mvc.md).
+
+
+### condition
+
+The condition attribute determines whether an element remains in the DOM. 
+The expression passed to the attribute must explicitly return `true` or
+`false`. With `false` an element is temporarily removed from the DOM and can
+be re-inserted later by refreshing the __parent element__ if the expression
+returns `true`.
+A peculiarity is the combination with the attribute [interval](#interval),
+because with the removal of the element from the DOM also the corresponding
+timer is terminated. If the element is inserted into the DOM again with a later
+refresh, the timer starts again from the beginning and is therefore not
+continued.
+
+```html
+<article condition="{{Model.visible}}">
+  ...
+</article>
+```
+
+The use of the condition attribute in combination with embedded JavaScript is
+possible as composite JavaScript.
+
+```html
+<script type="composite/javascript" condition="{{Model.visible}}">
+  ...
+</script>
+```
+
+Details about using embedded JavaScript are described in the section
+[Scripting](#scripting).
 
 TODO:
