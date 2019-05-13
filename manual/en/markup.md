@@ -44,3 +44,36 @@ supported with the attributes `output` and `import`.
 
 Details about syntax and usage are described in the section
 [Expression Language](expressions.md).
+
+
+## Attributes
+
+The declarative approach in aspect-js is primarily implemented with attributes
+and can be used with all HTML elements except `SCRIPT`, which is only supported
+with the type `composite/javascript`, and `STYLE`, which is not supported.
+The values of the attributes can be static or dynamic when the expression
+language is used.  
+If an attribute contains an expression, the attribute and the value become
+unchangeable, because the renderer sets them again with the updated value of the
+initial expression each time it is refreshed (render cycle).
+
+
+### composite
+
+Marks an element in the markup as [Composite](composites.md).  
+Composites are modular components and have a versatile meaning in aspect-js.  
+They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
+virtual paths in the face flow, which has a direct influence of the visibility
+of the composites.
+The [Model View Controler](mvc.md#sitemap) supports automatic
+[object/model binding](object-binding.md) for composites. The resources (CSS,
+JS, Markup) for composites can be outsourced to the module directory and are
+only loaded automatically when necessary.
+
+```html
+<article composite>
+  ...
+</article>
+```
+
+TODO:
