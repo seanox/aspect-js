@@ -66,14 +66,28 @@ They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
 virtual paths in the face flow, which has a direct influence of the visibility
 of the composites.
 The [Model View Controler](mvc.md#sitemap) supports automatic
-[object/model binding](object-binding.md) for composites. The resources (CSS,
-JS, Markup) for composites can be outsourced to the module directory and are
-only loaded automatically when necessary.
+[object/model binding](object-binding.md) for composites.  
+The resources (CSS, JS, Markup) for composites can be outsourced to the module
+directory and are only loaded automatically when necessary.
 
 ```html
 <article composite>
   ...
 </article>
 ```
+
+The attribute has no value.  
+It can be combined with the `static` attribute.
+Then the composite becomes permanently visible as a face independent of virtual
+paths.
+
+```html
+<article composite static>
+  ...
+</article>
+```
+
+Details on the use of composites / modular components are described in the
+sections [Composites](composites.md) and [Model View Controler](mvc.md).
 
 TODO:
