@@ -62,43 +62,42 @@ In aspect-js the views are represented by the markup.
 
 ## Contents Overview
 
-* [Controller](#Controller)
-* [Model](#Model)
-* [View](#View)
-* [SiteMap](#SiteMap)
-  * [Terms](#Terms)
-    * [Page](#Page)
-    * [Face](#Face)
-    * [Facets](#Facets)
-    * [Face Flow](#FaceFlow)
-  * [Configuration](#Configuration)
-    * [Face Flow](#FaceFlow-1)
-    * [Permissions](#Permissions)
-    * [Acceptors](#Acceptors)
-  * [Navigation](#Navigation)
-  * [Permission Concept](#Permission-Concept)
-  * [Acceptors](#Acceptors)
-* [Virtual Paths](#VirtualPaths)
-  * [Functional Path](#FunctionalPath)
-  * [Root Path](#RootPath)
-  * [Relative Path](#RelativePath)
-  * [Absolute Path](#AbsolutePath)
-* [Object-/Model-Binding](#Object-Model-Binding)
-  * [Terms](#Terms)
+* [Controller](#controller)
+* [Model](#model)
+* [View](#view)
+* [SiteMap](#sitemap)
+  * [Terms](#terms)
+    * [Page](#page)
+    * [Face](#face)
+    * [Facets](#facets)
+    * [Face Flow](#face-flow)
+  * [Configuration](#configuration)
+    * [Face Flow](#face-flow-1)
+    * [Permissions](#permissions)
+    * [Acceptors](#acceptors)
+  * [Navigation](#navigation)
+  * [Permission Concept](#permission-concept)
+  * [Acceptors](#acceptors)
+* [Virtual Paths](#virtual-paths)
+  * [Functional Path](#functional-path)
+  * [Root Path](#root-path)
+  * [Relative Path](#relative-path)
+  * [Absolute Path](#absolute-path)
+* [Object-/Model-Binding](#object-model-binding)
+  * [Terms](#terms)
     * [namespace](#namespace)
     * [scope](#scope)
     * [model](#model)
-    * [field](#field)
-    * [composite-id](#composite-id)
-    * [identifier](#identifier)
+    * [property](#property)
     * [qualifier](#qualifier)
     * [composite](#composite)
-  * [Binding](#Binding)
-  * [Dock](#Dock)
-  * [Undock](#Undock)
-  * [Synchronization](#Synchronization)
-  * [Validation](#Validation)
-  * [Events](#Events)
+    * [composite-id](#composite-id)
+  * [Binding](#binding)
+  * [Dock](#dock)
+  * [Undock](#undock)
+  * [Synchronization](#synchronization)
+  * [Validation](#validation)
+  * [Events](#events)
 
 
 ## SiteMap
@@ -494,7 +493,7 @@ Means the namespace is the description text, the scope is the object if the
 namespace was resolved in the object tree.
 
 
-#### TODO: model
+#### model
 
 The model (model component / component) is a static JavaScript object in any
 namespace and provides the logic for the user interface (UI component) and the
@@ -523,12 +522,12 @@ var model = {
 ```
 
 
-#### TODO: field
+#### property
 
-A field is a property of a static model (model component / component). It
-corresponds to an HTML element with the same ID in the same namespace. The ID of
-the field can be relative or use an absolute namespace. If the ID is relative,
-the namespace is defined by the parent composite element.
+Is a property in a static model (model component / component). It corresponds to
+an HTML element with the same ID in the same namespace. The ID of the property
+can be relative or use an absolute namespace. If the ID is relative, the
+namespace is defined by the parent composite element.
 
 ```javascript
 var model = {
@@ -551,9 +550,41 @@ model component property. For an HTML element, the corresponding events are
 defined using the attribute of the same name.  
 Synchronization only works in one direction, from the HTML element to the
 property of the model component.
-  
 
-#### TODO: composite-id
+
+#### qualifier
+
+In some cases, the identifier (ID) may not be unique. For example, in cases
+where properties are arrays or an iteration is used. In these cases the
+identifier can be extended by an additional unique qualifier separated by a
+colon.  
+Qualifiers are ignored during object/model binding.
+
+```html
+<input type="text" id="identifier">
+<input type="text" id="identifier:qualifier">
+```
+ 
+```html
+<html>
+  <body>
+    <form id="model" composite static iterate="{{set:['A','B','C']}}">
+      <input type="text" id="fieldA:{{set.value}}">
+      ...
+    </form>
+  </body>
+</html>
+```
+
+
+#### composite
+
+Composite describes the construct of markup, JavaScript model, and possibly
+existing module resources. It describes a component/module without direct
+reference to a concrete perspective.
+
+
+#### composite-id
 
 The Composite-ID is an application-wide unique identifier.  
 It is a sequence of characters or words consisting of letters, numbers, and
@@ -576,56 +607,6 @@ synchronization and validation. Therefore, it is important that the sequence of
 characters within the JavaScript namespace is valid and unique. The identifier
 is also used for face-flow to identify and control faces and facets and in
 general to identify and control models/components.
-
-
-#### TODO: identifier
-
-The identifier is a unique value with the same requirements as a Composite-ID.
-It is important for the assignment and binding of fields and properties for
-object/model binding, validation and synchronization.
-
-```html
-<html>
-  <body>
-    <form id="model" composite static>
-      <input type="text" id="fieldA">
-      ...
-    </form>
-  </body>
-</html>
-```
-
-
-#### TODO: qualifier
-
-In some cases the identifier cannot be uniquely named, so in cases where the
-target in the object is an array and/or the identifier is used in an iteration.
-In these cases, the identifier can be extended by an additional unique
-qualifier, separated by a colon.
-Qualifiers are ignored during object/model binding. 
-
-```html
-<input type="text" id="identifier">
-<input type="text" id="identifier:qualifier">
-```
- 
-```html
-<html>
-  <body>
-    <form id="model" composite static iterate="{{set:['A','B','C']}}">
-      <input type="text" id="fieldA:{{set.value}}">
-      ...
-    </form>
-  </body>
-</html>
-```
-
-
-#### TODO: composite
-
-Composite describes the construct of markup, JavaScript model, and possibly
-existing module resources. It describes a component/module without direct
-reference to a concrete perspective.
 
 
 ### Binding

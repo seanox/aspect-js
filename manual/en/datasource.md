@@ -19,13 +19,14 @@ similar to SQL.
 
 
 ## Contents Overview
-* [Data Storage](#Data-Storage)
-* [Locales](#Locales)
-* [Locator](#Locator)
-* [XPath](#XPath)
-* [fetch](#Fetch)
+* [Data Storage](#data-storage)
+* [Locales](#locales)
+* [Locator](#locator)
+* [XPath](#xpath)
+* [fetch](#fetch)
 * [transform](#transform)
 * [collect](#collect)
+* [Usage](#usage)
 
 
 ## Data Storage
@@ -293,4 +294,28 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
     <price>3.00</price>
   </article>
 </articles>  
+```
+
+
+## Usage
+
+The DataSource can also be used directly in the markup with the attributes
+[import](markup.md#import) and [output](markup.md#output).
+
+```html
+<article import="xml:/example/content">
+  loading resource...  
+</article>
+
+<article import="xml:/example/data xslt:/example/style">
+  loading resource...  
+</article>
+
+<article output="xml:/example/content">
+  loading resource...  
+</article>
+
+<article output="xml:/example/data xslt:/example/style">
+  loading resource...  
+</article>
 ```

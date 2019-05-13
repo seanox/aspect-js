@@ -18,20 +18,20 @@ Expression Language is not supported.
 
 ## Contents Overview
 
-* [Elements](#Elements)
-  * [Text](#Text)
-  * [Literal](#Literal)
-  * [Keyword](#Keyword)
-  * [Value](#Value)
-  * [Method](#Method)
-  * [Logic](#Logic)
-* [Expressions](#Expressions)
-  * [Value-Expression](#Value-Expression)
-  * [Method-Expression](#Method-Expression)
-  * [Element-Expression](#Element-Expression)
-  * [Variablen-Expression](#Variablen-Expression)    
-  * [Combination](#Combination)    
-* [Integration](#Integration)
+* [Elements](#elements)
+  * [Text](#text)
+  * [Literal](#literal)
+  * [Keyword](#keyword)
+  * [Value](#value)
+  * [Method](#method)
+  * [Logic](#logic)
+* [Expressions](#expressions)
+  * [Value-Expression](#value-expression)
+  * [Method-Expression](#method-expression)
+  * [Element-Expression](#element-expression)
+  * [Variablen-Expression](#variablen-expression)    
+  * [Combination](#combination)    
+* [Usage](#usage)
   
 
 ## Elements
@@ -199,7 +199,7 @@ All types of expressions can be combined.
 ```
 
 
-## Integration
+## Usage
 
 Expressions are interpreted by the renderer that starts after loading the page.
 So expressions can be visible when loading the page. We recommend that you swap
