@@ -63,8 +63,8 @@ initial expression each time it is refreshed (render cycle).
 Marks an element in the markup as [Composite](composites.md).  
 Composites are modular components and have a versatile meaning in aspect-js.  
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
-virtual paths in the face flow, which has a direct influence of the visibility
-of the composites.
+virtual paths in the face flow, which has a direct effect of the visibility of
+the composites.
 The [Model View Controler](mvc.md#sitemap) supports automatic
 [object/model binding](object-binding.md) for composites.  
 The resources (CSS, JS, Markup) for composites can be outsourced to the module
@@ -617,4 +617,47 @@ Composite.customize("foo", function(element) {
 </article>
 ```
 
-TODO:
+
+### Selector
+
+Selectors work similar to custom tags.  
+Compared to these, selectors use a CSS selector to recognize elements. This
+selector must address the element from the point of view of the parent element.
+Selectors are more flexible and multifunctional. In this way, different
+selectors with different functions can affect one element.  
+Selectors are iterated in order of registration and then their callback methods
+are executed. The return value of the callback method determines whether the
+iteration is terminated or not.  
+Only the return value `false` (not void, not empty) terminates the iteration
+over other selectors and the rendering for the selector is terminated without
+using the standard functions.
+
+```javascript
+Composite.customize("a:not([href])", function(element) {
+    ...
+});
+
+Composite.customize("a.foo", function(element) {
+    ...
+});
+```
+
+```html
+<article>
+  <a class="foo"></a>  
+</article>
+```
+
+
+### Acceptor
+  
+Acceptors are a special way of customizing the rendering. Compared to the other
+possibilities, this is about manipulating elements before rendering. This allows
+individual changes to attributes and/or the markup before the renderer processes
+them. Thus, an acceptor has no effect of the implementation of the rendering.
+
+```javascript
+Composite.customize(function(element) {
+    ...
+});
+```
