@@ -269,6 +269,7 @@ SiteMap.customize({
     
     function(path) {
         ...
+    }    
 });
 ```
 

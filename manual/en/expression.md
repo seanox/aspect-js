@@ -29,7 +29,7 @@ Expression Language is not supported.
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
-  * [Variablen-Expression](#variablen-expression)    
+  * [Variablen-Expression](#variable-expression)    
   * [Combination](#combination)    
 * [Usage](#usage)
   
@@ -172,7 +172,7 @@ the variable corresponds to `undefined`.
 ```
 
 
-### Variablen-Expression
+### Variable-Expression
 
 With the expression language, global variables can also be created and set at
 the runtime. The expression must begin with the name of a variable (identifier)

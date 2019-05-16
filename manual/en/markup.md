@@ -43,7 +43,7 @@ supported with the attributes `output` and `import`.
 ```
 
 Details about syntax and usage are described in the section
-[Expression Language](expressions.md).
+[Expression Language](expression.md).
 
 
 ## Attributes
@@ -261,6 +261,7 @@ changed to composite/javascript and are only executed by the renderer. This
 ensures that the JavaScript is only executed depending on surrounding condition
 attributes.
 
+
 ### interval
 
 This declaration activates an interval-controlled refresh of an HTML element
@@ -325,6 +326,295 @@ composite JavaScript.
 <script type="composite/javascript" interval="1000">
   ...
 </script>
+```
+
+
+### iterate
+
+The iterative output is based on lists, enumerations and arrays.  
+If an HTML element is declared as iterative, the initial inner HTML code is used
+as template and during the iteration the inner HTML code is removed first, the
+template is generated individually with each iteration and the result is added
+to the inner HTML code. 
+The iterate attribute expects a
+[variable expression](expression.md#variable-expression), as well as a
+meta-object that allows access to the iteration.  
+So the variable expression `iterat={tempA:Model.list}}` creates the
+meta-object `tempA = {item, index, data}`.
+
+```javascript
+var Model = {
+    months: ["Spring", "Summer", "Autumn", "Winter"]
+};
+```
+
+```html
+<select iterate={{months:Model.months}}>
+  <option id="{{months.index}}">
+    {{months.item}}
+  </option>
+</select>
+```
+
+
+### output
+
+The attribute output the value or result of its expression as an inner HTML code
+for an HTML element. As value are expected one element or more elements as
+NodeList or Array -- these are then inserted directly, or an absolute or
+relative URL to a remote resource, which is loaded by HTTP method GET, or a
+DataSource URL which loads and transforms content from the DataSource.
+
+In all cases, the output attribute can be combined with the condition attribute
+and is only executed when the condition is `true`.
+
+The behavior is similar to the `import` attribute, except that `output` is
+always executed for the element.
+
+```javascript
+var Model = {
+    publishForm: function() {
+        var form = document.createElement("form");
+        var label = document.createElement("label");
+        label.textContent = "Input";
+        form.appendChild(label);
+        var input = document.createElement("input");
+        input.value = "123";
+        input.type = "text";
+        form.appendChild(input);
+        var submit = document.createElement("input");
+        submit.type = "submit";
+        form.appendChild(submit);
+        return form;
+    },
+    publishImg: function() {
+        var img = document.createElement("img");
+        img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
+        return img;
+    }
+};
+```
+
+```html
+<article output="{{Model.publishImg()}}">
+  loading image...  
+</article>
+<article output="{{Model.publishForm()}}">
+  loading form...  
+</article>
+```
+
+Example of the output of a remote resource using the HTTP method GET.
+
+```html
+<article output="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
+  loading resource...  
+</article>
+
+<article output="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
+  loading resource...  
+</article>
+```
+
+Example of the output of a DataSource resource.  
+If only one URL is specified, the data and transformation URLs are derived from it. 
+
+```html
+<article output="{{'xml:/example/content'}}">
+  loading resource...  
+</article>
+
+<article output="xml:/example/content">
+  loading resource...  
+</article>
+```
+
+Example of the output of a DataSource resource with a specific data URL and
+transformation URL. The blank character is used for separation. Both URLs must
+begin with the DataSource protocol and only the first two entries are used from
+which the first refers to the data and the second to the transformation.
+
+```html
+<article output="{{'xml:/example/data xslt:/example/style'}}">
+  loading resource...  
+</article>
+
+<article output="xml:/example/data xslt:/example/style">
+  loading resource...  
+</article>
+```
+
+When inserting content from the DataSource, script blocks are automatically
+changed to composite/javascript and are only executed by the renderer. This
+ensures that the JavaScript is only executed depending on surrounding condition
+attributes.
+
+
+### render
+
+The `render` attribute requires the combination with the `events` attribute.
+Together they define which targets with which occurring events
+be refreshed.  
+The `render` attribute expects a CSS selector or query selector as value.
+which sets the targets.
+
+```javascript
+var Model = {
+    _status1: 0,
+    getStatus1: function() {
+        return ++Model._status1;
+    },
+    _status2: 0,
+    getStatus2: function() {
+        return ++Model._status2;
+    },
+    _status3: 0,
+    getStatus3: function() {
+        return ++Model._status3;
+    }
+};
+```
+
+```html
+Taget #1:
+<span id="outputText1">{{Model.status1}}</span>
+Events: Wheel
+<input id="text1" type="text"
+    events="wheel"
+    render="#outputText1, #outputText2, #outputText3"/>
+    
+Target #2:
+<span id="outputText2">{{Model.status2}}</span>
+Events: MouseDown KeyDown
+<input id="text1" type="text"
+    events="mousedown keydown"
+    render="#outputText2, #outputText3"/>
+
+Target #3:
+<span id="outputText3">{{Model.status3}}</span>
+Events: MouseUp KeyUp
+<input id="text1" type="text"
+    events="mouseup keyup"
+    render="#outputText3"/>
+    
+```
+
+The example contains 3 input fields with different events (`events`) and
+targets (`render`), each of which represents an incremental text output and
+reacts to corresponding events.
+
+
+### validate
+
+The `validate` attribute requires the combination with the `events` attribute.
+Together they define and control the synchronization between the markup of a
+Composites and the corresponding JavaScript model.  
+If `validate` is used, the JavaScript model must implement a corresponding
+validate method: `boolean Model.validate(element, value)`.  
+The return value must be a Boolean value and so only the return value `true`
+synchronizes the value from the composite into the JavaScript model.  
+A general strategy or standard implementation for error output is deliberately
+not provided, as this is too strict in most cases and can be implemented
+individually as a central solution with little effort.
+
+```css
+input[type='text']:not([title]) {
+    background:#EEEEFF;
+    border-color:#7777AA;
+}
+input[type='text'][title=''] {
+    background:#EEFFEE;
+    border-color:#77AA77;
+}
+input[type='text'][title]:not([title='']) {
+    background:#FFEEEE;
+    border-color:#AA7777;
+}
+```
+
+```javascript
+var Model = {
+    validate: function(element, value) {
+        var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
+        var test = PATTER_EMAIL_SIMPLE.test(value);
+        element.setAttribute("title", test ? "" : "Invalid " + element.getAttribute("placeholder"));
+        return test;
+    },
+    text1: ""
+};
+```
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate events="mouseup keyup change" render="#Model"/>
+  Model.text1: {{Model.text1}}  
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+In this example, the input field expects an e-mail address.  
+The format is checked continuously during input and an error message is written
+to the `title` attribute if the value is invalid, or the content of the
+`title` attribute is deleted if the value is valid.  
+Below the input field is the control output of the corresponding field in the
+JavaScript model. This field is only synchronized if the validate method return
+the value `true`.  
+
+
+## Scripting
+
+Embedded scripting brings some peculiarity with it.  
+The standard scripting is executed automatically by the browser and
+independently of the rendering. Therefore, markup for rendering has been
+extended by the additional script type `composite/javascript`, which uses the
+normal JavaScript but is not recognized by the browser in comparison to
+`text/javascript` and therefore not executed directly. The renderer recognizes
+the JavaScript code and executes it in every render cycle if the cycle contains
+a SCRIPT element. In this way, the execution of the SCRIPT element can also be
+combined with the `condition` attribute.   
+Embedded scripts must/should be "ThreadSafe".
+
+```html
+<script type="composite/javascript">
+  ...
+</script>
+```
+
+Because the JavaScript is not inserted as an element, but directly in a separate
+namespace executed, it is important for global variables that they are it is
+important for global variables that they are initialized as window properties if
+they are to be used later in the application logic.
+
+```html
+<script type="composite/javascript">
+  window['Foo'] = function() {
+    ...
+  }
+</script>
+```
+
+
+## Customizing
+
+
+### Tag
+
+Custom tags take over the complete rendering on their own responsibility. The
+return value determines whether the standard functions of the renderer are used
+or not. Only the return value `false` (not void, not empty) terminates the
+rendering for a custom tag without using the standard functions of the renderer.
+
+```javascript
+Composite.customize("foo", function(element) {
+    ...
+});
+```
+
+```html
+<article>
+  <foo/>  
+</article>
 ```
 
 TODO:
