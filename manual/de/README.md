@@ -18,3 +18,4 @@
     * [Tag](markup.md#tag)   
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
+* [Resource Bundle](messages.md)    
