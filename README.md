@@ -1,11 +1,13 @@
 # Description
+Influenced by the good experiences from JSF (Java Server Faces) with regard to
+function and an easy integration into the markup, arose a similar client-side
+fullstack solution.  
 Seanox aspect-js focuses on a minimalist approach to implementing
-Single-Page Applications (SPAs). Influenced by the good experiences from JSF
-(Java Server Faces) with regard to function and an easy integration into the
-markup, arose a similar client-side fullstack solution.  
-This framework takes the declarative approach of HTML and adds an expression
-language, a rendering with addional attributes, object/model-binding, Model View
-Controller, Resource Bundle, NoSQL datasource, test environment and much more.
+Single-Page Applications (SPAs). 
+This framework takes the declarative approach of HTML and extends this with
+expression language, rendering with addional attributes, object/model-binding,
+Model View Controller, Resource Bundle, NoSQL datasource, test environment and
+much more.
 
 
 # Features
@@ -72,7 +74,10 @@ Seanox aspect-js is always up to date when using the release channels.
 
 
 # Manuals
-- [Manual DE](https://github.com/seanox/aspect-js/blob/master/manual/de) in progress
+- [Introduction DE](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md) in progress
+- [Manual DE](https://github.com/seanox/aspect-js/blob/master/manual/de) in progress  
+
+- [Introduction EN](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md) in progress
 - [Manual EN](https://github.com/seanox/aspect-js/blob/master/manual/en) in progress
 
 # Changes (Change Log)
