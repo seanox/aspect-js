@@ -33,14 +33,15 @@ release channel.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x.js"></script>
+<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js"></script>
 ```
 
 or
 
 ```html
 <!-- production version, optimized in size but not obfuscated -->
-<script src="https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js"></script>
+<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js"></script>
 ```
+
 
 TODO:

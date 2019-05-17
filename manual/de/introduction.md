@@ -18,28 +18,54 @@ Testumgebung und vieles mehr.
 
 Das Framework besteht aus reinem JavaScript.
 
-Die Releases bestehen aus einer Datei, die heruntergeladen oder über einen
-Release-Channel eingebunden wird. Release-Channel stellen kontinuierlich die
-neuesten endgültigen Hauptversionen zur Verfügung, die sind abwärtskompatibel
-zur Hauptversion. Seanox aspect-js ist somit immer auf dem neuesten Stand.
+Die Releases werden heruntergeladen oder über einen Release-Channel eingebunden.
+Release-Channel stellen kontinuierlich die neuesten endgültigen Hauptversionen
+zur Verfügung, die sind abwärtskompatibel zur Hauptversion. Seanox aspect-js ist
+somit immer auf dem neuesten Stand.
 
-Jedes Release besteht aus zwei Versionen. Die Entwickler-Version beinhaltet
-umfangreiche Kommentare zu Konzeption, Funktion, Arbeitsweise und Verwendung.
+Jedes Release besteht aus zwei Versionen.  
+Die Entwickler-Version beinhaltet umfangreiche Kommentare zu Konzeption,
+Funktion, Arbeitsweise und Verwendung.  
 Die Produktions-Version ist in der Grösse optimiert aber nicht verschleiert
-(obfuscated) .
+(obfuscated).
 
-Erstelle eine HTML-Datei, z.B. index.html und füge Seanox apect-js ein.
+Erstelle eine HTML-Datei, z.B. _index.html_ und füge Seanox apect-js ein.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x.js"></script>
+<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js"></script>
 ```
 
-or
+oder
 
 ```html
 <!-- production version, optimized in size but not obfuscated -->
-<script src="https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js"></script>
+<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js"></script>
 ```
 
-TODO:
+## Arbeitsbereich
+
+Seanox aspect-js agiert ausschliesslich im BODY-Tag, welches selbt mit
+einbezogen wird.
+
+
+## Expression Language
+
+Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
+clientseitigen JavaScrript und damit zu den Modellen und Komponenten im
+aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt, die
+mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
+arithmetische und logische Operatoren verwendet werden können.
+
+Die Expression Language kann ab dem BODY-Tag im kompletten Markup als Freitext
+sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
+SCRIPT, hier wird die Expression Language nicht unterstützt.
+
+```html
+<body>
+
+</body>
+<p>
+  Today is {{Calendar.weekday}} and it's {{Clock.time}}.
+<p>
+```

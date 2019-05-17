@@ -60,13 +60,13 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox aspect-js 1.0.0](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0.zip)  
-[Seanox aspect-js 1.0.0 Sources](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.0.0-src.zip)
+[Seanox aspect-js 1.0.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0.zip)  
+[Seanox aspect-js 1.0.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-src.zip)
 
 
 # Release Channels
-[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x.js)  
-[https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js](https://github.com/seanox/aspect-js/raw/master/releases/aspect-js-1.x-min.js)  
+[https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js)  
+[https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js)  
 
 The release channels continuously provide the newest final major versions, which
 are downward compatible to the major version. Seanox aspect-js is always up to

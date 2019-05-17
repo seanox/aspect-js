@@ -61,7 +61,7 @@ Text is not a regular element of the expression.
 This occurs for attributes when the Expression Language is combined with text.
 
 ```html
-<p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}.">
+<p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}."></p>
 ```
 
 
