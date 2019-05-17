@@ -80,6 +80,9 @@ Seanox aspect-js is always up to date when using the release channels.
 - [Manual EN](https://github.com/seanox/aspect-js/blob/master/manual/en) in progress
 
 # Changes (Change Log)
+## 1.0.0 20190515 (summary of the current version)  
+NT: Release is available  
+
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
 
