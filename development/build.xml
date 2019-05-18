@@ -127,7 +127,7 @@
       </filelist>   
     </concat>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
-    <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+\*\s+)" flags="g" replace="\1" byline="false"/>
+    <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" flags="g" replace="\1" byline="false"/>
     
     <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.major}.x-min.js"/>
     <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
@@ -142,6 +142,7 @@
       <fileset dir="${workspace.releases}" includes="release.txt"/>
       <fileset dir="${workspace.releases}" includes="license.txt"/>
     </touch>     
+    <delete file="${workspace.releases}/${ant.project.name}-${release.version}.zip"/>
     <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}.zip">
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
@@ -163,9 +164,10 @@
     </copy>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${workspace.releases}/temp"/>
-    </touch>     
-    <zip basedir="${workspace.releases}/temp"
-        destfile="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"/>
+    </touch>
+    <delete file="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"/>
+    <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"
+      basedir="${workspace.releases}/temp"/>
     <delete dir="${workspace.releases}/temp"/>
     
     <touch datetime="${release.date}" pattern="yyyyMMdd">
