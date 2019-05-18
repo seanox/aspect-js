@@ -51,21 +51,47 @@ einbezogen wird.
 
 ## Expression Language
 
-Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
-clientseitigen JavaScrript und damit zu den Modellen und Komponenten im
-aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt, die
-mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
-arithmetische und logische Operatoren verwendet werden können.
+Expressions bzw. die [Expression Language (EL)](expression.md) ist ein einfacher
+Zugang zum clientseitigen JavaScrript und damit zu den Modellen und Komponenten
+im aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt,
+die mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die
+zahlreichen arithmetische und logische Operatoren verwendet werden können.
 
 Die Expression Language kann ab dem BODY-Tag im kompletten Markup als Freitext
 sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
 SCRIPT, hier wird die Expression Language nicht unterstützt.
 
 ```html
-<body>
-
+<body lang="{{DataSource.locale}}">
+  <p>
+    Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.
+  </p>
 </body>
-<p>
-  Today is {{Calendar.weekday}} and it's {{Clock.time}}.
-<p>
 ```
+
+Die Expression Language ist zeitweise sichtbar, da der Renderer erst nach dem
+Laden der Page aktiv wird. Alternativ können die Attribute
+[output](markup.md#output) und [import](markup.md#import) vewendet werden,
+welche eine direkte Ausgabe in das innere HTML vom Element bewirken. 
+
+```html
+<p output="Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+```
+
+Die Expression kann zur Laufzeit globale Variablen erzeugen nun nutzen.
+
+```html
+{{now:new Date()}}
+<p>
+  Today is {{now.toDateString()}}
+  and it's {{now.toLocaleTimeString()}} o'clock.
+</p>
+```
+
+
+## Attribute
+
+TODO:
