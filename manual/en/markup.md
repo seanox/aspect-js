@@ -218,11 +218,11 @@ var Model = {
 Example of importing a remote resource using the HTTP method GET.
 
 ```html
-<article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
+<article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx'}}">
   loading resource...  
 </article>
 
-<article import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
+<article import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
   loading resource...  
 </article>
 ```
@@ -361,9 +361,8 @@ var Model = {
 
 The attribute output the value or result of its expression as an inner HTML code
 for an HTML element. As value are expected one element or more elements as
-NodeList or Array -- these are then inserted directly, or an absolute or
-relative URL to a remote resource, which is loaded by HTTP method GET, or a
-DataSource URL which loads and transforms content from the DataSource.
+NodeList or Array -- these are then inserted directly, or a DataSource URL which
+loads and transforms content from the DataSource.
 
 In all cases, the output attribute can be combined with the condition attribute
 and is only executed when the condition is `true`.
@@ -401,18 +400,6 @@ var Model = {
 </article>
 <article output="{{Model.publishForm()}}">
   loading form...  
-</article>
-```
-
-Example of the output of a remote resource using the HTTP method GET.
-
-```html
-<article output="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
-  loading resource...  
-</article>
-
-<article output="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
-  loading resource...  
 </article>
 ```
 

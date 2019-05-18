@@ -222,11 +222,11 @@ var Model = {
 Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
 
 ```html
-<article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
+<article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx'}}">
   loading resource...  
 </article>
 
-<article import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
+<article import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
   loading resource...  
 </article>
 ```
@@ -365,11 +365,10 @@ var Model = {
 ### output
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden ein Elemente oder mehre
+HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine absolute oder relative URL zu einer entfernten Ressource, die per
-HTTP-Methode GET nachgeladen wird, oder eine DataSource-URL die einen Inhalt aus
-der DataSource lädt und transformiert, erwartet.
+eine DataSource-URL die einen Inhalt aus der DataSource lädt und transformiert,
+erwartet.
 
 In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -408,18 +407,6 @@ var Model = {
 </article>
 <article output="{{Model.publishForm()}}">
   loading form...  
-</article>
-```
-
-Beispiel für den Output einer entfernten Ressource per HTTP-Methode GET.
-
-```html
-<article output="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx'}}">
-  loading resource...  
-</article>
-
-<article output="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import.htmlx">
-  loading resource...  
 </article>
 ```
 
