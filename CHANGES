@@ -1,5 +1,7 @@
 1.0.1 2019xxxx
   BF: Build: Optimization/correction when creating releases 
-
+  BF: DataSource: Correction if no DataSource exists
+  BF: Message: Correction if no DataSource exists
+  
 1.0.0 20190515
   NT: Release is available 

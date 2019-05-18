@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.0 20181021
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Messages 1.0 20190518
+ *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20181021
+ *  @version 1.0 20190518
  */
 if (typeof Messages === "undefined") {
     
@@ -91,6 +91,8 @@ if (typeof Messages === "undefined") {
         request.overrideMimeType("application/xslt+xml");
         request.send();
         var xml = request.responseXML;
+        if (!xml)
+            return;
 
         var xpath = "(/locales/*[@default])[1]/label";
         var locale = (navigator.browserLanguage || navigator.language || "").trim().toLowerCase();
