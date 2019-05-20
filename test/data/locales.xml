@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <locales>
-  <xx default="true"></xx>
+  <xx default="true">
+    <label key="all.a" value="xxA"/>
+    <label key="all.b">xxB</label>
+    <label key="xx" value="xxX"/>
+  </xx>
+  <xde>
+    <label key="all.a" value="xdeA"/>
+    <label key="all.b">xdeB</label>
+    <label key="xde" value="xdeX"/>
+  </xde>
+  <xen>
+    <label key="all.a" value="xenA"/>
+    <label key="all.b">xenB</label>
+    <label key="xen" value="xenX"/>
+  </xen>
 </locales>
