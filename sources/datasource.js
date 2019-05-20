@@ -40,17 +40,23 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
- *  DataSource 1.0 20190518
+ *  DataSource 1.0 20190520
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190518
+ *  @version 1.0 20190520
  */
 if (typeof DataSource === "undefined") {
     
     /** Static component for the access and transforming of XML data. */  
     DataSource = {};
+    
+    /** Internal cache of locales.xml */
+    DataSource.data;
+
+    /** List of available locales */
+    DataSource.locales;
 
     /** Internal cache of XML/XSLT data. */
     DataSource.cache;
@@ -81,27 +87,67 @@ if (typeof DataSource === "undefined") {
     };    
     
     /** The available languages in the 'locales.xml' with label-value pairs. */
-    DataSource.locale = (function() {
-        
-        var request;
+    DataSource.locale;
+    
+    (function() {
         
         var locale = (navigator.browserLanguage || navigator.language || "").trim().toLowerCase();
         locale = locale.match(/^([a-z]+)/);
-        if (locale)
-            locale = locale[0];
-        else throw new Error("No language available"); 
+        if (!locale)
+            throw new Error("Locale not available");
+        DataSource.locale = locale[0];
         
+        var request;
         request = new XMLHttpRequest();
         request.open("GET", DataSource.DATA + "/locales.xml", false);
         request.overrideMimeType("application/xslt+xml");
         request.send();
-        var xml = request.responseXML;
-        if (!xml)
-            return locale;
-        if (xml.evaluate("count(/locales/" + locale + ")", xml, null, XPathResult.ANY_TYPE, null).numberValue)
-            return locale;
-        return xml.evaluate("/locales/*[@default]", xml, null, XPathResult.ANY_TYPE, null).iterateNext().nodeName.toLowerCase();
+
+        if (request.status == 200)
+            DataSource.data = request.responseXML;
+        if (!DataSource.data
+                && request.status != 404)
+            throw new Error("Locale not available");
+        
+        DataSource.locales = [];
+        if (!DataSource.data)
+            return;
+        
+        var xml = DataSource.data;
+        var nodes = xml.evaluate("/locales/*", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+        for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
+            var name = node.nodeName.toLowerCase();
+            DataSource.locales.push(node.nodeName);
+        }
+        
+        locale = DataSource.locale;
+        if (!xml.evaluate("count(/locales/" + locale + ")", xml, null, XPathResult.ANY_TYPE, null).numberValue)
+            locale = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.ANY_TYPE, null).iterateNext().nodeName.toLowerCase();
+        if (!locale)
+            throw new Error("Locale not available");
+        DataSource.locale = locale;
     })();
+    
+    /**
+     *  Changes the localization of the DataSource.
+     *  Only locales from locales.xml can be used, other values cause an
+     *  exception.
+     *  @para  locale
+     *  @throws Error in the case of invalid locales
+     */
+    DataSource.localize = function(locale) {
+        
+        if (!DataSource.data
+                || !DataSource.locales) 
+            throw new Error("Locale not available");
+
+        locale = (locale || "").trim().toLowerCase();
+        if (!locale
+                || !DataSource.locales.includes(locale))
+            throw new Error("Locale not available");
+
+        DataSource.locale = locale;
+    };
     
     /**
      *  Transforms an XMLDocument based on a passed stylesheet.

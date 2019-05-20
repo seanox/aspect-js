@@ -1,7 +1,9 @@
-1.0.1 2019xxxx
+1.1.0 2019xxxx
   BF: Build: Optimization/correction when creating releases 
   BF: DataSource: Correction if no DataSource exists
-  BF: Message: Correction if no DataSource exists
+  BF: Messages: Correction if no DataSource exists
+  CR: DataSource: Added the changing of localization via DataSource.localize(locale)
+  CR: Messages: Added the changing of localization via DataSource.localize(locale)
   
 1.0.0 20190515
   NT: Release is available 

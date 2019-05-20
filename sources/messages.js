@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.0 20190518
+ *  Messages 1.0 20190520
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190518
+ *  @version 1.0 20190520
  */
 if (typeof Messages === "undefined") {
     
@@ -81,34 +81,38 @@ if (typeof Messages === "undefined") {
      *  or label-value data.
      */
     Messages = {};
-
+    
     (function() {
 
-        var root = window.location.pathname;
-        var data = (root + "/data").replace(/\/+/g, "/");
-        var request = new XMLHttpRequest();
-        request.open("GET", DataSource.DATA + "/locales.xml", false);
-        request.overrideMimeType("application/xslt+xml");
-        request.send();
-        var xml = request.responseXML;
-        if (!xml)
-            return;
+        //Messages are based on DataSources.
+        //To initialize, the DataSource.localize method must be overwritten and
+        //loading of the key-value pairs is embedded.
+        var localize = DataSource.localize;
+        DataSource.localize = function(locale) {
+            for (var property in Messages)
+                if (typeof Messages[property] == "string")
+                    delete Messages[property];
+            DataSource.localize.internal(locale);
 
-        var xpath = "(/locales/*[@default])[1]/label";
-        var locale = (navigator.browserLanguage || navigator.language || "").trim().toLowerCase();
-        locale = locale.match(/^([a-z]+)/);
-        if (locale)
-            xpath = xpath.replace(/(^\()/, "$1/locales/" + locale[0] + "|");
-
-        var label = xml.evaluate(xpath, xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-        for (var node = label.iterateNext(); node; node = label.iterateNext()) {
-            var key = (node.getAttribute("key") || "").trim();
-            if (key == "")
-                continue;
-            var value = ((node.getAttribute("value") || "").trim()
-                    + " " + (node.textContent).trim()).trim();
-            value = value.unescape();
-            Messages[key] = value;
-        }
+            var xpath = "/locales/" + DataSource.locale + "/label";
+            var label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+            for (var node = label.iterateNext(); node; node = label.iterateNext()) {
+                var key = (node.getAttribute("key") || "").trim();
+                if (key == "")
+                    continue;
+                var value = ((node.getAttribute("value") || "").trim()
+                        + " " + (node.textContent).trim()).trim();
+                value = value.unescape();
+                Messages[key] = value;
+            }
+        };
+        
+        DataSource.localize.internal = localize;
+        
+        if (DataSource.data
+                && DataSource.locale
+                && DataSource.locales
+                && DataSource.locales.includes(DataSource.locale))
+            DataSource.localize(DataSource.locale);
     })();
 };
