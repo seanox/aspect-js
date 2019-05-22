@@ -19,7 +19,7 @@
     * [Tag](markup.md#tag)   
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
-*[DataSource](datasource.md)
+* [DataSource](datasource.md)
   * [Data Storage](datasource.md#data-storage)
   * [Locales](datasource.md#locales)
   * [Locator](datasource.md#locator)
