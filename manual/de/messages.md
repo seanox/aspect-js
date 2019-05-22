@@ -52,3 +52,12 @@ Messages["contact.title"];
 ```html
 <h1 output="{{Messages['contact.title']}}"/>
 ```
+
+Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geänder
+werden.  
+Akzeptiert werden nur Gebietsschemen, die mit der DataSource verfügbar sind,
+andere Angaben führen beim Methoden-Aufruf zu einem Fehler.
+
+```javascript
+DataSource.localize("de");
+```

@@ -50,3 +50,11 @@ Messages["contact.title"];
 ```html
 <h1 output="{{Messages['contact.title']}}"/>
 ```
+
+At runtime, the language can be changed via JavaScript with the locale.  
+Only locales that are available with the DataSource are accepted. Other values
+cause an error when the method is called.
+
+```javascript
+DataSource.localize("de");
+```

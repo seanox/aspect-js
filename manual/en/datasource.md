@@ -79,9 +79,16 @@ The language is selected automatically on the basis of the language setting of
 the browser. If the language set there is not supported, the language declared
 as `default` is used.
 
-The available language information can be queried with the property
-`DataSource.locale`.
+The available language informations can be queried with the property
+`DataSource.locale` and `DataSource.locales`.
 
+At runtime, the language can be changed via JavaScript with the locale.  
+Only locales that are available with the DataSource are accepted. Other values
+cause an error when the method is called.
+
+```javascript
+DataSource.localize("de");
+```
 
 ## Locator
 
