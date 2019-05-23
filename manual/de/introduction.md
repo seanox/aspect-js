@@ -44,9 +44,9 @@ oder
 ```
 
 __Das Framework ist zur Implementierung modularer und komponentenbasierter__
-__Single-Page-Applications entwickelt worden.__  
-__Für das automatisch Laden von Ressourcen, Module und Daten ist die__
-__Verwendung eines Web-Servers erforderlich.__
+__Single-Page-Applications entwickelt worden. Durch das automatische Laden__
+__von Ressourcen, Module und Daten ist die Verwendung eines Web-Servers__
+__erforderlich.__
 
 
 ## Arbeitsbereich
