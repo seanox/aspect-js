@@ -4,6 +4,7 @@
   BF: Messages: Correction if no DataSource exists
   CR: DataSource: Added the changing of localization via DataSource.localize(locale)
   CR: Messages: Added the changing of localization via DataSource.localize(locale)
+  CR: Project: Added support for jsdelivr.com (beta)
   
 1.0.0 20190515
   NT: Release is available 

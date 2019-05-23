@@ -128,12 +128,14 @@
     </concat>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" flags="g" replace="\1" byline="false"/>
+    <copy file="${release.dev}" tofile="${workspace.releases}/${ant.project.name}.js" overwrite="true"/>
     
     <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.major}.x-min.js"/>
     <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
     <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <compress-javascript file="${release.min}"/>
-
+    <copy file="${release.min}" tofile="${workspace.releases}/${ant.project.name}-min.js" overwrite="true"/>
+    
     <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
     <copy file="LICENSE" tofile="${workspace.releases}/license.txt"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
@@ -171,11 +173,15 @@
     <delete dir="${workspace.releases}/temp"/>
     
     <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}.js"/>
+      <fileset dir="${workspace.releases}" includes="${ant.project.name}-min.js"/>
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}-src.zip"/>
       <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}.zip"/>
-    </touch>         
+    </touch>
+    
+    <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\1${release.version}\2" byline="false"/>  
   </target>
   
   <target name="test-min" depends="archive">
@@ -184,5 +190,5 @@
   
   <target name="test-dev" depends="archive">
     <copy file="${release.dev}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
-  </target>  
+  </target>
 </project>
