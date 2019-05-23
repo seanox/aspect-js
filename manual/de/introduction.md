@@ -43,6 +43,12 @@ oder
 <script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js"></script>
 ```
 
+__Das Framework ist zur Implementierung modularer und komponentenbasierter__
+__Single-Page-Applications entwickelt worden.__  
+__Für das automatisch Laden von Ressourcen, Module und Daten ist die__
+__Verwendung eines Web-Servers erforderlich.__
+
+
 ## Arbeitsbereich
 
 Seanox aspect-js agiert ausschliesslich im BODY-Tag, welches selbt mit

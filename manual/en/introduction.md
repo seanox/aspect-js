@@ -43,6 +43,11 @@ or
 <script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js"></script>
 ```
 
+__The framework has been developed for the implementation of modular and__
+__component-based single-page applications.__  
+__To load resources, modules, and data automatically, you must use a web__
+__server.__
+
 
 ## Scope
 
