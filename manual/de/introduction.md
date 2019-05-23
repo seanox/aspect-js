@@ -33,14 +33,14 @@ Erstelle eine HTML-Datei, z.B. _index.html_ und füge Seanox apect-js ein.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js"></script>
 ```
 
 oder
 
 ```html
 <!-- production version, optimized in size but not obfuscated -->
-<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js"></script>
 ```
 
 ## Arbeitsbereich
@@ -100,10 +100,10 @@ Expressions können zur Laufzeit globale Variablen erzeugen und nutzen.
 ## Attribute
 
 Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt und
-kann mit allen HTML-Elementen verwendet werden, ausgenommen sind `SCRIPT`, was
-nur mit dem Typ `composite/javascript` unterstützt wird, sowie `STYLE`,
-welches nicht unterstützt wird. Die Werte der Attribute können statische oder
-mit Verwendung der Expression-Language dynamisch sein.
+kann mit allen HTML-Elementen und in Kombination verwendet werden. Ausgenommen
+sind `SCRIPT`, was nur mit dem Typ `composite/javascript` unterstützt wird,
+sowie `STYLE`, welches nicht unterstützt wird. Die Werte der Attribute können
+statische oder mit Verwendung der Expression-Language dynamisch sein.
 Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
@@ -201,31 +201,19 @@ ist als Composite-JavaScript möglich.
 ### interval
 
 Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
-HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
-Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
-formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
-nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
-Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
-JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
-aber als exakt zu verstehen.
-Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
-verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
-Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
+HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss. Als
+Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
+formuliert werden kann. Ein ungültiger Wert verursacht eine Konsolenausgabe.
+Das Intervall beginnt automatisch mit dem Auffrischen vom deklarierten
+HTML-Element und wird beendet bzw. entfernt wenn:
 - das Element nicht mehr im DOM existiert
 - das condition-Attribut `false` ist
-
-Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
-HTML-Code als Vorlage verwendet und während der Intervalle zuerst der innere
-HTML-Code geleert, die Vorlage mit jedem Intervall-Zyklus einzeln generiert und
-das Ergebnis dem inneren HTML-Code hinzugefügt.
 
 ```html
 <p interval="1000">
   {{new Date().toLocaleTimeString()}}
 </p>
 ```
-
-Das SPAN-Element wird alle 1000ms aktualisiert.
 
 Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
 eines permanenten Zählers sehr einfach.

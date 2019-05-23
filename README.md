@@ -65,8 +65,14 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Release Channels
-[https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js)  
-[https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js)  
+
+## latest release
+[https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js)  
+[https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js)
+
+## latest release of major version 1.x
+[https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x.js)  
+[https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x-min.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x-min.js)
 
 The release channels continuously provide the newest final major versions, which
 are downward compatible to the major version. Seanox aspect-js is always up to

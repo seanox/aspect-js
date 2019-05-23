@@ -33,14 +33,14 @@ release channel.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js"></script>
 ```
 
 or
 
 ```html
 <!-- production version, optimized in size but not obfuscated -->
-<script src="https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.x-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js"></script>
 ```
 
 
@@ -97,11 +97,11 @@ Expressions can create and use global variables at runtime.
 
 ## Attribute
 
-The declarative approach in aspect-js is primarily implemented with attributes
-and can be used with all HTML elements except `SCRIPT`, which is only supported
-with the type `composite/javascript`, and `STYLE`, which is not supported.
-The values of the attributes can be static or dynamic when the expression
-language is used.  
+The declarative approach is primarily implemented using attributes in aspect-js
+and can be used with all HTML elements and in combination. Excluded are
+`SCRIPT`,  which is only supported with the type `composite/javascript`, and
+`STYLE`, which is not supported. The values of the attributes can be static or
+dynamic when the expression language is used.   
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
