@@ -2,13 +2,13 @@
 
 DataSource ist ein NoSQL-Ansatz zur Datenspeicherung auf Basis von XML-Daten in
 Kombination mit mehrsprachiger Datentrennung, optionaler Aggregation und
-Transformation. Es ist eine Kombination von Ansätzen einer Read-only-Datenbank
+Transformation. Es ist eine Kombination von Ansätzen einer read-only-Datenbank
 und einem CMS.
 
 Die DataSource basiert auf statischen Daten. Daher verwendet die Implementierung
 einen Cache, um den Netzwerkzugriff zu minimieren.
 
-Die Daten werden mit XPath abgefragt, das Ergebnis kann verkettet, aggregiert
+Die Daten werden per XPath abgefragt, das Ergebnis kann verkettet, aggregiert
 und per XSLT transformiert werden.
 
 _Warum wird der Begriff NoSQL verwendet?_

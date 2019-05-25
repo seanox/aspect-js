@@ -303,4 +303,49 @@ which sets the targets.
 [Learn more](markup.md#render)
 
 
+### validate
+
+The `validate` attribute requires the combination with the `events` attribute.
+Together they define and control the synchronization between the markup of a
+Composites and the corresponding JavaScript model.  
+If `validate` is used, the JavaScript model must implement a corresponding
+validate method: `boolean Model.validate(element, value)`.  
+The return value must be a Boolean value and so only the return value `true`
+synchronizes the value from the composite into the JavaScript model.  
+A general strategy or standard implementation for error output is deliberately
+not provided, as this is too strict in most cases and can be implemented
+individually as a central solution with little effort.
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate events="mouseup keyup change" render="#Model"/>
+  Model.text1: {{Model.text1}}  
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+[Learn more](markup.md#validate)
+
+
+## DataSource
+
+DataSource is a NoSQL approach to data storage based on XML data in combination
+with multilingual data separation, optional aggregation and transformation. A
+combination of the approaches of a read only database and a CMS.  
+The DataSource is based on static data that is queried using XPath and the
+result can be concatenated, aggregated and transformed using XSLT.
+
+[Learn more](datasource.md)
+
+
+## Resource Bundle (Messages)
+
+(Resource)Messages is a static [DataSource](datasource.md) extension for
+internationalization and localization. The implementation is based on a set of
+key-value or label-value data which is stored in the `locales.xml` of the
+DataSource.
+
+[Learn more](messages.md)
+
 TODO:

@@ -7,8 +7,8 @@ combination of the approaches of a read only database and a CMS.
 DataSource is based on static data. Therefore, the implementation uses a cache
 to minimize network access.
  
-The data is queried with XPath, the result can be concatenated and aggregated
-and the result can be transformed with XSLT.
+The data is queried via XPath, the result can be concatenated and aggregated and
+the result can be transformed with XSLT.
 
 _Why the term NoSQL is used?_
 
