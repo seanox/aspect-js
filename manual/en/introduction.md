@@ -171,4 +171,136 @@ content from the [DataSource](datasource.md).
 
 [Learn more](markup.md#import)
 
+
+### condition
+
+The condition attribute determines whether an element remains in the DOM. 
+The expression passed to the attribute must explicitly return `true` or
+`false`. With `false` an element is temporarily removed from the DOM and can
+be re-inserted later by refreshing the __parent element__ if the expression
+returns `true`.
+A peculiarity is the combination with the attribute
+[interval](markup.md#interval), because with the removal of the element from the
+DOM also the corresponding timer is terminated. If the element is inserted into
+the DOM again with a later refresh, the timer starts again from the beginning
+and is therefore not continued.
+
+```html
+<article condition="{{Model.visible}}">
+  ...
+</article>
+```
+
+The use of the condition attribute in combination with embedded JavaScript is
+possible as composite JavaScript.
+
+```html
+<script type="composite/javascript" condition="{{Model.visible}}">
+  ...
+</script>
+```
+
+[Learn more](markup.md#condition)
+
+
+### interval
+
+This declaration activates an interval-controlled refresh of an HTML element
+without having to trigger the refresh manually.
+As value an interval in milliseconds is expected, which can also be formulated
+as expression. Processing is concurrent or asynchronous, but not parallel. Means
+that the processing is to start after the set time interval, but this does not
+start until a JavaScript procedure started before has been completed. For this
+reason, the interval is to be understood as near real-time, but not as exact.  
+The interval attribute expects a value in milliseconds. An invalid value causes
+console output. The interval starts automatically with refreshing the declared
+HTML element and will terminated and/or removed when:  
+- The element no longer exists in the DOM.
+- the condition attribute is `false  
+
+```html
+<p interval="1000">
+  {{new Date().toLocaleTimeString()}}
+</p>
+```
+
+With the combination of interval and variable expression, the implementation of
+a permanent counter is very simple.
+
+```html
+{{counter:0}}
+<p interval="1000">
+  {{counter:parseInt(counter) +1}}^
+  {{counter}}
+</p>
+```
+
+The interval attribute can be used in combination with embedded JavaScript as
+composite JavaScript.
+
+```html
+<script type="composite/javascript" interval="1000">
+  console.log(new Date().toLocaleTimeString());
+</script>
+```
+
+[Learn more](markup.md#interval)
+
+
+### composite
+
+Marks an element in the markup as [Composite](composites.md).  
+Composites are modular components and have a versatile meaning in aspect-js.  
+They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
+virtual paths in the face flow, which has a direct effect of the visibility of
+the composites.
+The [Model View Controler](mvc.md#sitemap) supports automatic
+[object/model binding](object-binding.md) for composites.  
+The resources (CSS, JS, Markup) for composites can be outsourced to the module
+directory and are only loaded automatically when necessary.
+
+```html
+<article composite>
+  ...
+</article>
+```
+
+[Learn more](markup.md#composite)
+
+
+### events
+
+This declaration binds one or more events
+(see https://www.w3.org/TR/DOM-Level-3-Events) to an HTML element. Events
+provide primary functions for event-driven refreshing of other HTML elements
+(see [render](markup.md#render) for more information), and for validating and
+synchronizing and synchronization of HTML elements with the corresponding
+JavaScript models (see [validate](markup.md#validate) for more information). 
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+    events="mouseup keyup change" render="#output1"/>
+```
+
+[Learn more](markup.md#events)
+
+
+### render
+
+The `render` attribute requires the combination with the `events` attribute.
+Together they define which targets with which occurring events
+be refreshed.  
+The `render` attribute expects a CSS selector or query selector as value.
+which sets the targets.
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+    events="mouseup keyup change" render="#output1"/>
+```
+
+[Learn more](markup.md#render)
+
+
 TODO:

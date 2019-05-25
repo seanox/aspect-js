@@ -247,9 +247,64 @@ ist als Composite-JavaScript möglich.
 
 ### composite
 
+Kennzeichnet im Markup ein Element als [Composite](composites.md).  
+Composites sind modulare Komponente und haben in aspect-js eine vielseitige
+Bedeutung.  
+Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
+virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
+Sichtbarkeit der Composites hat.
+Der [Model View Controler](mvc.md#sitemap) unterstützt für Composites eine
+automatisches [Objekt-/Model-Binding](object-binding.md).  
+Die Ressourcen (CSS, JS, Markup) lassen sich für Composite in das
+Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
+
+```html
+<article composite>
+  ...
+</article>
+```
+
+Details zur Verwendung von Composites / modularen Komponente werden in den
+Abschnitten [Composites](composites.md) und [Model View Controler](mvc.md)
+beschrieben.
+
+[Mehr erfahren](markup.md#composite)
+
+
 ### events
 
-### render   
+Diese Deklaration bindet ein oder mehre Ereignisse (siehe
+https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
+eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
+HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
+und Synchronisation von HTML-Elementen und den korrespondierenden
+JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).  
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+    events="mouseup keyup change" render="#output1"/>
+```
+
+[Mehr erfahren](markup.md#events)
+
+
+### render
+
+Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
+Zusammen definieren sie, welche Ziele mit welchen auftretenden Events
+aufgefrischt werden.  
+Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
+welche die Ziele festlegt.
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+    events="mouseup keyup change" render="#output1"/>
+```
+
+[Mehr erfahren](markup.md#render)
+ 
 
 ### validate  
 
