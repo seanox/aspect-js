@@ -4,21 +4,21 @@ Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung.
 
 ```
-+-------------------------------------------+--------------+-----------------------------+
-|  View                                     |  Controller  |  Model                      |
-+-------------------------------------------+--------------+-----------------------------+
-|  Markup                                   |  Composite   |  JavaScript                 |
-|                                           |  Path        |                             |
-|                                           |  SiteMap     |                             |
-+-------------------------------------------+--------------+-----------------------------+
-|  <form id="model" composite>              |  aspect-js   |  var model = {              |
-|    <input id="message" events="change"/>  |              |    message:"",              | 
-|    <button id="submit"/>                  |              |    submit: {                |
-|  </form>                                  |              |      onClick: function() {  |
-|                                           |              |      }                      |
-|                                           |              |    }                        |
-|                                           |              |  }                          |
-+-------------------------------------------+--------------+-----------------------------+
++-------------------------------------------+--------------+---------------------------------+
+|  View                                     |  Controller  |  Model                          |
++-------------------------------------------+--------------+---------------------------------+
+|  Markup                                   |  Composite   |  JavaScript                     |
+|                                           |  Path        |                                 |
+|                                           |  SiteMap     |                                 |
++-------------------------------------------+--------------+---------------------------------+
+|  <form id="model" composite>              |  aspect-js   |  var model = {                  |
+|    <input id="message" events="change"/>  |              |      message:"",                | 
+|    <button id="submit"/>                  |              |      submit: {                  |
+|  </form>                                  |              |          onClick: function() {  |
+|                                           |              |          }                      |
+|                                           |              |      }                          |
+|                                           |              |  }                              |
++-------------------------------------------+--------------+---------------------------------+
 ```
 
 
