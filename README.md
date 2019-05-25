@@ -86,8 +86,13 @@ date when using the release channels.
 - [Manual EN](https://github.com/seanox/aspect-js/blob/master/manual/en) in progress
 
 # Changes (Change Log)
-## 1.0.0 20190515 (summary of the current version)  
-NT: Release is available  
+## 1.1.0 2019xxxx (summary of the next version)  
+BF: Build: Optimization/correction when creating releases  
+BF: DataSource: Correction if no DataSource exists  
+BF: Messages: Correction if no DataSource exists  
+CR: DataSource: Added the changing of localization via DataSource.localize(locale)  
+CR: Messages: Added the changing of localization via DataSource.localize(locale)  
+CR: Project: Added support for jsdelivr.com (beta)  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
