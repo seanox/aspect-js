@@ -1,9 +1,10 @@
 # Resource Bundle (Messages)
 
-(Resource)Messages ist eine statische DataSource-Erweiterung für
-Internationalisierung und Lokalisierung. Die Implementierung basiert auf einer
-Menge von Schlüssel-Wert-Paaren in Form von Label-Elementen, die in der Datei
-`locales.xml` in der DataSource definiert werden.
+(Resource)Messages ist eine statische Erweiterung der
+[DataSource](datasource.md) für Internationalisierung und Lokalisierung.  
+Die Implementierung basiert auf einer Menge von Schlüssel-Wert-Paaren in Form
+von Label-Elementen, die in der Datei `locales.xml` in der DataSource
+definiert werden.
 
 ```
 +- data

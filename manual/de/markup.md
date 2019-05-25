@@ -50,10 +50,10 @@ Details zu Syntax und Verwendung werden im Abschnitt
 ## Attribute
 
 Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt und
-kann mit allen HTML-Elementen verwendet werden, ausgenommen sind `SCRIPT`, was
-nur mit dem Typ `composite/javascript` unterstützt wird, sowie `STYLE`,
-welches nicht unterstützt wird. Die Werte der Attribute können statische oder
-mit Verwendung der Expression-Language dynamisch sein.
+kann mit allen HTML-Elementen und in Kombination verwendet werden. Ausgenommen
+sind `SCRIPT`, was nur mit dem Typ `composite/javascript` unterstützt wird,
+sowie `STYLE`, welches nicht unterstützt wird. Die Werte der Attribute können
+statische oder mit Verwendung der Expression-Language dynamisch sein.
 Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
@@ -176,8 +176,9 @@ eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
 eine absolute oder relative URL zu einer entfernten Ressource, die per
-HTTP-Methode GET nachgeladen wird, oder eine DataSource-URL die einen Inhalt aus
-der DataSource lädt und transformiert, erwartet.
+HTTP-Methode GET nachgeladen wird, oder eine
+[DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
+[DataSource](datasource.md) lädt und transformiert, erwartet.
 
 In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -231,7 +232,7 @@ Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
 </article>
 ```
 
-Beispiel für den Import einer DataSource-Ressource.  
+Beispiel für den Import per DataSource-URL.  
 Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
 abgeleitet. 
 
@@ -245,9 +246,9 @@ abgeleitet.
 </article>
 ```
 
-Beispiel für den Import einer DataSource-Ressource mit spezifischer Daten- und
-Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit
-dem DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
+Beispiel für den Import per DataSource-URL mit spezifischer Daten- und
+Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit dem
+DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
 verwendet, von denen der erste aus die Daten und der zweite auf die
 Transformation verweist.
 
@@ -367,8 +368,8 @@ var Model = {
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
 HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine DataSource-URL die einen Inhalt aus der DataSource lädt und transformiert,
-erwartet.
+eine [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
+[DataSource](datasource.md) lädt und transformiert, erwartet.
 
 In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -410,7 +411,7 @@ var Model = {
 </article>
 ```
 
-Beispiel für den Output einer DataSource-Ressource.  
+Beispiel für den Output per DataSource-URL.  
 Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
 abgeleitet. 
 
@@ -424,9 +425,9 @@ abgeleitet.
 </article>
 ```
 
-Beispiel für den Output einer DataSource-Ressource mit spezifischer Daten- und
-Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit
-dem DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
+Beispiel für den Output per DataSource-URL mit spezifischer Daten- und
+Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit dem
+DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
 verwendet, von denen der erste aus die Daten und der zweite auf die
 Transformation verweist.
 

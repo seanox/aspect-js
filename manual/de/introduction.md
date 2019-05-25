@@ -45,7 +45,7 @@ oder
 
 __Das Framework ist zur Implementierung modularer und komponentenbasierter__
 __Single-Page-Applications entwickelt worden. Durch das automatische Laden__
-__von Ressourcen, Module und Daten ist die Verwendung eines Web-Servers__
+__von Ressourcen, Modulen und Daten ist die Verwendung eines Web-Servers__
 __erforderlich.__
 
 
@@ -122,8 +122,8 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
 HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine DataSource-URL die einen Inhalt aus der [DataSource](datasource.md) lädt
-und transformiert, erwartet.
+eine [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
+[DataSource](datasource.md) lädt und transformiert, erwartet.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -149,8 +149,9 @@ eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
 eine absolute oder relative URL zu einer entfernten Ressource, die per
-HTTP-Methode GET nachgeladen wird, oder eine DataSource-URL die einen Inhalt aus
-der DataSource lädt und transformiert, erwartet.
+HTTP-Methode GET nachgeladen wird, oder eine
+[DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
+[DataSource](datasource.md) lädt und transformiert, erwartet.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}

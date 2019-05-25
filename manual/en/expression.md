@@ -203,8 +203,8 @@ All types of expressions can be combined.
 
 Expressions are interpreted by the renderer that starts after loading the page.
 So expressions can be visible when loading the page. We recommend that you swap
-the data to the DataSource and use the attributes [output](markup.md#output) and
-[import](markup.md#import) in the markup.
+the data to the [DataSource](datasource.md) and use the attributes
+[output](markup.md#output) and [import](markup.md#import) in the markup.
 
 ```css
 h1:after {

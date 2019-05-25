@@ -48,11 +48,11 @@ Details about syntax and usage are described in the section
 
 ## Attributes
 
-The declarative approach in aspect-js is primarily implemented with attributes
-and can be used with all HTML elements except `SCRIPT`, which is only supported
-with the type `composite/javascript`, and `STYLE`, which is not supported.
-The values of the attributes can be static or dynamic when the expression
-language is used.  
+The declarative approach is primarily implemented using attributes in aspect-js
+and can be used with all HTML elements and in combination. Excluded are
+`SCRIPT`,  which is only supported with the type `composite/javascript`, and
+`STYLE`, which is not supported. The values of the attributes can be static or
+dynamic when the expression language is used.  
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
@@ -173,8 +173,9 @@ This declaration loads content dynamically and replaces the inner HTML code of
 an element. If the content was successfully loaded, the `import` attribute is
 removed. The attribute expects as value one element or more elements as NodeList
 or Array -- these are then inserted directly, or an absolute or relative URL to
-a remote resource that is loaded by HTTP method GET, or a DataSource URL that
-loads and transforms content from the DataSource.
+a remote resource that is loaded by HTTP method GET, or a
+[DataSource-URL (locator)](datasource.md#locator) that loads and transforms
+content from the [DataSource](datasource.md).
 
 In all cases, the import attribute can be combined with the condition attribute
 and is only executed when the condition is `true`.
@@ -227,7 +228,7 @@ Example of importing a remote resource using the HTTP method GET.
 </article>
 ```
 
-Example of Importing a DataSource Resource.  
+Example of importing via DataSource-URL.  
 If only one URL is specified, the data and transformation URLs are derived from
 it. 
 
@@ -241,7 +242,7 @@ it.
 </article>
 ```
 
-Example of importing a DataSource resource with a specific data URL and
+Example of importing a DataSource-URL with a specific data URL and
 transformation URL. The blank character is used for separation. Both URLs must
 begin with the DataSource protocol and only the first two entries are used from
 which the first refers to the data and the second to the transformation.
@@ -361,8 +362,9 @@ var Model = {
 
 The attribute output the value or result of its expression as an inner HTML code
 for an HTML element. As value are expected one element or more elements as
-NodeList or Array -- these are then inserted directly, or a DataSource URL which
-loads and transforms content from the DataSource.
+NodeList or Array -- these are then inserted directly, or a
+[DataSource-URL (locator)](datasource.md#locator) which loads and transforms
+content from the [DataSource](datasource.md).
 
 In all cases, the output attribute can be combined with the condition attribute
 and is only executed when the condition is `true`.
@@ -403,7 +405,7 @@ var Model = {
 </article>
 ```
 
-Example of the output of a DataSource resource.  
+Example of the output via DataSource-URL.  
 If only one URL is specified, the data and transformation URLs are derived from it. 
 
 ```html
@@ -416,7 +418,7 @@ If only one URL is specified, the data and transformation URLs are derived from 
 </article>
 ```
 
-Example of the output of a DataSource resource with a specific data URL and
+Example of the output via DataSource-URL with a specific data URL and
 transformation URL. The blank character is used for separation. Both URLs must
 begin with the DataSource protocol and only the first two entries are used from
 which the first refers to the data and the second to the transformation.

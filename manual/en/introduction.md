@@ -98,8 +98,10 @@ Expressions can create and use global variables at runtime.
 </p>
 ```
 
+[Learn more](expression.md)
 
-## Attribute
+
+## Attributes
 
 The declarative approach is primarily implemented using attributes in aspect-js
 and can be used with all HTML elements and in combination. Excluded are
@@ -109,5 +111,64 @@ dynamic when the expression language is used.
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
+
+[Learn more](markup.md#attributes)
+
+
+### output
+
+The attribute output the value or result of its expression as an inner HTML code
+for an HTML element. As value are expected one element or more elements as
+NodeList or Array -- these are then inserted directly, or a
+[DataSource-URL (locator)](datasource.md#locator) which loads and transforms
+content from the [DataSource](datasource.md).
+
+```html
+<p output="Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+
+<p output="xml:/example/content">
+  loading resource...  
+</p>
+
+<p output="xml:/example/data xslt:/example/style">
+  loading resource...  
+</p>
+```
+
+[Learn more](markup.md#output)
+
+
+### import
+
+This declaration loads content dynamically and replaces the inner HTML code of
+an element. If the content was successfully loaded, the `import` attribute is
+removed. The attribute expects as value one element or more elements as NodeList
+or Array -- these are then inserted directly, or an absolute or relative URL to
+a remote resource that is loaded by HTTP method GET, or a
+[DataSource-URL (locator)](datasource.md#locator) that loads and transforms
+content from the [DataSource](datasource.md).
+
+```html
+<p output="Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+
+<p output="xml:/example/content">
+  loading resource...  
+</p>
+
+<p output="xml:/example/data xslt:/example/style">
+  loading resource...  
+</p>
+
+<p import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
+  loading resource...  
+</p>
+
+```
+
+[Learn more](markup.md#import)
 
 TODO:
