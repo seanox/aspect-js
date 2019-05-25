@@ -320,7 +320,6 @@ Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       validate events="mouseup keyup change" render="#Model"/>
-  Model.text1: {{Model.text1}}  
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
