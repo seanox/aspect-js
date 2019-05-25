@@ -31,7 +31,7 @@ Expression Language is not supported.
   * [Element-Expression](#element-expression)
   * [Variablen-Expression](#variable-expression)    
   * [Combination](#combination)    
-* [Usage](#usage)
+* [Supplement](#supplement)
   
 
 ## Elements
@@ -199,7 +199,7 @@ All types of expressions can be combined.
 ```
 
 
-## Usage
+## Supplement
 
 Expressions are interpreted by the renderer that starts after loading the page.
 So expressions can be visible when loading the page. We recommend that you swap

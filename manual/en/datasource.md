@@ -26,7 +26,7 @@ similar to SQL.
 * [fetch](#fetch)
 * [transform](#transform)
 * [collect](#collect)
-* [Usage](#usage)
+* [Supplement](#supplement)
 
 
 ## Data Storage
@@ -304,7 +304,7 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
 ```
 
 
-## Usage
+## Supplement
 
 The DataSource can also be used directly in the markup with the attributes
 [import](markup.md#import) and [output](markup.md#output).

@@ -208,13 +208,16 @@ ist als Composite-JavaScript möglich.
 ### interval
 
 Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
-HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss. Als
-Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
-formuliert werden kann. Ein ungültiger Wert verursacht eine Konsolenausgabe.
-Das Intervall beginnt automatisch mit dem Auffrischen vom deklarierten
-HTML-Element und wird beendet bzw. entfernt wenn:
-- das Element nicht mehr im DOM existiert
-- das condition-Attribut `false` ist
+HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
+Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
+formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
+nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
+Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
+JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
+aber als exakt zu verstehen.
+Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
+verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch und aktiv, so
+lange das Element im DOM existiert.
 
 ```html
 <p interval="1000">
@@ -457,6 +460,65 @@ Weitere Bestandteile der SiteMap sind die Navigation und ein Permission Concept.
 
 TODO:
 
+
+### Object-/Model-Binding
+
+TODO:
+
+
+## Komponenten
+
+Die Implementierung von aspect-js zielt auf eine modulare und auf Komponenten
+basierte Architektur. Das Framework unterstützt dazu eine deklarative
+Kennzeichnung von Komponenten im Markup, die Auslagerung und das automatische
+Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
+
+Eine Komponente besteht im initialen Markup aus einem als Composite
+gekennzeichneten HTML-Element mit einer eindeutigen Id.
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="aspect-js.js"></script>
+  </head>
+  <body>
+    <div id="example" composite></div>
+  </bod>
+</html>
+````
+
+Das innere Markup, CSS und JavaScript lassen sich ins Dateisystem auslagern.  
+Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
+`Composite.MODULES` geändert werden.
+
+```
++- modules
+|  |
+|  +- example.css
+|  +- example.js
+|  +- example.html
+|
++- index.html
+```
+
+Das Laden der Ressourcen und die Objekt/Model-Bindung erfolgt partiell, wenn die
+Komponente im UI benötigt wird -- also mit der ersten Anzeige, was über die
+[SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert wird und so
+die Ladezeit stark minimiert, da punktuell jeweils nur für die aktiven
+UI-Komponenten benötigten Ressourcen geladen werden.  
+Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und lässt sich
+komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
+eine feste Reihenfolge: CSS, JS, HTML/Markup.  
+Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
+ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
+mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.  
+Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
+Komponente für das UI ausgeführt.
+
+Konzeptionell sind für die Implementierung von Komponenten die Entwurfsmuster
+Fassade und Delegation angedacht, die intern weitere Komponenten und Abstraktion
+verwenden.
 
 ### Object-/Model-Binding
 

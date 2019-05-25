@@ -27,7 +27,7 @@ Datenquelle, die funktional ähnlich wie SQL verwendet werden kann.
 * [fetch](#fetch)
 * [transform](#transform)
 * [collect](#collect)
-* [Verwendung](#verwendung)
+* [Ergänzung](#erg-nzung)
 
 
 ## Data Storage

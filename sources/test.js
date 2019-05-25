@@ -1032,6 +1032,5 @@ if (typeof Test === "undefined") {
                 trigger.initEvent(event, bubbles, cancel);
                 this.dispatchEvent(trigger);
             }; 
-        
     };
 };

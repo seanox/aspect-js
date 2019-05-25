@@ -213,10 +213,8 @@ that the processing is to start after the set time interval, but this does not
 start until a JavaScript procedure started before has been completed. For this
 reason, the interval is to be understood as near real-time, but not as exact.  
 The interval attribute expects a value in milliseconds. An invalid value causes
-console output. The interval starts automatically with refreshing the declared
-HTML element and will terminated and/or removed when:  
-- The element no longer exists in the DOM.
-- the condition attribute is `false  
+console output. The interval starts automatically and is active as long as the
+element exists in the DOM.  
 
 ```html
 <p interval="1000">
@@ -452,6 +450,16 @@ Further components of the SiteMap are the navigation and a permission concept.
 
 
 ### Virtual Paths
+
+TODO:
+
+
+### Object-/Model-Binding
+
+TODO:
+
+
+## Components
 
 TODO:
 

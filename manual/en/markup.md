@@ -276,7 +276,7 @@ The interval attribute expects a value in milliseconds. An invalid value causes
 console output. The interval starts automatically with refreshing the declared
 HTML element and will terminated and/or removed when:  
 - The element no longer exists in the DOM.
-- the condition attribute is `false  
+- the condition attribute is `false`  
 
 If an HTML element is declared as an interval, the original inner HTML code is
 used as a template, and during the intervals the inner HTML code is first
