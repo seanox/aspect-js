@@ -349,4 +349,66 @@ definiert werden.
 
 [Mehr erfahren](messages.md)
 
+
+## Model View Controller
+
+Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
+Interaktion, Daten und Darstellung.
+
+```
++-------------------------------------------+--------------+-----------------------------+
+|  View                                     |  Controller  |  Model                      |
++-------------------------------------------+--------------+-----------------------------+
+|  Markup                                   |  Composite   |  JavaScript                 |
+|                                           |  Path        |                             |
+|                                           |  SiteMap     |                             |
++-------------------------------------------+--------------+-----------------------------+
+|  <form id="model" composite>              |  aspect-js   |  var model = {              |
+|    <input id="message" events="change"/>  |              |    message:"",              | 
+|    <button id="submit"/>                  |              |    submit: {                |
+|  </form>                                  |              |      onClick: function() {  |
+|                                           |              |      }                      |
+|                                           |              |    }                        |
+|                                           |              |  }                          |
++-------------------------------------------+--------------+-----------------------------+
+```
+
+[Mehr erfahren](mvc.md)
+
+
+### Controller
+
+Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
+werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur Übermittlung
+der Interaktionen. Da dieser durch Betriebssystem und Browser bereitgestellt
+wird, bezieht sich der Controler in aspect-js vordergründig auf den
+Applikations-Controller, der Abläufe innerhalb einer Applikation (Face-Flow)
+steuert und das Binding von Markup und JavaScript sowie die Steuerung vom
+Datenfluss zwischen View und Model übernimmt.  
+In aspect-js ist der Controller die Zusammenarbeit von Composite, Paths und
+SiteMap.
+
+
+### Model
+
+Das Modell ist ein darstellbares/projezierbares Objekt.  
+Es empfängt (Status)Änderungen und Interaktionen der View, die durch den 
+Controler übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
+sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
+View zur Darstellung und Verwaltung der Zustände, für fachliche Funktionalität
+nimmt es weitere Komponenten in Anspruch.    
+In aspect-js werden die Modelle durch statische JavaScript-Objekte
+repräsentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
+und Delegation angedacht, so dass die statischen Modelle intern weitere
+Komponenten und Abstraktion verwenden.
+
+
+### View
+
+Die View ist ausschliesslich für die Darstellung bzw. Projektion eines Modells
+verantwortlich.  
+Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Models
+nicht eingeschränkt ist.  
+In aspect-js werden die Views durch das Markup repräsentiert.
+
 TODO:
