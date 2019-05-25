@@ -411,4 +411,44 @@ representation/projection, which will be explained later.
 In aspect-js the views are represented by the markup.
 
 
+## SiteMap
+
+The representation in aspect-js is multilayered and the views are organized as
+page, faces and facets which are accessed with virtual paths. For this purpose,
+SiteMap provides a hierarchical directory structure based on the virtual paths
+for all views. The SiteMap then controls the access and the visualization (show
+and hide) of the views, which is termed face-flow.  
+Face-flow and visualization are resolute and uses the DOM to insert and remove
+the views (faces and facets).
+
+```
++-----------------------------------------------+
+|  Page                                         |
+|  +-----------------------------------------+  |
+|  |  Face A / Partial Face A                |  |
+|  |  +-------------+       +-------------+  |  |
+|  |  |  Facet A1   |  ...  |  Facet An   |  |  |
+|  |  +-------------+       +-------------+  |  |
+|  |                                         |  |
+|  |  +-----------------------------------+  |  |
+|  |  |  Face AA                          |  |  |
+|  |  |  +-----------+     +-----------+  |  |  |
+|  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
+|  |  |  +-----------+     +-----------+  |  |  |
+|  |  +-----------------------------------+  |  |
+|  |  ...                                    |  |
+|  +-----------------------------------------+  |
+|  ...                                          |
+|  +-----------------------------------------+  |
+|  |  Face n                                 |  |
+|  |  ...                                    |  |
+|  +-----------------------------------------+  |
++-----------------------------------------------+
+```
+
+Further components of the SiteMap are the navigation and a permission concept.
+
+[Learn more](mvc.md#sitemap)
+
+
 TODO:

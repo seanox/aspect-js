@@ -411,4 +411,46 @@ Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Models
 nicht eingeschränkt ist.  
 In aspect-js werden die Views durch das Markup repräsentiert.
 
+
+## SiteMap
+
+Die Darstellung in aspect-js ist mehrschichtig und die Ansichten sind als Page,
+Faces und Facets organisiert, auf die über virtuelle Pfade zugegriffen wird. Zu
+diesem Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
+Verfügung, die auf den virtuellen Pfaden für alle Ansichten basiert. Die SiteMap
+steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Ansichten,
+den sogenannten Face-Flow.  
+Face-Flow und Visualisierung funktionieren resolut und verwenden das DOM zum
+Einfügen und Entfernen der Ansichten (Faces und Facets).
+
+```
++-----------------------------------------------+
+|  Page                                         |
+|  +-----------------------------------------+  |
+|  |  Face A / Partial Face A                |  |
+|  |  +-------------+       +-------------+  |  |
+|  |  |  Facet A1   |  ...  |  Facet An   |  |  |
+|  |  +-------------+       +-------------+  |  |
+|  |                                         |  |
+|  |  +-----------------------------------+  |  |
+|  |  |  Face AA                          |  |  |
+|  |  |  +-----------+     +-----------+  |  |  |
+|  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
+|  |  |  +-----------+     +-----------+  |  |  |
+|  |  +-----------------------------------+  |  |
+|  |  ...                                    |  |
+|  +-----------------------------------------+  |
+|  ...                                          |
+|  +-----------------------------------------+  |
+|  |  Face n                                 |  |
+|  |  ...                                    |  |
+|  +-----------------------------------------+  |
++-----------------------------------------------+
+```
+
+Weitere Bestandteile der SiteMap sind die Navigation und ein Permission Concept.
+
+[Mehr erfahren](mvc.md#sitemap)
+
+
 TODO:
