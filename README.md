@@ -92,7 +92,7 @@ BF: DataSource: Correction if no DataSource exists
 BF: Messages: Correction if no DataSource exists  
 CR: DataSource: Added the changing of localization via DataSource.localize(locale)  
 CR: Messages: Added the changing of localization via DataSource.localize(locale)  
-CR: Project: Added support for jsdelivr.com (beta)  
+CR: Project: Added support for jsdelivr.com  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
