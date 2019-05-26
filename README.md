@@ -80,10 +80,10 @@ date when using the release channels.
 
 
 # Manuals
-- [Introduction DE](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md) in progress
-- [Manual DE](https://github.com/seanox/aspect-js/blob/master/manual/de) in progress  
-- [Introduction EN](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md) in progress
-- [Manual EN](https://github.com/seanox/aspect-js/blob/master/manual/en) in progress
+- [Introduction DE](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md)
+- [Manual DE](https://github.com/seanox/aspect-js/blob/master/manual/de)  
+- [Introduction EN](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md)
+- [Manual EN](https://github.com/seanox/aspect-js/blob/master/manual/en)
 
 # Changes (Change Log)
 ## 1.1.0 2019xxxx (summary of the next version)  
