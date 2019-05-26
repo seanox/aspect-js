@@ -92,15 +92,16 @@ DataSource.localize("de");
 
 ## Locator
 
-Files are defined by locator.  
+The data in the data storage is addressed with a locator.  
 A locator is a URL (`xml://...` or `xslt://...`) that is used absolute and
 relative to the DataSource data storage, but does not contain a locale (language
-specification) in the path. The locale is determined automatically for the
-language setting of the browser, or if this is not supported, the standard from
-the `locales.xml` in the DataSource data storage is used.
+specification) and file extenstion in the path. The locale is determined
+automatically for the language setting of the browser, or if this is not
+supported, the standard from the `locales.xml` in the DataSource data storage
+is used.
 
-Each locator starts with a protocol. The protocol defines the file extension of
-the files in the data storage.
+Each locator starts with a protocol that corresponds to the file extension in
+the data storage. 
 
 ```
 xml://fileA -> ./data/en/fileA.xml
