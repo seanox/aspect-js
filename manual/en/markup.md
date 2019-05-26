@@ -1,3 +1,5 @@
+[Motivation](motivation.md) | [TOC](README.md) | [Expression Language](expression.md)
+
 # Markup
 
 With aspect-js the declarative approach of HTML is taken up and extended.  
@@ -650,3 +652,5 @@ Composite.customize(function(element) {
     ...
 });
 ```
+
+[Motivation](motivation.md) | [TOC](README.md) | [Expression Language](expression.md)

@@ -1,3 +1,5 @@
+[Markup](markup.md) | [TOC](README.md) | [DataSource](datasource.md)
+
 # Expression Language
 
 Expressions or the Expression Language (EL) is a simple access to the
@@ -225,3 +227,5 @@ h1:after {
 <h1 import="xml:/example/content"/>
 <h1 import="{{Messages['hello']}}"/>
 ```
+
+[Markup](markup.md) | [TOC](README.md) | [DataSource](datasource.md)

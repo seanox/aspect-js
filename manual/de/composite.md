@@ -1,3 +1,5 @@
+[Model View Controler](mvc.md) | [Inhalt](README.md) | [Erweiterung](extension.md)
+
 # Komponenten
 
 Die Implementierung von aspect-js zielt auf eine modulare und auf Komponenten
@@ -87,3 +89,6 @@ Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
 von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
 
 TODO:
+
+[Model View Controler](mvc.md) | [Inhalt](README.md) | [Erweiterung](extension.md)
+

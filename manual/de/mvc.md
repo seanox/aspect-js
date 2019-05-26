@@ -1,3 +1,5 @@
+[Resource Bundle](messages.md) | [Inhalt](README.md) | [Komponenten](composite.md)
+
 # Model View Controller
 
 Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
@@ -136,3 +138,5 @@ Einfügen und Entfernen der Ansichten (Faces und Facets).
 
 
 TODO:
+
+[Resource Bundle](messages.md) | [Inhalt](README.md) | [Komponenten](composite.md)

@@ -1,3 +1,5 @@
+[DataSource](datasource.md) | [TOC](README.md) | [Model View Controler](mvc.md)
+
 # Resource Bundle (Messages)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
@@ -59,3 +61,5 @@ cause an error when the method is called.
 ```javascript
 DataSource.localize("de");
 ```
+
+[DataSource](datasource.md) | [TOC](README.md) | [Model View Controler](mvc.md)

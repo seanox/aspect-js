@@ -1,3 +1,5 @@
+[TOC](README.md) | [Markup](markup.md)
+
 # Motivation
 
 The separation of web applications into frontend and backend as well as the use
@@ -14,3 +16,5 @@ experiences from JSF (Java Server Faces) with regard to function and an easy
 integration into the markup, the desire arose for a similar client-side solution
 as a sporty experiment to understand rendering, expression language and
 performance.
+
+[TOC](README.md) | [Markup](markup.md)

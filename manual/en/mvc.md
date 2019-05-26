@@ -1,3 +1,5 @@
+[Resource Bundle](messages.md) | [TOC](README.md) | [Components](composite.md)
+
 # Model View Controller
 
 The Model View Controller (MVC) is a design pattern for separating interaction,
@@ -802,3 +804,5 @@ var contact= {
   </body>
 </html>
 ```
+
+[Resource Bundle](messages.md) | [TOC](README.md) | [Components](composite.md)

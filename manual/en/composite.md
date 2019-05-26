@@ -1,3 +1,5 @@
+[Model View Controler](mvc.md) | [TOC](README.md) | [Extension](extension.md)
+
 # Components
 
 The implementation of aspect-js focuses on a modular and component-based
@@ -89,3 +91,5 @@ the attributes `import` or `output`. Only in this case an empty component with
 outsourced HTML/Markup is assumed.
 
 TODO:
+
+[Model View Controler](mvc.md) | [TOC](README.md) | [Extension](extension.md)

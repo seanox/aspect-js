@@ -1,3 +1,5 @@
+[Expression Language](expression.md) | [TOC](README.md) | [Resource Bundle](messages.md)
+
 # DataSource
 
 DataSource is a NoSQL approach to data storage based on XML data in combination
@@ -327,3 +329,5 @@ The DataSource can also be used directly in the markup with the attributes
   loading resource...  
 </article>
 ```
+
+[Expression Language](expression.md) | [TOC](README.md) | [Resource Bundle](messages.md)
