@@ -29,7 +29,7 @@ Expression Language is not supported.
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
-  * [Variablen-Expression](#variable-expression)    
+  * [Variable-Expression](#variable-expression)    
   * [Combination](#combination)    
 * [Supplement](#supplement)
   

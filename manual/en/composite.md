@@ -1,214 +1,91 @@
-# Composite
+# Components
 
-TODO:
+The implementation of aspect-js focuses on a modular and component-based
+architecture. The framework supports a declarative designation of components in
+the markup, the outsourcing and automatic loading of resources, as well as an
+automatic object/model binding.
 
 
 ## Contents Overview
 
-* [Events](#events)
-  * [Composite Render Events](#composite-render-events)
-    * [Composite.EVENT_RENDER_START](#composite-event_render_start)
-    * [Composite.EVENT_RENDER_NEXT](#composite-event_render_next)
-    * [Composite.EVENT_RENDER_END](#composite-event_render_end)
-  * [Composite Scan Events](#composite-scan-events)
-    * [Composite.EVENT_SCAN_START](#composite-event_scan_start)
-    * [Composite.EVENT_SCAN_NEXT](#composite-event_scan_next)
-    * [Composite.EVENT_SCAN_END](#composite-event_scan_end)
-  * [Composite Mount Events](#composite-mount-events)
-    * [Composite.EVENT_MOUNT_START](#composite-event_mount_start)
-    * [Composite.EVENT_MOUNT_NEXT](#composite-event_mount_next)
-    * [Composite.EVENT_MOUNT_END](#composite-event_mount_end)
-  * [Composite AJAX Events](#composite-ajax-events)
-    * [Composite.EVENT_AJAX_START](#composite-event_ajax_start)
-    * [Composite.EVENT_AJAX_PROGRESS](#composite-event_ajax_progress)
-    * [Composite.EVENT_AJAX_RECEIVE](#composite-event_ajax_receive)
-    * [Composite.EVENT_AJAX_LOAD](#composite-event_ajax_load)
-    * [Composite.EVENT_AJAX_ABORT](#composite-event_ajax_abort)
-    * [Composite.EVENT_AJAX_TIMEOUT](#composite-event_ajax_timeout)
-    * [Composite.EVENT_AJAX_ERROR](#composite-event_ajax_error)
-    * [Composite.EVENT_AJAX_END](#composite-event_ajax_end)
-  * [Composite Error Events](#composite-error-events)
-    * [Composite.EVENT_ERROR](#composite-event_error)
-
+* [Structure](#structure)
+* [Outsourcing](#outsourcing)
+* [Loading](#loading)
+  * [CSS](#css)
+  * [JavaScript](#javascript)
+  * [HTML](#html)
   
-## Events
+  
+## Structure
 
-For an event oriented programming, aspect-js provides numerous events and
-functions, which are primarily associated with status changes and errors during
-processing, communication, and rendering.
+The initial markup of a component consists of an HTML element with a unique ID
+that is marked as composite.
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="aspect-js.js"></script>
+  </head>
+  <body>
+    <div id="example" composite></div>
+  </bod>
+</html>
+````
 
 
-### Composite Render Events
+## Outsourcing
 
-These events occur when status changes during rendering.  
-The current selector is passed to the callback method. It can influence this
-and/or the corresponding element, but not the rendering.
+The inner markup, CSS and JavaScript can be stored in the file system.  
+The default directory `./modules` can be changed with the property
+`Composite.MODULES`.
 
-```javascript
-Composite.listen(Composite.EVENT_RENDER_***, function(selector) {
-    ...
-});
+```
++- modules
+|  |
+|  +- example.css
+|  +- example.js
+|  +- example.html
+|
++- index.html
 ```
 
 
-#### Composite.EVENT_RENDER_START
+## Loading
 
-The event occurs when the rendering is started.  
-The work of the renderer starts after the event.
+The loading of resources and the object/model binding takes place partially when
+the component is needed in the UI -- i.e. with the first visibility, which is
+controlled via the [SiteMap](sitemap.md) as the central face flow management and
+thus minimizes the loading time considerably, since only the resources required
+for the active UI components are loaded.    
+The outsourcing and loading of resources at runtime is optional and can be
+applied completely, partially and not at all. There is a fixed order for loading
+and embedding: CSS, JS, HTML/Markup.   
+If the request for a resource is answered with status 404, it is assumed that
+this resource has not been swapped out. If requests are not answered with status
+200 or 404, an error is assumed.  
+The loading of resources is only performed once with the first request of the
+component for the UI.
 
 
-#### Composite.EVENT_RENDER_NEXT
+### CSS
 
-The event occurs during recursive iteration during renderings.    
-The work of the renderer starts after the event.
+CSS is inserted into the HEAD element as a style element. Without a HEAD
+element, the insertion causes an error.
 
 
-#### Composite.EVENT_RENDER_END
+### JavaScript
 
-The event occurs with the final end of the rendering.       
-The work of the renderer ends before the event.
+JavaScript is not inserted as an element, but executed directly with the eval
+method. Because the eval method can use its own namespace for variables, it is
+important to initialize the global variable better with `window[...]`.
 
 
-### Composite Scan Events
+### HTML
 
-These events occur when status changes occur during scanning for the
-object/model binding.  
-The current selector is passed to the callback method. It can influence this
-and/or the corresponding element, but not the scanning.
+HTML/Markup is only loaded for a component if the HTML element of the component
+itself has no internal HTML and for which elements have not been declared with
+the attributes `import` or `output`. Only in this case an empty component with
+outsourced HTML/Markup is assumed.
 
-```javascript
-Composite.listen(Composite.EVENT_SCAN_***, function(selector) {
-    ...
-});
-```
-
-
-#### Composite.EVENT_SCAN_START
-
-The event occurs when the scan is started.  
-The work of the renderer starts after the event.
-
-
-#### Composite.EVENT_SCAN_NEXT
-
-The event occurs at the final end of the scan.  
-The work of the renderer starts after the event.
-
-
-#### Composite.EVENT_SCAN_END
-
-The event occurs at the final end of the scan.  
-The work of the renderer ends before the event.
-
-
-### Composite Mount Events
-
-These events occur when status is changed in the object/model binding.  
-The current selector is passed to the callback method. It can influence this
-and/or the corresponding element, but not the object/model binding.
-
-```javascript
-Composite.listen(Composite.EVENT_MOUNT_***, function(selector) {
-    ...
-});
-```
-
-#### Composite.EVENT_MOUNT_START
-
-The event occurs when the object/model binding is started.  
-The work of the renderer starts after the event.
-
-
-#### Composite.EVENT_MOUNT_NEXT
-
-The event occurs with final end of object/model binding.  
-The work of the renderer starts after the event.
-
-
-#### Composite.EVENT_MOUNT_END
-
-The event occurs at the final end of the object/model binding.  
-The work of the renderer ends before the event.
-
-
-### Composite AJAX Events
-
-The Composite API supports an application-wide Event Management for the
-XMLHttpRequest for implementing request-related application logic, e.g. for
-Logging or spinner. 
-
-```javascript
-Composite.listen(Composite.EVENT_AJAX_***, function(XMLHttpRequest) {
-    ...
-});
-```
-
-
-#### Composite.EVENT_AJAX_START
-
-Corresponds to the XMLHttpRequest event: `loadstart` and is triggered when a
-Request to load data was started.
-
-
-#### Composite.EVENT_AJAX_PROGRESS
-
-Corresponds to the XMLHttpRequest event: `progress`.  
-The progress event is triggered periodically when a request receives additional
-data.
-
-
-#### Composite.EVENT_AJAX_RECEIVE
-
-Corresponds to the XMLHttpRequest-Event: `readystatechange` and is triggered
-when the status of the request/response changes.
-
-
-#### Composite.EVENT_AJAX_LOAD
-
-Corresponds to the XMLHttpRequest event: `load` and is triggered when a
-resource is loaded.
-
-
-#### Composite.EVENT_AJAX_ABORT
-
-Corresponds to the XMLHttpRequest event: `abort` and is triggered if loading of
-a resource was aborted.
-
-
-#### Composite.EVENT_AJAX_TIMEOUT
-
-Corresponds to the XMLHttpRequest event: `timeout` and is triggered if the
-loading of a resource was terminated because the maximum loading time was
-exceeded.
-
-
-#### Composite.EVENT_AJAX_ERROR
-
-Corresponds to the XMLHttpRequest event: `error` and is triggered when an error
-occurs.
-
-
-#### Composite.EVENT_AJAX_END
-
-Corresponds to the XMLHttpRequest event: `loadend` and is triggered when the
-request is completed, regardless of any errors or successful completion.
-
-
-### Composite Error Events
-
-The composite API supports an application-wide event management for runtime
-errors to implement event-related application logic, e.g. for logging or error
-output. 
-
-```javascript
-Composite.listen(Composite.EVENT_ERROR, function(Event) {
-    ...
-});
-```
-
-
-#### Composite.EVENT_ERROR
-
-The error event is triggered if runtime errors are not handled.  
-Syntactic errors that prevent the execution of JavaScript in general, cannot
-trigger the error event.
+TODO:

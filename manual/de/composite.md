@@ -69,7 +69,7 @@ Komponente für das UI ausgeführt.
 
 ### CSS
 
-CSS wird als Style-Element in das Head-Element eingefügt. Ohne ein HEAD-Element
+CSS wird als Style-Element in das HEAD-Element eingefügt. Ohne ein HEAD-Element
 verursacht das Einfügen einen Fehler.
 
 ### JavaScript
