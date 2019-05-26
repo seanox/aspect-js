@@ -90,4 +90,5 @@ Machine translation with [DeepL](https://deepl.com).
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
+* [Extension](extension.md)    
 * [Test](test.md)

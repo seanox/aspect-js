@@ -91,4 +91,3 @@ von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
 TODO:
 
 [Model View Controler](mvc.md) | [Inhalt](README.md) | [Erweiterung](extension.md)
-

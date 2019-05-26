@@ -137,6 +137,11 @@ Einfügen und Entfernen der Ansichten (Faces und Facets).
 ```
 
 
+### Terms
+
+
+#### Page
+
 TODO:
 
 [Resource Bundle](messages.md) | [Inhalt](README.md) | [Komponenten](composite.md)
