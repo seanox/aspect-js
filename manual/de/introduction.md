@@ -458,7 +458,23 @@ Weitere Bestandteile der SiteMap sind die Navigation und ein Permission Concept.
 
 ### Virtual Paths
 
-TODO:
+Virtuelle Pfade werden für die Navigation und zur Kontrolle des Face-Flow
+verwendet.  
+Das Ziel kann ein Face, eine Facet oder eine Funktion sein.  
+Bei SPAs (Single-Page-Application) wird das Fragment (anchor part) der URL für
+die Pfade verwendet.
+
+```
+https://example.local/example/#path
+```
+
+Entsprechend dem Dateisystem werden auch hier absolute und relative Pfade sowie
+Funktionspfade unterstützt.  
+Pfade bestehen ausschliesslich aus Wortzeichen und Unterstrichen (basierend auf
+zusammengesetzten IDs) und müssen mit einem Buchstaben beginnen und verwenden
+das Doppelkreuz (#) als Separator und Wuruel.
+
+[Mehr erfahren](mvc.md#virtual-paths)
 
 
 ### Object-/Model-Binding

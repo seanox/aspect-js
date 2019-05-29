@@ -250,7 +250,7 @@ composite JavaScript.
 Marks an element in the markup as [Composite](composites.md).  
 Composites are modular components and have a versatile meaning in aspect-js.  
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
-virtual paths in the face flow, which has a direct effect of the visibility of
+virtual paths in the face-flow, which has a direct effect of the visibility of
 the composites.
 The [Model View Controler](mvc.md#sitemap) supports automatic
 [object/model binding](object-binding.md) for composites.  
@@ -451,7 +451,22 @@ Further components of the SiteMap are the navigation and a permission concept.
 
 ### Virtual Paths
 
-TODO:
+Virtual paths are used for navigation and control of face-flow.  
+The target can be a face, a facet or a function.  
+For SPAs (Single-Page-Applications) the anchor part of the URL is used for the
+paths.
+
+```
+https://example.local/example/#path
+```
+
+In accordance with the file system, also here absolute and relative paths as
+well as functional paths are supported.  
+Paths consist exclusively of word characters and underscores (based on composite
+IDs) and must begin with a letter and use the hash character as separator and
+root.
+
+[Learn more](mvc.md#virtual-paths)
 
 
 ### Object-/Model-Binding

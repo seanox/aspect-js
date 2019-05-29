@@ -65,7 +65,7 @@ initial expression each time it is refreshed (render cycle).
 Marks an element in the markup as [Composite](composites.md).  
 Composites are modular components and have a versatile meaning in aspect-js.  
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
-virtual paths in the face flow, which has a direct effect of the visibility of
+virtual paths in the face-flow, which has a direct effect of the visibility of
 the composites.
 The [Model View Controler](mvc.md#sitemap) supports automatic
 [object/model binding](object-binding.md) for composites.  

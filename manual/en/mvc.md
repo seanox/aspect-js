@@ -362,7 +362,8 @@ More details can be found in chapter [Acceptors](#acceptors).
 
 ## Virtual Paths
 
-Virtual paths are used for navigation and control of face flow.   
+Virtual paths are used for navigation and control of face-flow.  
+The target can be a face, a facet or a function.  
 For SPAs (Single-Page-Applications) the anchor part of the URL is used for the
 paths.
 
@@ -371,15 +372,7 @@ https://example.local/example/#path
 ```
 
 In accordance with the file system, also here absolute and relative paths as
-well as functional paths are supported..
-
-```
-https://seanox.local/example/#path#sub-path
-```
-
-Paths are a reference to a target in face-flow.  
-The target can be a face, a facet or a function.
-
+well as functional paths are supported.  
 Paths consist exclusively of word characters and underscores (based on composite
 IDs) and must begin with a letter and use the hash character as separator and
 root. Spaces are not supported.
@@ -762,7 +755,6 @@ JavaScript models can be monitored and controlled by validation.
 Validation is declared in HTML via the `validate` attribute in combination
 with the `events` attribute and requires a corresponding validation method in
 the JavaScript model.
-
   
 More details about the usage can be found in chapter
 [validate](markup.md#validate).
