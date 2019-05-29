@@ -86,7 +86,7 @@ date when using the release channels.
 - [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
 
 # Changes (Change Log)
-## 1.1.0 2019xxxx (summary of the next version)  
+## 1.1.0 20190530 (summary of the current version)  
 BF: Build: Optimization/correction when creating releases  
 BF: DataSource: Correction if no DataSource exists  
 BF: Messages: Correction if no DataSource exists  
