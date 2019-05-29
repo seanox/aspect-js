@@ -57,7 +57,7 @@ The default directory `./modules` can be changed with the property
 
 The loading of resources and the object/model binding takes place partially when
 the component is needed in the UI -- i.e. with the first visibility, which is
-controlled via the [SiteMap](sitemap.md) as the central face flow management and
+controlled via the [SiteMap](sitemap.md) as the central face-flow management and
 thus minimizes the loading time considerably, since only the resources required
 for the active UI components are loaded.    
 The outsourcing and loading of resources at runtime is optional and can be

@@ -54,7 +54,7 @@
       * [Face](mvc.md#face)
       * [Facets](mvc.md#facets)
       * [Face Flow](mvc.md#face-flow)
-    * [Configuration](mvc.md#configuration)
+    * [Konfiguration](mvc.md#konfiguration)
       * [Face Flow](mvc.md#face-flow-1)
       * [Permissions](mvc.md#permissions)
       * [Acceptors](mvc.md#acceptors)

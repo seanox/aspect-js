@@ -163,9 +163,9 @@ therefore only partially presented.
 Facets are parts of a face (projection) and are not normally a standalone view.
 For example, the input mask and result table of a search can be separate facets
 of a face, as can articles or sections of a face. Both face and facet can be
-accessed via virtual paths. The path to a facet has the effect that the face is
-displayed with any other faces, but the requested facet is displayed in the
-visible area and focused.
+accessed via virtual paths. The path to facets causes the surrounding face with
+all its superordinate faces to be displayed and the addressed facets to be
+brought into the visible area and focused.
 
 
 #### Face Flow
@@ -201,7 +201,6 @@ The keys (string) correspond to the paths and a path always has a existing face
 as its target, partial paths without face can be ignored. The values are arrays
 with the valid facets for a path/face. Facets do not need their own path, which
 is automatically derived/created.
-
 
 ```javascript
 SiteMap.customize({...});

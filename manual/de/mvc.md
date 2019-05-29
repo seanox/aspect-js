@@ -71,7 +71,7 @@ In aspect-js werden die Views durch das Markup repräsentiert.
     * [Face](#face)
     * [Facets](#facets)
     * [Face Flow](#face-flow)
-  * [Configuration](#configuration)
+  * [Konfiguration](#konfiguration)
     * [Face Flow](#face-flow-1)
     * [Permissions](#permissions)
     * [Acceptors](#acceptors)
@@ -141,6 +141,121 @@ Einfügen und Entfernen der Ansichten (Faces und Facets).
 
 
 #### Page
+
+In einer Single-Page-Application bildet die Page den elementaren Rahmen und die
+Laufzeitumgebung der gesamten Anwendung.
+
+
+#### Face
+
+Ein Face ist die primäre Projektion von Modellen/Komponenten/Inhalten. Diese
+Projektion kann zusätzliche Unterstrukturen in Form von Facets und Sub-Faces
+enthalten.  
+Faces sind Komponenten, die verschachtelt werden können.  
+So werden übergeordneten Faces zu partiellen Faces, wenn sich der Pfad auf ein
+Sub-Face bezieht.
+Ein Sub-Face wird mit allen seinen übergeordneten Faces angezeigt. Wenn die
+übergeordneten Faces zusätzliche Facets enthalten, werden diese Facets nicht
+angezeigt. Die übergeordneten Faces werden dann nur teilweise/partiell
+dargestellt.
+
+
+#### Facets
+
+Facets sind Teile eines Faces (Projektion) und sind in der Regel keine
+eigenständige Ansicht. So können z.B. bei einem Such-Formular die Eingabemaske
+und die Ergebnistabelle separate Facets eines Faces sein, ebenso wie Article 
+und/oder Section in einem Face. Sowohl Face als auch Facets sind über virtuelle
+Pfade erreichbar. Der Pfad zu Facets bewirkt, dass das umschliessende Face mit
+allen seinen übergeordneten Faces angezeigt und das adressiert Facets in den
+sichtbaren Bereich geholt und fokussiert wird.
+
+
+#### Face Flow
+
+Face-Flow beschreibt die Zugriffssteuerung und die Visualisierung von Ansichten.  
+Die SiteMap stellt dafür Schnittstellen für Berechtigungskonzepte und Akzeptoren
+zur Verfügung, mit denen der Face-Flow kontrolliert und beeinflusst werden kann.
+Auf diese Weise kann der Zugriff auf Pfade/Ansichten mit eigener Logik gestoppt
+und/oder umgeleitet bzw. weitergeleitet werden.
+
+
+### Konfiguration
+
+Für die Konfiguration der SiteMap wird die Methode `SiteMap.customize(....)`
+verwendet. Mit dieser Methode ist es möglich, den Face-Flow (Pfade, Faces,
+Facets), die Berechtigungen zu definieren und Akzeptoren zu registrieren, wofür
+die die Methode unterschiedliche Signaturen bereitstellt.  
+
+Die Konfiguration kann mehrfach aufgerufen werden, auch zur Laufzeit. Die
+SiteMap sammelt alle Konfigurationen kumulativ. Alle Pfade, Faces und Facets
+werden zusammengefasst, Akzeptoren und permit-Methoden in der Reihenfolge ihrer
+Registrierung gesammelt. Da die Konfiguration immer einen kumulativen Zustand
+verwendet, ist es später nicht nachvollziehbar, wie die Konfiguration erstellt
+wurde.
+
+Die Konfiguration der SiteMap greift nur, wenn ein fehlerfreies Meta-Objekt
+übergeben wird und keine Fehler bei der Verarbeitung auftreten.
+
+
+#### Face Flow
+
+Die Konfiguration basiert auf einem Meta-Objekt, das an die Methode
+`SiteMap.customize({meta})` übergeben wird.  
+Die Schlüssel (string) entsprechen den Pfaden und ein Pfad hat immer ein
+existierendes Face als Ziel, Teilpfade ohne Face werden ignoriert. Die Werte
+sind Arrays mit den gültigen Facets für einen Pfad/Face. Facets benötigen keinen
+eigenen Pfad, da diese automatisch abgeleitet/erstellt werden.
+
+```javascript
+SiteMap.customize({...});
+```
+
+```javascript
+var map = {
+    "#": ["news", "products", "about", "contact", "legal"],
+    "products#papers": ["paperA4", "paperA5", "paperA6"],
+    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "products#pens": ["pencil", "ballpoint", "stylograph"],
+    "legal": ["terms", "privacy"],
+    ...
+};
+
+SiteMap.customize(map);
+```
+
+Oder etwas kürzer als direkter Aufruf der Customize-Methode:
+
+```javascript
+SiteMap.customize({
+    "#": ["news", "products", "about", "contact", "legal"],
+    "products#papers": ["paperA4", "paperA5", "paperA6"],
+    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "products#pens": ["pencil", "ballpoint", "stylograph"],
+    "legal": ["terms", "privacy"],
+    ...
+});
+```
+
+__Die Navigation akzeptiert nur Pfade, die im Face-Flow definiert sind.__
+__Ungültige Pfade werden basierend auf dem angeforderten Pfad zum nächst__
+__höheren bekannten/berechtigten Pfad weitergeleitet.__
+
+__Ohne Face-Flow gibt es keine gültigen Pfade. Wird eine Benutzeroberfläche__
+__oder Komponenten ohne Face-Flow verwendet, müssen diese als statisch__
+__gekennzeichnet werden, da die Komponenten sind ausgeblendet (aus dem DOM__
+__entfernt) werden.__
+
+```html
+<html>
+  <body>
+    <form id="model" composite static>
+      ...
+    </form>
+  </body>
+</html>
+```
+
 
 TODO:
 
