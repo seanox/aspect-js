@@ -30,7 +30,7 @@ much more.
 - NoSQL datasource based on XML
 - Test environment  
   something like JUnit for automated tests
-- ...
+- ... 
 
 
 # Licence Agreement
