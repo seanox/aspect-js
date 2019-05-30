@@ -512,6 +512,8 @@ The smallest component in an integration test, used here as 'task', because
 used in a scenario.
 
 ```javascript
+Test.activate();
+
 Test.create({test:function() {
     Assert.assertTrue(true);
 }});
@@ -524,6 +526,8 @@ Test.start();
 A scenario is a sequence of a lot of test cases (tasks).
 
 ```javascript
+Test.activate();
+
 Test.create({test:function() {
     Assert.assertTrue(true);
 }});

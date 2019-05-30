@@ -570,6 +570,8 @@ verwendet wird, da "Case" ein Schlüsselwort im JavaScript ist. Es kann allein
 implementiert werden, wird aber immer in einem Szenario verwendet.
 
 ```javascript
+Test.activate();
+
 Test.create({test:function() {
     Assert.assertTrue(true);
 }});
@@ -582,6 +584,8 @@ Test.start();
 Ein Szenario ist eine Abfolge von vielen Testfällen (Tasks).
 
 ```javascript
+Test.activate();
+
 Test.create({test:function() {
     Assert.assertTrue(true);
 }});
