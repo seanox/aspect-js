@@ -607,7 +607,7 @@ not ´true´, a error is thrown.
 [Learn more](test.m#assert)
 
 
-### Console
+### Output
 
 TODO:
 

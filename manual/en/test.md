@@ -185,7 +185,7 @@ Test.start();
 ### assertEquals
     
 Asserts that two values are equals.  
-Difference between equals and same: `=== / == or !== / !=`  
+Difference between equals and same: `=== / ==` or `!== / !=`  
 If the assertion is false, an error with optional message is thrown.   
 The method has different signatures.
 
@@ -206,7 +206,7 @@ Test.start();
 ### assertNotEquals
     
 Asserts that two values are not equals, as negation of `Assert.assertEquals(...)`.  
-Difference between equals and same: `=== / == or !== / !=`  
+Difference between equals and same: `=== / ==` or `!== / !=`  
 If the assertion is false, an error with optional message is thrown.   
 The method has different signatures.
 
@@ -227,7 +227,7 @@ Test.start();
 ### assertSame
 
 Asserts that two values are the same.  
-Difference between equals and same: `=== / == or !== / !=`  
+Difference between equals and same: `=== / ==` or `!== / !=`  
 If the assertion is false, an error with optional message is thrown.   
 The method has different signatures.
 

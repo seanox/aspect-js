@@ -187,7 +187,7 @@ Test.start();
 ### assertEquals
     
 Behauptet, dass zwei Werte identisch sind.  
-Unterschied zwischen identisch und gleich: `=== / == oder !== / !=`  
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
 Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
 Die Methode hat unterschiedliche Signaturen.
 
@@ -208,7 +208,7 @@ Test.start();
 ### assertNotEquals
     
 Behauptet, dass zwei Werte nicht identisch sind, als Negation von `Assert.assertEquals(....)`.  
-Unterschied zwischen identisch und gleich: `=== / == oder !== / !=`    
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`    
 Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
 Die Methode hat unterschiedliche Signaturen.
 
@@ -229,7 +229,7 @@ Test.start();
 ### assertSame
 
 Behauptet, dass zwei Werte gleich sind.   
-Unterschied zwischen identisch und gleich: `=== / == oder !== / !=`   
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`   
 Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
 Die Methode hat unterschiedliche Signaturen.
 
@@ -270,7 +270,7 @@ Test.start();
 ### assertNotSame        
     
 Behauptet, dass zwei Werte nicht gleich sind, als Negation von `Assert.assertSame(....)`.
-Unterschied zwischen identisch und gleich: `=== / == oder !== / !=`  
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
 Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
 Die Methode hat unterschiedliche Signaturen.
 

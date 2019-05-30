@@ -668,7 +668,7 @@ einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
 [Mehr erfahren](test.md#assert)
 
 
-### Console
+### Output
 
 TODO:
 
