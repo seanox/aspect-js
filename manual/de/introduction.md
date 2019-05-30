@@ -502,7 +502,7 @@ gekennzeichneten HTML-Element mit einer eindeutigen Id.
     <div id="example" composite></div>
   </bod>
 </html>
-````
+```
 
 Das innere Markup, CSS und JavaScript lassen sich ins Dateisystem auslagern.  
 Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
@@ -543,9 +543,98 @@ TODO:
 
 ## Unit Test
 
+Das Test-API unterstützt die Implementierung und Ausführung von
+Integrationstests und kann für Suiten (suite), Szenarien (scenario) und einzelne
+Testfälle (case) verwendet werden.
+
+Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
+enthalten ist, der sich ohne Probleme entfernen lässt. Da das Test-API einige
+Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
+das Test-API zur Laufzeit bewusst aktiviert werden.
+
+```javascript
+Test.activate();
+
+Test.create({test:function() {
+    ...
+}});
+
+Test.start();
+```
+
+
+### Testfall
+
+Der kleinste Bestandteil in einem Integrationstest, der hier als "Task"
+verwendet wird, da "Case" ein Schlüsselwort im JavaScript ist. Es kann allein
+implementiert werden, wird aber immer in einem Szenario verwendet.
+
+```javascript
+Test.create({test:function() {
+    Assert.assertTrue(true);
+}});
+
+Test.start();
+```
+
+### Szenario
+
+Ein Szenario ist eine Abfolge von vielen Testfällen (Tasks).
+
+```javascript
+Test.create({test:function() {
+    Assert.assertTrue(true);
+}});
+Test.create({name:"example", timeout:1000, test:function() {
+    Assert.assertTrue(true);
+}});
+Test.create({error:Error test:function() {
+    throw new Error();
+}});
+Test.create({error:/^My Error/i, test:function() {
+    throw new Error("My Error");
+}});
+Test.create({ignore:true, test:function() {
+    Assert.assertTrue(true);
+}});
+
+Test.start();
+```
+
+### Suite 
+
+Eine Suite ist ein komplexes Paket aus verschiedenen Testfällen, Szenarien und
+anderen Suiten. In der Regel besteht eine Suite aus verschiedenen Dateien, die
+dann einen komplexen Test darstellen. Ein Beispiel für eine gute Suite ist eine
+Kaskade von verschiedenen Dateien und wo der Test in jeder Datei und an jedem
+Stelle gestartet werden kann. Dies ermöglicht einen Integrationstest auf
+verschiedenen Ebenen und mit unterschiedlicher Komplexität.
+
+ 
+### Assert
+
+Die Testfälle werden mit Behauptungen (Assertions) implementiert. Das Test-API
+bietet elementare Aussagen, die erweitert werden können. Die Funktion ist
+einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
+
+
+### Console
+
 TODO:
 
 
-### Assert
+### Monitoring
+
+TODO:
+
+
+### Control
+
+TODO:
+
+
+### Events
+
+TODO:
 
 TODO:

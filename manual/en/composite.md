@@ -33,7 +33,7 @@ that is marked as composite.
     <div id="example" composite></div>
   </bod>
 </html>
-````
+```
 
 
 ## Outsourcing

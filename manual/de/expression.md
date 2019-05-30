@@ -4,7 +4,7 @@
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScrript und damit zu den Modellen und Komponenten im
-aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt, die
+aspect-js. In den Expressions wird das komplette JavaScript-API unterstützt, die
 mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
 arithmetische und logische Operatoren verwendet werden können.
 

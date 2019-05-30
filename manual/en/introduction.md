@@ -486,9 +486,94 @@ TODO:
 
 ## Unit Test
 
-TODO:
+The Test API supports the implementation and execution of integration tests and
+can be used for suites, scenarios and single test cases.
+
+As a modular component of Seanox aspect-js, the Test API is included in every
+release that can be easily removed. Because the Test API has some special
+features regarding error handling and console output, the Test API must be
+activated deliberately at runtime.
+
+```javascript
+Test.activate();
+
+Test.create({test:function() {
+    ...
+}});
+
+Test.start();
+```
+
+
+### Case / Task
+
+The smallest component in an integration test, used here as 'task', because
+'case' is a keyword in JavaScript. It can be implemented alone, but is always
+used in a scenario.
+
+```javascript
+Test.create({test:function() {
+    Assert.assertTrue(true);
+}});
+
+Test.start();
+```
+
+### Scenario
+
+A scenario is a sequence of a lot of test cases (tasks).
+
+```javascript
+Test.create({test:function() {
+    Assert.assertTrue(true);
+}});
+Test.create({name:"example", timeout:1000, test:function() {
+    Assert.assertTrue(true);
+}});
+Test.create({error:Error test:function() {
+    throw new Error();
+}});
+Test.create({error:/^My Error/i, test:function() {
+    throw new Error("My Error");
+}});
+Test.create({ignore:true, test:function() {
+    Assert.assertTrue(true);
+}});
+
+Test.start();
+```
+
+### Suite
+
+A suite is a complex bundle of different test cases, scenarios and other suites.
+Usually a suite consists of different files, which then represent a complex
+test. An example of a good suite is a cascade of different files und the test
+can be started in any file and place. This makes it possible toperform the
+integration test on different levels and with different complexity.
 
 
 ### Assert
+
+The test cases are implemented with assertions. The Test-API provides elementary
+assertions, you can implement more. The function is simple. If an assertion was
+not ´true´, a error is thrown.
+
+
+### Console
+
+TODO:
+
+
+### Monitoring
+
+TODO:
+
+
+### Control
+
+TODO:
+
+
+### Events
 
 TODO:

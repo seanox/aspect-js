@@ -33,7 +33,7 @@ gekennzeichneten HTML-Element mit einer eindeutigen Id.
     <div id="example" composite></div>
   </bod>
 </html>
-````
+```
 
 
 ## Auslagerung
