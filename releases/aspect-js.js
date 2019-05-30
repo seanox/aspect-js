@@ -318,12 +318,12 @@ if (window.location.pathcontext === undefined) {
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
- *  DataSource 1.0 20190520
+ *  DataSource 1.1.0 20190520
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190520
+ *  @version 1.1.0 20190520
  */
 if (typeof DataSource === "undefined") {
     
@@ -653,12 +653,12 @@ if (typeof DataSource === "undefined") {
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.0 20190520
+ *  Messages 1.1.0 20190520
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190520
+ *  @version 1.1.0 20190520
  */
 if (typeof Messages === "undefined") {
     
@@ -5087,6 +5087,5 @@ if (typeof Test === "undefined") {
                 trigger.initEvent(event, bubbles, cancel);
                 this.dispatchEvent(trigger);
             }; 
-        
     };
 };
