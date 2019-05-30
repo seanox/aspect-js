@@ -2,10 +2,10 @@
 
 # Komponenten
 
-Die Implementierung von aspect-js zielt auf eine modulare und auf Komponenten
-basierte Architektur. Das Framework unterstützt dazu eine deklarative
-Kennzeichnung von Komponenten im Markup, die Auslagerung und das automatische
-Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
+Die Implementierung von Seanox aspect-js zielt auf eine modulare und auf
+Komponenten basierte Architektur. Das Framework unterstützt dazu eine
+deklarative Kennzeichnung von Komponenten im Markup, die Auslagerung und das
+automatische Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
 
 
 ## Inhalt

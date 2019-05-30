@@ -29,12 +29,12 @@ Interaktion, Daten und Darstellung.
 Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
 werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur Übermittlung
 der Interaktionen. Da dieser durch Betriebssystem und Browser bereitgestellt
-wird, bezieht sich der Controler in aspect-js vordergründig auf den
+wird, bezieht sich der Controler in Seanox aspect-js vordergründig auf den
 Applikations-Controller, der Abläufe innerhalb einer Applikation (Face-Flow)
 steuert und das Binding von Markup und JavaScript sowie die Steuerung vom
 Datenfluss zwischen View und Model übernimmt.  
-In aspect-js ist der Controller die Zusammenarbeit von Composite, Paths und
-SiteMap.
+In Seanox aspect-js ist der Controller die Zusammenarbeit von Composite, Paths
+und SiteMap.
 
 
 ## Model
@@ -45,7 +45,7 @@ Controler übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
 sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
 View zur Darstellung und Verwaltung der Zustände, für fachliche Funktionalität
 nimmt es weitere Komponenten in Anspruch.    
-In aspect-js werden die Modelle durch statische JavaScript-Objekte
+In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
 repräsentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
 und Delegation angedacht, so dass die statischen Modelle intern weitere
 Komponenten und Abstraktion verwenden.
@@ -57,10 +57,10 @@ Die View ist ausschliesslich für die Darstellung bzw. Projektion eines Modells
 verantwortlich.  
 Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Models
 nicht eingeschränkt ist.  
-In aspect-js werden die Views durch das Markup repräsentiert.
+In Seanox aspect-js werden die Views durch das Markup repräsentiert.
 
 
-## Contents Overview
+## Inhalt
 
 * [Controller](#controller)
 * [Model](#model)
@@ -102,9 +102,9 @@ In aspect-js werden die Views durch das Markup repräsentiert.
 
 ## SiteMap
 
-Die Darstellung in aspect-js ist mehrschichtig und die Ansichten sind als Page,
-Faces und Facets organisiert, auf die über virtuelle Pfade zugegriffen wird. Zu
-diesem Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
+Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten sind als
+Page, Faces und Facets organisiert, auf die über virtuelle Pfade zugegriffen
+wird. Zu diesem Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
 Verfügung, die auf den virtuellen Pfaden für alle Ansichten basiert. Die SiteMap
 steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Ansichten,
 den sogenannten Face-Flow.  

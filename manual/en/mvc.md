@@ -29,11 +29,11 @@ data, and presentation.
 For this we have to distinguish between I/O controller and application
 controller. The original MVC design pattern refers to the I/O controller for
 transmitting the interactions. Because this I/O controller is part of the
-operating system and the browser, the controller in aspect-js refers to the
-application controller. The application controller controls the flow within an
-application (face-flow) and takes over the binding of markup and JavaScript as
-well as the control of the data flow between view and model.  
-In aspect-js the controller is the collaboration of Composite, Paths and
+operating system and the browser, the controller in Seanox aspect-js refers to
+the application controller. The application controller controls the flow within
+an application (face-flow) and takes over the binding of markup and JavaScript
+as well as the control of the data flow between view and model.  
+In Seanox aspect-js the controller is the collaboration of Composite, Paths and
 SiteMap.
 
 
@@ -45,7 +45,7 @@ by the controller, or provides the view with an interface to data as well as
 functions and services of the middleware. The model primarily serves the view
 for the representation and management of the states, for business functionality
 it uses additional components.  
-In aspect-js the models are represented by static JavaScript objects.  
+In Seanox aspect-js the models are represented by static JavaScript objects.  
 Conceptually the implementation of the design pattern facade and delegation is
 planned, so that the static models internally use additional components and
 abstraction.
@@ -57,9 +57,9 @@ The view is exclusively responsible for the presentation or projection of a
 model.  
 Projection is an important term because the way in which a model is
 presented is not restricted.  
-In the context of aspect-js, terms face and factes are used for the visual
-representation/projection, which will be explained later.  
-In aspect-js the views are represented by the markup.
+In the context of Seanox aspect-js, terms face and factes are used for the
+visual representation/projection, which will be explained later.  
+In Seanox aspect-js the views are represented by the markup.
 
 
 ## Contents Overview
@@ -104,11 +104,11 @@ In aspect-js the views are represented by the markup.
 
 ## SiteMap
 
-The representation in aspect-js is multilayered and the views are organized as
-page, faces and facets which are accessed with virtual paths. For this purpose,
-SiteMap provides a hierarchical directory structure based on the virtual paths
-for all views. The SiteMap then controls the access and the visualization (show
-and hide) of the views, which is termed face-flow.  
+The representation in Seanox aspect-js is multilayered and the views are
+organized as page, faces and facets which are accessed with virtual paths. For
+this purpose, SiteMap provides a hierarchical directory structure based on the
+virtual paths for all views. The SiteMap then controls the access and the
+visualization (show and hide) of the views, which is termed face-flow.  
 Face-flow and visualization are resolute and uses the DOM to insert and remove
 the views (faces and facets).
 
@@ -462,8 +462,8 @@ Object binding is about linking HTML elements with corresponding model objects
 that exist in JavaScript.
 
 The object/model binding part also belongs to the Model View Controller and is
-implemented in aspect-js by the Composite API. SiteMap is an extension and is
-based on the composite API.    
+implemented in Seanox aspect-js by the Composite API. SiteMap is an extension
+and is based on the composite API.    
 For a better understanding, the functionality is described here in the Model
 View Controller.
 
@@ -606,7 +606,7 @@ general to identify and control models/components.
 
 ### Binding
 
-In aspect-js components, also termed composites, are used.  
+In Seanox aspect-js components, also termed composites, are used.  
 Composite, because the components consist of markup (view), corresponding
 JavaScript (model) and more.  
 

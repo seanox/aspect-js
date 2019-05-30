@@ -2,9 +2,9 @@
 
 # Markup
 
-Mit aspect-js wird der deklarative Ansatz von HTML aufgegriffen und erweitert.
-Neben der Expression-Language werden den HTML-Elementen zusätzliche Attribute
-für Funktionen und Objekt-Bindung bereitgestellt.  
+Mit Seanox aspect-js wird der deklarative Ansatz von HTML aufgegriffen und
+erweitert. Neben der Expression-Language werden den HTML-Elementen zusätzliche
+Attribute für Funktionen und Objekt-Bindung bereitgestellt.  
 Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
 überwacht das DOM aktiv über den MutationObserver und funktioniert und reagiert
 somit rekursiv auf Veränderungen im DOM.
@@ -12,7 +12,6 @@ somit rekursiv auf Veränderungen im DOM.
 
 ## Inhalt
 
-* [Expression Language](#expression-language)
 * [Attribute](#attribute)
   * [composite](#composite)
   * [condition](#condition)
@@ -22,41 +21,22 @@ somit rekursiv auf Veränderungen im DOM.
   * [output](#output)
   * [render](#render)    
   * [validate](#validate)  
+* [Expression Language](#expression-language)
 * [Scripting](#scripting)
 * [Customizing](#customizing)
   * [Tag](#tag)   
   * [Selector](#selector)
   * [Acceptor](#acceptor)
   
-  
-## Expression Language
-
-Die Expression-Language kann im Markup als Freitext und in den Attributen der
-HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
-Hier wird die Expression-Language nicht unterstützt.  
-Bei der Verwendung als Freitext wird als Ausgabe immer reiner Text (plain text)
-erzeugt. Das Hinzufügen von Markup, insbesondere HTML-Code, ist so nicht möglich
-und wir nur mit den Attributen `output` und `import` unterstützt.
-
-```html
-<article title="{{Model.title}}">
-  {{'Hello World!'}}
-  ...
-</article>
-```
-
-Details zu Syntax und Verwendung werden im Abschnitt
-[Expression Language](expression.md) beschrieben.
-  
 
 ## Attribute
 
-Der deklarative Ansatz ist in aspect-js vorrangig mit Attributen umgesetzt und
-kann mit allen HTML-Elementen und in Kombination verwendet werden. Ausgenommen
-sind `SCRIPT`, was nur mit dem Typ `composite/javascript` unterstützt wird,
-sowie `STYLE`, welches nicht unterstützt wird. Die Werte der Attribute können
-statische oder mit Verwendung der Expression-Language dynamisch sein.
-Enthält ein Attribut eine Expression, werden das Attribut und der Wert
+Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
+umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
+Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
+unterstützt wird, sowie `STYLE`, welches nicht unterstützt wird. Die Werte der
+Attribute können statische oder mit Verwendung der Expression-Language dynamisch
+sein. Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
@@ -64,8 +44,8 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 ### composite
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
-Composites sind modulare Komponente und haben in aspect-js eine vielseitige
-Bedeutung.  
+Composites sind modulare Komponente und haben in Seanox aspect-js eine
+vielseitige Bedeutung.  
 Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
@@ -560,6 +540,26 @@ gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.
 Unterhalb vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
 JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode
 den Wert `true` zurückgibt.
+
+
+## Expression Language
+
+Die Expression-Language kann im Markup als Freitext und in den Attributen der
+HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
+Hier wird die Expression-Language nicht unterstützt.  
+Bei der Verwendung als Freitext wird als Ausgabe immer reiner Text (plain text)
+erzeugt. Das Hinzufügen von Markup, insbesondere HTML-Code, ist so nicht möglich
+und wir nur mit den Attributen `output` und `import` unterstützt.
+
+```html
+<article title="{{Model.title}}">
+  {{'Hello World!'}}
+  ...
+</article>
+```
+
+Details zu Syntax und Verwendung werden im Abschnitt
+[Expression Language](expression.md) beschrieben.
 
 
 ## Scripting

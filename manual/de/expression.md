@@ -3,7 +3,7 @@
 # Expression Language
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
-clientseitigen JavaScrript und damit zu den Modellen und Komponenten im
+clientseitigen JavaScrript und damit zu den Modellen und Komponenten im Seanox
 aspect-js. In den Expressions wird das komplette JavaScript-API unterstützt, die
 mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
 arithmetische und logische Operatoren verwendet werden können.

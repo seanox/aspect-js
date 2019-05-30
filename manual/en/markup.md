@@ -2,7 +2,7 @@
 
 # Markup
 
-With aspect-js the declarative approach of HTML is taken up and extended.  
+With Seanox aspect-js the declarative approach of HTML is taken up and extended.  
 In addition to the expression language, the HTML elements are provided with
 additional attributes for functions and object binding.  
 The corresponding renderer is included in the composite implementation and
@@ -11,7 +11,7 @@ in the DOM.
 
 
 ## Contents Overview
-* [Expression Language](#expression-language)
+
 * [Attributes](#attributes)
   * [composite](#composite)
   * [condition](#condition)
@@ -21,6 +21,7 @@ in the DOM.
   * [output](#output)
   * [render](#render)    
   * [validate](#validate)  
+* [Expression Language](#expression-language)
 * [Scripting](#scripting)
 * [Customizing](#customizing)
   * [Tag](#tag)   
@@ -28,33 +29,13 @@ in the DOM.
   * [Acceptor](#acceptor)
 
 
-## Expression Language
-
-The expression language can be used in the markup as free text and in the
-attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here.    
-When used as free text, pure text (plain text) is always generated as output.
-The addition of markup, especially HTML code, is not possible and is only
-supported with the attributes `output` and `import`.
-
-```html
-<article title="{{Model.title}}">
-  {{'Hello World!'}}
-  ...
-</article>
-```
-
-Details about syntax and usage are described in the section
-[Expression Language](expression.md).
-
-
 ## Attributes
 
-The declarative approach is primarily implemented using attributes in aspect-js
-and can be used with all HTML elements and in combination. Excluded are
-`SCRIPT`,  which is only supported with the type `composite/javascript`, and
-`STYLE`, which is not supported. The values of the attributes can be static or
-dynamic when the expression language is used.  
+The declarative approach is primarily implemented using attributes in Seanox
+aspect-js and can be used with all HTML elements and in combination. Excluded
+are `SCRIPT`,  which is only supported with the type `composite/javascript`,
+and `STYLE`, which is not supported. The values of the attributes can be static
+or dynamic when the expression language is used.  
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
@@ -63,7 +44,8 @@ initial expression each time it is refreshed (render cycle).
 ### composite
 
 Marks an element in the markup as [Composite](composites.md).  
-Composites are modular components and have a versatile meaning in aspect-js.  
+Composites are modular components and have a versatile meaning in Seanox
+aspect-js.  
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
 virtual paths in the face-flow, which has a direct effect of the visibility of
 the composites.
@@ -551,6 +533,26 @@ to the `title` attribute if the value is invalid, or the content of the
 Below the input field is the control output of the corresponding field in the
 JavaScript model. This field is only synchronized if the validate method return
 the value `true`.  
+
+
+## Expression Language
+
+The expression language can be used in the markup as free text and in the
+attributes of the HTML elements. JavaScript and CSS elements are excluded. The
+expression language is not supported here.    
+When used as free text, pure text (plain text) is always generated as output.
+The addition of markup, especially HTML code, is not possible and is only
+supported with the attributes `output` and `import`.
+
+```html
+<article title="{{Model.title}}">
+  {{'Hello World!'}}
+  ...
+</article>
+```
+
+Details about syntax and usage are described in the section
+[Expression Language](expression.md).
 
 
 ## Scripting

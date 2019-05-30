@@ -53,61 +53,13 @@ __resources, modules, and data requires the use of a web server.__
 Seanox aspect-js works exclusively in the BODY tag, which itself is included.
 
 
-## Expression Language
-
-Expressions or the Expression Language (EL) is a simple access to the
-client-side JavaScrript and thus to the models and components in aspect-js. In
-the expressions the complete JavaScript API is supported, which is enhanced with
-additional keywords, so that also the numerous arithmetic and logical operators
-can be used.
-
-The expression language can be used in the markup as free text and in the
-attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here.    
-When used as free text, pure text (plain text) is always generated as output.
-The addition of markup, especially HTML code, is not possible and is only
-supported with the attributes `output` and `import`.
- 
-```html
-<body lang="{{DataSource.locale}}">
-  <p>
-    Today is {{new Date().toDateString()}}
-    and it's {{new Date().toLocaleTimeString()}} o'clock.
-  </p>
-</body>
-```
-
-The Expression Language is temporarily visible, since the renderer only becomes
-active after the page has been loaded. Alternatively, the attributes
-[output](markup.md#output) and [import](markup.md#import) can be used, which
-cause a direct output into the inner HTML of the element. 
-
-```html
-<p output="Today is {{new Date().toDateString()}}
-    and it's {{new Date().toLocaleTimeString()}} o'clock.">
-</p>
-```
-
-Expressions can create and use global variables at runtime.
-
-```html
-{{now:new Date()}}
-<p>
-  Today is {{now.toDateString()}}
-  and it's {{now.toLocaleTimeString()}} o'clock.
-</p>
-```
-
-[Learn more](expression.md)
-
-
 ## Attributes
 
-The declarative approach is primarily implemented using attributes in aspect-js
-and can be used with all HTML elements and in combination. Excluded are
-`SCRIPT`,  which is only supported with the type `composite/javascript`, and
-`STYLE`, which is not supported. The values of the attributes can be static or
-dynamic when the expression language is used.   
+The declarative approach is primarily implemented using attributes in Seanox
+aspect-js and can be used with all HTML elements and in combination. Excluded
+are `SCRIPT`,  which is only supported with the type `composite/javascript`,
+and `STYLE`, which is not supported. The values of the attributes can be static
+or dynamic when the expression language is used.   
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
@@ -248,10 +200,10 @@ composite JavaScript.
 ### composite
 
 Marks an element in the markup as [Composite](composites.md).  
-Composites are modular components and have a versatile meaning in aspect-js.  
-They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
-virtual paths in the face-flow, which has a direct effect of the visibility of
-the composites.
+Composites are modular components and have a versatile meaning in Seanox
+aspect-js. They are used by the [SiteMap](mvc.md#sitemap) as faces, so as
+targets for virtual paths in the face-flow, which has a direct effect of the
+visibility of the composites.
 The [Model View Controler](mvc.md#sitemap) supports automatic
 [object/model binding](object-binding.md) for composites.  
 The resources (CSS, JS, Markup) for composites can be outsourced to the module
@@ -325,6 +277,54 @@ individually as a central solution with little effort.
 [Learn more](markup.md#validate)
 
 
+## Expression Language
+
+Expressions or the Expression Language (EL) is a simple access to the
+client-side JavaScrript and thus to the models and components in Seanox
+aspect-js. In the expressions the complete JavaScript API is supported, which is
+enhanced with additional keywords, so that also the numerous arithmetic and
+logical operators can be used.
+
+The expression language can be used in the markup as free text and in the
+attributes of the HTML elements. JavaScript and CSS elements are excluded. The
+expression language is not supported here.    
+When used as free text, pure text (plain text) is always generated as output.
+The addition of markup, especially HTML code, is not possible and is only
+supported with the attributes `output` and `import`.
+ 
+```html
+<body lang="{{DataSource.locale}}">
+  <p>
+    Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.
+  </p>
+</body>
+```
+
+The Expression Language is temporarily visible, since the renderer only becomes
+active after the page has been loaded. Alternatively, the attributes
+[output](markup.md#output) and [import](markup.md#import) can be used, which
+cause a direct output into the inner HTML of the element. 
+
+```html
+<p output="Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+```
+
+Expressions can create and use global variables at runtime.
+
+```html
+{{now:new Date()}}
+<p>
+  Today is {{now.toDateString()}}
+  and it's {{now.toLocaleTimeString()}} o'clock.
+</p>
+```
+
+[Learn more](expression.md)
+
+
 ## DataSource
 
 DataSource is a NoSQL approach to data storage based on XML data in combination
@@ -376,11 +376,11 @@ data, and presentation.
 For this we have to distinguish between I/O controller and application
 controller. The original MVC design pattern refers to the I/O controller for
 transmitting the interactions. Because this I/O controller is part of the
-operating system and the browser, the controller in aspect-js refers to the
-application controller. The application controller controls the flow within an
-application (face-flow) and takes over the binding of markup and JavaScript as
-well as the control of the data flow between view and model.  
-In aspect-js the controller is the collaboration of Composite, Paths and
+operating system and the browser, the controller in Seanox aspect-js refers to
+the application controller. The application controller controls the flow within
+an application (face-flow) and takes over the binding of markup and JavaScript
+as well as the control of the data flow between view and model.  
+In Seanox aspect-js the controller is the collaboration of Composite, Paths and
 SiteMap.
 
 
@@ -392,7 +392,7 @@ by the controller, or provides the view with an interface to data as well as
 functions and services of the middleware. The model primarily serves the view
 for the representation and management of the states, for business functionality
 it uses additional components.  
-In aspect-js the models are represented by static JavaScript objects.  
+In Seanox aspect-js the models are represented by static JavaScript objects.  
 Conceptually the implementation of the design pattern facade and delegation is
 planned, so that the static models internally use additional components and
 abstraction.
@@ -404,18 +404,18 @@ The view is exclusively responsible for the presentation or projection of a
 model.  
 Projection is an important term because the way in which a model is
 presented is not restricted.  
-In the context of aspect-js, terms face and factes are used for the visual
-representation/projection, which will be explained later.  
-In aspect-js the views are represented by the markup.
+In the context of Seanox aspect-js, terms face and factes are used for the
+visual representation/projection, which will be explained later.  
+In Seanox aspect-js the views are represented by the markup.
 
 
 ## SiteMap
 
-The representation in aspect-js is multilayered and the views are organized as
-page, faces and facets which are accessed with virtual paths. For this purpose,
-SiteMap provides a hierarchical directory structure based on the virtual paths
-for all views. The SiteMap then controls the access and the visualization (show
-and hide) of the views, which is termed face-flow.  
+The representation in Seanox aspect-js is multilayered and the views are
+organized as page, faces and facets which are accessed with virtual paths. For
+this purpose, SiteMap provides a hierarchical directory structure based on the
+virtual paths for all views. The SiteMap then controls the access and the
+visualization (show and hide) of the views, which is termed face-flow.  
 Face-flow and visualization are resolute and uses the DOM to insert and remove
 the views (faces and facets).
 
@@ -484,14 +484,14 @@ TODO:
 TODO:
 
 
-## Unit Test
+## Test
 
-The Test API supports the implementation and execution of integration tests and
+The Test-API supports the implementation and execution of integration tests and
 can be used for suites, scenarios and single test cases.
 
-As a modular component of Seanox aspect-js, the Test API is included in every
-release that can be easily removed. Because the Test API has some special
-features regarding error handling and console output, the Test API must be
+As a modular component of Seanox aspect-js, the Test-API is included in every
+release that can be easily removed. Because the Test-API has some special
+features regarding error handling and console output, the Test-API must be
 activated deliberately at runtime.
 
 ```javascript
@@ -504,8 +504,10 @@ Test.create({test:function() {
 Test.start();
 ```
 
+[Learn more](test.md)
 
-### Case / Task
+
+### Task
 
 The smallest component in an integration test, used here as 'task', because
 'case' is a keyword in JavaScript. It can be implemented alone, but is always
@@ -520,6 +522,44 @@ Test.create({test:function() {
 
 Test.start();
 ```
+
+Task is primarily a meta object.  
+
+```
+{name:..., test:..., timeout:..., expected:..., ignore:...}
+```
+
+
+#### name
+
+Optional name of the test task.
+
+
+#### test
+
+An implemented method to be executed as a test.
+
+
+#### timeout
+
+Optional the maximum runtime of the test item in milliseconds.
+Exceeding this limit will cause the test to fail.  
+A value greater than 0 is expected, otherwise the timeout is ignored.
+
+
+#### expected
+
+Optional to test the occurrence of defined errors.
+The error must occur if the test is successful.
+An error object or a RegExp is expected as value.
+
+
+#### ignore
+
+Optional true, if the test is to be ignored.
+
+[Learn more](test.m#task)
+
 
 ### Scenario
 
@@ -555,12 +595,16 @@ test. An example of a good suite is a cascade of different files und the test
 can be started in any file and place. This makes it possible toperform the
 integration test on different levels and with different complexity.
 
+[Learn more](test.m#suite)
+
 
 ### Assert
 
 The test cases are implemented with assertions. The Test-API provides elementary
 assertions, you can implement more. The function is simple. If an assertion was
 not ´true´, a error is thrown.
+
+[Learn more](test.m#assert)
 
 
 ### Console

@@ -21,7 +21,8 @@ abweichenden Befehlssatz. Es gibt keinen Standard für NoSQL, aber es gibt eine
 Datenquelle, die funktional ähnlich wie SQL verwendet werden kann.
 
 
-## Contents Overview
+## Inhalt
+
 * [Data Storage](#data-storage)
 * [Locales](#locales)
 * [Locator](#locator)
