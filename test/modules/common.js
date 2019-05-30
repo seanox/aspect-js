@@ -44,3 +44,15 @@ Assert.assertSameText = function(expected, actual) {
     actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
     Assert.assertEquals(expected, actual);    
 };
+
+Assert.assertSameTo = function(selector, actual) {
+    var element = document.querySelector(selector);
+    var content = element.innerHTML.trim().replace(/\t/g, "    ");
+    content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+    content = content.replace(/(^\s+)|(\s+$)/gm, "");
+    actual = actual.trim();
+    actual = actual.replace(/\t/g, "    ");
+    actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+    actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
+    Assert.assertEquals(content, actual);    
+};

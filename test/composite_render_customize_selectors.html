@@ -39,7 +39,7 @@
         });
         
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test']", document.body.textContent);
+            Assert.assertSameTo("script[type='text/test']", document.body.textContent);
         }});
         
         var count = 0;

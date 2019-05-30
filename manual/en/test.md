@@ -37,7 +37,6 @@ Test.start();
   * [assertEquals](#assertequals)
   * [assertNotEquals](#assertnotequals)
   * [assertSame](#assertsame)
-  * [assertSameTo](#assertsameto)
   * [assertNotSame](#assertnotsame)
   * [assertNull](#assertnull)
   * [assertNotNull](#assertnotnull)
@@ -239,26 +238,6 @@ Test.create({test:function() {
 }});
 Test.create({test:function() {
     Assert.assertSame("message", expected, value);
-}});
-
-Test.start();
-```
-
-
-### assertSameTo
-
-Special extension based on `Assert.assertSame(...)`.  
-The expected value is determined here from a DOM by a QuerySelector.  
-This method is for using templates contained in the DOM. The comparison is
-accordingly tolerant with blanks/whitespaces and compares these only
-inaccurately within the value.  
-If the assertion is false, an error with optional message is thrown.   
-
-```javascript
-Test.activate();
-
-Test.create({test:function() {
-    Assert.assertSameTo(selector, value);
 }});
 
 Test.start();

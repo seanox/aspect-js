@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.0 20190312
+ *  Test 1.1.0 20190530
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190312
+ *  @version 1.1.0 20190530
  */
 if (typeof Test === "undefined") {
     
@@ -774,30 +774,13 @@ if (typeof Test === "undefined") {
                     return;
                 throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
             };
-            
-            /**
-             *  Enhancement of the Test/Assert API
-             *  Adds a equals methode for a template to the Assert objects.
-             *  Spaces at the beginning and end of lines are ignored.
-             */
-            Assert.assertEqualsTo = function(selector, actual) {
-                var element = document.querySelector(selector);
-                var content = element.innerHTML.trim().replace(/\t/g, "    ");
-                content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-                content = content.replace(/(^\s+)|(\s+$)/gm, "");
-                actual = actual.trim();
-                actual = actual.replace(/\t/g, "    ");
-                actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-                actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-                Assert.assertEquals(content, actual);    
-            };    
     
             /**
              *  Asserts that two values are the same.
              *  Difference between equals and same: === / == or !== / !=
              *  If the assertion is incorrect, an error with a message is thrown.
              *  The method has the following various signatures:
-             *      function(message, nexpected, actual) 
+             *      function(message, expected, actual) 
              *      function(expected, actual) 
              *  @param message
              *  @param expected

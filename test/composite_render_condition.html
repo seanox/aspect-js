@@ -71,19 +71,19 @@
         var x4 = 0;
         
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-1']", snapshots.shift());
+            Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());
         }});
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-2']", snapshots.shift());
+            Assert.assertSameTo("script[type='text/test-2']", snapshots.shift());
         }});
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-3']", snapshots.shift());
+            Assert.assertSameTo("script[type='text/test-3']", snapshots.shift());
         }});
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-4']", snapshots.shift());
+            Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
         }});
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-5']", snapshots.shift());
+            Assert.assertSameTo("script[type='text/test-5']", snapshots.shift());
         }});
     </script>
     <script type="text/test-1">

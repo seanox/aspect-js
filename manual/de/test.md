@@ -38,7 +38,6 @@ Test.start();
   * [assertEquals](#assertequals)
   * [assertNotEquals](#assertnotequals)
   * [assertSame](#assertsame)
-  * [assertSameTo](#assertsameto)
   * [assertNotSame](#assertnotsame)
   * [assertNull](#assertnull)
   * [assertNotNull](#assertnotnull)
@@ -241,26 +240,6 @@ Test.create({test:function() {
 }});
 Test.create({test:function() {
     Assert.assertSame("message", expected, value);
-}});
-
-Test.start();
-```
-
-
-### assertSameTo
-
-Spezielle Erweiterung basierend auf `Assert.assertSame(....)`.  
-Der erwartete Wert wird hierbei mit einen QuerySelector aus DOM ermittelt. Diese
-Methode ist für die Verwendung von Vorlagen, die im DOM enthalten sind. Der
-Vergleich von Leerzeichen/Whitespaces ist entsprechend tolerant und vergleicht
-diese nur ungenau innerhalb des Wertes.  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.
-
-```javascript
-Test.activate();
-
-Test.create({test:function() {
-    Assert.assertSameTo(selector, value);
 }});
 
 Test.start();

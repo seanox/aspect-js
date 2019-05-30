@@ -106,7 +106,6 @@ Machine translation with [DeepL](https://deepl.com).
     * [assertEquals](test.md#assertequals)
     * [assertNotEquals](test.md#assertnotequals)
     * [assertSame](test.md#assertsame)
-    * [assertSameTo](test.md#assertsameto)
     * [assertNotSame](test.md#assertnotsame)
     * [assertNull](test.md#assertnull)
     * [assertNotNull](test.md#assertnotnull)

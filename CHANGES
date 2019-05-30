@@ -1,10 +1,13 @@
+1.2.0 2019xxxx
+  CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js
+
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 
   BF: DataSource: Correction if no DataSource exists
   BF: Messages: Correction if no DataSource exists
   CR: DataSource: Added the changing of localization via DataSource.localize(locale)
   CR: Messages: Added the changing of localization via DataSource.localize(locale)
-  CR: Project: Added support for jsdelivr.com 
+  CR: Project: Added support for jsdelivr.com
   
 1.0.0 20190515
   NT: Release is available 

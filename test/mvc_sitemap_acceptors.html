@@ -110,7 +110,7 @@
             content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
             content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
             document.body.textContent = content;
-            Assert.assertEqualsTo("script[type='text/test']", content);                  
+            Assert.assertSameTo("script[type='text/test']", content);                  
         }});    
         
         var errors = "";

@@ -74,11 +74,11 @@
         };
         
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-1']", stack.join("\n")); 
+            Assert.assertSameTo("script[type='text/test-1']", stack.join("\n")); 
         }});         
 
         Test.create({test:function() {
-            Assert.assertEqualsTo("script[type='text/test-2']", snapshots.join("\n")); 
+            Assert.assertSameTo("script[type='text/test-2']", snapshots.join("\n")); 
         }});  
         
         var count = 0;

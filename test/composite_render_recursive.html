@@ -21,9 +21,9 @@
         };
         
         Test.create({test:function() {
-            try {Assert.assertEqualsTo("script[type='text/test-1']", document.body.innerHTML);
+            try {Assert.assertSameTo("script[type='text/test-1']", document.body.innerHTML);
             } catch (exception) {
-                try {Assert.assertEqualsTo("script[type='text/test-2']", document.body.innerHTML);
+                try {Assert.assertSameTo("script[type='text/test-2']", document.body.innerHTML);
                 } catch (exception) {
                     throw exception;
                 }
