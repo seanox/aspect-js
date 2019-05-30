@@ -60,8 +60,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox aspect-js 1.0.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0.zip)  
-[Seanox aspect-js 1.0.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.0.0-src.zip)
+[Seanox aspect-js 1.1.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.1.0.zip)  
+[Seanox aspect-js 1.1.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.1.0-src.zip)
 
 
 # Release Channels
