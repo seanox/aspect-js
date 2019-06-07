@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.1.0 20190530
+ *  Test 1.2.0 20190607
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20190530
+ *  @version 1.2.0 20190607
  */
 if (typeof Test === "undefined") {
     
@@ -146,7 +146,7 @@ if (typeof Test === "undefined") {
         /** Indicator if the autostart function can be used */
         Test.autostart;
         
-        /** Assoziative array with events and their registered listerners */
+        /** Assoziative array with events and their registered listeners */
         Test.listeners;
         
         /** Pattern for all accepted events */
@@ -303,28 +303,40 @@ if (typeof Test === "undefined") {
         /**
          *  Internal method to trigger an event.
          *  All callback functions for this event are called.
+         *  If the script is in a frame, at the parent object it will also try
+         *  to trigger this method. The parent object is always triggered after
+         *  the current object. If an error occurs when calling the current
+         *  object, the parent object is not triggered.
          *  @param event  see Test.EVENT_***
          *  @param status status object with information about the test execution
          */
         Test.fire = function(event, status) {
             
-            if (typeof Test.monitor === "object"
-                && typeof Test.monitor[event] === "function")
-            try {Test.monitor[event](status);
-            } catch (error) {
-                console.error(error);
-            }        
+            var invoke = function(context, event, status) {
+                if (typeof context.Test.monitor === "object"
+                    && typeof context.Test.monitor[event] === "function")
+                try {context.Test.monitor[event](status);
+                } catch (error) {
+                    console.error(error);
+                }        
 
-            event = (event || "").trim();
-            if (!Test.listeners
-                    || !event)
-                return;
-            var listeners = Test.listeners[event.toLowerCase()];
-            if (!Array.isArray(listeners))
-                return;
-            listeners.forEach((callback, index, array) => {
-                window.setTimeout(callback, 0, event, status);
-            });        
+                event = (event || "").trim();
+                if (!context.Test.listeners
+                        || !event)
+                    return;
+                var listeners = context.Test.listeners[event.toLowerCase()];
+                if (!Array.isArray(listeners))
+                    return;
+                listeners.forEach((callback, index, array) => {
+                    window.setTimeout(callback, 0, event, status);
+                }); 
+            };
+            
+            invoke(window, event, status);
+            if (parent && parent !== window)
+                try {invoke(parent, event, status);
+                } catch (exception) {
+                }
         };    
         
         /**
@@ -865,86 +877,104 @@ if (typeof Test === "undefined") {
         };
     
         /**
-         *  Redirection of the console when using tests in IFrames, based on
-         *  calling message events in the parent document.
-         *  The message events are on methods for levels: INFO, ERROR, WARN, LOG.
-         *  
-         *      Example:
-         *      
-         *  var onLog = function(message) {
-         *      ...
-         *  }
+         *  Redirection of the console level INFO, ERROR, WARN, LOG when using
+         *  tests. The outputs are buffered for analysis and listeners can be
+         *  implemented whose callback method is called at console outputs.
          */
-        if (typeof parent !== "undefined") {
             
-            /** Cache for analyzing console output */
-            console.output = {log:"", warn:"", error:"", info:""};
-            
-            /** Clears the cache from the console output. */
-            console.output.clear = function() {
-                console.output.log = "";
-                console.output.warn = "";
-                console.output.error = "";
-                console.output.info = "";
-            };
-            
-            /** 
-             *  General method for redirecting console levels.
-             *  @param level
-             *  @param variants
-             */
-            console.forward = function(level, variants) {
-                
-                console.output[level] += Array.from(variants).join(", ");
-                
-                var invoke;
-                if (parent)
-                    invoke = parent["on" + level.capitalize()];
-                if (invoke == null)
-                    invoke = console.forward[level];
-                invoke.apply(null, variants);
-            };
-            
-            /** Redirect for the level: LOG */
-            console.forward.log = console.log;
-            console.log = function(message) {
-                console.forward("log", arguments);
-            };
-            
-            /** Redirect for the level: WARN */
-            console.forward.warn = console.warn;
-            console.warn = function(message) {
-                console.forward("warn", arguments);
-            };
-            
-            /** Redirect for the level: ERROR */
-            console.forward.error = console.error;
-            console.error = function(message) {
-                console.forward("error", arguments);
-            };
-            
-            /** Redirect for the level: INFO */
-            console.forward.info = console.info;
-            console.info = function(message) {
-                console.forward("info", arguments);
-            };
-            
-            /** Registration of events for redirection */
-            if (typeof parent.onFinish === "function")
-                Test.listen(Test.EVENT_FINISH, parent.onFinish);
-            if (typeof parent.onInterrupt === "function")
-                Test.listen(Test.EVENT_INTERRUPT, parent.onInterrupt);
-            if (typeof parent.onPerform === "function")
-                Test.listen(Test.EVENT_PERFORM, parent.onPerform);
-            if (typeof parent.onResponse === "function")
-                Test.listen(Test.EVENT_RESPONSE, parent.onResponse);
-            if (typeof parent.onResume === "function")
-                Test.listen(Test.EVENT_RESUME, parent.onResume);
-            if (typeof parent.onStart === "function")
-                Test.listen(Test.EVENT_START, parent.onStart);
-            if (typeof parent.onSuspend === "function")    
-                Test.listen(Test.EVENT_SUSPEND, parent.onSuspend);
+        /** Cache for analyzing console output */
+        console.output = {log:"", warn:"", error:"", info:""};
+        
+        /** Clears the cache from the console output. */
+        console.output.clear = function() {
+            console.output.log = "";
+            console.output.warn = "";
+            console.output.error = "";
+            console.output.info = "";
         };
+        
+        /** Array of registered listeners for occurring console outputs. */
+        console.listeners = [];
+        
+        /**
+         *  Registers a callback function for console output.
+         *  Expected method signatures:
+         *      function(level)
+         *      function(level, ...)
+         *  @param callback callback function
+         */
+        console.listen = function(callback) {
+            
+            console.listeners = console.listeners || [];
+            console.listeners.push(callback);
+        };
+        
+        /** 
+         *  General method for redirecting console levels.
+         *  If the script is in a frame, at the parent object it will also try
+         *  to trigger this method. The parent object is always triggered after
+         *  the current object. If an error occurs when calling the current
+         *  object, the parent object is not triggered.
+         *  @param level
+         *  @param variants
+         *  @param output
+         */
+        console.forward = function(level, variants, output) {
+            
+            console.output[level] += Array.from(variants).join(", ");
+            
+            if (output)
+                output.apply(null, variants);
+            
+            var values = Array.from(variants);
+            values.unshift(level);
+            
+            var listeners = console.listeners;
+            if (Array.isArray(listeners))
+                listeners.forEach((callback, index, array) => {
+                    callback.apply(null, values);
+                }); 
+            
+            arguments = Array.from(arguments);
+            if (arguments.length > 2)
+                arguments[2] = null;
+            if (parent && parent !== window
+                    && parent.console
+                    && typeof parent.console.forward === "function")
+                parent.console.forward.apply(null, arguments);
+        };
+        
+        /** Redirect for the level: LOG */
+        console.forward.log = console.log;
+        console.log = function(message) {
+            console.forward("log", arguments, console.forward.log);
+        };
+        
+        /** Redirect for the level: WARN */
+        console.forward.warn = console.warn;
+        console.warn = function(message) {
+            console.forward("warn", arguments, console.forward.warn);
+        };
+        
+        /** Redirect for the level: ERROR */
+        console.forward.error = console.error;
+        console.error = function(message) {
+            console.forward("error", arguments, console.forward.error);
+        };
+        
+        /** Redirect for the level: INFO */
+        console.forward.info = console.info;
+        console.info = function(message) {
+            console.forward("info", arguments, console.forward.info);
+        };
+        
+        /** In the case of an error, the errors are forwarded to the console. */
+        window.addEventListener("error", function(event) {
+            if (parent && parent !== window)
+                console.forward("error", (function() {
+                    return arguments;
+                })(event.message), null);
+        });        
     
         /**
          *  Enhancement of the JavaScript API

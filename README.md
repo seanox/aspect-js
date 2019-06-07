@@ -86,13 +86,14 @@ date when using the release channels.
 - [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
 
 # Changes (Change Log)
-## 1.1.0 20190530 (summary of the current version)  
-BF: Build: Optimization/correction when creating releases  
-BF: DataSource: Correction if no DataSource exists  
-BF: Messages: Correction if no DataSource exists  
-CR: DataSource: Added the changing of localization via DataSource.localize(locale)  
-CR: Messages: Added the changing of localization via DataSource.localize(locale)  
-CR: Project: Added support for jsdelivr.com  
+## 1.2.0 2019xxxx (summary of the next version)  
+CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  
+CR: Test: Enhancement of console output monitoring  
+CR: Test: Optimization of console forwarding  
+CR: Test: Extension of console forwarding by listeners  
+CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames  
+CR: Test: Extension for central catching of errors with activated Test-AP  
+CR: Test Suit: Optimization of error output  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

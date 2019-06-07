@@ -66,10 +66,13 @@
         margin:0em;
         padding:0.75em;
       }
-      #progress > div.successful  {
+      #progress > div.progress {
+        border-left-color:#00A0F0;
+      }
+      #progress > div.successful {
         border-left-color:#70A040;
       }
-      #progress > div.failed  {
+      #progress > div.failed {
         border-left-color:#FF0000;
       }
       #progress > div + div {
@@ -107,7 +110,7 @@
         border-left-color:#00A0F0;
       }
       #output pre.warn {
-        border-left-color:#F0A000;
+        border-left-color:#FFA000;
       }
     </style>
     <script type="text/test-cases">
@@ -153,19 +156,19 @@
       mvc_sitemap_empty.html
       mvc_sitemap_permit.html
     </script>
-    <script src="../sources/extension.js"></script>
+    <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
       var queue;
       var faults;
       var lock;
     
-      window.addEventListener("load", function(event) {
+      window.addEventListener("load", (event) => {
           queue = document.querySelector("script[type='text/test-cases']");
           queue = queue.textContent.trim().split(/\s+/);
           queue = queue.filter(entry => !entry.match(/^\*/));
           var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
-          queue.forEach(function(entry, index, array) {
+          queue.forEach((entry, index, array) => {
               var text = content;
               text = text.replace(/%1/g, entry.hashCode());
               text = text.replace(/%2/g, entry);
@@ -173,8 +176,8 @@
           });
           lock = true;
           var tests = document.querySelectorAll("#progress div[id]");
-          tests.forEach(function(test, index, array) {
-              test.addEventListener("click", function(event) {
+          tests.forEach((test, index, array) => {
+              test.addEventListener("click", (event) => {
                   if (lock)
                       return;
                   var test = event.currentTarget.textContent.match(/^[\S]+/);
@@ -199,39 +202,11 @@
       };
       
       var loadTest = function(test) {
+          outputMessage("info", "Loading " + test);
           document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + new Date().getTime());
       };
       
-      var onMessage = function(event, message) {
-          var output = document.querySelector("#output");
-          var content = document.createElement("pre");
-          content.className = event;
-          content.textContent = String(message || "").trim();
-          if (content.textContent)
-              output.appendChild(content);
-          output.innerHTML = output.innerHTML.trim();
-          output.scrollTop = output.scrollHeight;          
-      };
-      var onLog = function(message) {
-          onMessage("log", message);
-      };
-      var onInfo = function(message) {
-          onMessage("info", message);
-      };      
-      var onWarn = function(message) {
-          onMessage("warn", message);
-      };      
-      var onError = function(message) {
-          if (String(message).match(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\sTest/i))
-              onMessage("error", message);
-          else onMessage("warn", message);
-      };    
-      
-      var onStart = function(event, status) {
-          onMessage("info", "Start of " + locateTest()
-                  + "\r\n\t" + status.queue.size + " tests found");
-      };
-      var onPerform = function(event, status) {
+      var performTest = function(event, status) {
           var test = locateTest();
           test = document.querySelector("#" + test.hashCode());
           test.scrollIntoView(false);
@@ -244,25 +219,74 @@
           test.className = status.queue.faults ? "failed" : "successful";
           if (status.queue.faults)
               faults = true;  
-      };      
-      var onFinish = function(event, status) {
-          onPerform(event, status);
+      }; 
+      
+      var outputMessage = function(event, message) {
+          var output = document.querySelector("#output");
+          var content = document.createElement("pre");
+          content.className = event;
+          content.textContent = String(message || "").trim();
+          if (content.textContent)
+              output.appendChild(content);
+          output.innerHTML = output.innerHTML.trim();
+          output.scrollTop = output.scrollHeight;          
+      };
+      
+      Test.activate();
+      
+      Test.listen(Test.EVENT_START, (event, status) => {
+          outputMessage("info", "Start of " + locateTest()
+                  + "\r\n\t" + status.queue.size + " tests found");
+      });    
+      
+      Test.listen(Test.EVENT_PERFORM, (event, status) => {
+          performTest(event, status);
+      });      
+      
+      Test.listen(Test.EVENT_FINISH, (event, status) => {
+          
+          performTest(event, status);
           if (queue.length > 0) {
               loadTest(queue.shift());
           } else {
               if (typeof faults !== "undefined"
                       && faults)
-                  onMessage("error", "Some of the tests failed.");
-              else onMessage("info", "All tests were successful.");
+                  outputMessage("error", "Some of the tests failed.");
+              else outputMessage("info", "All tests were successful.");
           }
-          lock = false;          
-      };      
-      var onInterrupt = function(event, status) {
-          onMessage("warn", "Interrupt of " + locateTest());
-          onPerform(event, status);
+          lock = false;   
+          
+          window.focus();
+          document.body.focus();
+
+          var test = locateTest();
+          test = document.querySelector("#" + test.hashCode());
+          if (test && !test.className) {
+              test.scrollIntoView(false);
+              test.className = "progress";
+          }
+      });
+      
+      Test.listen(Test.EVENT_INTERRUPT, (event, status) => {
+          outputMessage("warn", "Interrupt of " + locateTest());
+          performTest(event, status);
           if (queue.length > 0)
               loadTest(queue.shift());
-      };    
+      });
+      
+      console.listen(function(event, variants) {
+          
+          if (arguments.length <= 0)
+              return;
+          
+          var message = Array.from(arguments).slice(1).join(", ");
+          event = (event || "").trim();
+          if (event.match(/^error$/i))
+              if (!String(message).match(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+Test/i))
+                  event = "warn";
+          message = message.replace(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+/i, "");
+          outputMessage(event, message);
+      });
     </script>
   </head>
   <body>
