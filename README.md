@@ -93,7 +93,7 @@ CR: Test: Optimization of console forwarding
 CR: Test: Extension of console forwarding by listeners  
 CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames  
 CR: Test: Extension for central catching of errors with activated Test-AP  
-CR: Test Suit: Optimization of error output  
+CR: Test Suite: Optimization of error output  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
