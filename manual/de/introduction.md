@@ -742,14 +742,76 @@ console.listen(function(level, message) {
 
 ### Monitoring
 
-TODO:
+Das Monitoring überwacht den Testablauf während der Ausführung wird über die
+verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
+diesen werden Informationen zum Testverlauf in der Konsole ausgegeben.
+
+[Mehr erfahren](test.md#monitoring)
 
 
 ### Control
 
-TODO:
+Der Testverlauf und die Verarbeitung der einzelnen Tests kann per Test-API
+gesteuert werden.
+
+```javascript
+Test.start();
+});
+```
+
+(Neu)Start der Testausführung.  
+
+```javascript
+Test.suspend();
+});
+```
+
+Unterbricht die aktuelle Testausführung, die mit `Test.resume()` vom aktuellen
+Test fortgesetzt werden kann.
+
+```javascript
+Test.resume();
+});
+```
+
+Setzt die Testausführung fort, wenn sie zuvor unterbrochen wurde.
+
+```javascript
+Test.interrupt();
+});
+```
+
+Unterbricht die aktuelle Testausführung und verwirft alle ausstehenden Tests.
+Der Testlauf kann mit `Test.start()` neu gestartet werden.
+
+```javascript
+Test.status();
+});
+```
+
+Macht eine Momentaufnahme des Status des aktuellen Tests.  
+
+[Mehr erfahren](test.md#control)
 
 
 ### Events
 
-TODO:
+Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
+Überwachung der Testausführung. Die Callback-Methoden werden für entsprechende
+Ereignisse vom Test-API registriert und funktionieren dann ähnlich dem Monitor.
+
+```javascript
+Test.listen(Test.EVENT_START, function(event, status) {
+    ...
+});    
+  
+Test.listen(Test.EVENT_PERFORM, function(event, status) {
+    ...
+});      
+  
+Test.listen(Test.EVENT_FINISH, function(event, status) {
+    ...
+});      
+```
+
+[Mehr erfahren](test.md#events)

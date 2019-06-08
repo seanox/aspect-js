@@ -679,14 +679,76 @@ console.listen(function(level, message) {
 
 ### Monitoring
 
-TODO:
+Monitoring monitors the progress of the test and is informed of the various
+steps and statuses during execution. The monitor is optional. Without this, the
+console is used to output information about the test process.
+
+[Learn more](test.m#monitoring)
 
 
 ### Control
 
-TODO:
+The test progress and the execution of the tests can be controlled by the
+Test-API.
+
+```javascript
+Test.start();
+});
+```
+
+(Re)Starts the test execution.  
+
+```javascript
+Test.suspend();
+});
+```
+
+Suspends the current test execution, which can be continued from the current
+test with `Test.resume()`.
+
+```javascript
+Test.resume();
+});
+```
+
+Continues the test execution if it was stopped before.
+
+```javascript
+Test.interrupt();
+});
+```
+
+Interrupts the current test run and discards all outstanding tests.
+The test run can be restarted with `Test.start()`.
+
+```javascript
+Test.status();
+});
+```
+
+Makes a snapshot of the status of the current test.
+
+[Learn more](test.m#control)
 
 
 ### Events
 
-TODO:
+Events and their callback methods are another way of monitoring test execution.
+The callback methods are registered at the Test-API for corresponding events and
+then work similar to the monitor.
+
+```javascript
+Test.listen(Test.EVENT_START, function(event, status) {
+    ...
+});    
+  
+Test.listen(Test.EVENT_PERFORM, function(event, status) {
+    ...
+});      
+  
+Test.listen(Test.EVENT_FINISH, function(event, status) {
+    ...
+});      
+```
+
+[Learn more](test.m#events)
