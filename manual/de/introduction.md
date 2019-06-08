@@ -670,7 +670,38 @@ einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
 
 ### Output
 
-TODO:
+Als Entwicklungswerkzeug stellen Browser eine Konsolenausgabe bereit, die zur
+Protokollierung von Informationen verwendet werden kann.  
+Die Protokollierung unterstützt verschiedene Kanäle bzw. Stufen (Level): LOG,
+WARN, ERROR und INFO.
+
+```javascript
+console.log(message);
+console.warn(message);
+console.error(message);
+console.info(message);
+```
+
+Um die Konsolenausgabe in Tests einbeziehen zu können, unterstützt das
+aktivierte Test-API Weiterleitungen (Forwarding), Listener und Puffer (Buffer)
+für die Konsolenausgabe.
+
+```javascript
+
+var log   = console.output.log;
+var warn  = console.output.warn;
+var error = console.output.error;
+var info  = console.output.info;
+
+console.output.clear();
+
+console.listen(function(level, message) {
+    message = Array.from(arguments).slice(1);
+    ...
+});
+```
+
+[Mehr erfahren](test.md#output)
 
 
 ### Monitoring
