@@ -1,4 +1,4 @@
-[TOC](README.md) | [Markup](markup.md)
+[TOC](README.md) | [Markup](markup.md#motivation)
 
 # Motivation
 
@@ -17,4 +17,4 @@ integration into the markup, the desire arose for a similar client-side solution
 as a sporty experiment to understand rendering, expression language and
 performance.
 
-[TOC](README.md) | [Markup](markup.md)
+[TOC](README.md) | [Markup](markup.md#motivation)

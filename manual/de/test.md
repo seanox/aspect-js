@@ -42,7 +42,10 @@ Test.start();
   * [assertNull](#assertnull)
   * [assertNotNull](#assertnotnull)
   * [fail](#fail)
-* [Output](#output)
+* [Konfiguration](#konfiguration)
+  * [Output](#output)
+  * [Monitor](#monitor)
+* [Output](#output-1)
   * [Forwarding](#forwarding)
   * [Buffer](#buffer)
   * [Listener](#listener)
@@ -326,6 +329,151 @@ Test.create({test:function() {
 }});
 
 Test.start();
+```
+
+
+## Konfiguration
+
+Optional kann das Test-API, mit Fokus auf Überwachung konfiguriert werden.  
+Die Konfiguration kann einmalig und mehrfach aufgerufen werden. Als Argument
+wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
+übernommen und unbekanntes wird ignoriert.
+
+
+```javascript
+Test.configure({
+    log:function(message) {
+        ...
+    },
+    error:function(message) {
+        ...
+    },
+    ...
+});
+
+Test.configure({
+    start:function(status) {
+        ...
+    },
+    perform:function(status) {
+        ...
+    },
+    response:function(status) {
+        ...
+    },
+    
+    finish:function(status) {
+        ...
+    }
+});
+
+```
+
+
+### Output
+
+Funktion oder Objekt zur Ausgabe von Meldungen und Fehlern.  
+Wenn nicht angegeben, wird das console-Objekt verwendet.
+
+```javascript
+Test.configure({
+    log:function(message) {
+        ...
+    },
+    error:function(message) {
+        ...
+    }
+});
+```
+
+
+### Monitor
+
+Überwacht den Testablauf und wird während der Ausführung über die verschiedenen
+Schritte und Status informiert. Der Monitor kann auch für die Datenausgabe
+verwendet werden und z.B. die Ausgabe in ein DOM-Element umleiten.  
+Der Monitor ist optional. Ohne diesen werden Informationen zum Testverlauf in
+der Konsole ausgegeben.
+
+```javascript
+Test.configure({
+
+    start:function(status) {
+        Aufruf der Methode beim Start.
+    },
+    
+    suspend:function(status) {
+        Aufruf der Methode bei einer Unterbrechung.
+    },
+    
+    resume:function(status) {
+        Aufruf der Methode beim Fortgesetzt des Testverlaufs, wenn
+        dieser zuvor unterbrochen wurde.
+    },
+    
+    interrupt:function(status) {
+        Aufruf der Methode beim Abbruch vom Testlauf.
+        Der Testlauf kann nicht fortgesetzt werden.
+    },
+    
+    perform:function(status) {
+        Aufruf der Methode bevor eine Testaufgabe ausgeführt wird.
+    },
+    
+    response:function(status) {
+        Aufruf der Methode nach der Ausführung einer Testaufgabe.
+        Hier ist das Ergebnis der Testaufgabe enthalten.
+    },
+    
+    finish:function(status) {
+        Aufruf der Methode, wenn alle Testaufgaben abgeschlossen sind.
+    }
+});
+```
+
+Allen Monitor-Methoden wird der aktuelle Status als Objekt übergeben.  
+Der Status ist eine Momentaufnahme des aktuellen Testlaufs mit Angaben zur
+aktuellen Aufgabe und zur Warteschlange. Die Details sind nur lesabr und können
+nicht geändert werden.
+
+```javascript
+
+{
+    task: {
+        title:
+            Titel der Testaufgabe,
+        meta:
+            Meta-Informationen zum Test (name, test, timeout, expected,
+            serial),
+        running:
+            Kennzeichen, wenn die Testaufgabe ausgeführt wird.
+        timing:
+            Zeitpunkt vom Beginn der Testaufgabe in Millisekunden.
+        timeout:
+            Optionale Zeit in Millisekunden, zu der ein Timeout
+            erwartet wird.
+        duration:
+            Gesamtausführungszeit der Testaufgabe in Millisekunden nach
+            dem Ende der Testaufgabe.
+        error:
+            Optional, wenn ein unerwarteter Fehler (auch Asser-Fehler)
+            aufgetreten ist, der die Testaufgabe beendet hat.
+    },
+    queue: {
+        timing:
+            Zeitpunkt vom Beginn in Millisekunden,
+        size:
+            ursprüngliche Anzahl von Testfällen,
+        length:
+            Anzahl ausstehenden Tests,
+        progress:
+            Anzahl durchgeführter Tests,
+        lock:
+            Indikator, wenn die Queue zur Ausführung eines Test wartet,
+        faults:
+            Anzahl der erkannten Fehler        
+    }
+}
 ```
 
 

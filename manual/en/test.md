@@ -41,7 +41,10 @@ Test.start();
   * [assertNull](#assertnull)
   * [assertNotNull](#assertnotnull)
   * [fail](#fail)
-* [Output](#output)
+* [Configuration](#configuration)
+  * [Output](#output)
+  * [Monitor](#monitor)
+* [Output](#output-1)
   * [Forwarding](#forwarding)
   * [Buffer](#buffer)
   * [Listener](#listener)
@@ -327,6 +330,149 @@ Test.start();
 ```
 
 
+## Configuration
+
+Optionally, the Test-API can be configured with a focus on monitoring.  
+The configuration can be called up once or several times. A meta object is
+expected as argument. The configuration contained in it is partially adopted and
+the unknown is ignored.
+
+```javascript
+Test.configure({
+    log:function(message) {
+        ...
+    },
+    error:function(message) {
+        ...
+    },
+    ...
+});
+
+Test.configure({
+    start:function(status) {
+        ...
+    },
+    perform:function(status) {
+        ...
+    },
+    response:function(status) {
+        ...
+    },
+    
+    finish:function(status) {
+        ...
+    }
+});
+
+```
+         
+
+### Output
+
+Function or object for outputting messages and errors.  
+If not specified, console object is used.
+
+```javascript
+Test.configure({
+    log:function(message) {
+        ...
+    },
+    error:function(message) {
+        ...
+    }
+});
+```
+
+
+### Monitor
+
+Monitors the progress of the test and is informed of the various steps and
+statuses during execution. The monitor can also be used for data output, for
+example, to redirect the output to a DOM element.  
+The monitor is optional. Without this, the console is used to output information
+about the test process.
+
+```javascript
+Test.configure({
+
+    start:function(status) {
+        The method is called with the start.
+    },
+    
+    suspend:function(status) {
+        The method is called with suspension.
+    },
+    
+    resume:function(status) {
+        The method is called if the test run is stopped and is to be
+        continued later.
+    },
+    
+    interrupt:function(status) {
+        The method is called if you want to abort the test run.
+        The test run cannot then be resumed.
+    },
+    
+    perform:function(status) {
+        The method is called before a test task is performed.
+    },
+    
+    response:function(status) {
+        The method is called when a test task has been performed.
+        Here you can find the result of the test task.
+    },
+    
+    finish:function(status) {
+        The method is called when all test tasks have been completed.
+    }
+});
+```
+
+The current status is passed to all monitor methods as an object. The status is
+a snapshot of the current test run with details of the current task and the
+queue. The details are read-only and cannot be changed.
+
+```javascript
+
+{
+    task: {
+        title:
+            title of the test task,
+        meta:
+            meta information about the test itself (name, test,
+            timeout, expected, serial),
+        running:
+            indicator when the test task is in progress
+        timing:
+            start time from the test task in milliseconds
+        timeout:
+            optional, the time in milliseconds when a timeout is
+            expected
+        duration:
+            total execution time of the test task in milliseconds, is
+            set with the end of the test task
+        error:
+            optional, if an unexpected error (also asser error) has
+            occurred, which terminated the test task
+    },
+    queue: {
+        timing:
+            start time in milliseconds,
+        size:
+            original queue length,
+        length:
+            number of outstanding tests,
+        progress:
+            number of tests performed,
+        lock:
+            indicator when a test is performed and the queue is waiting,
+        faults:
+            number of detected faults        
+    }
+}
+```
+
+
 ## Output
 
 As a development tool, browsers provide console output that can be used to log
@@ -387,6 +533,9 @@ makes it easier to use `arguments`.
 
 
 ## Monitoring
+
+
+         
 
 TODO:
 

@@ -604,6 +604,42 @@ The test cases are implemented with assertions. The Test-API provides elementary
 assertions, you can implement more. The function is simple. If an assertion was
 not ´true´, a error is thrown.
 
+```javascript
+Test.activate();
+
+Test.create({test:function() {
+
+    Assert.assertTrue(true);
+    Assert.assertTrue("message", true);
+
+    Assert.assertFalse(false);
+    Assert.assertFalse("message", false);
+
+    Assert.assertEquals(expected, value);
+    Assert.assertEquals("message", expected, value);
+
+    Assert.assertNotEquals(unexpected, value);
+    Assert.assertNotEquals("message", unexpected, value);
+
+    Assert.assertSame(expected, value);
+    Assert.assertSame("message", expected, value);
+
+    Assert.assertNotSame(unexpected, value);
+    Assert.assertNotSame("message", unexpected, value);
+
+    Assert.assertNull(null);
+    Assert.assertNull("message", null);
+
+    Assert.assertNotNull(null);
+    Assert.assertNotNull("message", null);
+
+    Assert.fail();
+    Assert.fail("message");
+}});
+
+Test.start();
+```
+
 [Learn more](test.m#assert)
 
 
