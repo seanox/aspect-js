@@ -335,7 +335,7 @@ Test.start();
 ## Konfiguration
 
 Optional kann das Test-API, mit Fokus auf Überwachung konfiguriert werden.  
-Die Konfiguration kann einmalig und mehrfach aufgerufen werden. Als Argument
+Die Konfiguration kann einmalig und mehrfach aufgerufen werden. Als Parameter
 wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
 übernommen und unbekanntes wird ignoriert.
 
@@ -431,13 +431,11 @@ Test.configure({
 });
 ```
 
-Allen Monitor-Methoden wird der aktuelle Status als Objekt übergeben.  
-Der Status ist eine Momentaufnahme des aktuellen Testlaufs mit Angaben zur
-aktuellen Aufgabe und zur Warteschlange. Die Details sind nur lesabr und können
-nicht geändert werden.
+Allen Monitor-Methoden wird der aktuelle Status als Meta-Objekt übergeben.  
+Der Status enthält Details zum aktuellen Test und zur Warteschlange. Die Details
+sind schreibgeschützt und können nicht geändert werden.
 
 ```javascript
-
 {
     task: {
         title:
@@ -533,25 +531,142 @@ console.listen(function(level, message) {
 ```
 
 Die Callback-Methoden werden dann bei jeder Konsolenausgabe unter Angabe vom
-Log-Level, das als erstes Argument übergeben wird, aufgerufen. Die weitere
-Anzahl von Argumenten ist variable und abhängig vom initialen Aufruf der
+Log-Level, das als erstes Parameter übergeben wird, aufgerufen. Die weitere
+Anzahl von Parametern ist variable und abhängig vom initialen Aufruf der
 korrespondierenden console-Methoden. Womit es oft einfacher ist `arguments` zu
 verwenden.
 
 
 ### Monitoring
 
-TODO:
+Das Monitoring überwacht den Testablauf während der Ausführung wird über die
+verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
+diesen werden Informationen zum Testverlauf in der Konsole ausgegeben.
+
+Details zur Konfiguration und und Verwendung werden im Abschnitt
+[Konfiguration - Monitor](#monitor) beschrieben.
 
 
 ### Control
 
-TODO:
+Der Testverlauf und die Verarbeitung der einzelnen Tests kann per Test-API
+gesteuert werden.
+
+```javascript
+Test.start();
+Test.start(boolean);
+});
+```
+
+(Neu)Start der Testausführung.  
+Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
+der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
+`auto` ignoriert und der Start sofort ausgeführt.
+
+```javascript
+Test.suspend();
+});
+```
+
+Unterbricht die aktuelle Testausführung, die mit `Test.resume()` vom aktuellen
+Test fortgesetzt werden kann.
+
+```javascript
+Test.resume();
+});
+```
+
+Setzt die Testausführung fort, wenn sie zuvor unterbrochen wurde.
+
+```javascript
+Test.interrupt();
+});
+```
+
+Unterbricht die aktuelle Testausführung und verwirft alle ausstehenden Tests.
+Der Testlauf kann mit `Test.start()` neu gestartet werden.
+
+```javascript
+Test.status();
+});
+```
+
+Macht eine Momentaufnahme des Status des aktuellen Tests.  
+Der Status enthält Details zum aktuellen Test und zur Warteschlange. Die Details
+sind schreibgeschützt und können nicht geändert werden. Wenn kein Test
+ausgeführt wird, wird `false` zurückgegeben.
+
+```javascript
+{
+    task: {
+        title:
+            Titel der Testaufgabe,
+        meta:
+            Meta-Informationen zum Test (name, test, timeout, expected,
+            serial),
+        running:
+            Kennzeichen, wenn die Testaufgabe ausgeführt wird.
+        timing:
+            Zeitpunkt vom Beginn der Testaufgabe in Millisekunden.
+        timeout:
+            Optionale Zeit in Millisekunden, zu der ein Timeout
+            erwartet wird.
+        duration:
+            Gesamtausführungszeit der Testaufgabe in Millisekunden nach
+            dem Ende der Testaufgabe.
+        error:
+            Optional, wenn ein unerwarteter Fehler (auch Asser-Fehler)
+            aufgetreten ist, der die Testaufgabe beendet hat.
+    },
+    queue: {
+        timing:
+            Zeitpunkt vom Beginn in Millisekunden,
+        size:
+            ursprüngliche Anzahl von Testfällen,
+        length:
+            Anzahl ausstehenden Tests,
+        progress:
+            Anzahl durchgeführter Tests,
+        lock:
+            Indikator, wenn die Queue zur Ausführung eines Test wartet,
+        faults:
+            Anzahl der erkannten Fehler        
+    }
+}
+```
 
 
 ### Events
 
-TODO:
+Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
+Überwachung der Testausführung. Die Callback-Methoden werden für entsprechende
+Ereignisse vom Test-API registriert und funktionieren dann ähnlich dem Monitor.
 
+List der verfügbaren Ereignisse:
+
+```
+Test.EVENT_INTERRUPT
+Test.EVENT_PERFORM
+Test.EVENT_RESPONSE
+Test.EVENT_RESUME
+Test.EVENT_START
+Test.EVENT_SUSPEND
+```
+
+Beispiele zur Verwendung:
+        
+```javascript
+Test.listen(Test.EVENT_START, function(event, status) {
+    ...
+});    
+  
+Test.listen(Test.EVENT_PERFORM, function(event, status) {
+    ...
+});      
+  
+Test.listen(Test.EVENT_FINISH, function(event, status) {
+    ...
+});      
+```
 
 [Erweiterung](extension.md) | [Inhalt](README.md#test)

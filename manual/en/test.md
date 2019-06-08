@@ -334,8 +334,8 @@ Test.start();
 
 Optionally, the Test-API can be configured with a focus on monitoring.  
 The configuration can be called up once or several times. A meta object is
-expected as argument. The configuration contained in it is partially adopted and
-the unknown is ignored.
+expected as parameter. The configuration contained in it is partially adopted
+and the unknown is ignored.
 
 ```javascript
 Test.configure({
@@ -428,12 +428,11 @@ Test.configure({
 });
 ```
 
-The current status is passed to all monitor methods as an object. The status is
-a snapshot of the current test run with details of the current task and the
-queue. The details are read-only and cannot be changed.
+The current status is passed to all monitor methods as an meta-object.  
+The status contains details of the current task and the queue. The details are
+read-only and cannot be changed.
 
 ```javascript
-
 {
     task: {
         title:
@@ -527,27 +526,140 @@ console.listen(function(level, message) {
 ```
 
 The callback methods are then called at each console output and the log level is
-passed as the first argument. The additional number of arguments is variable and
-depends on the initial call of the corresponding console methods. This often
+passed as the first parameter. The additional number of parameters is variable
+and depends on the initial call of the corresponding console methods. This often
 makes it easier to use `arguments`.
 
 
 ## Monitoring
 
-
-         
-
-TODO:
+Monitoring monitors the progress of the test and is informed of the various
+steps and statuses during execution. The monitor is optional. Without this, the
+console is used to output information about the test process.
+    
+Details about configuration and usage are described in chapter
+[Configuration - Monitor](#monitor).
 
 
 ## Control
 
-TODO:
+The test progress and the execution of the tests can be controlled by the
+Test-API.
+
+```javascript
+Test.start();
+Test.start(boolean);
+});
+```
+
+(Re)Starts the test execution.  
+The start can be done manually or when using `auto = true`, by loading the
+page. If the page is already loaded, the parameter `auto` is ignored and the
+start is executed immediately.
+
+```javascript
+Test.suspend();
+});
+```
+
+Suspends the current test execution, which can be continued from the current
+test with `Test.resume()`.
+
+```javascript
+Test.resume();
+});
+```
+
+Continues the test execution if it was stopped before.
+
+```javascript
+Test.interrupt();
+});
+```
+
+Interrupts the current test run and discards all outstanding tests.
+The test run can be restarted with `Test.start()`.
+
+```javascript
+Test.status();
+});
+```
+
+Makes a snapshot of the status of the current test.  
+The status contains details of the current task and the queue. The details are
+read-only and cannot be changed. If no test is executed, false is returned.
+
+```javascript
+{
+    task: {
+        title:
+            title of the test task,
+        meta:
+            meta information about the test itself (name, test,
+            timeout, expected, serial),
+        running:
+            indicator when the test task is in progress
+        timing:
+            start time from the test task in milliseconds
+        timeout:
+            optional, the time in milliseconds when a timeout is
+            expected
+        duration:
+            total execution time of the test task in milliseconds, is
+            set with the end of the test task
+        error:
+            optional, if an unexpected error (also asser error) has
+            occurred, which terminated the test task
+    },
+    queue: {
+        timing:
+            start time in milliseconds,
+        size:
+            original queue length,
+        length:
+            number of outstanding tests,
+        progress:
+            number of tests performed,
+        lock:
+            indicator when a test is performed and the queue is waiting,
+        faults:
+            number of detected faults        
+    }
+}
+```
 
 
 ## Events
 
-TODO:
+Events and their callback methods are another way of monitoring test execution.
+The callback methods are registered at the Test-API for corresponding events and
+then work similar to the monitor.
 
+List of available events:
+
+```
+Test.EVENT_INTERRUPT
+Test.EVENT_PERFORM
+Test.EVENT_RESPONSE
+Test.EVENT_RESUME
+Test.EVENT_START
+Test.EVENT_SUSPEND
+```
+
+Examples of use:
+        
+```javascript
+Test.listen(Test.EVENT_START, function(event, status) {
+    ...
+});    
+  
+Test.listen(Test.EVENT_PERFORM, function(event, status) {
+    ...
+});      
+  
+Test.listen(Test.EVENT_FINISH, function(event, status) {
+    ...
+});      
+```
 
 [Extension](extension.md) | [TOC](README.md#test)

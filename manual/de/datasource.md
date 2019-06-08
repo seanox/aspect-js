@@ -162,7 +162,7 @@ Weitere Details zur Funktionsweise der Transformation werden im Abschnitt
 Die Transformation von XML-Daten mit XSLT (1.0) bietet eine zusätzliche
 Möglichkeit zur Generierung von dynamischen Daten sowie Inhalten und kann dirket
 mit fetch-Methode und einem entsprechenden Locator durchgeführt werden.  
-Beide Methoden, fetch und transform akzeptiert als Argumente Locator und
+Beide Methoden, fetch und transform akzeptiert als Parameter Locator und
 XMLDocument, auch im Mix. 
 
 ```javascript

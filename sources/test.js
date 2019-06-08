@@ -204,7 +204,7 @@ if (typeof Test === "undefined") {
          *      },
          *      
          *      suspend:function(status) {
-         *          The method is called with the start.
+         *          The method is called with suspension.
          *      },
          *      
          *      resume:function(status) {
@@ -233,8 +233,8 @@ if (typeof Test === "undefined") {
          *  
          *  The current status is passed to all monitor methods as an object.
          *  The status is a snapshot of the current test run with details of the
-         *  current task and the queue. You can read the details, but you can't
-         *  change them.
+         *  current task and the queue. The details are read-only and cannot be
+         *  changed.
          *   
          *      structure of status: {task:..., queue:...}
          *      
@@ -602,9 +602,10 @@ if (typeof Test === "undefined") {
         };
         
         /**
-         *  Take a snapshot of the running test.
-         *  Returns an object with copies of the task and the queue with detailed
-         *  status information. If no test run is executed, false is returned.
+         *  Makes a snapshot of the status of the current test.
+         *  The status contains details of the current task and the queue. The
+         *  details are read-only and cannot be changed. If no test is executed,
+         *  false is returned.
          *   
          *      structure of details: {task:..., queue:...}
          *      
