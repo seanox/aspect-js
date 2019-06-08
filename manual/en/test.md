@@ -42,6 +42,9 @@ Test.start();
   * [assertNotNull](#assertnotnull)
   * [fail](#fail)
 * [Output](#output)
+  * [Forwarding](#forwarding)
+  * [Buffer](#buffer)
+  * [Listener](#listener)
 * [Monitoring](#monitoring)
 * [Control](#control)
 * [Events](#events)
@@ -326,7 +329,61 @@ Test.start();
 
 ## Output
 
-TODO:
+As a development tool, browsers provide console output that can be used to log
+informations.  
+Logging supports different channels or levels: LOG, WARN, ERROR and INFO.
+
+```javascript
+console.log(message);
+console.warn(message);
+console.error(message);
+console.info(message);
+```
+
+To be able to include console output in tests, the activated Test-API supports
+forwarding, listeners and buffers for console output.
+
+
+### Forwarding
+
+The forwarding runs completely in the background and distributes the output to
+the browser console output and to the components of the Test-API. In the case
+of (I)Frames, the output is forwarded to enclosing or superordinate
+window-objects and is accessible there via buffer and listener with an activated
+Test-API.
+
+
+### Buffer
+
+If the Test API is activated, the console object is extended by the buffer
+output. The buffer contains caches for the levels: LOG, WARN, ERROR and INFO as
+well as methods for emptying.
+
+```javascript
+var log   = console.output.log;
+var warn  = console.output.warn;
+var error = console.output.error;
+var info  = console.output.info;
+
+console.output.clear();
+```
+
+
+### Listener
+
+Callback methods can be established as listeners for console output.
+
+```javascript
+console.listen(function(level, message) {
+    message = Array.from(arguments).slice(1);
+    ...
+});
+```
+
+The callback methods are then called at each console output and the log level is
+passed as the first argument. The additional number of arguments is variable and
+depends on the initial call of the corresponding console methods. This often
+makes it easier to use `arguments`.
 
 
 ## Monitoring

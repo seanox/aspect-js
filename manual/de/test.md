@@ -43,6 +43,9 @@ Test.start();
   * [assertNotNull](#assertnotnull)
   * [fail](#fail)
 * [Output](#output)
+  * [Forwarding](#forwarding)
+  * [Buffer](#buffer)
+  * [Listener](#listener)
 * [Monitoring](#monitoring)
 * [Control](#control)
 * [Events](#events)
@@ -328,7 +331,64 @@ Test.start();
 
 ## Output
 
-TODO:
+Als Entwicklungswerkzeug stellen Browser eine Konsolenausgabe bereit, die zur
+Protokollierung von Informationen verwendet werden kann.  
+Die Protokollierung unterstützt verschiedene Kanäle bzw. Stufen (Level): LOG,
+WARN, ERROR und INFO.
+
+```javascript
+console.log(message);
+console.warn(message);
+console.error(message);
+console.info(message);
+```
+
+Um die Konsolenausgabe in Tests einbeziehen zu können, unterstützt das
+aktivierte Test-API Weiterleitungen (Forwarding), Listener und Puffer (Buffer)
+für die Konsolenausgabe.
+
+
+### Forwarding
+
+Das Forwarding läuft komplett im Hintergrund ab und verteilt die Ausgaben an die
+Browser-Konsolenausgabe und an die Komponenten der Test-API. Bei (I)Frames wird
+die Ausgabe an umschliessende bzw. übergeordnete Window-Objekte weitergeleitet
+und ist dort mit aktiviertem Test-API per Buffer und Listener zugänglich.
+
+
+### Buffer
+
+Bei aktiviertem Test-API wird das JavaScript-API vom console-Objekt um den
+Buffer output erweitert. Der Buffer enthält Zwischenspeicher für die Level: LOG,
+WARN, ERROR und INFO sowie eine Methoden zum Leeren.
+
+```javascript
+
+var log   = console.output.log;
+var warn  = console.output.warn;
+var error = console.output.error;
+var info  = console.output.info;
+
+console.output.clear();
+```
+
+
+### Listener
+
+Für die Konsolenausgabe können Callback-Methoden als Listener etabliert werden.
+
+```javascript
+console.listen(function(level, message) {
+    message = Array.from(arguments).slice(1);
+    ...
+});
+```
+
+Die Callback-Methoden werden dann bei jeder Konsolenausgabe unter Angabe vom
+Log-Level, das als erstes Argument übergeben wird, aufgerufen. Die weitere
+Anzahl von Argumenten ist variable und abhängig vom initialen Aufruf der
+korrespondierenden console-Methoden. Womit es oft einfacher ist `arguments` zu
+verwenden.
 
 
 ### Monitoring
