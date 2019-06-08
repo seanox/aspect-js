@@ -1,4 +1,4 @@
-[Komponenten](composite.md) | [Inhalt](README.md) | [Test](test.md)
+[Komponenten](composite.md) | [Inhalt](README.md#erweiterung) | [Test](test.md)
 
 # Erweiterung
 
@@ -26,4 +26,4 @@ app.example.Model {
 
 TODO:
 
-[Komponenten](composite.md) | [Inhalt](README.md) | [Test](test.md)
+[Komponenten](composite.md) | [Inhalt](README.md#erweiterung) | [Test](test.md)

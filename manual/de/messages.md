@@ -1,4 +1,4 @@
-[DataSource](datasource.md) | [Inhalt](README.md) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle) | [Model View Controler](mvc.md)
 
 # Resource Bundle (Messages)
 
@@ -65,4 +65,4 @@ andere Angaben führen beim Methoden-Aufruf zu einem Fehler.
 DataSource.localize("de");
 ```
 
-[DataSource](datasource.md) | [Inhalt](README.md) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle) | [Model View Controler](mvc.md)

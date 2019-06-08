@@ -1,4 +1,4 @@
-[Model View Controler](mvc.md) | [TOC](README.md) | [Extension](extension.md)
+[Model View Controler](mvc.md) | [TOC](README.md#components) | [Extension](extension.md)
 
 # Components
 
@@ -92,4 +92,4 @@ outsourced HTML/Markup is assumed.
 
 TODO:
 
-[Model View Controler](mvc.md) | [TOC](README.md) | [Extension](extension.md)
+[Model View Controler](mvc.md) | [TOC](README.md#components) | [Extension](extension.md)

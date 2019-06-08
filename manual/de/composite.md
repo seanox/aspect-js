@@ -1,4 +1,4 @@
-[Model View Controler](mvc.md) | [Inhalt](README.md) | [Erweiterung](extension.md)
+[Model View Controler](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
 
 # Komponenten
 
@@ -90,4 +90,4 @@ von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
 
 TODO:
 
-[Model View Controler](mvc.md) | [Inhalt](README.md) | [Erweiterung](extension.md)
+[Model View Controler](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)

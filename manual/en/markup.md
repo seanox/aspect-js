@@ -1,4 +1,4 @@
-[Motivation](motivation.md) | [TOC](README.md) | [Expression Language](expression.md)
+[Motivation](motivation.md) | [TOC](README.md#markup) | [Expression Language](expression.md)
 
 # Markup
 
@@ -655,4 +655,4 @@ Composite.customize(function(element) {
 });
 ```
 
-[Motivation](motivation.md) | [TOC](README.md) | [Expression Language](expression.md)
+[Motivation](motivation.md) | [TOC](README.md#markup) | [Expression Language](expression.md)

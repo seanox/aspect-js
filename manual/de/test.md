@@ -1,4 +1,4 @@
-[Erweiterung](extension.md) | [Inhalt](README.md)
+[Erweiterung](extension.md) | [Inhalt](README.md#test)
 
 # Test
 
@@ -406,4 +406,4 @@ TODO:
 TODO:
 
 
-[Erweiterung](extension.md) | [Inhalt](README.md)
+[Erweiterung](extension.md) | [Inhalt](README.md#test)

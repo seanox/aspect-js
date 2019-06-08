@@ -1,4 +1,4 @@
-[Extension](extension.md) | [TOC](README.md)
+[Extension](extension.md) | [TOC](README.md#test)
 
 # Test
 
@@ -401,4 +401,4 @@ TODO:
 TODO:
 
 
-[Extension](extension.md) | [TOC](README.md)
+[Extension](extension.md) | [TOC](README.md#test)
