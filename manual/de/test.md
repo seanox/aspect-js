@@ -645,7 +645,7 @@ Ereignisse vom Test-API registriert und funktionieren dann ähnlich dem Monitor.
 
 List der verfügbaren Ereignisse:
 
-```
+```javascript
 Test.EVENT_INTERRUPT
 Test.EVENT_PERFORM
 Test.EVENT_RESPONSE

@@ -638,7 +638,7 @@ then work similar to the monitor.
 
 List of available events:
 
-```
+```javascript
 Test.EVENT_INTERRUPT
 Test.EVENT_PERFORM
 Test.EVENT_RESPONSE

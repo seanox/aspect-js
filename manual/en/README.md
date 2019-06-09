@@ -138,6 +138,13 @@ Machine translation with [DeepL](https://deepl.com).
 ### Extension
     
 * [Extension](extension.md)    
+  * [Namespace](extension.md#namespace)
+  * [Math](extension.md#math)
+  * [Object](extension.md#object)
+  * [RegExp](extension.md#regexp)
+  * [String](extension.md#string)
+  * [window](extension.md#window)
+  * [XMLHttpRequest](extension.md#xmlhttprequest)
 
 
 ### Test
