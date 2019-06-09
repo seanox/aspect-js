@@ -10,6 +10,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [DataSource](#datasource)
 * [Resource Bundle](#resource-bundle)
 * [Model View Controler](#model-view-controler)
+* [Composite](#composite)
 * [Extension](#extension)
 * [Test](#test)
 
@@ -115,6 +116,10 @@ Machine translation with [DeepL](https://deepl.com).
     * [Synchronization](mvc.md#synchronization)
     * [Validation](mvc.md#validation)
     * [Events](mvc.md#events)
+    
+    
+### Composite
+
 * [Composite](composite.md)
   * [Structure](composite.md#structure)
   * [Outsourcing](composite.md#outsourcing)
