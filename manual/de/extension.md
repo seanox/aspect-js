@@ -3,7 +3,8 @@
 
 # Erweiterung
 
-TODO:
+Das JavaScript-API wurde für Seanox aspect-js um einige allgemeine Funktionen
+erweitert.
 
 
 ## Inhalt
@@ -39,7 +40,22 @@ app.example.Model {
 
 ## Element
 
-TODO:
+### Element.prototype.appendChild
+
+Ändert die ursprüngliche Methode zur Unterstützung von Knoten als NodeList und
+Array. Wenn die Option `exclusive` verwendet wird, werden bestehende Kinder
+zuerst entfernt.
+
+```javascript
+var nodes = [];
+nodes.push(document.createElement("a"));
+nodes.push(document.createElement("a"));
+nodes.push(document.createElement("a"));
+
+document.body.appendChild(nodes);
+
+document.body.appendChild(nodes, true);
+```
 
 
 ## Math
@@ -50,10 +66,10 @@ Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge.
 
 ```javascript
 Math.uniqueId()
-    returns e.g. 42X3IUW7622CKY02
+    returns e.g. "42X3IUW7622CKY02"
     
 Math.uniqueId(32)
-    returns e.g. SPH507D0C5SQ1EP5107HD3514K08T8H1
+    returns e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
 
@@ -239,7 +255,7 @@ Eigenschaft mit der UID für Instanz vom window-Objekt.
 
 ```javascript
 window.serial
-  returns e.g. 2YG490NMYY87TSF1I9R
+  returns e.g. "2YG490NMYY87TSF1I9R"
 ```
 
 
