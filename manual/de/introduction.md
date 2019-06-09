@@ -1,3 +1,5 @@
+[Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Markup](markup.md)
+
 # Einführung
 
 ## Was ist Seanox aspect-js?
@@ -818,3 +820,5 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 ```
 
 [Mehr erfahren](test.md#events)
+
+[Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Markup](markup.md)

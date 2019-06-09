@@ -1,4 +1,4 @@
-[Inhalt](README.md#motivation) | [Markup](markup.md)
+[Inhalt](README.md#motivation) | [Einführung](introduction.md)
 
 # Motivation
 
@@ -18,4 +18,4 @@ und einfache Integration ins Markup, entstand der Wunsch nach einer ähnlichen
 client-seitigen Lösung als sportliches Experiment um das Verständnis von
 Rendering, Expression Language und Performance.
 
-[Inhalt](README.md#motivation) | [Markup](markup.md)
+[Inhalt](README.md#motivation) | [Einführung](introduction.md)
