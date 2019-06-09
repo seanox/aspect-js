@@ -9,6 +9,7 @@ TODO:
 ## Contents Overview
 
 * [Namespace](#namespace)
+* [Element](#element)
 * [Math](#math)
 * [Object](#object)
 * [RegExp](#regexp)
@@ -34,10 +35,24 @@ app.example.Model {
 }
 ```
 
+## Element
+
+TODO:
+
 
 ## Math
 
-TODO:
+### Math.uniqueId
+
+Static function for creating a alhpanumeric (U)UID with fixed size.
+
+```javascript
+Math.uniqueId()
+    returns e.g. 42X3IUW7622CKY02
+    
+Math.uniqueId(32)
+    returns e.g. SPH507D0C5SQ1EP5107HD3514K08T8H1
+```
 
 
 ## Object
@@ -68,10 +83,8 @@ Static function to determine an object via the namespace.
 var earth = {
     europe: {
         germany: {
-            berlin: {
-                countPopulation: function() {
-                    return 3900000;
-                }
+            countPopulation: function() {
+                return 83000000;
             }
         } 
     }   
@@ -83,8 +96,8 @@ Object.lookup("earth");
 Object.lookup("earth.europe.germany");
     returns object earth.europe.germany
 
-Object.lookup("earth.europe.germany.berlin.countPopulation");
-    returns function earth.europe.germany.berlin.countPopulation
+Object.lookup("earth.europe.germany.countPopulation");
+    returns function earth.europe.germany.countPopulation
 
 Object.lookup("foo");
     returns null
@@ -99,10 +112,8 @@ Static function to check whether an object exists in a namespace.
 var earth = {
     europe: {
         germany: {
-            berlin: {
-                countPopulation: function() {
-                    return 3900000;
-                }
+            countPopulation: function() {
+                return 83000000;
             }
         } 
     }   
@@ -114,29 +125,131 @@ Object.exists("earth");
 Object.exists("earth.europe.germany");
     returns true
 
-Object.exists("earth.europe.germany.berlin.countPopulation");
+Object.exists("earth.europe.germany.countPopulation");
     returns true
 
 Object.exists("foo");
     returns false
 ```
 
-TODO:
-
 
 ## RegExp
 
-TODO:
+### RegExp.quote
+
+Creates a literal pattern for the specified text.  
+Metacharacters or escape sequences in the text thus lose their meaning.
+
+```javascript
+RegExp.quote("only a text with a + b (as an example)");
+    returns "only a text with a \+ b \(as an example\)"
+```
 
 
 ## String
 
-TODO:
+### String.prototype.capitalize
+
+Function for capitalizing string objects.
+
+```javascript
+("hello world").capitalize();
+    returns "Hello world"
+```
+
+
+### String.prototype.encodeHex
+
+Function for encoding string objects in hexadecimal code.
+
+```javascript
+("hello world").encodeHex();
+    returns "0x68656C6C6F20776F726C64"
+```
+
+
+### String.prototype.decodeHex
+
+Function for decoding hexadecimal code to string objects.
+
+```javascript
+("0x68656C6C6F20776F726C64").decodeHex();
+    returns "hello world"
+```
+
+
+### String.prototype.encodeBase64
+
+Function for encoding string objects as Base64.
+
+```javascript
+("hello world").encodeBase64();
+    returns "aGVsbG8gd29ybGQ="
+```
+
+
+### String.prototype.decodeBase64
+
+Function for decoding Base64 to string objects.
+
+```javascript
+("aGVsbG8gd29ybGQ=").decodeBase64();
+    returns "hello world"
+```
+
+
+### String.prototype.encodeHtml
+
+Function for encoding HTML characters in string objects.
+
+```javascript
+("<hello world> & abc").encodeHtml();
+    returns "&lt;hello world&gt; &amp; abc"
+```
+
+
+### String.prototype.hashCode
+
+Function for calculating a alhpanumeric hash value for string objects.
+
+```javascript
+("hello world").hashCode();
+    returns "B1OQGUCARUTF1"
+```
+
+
+### String.prototype.unescape
+
+Function for decoding of slash sequences (control characters) in string objects.
+
+```javascript
+("a\\tb").unescape();
+    returns "a   b"
+```
 
 
 ## window
 
-TODO:
+### window.serial
+
+Property to get the UID for the window instance.
+
+```javascript
+window.serial
+  returns e.g. 2YG490NMYY87TSF1I9R
+```
+
+
+### window.location.pathcontext
+
+Property to get the context path.  
+The context path is a part of the request URI and can be compared with the
+current working directory.
+
+```javascript
+window.location.pathcontext
+  returns e.g. /apps/test for URL https://example.local/apps/test/index.html
+```
 
 
 ## XMLHttpRequest

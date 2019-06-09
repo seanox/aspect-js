@@ -137,6 +137,7 @@
 
 * [Erweiterung](extension.md)
   * [Namespace](extension.md#namespace)
+  * [Element](extension.md#element)
   * [Math](extension.md#math)
   * [Object](extension.md#object)
   * [RegExp](extension.md#regexp)

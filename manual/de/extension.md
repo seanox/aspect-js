@@ -9,6 +9,7 @@ TODO:
 ## Inhalt
 
 * [Namespace](#namespace)
+* [Element](#element)
 * [Math](#math)
 * [Object](#object)
 * [RegExp](#regexp)
@@ -36,9 +37,24 @@ app.example.Model {
 ```
 
 
-## Math
+## Element
 
 TODO:
+
+
+## Math
+
+### Math.uniqueId
+
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge.
+
+```javascript
+Math.uniqueId()
+    returns e.g. 42X3IUW7622CKY02
+    
+Math.uniqueId(32)
+    returns e.g. SPH507D0C5SQ1EP5107HD3514K08T8H1
+```
 
 
 ## Object
@@ -70,10 +86,8 @@ Statische Funktion zum Bestimmen eines Objekts über den Namensraum.
 var earth = {
     europe: {
         germany: {
-            berlin: {
-                countPopulation: function() {
-                    return 3900000;
-                }
+            countPopulation: function() {
+                return 83000000;
             }
         } 
     }   
@@ -85,8 +99,8 @@ Object.lookup("earth");
 Object.lookup("earth.europe.germany");
     returns object earth.europe.germany
 
-Object.lookup("earth.europe.germany.berlin.countPopulation");
-    returns function earth.europe.germany.berlin.countPopulation
+Object.lookup("earth.europe.germany.countPopulation");
+    returns function earth.europe.germany.countPopulation
 
 Object.lookup("foo");
     returns null
@@ -101,10 +115,8 @@ Statische Funktion, um zu prüfen, ob ein Objekt in einem Namensraum existiert.
 var earth = {
     europe: {
         germany: {
-            berlin: {
-                countPopulation: function() {
-                    return 3900000;
-                }
+            countPopulation: function() {
+                return 83000000;
             }
         } 
     }   
@@ -116,29 +128,131 @@ Object.exists("earth");
 Object.exists("earth.europe.germany");
     returns true
 
-Object.exists("earth.europe.germany.berlin.countPopulation");
+Object.exists("earth.europe.germany.countPopulation");
     returns true
 
 Object.exists("foo");
     returns false
 ```
 
-TODO:
-
 
 ## RegExp
 
-TODO:
+### RegExp.quote
+
+Erstellt ein literales Muster für den angegebenen Text.  
+Metazeichen oder Escape-Sequenzen im Text verlieren dadurch ihre Bedeutung.
+
+```javascript
+RegExp.quote("only a text with a + b (as an example)");
+    returns "only a text with a \+ b \(as an example\)"
+```
 
 
 ## String
 
-TODO:
+### String.prototype.capitalize
+
+Funktion zur Kapitalisierung von String-Objekten.
+
+```javascript
+("hello world").capitalize();
+    returns "Hello world"
+```
+
+
+### String.prototype.encodeHex
+
+Funktion zur Kodierung von String-Objekten im Hexadezimalcode.
+
+```javascript
+("hello world").encodeHex();
+    returns "0x68656C6C6F20776F726C64"
+```
+
+
+### String.prototype.decodeHex
+
+Funktion zur Dekodierung von Hexadezimalcode in String-Objekten.
+
+```javascript
+("0x68656C6C6F20776F726C64").decodeHex();
+    returns "hello world"
+```
+
+
+### String.prototype.encodeBase64
+
+Funktion zur Codierung von String-Objekten als Base64.
+
+```javascript
+("hello world").encodeBase64();
+    returns "aGVsbG8gd29ybGQ="
+```
+
+
+### String.prototype.decodeBase64
+
+Funktion zur Dekodierung von Base64 in String-Objekten.
+
+```javascript
+("aGVsbG8gd29ybGQ=").decodeBase64();
+    returns "hello world"
+```
+
+
+### String.prototype.encodeHtml
+
+Funktion zur Kodierung von HTML-Zeichen in String-Objekten.
+
+```javascript
+("<hello world> & abc").encodeHtml();
+    returns "&lt;hello world&gt; &amp; abc"
+```
+
+
+### String.prototype.hashCode
+
+Funktion zur Berechnung eines alhpanumerischen Hash-Wertes für String-Objekte.
+
+```javascript
+("hello world").hashCode();
+    returns "B1OQGUCARUTF1"
+```
+
+
+### String.prototype.unescape
+
+Funktion zur Dekodierung von Slash-Sequences (Steuerzeichen) in String-Objekten.
+
+```javascript
+("a\\tb").unescape();
+    returns "a   b"
+```
 
 
 ## window
 
-TODO:
+### window.serial
+
+Eigenschaft mit der UID für Instanz vom window-Objekt.
+
+```javascript
+window.serial
+  returns e.g. 2YG490NMYY87TSF1I9R
+```
+
+
+### window.location.pathcontext
+
+Eigenschaft mit dem Kontextpfad.  
+Der Kontextpfad ist Teil der Request-URI und kann mit dem aktuellen
+Arbeitsverzeichnis verglichen werden.
+
+```javascript
+window.location.pathcontext
+  returns e.g. /apps/test for URL https://example.local/apps/test/index.html
+```
 
 
 ## XMLHttpRequest
