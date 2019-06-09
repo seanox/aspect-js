@@ -1,4 +1,5 @@
 [Introduction](introduction.md) | [TOC](README.md#markup) | [Expression Language](expression.md)
+- - -
 
 # Markup
 
@@ -654,5 +655,8 @@ Composite.customize(function(element) {
     ...
 });
 ```
+
+
+- - -
 
 [Introduction](introduction.md) | [TOC](README.md#markup) | [Expression Language](expression.md)

@@ -1,4 +1,5 @@
 [TOC](README.md) | [Introduction](introduction.md)
+- - -
 
 # Motivation
 
@@ -16,5 +17,8 @@ experiences from JSF (Java Server Faces) with regard to function and an easy
 integration into the markup, the desire arose for a similar client-side solution
 as a sporty experiment to understand rendering, expression language and
 performance.
+
+
+- - -
 
 [TOC](README.md) | [Introduction](introduction.md)

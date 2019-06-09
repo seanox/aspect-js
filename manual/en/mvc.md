@@ -1,4 +1,5 @@
 [Resource Bundle](messages.md) | [TOC](README.md#model-view-controler) | [Components](composite.md)
+- - -
 
 # Model View Controller
 
@@ -795,5 +796,8 @@ var contact= {
   </body>
 </html>
 ```
+
+
+- - -
 
 [Resource Bundle](messages.md) | [TOC](README.md#model-view-controler) | [Components](composite.md)

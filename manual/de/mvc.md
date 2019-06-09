@@ -1,4 +1,5 @@
 [Resource Bundle](messages.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
+- - -
 
 # Model View Controller
 
@@ -258,5 +259,8 @@ __entfernt) werden.__
 
 
 TODO:
+
+
+- - -
 
 [Resource Bundle](messages.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)

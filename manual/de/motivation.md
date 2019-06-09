@@ -1,4 +1,5 @@
 [Inhalt](README.md#motivation) | [Einführung](introduction.md)
+- - -
 
 # Motivation
 
@@ -17,5 +18,8 @@ durch die guten Erfahrungen aus JSF (Java Server Faces) in Bezug auf Funktion
 und einfache Integration ins Markup, entstand der Wunsch nach einer ähnlichen
 client-seitigen Lösung als sportliches Experiment um das Verständnis von
 Rendering, Expression Language und Performance.
+
+
+- - -
 
 [Inhalt](README.md#motivation) | [Einführung](introduction.md)

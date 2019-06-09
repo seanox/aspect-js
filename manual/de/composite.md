@@ -1,4 +1,5 @@
 [Model View Controler](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
+- - -
 
 # Komponenten
 
@@ -89,5 +90,8 @@ Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
 von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
 
 TODO:
+
+
+- - -
 
 [Model View Controler](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)

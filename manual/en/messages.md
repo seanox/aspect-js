@@ -1,4 +1,5 @@
 [DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controler](mvc.md)
+- - -
 
 # Resource Bundle (Messages)
 
@@ -61,5 +62,8 @@ cause an error when the method is called.
 ```javascript
 DataSource.localize("de");
 ```
+
+
+- - -
 
 [DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controler](mvc.md)

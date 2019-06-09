@@ -1,4 +1,5 @@
 [Motivation](motivation.md) | [TOC](README.md#introduction) | [Markup](markup.md)
+- - -
 
 # Introduction
 
@@ -806,5 +807,8 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 ```
 
 [Learn more](test.m#events)
+
+
+- - -
 
 [Motivation](motivation.md) | [TOC](README.md#introduction) | [Markup](markup.md)

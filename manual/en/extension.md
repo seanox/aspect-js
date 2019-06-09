@@ -1,4 +1,5 @@
 [Components](composite.md) | [TOC](README.md#extension) | [Test](test.md)
+- - -
 
 # Extension
 
@@ -24,5 +25,8 @@ app.example.Model {
 
 
 TODO:
+
+
+- - -
 
 [Components](composite.md) | [TOC](README.md#extension) | [Test](test.md)

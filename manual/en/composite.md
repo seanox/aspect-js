@@ -1,4 +1,5 @@
 [Model View Controler](mvc.md) | [TOC](README.md#components) | [Extension](extension.md)
+- - -
 
 # Components
 
@@ -91,5 +92,8 @@ the attributes `import` or `output`. Only in this case an empty component with
 outsourced HTML/Markup is assumed.
 
 TODO:
+
+
+- - -
 
 [Model View Controler](mvc.md) | [TOC](README.md#components) | [Extension](extension.md)
