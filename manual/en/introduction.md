@@ -476,7 +476,59 @@ TODO:
 
 ## Components
 
-TODO:
+Seanox aspect-js aims at a modular and component-based architecture. The
+framework supports declarative marking of components in the markup, outsourcing
+and automatic loading of resources, as well as automatic object/model binding.
+
+The initial markup of a component consists of an HTML element marked as
+composite and with a unique ID.
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="aspect-js.js"></script>
+  </head>
+  <body>
+    <div id="example" composite></div>
+  </bod>
+</html>
+```
+
+The inner markup, CSS and JavaScript can be stored in the file system.  
+The default directory `./modules` can be changed with the property
+`Composite.MODULES`.
+
+```
++- modules
+|  |
+|  +- example.css
+|  +- example.js
+|  +- example.html
+|
++- index.html
+```
+
+The loading of resources and the object/model binding are partial if the
+component is required in the UI -- means with the first use, which is controlled
+via the [SiteMap](sitemap.md) as central face flow management and thus minimizes
+the loading time, because only resources required for the active UI components
+are loaded selectively. 
+The outsourcing and loading of resources at runtime is optional and can be
+applied completely, partially and not at all. There is a fixed order for loading
+and embedding: CSS, JS, HTML/Markup. 
+  
+If the request for a resource is answered with status 404, it is assumed that
+this resource has not been outsourced. If requests are not answered with status
+200 or 404, an error is assumed.  
+The loading of resources is only executed once with the first request of the
+component for the UI.
+
+From the concept's point of view, the design patterns facade and delegation,
+which internally use additional components and abstraction, are considered for
+the implementation of components.
+
+[Learn more](composite.md)
 
 
 ### Object-/Model-Binding

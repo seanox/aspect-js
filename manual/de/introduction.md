@@ -484,10 +484,10 @@ TODO:
 
 ## Komponenten
 
-Die Implementierung von Seanox aspect-js zielt auf eine modulare und auf Komponenten
-basierte Architektur. Das Framework unterstützt dazu eine deklarative
-Kennzeichnung von Komponenten im Markup, die Auslagerung und das automatische
-Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
+Seanox aspect-js zielt auf eine modulare und auf Komponenten basierte
+Architektur. Das Framework unterstützt dazu eine deklarative Kennzeichnung von
+Komponenten im Markup, die Auslagerung und das automatische Laden von
+Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
 
 Eine Komponente besteht im initialen Markup aus einem als Composite
 gekennzeichneten HTML-Element mit einer eindeutigen Id.
@@ -535,6 +535,9 @@ Komponente für das UI ausgeführt.
 Konzeptionell sind für die Implementierung von Komponenten die Entwurfsmuster
 Fassade und Delegation angedacht, die intern weitere Komponenten und Abstraktion
 verwenden.
+
+[Mehr erfahren](composite.md)
+
 
 ### Object-/Model-Binding
 
