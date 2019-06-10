@@ -559,7 +559,6 @@ start is executed immediately.
 
 ```javascript
 Test.suspend();
-});
 ```
 
 Suspends the current test execution, which can be continued from the current
@@ -567,7 +566,6 @@ test with `Test.resume()`.
 
 ```javascript
 Test.resume();
-});
 ```
 
 Continues the test execution if it was stopped before.
