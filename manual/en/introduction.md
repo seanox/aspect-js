@@ -372,7 +372,6 @@ data, and presentation.
 +-------------------------------------------+--------------+---------------------------------+
 ```
 
-[Learn more](mvc.md)
 
 ### Controller
 
@@ -410,6 +409,8 @@ presented is not restricted.
 In the context of Seanox aspect-js, terms face and factes are used for the
 visual representation/projection, which will be explained later.  
 In Seanox aspect-js the views are represented by the markup.
+
+[Learn more](mvc.md)
 
 
 ## SiteMap
@@ -748,14 +749,12 @@ Test-API.
 
 ```javascript
 Test.start();
-});
 ```
 
 (Re)Starts the test execution.  
 
 ```javascript
 Test.suspend();
-});
 ```
 
 Suspends the current test execution, which can be continued from the current
@@ -763,14 +762,12 @@ test with `Test.resume()`.
 
 ```javascript
 Test.resume();
-});
 ```
 
 Continues the test execution if it was stopped before.
 
 ```javascript
 Test.interrupt();
-});
 ```
 
 Interrupts the current test run and discards all outstanding tests.
@@ -778,7 +775,6 @@ The test run can be restarted with `Test.start()`.
 
 ```javascript
 Test.status();
-});
 ```
 
 Makes a snapshot of the status of the current test.
