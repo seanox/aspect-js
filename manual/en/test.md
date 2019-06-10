@@ -550,7 +550,6 @@ Test-API.
 ```javascript
 Test.start();
 Test.start(boolean);
-});
 ```
 
 (Re)Starts the test execution.  
@@ -575,7 +574,6 @@ Continues the test execution if it was stopped before.
 
 ```javascript
 Test.interrupt();
-});
 ```
 
 Interrupts the current test run and discards all outstanding tests.
@@ -583,7 +581,6 @@ The test run can be restarted with `Test.start()`.
 
 ```javascript
 Test.status();
-});
 ```
 
 Makes a snapshot of the status of the current test.  

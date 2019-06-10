@@ -556,7 +556,6 @@ gesteuert werden.
 ```javascript
 Test.start();
 Test.start(boolean);
-});
 ```
 
 (Neu)Start der Testausführung.  
@@ -566,7 +565,6 @@ der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
 
 ```javascript
 Test.suspend();
-});
 ```
 
 Unterbricht die aktuelle Testausführung, die mit `Test.resume()` vom aktuellen
@@ -574,14 +572,12 @@ Test fortgesetzt werden kann.
 
 ```javascript
 Test.resume();
-});
 ```
 
 Setzt die Testausführung fort, wenn sie zuvor unterbrochen wurde.
 
 ```javascript
 Test.interrupt();
-});
 ```
 
 Unterbricht die aktuelle Testausführung und verwirft alle ausstehenden Tests.
@@ -589,7 +585,6 @@ Der Testlauf kann mit `Test.start()` neu gestartet werden.
 
 ```javascript
 Test.status();
-});
 ```
 
 Macht eine Momentaufnahme des Status des aktuellen Tests.  
