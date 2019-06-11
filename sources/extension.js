@@ -91,8 +91,7 @@ if (typeof Namespace === "undefined") {
 
 /**
  *  Enhancement of the JavaScript API
- *  Adds a function for creating a alhpanumeric (U)UID with fixed size to the
- *  Math object.
+ *  Adds a static function for creating a alhpanumeric (U)UID with fixed size.
  *  @param size optional, default is 16
  */
 if (Math.uniqueId === undefined) {
@@ -242,7 +241,7 @@ if (String.prototype.unescape === undefined) {
 
 /**
  *  Enhancement of the JavaScript API
- *  Modifies the method to support note and notes as NodeList and Array.
+ *  Modifies the method to support node and nodes as NodeList and Array.
  *  If the option exclusive is used, existing children will be removed first.
  *  @param node      node(s)
  *  @param exclusive existing children will be removed first
@@ -265,7 +264,7 @@ Element.prototype.appendChild = function(node, exclusive) {
 
 /**
  *  Enhancement of the JavaScript API
- *  Returns a literal pattern for the specified text.
+ *  Creates a literal pattern for the specified text.
  *  Metacharacters or escape sequences in the text thus lose their meaning.
  *  @param  text text to be literalized
  *  @return a literal pattern for the specified text 
@@ -291,9 +290,8 @@ if (window.serial === undefined) {
 /**
  *  Enhancement of the JavaScript API
  *  Adds a property to get the context path.
- *  The context path is the portion of the request URI that is used to select
- *  the context of the request and can be compared with the current working
- *  directory.
+ *  The context path is a part of the request URI and can be compared with the
+ *  current working directory.
  */  
 if (window.location.pathcontext === undefined) {
     window.location.pathcontext = window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/";
