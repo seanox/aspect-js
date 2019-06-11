@@ -19,17 +19,19 @@ much more.
   component concept for smart/automatic loading of composite resources
 - Event handling
 - Expression Language  
-  simple meta-language extension in combination with full JavaScript
+  meta-language extension in combination with full JavaScript
 - Markup rendering  
-  supports: condition, custom tags, events, filter, interval, iterate, rendering,
-  resources messages, validation, ...
+  supports: condition, custom tags, events, filter, interval, iterate,
+  rendering, resources messages, validation, ...
 - Model View Controller  
   supports: events, virtual paths, sitemap, permission concept, ...
 - Resource Bundle / Resource Messages  
-  for localization and internationalization as well for the outsourcing of texts 
-- NoSQL datasource based on XML
+  localization and internationalization (i18n) as well for the outsourcing of
+  texts 
+- NoSQL datasource based on XML  
+  lightweight data management for aggregation / projection / transformation
 - Test environment  
-  something like JUnit for automated tests
+  something like JUnit for automated unit tests
 - ... 
 
 
@@ -87,6 +89,8 @@ date when using the release channels.
 
 # Changes (Change Log)
 ## 1.2.0 2019xxxx (summary of the next version)  
+BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
+BF: Composite: Composite.asynchron, corection of passed arguments  
 CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  
 CR: Test: Enhancement of console output monitoring  
 CR: Test: Optimization of console forwarding  
