@@ -36,6 +36,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [import](markup.md#import)
     * [interval](markup.md#interval)
     * [output](markup.md#output)
+    * [release](markup.md#release)
     * [render](markup.md#render)    
     * [validate](markup.md#validate)  
   * [Expression Language](markup.md#expression-language)

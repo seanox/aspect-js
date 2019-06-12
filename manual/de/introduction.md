@@ -247,6 +247,26 @@ JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).
 [Mehr erfahren](markup.md#events)
 
 
+### release
+
+Inverser Indikator dafür, dass ein Element gerendert wurde.  
+Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser
+Effekt kann für CSS verwendet werden, um Elemente nur im gerenderten Zustand
+anzuzeigen.  
+
+```css
+*[release] {
+    display:none;
+}  
+```
+
+```html
+<span release>{{'Show me after rendering.'}}</span>
+```
+
+[Mehr erfahren](markup.md#release)
+
+
 ### render
 
 Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.

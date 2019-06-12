@@ -20,6 +20,7 @@ in the DOM.
   * [import](#import)
   * [interval](#interval)
   * [output](#output)
+  * [release](#release)
   * [render](#render)    
   * [validate](#validate)  
 * [Expression Language](#expression-language)
@@ -422,6 +423,23 @@ When inserting content from the DataSource, script blocks are automatically
 changed to composite/javascript and are only executed by the renderer. This
 ensures that the JavaScript is only executed depending on surrounding condition
 attributes.
+
+
+### release
+
+Inverse indicator that an element was rendered.  
+The renderer removes this attribute when an element is rendered. This effect can
+be used for CSS to display elements only in rendered state.  
+
+```css
+*[release] {
+    display:none;
+}  
+```
+
+```html
+<span release>{{'Show me after rendering.'}}</span>
+```
 
 
 ### render

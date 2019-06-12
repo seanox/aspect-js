@@ -20,6 +20,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [import](#import)
   * [interval](#interval)
   * [output](#output)
+  * [release](#release)
   * [render](#render)    
   * [validate](#validate)  
 * [Expression Language](#expression-language)
@@ -428,6 +429,24 @@ Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
 in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
 So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
 umschliessenden condition-Attribute aufgeführt wird.
+
+
+### release
+
+Inverser Indikator dafür, dass ein Element gerendert wurde.  
+Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser
+Effekt kann für CSS verwendet werden, um Elemente nur im gerenderten Zustand
+anzuzeigen.  
+
+```css
+*[release] {
+    display:none;
+}  
+```
+
+```html
+<span release>{{'Show me after rendering.'}}</span>
+```
 
 
 ### render
