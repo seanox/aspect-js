@@ -34,25 +34,28 @@ if (Test.read === undefined) {
     };
 };
 
-Assert.assertSameText = function(expected, actual) {
-    expected = (expected || "").trim().replace(/\t/g, "    ");
-    expected = expected.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-    expected = expected.replace(/(^\s+)|(\s+$)/gm, "");
-    actual = actual.trim();
-    actual = actual.replace(/\t/g, "    ");
-    actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-    actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-    Assert.assertEquals(expected, actual);    
-};
+if (typeof Assert !== "undefined") {
 
-Assert.assertSameTo = function(selector, actual) {
-    var element = document.querySelector(selector);
-    var content = element.innerHTML.trim().replace(/\t/g, "    ");
-    content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-    content = content.replace(/(^\s+)|(\s+$)/gm, "");
-    actual = actual.trim();
-    actual = actual.replace(/\t/g, "    ");
-    actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-    actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-    Assert.assertEquals(content, actual);    
-};
+    Assert.assertSameText = function(expected, actual) {
+        expected = (expected || "").trim().replace(/\t/g, "    ");
+        expected = expected.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        expected = expected.replace(/(^\s+)|(\s+$)/gm, "");
+        actual = actual.trim();
+        actual = actual.replace(/\t/g, "    ");
+        actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
+        Assert.assertEquals(expected, actual);    
+    };
+    
+    Assert.assertSameTo = function(selector, actual) {
+        var element = document.querySelector(selector);
+        var content = element.innerHTML.trim().replace(/\t/g, "    ");
+        content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        content = content.replace(/(^\s+)|(\s+$)/gm, "");
+        actual = actual.trim();
+        actual = actual.replace(/\t/g, "    ");
+        actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
+        Assert.assertEquals(content, actual);    
+    };
+}

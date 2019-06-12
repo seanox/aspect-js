@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      input {
+        display:block;
+      }
+      *[release] {
+        display:none;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        var x = false;
+
+        Test.activate();
+        
+        var snapshots = [];
+        var snapshot = function() {
+            var snapshot = document.body.innerHTML;
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            snapshots.push(snapshot);
+            if (snapshots.length == 2) {
+                x = true;
+                Composite.asynchron(Composite.render, document.body);
+            }
+            if (snapshots.length == 4)
+                Composite.asynchron(Test.start);
+        };
+
+        Composite.listen(Composite.EVENT_RENDER_START, snapshot);
+        Composite.listen(Composite.EVENT_RENDER_END, snapshot);
+        
+        Test.create({test:function() {
+            Assert.assertTrue(snapshots[0].indexOf(" release") > 0);
+        }});
+        Test.create({test:function() {
+            Assert.assertFalse(snapshots[1].indexOf(" release") > 0);
+        }});        
+        Test.create({test:function() {
+            Assert.assertFalse(snapshots[2].indexOf(" release") > 0);
+        }});        
+        Test.create({test:function() {
+            Assert.assertFalse(snapshots[3].indexOf(" release") > 0);
+        }});        
+    </script>
+  </head>
+  <body>
+    <span release>{{'A1'}}</span>
+    <span release>{{'A2'}}</span>
+    <span release condition="{{x}}">
+      {{'A3'}} 
+      <span release>{{'A4'}}</span>
+    </span>    
+    <span>{{'B1'}}</span>
+    <span>{{'B2'}}</span>
+    <span condition="{{x}}">
+      {{'B3'}} 
+      <span>{{'B4'}}</span>
+    </span>    
+  </body>
+</html>
