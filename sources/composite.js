@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190612
+ *  Composite 1.0 20190702
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190612
+ *  @version 1.0 20190702
  */
 if (typeof Composite === "undefined") {
     
@@ -269,11 +269,6 @@ if (typeof Composite === "undefined") {
     Composite.EVENT_RENDER_NEXT = "RenderNext";
     Composite.EVENT_RENDER_END = "RenderEnd";
 
-    /** Constants of events during scanning */
-    Composite.EVENT_SCAN_START = "ScanStart";
-    Composite.EVENT_SCAN_NEXT = "ScanNext";
-    Composite.EVENT_SCAN_END = "ScanEnd";
-
     /** Constants of events during mounting */
     Composite.EVENT_MOUNT_START = "MountStart";
     Composite.EVENT_MOUNT_NEXT = "MountNext";
@@ -325,6 +320,20 @@ if (typeof Composite === "undefined") {
         return pattern;
     })();
     
+    /** Patterns with the supported events as plain array */
+    Composite.PATTERN_EVENT_NAMES = (function() {
+        return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+            return letter.toUpperCase();
+        }).split(/\s+/);
+    })();
+    
+    /** Patterns with the supported events as plain array (lower case) */
+    Composite.PATTERN_EVENT_FILTER = (function() {
+        return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+            return letter.toUpperCase();
+        }).toLowerCase().split(/\s+/);
+    })();
+
     /**
      *  Lock mechanism for the render, mound and scan methods. The lock controls
      *  that the methods are not used concurrently and/or asynchronously. Each
@@ -357,11 +366,36 @@ if (typeof Composite === "undefined") {
                         context.lock = false;
                         if (context == Composite.render) {
                             Composite.fire(Composite.EVENT_RENDER_END, this.selector);
-                            Composite.scan(this.selector);
+                            
+                            //If the selector is a string, several elements must
+                            //be assumed. These can, but do not have to, have a
+                            //relationship in the DOM. Therefore they are all
+                            //considered and mounted separately. 
+                            
+                            var nodes;
+                            if (typeof this.selector == "string") {
+                                nodes = [];
+                                var scope = document.querySelectorAll(this.selector);
+                                Array.from(scope).forEach((node, index, array) => {
+                                    if (nodes.includes(node))
+                                        nodes.push(node);
+                                    var scope = node.querySelectorAll("*");
+                                    Array.from(scope).forEach((node, index, array) => {
+                                        if (nodes.includes(node))
+                                            nodes.push(node);
+                                    });
+                                });
+                            } else {
+                                nodes = this.selector.querySelectorAll("*");
+                                nodes = [this.selector].concat(Array.from(nodes));
+                            }
+                            
+                            //Mount all elements in a composite, including itself
+                            nodes.forEach((node, index, array) => {
+                                Composite.mount(node);
+                            });
                         } else if (context == Composite.mount) {
                             Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
-                        } else if (context == Composite.scan) {
-                            Composite.fire(Composite.EVENT_SCAN_END, this.selector);
                         } else throw new Error("Invalid context: " + context);
                         var selector = context.queue.shift();
                         if (selector)
@@ -372,16 +406,12 @@ if (typeof Composite === "undefined") {
                 Composite.fire(Composite.EVENT_RENDER_START, this.selector);
             else if (context == Composite.mount)
                 Composite.fire(Composite.EVENT_MOUNT_START, this.selector);
-            else if (context == Composite.scan)
-                Composite.fire(Composite.EVENT_SCAN_START, this.selector);
             else throw new Error("Invalid context: " + context);            
         } else {
             if (context == Composite.render)
                 Composite.fire(Composite.EVENT_RENDER_NEXT, this.selector);
             else if (context == Composite.mount)
                 Composite.fire(Composite.EVENT_MOUNT_NEXT, this.selector);
-            else if (context == Composite.scan)
-                Composite.fire(Composite.EVENT_SCAN_NEXT, this.selector);
             else throw new Error("Invalid context: " + context);            
         }
         
@@ -533,6 +563,8 @@ if (typeof Composite === "undefined") {
     };
 
     /**
+     *  TODO: Q: null or this, wath is better?
+     *           In general, all apply and call calls must be checked.
      *  Asynchronous call of a function.
      *  In reality, it is a non-blocking function call, because asynchronous
      *  execution is not possible without Web Worker.
@@ -587,11 +619,39 @@ if (typeof Composite === "undefined") {
      *  renderer then uses the current snapshot of the model and the property x
      *  also exists in the model.
      *  
+     *      Validation
+     *      ----
+     *  If an element is marked with the attribute 'validate', a two-step
+     *  validation is performed.
+     *  In the first step, the HTML5 validation is checked if it exists.
+     *  If this validation is valid or does not exist, the model-based
+     *  validation is executed if it exists. For this purpose, the static method
+     *  validate is expected in the model. The current element and the current
+     *  value (if available) are passed as arguments. If the return of a
+     *  validation is not true, if applicable, the synchronization and the
+     *  action are not executed and the default action of the browser is
+     *  cancelled.     
+     *  
      *      Synchronization
      *      ----
      *  The object binding and synchronization assume that a model corresponding
      *  to the composite exists with the same namespace. During synchronization,
-     *  the element must also exist as a property in the model.
+     *  the element must also exist as a property in the model. Accepted are
+     *  properties with a primitive data type and objects with a property value.
+     *  The synchronization expects a positive validation, otherwise it will not
+     *  be executed.
+     *  
+     *      Invocation
+     *      ---
+     *  For events, actions can be implemented in the model.
+     *  Actions are static methods in the model whose name begins with 'on' and
+     *  is followed by the name (camel case) of the event. As an argument, the
+     *  occurring event is passed.
+     *  The action methods can have a return value, but do not have to.
+     *  If their return value is false, the event and thus the default action of
+     *  the browser is cancelled.     
+     *  The invocation expects a positive validation, otherwise it will not be
+     *  executed.
      *  
      *      Events
      *      ----
@@ -637,41 +697,189 @@ if (typeof Composite === "undefined") {
                 return; 
             }
 
-            if (!(selector instanceof Element))
-                return;
-            
-            //There must be a corresponding model class.
-            var model = Composite.mount.lookup(selector);
-            if (!(model instanceof Object)
-                    || model instanceof Element)
+            //Exclusive for elements
+            //and without multiple object binding
+            //and script and style elements are not supported 
+            if (!(selector instanceof Element)
+                    || Composite.mount.queue.includes(selector)
+                    || selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
                 return;
 
-            //No multiple object binding
-            if (Composite.mount.queue.includes(selector))
+            //An element/selector should only be mounted once.
+            Composite.mount.stack = Composite.mount.stack || [];
+            if (Composite.mount.stack.includes(selector))
                 return;
             
             var serial = selector.ordinal();
             var object = Composite.render.meta[serial] || {};
-            var events = object.events || {};
             
-            //Registers all events that are implemented in the model.
-            //With the attribute 'events' the events are registered and executed
-            //during the rendering. The reason is the combination of the
-            //attributes events + render. The re-rendering of the targets only
-            //makes sense after executing the event methods. Only in this way
-            //can the results and changes that the event methods cause be used
-            //in the re-rendering. In this case, all event-methods which are
-            //used during the rendering are registered and collected. Only event
-            //methods that are not registered during rendering can be registered
-            //here.
+            //The explicit events are declared by the attribute: events.
+            //The model can, but does not have to, implement the corresponding
+            //method. Explicit events are mainly used to synchronize view and
+            //model and to trigger targets of the attribute: render.
+            var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+                    ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+            events = events.toLowerCase().split(/\s+/);
+            events = events.filter((event) => Composite.PATTERN_EVENT_FILTER.includes(event));
             
-            model = model.scope[model.property];
-            for (var entry in model)
-                if (typeof model[entry] === "function"
-                        && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)
-                        && typeof events[entry.substring(2).toLowerCase()] !== "function")
-                    selector.addEventListener(entry.substring(2).toLowerCase(), model[entry]);
+            //There must be a corresponding model class.
+            //Elements are not supported.
+            var meta = Composite.mount.lookup(selector);
+            if (meta instanceof Object) {
+                
+                //The implicit assignment is based on the on-event-methods
+                //implemented in the model. These are determined and added to the
+                //list of events if the events have not yet been explicitly
+                //declared.
+                
+                //If a property has been determined, a sub-model must be used in the
+                //scope, otherwise it must be the composite itself and the scope is
+                //used directly because it contains the event method.
+                var model = meta.property && typeof meta.scope[meta.property] === "object"
+                    ? meta.scope[meta.property] : meta.scope;
+                for (var event in model)
+                    if (typeof model[event] === "function"
+                            && event.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                        event = event.substring(2).toLowerCase();
+                        if (!events.includes(event))
+                            events.push(event);
+                    }
+            }
 
+            //The determined events are registered.
+            Composite.mount.stack.push(selector);
+            events.forEach((event, index, array) => {
+                selector.addEventListener(event.toLowerCase(), (event) => {
+
+                    var target = event.currentTarget;
+                    var serial = target.ordinal();
+                    var object = Composite.render.meta[serial];
+
+                    var action = event.type.toLowerCase();
+                    if (!Composite.PATTERN_EVENT_FILTER.includes(action))
+                        return;
+                    action = Composite.PATTERN_EVENT_FILTER.indexOf(action);
+                    action = Composite.PATTERN_EVENT_NAMES[action];
+                    
+                    var result;
+                    
+                    var valid = true;
+
+                    //There must be a corresponding model class.
+                    //Elements are not supported.
+                    var meta = Composite.mount.lookup(target);
+                    if (meta instanceof Object) {
+                        
+                        var value;
+                        if (Composite.ATTRIBUTE_VALUE in target
+                                && target instanceof Element)
+                            value = target[Composite.ATTRIBUTE_VALUE];
+                        
+                        //Step 1: Validation
+                        
+                        //Explicit validation via HTML5.
+                        //If the validation fails here, model validation and
+                        //synchronization is not and rendering always performed.
+                        //In this case the event and thus the default action of
+                        //the browser is cancelled.
+                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                                && typeof target.checkValidity === "function")
+                            valid = target.checkValidity();
+
+                        //Validation is a central function in the composite and
+                        //implemented directly there, even if the validation is
+                        //requested by a sub-element (not a sub-composite).
+                        var scope = Object.lookup(meta.composite);
+                        
+                        //Implicit validation via the model.
+                        //If a corresponding validate method has been
+                        //implemented in the model. The declaration with the
+                        //attribute validate is not required here.
+                        //The validation through the model only works if the
+                        //corresponding composite is active/present in the DOM!
+                        if (scope && typeof scope[Composite.ATTRIBUTE_VALIDATE] === "function"
+                                && valid === true) {
+                            var validate = scope[Composite.ATTRIBUTE_VALIDATE];
+                            valid = typeof value !== "undefined" ? validate.call(scope, target, value) : validate.call(scope, target);         
+                        }                        
+                                            
+                        //In case of a failed validation, the event and the
+                        //default action of the browser will be canceled.
+                        if (valid === true) {
+    
+                            //Step 2: Synchronisation
+                            
+                            //The synchronization expects a data field. It can
+                            //be a simple data type or an object with the
+                            //property value. Other targets are ignored.
+                            //The synchronization expects a positive validation,
+                            //otherwise it will not be executed.
+                            var accept = function(object, property) {
+                                if (object == null
+                                        || property == null)
+                                    return false;
+                                var type = typeof object[property];
+                                if (type === "object"
+                                        && object[property] == null)
+                                    return true;
+                                return type === "boolean"
+                                    || type === "number"
+                                    || type === "string";
+                            };
+                            
+                            //A composite is always a container for sub-elements.
+                            //Theoretically, an input element can also be a
+                            //composite, but not a model and input element/data
+                            //field at the same time. That's why this case is
+                            //ignored here. A composite cannot assign a value to
+                            //itself. Therefore, a data field is always expected
+                            //in a model.
+                            if (accept(meta.scope, meta.property))
+                                meta.scope[meta.property] = value;
+                            else if (typeof meta.scope[meta.property] === "object"
+                                    && accept(meta.scope[meta.property], "value"))
+                                meta.scope[meta.property].value = value;
+                            
+                            //Step 3: Invocation
+
+                            scope = meta.property ? meta.scope[meta.property] : meta.scope;
+    
+                            //For the event, a corresponding method is searched
+                            //in the model that can be called. If their return
+                            //value is false, the event and thus the default
+                            //action of the browser is cancelled. 
+                            //The invocation expects a positive validation,
+                            //otherwise it will not be executed.
+                            if (typeof scope["on" + action] === "function")
+                                result = scope["on" + action].call(scope, event);
+                        }
+                    }
+
+                    //Step 4: Rendering
+                    
+                    //Rendering is performed in all cases.
+                    //When an event occurs, all elements that correspond to the
+                    //query selector rendering are updated
+                    var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+                            ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+                    events = events.toLowerCase().split(/\s+/);
+                    if (events.includes(action.toLowerCase())) {
+                        var render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
+                                ? object.attributes[Composite.ATTRIBUTE_RENDER] : "";
+                        if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                            render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
+                        Composite.render(render);
+                    }
+                    
+                    if (meta instanceof Object) {
+                        if ((typeof result !== "undefined" && !result)
+                                || (typeof valid !== "undefined" && valid !== true))
+                            event.preventDefault();
+                        if (typeof result !== "undefined")
+                            return result;
+                    }
+                });
+            });
         } finally {
             lock.release();
         }        
@@ -681,9 +889,9 @@ if (typeof Composite === "undefined") {
      *  Determines the namespace for a composite element as meta object.
      *
      *  Composite:
-     *      {composite:scope, model}
+     *      {composite, model}
      *  Composite Element:
-     *      {composite:scope, model, property, name:qualifier}
+     *      {composite, model, property, name:qualifier}
      *
      *  The namespace is created based on the parent composite elements
      *  (elements with the attribute 'composite'), but also includes the passed
@@ -774,17 +982,18 @@ if (typeof Composite === "undefined") {
     /**
      *  Determines the meta informations as object for an element.
      *  
-     *      {scope, model, property, name:qualifier}
+     *      {composite, scope, model};
+     *      
+     *      {composite, scope, model, property, name:qualifier}
      *      
      *  The method always requires a corresponding JavaScript model and an
      *  element with an ID. The ID can be relative or absolute/full qualified.
      *  For relative IDs, the namespace is determined from the higher-level
-     *  composite structure in the DOM. Absolute IDs refer directly to the
-     *  namespace to be used. If no corresponding namespace/JavaScript model can
-     *  be determined, the method returns null.
+     *  composite structure in the DOM. Absolute IDs whose id/namespace contain
+     *  a dot as a package separator, refer directly to the namespace to be
+     *  used. If no corresponding namespace/JavaScript model can be determined,
+     *  the method returns null.
      *  
-     *  Absolute namespaces contain a dot as a package separator.
-
      *  The recursive determinaton of the namespace, the higher-level composite
      *  IDs are always regarded as absolute until the first absolute composite
      *  ID occurs, then the recursion/determinaton is interrupted and the
@@ -830,74 +1039,9 @@ if (typeof Composite === "undefined") {
         //The meta-object for the return value is created.
         //For composite elements, this only contains the scope and model.
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-            return {scope:scope, model:meta.model};
+            return {composite:meta.composite, scope:scope, model:meta.model};
 
-        return {composite:{scope:scope, model:meta.model},
-            scope:scope, model:meta.model, property:meta.property, name:meta.name};
-    };
-    
-    /**
-     *  Scans the as selector passed element with all its children for composite
-     *  elements where an object/model binding is possible. The binding itself
-     *  is delegated to the mount method.
-     *  
-     *      Events
-     *      ----
-     *  Composite.EVENT_SCAN_START
-     *  Composite.EVENT_SCAN_NEXT
-     *  Composite.EVENT_SCAN_END
-     *   
-     *      Queue and Lock:
-     *      ----
-     *  The method used a simple queue and transaction management so that the
-     *  concurrent execution of scanning works sequentially in the order of the
-     *  method call.
-     */
-    Composite.scan = function(selector, lock) {
-       
-        Composite.scan.queue = Composite.scan.queue || [];
-        
-        //The lock locks concurrent scan requests.
-        //Concurrent scaning causes unexpected effects.
-        if (Composite.scan.lock
-                && Composite.scan.lock != lock) {
-            if (!Composite.scan.queue.includes(selector))
-                Composite.scan.queue.push(selector);
-            return;
-        }
-
-        var lock = Composite.lock(Composite.scan, selector);
-            
-        try {
-
-            if (typeof selector === "string") {
-                selector = selector.trim();
-                if (!selector)
-                    return;
-                var nodes = document.querySelectorAll(selector);
-                nodes.forEach((node, index, array) => {
-                    Composite.scan(node, lock.share());
-                });
-                return; 
-            }
-
-            if (!(selector instanceof Element))
-                return;
-    
-            //Find all elements with an ID in a composite, including the
-            //composite itself.
-            var nodes = selector.querySelectorAll("[" + Composite.ATTRIBUTE_ID + "]");
-            nodes = Array.from(nodes);
-            if (!selector.hasAttribute(Composite.ATTRIBUTE_MOUNT))
-                nodes.unshift(selector); 
-            nodes.forEach((node, index, array) => {
-                var serial = (node.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-                if (serial.match(Composite.PATTERN_ELEMENT_ID))
-                    Composite.mount(node);
-            });
-        } finally {
-            lock.release();
-        }
+        return {composite:meta.composite, scope:scope, model:meta.model, property:meta.property, name:meta.name};
     };
     
     /**
@@ -1107,6 +1251,12 @@ if (typeof Composite === "undefined") {
      *  The expression for the iteration is a parameter expression. The
      *  parameter is a meta object and supports access to the iteration cycle.
      *      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}
+     *      
+     *      Release
+     *      ----
+     *  Inverse indicator that an element was rendered.
+     *  The renderer removes this attribute when an element is rendered. This
+     *  effect can be used for CSS to display elements only in rendered state.    
      *             
      *      Scripting
      *      ----
@@ -1558,86 +1708,15 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Element))
                 return;
             
-            //Events primarily controls the synchronization of the input values
-            //of HTML elements with the properties of a model. Means that the
-            //value in the model only changes if an event occurs for the
-            //corresponding HTML element. Synchronization is performed at a low
-            //level. Means that the properties are synchronized directly and
-            //without the use of get and set methods.
-            //For a better control a declarative validation is supported.
-            //If the attribute 'validate' exists, the value for this is ignored,
-            //the static method <Model>.validate(element, value) is  called in
-            //the corresponding model. This call must return a true value as the
-            //result, otherwise the element value is not stored into the
-            //corresponding model property.
-            //If an event occurs, synchronization is performed. After that will
-            //be checked whether the render attribute exists. All selectors
-            //listed here are then triggered for (re)rendering. (Re)rendering is
-            //independent of synchronization and validation and is executed
-            //immediately after an event occurs.
-            var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
-                    ? object.attributes[Composite.ATTRIBUTE_EVENTS] : null;
-            delete object.attributes[Composite.ATTRIBUTE_EVENTS];        
-            var render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
-                    ? object.attributes[Composite.ATTRIBUTE_RENDER] : false;
-            delete object.attributes[Composite.ATTRIBUTE_RENDER];        
-            if (events) {
-                events = events.split(/\s+/);
-                events.forEach((event, index, array) => {
-                    var meta = Composite.mount.lookup(selector);
-                    
-                    //With the attribute 'events' the events are registered and
-                    //executed here. Because the propagation, capture and
-                    //bubbling phases should not be disturbed during the event.
-                    //During binding, the logic checks which events have already
-                    //been registered so that the implemented event methods in
-                    //the model are not called more than once.
-                    if (meta && meta.scope && meta.property
-                            && typeof meta.scope[meta.property] === "object"
-                            && meta.scope[meta.property] != null) {
-                        var invoke = "on" + event.capitalize();
-                        if (invoke.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
-                            if (typeof meta.scope[meta.property][invoke] === "function") {
-                                object.events = object.events || {};
-                                object.events[event.toLowerCase()] = meta.scope[meta.property][invoke]; 
-                            }
-                        }
-                    }
-                    
-                    selector.addEventListener(event.toLowerCase(), (event) => {
-                        var target = event.currentTarget;
-                        var serial = target.ordinal();
-                        var object = Composite.render.meta[serial];
-                        if (!target.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                                && Composite.ATTRIBUTE_VALUE in target
-                                && typeof target[Composite.ATTRIBUTE_VALUE] !== "function") {
-                            var meta = Composite.mount.lookup(target);
-                            if (meta) {
-                                var valid = false;
-                                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                                        && typeof meta.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                                    valid = meta.scope[Composite.ATTRIBUTE_VALIDATE].call(null, target, target.value) === true;
-                                } else valid = true;
-                                if (valid) {
-                                    if (meta.scope[meta.property] instanceof Object)
-                                        meta.scope[meta.property].value = target.value;
-                                    else meta.scope[meta.property] = target.value
-                                }
-                            }
-                        }
-                        
-                        var events = object.events || {};
-                        if (typeof events[event.type] === "function")
-                            events[event.type].call(null, event);
-                        
-                        if (render) {
-                            if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                                render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
-                            Composite.render(render, lock.share());
-                        }
-                    });                    
-                });
-            }
+            //The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
+            //ATTRIBUTE_RENDER are processed in Composite.mount(selector, lock)
+            //the object binding and are only mentioned here for completeness.
+            
+            //The attribute ATTRIBUTE_RELEASE has no functional implementation.
+            //This is exclusively inverse indicator that an element was
+            //rendered. The renderer removes this attribute when an element is
+            //rendered. This effect can be used for CSS to display elements only
+            //in rendered state.   
             
             //The import attribute is interpreted.
             //This declation loads the content and replaces the inner HTML of an
