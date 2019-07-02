@@ -99,6 +99,12 @@ CR: Test: Extension for passing events (Test + Console) to the enclosing object 
 CR: Test: Extension for central catching of errors with activated Test-AP  
 CR: Test Suite: Optimization of error output  
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered  
+CR: Composite Mount: Revision of the object/model binding  
+CR: Composite Scan: Omission of the intermediate step between render and mount  
+CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)  
+CR: Composite Mount Validation: Has a direct effect on the synchronization, action, and default action of the browser - all require valid validation  
+CR: Composite Mount Synchronization: Optimization  
+CR: Composite Mount Action: The return value false can cancel the default action of the browser  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
