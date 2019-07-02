@@ -102,7 +102,7 @@ CR: Composite Render: Extension with the attribute 'release' as an indicator tha
 CR: Composite Mount: Revision of the object/model binding  
 CR: Composite Scan: Omission of the intermediate step between render and mount  
 CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)  
-CR: Composite Mount Validation: Has a direct effect on the synchronization, action, and default action of the browser - all require valid validation  
+CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser  
 CR: Composite Mount Synchronization: Optimization  
 CR: Composite Mount Action: The return value false can cancel the default action of the browser  
 
