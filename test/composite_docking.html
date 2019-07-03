@@ -13,6 +13,9 @@
       body * {
         display:block;
       }
+      *[release] {
+        display:none;
+      }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
@@ -292,31 +295,33 @@ Model off
     </script>
   </head>
   <body>
-    <button id="modelA.button" events="click" render="body">
+    <button id="modelA.button" events="click" render="body" release>
       Model {{modelA.status ? 'on' : 'off'}}</button>
     <section id="modelA" composite static condition="{{modelA.status}}">
       Model-A
     </section>
 
-    <button id="modelB.button" events="click" render="body">
+    <button id="modelB.button" events="click" render="body" release>
       Model {{modelB.status ? 'on' : 'off'}}</button>
     <section id="modelB" composite static condition="{{modelB.status}}">
       Model-B
     </section>
     
-    <button id="modelC.button" events="click" render="body">
+    <button id="modelC.button" events="click" render="body" release>
       Model {{modelC.status ? 'on' : 'off'}}</button>
     <section id="modelC" composite static condition="{{modelC.status}}">
       Model-C
     </section>
     
-    <button id="modelD.button" events="click" render="body">
+    <button id="modelD.button" events="click" render="body" release>
       Model {{modelD.status ? 'on' : 'off'}}</button>
     <section id="modelD" composite static condition="{{modelD.status}}">
       Model-D
     </section>    
             
-    <button id="modelX.button" events="click" render="body">
+    <!-- ModelX does not exist,
+         but event + render must work regardless of this fact. -->        
+    <button id="modelX.button" events="click" render="body" release>
       Model {{modelX.status ? 'on' : 'off'}}</button>
     <section id="modelX" composite static condition="{{modelX.status}}">
       Model-X

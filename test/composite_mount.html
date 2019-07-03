@@ -50,7 +50,9 @@
         var contactC = {
             text: "",
             data: {
-                text: {},
+                text: {
+                    value: null
+                },
                 link: {
                     onClick: function() {
                         clickStack.push("contactC.data.link.onClick");                            
@@ -128,10 +130,10 @@
             Assert.assertEquals(testStack.join(" "), clickStack.join(" "));
         }}); 
         Test.create({test:function() {
-            Assert.assertEquals('{"text":"xA","data":{"text":{"value":"xA"},"link":{},"button":{}},"link":{}}', contactA.toPlainString());             
+            Assert.assertEquals('{"text":"xA","data":{"text":{},"link":{},"button":{}},"link":{}}', contactA.toPlainString());             
         }});         
         Test.create({test:function() {
-            Assert.assertEquals('{"text":"xB","data":{"text":{"value":"xB"},"link":{}},"link":{}}', contactB.toPlainString());
+            Assert.assertEquals('{"text":"xB","data":{"text":{},"link":{}},"link":{}}', contactB.toPlainString());
         }});
         Test.create({test:function() {
             Assert.assertEquals('{"text":"xC","data":{"text":{"value":"xC"},"link":{}},"link":{}}', contactC.toPlainString());
