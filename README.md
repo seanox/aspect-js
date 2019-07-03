@@ -91,6 +91,7 @@ date when using the release channels.
 ## 1.2.0 2019xxxx (summary of the next version)  
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
 BF: Composite: Composite.asynchron, corection of passed arguments  
+BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
 CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  
 CR: Test: Enhancement of console output monitoring  
 CR: Test: Optimization of console forwarding  

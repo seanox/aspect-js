@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190702
+ *  Composite 1.0 20190703
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190702
+ *  @version 1.0 20190703
  */
 if (typeof Composite === "undefined") {
     
@@ -365,7 +365,6 @@ if (typeof Composite === "undefined") {
                             return;
                         context.lock = false;
                         if (context == Composite.render) {
-                            Composite.fire(Composite.EVENT_RENDER_END, this.selector);
                             
                             //If the selector is a string, several elements must
                             //be assumed. These can, but do not have to, have a
@@ -394,6 +393,8 @@ if (typeof Composite === "undefined") {
                             nodes.forEach((node, index, array) => {
                                 Composite.mount(node);
                             });
+                            
+                            Composite.fire(Composite.EVENT_RENDER_END, this.selector);
                         } else if (context == Composite.mount) {
                             Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
                         } else throw new Error("Invalid context: " + context);
@@ -711,7 +712,13 @@ if (typeof Composite === "undefined") {
                 return;
             
             var serial = selector.ordinal();
-            var object = Composite.render.meta[serial] || {};
+            var object = Composite.render.meta[serial];
+            
+            //Objects that were not rendered should not be mounted.
+            //This can happen if new DOM elements are created during rendering
+            //that are rendered later.
+            if (!(object instanceof Object))
+                return;
             
             //The explicit events are declared by the attribute: events.
             //The model can, but does not have to, implement the corresponding
@@ -1709,8 +1716,8 @@ if (typeof Composite === "undefined") {
                 return;
             
             //The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
-            //ATTRIBUTE_RENDER are processed in Composite.mount(selector, lock)
-            //the object binding and are only mentioned here for completeness.
+            //ATTRIBUTE_RENDER are processed in Composite.mount(selector) the
+            //object binding and are only mentioned here for completeness.
             
             //The attribute ATTRIBUTE_RELEASE has no functional implementation.
             //This is exclusively inverse indicator that an element was
