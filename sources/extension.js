@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.0 20190312
+ *  Extension 1.0 20190704
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190312
+ *  @version 1.0 20190704
  */
 if (typeof Namespace === "undefined") {
 
@@ -116,7 +116,21 @@ if (Math.uniqueId === undefined) {
  */ 
 if (String.prototype.capitalize === undefined) {
     String.prototype.capitalize = function() {
+        if (this.length <= 0)
+            return this;
         return this.charAt(0).toUpperCase() + this.slice(1);
+    };
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a uncapitalize function to the String objects.
+ */ 
+if (String.prototype.uncapitalize === undefined) {
+    String.prototype.uncapitalize = function() {
+        if (this.length <= 0)
+            return this;
+        return this.charAt(0).toLowerCase() + this.slice(1);
     };
 };
 
