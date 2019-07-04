@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.2.0 20190607
+ *  Test 1.2.0 20190704
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190607
+ *  @version 1.2.0 20190704
  */
 if (typeof Test === "undefined") {
     
@@ -328,7 +328,7 @@ if (typeof Test === "undefined") {
                 if (!Array.isArray(listeners))
                     return;
                 listeners.forEach((callback, index, array) => {
-                    window.setTimeout(callback, 0, event, status);
+                    Composite.asynchron(callback, event, status);
                 }); 
             };
             
@@ -506,7 +506,7 @@ if (typeof Test === "undefined") {
                             && meta.name.trim().length > 0)
                         Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                     Test.fire(Test.EVENT_PERFORM, Test.status());
-                    window.setTimeout(() => {
+                    Composite.asynchron(() => {
                         var task = Test.task;
                         try {task.meta.test();
                         } catch (error) {
@@ -543,7 +543,7 @@ if (typeof Test === "undefined") {
                             }
                             Test.queue.lock = false;
                         }
-                    }, 0);
+                    });
                     return;
                 }
                 
