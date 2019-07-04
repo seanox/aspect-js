@@ -92,6 +92,7 @@ date when using the release channels.
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
 BF: Composite: Composite.asynchron, corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
+BF: Extension Capitalize: Correction for use with empty strings  
 CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  
 CR: Test: Enhancement of console output monitoring  
 CR: Test: Optimization of console forwarding  
@@ -106,6 +107,7 @@ CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-ba
 CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser  
 CR: Composite Mount Synchronization: Optimization  
 CR: Composite Mount Action: The return value false can cancel the default action of the browser  
+CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
