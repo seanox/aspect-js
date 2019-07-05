@@ -192,7 +192,6 @@ Creates or sets the value for the existing global variable `foo` with
 The expression corresponds to the JavaScript syntax: `var foo = 1 +2 +3 + 'x hello';`
 
 
-
 ### Combination
 
 All types of expressions can be combined.
@@ -207,15 +206,22 @@ All types of expressions can be combined.
 Expressions are interpreted by the renderer that starts after loading the page.
 So expressions can be visible when loading the page. We recommend that you swap
 the data to the [DataSource](datasource.md) and use the attributes
-[output](markup.md#output) and [import](markup.md#import) in the markup.
+[release](markup.md#release) or [output](markup.md#output) and
+[import](markup.md#import) in the markup.
 
 ```css
+*[release] {
+  display:none;
+}
+
 h1:after {
   content:attr(title)
 }
 ```
 
 ```html
+<h1 release>{{'Hello World!'}}</h1>
+
 <h1 title="{{'Hello World!'}}"/>
 
 <h1 output="{{'Hello World!'}}"/>
