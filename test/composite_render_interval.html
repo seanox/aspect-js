@@ -43,9 +43,7 @@
                     
                     if (snapshots.length == 25) {
                         aCondition = true; 
-                        window.setTimeout(() => {
-                            Composite.render(document.body);
-                        }, 0);                        
+                        Composite.asynchron(Composite.render, document.body);
                     }
                     if (snapshots.length == 50) {
                         aCondition = false; 
@@ -53,16 +51,14 @@
                     }
                     if (snapshots.length == 75) {
                         aCondition = true; 
-                        window.setTimeout(() => {
-                            Composite.render(document.body);
-                        }, 0);                        
+                        Composite.asynchron(Composite.render, document.body);
                     }
                     
                     if (snapshots.length == 100)
-                        window.setTimeout(() => {
+                        Composite.asynchron(() => {
                             document.body.textContent = "Please wait, test in progress...";
                             Test.start();
-                        }, 0);
+                        });
                 });
             })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
         });

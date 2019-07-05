@@ -99,7 +99,7 @@
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             switch (++count) {
                 case 1:
-                    window.setTimeout(() => {
+                    Composite.asynchron(() => {
                         text3.typeTestValue();
                         text4.typeTestValue();
                         text6.typeTestValue();
@@ -110,15 +110,15 @@
                         window["fModel.text2"].typeTestValue();
                         window["fModel.text5"].typeTestValue();
                         document.querySelector("#textX").typeTestValue();
-                    }, 0);
+                    });
                     return;
                 case 2:
-                    window.setTimeout(() => {
+                    Composite.asynchron(() => {
                         text8.trigger("focus"); 
                     });
                     return; 
                 case 3:
-                    window.setTimeout(() => {
+                    Composite.asynchron(() => {
                         aModel.text8_2 = aModel.text8;
                         window.setTimeout(() => {
                             Test.start();

@@ -27,16 +27,10 @@
                 case 3: break;
                 case 4: raw_x = false; break;
             };
-            if (snapshots.length < 7) {
-                window.setTimeout(() => {
-                    Composite.render(document.body);
-                }, 0);
-            }
-            if (snapshots.length == 7) {
-                window.setTimeout(() => {
-                    Test.start();                
-                }, 0);
-            }
+            if (snapshots.length < 7)
+                Composite.asynchron(Composite.render, document.body);
+            if (snapshots.length == 7)
+                Composite.asynchron(Test.start);                
         }); 
         
         Test.create({test:function() {

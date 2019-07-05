@@ -58,9 +58,7 @@
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
             if (snapshots.length < 5)
-                window.setTimeout(() => {
-                    Composite.render(document.body);
-                }, 0);
+                Composite.asynchron(Composite.render, document.body);
             else if (snapshots.length == 5)
                 Test.start();
         });
