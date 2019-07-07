@@ -38,7 +38,7 @@
  *  Therefore, the implementation uses a cache to minimize network access.
  *  
  *  The data is queried with XPath, the result can be concatenated and
- *  aggregated and the result can be transformed with XSLT.
+ *  aggregated and the result can be transformed with XSLT. 
  *  
  *  DataSource 1.1.1 20190707
  *  Copyright (C) 2019 Seanox Software Solutions
