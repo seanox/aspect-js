@@ -81,7 +81,7 @@
  *  The test cases are implemented with assertions. The test module provides
  *  elementary assertions, you can implement more. The function is simple. If an
  *  assertion was not true, a error is thrown -- see as an example the
- *  implementation here.
+ *  implementation here. 
  *  
  *  Test 1.2.1 20190707
  *  Copyright (C) 2019 Seanox Software Solutions
