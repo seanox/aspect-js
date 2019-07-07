@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here.
  *  
- *  Test 1.2.0 20190704
+ *  Test 1.2.1 20190707
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190704
+ *  @version 1.2.1 20190707
  */
 if (typeof Test === "undefined") {
     
@@ -327,7 +327,7 @@ if (typeof Test === "undefined") {
                 var listeners = context.Test.listeners[event.toLowerCase()];
                 if (!Array.isArray(listeners))
                     return;
-                listeners.forEach((callback, index, array) => {
+                listeners.forEach((callback) => {
                     Composite.asynchron(callback, event, status);
                 }); 
             };
@@ -932,7 +932,7 @@ if (typeof Test === "undefined") {
             
             var listeners = console.listeners;
             if (Array.isArray(listeners))
-                listeners.forEach((callback, index, array) => {
+                listeners.forEach((callback) => {
                     callback.apply(null, values);
                 }); 
             
@@ -992,7 +992,7 @@ if (typeof Test === "undefined") {
                     this.value = "";
                 var element = this;
                 value = (value || "").split("");
-                value.forEach((digit, index, array) => {
+                value.forEach((digit) => {
                     element.trigger("keydown");
                     element.value = (element.value || "") + digit;
                     element.trigger("keyup");

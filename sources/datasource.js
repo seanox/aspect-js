@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT.
  *  
- *  DataSource 1.1.0 20190520
+ *  DataSource 1.1.1 20190707
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20190520
+ *  @version 1.1.1 20190707
  */
 if (typeof DataSource === "undefined") {
     
@@ -189,7 +189,7 @@ if (typeof DataSource === "undefined") {
         
         var result = processor.transformToDocument(xml);
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
-        nodes.forEach((node, index, array) => {
+        nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
                 var content = node.innerHTML;
                 if (content.indexOf("<") < 0
@@ -204,7 +204,7 @@ if (typeof DataSource === "undefined") {
         //but only by the renderer. This is important in combination with the
         //condition attribute.
         var nodes = result.querySelectorAll("script[type],script:not([type])");
-        nodes.forEach((node, index, array) => {
+        nodes.forEach((node) => {
             if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
                     || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
                 node.setAttribute("type", "composite/javascript");
@@ -312,14 +312,14 @@ if (typeof DataSource === "undefined") {
         
         DataSource.cache = DataSource.cache || {};
         var hash = collection.join().hashCode();
-        collection.forEach((entry, index, array) => {
+        collection.forEach((entry) => {
             hash += ":" + String(entry).hashCode();
         });
         if (DataSource.cache.hasOwnProperty(hash))
             return DataSource.cache[hash].clone();  
 
         var root = document.implementation.createDocument(null, collector, null, null);
-        collection.forEach((entry, index, array) => {
+        collection.forEach((entry) => {
             if (typeof entry !== "string")
                 throw TypeError("Invalid collection entry");
             root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
