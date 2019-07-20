@@ -375,11 +375,11 @@ if (typeof Composite === "undefined") {
                             if (typeof this.selector == "string") {
                                 nodes = [];
                                 var scope = document.querySelectorAll(this.selector);
-                                Array.from(scope).forEach((node, index, array) => {
+                                Array.from(scope).forEach((node) => {
                                     if (nodes.includes(node))
                                         nodes.push(node);
                                     var scope = node.querySelectorAll("*");
-                                    Array.from(scope).forEach((node, index, array) => {
+                                    Array.from(scope).forEach((node) => {
                                         if (nodes.includes(node))
                                             nodes.push(node);
                                     });
@@ -390,7 +390,7 @@ if (typeof Composite === "undefined") {
                             }
                             
                             //Mount all elements in a composite, including itself
-                            nodes.forEach((node, index, array) => {
+                            nodes.forEach((node) => {
                                 Composite.mount(node);
                             });
                             
@@ -558,7 +558,7 @@ if (typeof Composite === "undefined") {
         variants = Array.from(arguments);
         variants = variants.slice(1);
         variants.unshift(event);
-        listeners.forEach((callback, index, array) => {
+        listeners.forEach((callback) => {
             callback.apply(null, variants);
         });        
     };
@@ -692,7 +692,7 @@ if (typeof Composite === "undefined") {
                 if (!selector)
                     return;
                 var nodes = document.querySelectorAll(selector);
-                nodes.forEach((node, index, array) => {
+                nodes.forEach((node) => {
                     Composite.mount(node, lock.share());
                 });
                 return; 
@@ -735,13 +735,14 @@ if (typeof Composite === "undefined") {
             if (meta instanceof Object) {
                 
                 //The implicit assignment is based on the on-event-methods
-                //implemented in the model. These are determined and added to the
-                //list of events if the events have not yet been explicitly
+                //implemented in the model. These are determined and added to
+                //the list of events if the events have not yet been explicitly
                 //declared.
                 
-                //If a property has been determined, a sub-model must be used in the
-                //scope, otherwise it must be the composite itself and the scope is
-                //used directly because it contains the event method.
+                //If a property has been determined, a sub-model must be used in
+                //the scope, otherwise it must be the composite itself or a
+                //central implementation in the composite and the scope is used
+                //directly because it contains the event method.
                 var model = meta.property && typeof meta.scope[meta.property] === "object"
                     ? meta.scope[meta.property] : meta.scope;
                 for (var event in model)
@@ -755,7 +756,7 @@ if (typeof Composite === "undefined") {
 
             //The determined events are registered.
             Composite.mount.stack.push(selector);
-            events.forEach((event, index, array) => {
+            events.forEach((event) => {
                 selector.addEventListener(event.toLowerCase(), (event) => {
 
                     var target = event.currentTarget;
@@ -1329,7 +1330,7 @@ if (typeof Composite === "undefined") {
                 if (!selector)
                     return;
                 var nodes = document.querySelectorAll(selector);
-                nodes.forEach((node, index, array) => {
+                nodes.forEach((node) => {
                     Composite.render(node, lock.share());
                 });
                 return;
@@ -1398,7 +1399,7 @@ if (typeof Composite === "undefined") {
                 //rendering. The method call with a acceptor:
                 //    Composite.customize(function(element) {...});
                 Composite.acceptors = Composite.acceptors || [];
-                Composite.acceptors.forEach((acceptor, index, array) => {
+                Composite.acceptors.forEach((acceptor) => {
                     acceptor.call(null, selector);
                 });
 
@@ -1409,7 +1410,7 @@ if (typeof Composite === "undefined") {
                     //Attribute condition is not included in the list of
                     //Composite.PATTERN_ATTRIBUTE_ACCEPT because it is used very
                     //specifically and must therefore be requested separately.
-                    Array.from(selector.attributes).forEach((attribute, index, array) => {
+                    Array.from(selector.attributes).forEach((attribute) => {
                         var value = (attribute.value || "").trim();
                         if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                 || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
@@ -1617,7 +1618,7 @@ if (typeof Composite === "undefined") {
                         
                         //The new text nodes are inserted before the current
                         //element one.
-                        words.forEach((node, index, array) => {
+                        words.forEach((node) => {
                             selector.parentNode.insertBefore(node, selector);
                         });
                         
@@ -1828,7 +1829,7 @@ if (typeof Composite === "undefined") {
                 } else if (value instanceof Node)
                     selector.appendChild(value.cloneNode(true), true);
                 else if (value instanceof NodeList)
-                    Array.from(value).forEach(function(node, index, array) {
+                    Array.from(value).forEach(function(node, index) {
                         selector.appendChild(node.cloneNode(true), index == 0);
                     });
                 else selector.innerHTML = String(value);
@@ -1960,7 +1961,7 @@ if (typeof Composite === "undefined") {
                 attributes = attributes.filter((value, index, array) => {
                     return array.indexOf(value) === index;
                 });
-                attributes.forEach((attribute, index, array) => {
+                attributes.forEach((attribute) => {
                     //Ignore all internal attributes
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
@@ -2015,7 +2016,7 @@ if (typeof Composite === "undefined") {
             //This is intercepted by the MutationObserver.
             if (selector.childNodes
                     && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                Array.from(selector.childNodes).forEach((node, index, array) => {
+                Array.from(selector.childNodes).forEach((node) => {
                     //The rendering is recursive, if necessary the node is then
                     //no longer available. For example, if a condition is
                     //replaced by the placeholder,
@@ -2440,7 +2441,7 @@ if (typeof Expression === "undefined") {
                 cascade.logic.push(word);
         };
         
-        expression.split(/\n/).forEach((entry, index, array) => {
+        expression.split(/\n/).forEach((entry) => {
             var object = {type:Expression.TYPE_TEXT, data:entry};
             if (entry.match(/^\{\{.*\}\}$/)) {
                 object.data = object.data.substring(2, object.data.length -2);
@@ -2455,7 +2456,7 @@ if (typeof Expression === "undefined") {
         //The expression objects are retained but their value changes from text
         //to array with literal and script as partial words.
 
-        cascade.expression.forEach((entry, index, array) => {
+        cascade.expression.forEach((entry) => {
             var text = entry.data;
             text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, "$1\n$2\n");
             text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, "$1\r$2\r");
@@ -2501,7 +2502,7 @@ if (typeof Expression === "undefined") {
         var keywords = ["and", "&&", "or", "||", "not", "!", "eq", "==",
                 "ne", "!=", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
                 "div", "/", "mod", "%"];
-        cascade.script.forEach((entry, index, array) => {
+        cascade.script.forEach((entry) => {
             var text = entry.data;
             for (var loop = 0; loop < keywords.length; loop += 2) {
                 var pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
@@ -2511,7 +2512,7 @@ if (typeof Expression === "undefined") {
                 return script + "\n\r" + keyword.toLowerCase() + "\n";
             });
             var words = [];
-            text.split(/\n/).forEach((entry, index, array) => {
+            text.split(/\n/).forEach((entry) => {
                 var object = {type:Expression.TYPE_OTHER, data:entry};
                 if (entry.match(/^\r/)) {
                     object.data = entry.substring(1);
@@ -2530,12 +2531,12 @@ if (typeof Expression === "undefined") {
         //    value expression: (^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
         //The expression is followed by a non-word character or the end.
         
-        cascade.other.forEach((entry, index, array) => {
+        cascade.other.forEach((entry) => {
             var text = entry.data;
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
             var words = [];
-            text.split(/\n/).forEach((entry, index, array) => {
+            text.split(/\n/).forEach((entry) => {
                 var object = {type:Expression.TYPE_LOGIC, data:entry};
                 if (entry.match(/^\r\r/)) {
                     object.data = "Expression.lookup(\"" + entry.substring(2) + "\")";
@@ -2558,11 +2559,11 @@ if (typeof Expression === "undefined") {
         var words = [];
         var merge = function(word) {
             if (Array.isArray(word))
-                word.forEach((entry, index, array) => {
+                word.forEach((entry) => {
                     merge(entry);    
                 });
             else if (Array.isArray(word.data))
-                word.data.forEach((entry, index, array) => {
+                word.data.forEach((entry) => {
                     merge(entry);    
                 });            
             else if (typeof word.data === "string")
@@ -2583,7 +2584,7 @@ if (typeof Expression === "undefined") {
         //text to expression.
         
         var script = "";
-        words.forEach((word, index, array) => {
+        words.forEach((word) => {
             if (word.type == Expression.TYPE_TEXT)
                 script += "\n" + word.data + "\r";
             else if (word.type == Expression.TYPE_KEYWORD)
