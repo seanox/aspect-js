@@ -124,6 +124,7 @@
       composite_expression_parse.html
       composite_expression_syntax.html
       composite_mount.html
+      composite_object_lookup.html
       composite_render_condition.html
       composite_render_customize.html
       composite_render_customize_acceptors.html
@@ -169,7 +170,7 @@
           queue = queue.textContent.trim().split(/\s+/);
           queue = queue.filter(entry => !entry.match(/^\*/));
           var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
-          queue.forEach((entry, index, array) => {
+          queue.forEach((entry) => {
               var text = content;
               text = text.replace(/%1/g, entry.hashCode());
               text = text.replace(/%2/g, entry);
@@ -177,7 +178,7 @@
           });
           lock = true;
           var tests = document.querySelectorAll("#progress div[id]");
-          tests.forEach((test, index, array) => {
+          tests.forEach((test) => {
               test.addEventListener("click", (event) => {
                   if (lock)
                       return;

@@ -108,6 +108,7 @@ CR: Composite Mount Validation: Has a direct effect on synchronization, action a
 CR: Composite Mount Synchronization: Optimization  
 CR: Composite Mount Action: The return value false can cancel the default action of the browser  
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
+CR: Composite Object Lookup: Added support now for arrays (also associative)  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

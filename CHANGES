@@ -19,6 +19,9 @@
   CR: Composite Mount Synchronization: Optimization
   CR: Composite Mount Action: The return value false can cancel the default action of the browser
   CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
+  CR: Composite Object Lookup: Added support now for arrays (also associative)
+      In additional ':' is accepted as separator, so that the syntax is more understandable
+      e.g. model.array:1 / model.object:property
 
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 

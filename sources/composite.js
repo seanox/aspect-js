@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *        
- *  Composite 1.0 20190704
+ *  Composite 1.1.0 20190730
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190704
+ *  @version 1.1.0 20190730
  */
 if (typeof Composite === "undefined") {
     
@@ -443,7 +443,10 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.lookup === undefined)
         Object.lookup = function(namespace) {
-            namespace = (namespace || "").trim().split(/\./);
+            namespace = (namespace || "").trim();
+            if (!namespace.match(/^(?:[a-z]\w*)(?:(?:\:\w+)|(?:\.[a-z]\w*))*$/i))
+                return null;
+            namespace = namespace.split(/[\.\:]/);
             if (!namespace
                     || namespace.length <= 0)
                 return null;
