@@ -3,6 +3,7 @@
   BF: Composite: Composite.asynchron, corection of passed arguments
   BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models
   BF: Extension Capitalize: Correction for use with empty strings
+  BF: MVC: Correction of the embedded use of SiteMap.accept(path)
   CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js
   CR: Test: Enhancement of console output monitoring
   CR: Test: Optimization of console forwarding
