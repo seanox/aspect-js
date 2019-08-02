@@ -23,6 +23,9 @@
   CR: Composite Object Lookup: Added support now for arrays (also associative)
       In additional ':' is accepted as separator, so that the syntax is more understandable
       e.g. model.array:1 / model.object:property
+  CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM
+      The hierarchy of IDs in the DOM defines the model and sub-models.
+      Absolute and relative IDs in the markup are completely omitted.    
 
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 
