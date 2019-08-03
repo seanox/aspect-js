@@ -110,7 +110,7 @@
  *  Markup/DOM, object tree and virtual paths are analog/homogeneous.
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
- *        
+ *
  *  Composite 1.2.0 20190802
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
@@ -566,8 +566,6 @@ if (typeof Composite === "undefined") {
     };
 
     /**
-     *  TODO: Q: null or this, wath is better?
-     *           In general, all apply and call calls must be checked.
      *  Asynchronous call of a function.
      *  In reality, it is a non-blocking function call, because asynchronous
      *  execution is not possible without Web Worker.
@@ -741,12 +739,24 @@ if (typeof Composite === "undefined") {
                 //the list of events if the events have not yet been explicitly
                 //declared.
                 
-                //If a property has been determined, a sub-model must be used in
-                //the scope, otherwise it must be the composite itself or a
-                //central implementation in the composite and the scope is used
-                //directly because it contains the event method.
-                var model = meta.property && typeof meta.scope[meta.property] === "object"
-                    ? meta.scope[meta.property] : meta.scope;
+                //Events are possible for composites and interactive composite
+                //elements. Composites define the scope with their model.
+                //Interactive composite elements are a property object in the
+                //model that contains the interaction methods corresponding to
+                //the events.
+                //Therefore the scope of interactive composite elements shifts
+                //from the model to the property object.
+                //In all cases, a name-based alignment in the model and thus an
+                //ID is required. Anonymous intercation elements do not have
+                //this alignment and no scope can be determined.
+
+                var model = meta.scope;
+                if (typeof meta.property !== "undefined")
+                    if (meta.property 
+                            && typeof meta.scope[meta.property] === "object")
+                        model = meta.scope[meta.property];
+                    else model = null;
+
                 for (var event in model)
                     if (typeof model[event] === "function"
                             && event.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
@@ -796,10 +806,14 @@ if (typeof Composite === "undefined") {
                                 && typeof target.checkValidity === "function")
                             valid = target.checkValidity();
 
-                        //Validation is a central function in the composite and
-                        //implemented directly there, even if the validation is
-                        //requested by a sub-element (not a sub-composite).
-                        var scope = Object.lookup(meta.composite);
+                        //Validation is a function at the model level.
+                        //If a composite consists of several model levels, the
+                        //validation may have to be organized accordingly if
+                        //necessary.
+                        //Interactive composite elements are a property object. 
+                        //Therefore they are primarily a property and the
+                        //validation is located in the surrounding model and not
+                        //in the property object itself.
                         
                         //Implicit validation via the model.
                         //If a corresponding validate method has been
@@ -807,12 +821,14 @@ if (typeof Composite === "undefined") {
                         //attribute validate is not required here.
                         //The validation through the model only works if the
                         //corresponding composite is active/present in the DOM!
-                        if (scope && typeof scope[Composite.ATTRIBUTE_VALIDATE] === "function"
-                                && valid === true) {
-                            var validate = scope[Composite.ATTRIBUTE_VALIDATE];
-                            valid = typeof value !== "undefined" ? validate.call(scope, target, value) : validate.call(scope, target);         
+                        if (valid === true
+                                && typeof meta.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
+                            var validate = meta.scope[Composite.ATTRIBUTE_VALIDATE];
+                            if (typeof value !== "undefined")
+                                valid = validate.call(meta.scope, target, value);
+                            else valid = validate.call(meta.scope, target);
                         }                        
-                                            
+                        
                         //In case of a failed validation, the event and the
                         //default action of the browser will be canceled.
                         if (valid === true) {
@@ -836,7 +852,7 @@ if (typeof Composite === "undefined") {
                                     || type === "number"
                                     || type === "string";
                             };
-                            
+
                             //A composite is always a container for sub-elements.
                             //Theoretically, an input element can also be a
                             //composite, but not a model and input element/data
@@ -852,16 +868,35 @@ if (typeof Composite === "undefined") {
                             
                             //Step 3: Invocation
 
-                            scope = meta.property ? meta.scope[meta.property] : meta.scope;
-    
+                            //Events are possible for composites and interactive
+                            //composite elements. Composites define the scope
+                            //with their model.
+                            //Interactive composite elements are a property
+                            //object in the model that contains the interaction
+                            //methods corresponding to the events.
+                            //Therefore the scope of interactive composite
+                            //elements shifts from the model to the property
+                            //object.
+                            //In all cases, a name-based alignment in the model
+                            //and thus an ID is required. Anonymous intercation
+                            //elements do not have this alignment and no scope
+                            //can be determined.
+                            
+                            var model = meta.scope;
+                            if (typeof meta.property !== "undefined")
+                                if (meta.property 
+                                        && typeof meta.scope[meta.property] === "object")
+                                    model = meta.scope[meta.property];
+                                else model = null;
+
                             //For the event, a corresponding method is searched
                             //in the model that can be called. If their return
                             //value is false, the event and thus the default
                             //action of the browser is cancelled. 
                             //The invocation expects a positive validation,
                             //otherwise it will not be executed.
-                            if (typeof scope["on" + action] === "function")
-                                result = scope["on" + action].call(scope, event);
+                            if (model && typeof model["on" + action] === "function")
+                                result = model["on" + action].call(model, event);
                         }
                     }
 
@@ -897,15 +932,14 @@ if (typeof Composite === "undefined") {
     
     /**
      *  Determines the meta data for an element based on its position in the
-     *  DOM. Determines the surrounding composite and model, the referenced
-     *  property in the model with a qualifier if necessary.
-     *  The meta data is only determined as text information.
+     *  DOM, so the surrounding composite and model, the referenced property in
+     *  the model with a qualifier if necessary. The meta data is only
+     *  determined as text information.
      *  
      *  Composite:
      *      {composite, model}
      *  
      *  Composite Element:
-     *      {composite, model}
      *      {composite, model, property}
      *      {composite, model, property, name:qualifier}
      *  
@@ -979,8 +1013,8 @@ if (typeof Composite === "undefined") {
         
         //Fields that are not used are removed.
         //So later typeof can be used like an exists method.
-        if (!meta.property)
-            delete meta.property;
+        //However, the property must remain null so that composites and
+        //anonymous composite elements can be distinguished in the meta object.
         if (!meta.name)
             delete meta.name;
         
@@ -1023,7 +1057,7 @@ if (typeof Composite === "undefined") {
         if (!meta)
             return null;
         
-        scope = Object.lookup(meta.model);
+        var scope = Object.lookup(meta.model);
         if (!scope)
             return null;
         meta.scope = scope;
@@ -1630,11 +1664,8 @@ if (typeof Composite === "undefined") {
                     return;
                 Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
                 var meta = Composite.mount.lookup(object.template || object.element);
-                if (meta && meta.scope
-                        && typeof meta.scope.dock === "function")
-                    meta.scope.dock.call(null);
-                //The use of meta.scope as this is probably misleading because a
-                //composite is completely static.
+                if (meta && meta.scope && typeof meta.scope.dock === "function")
+                    meta.scope.dock.call(meta.scope);
             };
             
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
@@ -2215,15 +2246,10 @@ if (typeof Composite === "undefined") {
                             var object = Composite.render.meta[serial];
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                                 var meta = Composite.mount.lookup(node);
-                                if (meta && meta.model
-                                        && Composite.models.includes(meta.model)) {
+                                if (meta && meta.model && Composite.models.includes(meta.model)) {
                                     Composite.models = Composite.models.filter(model => model != meta.model);
-                                    if (meta.scope
-                                            && typeof meta.scope.undock === "function")
-                                        meta.scope.undock.call(null);
-                                    //The use of meta.scope as this is probably
-                                    //misleading because a composite is
-                                    //completely static.
+                                    if (meta.scope && typeof meta.scope.undock === "function")
+                                        meta.scope.undock.call(meta.scope);
                                 }
                             }
                             

@@ -11,7 +11,8 @@
   CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames 
   CR: Test: Extension for central catching of errors with activated Test-AP
   CR: Test Suite: Optimization of error output
-  CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered
+  CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
+      Can be used to control visibility so that only final rendered output/content is visible.
   CR: Composite Mount: Revision of the object/model binding
   CR: Composite Scan: Omission of the intermediate step between render and mount
   CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)
