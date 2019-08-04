@@ -442,6 +442,8 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.lookup === undefined)
         Object.lookup = function(namespace) {
+            if (typeof namespace !== "string")
+                throw new TypeError("Invalid namespace: " + typeof namespace);        
             namespace = (namespace || "").trim();
             if (!namespace.match(/^(?:[a-z]\w*)(?:(?:\:\w+)|(?:\.[a-z]\w*))*$/i))
                 return null;
@@ -753,9 +755,12 @@ if (typeof Composite === "undefined") {
                 var model = meta.scope;
                 if (typeof meta.property !== "undefined")
                     if (meta.property 
-                            && typeof meta.scope[meta.property] === "object")
+                            && typeof meta.scope[meta.property] === "object") {
                         model = meta.scope[meta.property];
-                    else model = null;
+                        if (meta.name
+                                && typeof model[meta.name] === "object")
+                            model = model[meta.name];
+                    } else model = null;
 
                 for (var event in model)
                     if (typeof model[event] === "function"
@@ -840,10 +845,12 @@ if (typeof Composite === "undefined") {
                             //property value. Other targets are ignored.
                             //The synchronization expects a positive validation,
                             //otherwise it will not be executed.
-                            var accept = function(object, property) {
+                            var accept = function(object, property, name) {
                                 if (object == null
                                         || property == null)
                                     return false;
+                                if (arguments.length > 2)
+                                    return accept(object[property], name);
                                 var type = typeof object[property];
                                 if (type === "object"
                                         && object[property] == null)
@@ -860,11 +867,18 @@ if (typeof Composite === "undefined") {
                             //ignored here. A composite cannot assign a value to
                             //itself. Therefore, a data field is always expected
                             //in a model.
-                            if (accept(meta.scope, meta.property))
+                            if (accept(meta.scope, meta.property, meta.name))
+                                meta.scope[meta.property][meta.name] = value;
+                            else if (accept(meta.scope, meta.property))
                                 meta.scope[meta.property] = value;
-                            else if (typeof meta.scope[meta.property] === "object"
-                                    && accept(meta.scope[meta.property], "value"))
-                                meta.scope[meta.property].value = value;
+                            else if (typeof meta.scope[meta.property] === "object") {
+                                if (typeof meta.name !== "undefined"
+                                        && typeof meta.scope[meta.property][meta.name] === "object")
+                                    if (accept(meta.scope[meta.property][meta.name], "value"))
+                                        meta.scope[meta.property][meta.name].value = value;
+                                else if (accept(meta.scope[meta.property], "value"))
+                                    meta.scope[meta.property].value = value;
+                            }
                             
                             //Step 3: Invocation
 
@@ -885,9 +899,12 @@ if (typeof Composite === "undefined") {
                             var model = meta.scope;
                             if (typeof meta.property !== "undefined")
                                 if (meta.property 
-                                        && typeof meta.scope[meta.property] === "object")
+                                        && typeof meta.scope[meta.property] === "object") {
                                     model = meta.scope[meta.property];
-                                else model = null;
+                                    if (meta.name
+                                            && typeof model[meta.name] === "object")
+                                        model = model[meta.name];
+                                } else model = null;
 
                             //For the event, a corresponding method is searched
                             //in the model that can be called. If their return
@@ -923,6 +940,18 @@ if (typeof Composite === "undefined") {
                         if (typeof result !== "undefined")
                             return result;
                     }
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 });
             });
         } finally {
