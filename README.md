@@ -111,7 +111,7 @@ CR: Composite Mount Action: The return value false can cancel the default action
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM  
-CR: Build: Optimization of task 'change'
+CR: Build: Optimization of target 'changes'  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

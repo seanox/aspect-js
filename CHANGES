@@ -28,7 +28,7 @@
   CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM
       The hierarchy of IDs in the DOM defines the model and sub-models.
       Absolute and relative IDs in the markup are completely omitted.
-  CR: Build: Optimization of task 'change'
+  CR: Build: Optimization of target 'changes'      
 
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 
