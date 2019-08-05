@@ -853,7 +853,6 @@ if (typeof Composite === "undefined") {
                                     return accept(object[property], name);
                                 var descriptor = Object.getOwnPropertyDescriptor(object, property);
                                 if (descriptor
-                                        && descriptor.set
                                         && typeof descriptor.set === "function")
                                     return true;
                                 var type = typeof object[property];
