@@ -940,18 +940,6 @@ if (typeof Composite === "undefined") {
                         if (typeof result !== "undefined")
                             return result;
                     }
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                 });
             });
         } finally {
