@@ -10,153 +10,195 @@
       body div {
         margin:1em;
       }
+      input[type="text"] {
+        width:2em;
+      }
+      input[type="button"] {
+        width:3em;
+      }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
         Test.activate();
-    
-        var contactA = {
-            text: "",
-            data: {
-                text: {},
-                link: {
-                    onClick: function() {
-                        clickStack.push("contactA.data.link.onClick");                            
-                    }
-                },
-                button: {
-                    onClick: function() {
-                        clickStack.push("contactA.data.button.onClick");                            
-                    }
-                }
-            },
-            link: {
-                onClick: function() {
-                    clickStack.push("contactA.link.onClick");                            
-                }
-            }
-        };
-        
-        var contactB = {
-            text: "",
-            data: {
-                text: {},
-                link: contactA.data.link
-            },
-            link: contactA.link
-        };
-
-        var contactC = {
-            text: "",
-            data: {
-                text: {
-                    value: null
-                },
-                link: {
-                    onClick: function() {
-                        clickStack.push("contactC.data.link.onClick");                            
-                    }
-                }
-            },
-            link: {
-                onClick: function() {
-                    clickStack.push("contactC.link.onClick");                            
-                }
-            }
-        };
-        
-        var contactD = {
-        };
-        
-        var clickStack = [];
         
         var publish = function(context) {
-            var content = '<input type="text" id="text:{context}" events="keydown">'
-                    + '<input type="text" id="data.text:{context}" events="keydown">'
-                    + '<input type="text" id="nothing:{context}" events="keydown">'
-                    + '<input type="button" id="link:{context}" value="{context}:1">'
-                    + '<input type="button" id="data.link:{context}" value="{context}:2">';
+            var content = '<input type="text" id="textArray:0" events="keyup">'
+                    + '<input type="text" id="textArray:1" events="keyup">'
+                    + '<input type="text" id="textArray:2" events="keyup">'
+                    + '<input type="text" id="textArray" events="keyup">'
+                    + '<input type="text" id="text:a" events="keyup">'                    
+                    + '<input type="text" id="text:b" events="keyup">'                    
+                    + '<input type="text" id="text:c" events="keyup">'
+                    + '<input type="text" id="text" events="keyup">'
+                    + '<input type="text" id="textNothing:a" events="keyup">'                    
+                    + '<input type="text" id="textNothing:b" events="keyup">'                    
+                    + '<input type="text" id="textNothing:c" events="keyup">'                    
+                    + '<input type="text" id="textNothing" events="keyup">'                    
+                    + '<input type="text" id="object:a" events="keyup">'                    
+                    + '<input type="text" id="object:b" events="keyup">'                    
+                    + '<input type="text" id="object:c" events="keyup">'
+                    + '<input type="text" id="objectArray:0" events="keyup">'                    
+                    + '<input type="text" id="objectArray:1" events="keyup">'                    
+                    + '<input type="text" id="objectArray:2" events="keyup">'                    
+                    + '<input type="text" id="objectArray" events="keyup">'
+                    + '<input type="text" id="objectNothing:a" events="keyup">'                    
+                    + '<input type="text" id="objectNothing:b" events="keyup">'                    
+                    + '<input type="text" id="objectNothing:c" events="keyup">'                    
+                    + '<input type="text" id="objectNothing" events="keyup">'                    
+                    + '<br>'
+                    + '<input type="button" id="buttonArray:0" events="click" value="A1">'
+                    + '<input type="button" id="buttonArray:1" events="click" value="A2">'
+                    + '<input type="button" id="buttonArray:2" events="click" value="A3">'
+                    + '<input type="button" id="buttonArray" events="click" value="B">'
+                    + '<input type="button" id="button:0" events="click" value="C1">'
+                    + '<input type="button" id="button:1" events="click" value="C2">'
+                    + '<input type="button" id="button:2" events="click" value="C3">'
+                    + '<input type="button" id="buttonNothing:0" events="click" value="D1">'
+                    + '<input type="button" id="buttonNothing:1" events="click" value="D2">'
+                    + '<input type="button" id="buttonNothing:2" events="click" value="D3">'
+                    + '<input type="button" id="buttonNothing" events="click" value="E">';
             var div = document.createElement("div");
             div.innerHTML = content.replace(/\{context\}/ig, context);
             return div;            
         };
+
+        var clickStack = [];
+        
+        var modelA = {
+            textArray: ["", ""],
+            text: "",
+            objectArray: [{value: ""},{value: ""}],
+            object: {a: {value: ""}, b: ""},
+            buttonArray: [
+                {onClick: function(event) {
+                    clickStack.push("a" + event.target.value);
+                }},
+                {onClick: function(event) {
+                    clickStack.push("b" + event.target.value);
+                }}
+            ],
+            button: {
+                onClick: function(event) {
+                    clickStack.push("c" + event.target.value);
+                }
+            }
+        };
+        
+        var modelB = {
+            textArray: ["", ""],
+            text: "",
+            objectArray: [{value: ""},{value: ""}],
+            object: {a: {value: ""}, b: ""},
+            buttonArray: [
+                {onClick: function(event) {
+                    clickStack.push("d" + event.target.value);
+                }},
+                {onClick: function(event) {
+                    clickStack.push("e" + event.target.value);
+                }}
+            ],
+            button: {
+                onClick: function(event) {
+                    clickStack.push("f" + event.target.value);
+                }
+            }
+        };        
+        
+        var modelC = {
+            textArray: ["", ""],
+            text: "",
+            objectArray: [{value: ""},{value: ""}],
+            object: {a: {value: ""}, b: ""},
+            buttonArray: [
+                {onClick: function(event) {
+                    clickStack.push("g" + event.target.value);
+                }},
+                {onClick: function(event) {
+                    clickStack.push("h" + event.target.value);
+                }}
+            ],
+            button: {
+                onClick: function(event) {
+                    clickStack.push("i" + event.target.value);
+                }
+            }
+        };        
         
         var timeout = null;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (timeout)
                 window.clearInterval(timeout);
             timeout = window.setTimeout(() => {
-                document.querySelector("#link\\:A").click();
-                document.querySelector("#data\\.link\\:A").click();
-                document.querySelector("#text\\:A").typeValue("xAA", true);
-                document.querySelector("#data\\.text\\:A").typeValue("xAB", true);
-                document.querySelector("#nothing\\:A").typeValue("xAC", true);
-                
-                document.querySelector("#link\\:B").click();
-                document.querySelector("#data\\.link\\:B").click();
-                document.querySelector("#text\\:B").typeValue("xBA", true);
-                document.querySelector("#data\\.text\\:B").typeValue("xBB", true);
-                document.querySelector("#nothing\\:B").typeValue("xBC", true);
-
-                document.querySelector("#link\\:C").click();
-                document.querySelector("#data\\.link\\:C").click();
-                document.querySelector("#text\\:C").typeValue("xCA", true);
-                document.querySelector("#data\\.text\\:C").typeValue("xCB", true);
-                document.querySelector("#nothing\\:C").typeValue("xCC", true);
-                
-                document.querySelector("#link\\:D").click();
-                document.querySelector("#data\\.link\\:D").click();
-                document.querySelector("#text\\:D").typeValue("xDA", true);
-                document.querySelector("#data\\.text\\:D").typeValue("xDB", true);
-                document.querySelector("#nothing\\:D").typeValue("xDC", true);
-                
-                document.querySelector("[xxx='buttonA1']").click();
-                document.querySelector("[xxx='buttonA2']").click();
-                
+                ("ABC".split(/(?=\w)/)).forEach((context) => {
+                    var i = 0;
+                    document.querySelector("#model" + context + " #textArray\\:0").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textArray\\:1").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textArray\\:2").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textArray").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectArray\\:0").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectArray\\:1").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectArray\\:2").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectArray").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #text\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #text\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #text\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #text").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #object\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #object\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #object\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textNothing\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textNothing\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textNothing\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #textNothing").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectNothing\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectNothing\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectNothing\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
+                    document.querySelector("#model" + context + " #objectNothing").typeValue(context + String.fromCharCode(65 + i++), true);
+                    
+                    document.querySelector("#model" + context + " #buttonArray\\:0").click();
+                    document.querySelector("#model" + context + " #buttonArray\\:1").click();
+                    document.querySelector("#model" + context + " #buttonArray\\:2").click();
+                    document.querySelector("#model" + context + " #buttonArray").click();
+                    document.querySelector("#model" + context + " #button\\:0").click();
+                    document.querySelector("#model" + context + " #button\\:1").click();
+                    document.querySelector("#model" + context + " #button\\:2").click();
+                    document.querySelector("#model" + context + " #buttonNothing\\:0").click();
+                    document.querySelector("#model" + context + " #buttonNothing\\:1").click();
+                    document.querySelector("#model" + context + " #buttonNothing\\:2").click();
+                    document.querySelector("#model" + context + " #buttonNothing").click();  
+                }); 
                 Test.start();
             }, 250);
         });     
         
         Test.create({test:function() {
-            var testStack = [];
-            testStack.push("contactA.link.onClick");
-            testStack.push("contactA.data.link.onClick");
-            testStack.push("contactA.link.onClick");
-            testStack.push("contactA.data.link.onClick");
-            testStack.push("contactC.link.onClick");
-            testStack.push("contactC.data.link.onClick");
-            testStack.push("contactA.data.button.onClick");
-            Assert.assertEquals(testStack.join(" "), clickStack.join(" "));
+            var pattern = '{"textArray":["AA","AB"],"text":"AL","objectArray":[{"value":"AE"},{"value":"AF"}],"object":{"a":{"value":"AM"},"b":"AN"},"buttonArray":[{},{}],"button":{}}';
+            Assert.assertEquals(pattern, modelA.toPlainString());
         }}); 
         Test.create({test:function() {
-            Assert.assertEquals('{"text":"xA","data":{"text":{},"link":{},"button":{}},"link":{}}', contactA.toPlainString());             
+            var pattern = '{"textArray":["BA","BB"],"text":"BL","objectArray":[{"value":"BE"},{"value":"BF"}],"object":{"a":{"value":"BM"},"b":"BN"},"buttonArray":[{},{}],"button":{}}';
+            Assert.assertEquals(pattern, modelB.toPlainString());
         }});         
         Test.create({test:function() {
-            Assert.assertEquals('{"text":"xB","data":{"text":{},"link":{}},"link":{}}', contactB.toPlainString());
+            var pattern = '{"textArray":["CA","CB"],"text":"CL","objectArray":[{"value":"CE"},{"value":"CF"}],"object":{"a":{"value":"CM"},"b":"CN"},"buttonArray":[{},{}],"button":{}}';
+            Assert.assertEquals(pattern, modelC.toPlainString());
         }});
         Test.create({test:function() {
-            Assert.assertEquals('{"text":"xC","data":{"text":{"value":"xC"},"link":{}},"link":{}}', contactC.toPlainString());
+            var pattern = 'aA1 bA2 cC1 cC2 cC3 dA1 eA2 fC1 fC2 fC3 gA1 hA2 iC1 iC2 iC3';
+            Assert.assertEquals(pattern, clickStack.join(" "));
         }});   
-        Test.create({test:function() {
-            Assert.assertEquals('{}', contactD.toPlainString());
-        }});           
     </script>
   </head>
   <body>
-    <section id="contactA" composite static
+    <section id="modelA" composite static
         import="{{publish('A')}}">
     </section>
-    <section id="contactB" composite static
+    <section id="modelB" composite static
         import="{{publish('B')}}">
     </section>
-    <section id="contactC" composite static
+    <section id="modelC" composite static
         import="{{publish('C')}}">
     </section>
-    <section id="contactD" composite static
-        import="{{publish('D')}}">
-    </section>
-    <button id="contactA.button" xxx="buttonA1">buttonA1</button>
-    <button id="contactA.data.button" xxx="buttonA2">buttonA2</button>
   </body>
 </html>

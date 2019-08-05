@@ -6,166 +6,145 @@
     <style type="text/css">
       body {
         font-family:monospace;
-      }
-      body div {
-        margin:1em;
+        white-space:pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
         Test.activate();
-      
-        var aModel = {
-            text1:null,
-            text2:null,
-            text3:null,
-            text4:null,
-            text5:null,
-            text6:null,
-            text7:null,
-            text8:null,
-            text8_1:null,
-            text8_2:null,
-            text9:null,
-            bModel:{
-                text3:null,
-                text4:null,
-                text9:null,
-                fModel:{
-                    text1:null,
-                    text5:null
-                },
-                cModel:{
-                    textX:null
-                },              
-            },
-            cModel:{
-            },
-            fModel:{
-                text1:null,
-                text2:null,
-                text5:null
-            }              
-        };
-        var bModel = {
-            text3:null,
-            text4:null,
-            text9:null              
-        };
-        var cModel = {};
-        var fModel = {
-            text1:null,
-            text2:null,
-            text5:null
-        };
-        var xModel = {
-            count: 0,
-            ping: function() {
-                return ++this.count;       
-            }
-        }
-        var textX = null;
-  
-        Test.create({test:function() {
-            var a = pattern.shift().replace(/"text8_1":""/, '"text8_1":null');
-            var b = aModel.toPlainString().replace(/"text8_1":""/, '"text8_1":null');
-            Assert.assertEquals(a, b);
-        }});
-        Test.create({test:function() {
-            Assert.assertEquals(pattern.shift(), bModel.toPlainString());
-        }});    
-        Test.create({test:function() {
-            Assert.assertEquals(pattern.shift(), cModel.toPlainString());
-        }});    
-        Test.create({test:function() {
-            Assert.assertEquals(pattern.shift(), fModel.toPlainString());
-        }});    
-        Test.create({test:function() {
-            Assert.assertEquals(pattern.shift(), xModel.toPlainString());
-        }});
-        Test.create({test:function() {
-            Assert.assertEquals(pattern.shift(), aModel.toPlainString());
-        }});       
-        Test.create({test:function() {
-            Assert.assertEquals("3", outputX.textContent);
-        }});  
         
-        Element.prototype.typeTestValue = function() {
-            this.typeValue(this.id + "-X");
+        var model = {
+            _textA:[""],    
+            set textA(text) {
+                this._textA[0] = text;
+                this._textA.push(text);
+            },
+            get textA() {
+                return this._textA.join(" ").trim().replace(/\s+/g, " ");
+            },
+            _textB:[""],    
+            set textB(text) {
+                this._textB[0] = text;
+                this._textB.push(text);
+            },
+            get textB() {
+                return this._textB.join(" ").trim().replace(/\s+/g, " ");
+            },
+            _textC:[""],    
+            set textC(text) {
+                this._textC[0] = text;
+                this._textC.push(text);
+            },
+            get textC() {
+                return this._textC.join(" ").trim().replace(/\s+/g, " ");
+            },
+            _textD:[""],    
+            set textD(text) {
+                this._textD[0] = text;
+                this._textD.push(text);
+            },
+            get textD() {
+                return this._textD.join(" ").trim().replace(/\s+/g, " ");
+            },
+            _textE:[""],    
+            set textE(text) {
+                this._textE[0] = text;
+                this._textE.push(text);
+            },
+            get textE() {
+                return this._textE.join(" ").trim().replace(/\s+/g, " ");
+            },
+            _textF:[""],    
+            set textF(text) {
+                this._textF[0] = text;
+                this._textF.push(text);
+            },
+            get textF() {
+                return this._textF.join(" ").trim().replace(/\s+/g, " ");
+            }
         };
-  
+        
         var count = 0;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             switch (++count) {
                 case 1:
+                    textA.value = "";
+                    textB.value = "";
+                    textC.value = "";
+                    textD.value = "";
+                    textE.value = "";
+                    textF.value = "";
+                    
                     Composite.asynchron(() => {
-                        text3.typeTestValue();
-                        text4.typeTestValue();
-                        text6.typeTestValue();
-                        text7.typeTestValue();
-                        text8.typeTestValue();
-                        text9.typeTestValue();
-                        window["fModel.text1"].typeTestValue();
-                        window["fModel.text2"].typeTestValue();
-                        window["fModel.text5"].typeTestValue();
-                        document.querySelector("#textX").typeTestValue();
-                    });
+                        textA.typeValue("HelloWorld");
+                    });                    
                     return;
                 case 2:
                     Composite.asynchron(() => {
-                        text8.trigger("focus"); 
-                    });
-                    return; 
-                case 3:
-                    Composite.asynchron(() => {
-                        aModel.text8_2 = aModel.text8;
-                        window.setTimeout(() => {
-                            Test.start();
-                        }, 250);
-                    });
+                        textB.typeValue("HelloWorld");
+                    });                    
                     return;
+                case 12:
+                    Composite.asynchron(() => {
+                        textC.typeValue("HelloWorld");
+                    });                    
+                    return;  
+                case 22:
+                    Composite.asynchron(() => {
+                        textD.typeValue("HelloWorld");
+                    });                    
+                    return;   
+                case 42:
+                    Composite.asynchron(() => {
+                        textE.typeValue("HelloWorld");
+                    });  
+                    Composite.asynchron(() => {
+                        textF.typeValue("HelloWorld");
+                    });                    
+                    Test.start();
+                    return;                      
             }
-        });  
+        }); 
         
-        var pattern = null;
-        window.addEventListener("load", function(event) {
-            pattern = document.querySelector("script[type='text/test']").textContent.trim();
-            pattern = pattern.split(/\s*[\r\n]+\s*/m);
-        });        
+        Test.create({test:function() {
+            Assert.assertSameTo("script[type='text/test']", document.body.textContent); 
+        }});        
     </script>
     <script type="text/test">
-      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null,"fModel":{"text1":null,"text5":"fModel.text5-X"},"cModel":{"textX":"textX-X"}},"cModel":{},"fModel":{"text1":"fModel.text1-X","text2":null,"text5":null}}
-      {"text3":null,"text4":null,"text9":null}
-      {}
-      {"text1":null,"text2":"fModel.text2-X","text5":null}
-      {"count":3}
-      {"text1":null,"text2":null,"text3":null,"text4":null,"text5":null,"text6":null,"text7":"text7-X","text8":"text8-X","text8_1":null,"text8_2":"text8-X","text9":null,"bModel":{"text3":null,"text4":null,"text9":null,"fModel":{"text1":null,"text5":"fModel.text5-X"},"cModel":{"textX":"textX-X"}},"cModel":{},"fModel":{"text1":"fModel.text1-X","text2":null,"text5":null}}
+A:HelloWorld HelloWorld
+B:HelloWorl H He Hel Hell Hello HelloW HelloWo HelloWor HelloWorl
+C:HelloWorld H He Hel Hell Hello HelloW HelloWo HelloWor HelloWorl HelloWorld
+D:HelloWorld H H He He Hel Hel Hell Hell Hello Hello HelloW HelloW HelloWo HelloWo HelloWor HelloWor HelloWorl HelloWorl HelloWorld
+E:
+F:
     </script>
   </head>
   <body>
-    <div id="aModel" composite static>
-      <!-- write to aModel.fModel.text1 --> 
-      <input type="text" id="fModel.text1" events="change">
-      <div id="bModel" composite static>
-        <!-- write to fModel.text2 --> 
-        <input type="text" id="fModel.text2" events="change">
-        <div id="cModel" composite static>
-          <!-- write to aModel.bModel.cModel.text* --> 
-          <input type="text" id="text3" events="change">
-          <input type="text" id="text4" events="change">
-          <input type="text" id="text9" events="change">
-          <!-- write to aModel.bModel.cModel.textX -->
-          <input type="text" id="textX" events="change">
-        </div>
-        <!-- write to aModel.bModel.fModel.text5 -->
-        <input type="text" id="fModel.text5" events="change">
-      </div>
-      <!-- write to aModel.text*** -->
-      <input type="text" id="text6">
-      <input type="text" id="text7" events="change">
-      <input type="text" id="text8" events="focus" render="#text7, #text7, #{{'output' + 'X'}}">
-      <span id="outputX">{{xModel.ping()}}</span>
+    <div id="model" composite static>
+      <input id="textA" value="" events="change"
+          render="#textA ~ span">
+      <span>A:{{model.textA}}</span>
+      
+      <input id="textB" value="" events="keydown"
+          render="#textB ~ span">
+      <span>B:{{model.textB}}</span>
+      
+      <input id="textC" value="" events="keyup keyup Keyup keyUp"
+          render="#textC ~ span">
+      <span>C:{{model.textC}}</span>
+      
+      <input id="textD" value="" events="keydown keyup"
+          render="#textD ~ span">
+      <span>D:{{model.textD}}</span>
+      
+      <input id="textE" value="" events="input"
+          render="#textE ~ span">
+      <span>E:{{model.textE}}</span>
+      
+      <input id="textF" value="" events="xxx"
+          render="#textF ~ span">
+      <span>F:{{model.textF}}</span>
     </div>
   </body>
 </html>
