@@ -101,7 +101,7 @@ CR: Test: Extension of console forwarding by listeners
 CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames  
 CR: Test: Extension for central catching of errors with activated Test-AP  
 CR: Test Suite: Optimization of error output  
-CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered  
+CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
 CR: Composite Mount: Revision of the object/model binding  
 CR: Composite Scan: Omission of the intermediate step between render and mount  
 CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)  
@@ -110,7 +110,8 @@ CR: Composite Mount Synchronization: Optimization
 CR: Composite Mount Action: The return value false can cancel the default action of the browser  
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
-CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM.  
+CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM  
+CR: Build: Optimization of task 'change'
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

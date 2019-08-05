@@ -13,6 +13,7 @@
   CR: Test Suite: Optimization of error output
   CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
       Can be used to control visibility so that only final rendered output/content is visible.
+      CSS: *[release] {display:none;}      
   CR: Composite Mount: Revision of the object/model binding
   CR: Composite Scan: Omission of the intermediate step between render and mount
   CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)
@@ -26,7 +27,8 @@
       e.g. model.array:1 / model.object:property
   CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM
       The hierarchy of IDs in the DOM defines the model and sub-models.
-      Absolute and relative IDs in the markup are completely omitted.    
+      Absolute and relative IDs in the markup are completely omitted.
+  CR: Build: Optimization of task 'change'
 
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 
