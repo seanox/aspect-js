@@ -29,6 +29,7 @@
       The hierarchy of IDs in the DOM defines the model and sub-models.
       Absolute and relative IDs in the markup are completely omitted.
   CR: Build: Optimization of target 'changes'      
+  CR: Composite Mount Synchronistation: Extension by the detection and use of setter (object accessors)
 
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 

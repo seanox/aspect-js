@@ -112,6 +112,7 @@ CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM  
 CR: Build: Optimization of target 'changes'  
+CR: Composite Mount Synchronistation: Extension by the detection and use of setter (object accessors)  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
