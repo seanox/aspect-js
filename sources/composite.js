@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190805
+ *  Composite 1.2.0 20190806
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190805
+ *  @version 1.2.0 20190806
  */
 if (typeof Composite === "undefined") {
     
@@ -729,7 +729,8 @@ if (typeof Composite === "undefined") {
             var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                     ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
             events = events.toLowerCase().split(/\s+/);
-            events = events.filter((event) => Composite.PATTERN_EVENT_FILTER.includes(event));
+            events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
+                    && array.indexOf(event) == index);
             
             //There must be a corresponding model class.
             //Elements are not supported.
