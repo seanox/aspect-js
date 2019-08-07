@@ -29,6 +29,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [Tag](#tag)   
   * [Selector](#selector)
   * [Acceptor](#acceptor)
+  * [Sicherheit](#sicherheit)
   
 
 ## Attribute
@@ -116,7 +117,7 @@ https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
 und Synchronisation von HTML-Elementen und den korrespondierenden
-JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).  
+JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).  
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -505,6 +506,17 @@ darstellen und auf entsprechende Ereignisse reagieren.
 
 ### validate
 
+TODO: validate funktioniert zwei stuffig (1. HTML5, 2. Model)
+TODO: validate im Model funktioniert nur, wenn das Element mit dem Attribut validate im Composite liegt (DOM)
+      sonst wird nur HTML5-Validierung verwendet
+TODO: validate hat direkte Auswirkung auf Action und Synchronisation
+      Rückgabewert blockiert die Ausführung, auch die Standard-Action vom Browser wird bei false geblockt
+      z.B. bei Submit-Button        
+
+TODO: action: nicht hier, Platz in der Doku für action suchen
+TODO: action: rückgabewert hat Einfluss auf Browser-Event-Verhalten, Rückgabewert false blockt die Standard-Action vom Browser
+      z.B. bei Submit-Button
+      
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuert sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model.  
@@ -682,6 +694,17 @@ Composite.customize(function(element) {
     ...
 });
 ```
+
+### Sicherheit
+
+In Seanox aspect-js ist eine Härtung vom Markup vorgesehen, was die Manipulation
+vom Markup zur Laufzeit erschwert. Zum einen wird mit einer Condition
+ausgeblendetes Markup physisch aus dem DOM entfernt und zum anderen überwacht
+der Renderer Manipulationen an Attributen zur Laufzeit. Diese Überwachung
+basiert auf einem Filter mit statischen Attributen. Statische Attribute werden
+mit dem Anlegen eines Elements im DOM gelesen und bei Manipulation (Löschen /
+Ändern) wieder hergestellt.
+
 
 
 - - -

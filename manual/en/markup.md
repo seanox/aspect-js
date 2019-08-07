@@ -29,6 +29,7 @@ in the DOM.
   * [Tag](#tag)   
   * [Selector](#selector)
   * [Acceptor](#acceptor)
+  * [Security](#security)
 
 
 ## Attributes
@@ -673,6 +674,10 @@ Composite.customize(function(element) {
     ...
 });
 ```
+
+### Security
+
+TODO:
 
 
 - - -
