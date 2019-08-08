@@ -90,7 +90,7 @@ date when using the release channels.
 # Changes (Change Log)
 ## 1.2.0 2019xxxx (summary of the next version)  
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
-BF: Composite: Composite.asynchron, corection of passed arguments  
+BF: Composite Asynchron: Corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
 BF: Extension Capitalize: Correction for use with empty strings  
 BF: MVC: Correction of the embedded use of SiteMap.accept(path)  
@@ -101,18 +101,20 @@ CR: Test: Extension of console forwarding by listeners
 CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames  
 CR: Test: Extension for central catching of errors with activated Test-AP  
 CR: Test Suite: Optimization of error output  
+CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
-CR: Composite Mount: Revision of the object/model binding  
 CR: Composite Scan: Omission of the intermediate step between render and mount  
+CR: Composite Mount: Revision of the object/model binding  
 CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)  
 CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser  
 CR: Composite Mount Synchronization: Optimization  
 CR: Composite Mount Action: The return value false can cancel the default action of the browser  
-CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
-CR: Composite Object Lookup: Added support now for arrays (also associative)  
-CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM  
+CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM  
+CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM  
 CR: Build: Optimization of target 'changes'  
-CR: Composite Mount Synchronistation: Extension by the detection and use of setter (object accessors)  
+CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)  
+CR: Composite Hardening: Added optional hardening from markup  
+CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

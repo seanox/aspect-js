@@ -1,6 +1,6 @@
 1.2.0 2019xxxx
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
-  BF: Composite: Composite.asynchron, corection of passed arguments
+  BF: Composite Asynchron: Corection of passed arguments
   BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models
   BF: Extension Capitalize: Correction for use with empty strings
   BF: MVC: Correction of the embedded use of SiteMap.accept(path)
@@ -11,25 +11,28 @@
   CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames 
   CR: Test: Extension for central catching of errors with activated Test-AP
   CR: Test Suite: Optimization of error output
+  CR: Composite Object Lookup: Added support now for arrays (also associative)
+      In additional ':' is accepted as separator, so that the syntax is more understandable
+      e.g. model.array:1 / model.object:property
   CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
       Can be used to control visibility so that only final rendered output/content is visible.
       CSS: *[release] {display:none;}      
-  CR: Composite Mount: Revision of the object/model binding
   CR: Composite Scan: Omission of the intermediate step between render and mount
+  CR: Composite Mount: Revision of the object/model binding
   CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)
   CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser
       Everyone expects a valid validation if a validation exists.
   CR: Composite Mount Synchronization: Optimization
   CR: Composite Mount Action: The return value false can cancel the default action of the browser
-  CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
-  CR: Composite Object Lookup: Added support now for arrays (also associative)
-      In additional ':' is accepted as separator, so that the syntax is more understandable
-      e.g. model.array:1 / model.object:property
-  CR: Composite Locate/Mount: Stricter use of the hierarchy of IDs in the DOM
+  CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM      
+  CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM
       The hierarchy of IDs in the DOM defines the model and sub-models.
       Absolute and relative IDs in the markup are completely omitted.
   CR: Build: Optimization of target 'changes'      
-  CR: Composite Mount Synchronistation: Extension by the detection and use of setter (object accessors)
+  CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)
+  CR: Composite Hardening: Added optional hardening from markup
+      Hardening makes it difficult to manipulate the attributes in the markup.
+  CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
 
 1.1.0 20190530
   BF: Build: Optimization/correction when creating releases 

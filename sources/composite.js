@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190806
+ *  Composite 1.2.0 20190808
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190806
+ *  @version 1.2.0 20190808
  */
 if (typeof Composite === "undefined") {
     
@@ -192,6 +192,29 @@ if (typeof Composite === "undefined") {
     
     /** Constant for attribute value */
     Composite.ATTRIBUTE_VALUE = "value";
+    
+    /**
+     *  List of attributes to be hardened.
+     *  The hardening of attributes is part of the safety concept and should
+     *  make it more difficult to manipulate the markup at runtime. Hardening
+     *  observes attributes and undoes changes.
+     *  Initially, the list is empty because the policies and rules are too
+     *  individual.
+     *  
+     *  The following attributes are recommended:
+     *      action        autocomplete      autofocus
+     *      form          formaction        formenctype
+     *      formmethod    formnovalidate    formtarget
+     *      height        list              max
+     *      min           multiple          name
+     *      pattern       placeholder       required
+     *      size          step              target
+     *      type          width
+     *      
+     *  The following attributes are automatically hardened:
+     *      composite    id    static
+     */
+    Composite.ATTRIBUTE_STATICS = [];
 
     /**
      *  Pattern for all accepted attributes.
@@ -207,7 +230,7 @@ if (typeof Composite === "undefined") {
      *  are also set in the meta object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|id$/i;
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|id|static$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
@@ -1088,6 +1111,7 @@ if (typeof Composite === "undefined") {
     };
     
     /**
+     *  TODO: Add @ATTRIBUTES-STATICS
      *  There are several ways to customize the renderer.
      *  
      *      Custom Tag (Macro)
@@ -1136,6 +1160,18 @@ if (typeof Composite === "undefined") {
      *      - callback function is not implemented correctly
      */
     Composite.customize = function(scope, callback) {
+        
+        if (typeof scope === "string"
+                && typeof callback === "string"
+                && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
+            var statics = (callback || "").trim().split(/\s+/);
+            statics.forEach((entry) => {
+                entry = entry.toLowerCase();
+                if (!Composite.ATTRIBUTE_STATICS.includes(entry))
+                    Composite.ATTRIBUTE_STATICS.push(entry)
+            });
+            return;
+        }
         
         //If only one argument of type function is passed, the method is
         //registered as a acceptor.
@@ -1594,19 +1630,19 @@ if (typeof Composite === "undefined") {
                         var node = document.createTextNode("");
                         var serial = node.ordinal();
                         var object = {serial:serial, element:node, attributes:{}, value:null,
-                                render:function() {
-                                    if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
-                                        var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                                        var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
-                                        window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
-                                        word = "";
-                                    } else {
-                                        word = this.attributes[Composite.ATTRIBUTE_VALUE];
-                                        word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
-                                    }
-                                    this.value = word;
-                                    this.element.textContent = word;
-                                }};
+                            render:function() {
+                                if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
+                                    var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                                    var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                                    window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
+                                    word = "";
+                                } else {
+                                    word = this.attributes[Composite.ATTRIBUTE_VALUE];
+                                    word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                                }
+                                this.value = word;
+                                this.element.textContent = word;
+                            }};
                         var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                         if (param) {
                             object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
@@ -2211,6 +2247,14 @@ if (typeof Composite === "undefined") {
                             record.target.setAttribute(attribute, object.attributes[attribute]);
                     } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
                         record.target.removeAttribute(attribute);
+                    } else if (Composite.ATTRIBUTE_STATICS.includes(attribute)) {
+                        object.statics = object.statics || {};
+                        var value = record.oldValue;
+                        if (!object.statics.hasOwnProperty(attribute))
+                            object.statics[attribute] = value;
+                        else value = object.statics[attribute];
+                        if (record.target.getAttribute(attribute) != value)
+                            record.target.setAttribute(attribute, record.oldValue);
                     }
                 }
                 
@@ -2281,7 +2325,7 @@ if (typeof Composite === "undefined") {
                     });
                 }                
             });
-        })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
+        })).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
     });
 };
 
