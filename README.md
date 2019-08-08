@@ -24,9 +24,8 @@ much more.
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 - Markup hardening  
-  Hardening makes it difficult to manipulate the attributes in the markup.  
-  Non-visible markup fragments and components are removed from the DOM and only
-  inserted again when used.  
+  hardening makes it difficult to manipulate the attributes in the markup  
+  Non-visible components are removed from the DOM and only reinserted when used  
 - Model View Controller  
   supports: events, virtual paths, sitemap, permission concept, ...
 - Resource Bundle / Resource Messages  
