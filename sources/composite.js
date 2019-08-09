@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190808
+ *  Composite 1.2.0 20190809
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190808
+ *  @version 1.2.0 20190809
  */
 if (typeof Composite === "undefined") {
     
@@ -212,7 +212,14 @@ if (typeof Composite === "undefined") {
      *      type          width
      *      
      *  The following attributes are automatically hardened:
-     *      composite    id    static
+     *      composite     id                static*
+     *      
+     *  Composite internal/relevant attributes are also protected, these are
+     *  removed in markup and managed in memory:
+     *      composite     condition         events
+     *      id            import            interval
+     *      iterate       output            release
+     *      render        validate
      */
     Composite.ATTRIBUTE_STATICS = [];
 
@@ -230,7 +237,7 @@ if (typeof Composite === "undefined") {
      *  are also set in the meta object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|id|static$/i;
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|id$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
