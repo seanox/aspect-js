@@ -236,7 +236,7 @@ https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
 und Synchronisation von HTML-Elementen und den korrespondierenden
-JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate).  
+JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).  
 
 ```html
 <span id="output1">{{#text1.value}}</span>

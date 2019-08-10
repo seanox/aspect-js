@@ -29,7 +29,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [Tag](#tag)   
   * [Selector](#selector)
   * [Acceptor](#acceptor)
-  * [Sicherheit](#sicherheit)
+* [Härtung](markup.md#h-rtung)  
   
 
 ## Attribute
@@ -695,7 +695,7 @@ Composite.customize(function(element) {
 });
 ```
 
-### Sicherheit
+## Härtung
 
 In Seanox aspect-js ist eine Härtung vom Markup vorgesehen, was die Manipulation
 vom Markup zur Laufzeit erschwert. Zum einen wird mit einer Condition
@@ -705,6 +705,7 @@ basiert auf einem Filter mit statischen Attributen. Statische Attribute werden
 mit dem Anlegen eines Elements im DOM gelesen und bei Manipulation (Löschen /
 Ändern) wieder hergestellt.
 
+TODO:
 
 
 - - -

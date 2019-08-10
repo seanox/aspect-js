@@ -29,7 +29,7 @@ in the DOM.
   * [Tag](#tag)   
   * [Selector](#selector)
   * [Acceptor](#acceptor)
-  * [Security](#security)
+* [Hardening](markup.md#hardening)
 
 
 ## Attributes
@@ -675,7 +675,7 @@ Composite.customize(function(element) {
 });
 ```
 
-### Security
+## Hardening
 
 TODO:
 
