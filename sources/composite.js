@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190809
+ *  Composite 1.2.0 20190811
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190809
+ *  @version 1.2.0 20190811
  */
 if (typeof Composite === "undefined") {
     
@@ -469,9 +469,26 @@ if (typeof Composite === "undefined") {
     /**
      *  Enhancement of the JavaScript API
      *  Adds a static function to determine an object via the namespace.
+     *  The method has the following various signatures:
+     *      Object.lookup(namespace);
+     *      Object.lookup(object, namespace);
      */ 
     if (Object.lookup === undefined)
-        Object.lookup = function(namespace) {
+        Object.lookup = function(variants) {
+        
+            var scope;
+            var namespace;
+            
+            if (arguments.length > 1) {
+                scope = arguments[0];
+                namespace = arguments[1];
+            } else if (arguments.length > 0) {
+                scope = window;
+                namespace = arguments[0];
+            } else throw new TypeError("Invalid namespace");
+
+            if (typeof scope !== "object")
+                throw new TypeError("Invalid scope: " + typeof scope);        
             if (typeof namespace !== "string")
                 throw new TypeError("Invalid namespace: " + typeof namespace);        
             namespace = (namespace || "").trim();
@@ -481,7 +498,6 @@ if (typeof Composite === "undefined") {
             if (!namespace
                     || namespace.length <= 0)
                 return null;
-            var scope = window;
             for (var index = 0; scope && index < namespace.length; index++) {
                 if (namespace[index] in scope
                         && scope[namespace[index]] instanceof Object)

@@ -161,7 +161,7 @@ if (typeof Path === "undefined") {
      *  a#b#c           #x#y#z#a#b#c
      *  
      *  Invalid roots and paths cause an exception.
-     *  The method uses variable parameters and has the following signatures:
+     *  The method has the following various signatures:
      *      function(root, path) 
      *      function(path) 
      *  @param  root optional, otherwise # is used 
