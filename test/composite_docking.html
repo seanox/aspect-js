@@ -239,7 +239,6 @@
                         Composite.render(document.body);
                     });
                     return;
-                    
                 case 33:
                 case 34:
                 case 35:
@@ -286,7 +285,6 @@
                         Composite.render(document.body);
                     });
                     return;
-                    
                 case 49:
                 case 50:
                 case 51:
@@ -369,41 +367,21 @@ Step:16
 A:dock
 C:dock
 Step:17
-A:onClick
 Step:18
-A:undock
-A:onClick
-A:dock
 Step:19
-A:onClick
 Step:20
-A:undock
-B:onClick
 Step:21
-B:undock
-B:onClick
 Step:22
-B:onClick
 Step:23
-B:undock
-C:onClick
 Step:24
-C:onClick
-C:dock
 Step:25
-C:onClick
 Step:26
-D:onClick
 Step:27
-D:onClick
 Step:28
-D:onClick
 Step:29
 Step:30
 Step:31
 Step:32
-A:dock
-C:dock
 Step:33
 A:onClick
 Step:34
@@ -493,21 +471,21 @@ Step:64
 :
 :
 :A B C D
-:B C D
 :A B C D
-:B C D
-:C D
-:B C D
-:C D
-:D
-:C D
-:D
-:
-:D
-:
-:
-:
-:
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
+:A B C D
 :A B C D
 :B C D
 :A B C D
@@ -543,6 +521,16 @@ Step:64
     </script>
   </head>
   <body id="page" composite static>
+    <!--
+      Combined test for mount, dock and undock.
+      
+      The buttons must be mounted correctly.
+      Because the models don't fit to all buttons, the buttonB don't work.
+      
+      The methods dock and undock are implemented differently in the models and
+      must apply differently.
+     --> 
+  
     <button id="buttonA:modelA" events="click" render="body" release>
       Model-A:A {{modelA.status ? '1' : '0'}}</button>
     <button id="buttonB:modelA" events="click" render="body" release>
