@@ -899,7 +899,7 @@ if (typeof Composite === "undefined") {
                                     || type === "number"
                                     || type === "string";
                             };
-
+                            
                             //A composite is planned as a container for
                             //sub-elements. Theoretically, an input element can
                             //also be a composite and thus both model and input
