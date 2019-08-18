@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190811
+ *  Composite 1.2.0 20190818
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190811
+ *  @version 1.2.0 20190818
  */
 if (typeof Composite === "undefined") {
     
@@ -282,7 +282,7 @@ if (typeof Composite === "undefined") {
      *      group 1: name
      *      group 2: qualifier (optional)
      */
-    Composite.PATTERN_ELEMENT_ID = /^([a-z]\w*)(?:\:(\w*))*$/i;
+    Composite.PATTERN_ELEMENT_ID = /^([a-z]\w*)(?:\:((?:\w*)(?:\:\w*)*)){0,1}$/i;
     
     /** Pattern for a scope (namespace) */
     Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
@@ -799,15 +799,11 @@ if (typeof Composite === "undefined") {
                 //ID is required. Anonymous intercation elements do not have
                 //this alignment and no scope can be determined.
 
-                var model = meta.scope;
+                var model = meta.model;
                 if (typeof meta.property !== "undefined")
-                    if (meta.property 
-                            && typeof meta.scope[meta.property] === "object") {
-                        model = meta.scope[meta.property];
-                        if (meta.name
-                                && typeof model[meta.name] === "object")
-                            model = model[meta.name];
-                    } else model = null;
+                    if (typeof meta.property === "object")
+                        model = meta.property;
+                    else model = null;
 
                 for (var event in model)
                     if (typeof model[event] === "function"
@@ -874,11 +870,11 @@ if (typeof Composite === "undefined") {
                         //The validation through the model only works if the
                         //corresponding composite is active/present in the DOM!
                         if (valid === true
-                                && typeof meta.scope[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                            var validate = meta.scope[Composite.ATTRIBUTE_VALIDATE];
+                                && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
+                            var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
                             if (typeof value !== "undefined")
-                                valid = validate.call(meta.scope, target, value);
-                            else valid = validate.call(meta.scope, target);
+                                valid = validate.call(meta.model, target, value);
+                            else valid = validate.call(meta.model, target);
                         }                        
                         
                         //In case of a failed validation, the event and the
@@ -892,43 +888,31 @@ if (typeof Composite === "undefined") {
                             //property value. Other targets are ignored.
                             //The synchronization expects a positive validation,
                             //otherwise it will not be executed.
-                            var accept = function(object, property, name) {
-                                if (object == null
-                                        || property == null)
+                            var accept = function(property) {
+                                var type = typeof property;
+                                if (typeof property === "undefined")
                                     return false;
-                                if (arguments.length > 2)
-                                    return accept(object[property], name);
-                                var descriptor = Object.getOwnPropertyDescriptor(object, property);
-                                if (descriptor
-                                        && typeof descriptor.set === "function")
-                                    return true;
-                                var type = typeof object[property];
                                 if (type === "object"
-                                        && object[property] == null)
+                                        && property == null)
                                     return true;
                                 return type === "boolean"
                                     || type === "number"
                                     || type === "string";
                             };
 
-                            //A composite is always a container for sub-elements.
-                            //Theoretically, an input element can also be a
-                            //composite, but not a model and input element/data
-                            //field at the same time. That's why this case is
-                            //ignored here. A composite cannot assign a value to
-                            //itself. Therefore, a data field is always expected
-                            //in a model.
-                            if (accept(meta.scope, meta.property, meta.name))
-                                meta.scope[meta.property][meta.name] = value;
-                            else if (accept(meta.scope, meta.property))
-                                meta.scope[meta.property] = value;
-                            else if (typeof meta.scope[meta.property] === "object") {
-                                if (typeof meta.name !== "undefined"
-                                        && typeof meta.scope[meta.property][meta.name] === "object")
-                                    if (accept(meta.scope[meta.property][meta.name], "value"))
-                                        meta.scope[meta.property][meta.name].value = value;
-                                else if (accept(meta.scope[meta.property], "value"))
-                                    meta.scope[meta.property].value = value;
+                            //A composite is planned as a container for
+                            //sub-elements. Theoretically, an input element can
+                            //also be a composite and thus both model and input
+                            //element / data field. In this case, a composite
+                            //can assign a value to itself.
+                            if (accept(meta.property)) {
+                                meta.property = value;
+                            } else if (typeof meta.property === "object") {
+                                if (accept(meta.property["value"]))
+                                    meta.property["value"] = value;                                
+                            } else if (typeof meta.property === "undefined") {
+                                if (accept(meta.model["value"]))
+                                    meta.model["value"] = value;                                
                             }
                             
                             //Step 3: Invocation
@@ -947,15 +931,12 @@ if (typeof Composite === "undefined") {
                             //elements do not have this alignment and no scope
                             //can be determined.
                             
-                            var model = meta.scope;
+                            var model = meta.model;
                             if (typeof meta.property !== "undefined")
                                 if (meta.property 
-                                        && typeof meta.scope[meta.property] === "object") {
-                                    model = meta.scope[meta.property];
-                                    if (meta.name
-                                            && typeof model[meta.name] === "object")
-                                        model = model[meta.name];
-                                } else model = null;
+                                        && typeof meta.property === "object")
+                                    model = meta.property;
+                                else model = null;
 
                             //For the event, a corresponding method is searched
                             //in the model that can be called. If their return
@@ -1125,12 +1106,58 @@ if (typeof Composite === "undefined") {
         if (!meta)
             return null;
         
-        var scope = Object.lookup(meta.model);
-        if (!scope)
-            return null;
-        meta.scope = scope;
+        var lookup = {
+            meta: {
+                composite: meta.composite,
+                model: meta.model,
+            },
+            composite: Object.lookup(meta.composite),
+            model: Object.lookup(meta.model)
+        };
         
-        return meta;
+        if (!lookup.composite
+                || !lookup.model)
+            return null;
+        
+        if (typeof meta.property === "undefined")
+            return lookup;
+        
+        if (meta.name) {
+            var target = (meta.property + "." + meta.name.replace(/\:/g, ".")).match(/^(.*)\.(\w+)$/);
+            meta.property = target[1];
+            meta.name = target[2];
+        } 
+        
+        var lookup = {
+            meta: {
+                composite: meta.composite,
+                model: meta.model,
+                property: meta.property,
+                name: meta.name
+            },
+            composite: Object.lookup(meta.composite),
+            model: Object.lookup(meta.model),
+            get property() {
+                if (this.meta.name) {
+                    var property = Object.lookup(this.model, this.meta.property);
+                    if (property == null)
+                        return;
+                    return property[this.meta.name];
+                }
+                return this.model[this.meta.property];
+            },
+            set property(value) {
+                if (this.meta.name)
+                    Object.lookup(this.model, this.meta.property)[this.meta.name] = value;
+                else this.model[this.meta.property] = value;
+            }               
+        };
+
+        if (!lookup.composite
+                || !lookup.model
+                || typeof lookup.property === "undefined")
+            return null;
+        return lookup;
     };
     
     /**
@@ -1745,8 +1772,8 @@ if (typeof Composite === "undefined") {
                     return;
                 Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
                 var meta = Composite.mount.lookup(object.template || object.element);
-                if (meta && meta.scope && typeof meta.scope.dock === "function")
-                    meta.scope.dock.call(meta.scope);
+                if (meta && meta.model && typeof meta.model.dock === "function")
+                    meta.model.dock.call(meta.model);
             };
             
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
@@ -2335,10 +2362,11 @@ if (typeof Composite === "undefined") {
                             var object = Composite.render.meta[serial];
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                                 var meta = Composite.mount.lookup(node);
-                                if (meta && meta.model && Composite.models.includes(meta.model)) {
-                                    Composite.models = Composite.models.filter(model => model != meta.model);
-                                    if (meta.scope && typeof meta.scope.undock === "function")
-                                        meta.scope.undock.call(meta.scope);
+                                if (meta && meta.meta && meta.meta.model && meta.model
+                                        && Composite.models.includes(meta.meta.model)) {
+                                    Composite.models = Composite.models.filter(model => model != meta.meta.model);
+                                    if (typeof meta.model.undock === "function")
+                                        meta.model.undock.call(meta.model);
                                 }
                             }
                             
