@@ -22,7 +22,7 @@
     
         Test.activate();
         
-        var publish = function(context) {
+        var publish = function() {
             var content = '<input type="text" id="textArray:0" events="keyup">'
                     + '<input type="text" id="textArray:1" events="keyup">'
                     + '<input type="text" id="textArray:2" events="keyup">'
@@ -59,7 +59,7 @@
                     + '<input type="button" id="buttonNothing:2" events="click" value="D3">'
                     + '<input type="button" id="buttonNothing" events="click" value="E">';
             var div = document.createElement("div");
-            div.innerHTML = content.replace(/\{context\}/ig, context);
+            div.innerHTML = content;
             return div;            
         };
 
@@ -185,20 +185,20 @@
             Assert.assertEquals(pattern, modelC.toPlainString());
         }});
         Test.create({test:function() {
-            var pattern = 'aA1 bA2 cC1 cC2 cC3 dA1 eA2 fC1 fC2 fC3 gA1 hA2 iC1 iC2 iC3';
+            var pattern = 'aA1 bA2 dA1 eA2 gA1 hA2';
             Assert.assertEquals(pattern, clickStack.join(" "));
         }});   
     </script>
   </head>
   <body>
     <section id="modelA" composite static
-        import="{{publish('A')}}">
+        import="{{publish()}}">
     </section>
     <section id="modelB" composite static
-        import="{{publish('B')}}">
+        import="{{publish()}}">
     </section>
     <section id="modelC" composite static
-        import="{{publish('C')}}">
+        import="{{publish()}}">
     </section>
   </body>
 </html>
