@@ -19,6 +19,13 @@
     <script type="text/javascript">
     
         Test.activate();
+        
+        var model = {
+            _count: 100,
+            get count() {
+                return ++this._count;
+            }
+        }
 
         var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -33,6 +40,8 @@
             document.querySelector("#loginA").removeAttribute("static");
             document.querySelector("#loginA #email").removeAttribute("required");
             document.querySelector("#loginA input[type='submit']").setAttribute("type", "button_A");
+            document.querySelector("#loginA input[title1]").setAttribute("title1", "A1 xxx");
+            document.querySelector("#loginA input[title2]").setAttribute("title2", "A2 xxx");
             document.querySelector("#loginA iframe").setAttribute("name", "nix_A");
             document.querySelector("#loginA iframe").setAttribute("src", "nix_A");
 
@@ -43,12 +52,15 @@
                 Composite.customize("@ATTRIBUTES-STATICS", "namE src Type");
                 Composite.customize("@Attributes-Statics", "requireD");
                 Composite.customize("@ATTRIBUTES-statics", "Method action");
+                Composite.customize("@ATTRIBUTES-statics", "title1");
                 
                 document.querySelector("#loginA").setAttribute("method", "POST_AB");
                 document.querySelector("#loginA").setAttribute("action", "nix_AB");
                 document.querySelector("#loginA").removeAttribute("composite");
                 document.querySelector("#loginA").removeAttribute("static");
                 document.querySelector("#loginA input[type='button_A']").setAttribute("type", "button_AB");
+                document.querySelector("#loginA input[title1]").setAttribute("title1", "A1 xxx xxx");
+                document.querySelector("#loginA input[title2]").setAttribute("title2", "A2 xxx xxx");
                 document.querySelector("#loginA iframe").setAttribute("name", "nix_AB");
                 document.querySelector("#loginA iframe").setAttribute("src", "nix_AB");
                 
@@ -62,6 +74,8 @@
                     document.querySelector("#loginB").removeAttribute("static");
                     document.querySelector("#loginB #email").removeAttribute("required");
                     document.querySelector("#loginB input[type='submit']").setAttribute("type", "button_AB");
+                    document.querySelector("#loginB input[title1]").setAttribute("title1", "B1 xxx");
+                    document.querySelector("#loginB input[title2]").setAttribute("title2", "B2 xxx");
                     document.querySelector("#loginB iframe").setAttribute("name", "nix_AB");
                     document.querySelector("#loginB iframe").setAttribute("src", "nix_AB");
                     
@@ -87,7 +101,9 @@
             Assert.assertEquals("about:blank", temp.querySelector("#loginA iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("static"));
-            Assert.assertTrue(temp.querySelector("#loginA #email").hasAttribute("required"));
+            Assert.assertTrue(temp.querySelector("#loginA #email").hasAttribute("required"));            
+            Assert.assertEquals("A1 101", temp.querySelector("#loginA input[title1]").getAttribute("title1"));
+            Assert.assertEquals("A2 102", temp.querySelector("#loginA input[title2]").getAttribute("title2"));
             
             Assert.assertEquals("GET", temp.querySelector("#loginB").getAttribute("method"));
             Assert.assertEquals("ref_BA", temp.querySelector("#loginB").getAttribute("action"));
@@ -97,6 +113,8 @@
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("static"));
             Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));  
+            Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
+            Assert.assertEquals("B2 104", temp.querySelector("#loginB input[title2]").getAttribute("title2"));
             
             Assert.assertFalse(temp.querySelector("#loginA #password").hasAttribute("validate"));  
             Assert.assertFalse(temp.querySelector("#loginA #password + input").hasAttribute("validate"));
@@ -119,7 +137,9 @@
             Assert.assertEquals("nix_A", temp.querySelector("#loginA iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("static"));
-            Assert.assertFalse(temp.querySelector("#loginA #email").hasAttribute("required"));
+            Assert.assertFalse(temp.querySelector("#loginA #email").hasAttribute("required"));  
+            Assert.assertEquals("A1 xxx", temp.querySelector("#loginA input[title1]").getAttribute("title1"));
+            Assert.assertEquals("A2 xxx", temp.querySelector("#loginA input[title2]").getAttribute("title2"));
             
             Assert.assertEquals("GET", temp.querySelector("#loginB").getAttribute("method"));
             Assert.assertEquals("ref_BA", temp.querySelector("#loginB").getAttribute("action"));
@@ -128,7 +148,9 @@
             Assert.assertEquals("about:blank", temp.querySelector("#loginB iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("static"));
-            Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));    
+            Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));
+            Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
+            Assert.assertEquals("B2 104", temp.querySelector("#loginB input[title2]").getAttribute("title2"));    
         }});   
 
         Test.create({test:function() {
@@ -143,7 +165,9 @@
             Assert.assertEquals("nix_A", temp.querySelector("#loginA iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("static"));
-            Assert.assertFalse(temp.querySelector("#loginA #email").hasAttribute("required"));
+            Assert.assertFalse(temp.querySelector("#loginA #email").hasAttribute("required"));            
+            Assert.assertEquals("A1 xxx", temp.querySelector("#loginA input[title1]").getAttribute("title1"));
+            Assert.assertEquals("A2 xxx xxx", temp.querySelector("#loginA input[title2]").getAttribute("title2"));
             
             Assert.assertEquals("GET", temp.querySelector("#loginB").getAttribute("method"));
             Assert.assertEquals("ref_BA", temp.querySelector("#loginB").getAttribute("action"));
@@ -152,7 +176,9 @@
             Assert.assertEquals("about:blank", temp.querySelector("#loginB iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("static"));
-            Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));    
+            Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));
+            Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
+            Assert.assertEquals("B2 104", temp.querySelector("#loginB input[title2]").getAttribute("title2"));  
         }}); 
         
         Test.create({test:function() {
@@ -167,7 +193,9 @@
             Assert.assertEquals("nix_A", temp.querySelector("#loginA iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("static"));
-            Assert.assertFalse(temp.querySelector("#loginA #email").hasAttribute("required"));
+            Assert.assertFalse(temp.querySelector("#loginA #email").hasAttribute("required"));            
+            Assert.assertEquals("A1 xxx", temp.querySelector("#loginA input[title1]").getAttribute("title1"));
+            Assert.assertEquals("A2 xxx xxx", temp.querySelector("#loginA input[title2]").getAttribute("title2"));
             
             Assert.assertEquals("GET", temp.querySelector("#loginB").getAttribute("method"));
             Assert.assertEquals("ref_BA", temp.querySelector("#loginB").getAttribute("action"));
@@ -176,7 +204,9 @@
             Assert.assertEquals("about:blank", temp.querySelector("#loginB iframe").getAttribute("src"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("static"));
-            Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));    
+            Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required")); 
+            Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
+            Assert.assertEquals("B2 xxx", temp.querySelector("#loginB input[title2]").getAttribute("title2"));  
         }});         
     </script>
   </head>
@@ -184,7 +214,7 @@
     <form id="loginA" method="GET" action="ref_AA" target="targetA" composite static>
       <input id="email" placeholder="email" required>
       <input id="password" placeholder="password" required validate>
-      <input type="submit" validate>
+      <input type="submit" validate title1="A1 {{model.count}}" title2="A2 {{model.count}}">
       <a href="ref_AB" target="targetA" validate>Password forgotten?</a>
       <iframe name="targetA" src="about:blank"></iframe>
     </form>
@@ -192,7 +222,7 @@
     <form id="loginB" method="GET" action="ref_BA" target="targetB" composite static>
       <input id="email" placeholder="email" required>
       <input id="password" placeholder="password" required validate>
-      <input type="submit" validate>
+      <input type="submit" validate title1="B1 {{model.count}}" title2="B2 {{model.count}}">
       <a href="ref_BB" target="targetA" validate>Password forgotten?</a>
       <iframe name="targetB" src="about:blank"></iframe>
     </form>
