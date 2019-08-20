@@ -982,8 +982,8 @@ if (typeof Composite === "undefined") {
     /**
      *  Determines the meta data for an element based on its position in the
      *  DOM, so the surrounding composite and model, the referenced property in
-     *  the model with a qualifier if necessary. The meta data is only
-     *  determined as text information.
+     *  the model with an optional qualifier. The meta data is only determined
+     *  as text information.
      *  
      *  Composite:
      *      {composite, model}
@@ -1071,32 +1071,26 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO: Determines the meta informations as object for an element.
+     *  Determines the meta object for an element based on its position in the
+     *  DOM, so the surrounding composite and model, the referenced property in
+     *  the model with an optional qualifier.
      *  
-     *      {composite, scope, model};
-     *      
-     *      {composite, scope, model, property, name:qualifier}
+     *  Composite:
+     *      {meta:{composite, model}, composite, model}
+     *  
+     *  Composite Element:
+     *      {meta:{composite, model, property}, composite, model, property}
      *      
      *  The method always requires a corresponding JavaScript model and an
-     *  element with an ID. The ID can be relative or absolute/full qualified.
-     *  For relative IDs, the namespace is determined from the higher-level
-     *  composite structure in the DOM. Absolute IDs whose id/namespace contain
-     *  a dot as a package separator, refer directly to the namespace to be
-     *  used. If no corresponding namespace/JavaScript model can be determined,
-     *  the method returns null.
-     *  
-     *  The recursive determinaton of the namespace, the higher-level composite
-     *  IDs are always regarded as absolute until the first absolute composite
-     *  ID occurs, then the recursion/determinaton is interrupted and the
-     *  absolute composite ID is used as the basis for the namespace.
-     *  Means, it is primarily always searched for an independent model in
-     *  JavaScript and only alternatively for a sub-model (inner class).
-     *      
-     *  @param  element element
-     *  @return the created meta object, otherwise null
+     *  element with an valid element ID in a valid enclosing composite,
+     *  otherwise the method will return null.  
+
+     *  @param  element
+     *  @return determined meta object for the passed element, otherwise null
      *  @throws An error occurs in the following cases:
-     *      - in the case of an invalid composite ID 
-     */
+     *      - in the case of an invalid composite ID
+     *      - in the case of an invalid element ID
+     */    
     Composite.mount.lookup = function(element) {
         
         if (!(element instanceof Element))
@@ -1161,7 +1155,6 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  TODO: Add @ATTRIBUTES-STATICS
      *  There are several ways to customize the renderer.
      *  
      *      Custom Tag (Macro)
@@ -1204,6 +1197,25 @@ if (typeof Composite === "undefined") {
      *  rendering.
      *  
      *      Composite.customize(function(element) {...});
+     *      
+     *      Configuration
+     *      ---
+     *  The customize method also supports the configuration of the composite.
+     *  For this purpose, the parameter and the value are passed.
+     *  
+     *      Composite.customize(parameter, value);
+     *      
+     *  Parameters start with @ and thereby differ from Acceptor/Selector/Tag.
+     *      
+     *      @ATTRIBUTES-STATICS
+     *  Static attributes are a component of the hardening of the markup. These
+     *  attributes are observed by the renderer and manipulation is made more
+     *  difficult by restoring the original value.
+     *  As value one or more attributes separated by spaces are expected.
+     *  The method can be called several times. This has a cumulative effect and
+     *  the attributes are collected. It is not possible to remove attributes.    
+     *  
+     *      Composite.customize("@ATTRIBUTES-STATICS", "...");
      * 
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
