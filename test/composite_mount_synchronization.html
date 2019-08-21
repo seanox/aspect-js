@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      input, span {
+          display:block;
+      }
+      input ~ * {
+          margin-top:1em;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+        
+        var model = {
+            user: {
+                name: "",
+                address: {
+                    city: "",
+                    citycode: "",
+                    street: "",
+                    number: ""
+                }
+            },
+            views: [
+                {textA: ""},
+                {textA: ""}    
+            ]
+        }        
+    </script>
+  </head>
+  <body>
+    <form id="model" composite static>
+      <input type="text" id="user:name" placeholder="user:name"
+           events="keyup" render="body,#user\:name_text">
+      <span id="user:name_text">{{model.user.name}}</span>     
+      <input type="text" id="user:address:city" placeholder="user:address:city"
+           events="keyup" render="body,#user\:address\:city_text">
+      <span id="user:address:city_text">{{model.user.address.city}}</span>
+      <input type="text" id="user:address:citycode" placeholder="user:address:citycode"
+           events="keyup" render="#user\:address\:citycode_text">
+      <span id="user:address:citycode_text">{{model.user.address.citycode}}</span>
+      <input type="text" id="user:address:street" placeholder="user:address:street"
+           events="keyup" render="#user\:address\:street_text">
+      <span id="user:address:street_text">{{model.user.address.street}}</span>
+      <input type="text" id="user:address:number" placeholder="user:address:number"
+           events="keyup" render="#user\:address\:number_text">
+      <span id="user:address:number_text">{{model.user.address.number}}</span>
+      <div id="views:0">
+        <input type="text" id="textA" placeholder="user:name"
+             events="keyup" render="body,#views_0_textA">
+        <span id="views_0_textA">{{model.views[0].textA}}</span>     
+      </div>
+      <div id="views:1">
+        <input type="text" id="textA" placeholder="user:name"
+             events="keyup" render="body,#views_1_textA">
+        <span id="views_1_textA">{{model.views[1].textA}}</span>     
+      </div>
+    </form>
+  </body>
+</html>
