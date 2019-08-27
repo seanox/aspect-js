@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190818
+ *  Composite 1.2.0 20190827
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190818
+ *  @version 1.2.0 20190827
  */
 if (typeof Composite === "undefined") {
     
@@ -2304,9 +2304,11 @@ if (typeof Composite === "undefined") {
                 if (object && record.type == "attributes") {
                     var attribute = (record.attributeName || "").toLowerCase().trim();
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
-                        var value = record.target.getAttribute(attribute);
-                        if (object.attributes[attribute] != value)
-                            record.target.setAttribute(attribute, object.attributes[attribute]);
+                        if (object.attributes.hasOwnProperty(attribute)) {
+                            var value = record.target.getAttribute(attribute);
+                            if (object.attributes[attribute] != value)
+                                record.target.setAttribute(attribute, object.attributes[attribute]);
+                        } else record.target.removeAttribute(attribute);
                     } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
                         record.target.removeAttribute(attribute);
                     } else if (Composite.ATTRIBUTE_STATICS.includes(attribute)) {
