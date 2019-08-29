@@ -44,6 +44,13 @@
             document.querySelector("#loginA input[title2]").setAttribute("title2", "A2 xxx");
             document.querySelector("#loginA iframe").setAttribute("name", "nix_A");
             document.querySelector("#loginA iframe").setAttribute("src", "nix_A");
+            
+            document.querySelector("iframe[name='targetC']").setAttribute("composite", "x1");
+            document.querySelector("iframe[name='targetC']").setAttribute("id", "x2");
+            document.querySelector("iframe[name='targetC']").setAttribute("render", "x3");
+            document.querySelector("iframe[name='targetC']").setAttribute("title1", "x5");
+            document.querySelector("iframe[name='targetC']").setAttribute("x-id", "x4");
+            document.querySelector("iframe[name='targetC']").setAttribute("x-title1", "x6");
 
             Composite.asynchron(() => {
 
@@ -64,6 +71,13 @@
                 document.querySelector("#loginA iframe").setAttribute("name", "nix_AB");
                 document.querySelector("#loginA iframe").setAttribute("src", "nix_AB");
                 
+                document.querySelector("iframe[name='targetC']").setAttribute("composite", "x1x");
+                document.querySelector("iframe[name='targetC']").setAttribute("id", "x2x");
+                document.querySelector("iframe[name='targetC']").setAttribute("render", "x3x");
+                document.querySelector("iframe[name='targetC']").setAttribute("title1", "x5x");
+                document.querySelector("iframe[name='targetC']").setAttribute("x-id", "x4x");
+                document.querySelector("iframe[name='targetC']").setAttribute("x-title1", "x6x");
+                
                 Composite.asynchron(() => {
                     
                     snapshots.push(document.body.innerHTML);
@@ -78,6 +92,13 @@
                     document.querySelector("#loginB input[title2]").setAttribute("title2", "B2 xxx");
                     document.querySelector("#loginB iframe").setAttribute("name", "nix_AB");
                     document.querySelector("#loginB iframe").setAttribute("src", "nix_AB");
+                    
+                    document.querySelector("iframe[name='targetC']").setAttribute("composite", "x1xx");
+                    document.querySelector("iframe[name='targetC']").setAttribute("id", "x2xx");
+                    document.querySelector("iframe[name='targetC']").setAttribute("render", "x3xx");
+                    document.querySelector("iframe[name='targetC']").setAttribute("title1", "x5xx");
+                    document.querySelector("iframe[name='targetC']").setAttribute("x-id", "x4xx");
+                    document.querySelector("iframe[name='targetC']").setAttribute("x-title1", "x6xx");
                     
                     Composite.asynchron(() => {
                         
@@ -123,6 +144,13 @@
             Assert.assertFalse(temp.querySelector("#loginB #password").hasAttribute("validate"));  
             Assert.assertFalse(temp.querySelector("#loginB #password + input").hasAttribute("validate"));
             Assert.assertFalse(temp.querySelector("#loginB a").hasAttribute("validate"));
+            
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("title1"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("x-id"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("x-title1"));
         }});   
 
         Test.create({test:function() {
@@ -151,6 +179,13 @@
             Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));
             Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
             Assert.assertEquals("B2 104", temp.querySelector("#loginB input[title2]").getAttribute("title2"));    
+            
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
+            Assert.assertEquals("x5", temp.querySelector("iframe[name='targetC']").getAttribute("title1"));
+            Assert.assertEquals("x4", temp.querySelector("iframe[name='targetC']").getAttribute("x-id"));
+            Assert.assertEquals("x6", temp.querySelector("iframe[name='targetC']").getAttribute("x-title1"));
         }});   
 
         Test.create({test:function() {
@@ -179,6 +214,13 @@
             Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));
             Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
             Assert.assertEquals("B2 104", temp.querySelector("#loginB input[title2]").getAttribute("title2"));  
+            
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
+            Assert.assertEquals("x5", temp.querySelector("iframe[name='targetC']").getAttribute("title1"));
+            Assert.assertEquals("x4x", temp.querySelector("iframe[name='targetC']").getAttribute("x-id"));
+            Assert.assertEquals("x6x", temp.querySelector("iframe[name='targetC']").getAttribute("x-title1"));
         }}); 
         
         Test.create({test:function() {
@@ -207,6 +249,13 @@
             Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required")); 
             Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
             Assert.assertEquals("B2 xxx", temp.querySelector("#loginB input[title2]").getAttribute("title2"));  
+            
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
+            Assert.assertEquals("x5", temp.querySelector("iframe[name='targetC']").getAttribute("title1"));
+            Assert.assertEquals("x4xx", temp.querySelector("iframe[name='targetC']").getAttribute("x-id"));
+            Assert.assertEquals("x6xx", temp.querySelector("iframe[name='targetC']").getAttribute("x-title1"));
         }});         
     </script>
   </head>
@@ -225,6 +274,10 @@
       <input type="submit" validate title1="B1 {{model.count}}" title2="B2 {{model.count}}">
       <a href="ref_BB" target="targetA" validate>Password forgotten?</a>
       <iframe name="targetB" src="about:blank"></iframe>
+    </form>
+    
+    <form>
+      <iframe name="targetC" src="about:blank"></iframe>
     </form>
   </body>
 </html>
