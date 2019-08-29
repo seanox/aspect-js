@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190828
+ *  Composite 1.2.0 20190829
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190828
+ *  @version 1.2.0 20190829
  */
 if (typeof Composite === "undefined") {
     
@@ -229,7 +229,7 @@ if (typeof Composite === "undefined") {
      *  is cached in the meta object. Other attributes are only cached if they
      *  contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^composite|condition|events|id|import|interval|iterate|output|release|render|validate$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^(composite|condition|events|id|import|interval|iterate|output|release|render|validate)$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -237,7 +237,7 @@ if (typeof Composite === "undefined") {
      *  are also set in the meta object like non-static attributes.
      *  These attributes are also intended for direct use in JavaScript and CSS.
      */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^composite|id$/i;
+    Composite.PATTERN_ATTRIBUTE_STATIC = /^(composite|id)$/i;
 
     /** 
      *  Pattern to detect if a string contains an expression.
