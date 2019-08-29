@@ -2315,9 +2315,11 @@ if (typeof Composite === "undefined") {
                     } else if (Composite.ATTRIBUTE_STATICS.includes(attribute)) {
                         object.statics = object.statics || {};
                         var value = record.oldValue;
-                        if (!object.statics.hasOwnProperty(attribute))
+                        if (!object.statics.hasOwnProperty(attribute)) {
+                            if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                value = Expression.eval(serial + ":" + attribute, value);
                             object.statics[attribute] = value;
-                        else value = object.statics[attribute];
+                        } else value = object.statics[attribute];
                         if (record.target.getAttribute(attribute) != value)
                             record.target.setAttribute(attribute, record.oldValue);
                     }
