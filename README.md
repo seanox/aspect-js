@@ -111,6 +111,7 @@ CR: Composite Mount: Revision of the object/model binding
 CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM  
 CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)  
 CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser  
+CR: Composite Mount Validation: Enhancement with the attribute message for error output  
 CR: Composite Mount Synchronization: Optimization  
 CR: Composite Mount Action: The return value false can cancel the default action of the browser  
 CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM  

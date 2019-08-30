@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190829
+ *  Composite 1.2.0 20190830
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190829
+ *  @version 1.2.0 20190830
  */
 if (typeof Composite === "undefined") {
     
@@ -150,6 +150,8 @@ if (typeof Composite === "undefined") {
     
     /** Path of the Composite for: moduels (sub-directory of work path) */
     Composite.MODULES = window.location.pathcontext + "/modules";
+    
+    //TODO: Dokumentation der Attribute ohne Expressions: composite, events, id, name, validate
 
     /** Constant for attribute composite */
     Composite.ATTRIBUTE_COMPOSITE = "composite";
@@ -174,6 +176,10 @@ if (typeof Composite === "undefined") {
 
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
+
+    //TODO: Doku
+    /** Constant for attribute message */
+    Composite.ATTRIBUTE_MESSAGE = "message";
 
     /** Constant for attribute output */
     Composite.ATTRIBUTE_OUTPUT = "output";
@@ -229,7 +235,7 @@ if (typeof Composite === "undefined") {
      *  is cached in the meta object. Other attributes are only cached if they
      *  contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^(composite|condition|events|id|import|interval|iterate|output|release|render|validate)$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^(composite|condition|events|id|import|interval|iterate|message|output|release|render|validate)$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -845,6 +851,10 @@ if (typeof Composite === "undefined") {
                         
                         //Step 1: Validation
                         
+                        //Resets the customer-specific error.
+                        //This is necessary for the checkValidity method to work.
+                        target.setCustomValidity("");
+                        
                         //Explicit validation via HTML5.
                         //If the validation fails here, model validation and
                         //synchronization is not and rendering always performed.
@@ -875,7 +885,22 @@ if (typeof Composite === "undefined") {
                             if (typeof value !== "undefined")
                                 valid = validate.call(meta.model, target, value);
                             else valid = validate.call(meta.model, target);
-                        }                        
+                        }
+
+                        //TODO:
+                        if (valid !== true) {
+                            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
+                                var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
+                                if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                    message = Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message);
+                                message = message.match(/^(?:([|\w]+):)*(.*)$/);
+                                if (message[2]) {
+                                    target.setCustomValidity(message[2]);
+                                    if (message[1].match(/\br\b/i))
+                                        target.reportValidity();
+                                }
+                            }
+                        }
                         
                         //In case of a failed validation, the event and the
                         //default action of the browser will be canceled.
