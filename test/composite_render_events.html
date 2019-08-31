@@ -122,7 +122,7 @@ F:
   </head>
   <body>
     <div id="model" composite static>
-      <input id="textA" value="" events="change"
+      <input id="textA" value="" events="input"
           render="#textA ~ span">
       <span>A:{{model.textA}}</span>
       
@@ -138,7 +138,7 @@ F:
           render="#textD ~ span">
       <span>D:{{model.textD}}</span>
       
-      <input id="textE" value="" events="input"
+      <input id="textE" value="" events="change"
           render="#textE ~ span">
       <span>E:{{model.textE}}</span>
       
