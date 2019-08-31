@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.2.1 20190707
+ *  Test 1.1.0 20190831
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.1 20190707
+ *  @version 1.1.0 20190831
  */
 if (typeof Test === "undefined") {
     
@@ -981,7 +981,7 @@ if (typeof Test === "undefined") {
          *  Enhancement of the JavaScript API
          *  Adds a method that simulates keyboard input to the Element objects.
          *  The following events are triggered during simulation:
-         *      focus, keydown, keyup, change
+         *      focus, keydown, keyup, input
          *  @param value simulated input value
          *  @param clear option false suppresses emptying before input
          */ 
@@ -997,7 +997,7 @@ if (typeof Test === "undefined") {
                     element.value = (element.value || "") + digit;
                     element.trigger("keyup");
                 });
-                this.trigger("change");
+                this.trigger("input");
             };     
         };
     
