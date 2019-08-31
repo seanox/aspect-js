@@ -177,7 +177,6 @@ if (typeof Composite === "undefined") {
     /** Constant for attribute name */
     Composite.ATTRIBUTE_NAME = "name";
 
-    //TODO: Doku
     /** Constant for attribute message */
     Composite.ATTRIBUTE_MESSAGE = "message";
 
@@ -678,29 +677,25 @@ if (typeof Composite === "undefined") {
             selector.setCustomValidity("");
         
         //Explicit validation via HTML5.
-        //If the validation fails here, model validation and
-        //synchronization is not and rendering always performed.
-        //In this case the event and thus the default action of
-        //the browser is cancelled.
+        //If the validation fails here, model validation and synchronization is
+        //not and rendering always performed. In this case the event and thus
+        //the default action of  the browser is cancelled.
         if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
                 && typeof selector.checkValidity === "function")
             valid = selector.checkValidity();
 
         //Validation is a function at the model level.
-        //If a composite consists of several model levels, the
-        //validation may have to be organized accordingly if
-        //necessary.
-        //Interactive composite elements are a property object. 
-        //Therefore they are primarily a property and the
-        //validation is located in the surrounding model and not
-        //in the property object itself.
+        //If a composite consists of several model levels, the validation may
+        //have to be organized accordingly if necessary.
+        //Interactive composite elements are a property object. Therefore they
+        //are primarily a property and the validation is located in the
+        //surrounding model and not in the property object itself.
         
         //Implicit validation via the model.
-        //If a corresponding validate method has been
-        //implemented in the model. The declaration with the
-        //attribute validate is not required here.
-        //The validation through the model only works if the
-        //corresponding composite is active/present in the DOM!
+        //If a corresponding validate method has been implemented in the model.
+        //The declaration with the attribute validate is not required here.
+        //The validation through the model only works if the corresponding
+        //composite is active/present in the DOM!
         if (valid === true
                 && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
             var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
@@ -709,7 +704,18 @@ if (typeof Composite === "undefined") {
             else valid = validate.call(meta.model, selector);
         }
 
-        //TODO:
+        //The attribute validate can be combined with the attribute message.
+        //However, the message attribute has no effect without the validate
+        //attribute. The value of the Message attribute is used as an error
+        //message if the validation was not successful.
+        //To output the error message, the browser function of the HTML5 form
+        //validation is used.
+        //A directive at the beginning of the message can be used to specify
+        //whether the message is only displayed during mouse-over (T) or also as
+        //an overlay/notification/report (R).
+        //    e.g. T|R:Error information
+        //Option T is obligatory and is always used.
+        
         if (valid !== true) {
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
                 var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
@@ -943,8 +949,31 @@ if (typeof Composite === "undefined") {
                             value = target[Composite.ATTRIBUTE_VALUE];
                         
                         //Step 1: Validation
-                        //TODO: Status true, not true, void/undefined
-                         
+                        
+                        //The result of the validation can have three states:
+                        //    true, not true, undefined/void
+                        //
+                        //    true
+                        //    ----
+                        //The validation was successful. No error is displayed
+                        //and the default action of the browser is used.
+                        //
+                        //    not true and not undefined/void
+                        //    ----
+                        //The validation failed. An error is displayed.
+                        //A return value indicates that the default action of
+                        //the browser should not be executed and so it is
+                        //blocked.
+                        //
+                        //    undefined/void
+                        //    ----
+                        //The validation failed.An error is displayed.
+                        //A return value indicates that the default action of
+                        //the browser should nevertheless be executed.
+                        //This behavior is important e.g. for the validation of
+                        //input fields, so that the input reaches the user
+                        //interface.
+                        
                         valid = Composite.validate(target);
                         
                         //In case of a failed validation, the event and the

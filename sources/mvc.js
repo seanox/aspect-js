@@ -717,7 +717,10 @@ if (typeof SiteMap === "undefined") {
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
     
-    //TODO:
+    /**
+     *  Registration of the attribute 'x' for hardening.
+     *  The attribute is therefore more difficult to manipulate in markup.
+     */
     Composite.customize("@ATTRIBUTES-STATICS", "static");
 
     /**
