@@ -981,7 +981,7 @@ if (typeof Test === "undefined") {
          *  Enhancement of the JavaScript API
          *  Adds a method that simulates keyboard input to the Element objects.
          *  The following events are triggered during simulation:
-         *      focus, keydown, keyup, input
+         *      focus, keydown, keyup, change
          *  @param value simulated input value
          *  @param clear option false suppresses emptying before input
          */ 
