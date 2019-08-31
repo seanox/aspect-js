@@ -636,6 +636,99 @@ if (typeof Composite === "undefined") {
         }, 0, task, arguments);
     };
     
+    //TODO:
+    Composite.validate = function(selector) {
+        
+        if (typeof selector === "string") {
+            selector = selector.trim();
+            if (!selector)
+                return;
+            var validate = Array.from(document.querySelectorAll(selector));
+            validate.forEach((node, index, array) => {
+                validate[index] = Composite.validate(node);
+                if (typeof validate[index] === "undefined")
+                    validate[index] = 0;
+                else validate[index] = validate[index] === true ? 1 : 2; 
+            });
+            validate = validate.join("");
+            if (validate.match(/^1+$/))
+                return true;
+            if (validate.match(/2/))
+                return false;
+            return;
+        }
+
+        if (!(selector instanceof Element))
+            return;
+        
+        var serial = selector.ordinal();
+        var object = Composite.render.meta[serial];
+        
+        var valid = true;
+
+        //There must be a corresponding model class.
+        //Elements are not supported.
+        var meta = Composite.mount.lookup(selector);
+        if (!(meta instanceof Object))
+            return;
+        
+        //Resets the customer-specific error.
+        //This is necessary for the checkValidity method to work.
+        if (typeof selector.setCustomValidity === "function")
+            selector.setCustomValidity("");
+        
+        //Explicit validation via HTML5.
+        //If the validation fails here, model validation and
+        //synchronization is not and rendering always performed.
+        //In this case the event and thus the default action of
+        //the browser is cancelled.
+        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                && typeof selector.checkValidity === "function")
+            valid = selector.checkValidity();
+
+        //Validation is a function at the model level.
+        //If a composite consists of several model levels, the
+        //validation may have to be organized accordingly if
+        //necessary.
+        //Interactive composite elements are a property object. 
+        //Therefore they are primarily a property and the
+        //validation is located in the surrounding model and not
+        //in the property object itself.
+        
+        //Implicit validation via the model.
+        //If a corresponding validate method has been
+        //implemented in the model. The declaration with the
+        //attribute validate is not required here.
+        //The validation through the model only works if the
+        //corresponding composite is active/present in the DOM!
+        if (valid === true
+                && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
+            var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
+            if (typeof value !== "undefined")
+                valid = validate.call(meta.model, selector, value);
+            else valid = validate.call(meta.model, selector);
+        }
+
+        //TODO:
+        if (valid !== true) {
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
+                var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
+                if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                    message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
+                message = message.match(/^(?:([|\w]+):)*(.*)$/);
+                if (message[2] && typeof selector.setCustomValidity === "function") {
+                    selector.setCustomValidity(message[2]);
+                    if (message[1].match(/\br\b/i) && typeof selector.reportValidity === "function")
+                        selector.reportValidity();
+                }
+            }
+        }     
+        
+        if (typeof valid === "undefined")
+            return;
+        return valid; 
+    };
+    
     /**
      *  Mounts the as selector passed element with all its children where an
      *  object/model binding is possible. Mount is possible for all elements
@@ -850,57 +943,9 @@ if (typeof Composite === "undefined") {
                             value = target[Composite.ATTRIBUTE_VALUE];
                         
                         //Step 1: Validation
-                        
-                        //Resets the customer-specific error.
-                        //This is necessary for the checkValidity method to work.
-                        target.setCustomValidity("");
-                        
-                        //Explicit validation via HTML5.
-                        //If the validation fails here, model validation and
-                        //synchronization is not and rendering always performed.
-                        //In this case the event and thus the default action of
-                        //the browser is cancelled.
-                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                                && typeof target.checkValidity === "function")
-                            valid = target.checkValidity();
-
-                        //Validation is a function at the model level.
-                        //If a composite consists of several model levels, the
-                        //validation may have to be organized accordingly if
-                        //necessary.
-                        //Interactive composite elements are a property object. 
-                        //Therefore they are primarily a property and the
-                        //validation is located in the surrounding model and not
-                        //in the property object itself.
-                        
-                        //Implicit validation via the model.
-                        //If a corresponding validate method has been
-                        //implemented in the model. The declaration with the
-                        //attribute validate is not required here.
-                        //The validation through the model only works if the
-                        //corresponding composite is active/present in the DOM!
-                        if (valid === true
-                                && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                            var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
-                            if (typeof value !== "undefined")
-                                valid = validate.call(meta.model, target, value);
-                            else valid = validate.call(meta.model, target);
-                        }
-
-                        //TODO:
-                        if (valid !== true) {
-                            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
-                                var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
-                                if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                                    message = Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message);
-                                message = message.match(/^(?:([|\w]+):)*(.*)$/);
-                                if (message[2]) {
-                                    target.setCustomValidity(message[2]);
-                                    if (message[1].match(/\br\b/i))
-                                        target.reportValidity();
-                                }
-                            }
-                        }
+                        //TODO: Status true, not true, void/undefined
+                         
+                        valid = Composite.validate(target);
                         
                         //In case of a failed validation, the event and the
                         //default action of the browser will be canceled.
