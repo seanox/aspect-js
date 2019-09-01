@@ -4,216 +4,287 @@
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
-      body {
-        font-family:monospace;
+      form {
         white-space:pre;
+      }
+      form * + * {
+        margin-top:1em;
+      }
+      iframe {
+        height:4em;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
         Test.activate();
-    
-        var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
-        var validateEmail = function(context, element, value) {
-            var test = PATTER_EMAIL_SIMPLE.test(value);
-            element.setAttribute("title", test ? "" : context + " " + test);
-            return test;
-        };
         
-        var test = {
-            loginA:{
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("test-loginA", element, value);
-                }
-            },
-            loginB:{
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("test-loginB", element, value);
-                }
-            },
-            loginF1:{
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("test-loginF1", element, value);
-                },
-                loginX:{
-                    email:null,
-                    validate:function(element, value) {
-                        return validateEmail("test-loginF1-loginX", element, value);
-                    },
-                }
-            },
-            loginF2:{
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("test-loginF2", element, value);
-                },
-                loginX:{
-                    email:null,
-                    validate:function(element, value) {
-                        return validateEmail("test-loginF2-loginX", element, value);
-                    },
-                }
-            },
-            loginF3:{
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("test-loginF3", element, value);
-                },
-                loginY:{
-                    email:null,
-                    validate:function(element, value) {
-                        return validateEmail("test-loginF3-loginY", element, value);
-                    }
-                }
-            },
-            loginY:{
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("test-loginY", element, value);
-                }
-            }
-        };
-        
-        var loginX = {
-                email:null,
-                validate:function(element, value) {
-                    return validateEmail("loginX", element, value);
-                }
-            };         
-        
-        var loginY = {
-            email:null,
+        Composite.customize("@ATTRIBUTES-STATICS", "href name pattern placeholder target type required");
+
+        var EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$";
+        var EMAIL_MESSAGE = "Mandatory with a valid e-mail address."
+       
+        var PASSWORD_PATTERN = "\\w{6,}";
+        var PASSWORD_MESSAGE = "Mandatory with at least 6 characters.";
+
+        var model = {
+            email: "",
+            password: "",
             validate:function(element, value) {
-                return validateEmail("loginY", element, value);
+                if (element == document.querySelector("#model #submit")
+                        || element == document.querySelector("#model #button")
+                        || element == document.querySelector("#model #link")) {
+                    return Composite.validate("#model #email, #model #password");
+                }
+                return Composite.validate(element);
+            },
+            submitClicks: 0,
+            submit: {
+                onClick: function(event) {
+                    model.submitClicks++;
+                }
+            },
+            buttonClicks: 0,
+            button: {
+                onClick: function(event) {
+                    model.buttonClicks++;
+                }
+            },
+            linkClicks: 0,
+            link: {
+                onClick: function(event) {
+                    model.linkClicks++;
+                }
             }
-        };        
+        };
         
+        var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            console.log(new Date());
-            if (Test.status().queue != null)
-                return;    
-            document.querySelector("#loginA input").typeValue("a-xxx", true);
-            document.querySelector("#loginB input").typeValue("b-xxx@xxx.xxx", true);
-            document.querySelector("#loginF1 input").typeValue("f1-xxx@", true);
-            document.querySelector("#loginF2 input").typeValue("f2-xxx@xxx.xxx", true);
-            document.querySelector("#loginF3 input").typeValue("f3-xxx", true);
-            Test.start();
+            var snapshot = function() {
+                var signatue = function(selector) {
+                    var element = document.querySelector(selector);
+                    var result = "";
+                    if (element.validationMessage)
+                        result += "M";
+                    if (element.customError)
+                        result += "C";
+                    if (element.validity.valueMissing)
+                        result += "R";
+                    if (element.validity.patternMismatch)
+                        result += "P";
+                    if (element.validity.valid)
+                        result += "V";
+                    
+                    return result;
+                };
+
+                var snapshot = "E:" + signatue("#model #email") + "|" + model.email
+                     + "\r\n" + "P:" + signatue("#model #password") + "|" + model.password
+                     + "\r\n" + "S:" + "|S:" + model.submitClicks
+                         + "|B:" + model.buttonClicks
+                         + "|L:" + model.linkClicks;
+                
+                var iframe;
+                iframe = document.querySelector("iframe[name='targetA']");
+                iframe = iframe.contentDocument || iframe.contentWindow.document;
+                snapshot += "\r\n" + "A:" + iframe.body.textContent.trim();
+                
+                iframe = document.querySelector("iframe[name='targetB']");
+                iframe = iframe.contentDocument || iframe.contentWindow.document;
+                snapshot += "\r\n" + "B:" + iframe.body.textContent.trim();
+                
+                snapshots.push(snapshot);
+            };
+        
+            snapshot();
+
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();
+            
+            document.querySelector("#model #email").typeValue("xxx", true);
+            snapshot();
+
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();
+
+            document.querySelector("#model #email").typeValue("xxx@xxx", true);
+            snapshot();
+
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();
+            
+            document.querySelector("#model #password").typeValue("xxx", true);
+            snapshot();
+
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();            
+
+            document.querySelector("#model #password").typeValue("xxxxxx", true);
+            snapshot();
+
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            
+            window.setTimeout(() => {
+                snapshot();       
+                Test.start();
+            }, 1000);
         });
         
         Test.create({test:function() {
-            Assert.assertTrue(!!(document.querySelector("#loginA input").getAttribute("title") || "").match(/false/));
-        }});
-        Test.create({test:function() {
-            Assert.assertFalse(document.querySelector("#loginB input").hasAttribute("title"));
-        }});
-        Test.create({test:function() {
-            Assert.assertTrue(!!(document.querySelector("#loginF1 input").getAttribute("title") || "").match(/false/));
-        }}); 
-        Test.create({test:function() {
-            Assert.assertTrue(document.querySelector("#loginF2 input").hasAttribute("title"));
-            Assert.assertTrue(document.querySelector("#loginF2 input").getAttribute("title") == "");
-        }});      
-        Test.create({test:function() {
-            Assert.assertTrue(!!(document.querySelector("#loginF3 input").getAttribute("title") || "").match(/false/));
-        }});  
-        
-        Test.create({test:function() {
-            Assert.assertEquals('{"loginA":{"email":null},"loginB":{"email":null},"loginF1":{"email":null,"loginX":{"email":null}},"loginF2":{"email":null,"loginX":{"email":"f2-xxx@xxx.xxx"}},"loginF3":{"email":null,"loginY":{"email":null}},"loginY":{"email":null}}', test.toPlainString());
-        }});
-        Test.create({test:function() {
-            Assert.assertEquals('{"email":"f2-xxx@xxx.xxx"}', test.loginF2.loginX.toPlainString());
-        }});
-        Test.create({test:function() {
-            Assert.assertEquals('{"email":null}', loginX.toPlainString());
+            Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
         }});        
-        Test.create({test:function() {
-            Assert.assertEquals('{"email":null}', loginY.toPlainString());
-        }});     
-        
-        Test.create({test:function() {
-            Assert.assertNotNull(document.querySelector("#loginF3 input"));
-            Assert.assertNull(document.querySelector("#loginF4 input"));
-            Assert.assertNotNull(document.querySelector("#loginF5 input"));
-        }});     
     </script>
-    <style type="text/css">
-      input {
-          border:1px solid;
-          margin:2px;
-      }
-      input:not([title]) {
-          background:#EEEEFF;
-          border-color:#7777AA;
-      }
-      input[title=''] {
-          background:#EEFFEE;
-          border-color:#77AA77;
-      }
-      input[title]:not([title='']) {
-          background:#FFEEEE;
-          border-color:#AA7777;
-      }
-      input[type='submit'] {
-          background:#EEEEEE;
-          border-color:#777777;
-      }      
-    </style>
+    <script type="text/test">
+E:MR|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MR|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MR|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MR|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MP|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MP|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MP|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:MP|
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MR|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MP|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MP|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MP|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:MP|
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:V|xxxxxx
+S:|S:0|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:V|xxxxxx
+S:|S:1|B:0|L:0
+A:
+B:
+E:V|xxx@xxx
+P:V|xxxxxx
+S:|S:1|B:1|L:0
+A:
+B:
+E:V|xxx@xxx
+P:V|xxxxxx
+S:|S:1|B:1|L:1
+A:1
+B:2
+    </script>
   </head>
   <body>
-    <article id="test" composite static>
-      loginA 
-      <form id="loginA" composite static>
-        <input id="email" placeholder="email"
-             validate events="keyup">
-        <input id="password" placeholder="password">
-        <input type="submit">
-      </form>
-      loginB
-      <form id="loginB" composite static>
-        <input id="loginB.email" placeholder="email"
-             validate events="keyup">
-        <input id="password" placeholder="password">
-        <input type="submit">
-      </form>    
-      loginF1
-      <form id="loginF1" composite static>
-        <input id="loginX.email" placeholder="email"
-             validate events="keyup">
-        <input id="loginX.password" placeholder="password">
-        <input type="submit">
-      </form>    
-      loginF2
-      <form id="loginF2" composite static>
-        <input id="loginX.email" placeholder="email"
-             validate events="keyup">
-        <input id="loginX.password" placeholder="password">
-        <input type="submit">
-      </form>
-      loginF3
-      <form id="loginF3" composite static>
-        <input id="loginY.email" placeholder="email"
-             validate events="keyup">
-        <input id="loginY.password" placeholder="password">
-        <input type="submit">
-      </form>       
-      loginF4
-      <form id="loginF4" composite>
-        <input id="loginY.email" placeholder="email"
-             validate events="keyup">
-        <input id="loginY.password" placeholder="password">
-        <input type="submit">
-      </form>       
-      loginF5
-      <form id="loginF5" composite static>
-        <input id="loginY.email" placeholder="email"
-             validate events="keyup">
-        <input id="loginY.password" placeholder="password">
-        <input type="submit">
-      </form>       
-    </article>
+    <!-- 
+        invalid e-mail / password (HTML5 pattern):
+        - value should not be synchronized</li>
+        - link should not work</li>
+        - submit should not work</li>
+
+        valid e-mail / password (HTML5 pattern):
+        -  value should be synchronized</li>
+        - link should work</li>
+        - submit should work</li>
+     --> 
+    <form id="model" composite static
+        method="GET" action="composite_render_validate_1.html" target="targetA">
+      <input type="text" id="email" placeholder="email"
+          validate required pattern="{{EMAIL_PATTERN}}"
+          message="T|R:{{EMAIL_MESSAGE}}"
+          events="input">
+      <input type="text" id="password" placeholder="password"
+          validate required pattern="{{PASSWORD_PATTERN}}"
+          message="T|R:{{PASSWORD_MESSAGE}}"
+          events="input">
+      <input type="submit" id="submit" value="Submit" validate>
+      <input type="button" id="button" value="Button" validate>
+      <a id="link" href="composite_render_validate_2.html" target="targetB"
+          validate events="click">Password forgotten?</a>
+      <iframe name="targetA" src="about:blank"></iframe>
+      <iframe name="targetB" src="about:blank"></iframe>
+    </form>
   </body>
 </html>
