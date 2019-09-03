@@ -132,7 +132,7 @@ if (typeof DataSource === "undefined") {
      *  Changes the localization of the DataSource.
      *  Only locales from locales.xml can be used, other values cause an
      *  exception.
-     *  @para  locale
+     *  @param  locale
      *  @throws Error in the case of invalid locales
      */
     DataSource.localize = function(locale) {

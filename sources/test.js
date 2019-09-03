@@ -308,7 +308,7 @@ if (typeof Test === "undefined") {
          *  the current object. If an error occurs when calling the current
          *  object, the parent object is not triggered.
          *  @param event  see Test.EVENT_***
-         *  @param status status object with information about the test execution
+         *  @param status meta object with information about the test execution
          */
         Test.fire = function(event, status) {
             
@@ -378,6 +378,8 @@ if (typeof Test === "undefined") {
          *  Test.create({ignore:true, test:function() {
          *      Assert.assertTrue(true);
          *  }});
+         *  
+         *  @param meta
          */
         Test.create = function(meta) {
             
