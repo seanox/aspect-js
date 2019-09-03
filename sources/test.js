@@ -1035,7 +1035,7 @@ if (typeof Test === "undefined") {
          *  Adds a method to trigger an event for elements.
          *  @param event   type of event
          *  @param bubbles deciding whether the event should bubble up through
-         *                 the event chain or not
+         *      the event chain or not
          *  @param cancel  defining whether the event can be canceled
          */         
         if (Element.prototype.trigger === undefined)

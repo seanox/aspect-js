@@ -166,7 +166,7 @@ if (typeof Path === "undefined") {
      *      function(path) 
      *  @param  root optional, otherwise # is used 
      *  @param  path to normalize (URL is also supported, only the hash is used
-     *               here and the URL itself is ignored)
+     *      here and the URL itself is ignored)
      *  @return the normalize path
      *  @throws An error occurs in the following cases:
      *      - if the root and/or the path is invalid
@@ -306,7 +306,7 @@ if (typeof SiteMap === "undefined") {
      *  The path is only allowed if all permit methods confirm the check with
      *  the return value true.
      *  @param  path to check (URL is also supported, only the hash is used
-     *               here and the URL itself is ignored)
+     *      here and the URL itself is ignored)
      *  @return true if the path has been confirmed as permitted 
      */
     SiteMap.permit = function(path) {
@@ -339,9 +339,9 @@ if (typeof SiteMap === "undefined") {
      *  piece. If no valid partial path can be found, the root is returned.
      *  Without passing a path, the current location is returned.
      *  @param  path to check - optional (URL is also supported, only the hash
-     *               is used here and the URL itself is ignored)
+     *      is used here and the URL itself is ignored)
      *  @return the real path determined in the SiteMap, or the unchanged
-     *          function path.
+     *      function path.
      */  
     SiteMap.locate = function(path, strict) {
         
@@ -384,7 +384,7 @@ if (typeof SiteMap === "undefined") {
      *  for a valid partial path. To do this, the path is shortened piece by
      *  piece. If no valid partial path can be found, the root is the target.
      *  @param path (URL is also supported, only the hash is used here and the
-     *              URL itself is ignored)
+     *      URL itself is ignored)
      */    
     SiteMap.navigate = function(path) {
         window.location.hash = SiteMap.locate(path);
