@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190830
+ *  Composite 1.2.0 20190905
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190830
+ *  @version 1.2.0 20190905
  */
 if (typeof Composite === "undefined") {
     
@@ -174,11 +174,14 @@ if (typeof Composite === "undefined") {
     /** Constant for attribute iterate */
     Composite.ATTRIBUTE_ITERATE = "iterate";
 
-    /** Constant for attribute name */
-    Composite.ATTRIBUTE_NAME = "name";
-
     /** Constant for attribute message */
     Composite.ATTRIBUTE_MESSAGE = "message";
+    
+    /** Constant for attribute notification */
+    Composite.ATTRIBUTE_NOTIFICATION = "notification";
+
+    /** Constant for attribute name */
+    Composite.ATTRIBUTE_NAME = "name";
 
     /** Constant for attribute output */
     Composite.ATTRIBUTE_OUTPUT = "output";
@@ -234,7 +237,7 @@ if (typeof Composite === "undefined") {
      *  is cached in the meta object. Other attributes are only cached if they
      *  contain an expression.
      */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^(composite|condition|events|id|import|interval|iterate|message|output|release|render|validate)$/i;   
+    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i;   
     
     /**
      *  Pattern for all static attributes.
@@ -599,7 +602,7 @@ if (typeof Composite === "undefined") {
      *  All callback functions for this event are called.
      *  @param event    see Composite.EVENT_***
      *  @param variants up to five additional optional arguments that are passed
-     *                  as arguments when the callback function is called
+     *      as arguments when the callback function is called
      */
     Composite.fire = function(event, variants) {
 
@@ -624,7 +627,7 @@ if (typeof Composite === "undefined") {
      *  execution is not possible without Web Worker.
      *  @param task     function to be executed
      *  @param variants up to five additional optional arguments that are passed
-     *                  as arguments when the callback function is called
+     *      as arguments when the callback function is called
      */
     Composite.asynchron = function(task, variants) {
         
@@ -635,8 +638,50 @@ if (typeof Composite === "undefined") {
         }, 0, task, arguments);
     };
     
-    //TODO:
-    Composite.validate = function(selector) {
+    /**
+     *  Validates the as selector passed element(s), if the element(s) are
+     *  marked with the attribute 'validate', a two-step validation is performed.
+     *  In the first step, the HTML5 validation is checked if it exists.
+     *  If this validation is valid or does not exist, the model-based
+     *  validation is executed if it exists. For this purpose, the static method
+     *  validate is expected in the model. The current element and the current
+     *  value (if available) are passed as arguments.
+     *  
+     *  The validation can have three states:
+     *      true, not true, undefined/void
+     *      
+     *          true
+     *          ----
+     *  The validation was successful.
+     *  No error is displayed and the default action of the browser is used.
+     *  If possible the value is synchronized with the model.
+     *  
+     *          not true and not undefined/void
+     *          ----
+     *  The validation failed; an error is displayed.
+     *  A return value indicates that the default action of the browser should
+     *  not be executed and so it is blocked. In this case, a possible value is
+     *  not synchronized with the model.
+     *  
+     *          undefined/void
+     *          ----
+     *  The validation failed; an error is displayed.
+     *  A return value indicates that the default action of the browser should
+     *  nevertheless be executed. This behavior is important e.g. for the
+     *  validation of input fields, so that the input reaches the user
+     *  interface. In this case, a possible value is not synchronized with the
+     *  model. 
+     *
+     *  @param  selector selector
+     *  @param  lock     unlocking of the model validation
+     *  @return validation result
+     *      true, false, undefined/void
+     */
+    Composite.validate = function(selector, lock) {
+        
+        if (arguments.length < 2
+                || lock !== false)
+            lock = true;
         
         if (typeof selector === "string") {
             selector = selector.trim();
@@ -644,7 +689,7 @@ if (typeof Composite === "undefined") {
                 return;
             var validate = Array.from(document.querySelectorAll(selector));
             validate.forEach((node, index, array) => {
-                validate[index] = Composite.validate(node);
+                validate[index] = Composite.validate(node, lock);
                 if (typeof validate[index] === "undefined")
                     validate[index] = 0;
                 else validate[index] = validate[index] === true ? 1 : 2; 
@@ -697,6 +742,7 @@ if (typeof Composite === "undefined") {
         //The validation through the model only works if the corresponding
         //composite is active/present in the DOM!
         if (valid === true
+                && lock !== true
                 && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
             var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
             if (typeof value !== "undefined")
@@ -710,7 +756,7 @@ if (typeof Composite === "undefined") {
         //message if the validation was not successful.
         //To output the error message, the browser function of the HTML5 form
         //validation is used.
-        //A directive at the beginning of the message can be used to specify
+        //TODO: A directive at the beginning of the message can be used to specify
         //whether the message is only displayed during mouse-over (T) or also as
         //an overlay/notification/report (R).
         //    e.g. T|R:Error information
@@ -721,10 +767,12 @@ if (typeof Composite === "undefined") {
                 var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
                 if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
-                message = message.match(/^(?:([|\w]+):)*(.*)$/);
-                if (message[2] && typeof selector.setCustomValidity === "function") {
-                    selector.setCustomValidity(message[2]);
-                    if (message[1].match(/\br\b/i) && typeof selector.reportValidity === "function")
+                if (message && typeof selector.setCustomValidity === "function") {
+                    selector.setCustomValidity(message);
+                    var notification =  object.attributes[Composite.ATTRIBUTE_NOTIFICATION] || ""
+                    if ((notification || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                        notification = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_NOTIFICATION, notification));
+                    if (!!notification.match(/^yes|on|true|1$/i) && typeof selector.reportValidity === "function")
                         selector.reportValidity();
                 }
             }
@@ -736,7 +784,7 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  Mounts the as selector passed element with all its children where an
+     *  Mounts the as selector passed element(s) with all its children where an
      *  object/model binding is possible. Mount is possible for all elements
      *  with an ID, not only for composite objects and their children.
      *  
@@ -781,10 +829,32 @@ if (typeof Composite === "undefined") {
      *  If this validation is valid or does not exist, the model-based
      *  validation is executed if it exists. For this purpose, the static method
      *  validate is expected in the model. The current element and the current
-     *  value (if available) are passed as arguments. If the return of a
-     *  validation is not true, if applicable, the synchronization and the
-     *  action are not executed and the default action of the browser is
-     *  cancelled.     
+     *  value (if available) are passed as arguments.
+     *  
+     *  The validation can have three states:
+     *      true, not true, undefined/void
+     *      
+     *          true
+     *          ----
+     *  The validation was successful.
+     *  No error is displayed and the default action of the browser is used.
+     *  If possible the value is synchronized with the model.
+     *  
+     *          not true and not undefined/void
+     *          ----
+     *  The validation failed; an error is displayed.
+     *  A return value indicates that the default action of the browser should
+     *  not be executed and so it is blocked. In this case, a possible value is
+     *  not synchronized with the model.
+     *  
+     *          undefined/void
+     *          ----
+     *  The validation failed; an error is displayed.
+     *  A return value indicates that the default action of the browser should
+     *  nevertheless be executed. This behavior is important e.g. for the
+     *  validation of input fields, so that the input reaches the user
+     *  interface. In this case, a possible value is not synchronized with the
+     *  model.
      *  
      *      Synchronization
      *      ----
@@ -818,7 +888,9 @@ if (typeof Composite === "undefined") {
      *  The method used a simple queue and transaction management so that the
      *  concurrent execution of rendering works sequentially in the order of the
      *  method call.
-     * 
+     *  
+     *  @param  selector
+     *  @param  lock
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - namespace cannot be created if it already exists as a method
@@ -950,31 +1022,7 @@ if (typeof Composite === "undefined") {
                         
                         //Step 1: Validation
                         
-                        //The result of the validation can have three states:
-                        //    true, not true, undefined/void
-                        //
-                        //    true
-                        //    ----
-                        //The validation was successful. No error is displayed
-                        //and the default action of the browser is used.
-                        //
-                        //    not true and not undefined/void
-                        //    ----
-                        //The validation failed. An error is displayed.
-                        //A return value indicates that the default action of
-                        //the browser should not be executed and so it is
-                        //blocked.
-                        //
-                        //    undefined/void
-                        //    ----
-                        //The validation failed.An error is displayed.
-                        //A return value indicates that the default action of
-                        //the browser should nevertheless be executed.
-                        //This behavior is important e.g. for the validation of
-                        //input fields, so that the input reaches the user
-                        //interface.
-                        
-                        valid = Composite.validate(target);
+                        valid = Composite.validate(target, false);
                         
                         //In case of a failed validation, the event and the
                         //default action of the browser will be canceled.
@@ -1316,6 +1364,8 @@ if (typeof Composite === "undefined") {
      *  
      *      Composite.customize("@ATTRIBUTES-STATICS", "...");
      * 
+     *  @param  scope    TODO
+     *  @param  callback TODO
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - callback function is not implemented correctly
@@ -1418,9 +1468,9 @@ if (typeof Composite === "undefined") {
      *  their own rendering method for generating output. Static content is
      *  ignored later during rendering because it is unchangeable.     
      *      
-     *      Events + Validate + Render
+     *      Events + Validate + Message + Render
      *      ----
-     *  Events primarily controls the synchronization of the input values of
+     *  TODO: Events primarily controls the synchronization of the input values of
      *  HTML elements with the properties of a model. Means that the value in
      *  the model only changes if an event occurs for the corresponding HTML
      *  element. Synchronization is performed at a low level. Means that the
@@ -1533,6 +1583,9 @@ if (typeof Composite === "undefined") {
      *  Composite.EVENT_RENDER_START
      *  Composite.EVENT_RENDER_NEXT
      *  Composite.EVENT_RENDER_END
+     *  
+     *  @param selector
+     *  @param lock
      */
     Composite.render = function(selector, lock) {
         
@@ -2862,7 +2915,7 @@ if (typeof Expression === "undefined") {
      *  @param  serial
      *  @param  expression
      *  @return the return value of the interpreted expression or an error if a
-     *          error or exception has occurred
+     *      error or exception has occurred
      */
     Expression.eval = function(variants) {
         
