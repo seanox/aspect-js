@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190905
+ *  Composite 1.2.0 20190906
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190905
+ *  @version 1.2.0 20190906
  */
 if (typeof Composite === "undefined") {
     
@@ -125,81 +125,201 @@ if (typeof Composite === "undefined") {
      *  The processing runs in the background and starts automatically when a
      *  page is loaded.
      */
-    Composite = {};
-    
-    /** Assoziative array for custom tags (key:tag, value:function) */
-    Composite.macros;
+    Composite = {
+            
+        /** Path of the Composite for: moduels (sub-directory of work path) */
+        get MODULES() {return window.location.pathcontext + "/modules"},
+        
+        //TODO: Dokumentation der Attribute ohne Expressions: composite, events, id, name, validate
 
-    /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
-    Composite.selectors;
-    
-    /** Assoziative array with acceptor and their registered listerners */
-    Composite.acceptors;
+        /** Constant for attribute composite */
+        get ATTRIBUTE_COMPOSITE() {return "composite"},
+        
+        /** Constant for attribute condition */
+        get ATTRIBUTE_CONDITION() {return "condition"},
 
-    /** Assoziative array with events and their registered listerners */
-    Composite.listeners;
-    
-    /** 
-     *  Array with docked models.
-     *  The array is used for the logic to call the dock and undock methods,
-     *  because the static models themselves have no status and the decision
-     *  about the current existence in the DOM is not stable.
-     *  All docked models are included in the array.
-     */
-    Composite.models;
-    
-    /** Path of the Composite for: moduels (sub-directory of work path) */
-    Composite.MODULES = window.location.pathcontext + "/modules";
-    
-    //TODO: Dokumentation der Attribute ohne Expressions: composite, events, id, name, validate
+        /** Constant for attribute events */
+        get ATTRIBUTE_EVENTS() {return "events"},
 
-    /** Constant for attribute composite */
-    Composite.ATTRIBUTE_COMPOSITE = "composite";
-    
-    /** Constant for attribute condition */
-    Composite.ATTRIBUTE_CONDITION = "condition";
+        /** Constant for attribute id */
+        get ATTRIBUTE_ID() {return "id"},
+        
+        /** Constant for attribute import */
+        get ATTRIBUTE_IMPORT() {return "import"},
 
-    /** Constant for attribute events */
-    Composite.ATTRIBUTE_EVENTS = "events"; 
+        /** Constant for attribute interval */
+        get ATTRIBUTE_INTERVAL() {return "interval"},
 
-    /** Constant for attribute id */
-    Composite.ATTRIBUTE_ID = "id";
-    
-    /** Constant for attribute import */
-    Composite.ATTRIBUTE_IMPORT = "import";
+        /** Constant for attribute iterate */
+        get ATTRIBUTE_ITERATE() {return "iterate"},
 
-    /** Constant for attribute interval */
-    Composite.ATTRIBUTE_INTERVAL = "interval";
+        /** Constant for attribute message */
+        get ATTRIBUTE_MESSAGE() {return "message"},
+        
+        /** Constant for attribute notification */
+        get ATTRIBUTE_NOTIFICATION() {return "notification"},
 
-    /** Constant for attribute iterate */
-    Composite.ATTRIBUTE_ITERATE = "iterate";
+        /** Constant for attribute name */
+        get ATTRIBUTE_NAME() {return "name"},
 
-    /** Constant for attribute message */
-    Composite.ATTRIBUTE_MESSAGE = "message";
-    
-    /** Constant for attribute notification */
-    Composite.ATTRIBUTE_NOTIFICATION = "notification";
+        /** Constant for attribute output */
+        get ATTRIBUTE_OUTPUT() {return "output"},
 
-    /** Constant for attribute name */
-    Composite.ATTRIBUTE_NAME = "name";
+        /** Constant for attribute render */
+        get ATTRIBUTE_RENDER() {return "render"},  
+        
+        /** Constant for attribute text */
+        get ATTRIBUTE_TEXT() {return "text"},
 
-    /** Constant for attribute output */
-    Composite.ATTRIBUTE_OUTPUT = "output";
+        /** Constant for attribute type */
+        get ATTRIBUTE_TYPE() {return "type"},
+        
+        /** Constant for attribute validate */
+        get ATTRIBUTE_VALIDATE() {return "validate"},
+        
+        /** Constant for attribute value */
+        get ATTRIBUTE_VALUE() {return "value"},
 
-    /** Constant for attribute render */
-    Composite.ATTRIBUTE_RENDER = "render";     
-    
-    /** Constant for attribute text */
-    Composite.ATTRIBUTE_TEXT = "text";    
+        /**
+         *  Pattern for all accepted attributes.
+         *  Accepted attributes are all attributes, even without an expression that
+         *  is cached in the meta object. Other attributes are only cached if they
+         *  contain an expression.
+         */
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i},   
+        
+        /**
+         *  Pattern for all static attributes.
+         *  Static attributes are not removed from the element during rendering, but
+         *  are also set in the meta object like non-static attributes.
+         *  These attributes are also intended for direct use in JavaScript and CSS.
+         */
+        get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i},
 
-    /** Constant for attribute type */
-    Composite.ATTRIBUTE_TYPE = "type";
-    
-    /** Constant for attribute validate */
-    Composite.ATTRIBUTE_VALIDATE = "validate";
-    
-    /** Constant for attribute value */
-    Composite.ATTRIBUTE_VALUE = "value";
+        /** 
+         *  Pattern to detect if a string contains an expression.
+         *  Escaping characters via slash is supported.
+         */
+        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}/g},   
+        
+        /**
+         *  Patterns to test whether an expression is exclusive, i.e. an expression
+         *  without additional text fragments before or after.
+         *  The test is based on the check that the text has an expression (group 1)
+         *  and at the end no more literal or other expressions (group 2) exist.
+         */
+        get PATTERN_EXPRESSION_EXCLUSIVE() {return /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*(.*)$/},
+        
+        /**
+         *  Patterns for expressions with variable.
+         *      group 1: variable
+         *      group 2: expression
+         */
+        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*(_*[a-z]\w*)\s*:\s*(.*?)\s*$/i},    
+
+        /** Pattern for all to ignore (script-)elements */
+        get PATTERN_ELEMENT_IGNORE() {return /script|style/i},
+
+        /** Pattern for all script elements */
+        get PATTERN_SCRIPT() {return /script/i},
+
+        /** 
+         *  Pattern for all composite-script elements.
+         *  These elements are not automatically executed by the browser but must be
+         *  triggered by rendering. Therefore, these scripts can be combined and
+         *  controlled with the condition attribute.
+         */
+        get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i},
+
+        /** Pattern for a composite id */
+        get PATTERN_COMPOSITE_ID() {return /^[a-z]\w*$/i},
+
+        /**
+         *  Pattern for a element id
+         *      group 1: name
+         *      group 2: qualifier (optional)
+         */
+        get PATTERN_ELEMENT_ID() {return /^([a-z]\w*)(?:\:((?:\w*)(?:\:\w*)*)){0,1}$/i},
+        
+        /** Pattern for a scope (namespace) */
+        get PATTERN_CUSTOMIZE_SCOPE() {return /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i},
+        
+        /** Pattern for a datasource url */
+        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i},
+
+        /** Pattern for all accepted events */
+        get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/},
+        
+        /** Constants of events during rendering */
+        get EVENT_RENDER_START() {return "RenderStart"},
+        get EVENT_RENDER_NEXT() {return "RenderNext"},
+        get EVENT_RENDER_END() {return "RenderEnd"},
+
+        /** Constants of events during mounting */
+        get EVENT_MOUNT_START() {return "MountStart"},
+        get EVENT_MOUNT_NEXT() {return "MountNext"},
+        get EVENT_MOUNT_END() {return "MountEnd"},
+
+        /** Constants of events when using AJAX */
+        get EVENT_AJAX_START() {return "AjaxStart"},
+        get EVENT_AJAX_PROGRESS() {return "AjaxProgress"},
+        get EVENT_AJAX_RECEIVE() {return "AjaxReceive"},
+        get EVENT_AJAX_LOAD() {return "AjaxLoad"},
+        get EVENT_AJAX_ABORT() {return "AjaxAbort"},
+        get EVENT_AJAX_TIMEOUT() {return "AjaxTimeout"},
+        get EVENT_AJAX_ERROR() {return "AjaxError"},
+        get EVENT_AJAX_END() {return "AjaxEnd"},
+
+        /** Constants of events when errors occur */
+        get EVENT_ERROR() {return "Error"},
+        
+        /** 
+         *  List of possible DOM events
+         *  see also https://www.w3schools.com/jsref/dom_obj_event.asp
+         */
+        get events() {return "abort after|print animation|end animation|iteration animation|start"
+            + " before|print before|unload blur"
+            + " can|play can|play|through change click context|menu copy cut"
+            + " dbl|click drag drag|end drag|enter drag|leave drag|over drag|start drop duration|change"
+            + " ended error"
+            + " focus focus|in focus|out"
+            + " hash|change"
+            + " input invalid"
+            + " key|down key|press key|up"
+            + " load loaded|data loaded|meta|data load|start"
+            + " message mouse|down mouse|enter mouse|leave mouse|move mouse|over mouse|out mouse|up mouse|wheel"
+            + " offline online open"
+            + " page|hide page|show paste pause play playing popstate progress"
+            + " rate|change resize reset"
+            + " scroll search seeked seeking select show stalled storage submit suspend"
+            + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
+            + " unload"
+            + " volume|change"
+            + " waiting wheel"},
+        
+        /** Patterns with the supported events */
+        get PATTERN_EVENT_FUNCTIONS() {return (function() {
+            var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+               return letter.toUpperCase();
+            });
+            pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
+            return pattern;
+        })()},
+        
+        /** Patterns with the supported events as plain array */
+        get PATTERN_EVENT_NAMES() {return (function() {
+            return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+                return letter.toUpperCase();
+            }).split(/\s+/);
+        })()},
+        
+        /** Patterns with the supported events as plain array (lower case) */
+        get PATTERN_EVENT_FILTER() {return (function() {
+            return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+                return letter.toUpperCase();
+            }).toLowerCase().split(/\s+/);
+        })()}        
+    };
     
     /**
      *  List of attributes to be hardened.
@@ -229,147 +349,28 @@ if (typeof Composite === "undefined") {
      *      iterate       output            release
      *      render        validate
      */
-    Composite.ATTRIBUTE_STATICS = [];
-
-    /**
-     *  Pattern for all accepted attributes.
-     *  Accepted attributes are all attributes, even without an expression that
-     *  is cached in the meta object. Other attributes are only cached if they
-     *  contain an expression.
-     */
-    Composite.PATTERN_ATTRIBUTE_ACCEPT = /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i;   
+    Composite.statics;    
     
-    /**
-     *  Pattern for all static attributes.
-     *  Static attributes are not removed from the element during rendering, but
-     *  are also set in the meta object like non-static attributes.
-     *  These attributes are also intended for direct use in JavaScript and CSS.
-     */
-    Composite.PATTERN_ATTRIBUTE_STATIC = /^(composite|id)$/i;
+    /** Assoziative array for custom tags (key:tag, value:function) */
+    Composite.macros;
 
-    /** 
-     *  Pattern to detect if a string contains an expression.
-     *  Escaping characters via slash is supported.
-     */
-    Composite.PATTERN_EXPRESSION_CONTAINS = /\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}/g;   
+    /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
+    Composite.selectors;
     
-    /**
-     *  Patterns to test whether an expression is exclusive, i.e. an expression
-     *  without additional text fragments before or after.
-     *  The test is based on the check that the text has an expression (group 1)
-     *  and at the end no more literal or other expressions (group 2) exist.
-     */
-    Composite.PATTERN_EXPRESSION_EXCLUSIVE = /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*(.*)$/;
-    
-    /**
-     *  Patterns for expressions with variable.
-     *      group 1: variable
-     *      group 2: expression
-     */
-    Composite.PATTERN_EXPRESSION_VARIABLE = /^\s*(_*[a-z]\w*)\s*:\s*(.*?)\s*$/i;    
+    /** Assoziative array with acceptor and their registered listerners */
+    Composite.acceptors;
 
-    /** Pattern for all to ignore (script-)elements */
-    Composite.PATTERN_ELEMENT_IGNORE = /script|style/i;
-
-    /** Pattern for all script elements */
-    Composite.PATTERN_SCRIPT = /script/i;
-
-    /** 
-     *  Pattern for all composite-script elements.
-     *  These elements are not automatically executed by the browser but must be
-     *  triggered by rendering. Therefore, these scripts can be combined and
-     *  controlled with the condition attribute.
-     */
-    Composite.PATTERN_COMPOSITE_SCRIPT = /^composite\/javascript$/i;
-
-    /** Pattern for a composite id */
-    Composite.PATTERN_COMPOSITE_ID = /^[a-z]\w*$/i;
-
-    /**
-     *  Pattern for a element id
-     *      group 1: name
-     *      group 2: qualifier (optional)
-     */
-    Composite.PATTERN_ELEMENT_ID = /^([a-z]\w*)(?:\:((?:\w*)(?:\:\w*)*)){0,1}$/i;
-    
-    /** Pattern for a scope (namespace) */
-    Composite.PATTERN_CUSTOMIZE_SCOPE = /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i;
-    
-    /** Pattern for a datasource url */
-    Composite.PATTERN_DATASOURCE_URL = /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i;
-
-    /** Pattern for all accepted events */
-    Composite.PATTERN_EVENT = /^([A-Z][a-z]+)+$/;
-    
-    /** Constants of events during rendering */
-    Composite.EVENT_RENDER_START = "RenderStart";
-    Composite.EVENT_RENDER_NEXT = "RenderNext";
-    Composite.EVENT_RENDER_END = "RenderEnd";
-
-    /** Constants of events during mounting */
-    Composite.EVENT_MOUNT_START = "MountStart";
-    Composite.EVENT_MOUNT_NEXT = "MountNext";
-    Composite.EVENT_MOUNT_END = "MountEnd";
-
-    /** Constants of events when using AJAX */
-    Composite.EVENT_AJAX_START = "AjaxStart";
-    Composite.EVENT_AJAX_PROGRESS = "AjaxProgress";
-    Composite.EVENT_AJAX_RECEIVE = "AjaxReceive";
-    Composite.EVENT_AJAX_LOAD = "AjaxLoad";
-    Composite.EVENT_AJAX_ABORT = "AjaxAbort";
-    Composite.EVENT_AJAX_TIMEOUT = "AjaxTimeout";
-    Composite.EVENT_AJAX_ERROR = "AjaxError";
-    Composite.EVENT_AJAX_END = "AjaxEnd";
-
-    /** Constants of events when errors occur */
-    Composite.EVENT_ERROR = "Error";
+    /** Assoziative array with events and their registered listerners */
+    Composite.listeners;
     
     /** 
-     *  List of possible DOM events
-     *  see also https://www.w3schools.com/jsref/dom_obj_event.asp
+     *  Array with docked models.
+     *  The array is used for the logic to call the dock and undock methods,
+     *  because the static models themselves have no status and the decision
+     *  about the current existence in the DOM is not stable.
+     *  All docked models are included in the array.
      */
-    Composite.events = "abort after|print animation|end animation|iteration animation|start"
-        + " before|print before|unload blur"
-        + " can|play can|play|through change click context|menu copy cut"
-        + " dbl|click drag drag|end drag|enter drag|leave drag|over drag|start drop duration|change"
-        + " ended error"
-        + " focus focus|in focus|out"
-        + " hash|change"
-        + " input invalid"
-        + " key|down key|press key|up"
-        + " load loaded|data loaded|meta|data load|start"
-        + " message mouse|down mouse|enter mouse|leave mouse|move mouse|over mouse|out mouse|up mouse|wheel"
-        + " offline online open"
-        + " page|hide page|show paste pause play playing popstate progress"
-        + " rate|change resize reset"
-        + " scroll search seeked seeking select show stalled storage submit suspend"
-        + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
-        + " unload"
-        + " volume|change"
-        + " waiting wheel";
-    
-    /** Patterns with the supported events */
-    Composite.PATTERN_EVENT_FUNCTIONS = (function() {
-        var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
-           return letter.toUpperCase();
-        });
-        pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
-        return pattern;
-    })();
-    
-    /** Patterns with the supported events as plain array */
-    Composite.PATTERN_EVENT_NAMES = (function() {
-        return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
-            return letter.toUpperCase();
-        }).split(/\s+/);
-    })();
-    
-    /** Patterns with the supported events as plain array (lower case) */
-    Composite.PATTERN_EVENT_FILTER = (function() {
-        return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
-            return letter.toUpperCase();
-        }).toLowerCase().split(/\s+/);
-    })();
+    Composite.models;
 
     /**
      *  Lock mechanism for the render, mound and scan methods. The lock controls
@@ -1372,14 +1373,16 @@ if (typeof Composite === "undefined") {
      */
     Composite.customize = function(scope, callback) {
         
+        Composite.statics = Composite.statics || [];
+        
         if (typeof scope === "string"
                 && typeof callback === "string"
                 && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
             var statics = (callback || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
-                if (!Composite.ATTRIBUTE_STATICS.includes(entry))
-                    Composite.ATTRIBUTE_STATICS.push(entry)
+                if (!Composite.statics.includes(entry))
+                    Composite.statics.push(entry)
             });
             return;
         }
@@ -2464,7 +2467,8 @@ if (typeof Composite === "undefined") {
                             record.target.setAttribute(attribute, object.attributes[attribute]);
                     } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
                         record.target.removeAttribute(attribute);
-                    } else if (Composite.ATTRIBUTE_STATICS.includes(attribute)) {
+                    } else if (Composite.statics
+                            && Composite.statics.includes(attribute)) {
                         object.statics = object.statics || {};
                         var value = record.oldValue;
                         if (!object.statics.hasOwnProperty(attribute)) {
@@ -2561,35 +2565,36 @@ if (typeof Expression === "undefined") {
      *  complete markup as free text. and in all attributes. Only the STYLE and
      *  SCRIPT, here the Expression Language is not supported.
      */
-    Expression = {};
+    Expression = {
+            
+        /** Constant for element type text */
+        get TYPE_TEXT() {return 1},
+        
+        /** Constant for element type expression */
+        get TYPE_EXPRESSION() {return 2},
+        
+        /** Constant for element type literal */
+        get TYPE_LITERAL() {return 3},
+        
+        /** Constant for element type script */
+        get TYPE_SCRIPT() {return 4},
+        
+        /** Constant for element type keyword */
+        get TYPE_KEYWORD() {return 5},
+        
+        /** Constant for element type other */
+        get TYPE_OTHER() {return 6},
+        
+        /** Constant for element type method */
+        get TYPE_METHOD() {return 7},
+        
+        /** Constant for element type value */
+        get TYPE_VALUE() {return 8},
+        
+        /** Constant for element type logic */
+        get TYPE_LOGIC() {return 9}
+    };
 
-    /** Constant for element type text */
-    Expression.TYPE_TEXT = 1;
-    
-    /** Constant for element type expression */
-    Expression.TYPE_EXPRESSION = 2;
-    
-    /** Constant for element type literal */
-    Expression.TYPE_LITERAL = 3;
-    
-    /** Constant for element type script */
-    Expression.TYPE_SCRIPT = 4;
-    
-    /** Constant for element type keyword */
-    Expression.TYPE_KEYWORD = 5;
-    
-    /** Constant for element type other */
-    Expression.TYPE_OTHER = 6;
-    
-    /** Constant for element type method */
-    Expression.TYPE_METHOD = 7;
-    
-    /** Constant for element type value */
-    Expression.TYPE_VALUE = 8;
-    
-    /** Constant for element type logic */
-    Expression.TYPE_LOGIC = 9;
-    
     /** Cache (expression/script) */
     Expression.cache;
     

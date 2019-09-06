@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.0 20190704
+ *  Extension 1.0 20190906
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190704
+ *  @version 1.0 20190906
  */
 if (typeof Namespace === "undefined") {
 
@@ -44,16 +44,17 @@ if (typeof Namespace === "undefined") {
      *  Each level in this object chain represents a namespace.
      *  As is typical for objects, the namespaces are separated by a dot. 
      */
-    Namespace = {};
-    
-    /** Pattern for the namespace separator */
-    Namespace.PATTERN_NAMESPACE_SEPARATOR = /[\\\/\.]/;
-    
-    /** Pattern for a valid namespace. */
-    Namespace.PATTERN_NAMESPACE = /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i;
-    
-    /** Pattern to detect if there are conflicts in the namespace. */
-    Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT = /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/;    
+    Namespace = {
+            
+        /** Pattern for the namespace separator */
+        get PATTERN_NAMESPACE_SEPARATOR() {return /[\\\/\.]/},
+        
+        /** Pattern for a valid namespace. */
+        get PATTERN_NAMESPACE() {return /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i},
+        
+        /** Pattern to detect if there are conflicts in the namespace. */
+        get PATTERN_NAMESPACE_SEPARATOR_CONFLICT() {return /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/}                
+    };
     
     /**
      *  Creates a namespace to pass string.

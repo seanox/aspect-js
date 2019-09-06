@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20190831
+ *  Test 1.1.0 20190906
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20190831
+ *  @version 1.1.0 20190906
  */
 if (typeof Test === "undefined") {
     
@@ -106,7 +106,20 @@ if (typeof Test === "undefined") {
      *  are helpful for implementing test are not used productively.
      *  For example, the redirection and caching of console output.
      */
-    Test = {};
+    Test = {
+            
+        /** Pattern for all accepted events */
+        get PATTERN_EVENT() {return /^[a-z]+$/},
+        
+        /** Constants of events */    
+        get EVENT_FINISH() {return "finish"},
+        get EVENT_INTERRUPT() {return "interrupt"},
+        get EVENT_PERFORM() {return "perform"},
+        get EVENT_RESPONSE() {return "response"},
+        get EVENT_RESUME() {return "resume"},
+        get EVENT_START() {return "start"},
+        get EVENT_SUSPEND() {return "suspend"}
+    };
     
     /** 
      *  Activates the test API.
@@ -148,18 +161,6 @@ if (typeof Test === "undefined") {
         
         /** Assoziative array with events and their registered listeners */
         Test.listeners;
-        
-        /** Pattern for all accepted events */
-        Test.PATTERN_EVENT = /^[a-z]+$/;
-        
-        /** Constants of events */    
-        Test.EVENT_FINISH = "finish";
-        Test.EVENT_INTERRUPT = "interrupt";
-        Test.EVENT_PERFORM = "perform";
-        Test.EVENT_RESPONSE = "response";
-        Test.EVENT_RESUME = "resume";
-        Test.EVENT_START = "start";
-        Test.EVENT_SUSPEND = "suspend";
 
         /**
          *  Optional configuration of the test environment.

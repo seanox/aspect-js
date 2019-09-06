@@ -84,12 +84,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.0.1 20190809
+ *  MVC 1.0.1 20190906
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0.1 20190809
+ *  @version 1.0.1 20190906
  */
 if (typeof Path === "undefined") {
     
@@ -99,16 +99,17 @@ if (typeof Path === "undefined") {
      *  face, a facet or a function.
      *  For more details see method Path.normalize(variants).
      */    
-    Path = {};
+    Path = {
+            
+        /** Pattern for a valid path. */
+        get PATTERN_PATH() {return /^(?:(?:#*(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)(?:#+(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)*)*$/},
     
-    /** Pattern for a valid path. */
-    Path.PATTERN_PATH = /^(?:(?:#*(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)(?:#+(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)*)*$/;
-
-    /** Pattern for a url path. */
-    Path.PATTERN_URL = /^[a-z]+:\/.*?(#.*)*$/i;
-
-    /** Pattern for a functional path. */
-    Path.PATTERN_PATH_FUNCTIONAL = /^#{3,}$/;
+        /** Pattern for a url path. */
+        get PATTERN_URL() {return /^[a-z]+:\/.*?(#.*)*$/i},
+    
+        /** Pattern for a functional path. */
+        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/}
+    };
     
     /**
      *  Normalizes a path.
@@ -266,7 +267,14 @@ if (typeof SiteMap === "undefined") {
      *  controlled and influenced. This way, the access to paths can be stopped
      *  and/or redirected/forwarded with own logic. 
      */
-    SiteMap = {};
+    SiteMap = {
+            
+        /** Pattern for a valid face path. */
+        get PATTERN_PATH() {return /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/},
+
+        /** Pattern for a valid face path with optional facets. */
+        get PATTERN_PATH_FACETS() {return /^(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)(\s+(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/}
+    };
 
     /**
      *  Primarily, the root is always used when loading the page, since the
@@ -294,12 +302,6 @@ if (typeof SiteMap === "undefined") {
 
     /** Array with all supported acceptors. */  
     SiteMap.acceptors;
-    
-    /** Pattern for a valid face path. */
-    SiteMap.PATTERN_PATH = /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/;
-
-    /** Pattern for a valid face path with optional facets. */
-    SiteMap.PATTERN_PATH_FACETS = /^(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)(\s+(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/;
     
     /**
      *  Checks a path using existing/registered permit methods.

@@ -40,17 +40,30 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.1.1 20190707
+ *  DataSource 1.1.1 20190906
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.1 20190707
+ *  @version 1.1.1 20190906
  */
 if (typeof DataSource === "undefined") {
     
     /** Static component for the access and transforming of XML data. */  
-    DataSource = {};
+    DataSource = {
+            
+        /** Path of the DataSource for: data (sub-directory of work path) */
+        get DATA() {return window.location.pathcontext + "/data"},
+
+        /** Pattern for a DataSource locators */
+        get PATTERN_LOCATOR() {return /^([a-z]+):\/(\/[\w\-\/]+)$/},
+        
+        /** Pattern to detect JavaScript elements */
+        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i},    
+        
+        /** Constant for attribute type */
+        get ATTRIBUTE_TYPE() {return "type"}
+    };
     
     /** Internal cache of locales.xml */
     DataSource.data;
@@ -60,18 +73,6 @@ if (typeof DataSource === "undefined") {
 
     /** Internal cache of XML/XSLT data. */
     DataSource.cache;
-    
-    /** Path of the DataSource for: data (sub-directory of work path) */
-    DataSource.DATA = window.location.pathcontext + "/data";
-
-    /** Pattern for a DataSource locators */
-    DataSource.PATTERN_LOCATOR = /^([a-z]+):\/(\/[\w\-\/]+)$/;
-    
-    /** Pattern to detect JavaScript elements */
-    DataSource.PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;    
-    
-    /** Constant for attribute type */
-    DataSource.ATTRIBUTE_TYPE = "type";
     
     /**
      *  Enhancement of the JavaScript API
