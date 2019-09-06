@@ -17,6 +17,7 @@
   CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
       Can be used to control visibility so that only final rendered output/content is visible.
       CSS: *[release] {display:none;}      
+  CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)    
   CR: Composite Scan: Omission of the intermediate step between render and mount
   CR: Composite Mount: Revision of the object/model binding
   CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM

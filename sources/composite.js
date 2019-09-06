@@ -186,7 +186,7 @@ if (typeof Composite === "undefined") {
          *  is cached in the meta object. Other attributes are only cached if they
          *  contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i},   
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i},
         
         /**
          *  Pattern for all static attributes.
@@ -952,6 +952,11 @@ if (typeof Composite === "undefined") {
             //model and to trigger targets of the attribute: render.
             var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                     ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+            //The events can contain an expression that is resolved if necessary.
+            if ((events || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                events = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EVENTS, events);
+                object.attributes[Composite.ATTRIBUTE_EVENTS] = events; 
+            }
             events = events.toLowerCase().split(/\s+/);
             events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
                     && array.indexOf(event) == index);
@@ -1101,7 +1106,7 @@ if (typeof Composite === "undefined") {
                     
                     //Rendering is performed in all cases.
                     //When an event occurs, all elements that correspond to the
-                    //query selector rendering are updated
+                    //query selector rendering are updated. 
                     var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                             ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
                     events = events.toLowerCase().split(/\s+/);
@@ -1626,7 +1631,17 @@ if (typeof Composite === "undefined") {
             
             if (!(selector instanceof Node))
                 return;
-
+            
+            //For element the ID can contain an expression that is initially
+            //resolved if necessary.
+            if (selector instanceof Element) {
+                var id = selector instanceof Element ? selector.getAttribute(Composite.ATTRIBUTE_ID) || "" : "";
+                if ((id || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                    id = Expression.eval(selector.ordinal() + ":" + Composite.ATTRIBUTE_ID, id);
+                    selector.setAttribute(Composite.ATTRIBUTE_ID, id);
+                }
+            }
+            
             //If a custom tag exists, the macro is executed.
             //Macros are completely user-specific.
             //The return value determines whether the standard functions are
