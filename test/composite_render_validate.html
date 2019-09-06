@@ -273,11 +273,13 @@ B:2
         method="GET" action="composite_render_validate_1.html" target="targetA">
       <input type="text" id="email" placeholder="email"
           validate required pattern="{{EMAIL_PATTERN}}"
-          message="T|R:{{EMAIL_MESSAGE}}"
+          message="{{EMAIL_MESSAGE}}"
+          notification="on"
           events="input">
       <input type="text" id="password" placeholder="password"
           validate required pattern="{{PASSWORD_PATTERN}}"
-          message="T|R:{{PASSWORD_MESSAGE}}"
+          message="{{PASSWORD_MESSAGE}}"
+          notification="on"
           events="input">
       <input type="submit" id="submit" value="Submit" validate>
       <input type="button" id="button" value="Button" validate>
