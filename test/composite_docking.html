@@ -531,7 +531,7 @@ Step:64
       must apply differently.
      --> 
   
-    <button id="buttonA:modelA" events="click" render="body" release>
+    <button id="{{'buttonA'}}:{{'model' + 'A'}}" events="click" render="body" release>
       Model-A:A {{modelA.status ? '1' : '0'}}</button>
     <button id="buttonB:modelA" events="click" render="body" release>
       Model-A:B {{modelA.status ? '1' : '0'}}</button>
