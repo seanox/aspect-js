@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190906
+ *  Composite 1.2.0 20190908
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190906
+ *  @version 1.2.0 20190908
  */
 if (typeof Composite === "undefined") {
     
@@ -770,7 +770,7 @@ if (typeof Composite === "undefined") {
                     message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
                 if (message && typeof selector.setCustomValidity === "function") {
                     selector.setCustomValidity(message);
-                    var notification =  object.attributes[Composite.ATTRIBUTE_NOTIFICATION] || ""
+                    var notification =  object.attributes[Composite.ATTRIBUTE_NOTIFICATION] || "";
                     if ((notification || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         notification = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_NOTIFICATION, notification));
                     if (!!notification.match(/^yes|on|true|1$/i) && typeof selector.reportValidity === "function")
@@ -952,11 +952,6 @@ if (typeof Composite === "undefined") {
             //model and to trigger targets of the attribute: render.
             var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                     ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
-            //The events can contain an expression that is resolved if necessary.
-            if ((events || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                events = Expression.eval(serial + ":" + Composite.ATTRIBUTE_EVENTS, events);
-                object.attributes[Composite.ATTRIBUTE_EVENTS] = events; 
-            }
             events = events.toLowerCase().split(/\s+/);
             events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
                     && array.indexOf(event) == index);
@@ -1632,16 +1627,6 @@ if (typeof Composite === "undefined") {
             if (!(selector instanceof Node))
                 return;
             
-            //For element the ID can contain an expression that is initially
-            //resolved if necessary.
-            if (selector instanceof Element) {
-                var id = selector instanceof Element ? selector.getAttribute(Composite.ATTRIBUTE_ID) || "" : "";
-                if ((id || "").match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                    id = Expression.eval(selector.ordinal() + ":" + Composite.ATTRIBUTE_ID, id);
-                    selector.setAttribute(Composite.ATTRIBUTE_ID, id);
-                }
-            }
-            
             //If a custom tag exists, the macro is executed.
             //Macros are completely user-specific.
             //The return value determines whether the standard functions are
@@ -1717,13 +1702,26 @@ if (typeof Composite === "undefined") {
                         var value = (attribute.value || "").trim();
                         if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                 || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
+                            //Special case of the attributes ID and EVENTS:
+                            //Both attributes are used initially for the object
+                            //and event binding. Expressions are supported for
+                            //the attributes, but these are only initially
+                            //resolved during the first rendering.
+                            var name = attribute.name.toLowerCase();
+                            if ((name == Composite.ATTRIBUTE_ID || name == Composite.ATTRIBUTE_EVENTS)
+                                    && value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                value = Expression.eval(selector.ordinal() + ":" + attribute.name, value);
+                            //The result of the expression must be written back
+                            //to the attribute ID.
+                            if (name == Composite.ATTRIBUTE_ID)
+                                selector.setAttribute(Composite.ATTRIBUTE_ID, value);
                             //Remove all internal attributes but not the statics.
                             //Static attributes are still used in the markup or
                             //for the rendering.
-                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                                    && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC))
-                                selector.removeAttribute(attribute.name);
-                            object.attributes[attribute.name.toLowerCase()] = value;
+                            if (name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                    && !name.match(Composite.PATTERN_ATTRIBUTE_STATIC))
+                                selector.removeAttribute(name);
+                            object.attributes[name] = value;
                         }
                     });
                     
