@@ -27,27 +27,27 @@
     ----
      true
      true 
-    ~~~Error_1~
+    No identifiers allowed directly after numeric literal
     1le2 true
-    ~~~Error_1~
+    No identifiers allowed directly after numeric literal
     1ne2 true
     
     true true
-    ~~~Error_1~
+    No identifiers allowed directly after numeric literal
     2ge1 true 
-    ~~~Error_1~
+    No identifiers allowed directly after numeric literal
     1lt2 true
     true true
-    Unexpected string
+    Unexpected string literal 'x'
     Expression.lookup("notempty")'x' true    
     
-    ~~~Error_1~
-    (25div5)Expression.lookup("eq5") Unexpected identifier
+    No identifiers allowed directly after numeric literal
+    (25div5)Expression.lookup("eq5") Unexpected identifier 'Expression'. Parse error.
     (25 /5)Expression.lookup("eq5")
-    ~~~Error_1~
+    No identifiers allowed directly after numeric literal
     2gt1 true 
-    ~~~Error_1~
-    (10mod3)Expression.lookup("eq1") Unexpected identifier
+    No identifiers allowed directly after numeric literal
+    (10mod3)Expression.lookup("eq1") Unexpected identifier 'Expression'. Parse error.
     (10%3)Expression.lookup("eq1")
      true
     
@@ -80,40 +80,40 @@
     
     A1: 
     A2: 
-    A3: Peter is not defined
+    A3: Can't find variable: Peter
     Peter.und.der()
     
     B1: [object HTMLInputElement]
-    B2: Expression.lookup(...) is not a function
+    B2: Expression.lookup("#HiddenField.value") is not a function. (In 'Expression.lookup("#HiddenField.value")()', 'Expression.lookup("#HiddenField.value")' is "Test-HF")
     Expression.lookup("#HiddenField.value")()
     B3: Test-HF    
     
-    C1: Unexpected identifier
+    C1: ~~~Error_1~: '#'
     #Expression.lookup("#HiddenField")
-    C2: Unexpected identifier
+    C2: ~~~Error_1~: '#'
     #Expression.lookup("#HiddenField.value")()
-    C3: Unexpected identifier
+    C3: ~~~Error_1~: '#'
     #Expression.lookup("#HiddenField.value")()    
     
     D1: 
     
-    E1: ~~~Error_1~
+    E1: ~~~Error_1~: '#'
     #
-    E2: ~~~Error_1~
+    E2: ~~~Error_1~: '#'
     # + #
     
-    F1: Expression.lookup(...) is not a function
+    F1: Expression.lookup("#HiddenField.value") is not a function. (In 'Expression.lookup("#HiddenField.value")()', 'Expression.lookup("#HiddenField.value")' is "Test-HF")
     '123' + Expression.lookup("#HiddenField.value")() + 'abc'
     F2: 123Test-HFabc
     
     G1: [object HTMLInputElement]
-    G2: Unexpected identifier
+    G2: ~~~Error_1~: '#'
     #HiddenField_1.#Expression.lookup("HiddenField_1")
-    G3: Unexpected identifier
+    G3: ~~~Error_1~: '#'
     #HiddenField_1.#Expression.lookup("HiddenField_2")    
-    G4: Unexpected identifier
+    G4: Unexpected identifier 'Expression'
     Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")    
-    G5: Unexpected identifier
+    G5: ~~~Error_1~: '#'
     Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
         
     X0: <input type="hidden" id="HiddenField" value="Test-HF">
@@ -122,7 +122,7 @@
     X3: <input type="hidden" id="HiddenField_3" value="Test-HF_C">
 
     O1: <span>undefined</span>
-    O2: <span>function() {
+    O2: <span>function () {
                 return 122;        
             }</span>
     O3: <span>122</span>

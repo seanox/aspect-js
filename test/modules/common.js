@@ -1,21 +1,19 @@
 if (navigator.engine === undefined) {
-    navigator.engine = navigator.userAgent.match(/edge/i);
-    if (!navigator.engine
-            && navigator.userAgent.match(/version.*safari/i))
-        navigator.engine = "webkit";
-    if (!navigator.engine
-            && navigator.userAgent.match(/like gecko/i)
-            && !navigator.userAgent.match(/\) chrome\/[\d\.]+ safari\/[\d\.]+$/i))
+    navigator.engine = "webkit";
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) [\w\d\.\s\/]+ Chrome\/[\d\.]+ Safari\/[\d\.]+/i))
         navigator.engine = "blink";
-    if (!navigator.engine)
-        navigator.engine = navigator.userAgent.match(/goanna/i);
-    if (!navigator.engine
-            && navigator.userAgent.match(/gecko\/[\d\.]+\b/i))
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Chrome\/[\d\.]+ Safari\/[\d\.]+/i))
+        navigator.engine = "webkit";
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(iPad;.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) [\w\d\.\s\/]+ Safari\/[\d\.]+/i))
+        navigator.engine = "webkit-ios";
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(Macintosh;.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Version\/[\d\.]+ Safari\/[\d\.]+/i))
+        navigator.engine = "webkit-macos";
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) Gecko\/[\d\.]+/i))
         navigator.engine = "gecko";
-    if (!navigator.engine)
-        navigator.engine = navigator.userAgent.match(/chrome/i);
-    if (navigator.engine)
-        navigator.engine = String(navigator.engine).toLowerCase();
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) Gecko\/[\d\.]+ Goanna\/[\d\.]+/i))
+        navigator.engine = "goanna";
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Chrome\/[\d\.]+ Safari\/[\d\.]+ Edge\/[\d\.]+/i))
+        navigator.engine = "edge";
 };
 
 if (Test.read === undefined) {
