@@ -123,8 +123,8 @@
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginA").hasAttribute("static"));
             Assert.assertTrue(temp.querySelector("#loginA #email").hasAttribute("required"));            
-            Assert.assertEquals("A1 101", temp.querySelector("#loginA input[title1]").getAttribute("title1"));
-            Assert.assertEquals("A2 102", temp.querySelector("#loginA input[title2]").getAttribute("title2"));
+            Assert.assertIn(["A1 101", "A1 102"], temp.querySelector("#loginA input[title1]").getAttribute("title1"));
+            Assert.assertIn(["A2 101", "A2 102"], temp.querySelector("#loginA input[title2]").getAttribute("title2"));
             
             Assert.assertEquals("GET", temp.querySelector("#loginB").getAttribute("method"));
             Assert.assertEquals("ref_BA", temp.querySelector("#loginB").getAttribute("action"));
@@ -134,8 +134,8 @@
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("composite"));
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("static"));
             Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required"));  
-            Assert.assertEquals("B1 103", temp.querySelector("#loginB input[title1]").getAttribute("title1"));
-            Assert.assertEquals("B2 104", temp.querySelector("#loginB input[title2]").getAttribute("title2"));
+            Assert.assertIn(["B1 103", "B1 104"], temp.querySelector("#loginB input[title1]").getAttribute("title1"));
+            Assert.assertIn(["B2 103", "B2 104"], temp.querySelector("#loginB input[title2]").getAttribute("title2"));
             
             Assert.assertFalse(temp.querySelector("#loginA #password").hasAttribute("validate"));  
             Assert.assertFalse(temp.querySelector("#loginA #password + input").hasAttribute("validate"));

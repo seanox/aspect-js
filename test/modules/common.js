@@ -56,4 +56,11 @@ if (typeof Assert !== "undefined") {
         actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
         Assert.assertEquals(content, actual);    
     };
+    
+    Assert.assertIn = function(values, actual) {
+        var assert = Assert.create(arguments, 2);
+        if (assert.values[0].includes(assert.values[1]))
+            return;
+        throw assert.error("Assert.assertIn", "{0}", "{1}");
+    };
 }
