@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190908
+ *  Composite 1.2.0 20190911
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190908
+ *  @version 1.2.0 20190911
  */
 if (typeof Composite === "undefined") {
     
@@ -2473,24 +2473,57 @@ if (typeof Composite === "undefined") {
                     var attribute = (record.attributeName || "").toLowerCase().trim();
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !object.attributes.hasOwnProperty(attribute)) {
-                        record.target.removeAttribute(attribute);
+                        if (record.target.hasAttribute(attribute))
+                            record.target.removeAttribute(attribute);
                     } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
                         var value = record.target.getAttribute(attribute);
                         if (object.attributes[attribute] != value)
                             record.target.setAttribute(attribute, object.attributes[attribute]);
                     } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
-                        record.target.removeAttribute(attribute);
+                        if (record.target.hasAttribute(attribute))
+                            record.target.removeAttribute(attribute);
                     } else if (Composite.statics
                             && Composite.statics.includes(attribute)) {
                         object.statics = object.statics || {};
-                        var value = record.oldValue;
-                        if (!object.statics.hasOwnProperty(attribute)) {
-                            if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                                value = Expression.eval(serial + ":" + attribute, value);
-                            object.statics[attribute] = value;
-                        } else value = object.statics[attribute];
-                        if (record.target.getAttribute(attribute) != value)
-                            record.target.setAttribute(attribute, record.oldValue);
+                        
+                        //Changed attributes are restored.
+                        //The initial value is used for the recovery. If this
+                        //contains an expression, the following value is used,
+                        //assuming that the expression was initially resolved by
+                        //the renderer.
+                        if (record.oldValue !== null
+                                && record.target.hasAttribute(attribute)
+                                && record.oldValue !== record.target.getAttribute(attribute)) {
+                            if (!object.statics.hasOwnProperty(attribute)) {
+                                if ((record.oldValue || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                    object.statics[attribute] = record.target.getAttribute(attribute);
+                                else object.statics[attribute] = record.oldValue;
+                            }
+                            if (object.statics[attribute] !== record.target.getAttribute(attribute))
+                                record.target.setAttribute(attribute, object.statics[attribute]);
+                        }
+                            
+                        //Deleted attributes are restored with the old value.
+                        if (record.oldValue !== null
+                                && !record.target.hasAttribute(attribute)) {
+                            if (!object.statics.hasOwnProperty(attribute))
+                                object.statics[attribute] = record.oldValue;
+                            if (object.statics[attribute] !== null)
+                                record.target.setAttribute(attribute, object.statics[attribute]);
+                        }
+                        
+                        //Subsequently added attributes are deleted.
+                        //In some cases, e.g. during the manual manipulation in
+                        //the browser, a deletion is executed before the change.
+                        //Therefore, the value may have to be restored. 
+                        if (record.oldValue === null
+                                && record.target.hasAttribute(attribute)) {
+                            if (!object.statics.hasOwnProperty(attribute))
+                                object.statics[attribute] = null;
+                            if (object.statics[attribute] === null)
+                                record.target.removeAttribute(attribute);
+                            else record.target.setAttribute(attribute, object.statics[attribute]);
+                        }
                     }
                 }
                 
