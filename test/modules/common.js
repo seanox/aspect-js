@@ -61,6 +61,7 @@ if (typeof Assert !== "undefined") {
         var assert = Assert.create(arguments, 2);
         if (assert.values[0].includes(assert.values[1]))
             return;
-        throw assert.error("Assert.assertIn", "{0}", "{1}");
+        assert.values[0] = "[" + assert.values[0].join(", ") + "]";
+        throw assert.error("Assert.assertIn", "in {0}", "{1}");
     };
 }
