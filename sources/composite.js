@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190911
+ *  Composite 1.2.0 20190915
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190911
+ *  @version 1.2.0 20190915
  */
 if (typeof Composite === "undefined") {
     
@@ -1372,18 +1372,48 @@ if (typeof Composite === "undefined") {
      *      - callback function is not implemented correctly
      */
     Composite.customize = function(scope, callback) {
-        
+
+        //Statics are used for hardening the attributes in the markup.
+        //Hardening makes it more difficult to manipulate the attributes.
+        //By default, the composite's own attributes are hardened and are
+        //actively monitored by the MutationObserver. At runtime, additional
+        //attributes can be declared as static. However, this function is not
+        //cheap, since the values of the attributes used at that time must be
+        //determined for all elements to be restored, for which purpose the
+        //complete DOM is analyzed (full DOM scan).
         Composite.statics = Composite.statics || [];
-        
         if (typeof scope === "string"
                 && typeof callback === "string"
                 && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
+            var changes = [];
             var statics = (callback || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
-                if (!Composite.statics.includes(entry))
-                    Composite.statics.push(entry)
+                if (!Composite.statics.includes(entry)) {
+                    Composite.statics.push(entry);
+                    changes.push(entry); 
+                }
             });
+            var scanning = function(element) {
+                if (!(element instanceof Element))
+                    return;
+                var serial = element.ordinal();
+                var object = Composite.render.meta[serial];
+                if (!object)
+                    return;
+                changes.forEach((attribue) => {
+                    object.statics = object.statics || {};
+                    if (object.statics.hasOwnProperty[attribue])
+                        return;
+                    if (element.hasAttribute(attribue))
+                        object.statics[attribue] = element.getAttribute(attribue);
+                    else object.statics[attribue] = null;
+                });
+                Array.from(element.childNodes).forEach((node) => {
+                    scanning(node);        
+                });
+            };
+            scanning(document.body);
             return;
         }
         
@@ -1699,29 +1729,37 @@ if (typeof Composite === "undefined") {
                     //Composite.PATTERN_ATTRIBUTE_ACCEPT because it is used very
                     //specifically and must therefore be requested separately.
                     Array.from(selector.attributes).forEach((attribute) => {
-                        var value = (attribute.value || "").trim();
-                        if (value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
+                        attribute = {name:attribute.name.toLowerCase(), value:(attribute.value || "").trim()};
+                        if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                 || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
                             //Special case of the attributes ID and EVENTS:
                             //Both attributes are used initially for the object
                             //and event binding. Expressions are supported for
                             //the attributes, but these are only initially
                             //resolved during the first rendering.
-                            var name = attribute.name.toLowerCase();
-                            if ((name == Composite.ATTRIBUTE_ID || name == Composite.ATTRIBUTE_EVENTS)
-                                    && value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                                value = Expression.eval(selector.ordinal() + ":" + attribute.name, value);
+                            if ((attribute.name == Composite.ATTRIBUTE_ID || attribute.name == Composite.ATTRIBUTE_EVENTS)
+                                    && attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                attribute.value = Expression.eval(selector.ordinal() + ":" + attribute.name, attribute.value);
                             //The result of the expression must be written back
                             //to the attribute ID.
-                            if (name == Composite.ATTRIBUTE_ID)
-                                selector.setAttribute(Composite.ATTRIBUTE_ID, value);
+                            if (attribute.name == Composite.ATTRIBUTE_ID)
+                                selector.setAttribute(Composite.ATTRIBUTE_ID, attribute.value);
                             //Remove all internal attributes but not the statics.
                             //Static attributes are still used in the markup or
                             //for the rendering.
-                            if (name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                                    && !name.match(Composite.PATTERN_ATTRIBUTE_STATIC))
-                                selector.removeAttribute(name);
-                            object.attributes[name] = value;
+                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                    && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC))
+                                selector.removeAttribute(attribute.name);
+                            object.attributes[attribute.name] = attribute.value;
+                        }
+                        //The initial value of the attribute is registered for
+                        //the restore. This is part of the markup hardening of
+                        //the MutationObserver.
+                        Composite.statics = Composite.statics || [];
+                        if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                || Composite.statics.includes(attribute.name)) {
+                            object.statics = object.statics || {};
+                            object.statics[attribute.name] = attribute.value;
                         }
                     });
                     
@@ -2470,59 +2508,31 @@ if (typeof Composite === "undefined") {
                 //Changes at the renderer-specific and static attributes are
                 //monitored. Manipulations are corrected/restored.
                 if (object && record.type == "attributes") {
+                    Composite.statics = Composite.statics || []; 
                     var attribute = (record.attributeName || "").toLowerCase().trim();
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                            && !object.attributes.hasOwnProperty(attribute)) {
+                            && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
+                        //Composite internal non-static attributes are managed
+                        //by the renderer and are removed.
                         if (record.target.hasAttribute(attribute))
                             record.target.removeAttribute(attribute);
-                    } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
-                        var value = record.target.getAttribute(attribute);
-                        if (object.attributes[attribute] != value)
-                            record.target.setAttribute(attribute, object.attributes[attribute]);
-                    } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
-                        if (record.target.hasAttribute(attribute))
-                            record.target.removeAttribute(attribute);
-                    } else if (Composite.statics
-                            && Composite.statics.includes(attribute)) {
+                    } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                            || Composite.statics.includes(attribute)) {
                         object.statics = object.statics || {};
-                        
-                        //Changed attributes are restored.
-                        //The initial value is used for the recovery. If this
-                        //contains an expression, the following value is used,
-                        //assuming that the expression was initially resolved by
-                        //the renderer.
-                        if (record.oldValue !== null
-                                && record.target.hasAttribute(attribute)
-                                && record.oldValue !== record.target.getAttribute(attribute)) {
-                            if (!object.statics.hasOwnProperty(attribute)) {
-                                if ((record.oldValue || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                                    object.statics[attribute] = record.target.getAttribute(attribute);
-                                else object.statics[attribute] = record.oldValue;
-                            }
-                            if (object.statics[attribute] !== record.target.getAttribute(attribute))
-                                record.target.setAttribute(attribute, object.statics[attribute]);
-                        }
-                            
-                        //Deleted attributes are restored with the old value.
-                        if (record.oldValue !== null
-                                && !record.target.hasAttribute(attribute)) {
-                            if (!object.statics.hasOwnProperty(attribute))
-                                object.statics[attribute] = record.oldValue;
-                            if (object.statics[attribute] !== null)
-                                record.target.setAttribute(attribute, object.statics[attribute]);
-                        }
-                        
-                        //Subsequently added attributes are deleted.
-                        //In some cases, e.g. during the manual manipulation in
-                        //the browser, a deletion is executed before the change.
-                        //Therefore, the value may have to be restored. 
-                        if (record.oldValue === null
-                                && record.target.hasAttribute(attribute)) {
-                            if (!object.statics.hasOwnProperty(attribute))
-                                object.statics[attribute] = null;
-                            if (object.statics[attribute] === null)
+                        //If the renderer has not registered an initial value,
+                        //the assumption is that the attribute was subsequently
+                        //added at runtime and is therefore removed.
+                        if (!object.statics.hasOwnProperty(attribute)) {
+                            if (record.target.hasAttribute(attribute))
                                 record.target.removeAttribute(attribute);
-                            else record.target.setAttribute(attribute, object.statics[attribute]);
+                        } else {
+                            if (!record.target.hasAttribute(attribute)
+                                    || object.statics[attribute] !== record.target.getAttribute(attribute)) {
+                                //If the attribute was removed or the value was
+                                //changed, the initial value is restored that
+                                //was previously determined by the renderer.
+                                record.target.setAttribute(attribute, object.statics[attribute]);
+                            }
                         }
                     }
                 }
