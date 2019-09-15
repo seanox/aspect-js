@@ -248,7 +248,7 @@
             Assert.assertTrue(temp.querySelector("#loginB").hasAttribute("static"));
             Assert.assertTrue(temp.querySelector("#loginB #email").hasAttribute("required")); 
             Assert.assertIn(["B1 103", "B1 104"], temp.querySelector("#loginB input[title1]").getAttribute("title1"));
-            Assert.assertIn(["B2 103", "B2 104"], temp.querySelector("#loginB input[title2]").getAttribute("title2"));
+            Assert.assertIn(["B2 xxx"], temp.querySelector("#loginB input[title2]").getAttribute("title2"));
             
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));

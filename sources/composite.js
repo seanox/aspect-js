@@ -1403,7 +1403,8 @@ if (typeof Composite === "undefined") {
                     return;
                 changes.forEach((attribue) => {
                     object.statics = object.statics || {};
-                    if (object.statics.hasOwnProperty[attribue])
+                    if (object.statics.hasOwnProperty[attribue]
+                            && typeof object.statics[attribue] !== "undefined")
                         return;
                     if (element.hasAttribute(attribue))
                         object.statics[attribue] = element.getAttribute(attribue);
