@@ -3,8 +3,8 @@
  *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Devwex, Advanced Server Development
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Seanox aspect-js, Fullstack JavaScript UI Framework
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
