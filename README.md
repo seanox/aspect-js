@@ -61,7 +61,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # System Requirement
 - ECMAScript 6 support or higher (normally the current browsers)  
-  Engines (tested): Blink, Gecko, Goanna, WebKit, Edge, ...
+  Engines (tested): Blink, Edge, Gecko, Goanna, WebKit, ...
 - Web server for hosting  
 
 
@@ -92,7 +92,7 @@ date when using the release channels.
 - [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
 
 # Changes (Change Log)
-## 1.2.0 2019xxxx (summary of the next version)  
+## 1.2.0 201910xx (summary of the next version)  
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
 BF: Composite Asynchron: Corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
@@ -124,6 +124,7 @@ CR: Composite Mount Synchronization: Extension by the detection and use of sette
 CR: Composite Hardening: Added optional hardening from markup  
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 CR: Build: Optimization of target 'changes'  
+CR: Build: Additional compression via javascript-minifier.com  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

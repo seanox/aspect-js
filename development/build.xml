@@ -134,6 +134,9 @@
     <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
     <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <compress-javascript file="${release.min}"/>
+    <java classname="Compress" classpath="${workspace}/compress/compress.jar" fork="yes">
+      <arg value="${release.min}"/>    
+    </java>    
     <copy file="${release.min}" tofile="${workspace.releases}/${ant.project.name}-min.js" overwrite="true"/>
     
     <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
