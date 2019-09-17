@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190915
+ *  Composite 1.2.0 20190917
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190915
+ *  @version 1.2.0 20190917
  */
 if (typeof Composite === "undefined") {
     
@@ -1374,13 +1374,14 @@ if (typeof Composite === "undefined") {
     Composite.customize = function(scope, callback) {
 
         //Statics are used for hardening the attributes in the markup.
-        //Hardening makes it more difficult to manipulate the attributes.
-        //By default, the composite's own attributes are hardened and are
-        //actively monitored by the MutationObserver. At runtime, additional
-        //attributes can be declared as static. However, this function is not
-        //cheap, since the values of the attributes used at that time must be
-        //determined for all elements to be restored, for which purpose the
-        //complete DOM is analyzed (full DOM scan).
+        //Hardening makes it more difficult to manipulate the attributes. 
+        //At runtime, additional attributes can be declared as static. However,
+        //this function is not cheap, since the values of the attributes used at
+        //that time must be determined for all elements to be restored, for
+        //which purpose the complete DOM is analyzed (full DOM scan).
+        //The composite-specific static attributes (PATTERN_ATTRIBUTE_ACCEPT)
+        //are excluded from this function because they are already actively
+        //monitored by the MutationObserver.
         Composite.statics = Composite.statics || [];
         if (typeof scope === "string"
                 && typeof callback === "string"
@@ -1389,7 +1390,8 @@ if (typeof Composite === "undefined") {
             var statics = (callback || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
-                if (!Composite.statics.includes(entry)) {
+                if (!Composite.statics.includes(entry)
+                        && !entry.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
                     Composite.statics.push(entry);
                     changes.push(entry); 
                 }
@@ -1726,41 +1728,64 @@ if (typeof Composite === "undefined") {
                 Composite.render.meta[serial] = object;
                 if ((selector instanceof Element)
                         && selector.attributes) {
-                    //Attribute condition is not included in the list of
-                    //Composite.PATTERN_ATTRIBUTE_ACCEPT because it is used very
-                    //specifically and must therefore be requested separately.
                     Array.from(selector.attributes).forEach((attribute) => {
                         attribute = {name:attribute.name.toLowerCase(), value:(attribute.value || "").trim()};
+                        Composite.statics = Composite.statics || []; 
                         if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
-                                || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
+                                || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                || Composite.statics.includes(attribute.name)) {
+                            
+                            //Remove all internal attributes but not the statics.
+                            //Static attributes are still used in the markup or
+                            //for the rendering.
+                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                    && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                    && !Composite.statics.includes(attribute.name))
+                                selector.removeAttribute(attribute.name);
+                            
+                            object.attributes[attribute.name] = attribute.value;
+                            
                             //Special case of the attributes ID and EVENTS:
                             //Both attributes are used initially for the object
                             //and event binding. Expressions are supported for
                             //the attributes, but these are only initially
                             //resolved during the first rendering.
-                            if ((attribute.name == Composite.ATTRIBUTE_ID || attribute.name == Composite.ATTRIBUTE_EVENTS)
-                                    && attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                            
+                            //Special case of the static attributes:
+                            //These attributes are used initially markup harding.
+                            //Expressions are supported for the attributes, but
+                            //these are only initially resolved during the first
+                            //rendering.
+                            
+                            if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
+                                    && (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                            || attribute.name == Composite.ATTRIBUTE_ID
+                                            || attribute.name == Composite.ATTRIBUTE_EVENTS
+                                            || Composite.statics.includes(attribute.name)))
                                 attribute.value = Expression.eval(selector.ordinal() + ":" + attribute.name, attribute.value);
-                            //The result of the expression must be written back
-                            //to the attribute ID.
-                            if (attribute.name == Composite.ATTRIBUTE_ID)
-                                selector.setAttribute(Composite.ATTRIBUTE_ID, attribute.value);
-                            //Remove all internal attributes but not the statics.
-                            //Static attributes are still used in the markup or
-                            //for the rendering.
-                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                                    && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC))
-                                selector.removeAttribute(attribute.name);
-                            object.attributes[attribute.name] = attribute.value;
-                        }
-                        //The initial value of the attribute is registered for
-                        //the restore. This is part of the markup hardening of
-                        //the MutationObserver.
-                        Composite.statics = Composite.statics || [];
-                        if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                || Composite.statics.includes(attribute.name)) {
+                            
+                            //The initial value of the static attribute is
+                            //registered for the restore. This is a part of the
+                            //markup hardening of the MutationObserver.                            
+                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                    || attribute.name == Composite.ATTRIBUTE_ID
+                                    || attribute.name == Composite.ATTRIBUTE_EVENTS)
+                                object.attributes[attribute.name] = attribute.value;
+
+                            //The initial value of the static attribute is
+                            //registered for the restore. This is a part of the
+                            //markup hardening of the MutationObserver.
                             object.statics = object.statics || {};
-                            object.statics[attribute.name] = attribute.value;
+                            if (Composite.statics.includes(attribute.name))
+                                object.statics[attribute.name] = attribute.value;
+                            
+                            //The result of the expression must be written back
+                            //to the static attributes.   
+                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                    || attribute.name == Composite.ATTRIBUTE_ID
+                                    || attribute.name == Composite.ATTRIBUTE_EVENTS
+                                    || Composite.statics.includes(attribute.name))
+                                selector.setAttribute(attribute.name, attribute.value);
                         }
                     });
                     
