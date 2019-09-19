@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190917
+ *  Composite 1.2.0 20190919
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190917
+ *  @version 1.2.0 20190919
  */
 if (typeof Composite === "undefined") {
     
@@ -129,8 +129,6 @@ if (typeof Composite === "undefined") {
             
         /** Path of the Composite for: moduels (sub-directory of work path) */
         get MODULES() {return window.location.pathcontext + "/modules"},
-        
-        //TODO: Dokumentation der Attribute ohne Expressions: composite, events, id, name, validate
 
         /** Constant for attribute composite */
         get ATTRIBUTE_COMPOSITE() {return "composite"},
@@ -751,18 +749,15 @@ if (typeof Composite === "undefined") {
             else valid = validate.call(meta.model, selector);
         }
 
-        //The attribute validate can be combined with the attribute message.
-        //However, the message attribute has no effect without the validate
-        //attribute. The value of the Message attribute is used as an error
-        //message if the validation was not successful.
-        //To output the error message, the browser function of the HTML5 form
-        //validation is used.
-        //TODO: A directive at the beginning of the message can be used to specify
-        //whether the message is only displayed during mouse-over (T) or also as
-        //an overlay/notification/report (R).
-        //    e.g. T|R:Error information
-        //Option T is obligatory and is always used.
-        
+        //The attribute VALIDATE can be combined with the attributes MESSAGE and
+        //NOTIFICATION. However, the attributes MESSAGE and NOTIFICATION have no
+        //effect without the attribute VALIDATE.
+        //The value of the attribute MESSAGE is used as an error message if the
+        //validation was not successful. To output the error message, the
+        //browser function of the HTML5 form validation is used. This message is
+        //displayed via mouse-over.
+        //The values on/true/1 of the attribute NOTIFICATION specifies that the
+        //message is also displayed as overlay/notification/report.
         if (valid !== true) {
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
                 var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
@@ -1351,7 +1346,7 @@ if (typeof Composite === "undefined") {
      *  The customize method also supports the configuration of the composite.
      *  For this purpose, the parameter and the value are passed.
      *  
-     *      Composite.customize(parameter, value);
+     *      Composite.customize(parameter:string, value);
      *      
      *  Parameters start with @ and thereby differ from Acceptor/Selector/Tag.
      *      
@@ -1365,13 +1360,14 @@ if (typeof Composite === "undefined") {
      *  
      *      Composite.customize("@ATTRIBUTES-STATICS", "...");
      * 
-     *  @param  scope    TODO
-     *  @param  callback TODO
+     *  @param  variants
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
      *      - callback function is not implemented correctly
      */
-    Composite.customize = function(scope, callback) {
+    Composite.customize = function(variants) {
+        
+        var scope = arguments.length > 0 ? arguments[0] : undefined;        
 
         //Statics are used for hardening the attributes in the markup.
         //Hardening makes it more difficult to manipulate the attributes. 
@@ -1384,10 +1380,11 @@ if (typeof Composite === "undefined") {
         //monitored by the MutationObserver.
         Composite.statics = Composite.statics || [];
         if (typeof scope === "string"
-                && typeof callback === "string"
+                && arguments.length > 1 
+                && typeof arguments[1] === "string"
                 && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
             var changes = [];
-            var statics = (callback || "").trim().split(/\s+/);
+            var statics = (arguments[1] || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
                 if (!Composite.statics.includes(entry)
@@ -1428,14 +1425,14 @@ if (typeof Composite === "undefined") {
             Composite.acceptors.push(scope);
             return;
         }
-        
+
         //Custom tags, here also called macro, are based on a case-insensitive
         //tag name (key) and a render function (value). In this function, the
         //tag name and the render functions are registered and a RegExp will be
         //created so that the custom tags can be found faster.
-        
         if (typeof scope !== "string")
             throw new TypeError("Invalid scope: " + typeof scope);
+        var callback = arguments.length > 1 ? arguments[1] : null;
         if (typeof callback !== "function"
                 && callback !== null
                 && callback !== undefined)
@@ -1504,7 +1501,7 @@ if (typeof Composite === "undefined") {
      *  their own rendering method for generating output. Static content is
      *  ignored later during rendering because it is unchangeable.     
      *      
-     *      Events + Validate + Message + Render
+     *      Events + Validate + Message + Notification + Render
      *      ----
      *  TODO: Events primarily controls the synchronization of the input values of
      *  HTML elements with the properties of a model. Means that the value in
@@ -2542,23 +2539,36 @@ if (typeof Composite === "undefined") {
                         //by the renderer and are removed.
                         if (record.target.hasAttribute(attribute))
                             record.target.removeAttribute(attribute);
-                    } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                            || Composite.statics.includes(attribute)) {
-                        object.statics = object.statics || {};
-                        //If the renderer has not registered an initial value,
-                        //the assumption is that the attribute was subsequently
-                        //added at runtime and is therefore removed.
-                        if (!object.statics.hasOwnProperty(attribute)) {
+                    } else if (attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
+                        if (!object.attributes.hasOwnProperty(attribute)) {
+                            //If the renderer has not registered an initial
+                            //value, the assumption is that the attribute was
+                            //subsequently added and is therefore removed.
                             if (record.target.hasAttribute(attribute))
                                 record.target.removeAttribute(attribute);
                         } else {
+                            //If the attribute was removed or the value was
+                            //changed, the initial value is restored that was
+                            //previously determined by the renderer.
                             if (!record.target.hasAttribute(attribute)
-                                    || object.statics[attribute] !== record.target.getAttribute(attribute)) {
-                                //If the attribute was removed or the value was
-                                //changed, the initial value is restored that
-                                //was previously determined by the renderer.
+                                    || object.attributes[attribute] !== record.target.getAttribute(attribute))
+                                record.target.setAttribute(attribute, object.attributes[attribute]);
+                        }
+                    } else if (Composite.statics.includes(attribute)) {
+                        object.statics = object.statics || {};
+                        if (!object.statics.hasOwnProperty(attribute)) {
+                            //If the renderer has not registered an initial
+                            //value, the assumption is that the attribute was
+                            //subsequently added and is therefore removed.
+                            if (record.target.hasAttribute(attribute))
+                                record.target.removeAttribute(attribute);
+                        } else {
+                            //If the attribute was removed or the value was
+                            //changed, the initial value is restored that was
+                            //previously determined by the renderer.
+                            if (!record.target.hasAttribute(attribute)
+                                    || object.statics[attribute] !== record.target.getAttribute(attribute))
                                 record.target.setAttribute(attribute, object.statics[attribute]);
-                            }
                         }
                     }
                 }
