@@ -6,7 +6,7 @@
 
 ## What is Seanox aspect-js?
 
-Influenced by the good experiences from JSF (Java Server Faces) with regard to
+Influenced by the good experiences with JSF (Java Server Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
 fullstack solution.  
 Seanox aspect-js focuses on a minimalist approach to implementing
@@ -76,7 +76,7 @@ The attribute output the value or result of its expression as an inner HTML code
 for an HTML element. As value are expected one element or more elements as
 NodeList or Array -- these are then inserted directly, or a
 [DataSource-URL (locator)](datasource.md#locator) which loads and transforms
-content from the [DataSource](datasource.md).
+content from the [DataSource](datasource.md#datasource).
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -103,7 +103,7 @@ removed. The attribute expects as value one element or more elements as NodeList
 or Array -- these are then inserted directly, or an absolute or relative URL to
 a remote resource that is loaded by HTTP method GET, or a
 [DataSource-URL (locator)](datasource.md#locator) that loads and transforms
-content from the [DataSource](datasource.md).
+content from the [DataSource](datasource.md#datasource).
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -202,7 +202,7 @@ composite JavaScript.
 
 ### composite
 
-Marks an element in the markup as [Composite](composites.md).  
+Marks an element in the markup as [Composite](composites.md#composites).  
 Composites are modular components and have a versatile meaning in Seanox
 aspect-js. They are used by the [SiteMap](mvc.md#sitemap) as faces, so as
 targets for virtual paths in the face-flow, which has a direct effect of the
@@ -233,27 +233,10 @@ JavaScript models (see [validate](markup.md#validate) for more information).
 ```html
 <span id="output1">{{#text1.value}}</span>
 <input id="text1" type="text"
-    events="mouseup keyup change" render="#output1"/>
+    events="input change" render="#output1"/>
 ```
 
 [Learn more](markup.md#events)
-
-
-### render
-
-The `render` attribute requires the combination with the `events` attribute.
-Together they define which targets with which occurring events
-be refreshed.  
-The `render` attribute expects a CSS selector or query selector as value.
-which sets the targets.
-
-```html
-<span id="output1">{{#text1.value}}</span>
-<input id="text1" type="text"
-    events="mouseup keyup change" render="#output1"/>
-```
-
-[Learn more](markup.md#render)
 
 
 ### validate
@@ -272,12 +255,58 @@ individually as a central solution with little effort.
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
-      validate events="mouseup keyup change" render="#Model"/>
+      validate events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
 
 [Learn more](markup.md#validate)
+
+
+### message
+
+TODO:
+
+
+### notification
+
+TODO:
+
+
+### render
+
+The `render` attribute requires the combination with the `events` attribute.
+Together they define which targets with which occurring events
+be refreshed.  
+The `render` attribute expects a CSS selector or query selector as value.
+which sets the targets.
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+    events="input change" render="#output1"/>
+```
+
+[Learn more](markup.md#render)
+
+
+### release
+
+Inverse indicator that an element was rendered.  
+The renderer removes this attribute when an element is rendered. This effect can
+be used for CSS to display elements only in rendered state.  
+
+```css
+*[release] {
+    display:none;
+}  
+```
+
+```html
+<span release>{{'Show me after rendering.'}}</span>
+```
+
+[Learn more](markup.md#release)
 
 
 ## Expression Language
@@ -336,14 +365,14 @@ combination of the approaches of a read only database and a CMS.
 The DataSource is based on static data that is queried using XPath and the
 result can be concatenated, aggregated and transformed using XSLT.
 
-[Learn more](datasource.md)
+[Learn more](datasource.md#datasource)
 
 
 ## Resource Bundle (Messages)
 
-(Resource)Messages is a static [DataSource](datasource.md) extension for
-internationalization and localization. The implementation is based on a set of
-key-value or label-value data which is stored in the `locales.xml` of the
+(Resource)Messages is a static [DataSource](datasource.md#datasource) extension
+for internationalization and localization. The implementation is based on a set
+of key-value or label-value data which is stored in the `locales.xml` of the
 DataSource.
 
 [Learn more](messages.md)
@@ -355,21 +384,21 @@ The Model View Controller (MVC) is a design pattern for separating interaction,
 data, and presentation.
 
 ```
-+-------------------------------------------+--------------+---------------------------------+
-|  View                                     |  Controller  |  Model                          |
-+-------------------------------------------+--------------+---------------------------------+
-|  Markup                                   |  Composite   |  JavaScript                     |
-|                                           |  Path        |                                 |
-|                                           |  SiteMap     |                                 |
-+-------------------------------------------+--------------+---------------------------------+
-|  <form id="model" composite>              |  aspect-js   |  var model = {                  |
-|    <input id="message" events="change"/>  |              |      message:"",                | 
-|    <button id="submit"/>                  |              |      submit: {                  |
-|  </form>                                  |              |          onClick: function() {  |
-|                                           |              |          }                      |
-|                                           |              |      }                          |
-|                                           |              |  }                              |
-+-------------------------------------------+--------------+---------------------------------+
++------------------------------------------+--------------+---------------------------------+
+|  View                                    |  Controller  |  Model                          |
++------------------------------------------+--------------+---------------------------------+
+|  Markup                                  |  Composite   |  JavaScript                     |
+|                                          |  Path        |                                 |
+|                                          |  SiteMap     |                                 |
++------------------------------------------+--------------+---------------------------------+
+|  <form id="model" composite>             |  aspect-js   |  var model = {                  |
+|    <input id="message" events="input"/>  |              |      message:"",                | 
+|    <button id="submit"/>                 |              |      submit: {                  |
+|  </form>                                 |              |          onClick: function() {  |
+|                                          |              |          }                      |
+|                                          |              |      }                          |
+|                                          |              |  }                              |
++------------------------------------------+--------------+---------------------------------+
 ```
 
 

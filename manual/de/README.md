@@ -16,23 +16,25 @@
 
 ### Motivation
 
-* [Motivation](motivation.md)
+* [Motivation](motivation.md#motivation)
 
 
 ### Einführung
 
-* [Einführung](introduction.md)
+* [Einführung](introduction.md#introduction)
 
 
 ### Markup
 
-* [Markup](markup.md)
+* [Markup](markup.md#markup)
   * [Attribute](markup.md#attribute)
     * [composite](markup.md#composite)
     * [condition](markup.md#condition)
     * [events](markup.md#events)
     * [import](markup.md#import)
     * [interval](markup.md#interval)
+    * [message](markup.md##message)
+    * [notification](markup.md##notification)
     * [output](markup.md#output)
     * [release](markup.md#release)
     * [render](markup.md#render)    
@@ -48,7 +50,7 @@
     
 ### Expression Language
 
-* [Expression Language](expression.md#expressions)
+* [Expression Language](expression.md#expression-language)
   * [Elemente](expression.md#elemente)
     * [Text](expression.md#text)
     * [Literal](expression.md#literal)
@@ -67,7 +69,7 @@
   
 ### DataSource
 
-* [DataSource](datasource.md)
+* [DataSource](datasource.md#datasource)
   * [Data Storage](datasource.md#data-storage)
   * [Locales](datasource.md#locales)
   * [Locator](datasource.md#locator)
@@ -80,12 +82,12 @@
   
 ### Resource Bundle
 
-* [Resource Bundle](messages.md)
+* [Resource Bundle](messages.md#resource-bundle)
 
 
 ### Model View Controler
 
-* [Model View Controler](mvc.md)
+* [Model View Controler](mvc.md#model-view-controler)
   * [Controller](mvc.md#controller)
   * [Model](mvc.md#model)
   * [View](mvc.md#view)
@@ -126,7 +128,7 @@
     
 ### Komponenten
 
-* [Komponenten](composite.md)
+* [Komponenten](composite.md#komponenten)
   * [Aufbau](composite.md#aufbau)
   * [Auslagerung](composite.md#auslagerung)
   * [Laden](composite.md#laden)
@@ -137,7 +139,7 @@
 
 ### Erweiterung
 
-* [Erweiterung](extension.md)
+* [Erweiterung](extension.md#erweiterung)
   * [Namespace](extension.md#namespace)
   * [Element](extension.md#element)
   * [Math](extension.md#math)
@@ -150,7 +152,7 @@
 
 ### Test
 
-* [Test](test.md)
+* [Test](test.md#test)
   * [Testfall](test.md#testfall)
     * [name](test.md#name)
     * [test](test.md#test)

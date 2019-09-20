@@ -5,7 +5,7 @@
 
 ## Was ist Seanox aspect-js?
 
-Geprägt durch die guten Erfahrungen aus JSF (Java Server Faces) in Bezug auf
+Geprägt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf
 Funktion und einfache Integration ins Markup, entstand der Wunsch nach einer
 ähnlichen client-seitigen fullstack Lösung
 Bei Seanox aspect-js steht ein minimalistischer Ansatz zur Implementierung von
@@ -78,7 +78,7 @@ Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
 HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Elemente oder mehre
 Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
 eine [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
-[DataSource](datasource.md) lädt und transformiert, erwartet.
+[DataSource](datasource.md#datasource) lädt und transformiert, erwartet.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -106,7 +106,7 @@ Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
 eine absolute oder relative URL zu einer entfernten Ressource, die per
 HTTP-Methode GET nachgeladen wird, oder eine
 [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
-[DataSource](datasource.md) lädt und transformiert, erwartet.
+[DataSource](datasource.md#datasource) lädt und transformiert, erwartet.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -241,10 +241,58 @@ JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).
 ```html
 <span id="output1">{{#text1.value}}</span>
 <input id="text1" type="text"
-    events="mouseup keyup change" render="#output1"/>
+    events="input change" render="#output1"/>
 ```
 
 [Mehr erfahren](markup.md#events)
+
+
+### validate
+
+Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
+Zusammen definieren und steuert sie die Synchronisation zwischen dem Markup
+eines Composites und dem korrespondierenden JavaScript-Model.  
+Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
+validate-Methode implementieren: `boolean Model.validate(element, value)`. 
+Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
+`true` der Wert aus dem Composite in das JavaScript-Model synchronisiert. 
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+[Mehr erfahren](markup.md#validate)
+
+
+### message
+
+TODO:
+
+
+### notification
+
+TODO:
+
+
+### render
+
+Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
+Zusammen definieren sie, welche Ziele mit welchen auftretenden Events
+aufgefrischt werden.  
+Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
+welche die Ziele festlegt.
+
+```html
+<span id="output1">{{#text1.value}}</span>
+<input id="text1" type="text"
+    events="input change" render="#output1"/>
+```
+
+[Mehr erfahren](markup.md#render)
 
 
 ### release
@@ -265,44 +313,6 @@ anzuzeigen.
 ```
 
 [Mehr erfahren](markup.md#release)
-
-
-### render
-
-Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Events
-aufgefrischt werden.  
-Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
-welche die Ziele festlegt.
-
-```html
-<span id="output1">{{#text1.value}}</span>
-<input id="text1" type="text"
-    events="mouseup keyup change" render="#output1"/>
-```
-
-[Mehr erfahren](markup.md#render)
- 
-
-### validate
-
-Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren und steuert sie die Synchronisation zwischen dem Markup
-eines Composites und dem korrespondierenden JavaScript-Model.  
-Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
-validate-Methode implementieren: `boolean Model.validate(element, value)`. 
-Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
-`true` der Wert aus dem Composite in das JavaScript-Model synchronisiert. 
-
-```html
-<form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
-      validate events="mouseup keyup change" render="#Model"/>
-  <input type="submit" value="submit" validate events="click"/>
-</form>
-```
-
-[Mehr erfahren](markup.md#validate)
 
 
 ## Expression Language
@@ -362,13 +372,14 @@ und einem CMS.
 Die DataSource basiert auf statischen Daten, die per XPath abgefragt werden und
 das Ergebnis verkettet, aggregiert und per XSLT transformiert werden kann.
 
-[Mehr erfahren](datasource.md)
+[Mehr erfahren](datasource.md#datasource)
 
 
 ## Resource Bundle (Messages)
 
 (Resource)Messages ist eine statische Erweiterung der
-[DataSource](datasource.md) für Internationalisierung und Lokalisierung.  
+[DataSource](datasource.md#datasource) für Internationalisierung und
+Lokalisierung.  
 Die Implementierung basiert auf einer Menge von Schlüssel-Wert-Paaren in Form
 von Label-Elementen, die in der Datei `locales.xml` in der DataSource
 definiert werden.
@@ -382,21 +393,21 @@ Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung.
 
 ```
-+-------------------------------------------+--------------+---------------------------------+
-|  View                                     |  Controller  |  Model                          |
-+-------------------------------------------+--------------+---------------------------------+
-|  Markup                                   |  Composite   |  JavaScript                     |
-|                                           |  Path        |                                 |
-|                                           |  SiteMap     |                                 |
-+-------------------------------------------+--------------+---------------------------------+
-|  <form id="model" composite>              |  aspect-js   |  var model = {                  |
-|    <input id="message" events="change"/>  |              |      message:"",                | 
-|    <button id="submit"/>                  |              |      submit: {                  |
-|  </form>                                  |              |          onClick: function() {  |
-|                                           |              |          }                      |
-|                                           |              |      }                          |
-|                                           |              |  }                              |
-+-------------------------------------------+--------------+---------------------------------+
++------------------------------------------+--------------+---------------------------------+
+|  View                                    |  Controller  |  Model                          |
++------------------------------------------+--------------+---------------------------------+
+|  Markup                                  |  Composite   |  JavaScript                     |
+|                                          |  Path        |                                 |
+|                                          |  SiteMap     |                                 |
++------------------------------------------+--------------+---------------------------------+
+|  <form id="model" composite>             |  aspect-js   |  var model = {                  |
+|    <input id="message" events="input"/>  |              |      message:"",                | 
+|    <button id="submit"/>                 |              |      submit: {                  |
+|  </form>                                 |              |          onClick: function() {  |
+|                                          |              |          }                      |
+|                                          |              |      }                          |
+|                                          |              |  }                              |
++------------------------------------------+--------------+---------------------------------+
 ```
 
 [Mehr erfahren](mvc.md)

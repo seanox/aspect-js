@@ -1503,21 +1503,30 @@ if (typeof Composite === "undefined") {
      *      
      *      Events + Validate + Message + Notification + Render
      *      ----
-     *  TODO: Events primarily controls the synchronization of the input values of
+     *  Events primarily controls the synchronization of the input values of
      *  HTML elements with the properties of a model. Means that the value in
      *  the model only changes if an event occurs for the corresponding HTML
      *  element. Synchronization is performed at a low level. Means that the
      *  properties are synchronized directly and without the use of get and set
-     *  methods. For a better control a declarative validation is supported. If
-     *  the attribute 'validate' exists, the value for this is ignored, the
-     *  static method <Model>.validate(element, value) is  called in the
-     *  corresponding model. This call must return a true value as the result,
-     *  otherwise the element value is not stored into the corresponding model
-     *  property. If an event occurs, synchronization is performed. After that
-     *  will be checked whether the render attribute exists. All selectors
-     *  listed here are then triggered for re-rendering. (Re)rendering is
-     *  independent of synchronization and validation and is executed
-     *  immediately after an event occurs.
+     *  methods but accessors (getters and setters) are supported. For a better
+     *  control a declarative validation is supported. If the attribute VALIDATE
+     *  exists, the value for this is ignored, the static method
+     *  <Model>.validate(element, value) is  called in the corresponding model.
+     *  This call must return a true value as the result, otherwise the element
+     *  value is not stored into the corresponding model property. If an event
+     *  occurs, synchronization is performed. After that will be checked whether
+     *  the render attribute exists. All selectors listed here are then
+     *  triggered for re-rendering. (Re)rendering is independent of
+     *  synchronization and validation and is executed immediately after an
+     *  event occurs.
+     *  The validation can be combined with the attributes MESSAGE and
+     *  NOTIFICATION. However, the attributes MESSAGE and NOTIFICATION have no
+     *  effect without the attribute VALIDATE. The value of the attribute
+     *  MESSAGE is used as an error message if the validation was not
+     *  successful. To output the error message, the browser function of the
+     *  HTML5 form validation is used. This message is displayed via mouse-over.
+     *  values on/true/1 of the attribute NOTIFICATION specifies that the
+     *  message is also displayed as overlay/notification/report.
      *      
      *      Condition
      *      ----

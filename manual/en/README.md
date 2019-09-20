@@ -18,23 +18,25 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### Motivation
 
-* [Motivation](motivation.md)
+* [Motivation](motivation.md#motivation)
 
 
 ### Introduction
 
-* [Introduction](introduction.md)
+* [Introduction](introduction.md#introduction)
 
 
 ### Markup
 
-* [Markup](markup.md)
+* [Markup](markup.md#markup)
   * [Attributes](markup.md#attributes)
     * [composite](markup.md#composite)
     * [condition](markup.md#condition)
     * [events](markup.md#events)
     * [import](markup.md#import)
     * [interval](markup.md#interval)
+    * [message](markup.md##message)
+    * [notification](markup.md##notification)
     * [output](markup.md#output)
     * [release](markup.md#release)
     * [render](markup.md#render)    
@@ -50,7 +52,7 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### Expression Language
 
-* [Expression Language](expression.md)
+* [Expression Language](expression.md#expression-language)
   * [Elements](expression.md#elements)
     * [Text](expression.md#Text)
     * [Literal](expression.md#literal)
@@ -69,7 +71,7 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### DataSource
 
-* [DataSource](datasource.md)
+* [DataSource](datasource.md#datasource)
   * [Data Storage](datasource.md#data-storage)
   * [Locales](datasource.md#locales)
   * [Locator](datasource.md#locator)
@@ -82,12 +84,12 @@ Machine translation with [DeepL](https://deepl.com).
   
 ### Resource Bundle
   
-* [Resource Bundle](messages.md)
+* [Resource Bundle](messages.md#resource-bundle)
 
 
 ### Model View Controler
 
-* [Model View Controler](mvc.md)
+* [Model View Controler](mvc.md#model-view-controler)
   * [Controller](mvc.md#controller)
   * [Model](mvc.md#model)
   * [View](mvc.md#view)
@@ -128,7 +130,7 @@ Machine translation with [DeepL](https://deepl.com).
     
 ### Composite
 
-* [Composite](composite.md)
+* [Composite](composite.md#composite)
   * [Structure](composite.md#structure)
   * [Outsourcing](composite.md#outsourcing)
   * [Loading](composite.md#loading)
@@ -139,7 +141,7 @@ Machine translation with [DeepL](https://deepl.com).
     
 ### Extension
     
-* [Extension](extension.md)    
+* [Extension](extension.md#extension)    
   * [Namespace](extension.md#namespace)
   * [Element](extension.md#element)
   * [Math](extension.md#math)
@@ -152,7 +154,7 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### Test
 
-* [Test](test.md)
+* [Test](test.md#test)
   * [Task](test.md#task)
     * [name](test.md#name)
     * [test](test.md#test)
