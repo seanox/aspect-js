@@ -6,7 +6,7 @@
 
 ## What is Seanox aspect-js?
 
-Influenced by the good experiences with JSF (Java Server Faces) with regard to
+Influenced by the good experiences with JSF (Java Server Faces) in regard to
 function and an easy integration into the markup, arose a similar client-side
 fullstack solution.  
 Seanox aspect-js focuses on a minimalist approach to implementing
