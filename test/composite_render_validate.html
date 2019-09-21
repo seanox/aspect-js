@@ -30,7 +30,10 @@
         var model = {
             email: "",
             password: "",
-            validate:function(element, value) {
+            validates: [],
+            validate: function(element, value) {
+                if (!model.validates.includes(element.id))
+                    model.validates.push(element.id);
                 if (element == document.querySelector("#model #submit")
                         || element == document.querySelector("#model #button")
                         || element == document.querySelector("#model #link")) {
@@ -48,6 +51,12 @@
             button: {
                 onClick: function(event) {
                     model.buttonClicks++;
+                }
+            },
+            unsafeClicks: 0,
+            unsafe: {
+                onClick: function(event) {
+                    model.unsafeClicks++;
                 }
             },
             linkClicks: 0,
@@ -80,9 +89,11 @@
 
                 var snapshot = "E:" + signatue("#model #email") + "|" + model.email
                      + "\r\n" + "P:" + signatue("#model #password") + "|" + model.password
+                     + "\r\n" + "V:" + model.validates.join("|")
                      + "\r\n" + "S:" + "|S:" + model.submitClicks
                          + "|B:" + model.buttonClicks
-                         + "|L:" + model.linkClicks;
+                         + "|L:" + model.linkClicks
+                         + "|U:" + model.unsafeClicks;
                 
                 var iframe;
                 iframe = document.querySelector("iframe[name='targetA']");
@@ -102,6 +113,8 @@
             snapshot();
             document.querySelector("#model #button").click();
             snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
             document.querySelector("#model #link").click();
             snapshot();
             
@@ -111,6 +124,8 @@
             document.querySelector("#model #submit").click();
             snapshot();
             document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #unsafe").click();
             snapshot();
             document.querySelector("#model #link").click();
             snapshot();
@@ -122,6 +137,8 @@
             snapshot();
             document.querySelector("#model #button").click();
             snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
             document.querySelector("#model #link").click();
             snapshot();
             
@@ -132,8 +149,10 @@
             snapshot();
             document.querySelector("#model #button").click();
             snapshot();
-            document.querySelector("#model #link").click();
+            document.querySelector("#model #unsafe").click();
             snapshot();            
+            document.querySelector("#model #link").click();
+            snapshot();
 
             document.querySelector("#model #password").typeValue("xxxxxx", true);
             snapshot();
@@ -142,10 +161,12 @@
             snapshot();
             document.querySelector("#model #button").click();
             snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
             document.querySelector("#model #link").click();
             
             window.setTimeout(() => {
-                snapshot();       
+                snapshot();
                 Test.start();
             }, 1000);
         });
@@ -157,102 +178,152 @@
     <script type="text/test">
 E:MR|
 P:MR|
-S:|S:0|B:0|L:0
+V:
+S:|S:0|B:0|L:0|U:0
 A:
 B:
 E:MR|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit
+S:|S:0|B:0|L:0|U:0
 A:
 B:
 E:MR|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button
+S:|S:0|B:0|L:0|U:0
 A:
 B:
 E:MR|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button
+S:|S:0|B:0|L:0|U:1
+A:
+B:
+E:MR|
+P:MR|
+V:submit|button|link
+S:|S:0|B:0|L:0|U:1
 A:
 B:
 E:MP|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link
+S:|S:0|B:0|L:0|U:1
 A:
 B:
 E:MP|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link
+S:|S:0|B:0|L:0|U:1
 A:
 B:
 E:MP|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link
+S:|S:0|B:0|L:0|U:1
 A:
 B:
 E:MP|
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link
+S:|S:0|B:0|L:0|U:2
+A:
+B:
+E:MP|
+P:MR|
+V:submit|button|link
+S:|S:0|B:0|L:0|U:2
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:2
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:2
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:2
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:3
+A:
+B:
+E:V|xxx@xxx
+P:MR|
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:3
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:3
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:3
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:3
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-S:|S:0|B:0|L:0
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:4
+A:
+B:
+E:V|xxx@xxx
+P:MP|
+V:submit|button|link|email
+S:|S:0|B:0|L:0|U:4
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-S:|S:0|B:0|L:0
+V:submit|button|link|email|password
+S:|S:0|B:0|L:0|U:4
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-S:|S:1|B:0|L:0
+V:submit|button|link|email|password
+S:|S:1|B:0|L:0|U:4
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-S:|S:1|B:1|L:0
+V:submit|button|link|email|password
+S:|S:1|B:1|L:0|U:4
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-S:|S:1|B:1|L:1
+V:submit|button|link|email|password
+S:|S:1|B:1|L:0|U:5
+A:
+B:
+E:V|xxx@xxx
+P:V|xxxxxx
+V:submit|button|link|email|password
+S:|S:1|B:1|L:1|U:5
 A:1
 B:2
     </script>
@@ -285,6 +356,7 @@ B:2
       <input type="button" id="button" value="Button" validate>
       <a id="link" href="composite_render_validate_2.html" target="targetB"
           validate events="click">Password forgotten?</a>
+      <input type="button" id="unsafe" value="Unsafe">
       <iframe name="targetA" src="about:blank"></iframe>
       <iframe name="targetB" src="about:blank"></iframe>
     </form>

@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190919
+ *  Composite 1.2.0 20190921
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190919
+ *  @version 1.2.0 20190921
  */
 if (typeof Composite === "undefined") {
     
@@ -724,8 +724,7 @@ if (typeof Composite === "undefined") {
         //If the validation fails here, model validation and synchronization is
         //not and rendering always performed. In this case the event and thus
         //the default action of  the browser is cancelled.
-        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                && typeof selector.checkValidity === "function")
+        if (typeof selector.checkValidity === "function")
             valid = selector.checkValidity();
 
         //Validation is a function at the model level.
@@ -740,7 +739,8 @@ if (typeof Composite === "undefined") {
         //The declaration with the attribute validate is not required here.
         //The validation through the model only works if the corresponding
         //composite is active/present in the DOM!
-        if (valid === true
+        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                && valid === true
                 && lock !== true
                 && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
             var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
@@ -2478,7 +2478,7 @@ if (typeof Composite === "undefined") {
                     } else if (request.responseURL.match(/\.js$/)) {
                         eval(content);
                     } else if (request.responseURL.match(/\.html$/)) {
-                        object.attributes[Composite.ATTRIBUTE_IMPORT.name.toLowerCase()] = request.responseURL;                                    
+                        object.attributes[Composite.ATTRIBUTE_IMPORT] = request.responseURL;                                    
                     }
                 }
             };
