@@ -90,6 +90,8 @@ date when using the release channels.
 - [DE Manual](https://github.com/seanox/aspect-js/blob/master/manual/de)  
 - [EN Introduction](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md)
 - [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
+- [EN Tutorial](https://github.com/seanox/aspect-js-tutorial#description)
+
 
 # Changes (Change Log)
 ## 1.2.0 201910xx (summary of the next version)  
