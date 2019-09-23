@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190921
+ *  Composite 1.2.0 20190922
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190921
+ *  @version 1.2.0 20190922
  */
 if (typeof Composite === "undefined") {
     
@@ -162,7 +162,7 @@ if (typeof Composite === "undefined") {
 
         /** Constant for attribute output */
         get ATTRIBUTE_OUTPUT() {return "output"},
-
+        
         /** Constant for attribute render */
         get ATTRIBUTE_RENDER() {return "render"},  
         
@@ -756,8 +756,8 @@ if (typeof Composite === "undefined") {
         //validation was not successful. To output the error message, the
         //browser function of the HTML5 form validation is used. This message is
         //displayed via mouse-over.
-        //The values on/true/1 of the attribute NOTIFICATION specifies that the
-        //message is also displayed as overlay/notification/report.
+        //If the attribute NOTIFICATION is also used, a value is not expected,
+        //the message is also displayed as an overlay/notification/report.
         if (valid !== true) {
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
                 var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
@@ -765,10 +765,8 @@ if (typeof Composite === "undefined") {
                     message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
                 if (message && typeof selector.setCustomValidity === "function") {
                     selector.setCustomValidity(message);
-                    var notification =  object.attributes[Composite.ATTRIBUTE_NOTIFICATION] || "";
-                    if ((notification || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                        notification = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_NOTIFICATION, notification));
-                    if (!!notification.match(/^yes|on|true|1$/i) && typeof selector.reportValidity === "function")
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
+                            && typeof selector.reportValidity === "function")
                         selector.reportValidity();
                 }
             }
@@ -2372,7 +2370,7 @@ if (typeof Composite === "undefined") {
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
                     try {eval(selector.textContent);
                     } catch (exception) {
-                        console.error(exception);
+                        console.error("Composite JavaScript", exception);
                     }
                 }
             }
@@ -2476,7 +2474,11 @@ if (typeof Composite === "undefined") {
                         style.textContent = content;
                         head.appendChild(style);
                     } else if (request.responseURL.match(/\.js$/)) {
-                        eval(content);
+                        try {eval(content);
+                        } catch (exception) {
+                            console.error(request.responseURL, exception.name + ": " + exception.message);
+                            throw exception;
+                        }
                     } else if (request.responseURL.match(/\.html$/)) {
                         object.attributes[Composite.ATTRIBUTE_IMPORT] = request.responseURL;                                    
                     }
@@ -2485,11 +2487,19 @@ if (typeof Composite === "undefined") {
 
             //The sequence of loading is strictly defined.
             //    sequence: CSS, JS, HTML
-            request.open("GET", context + ".css", false);
+            request.open("HEAD", context + ".css", false);
             request.send();
-            request.open("GET", context + ".js", false);
+            if (request.status != 404) {
+                request.open("GET", context + ".css", false);
+                request.send();
+            }
+            request.open("HEAD", context + ".js", false);
             request.send();
-
+            if (request.status != 404) {
+                request.open("GET", context + ".js", false);
+                request.send();
+            }
+            
             //HTML/Markup is only loaded if it is a known composite object and
             //the element does not contain a markup (inner HTML) and the
             //attributes import and output are not set. Thus is the assumption
@@ -2497,8 +2507,12 @@ if (typeof Composite === "undefined") {
             if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                     && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                     && !composite.innerHTML.trim()) {
-                request.open("GET", context + ".html", false);
+                request.open("HEAD", context + ".html", false);
                 request.send();
+                if (request.status != 404) {
+                    request.open("GET", context + ".html", false);
+                    request.send();
+                }
             }
         }        
     };
