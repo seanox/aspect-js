@@ -498,10 +498,10 @@ if (typeof SiteMap === "undefined") {
      *  
      *      sitemap = {
      *          "#": ["news", "products", "about", "contact", "legal"],
-     *          "products#papers": ["paperA4", "paperA5", "paperA6"],
-     *          "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-     *          "products#pens": ["pencil", "ballpoint", "stylograph"],
-     *          "legal": ["terms", "privacy"],
+     *          "#products#papers": ["paperA4", "paperA5", "paperA6"],
+     *          "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+     *          "#products#pens": ["pencil", "ballpoint", "stylograph"],
+     *          "#legal": ["terms", "privacy"],
      *          ...
      *      };
      *      
