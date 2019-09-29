@@ -124,13 +124,13 @@ if (typeof DataSource === "undefined") {
         var nodes = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
         for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
             var name = node.nodeName.toLowerCase();
-            if (DataSource.locales.includes(name))
+            if (!DataSource.locales.includes(name))
                 DataSource.locales.push(name);
         }
         var nodes = xml.evaluate("/locales/*", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
         for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
             var name = node.nodeName.toLowerCase();
-            if (DataSource.locales.includes(name))
+            if (!DataSource.locales.includes(name))
                 DataSource.locales.push(name);
         }
         
