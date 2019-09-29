@@ -39,6 +39,8 @@
   CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)
   CR: Composite Hardening: Added optional hardening from markup
       Hardening makes it difficult to manipulate the attributes in the markup.
+  CR: Composite Include: Modules with a condition are only reloaded if the condition is true
+  CR: DataSource Locales: As standard marked are at the beginning
   CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
   CR: Build: Optimization of target 'changes'      
   CR: Build: Additional compression via javascript-minifier.com
