@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.1.1 20190922
+ *  DataSource 1.2.0 20190929
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.1 20190922
+ *  @version 1.2.0 20190929
  */
 if (typeof DataSource === "undefined") {
     
@@ -68,9 +68,9 @@ if (typeof DataSource === "undefined") {
     /** Internal cache of locales.xml */
     DataSource.data;
 
-    /** List of available locales */
+    /** List of available locales (as standard marked are at the beginning) */
     DataSource.locales;
-
+    
     /** Internal cache of XML/XSLT data. */
     DataSource.cache;
     
@@ -121,15 +121,22 @@ if (typeof DataSource === "undefined") {
             return;
         
         var xml = DataSource.data;
+        var nodes = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+        for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
+            var name = node.nodeName.toLowerCase();
+            if (DataSource.locales.includes(name))
+                DataSource.locales.push(name);
+        }
         var nodes = xml.evaluate("/locales/*", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
         for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
             var name = node.nodeName.toLowerCase();
-            DataSource.locales.push(node.nodeName);
+            if (DataSource.locales.includes(name))
+                DataSource.locales.push(name);
         }
         
         locale = DataSource.locale;
         if (!xml.evaluate("count(/locales/" + locale + ")", xml, null, XPathResult.ANY_TYPE, null).numberValue)
-            locale = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.ANY_TYPE, null).iterateNext().nodeName.toLowerCase();
+            locale = DataSource.locales && DataSource.locales.length > 0 ? DataSource.locales[0] : null;
         if (!locale)
             throw new Error("Locale not available");
         DataSource.locale = locale;
