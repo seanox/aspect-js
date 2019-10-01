@@ -98,6 +98,7 @@ date when using the release channels.
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
 BF: Composite Asynchron: Corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
+BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox  
 BF: Extension Capitalize: Correction for use with empty strings  
 BF: MVC: Correction of the embedded use of SiteMap.accept(path)  
 CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  

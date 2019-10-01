@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20190927
+ *  Composite 1.2.0 20191001
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190927
+ *  @version 1.2.0 20191001
  */
 if (typeof Composite === "undefined") {
     
@@ -1010,9 +1010,16 @@ if (typeof Composite === "undefined") {
                     if (meta instanceof Object) {
                         
                         var value;
-                        if (Composite.ATTRIBUTE_VALUE in target
-                                && target instanceof Element)
-                            value = target[Composite.ATTRIBUTE_VALUE];
+                        if (target instanceof Element) {
+                            if (target.tagName.match(/^input$/i)
+                                    && target.type.match(/^radio|checkbox/i))
+                                value = target.checked;
+                            else if (target.tagName.match(/^select/i)
+                                    && "selectedIndex" in target)
+                                value = target.options[target.selectedIndex].value;
+                            else if (Composite.ATTRIBUTE_VALUE in target)
+                                value = target[Composite.ATTRIBUTE_VALUE];
+                        }
                         
                         //Step 1: Validation
                         
