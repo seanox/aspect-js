@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191001
+ *  Composite 1.2.0 20191003
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191001
+ *  @version 1.2.0 20191003
  */
 if (typeof Composite === "undefined") {
     
@@ -2977,8 +2977,8 @@ if (typeof Expression === "undefined") {
         
         cascade.other.forEach((entry) => {
             var text = entry.data;
-            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
-            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()/g, "$1\n\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]{0,}[\w]){0,1}(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]{0,}\w){0,1})(?=\()/g, "$1\n\r$2\n");
             var words = [];
             text.split(/\n/).forEach((entry) => {
                 var object = {type:Expression.TYPE_LOGIC, data:entry};
