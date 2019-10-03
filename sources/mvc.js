@@ -84,12 +84,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.0.1 20190906
+ *  MVC 1.0.1 20191003
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0.1 20190906
+ *  @version 1.0.1 20191003
  */
 if (typeof Path === "undefined") {
     
@@ -768,14 +768,30 @@ if (typeof SiteMap === "undefined") {
         if (!source
                 && window.location.href.match(/[^#]#$/))
             source = "#";
-        
-        var event = document.createEvent("HTMLEvents");
-        event.initEvent("hashchange", false, true);
-        event.newURL = target;
 
-        if (source != target)
+        //Some browsers have problems with forwarding from / to /# and do not
+        //trigger the hashchange event. Therefore, this must be checked with a
+        //time delay and, if necessary, triggered manually.
+        
+        var forward = function(target) {
+            var event = document.createEvent("HTMLEvents");
+            event.initEvent("hashchange", false, true);
+            event.newURL = target;
+            window.dispatchEvent(event);
+        };
+
+        if (source != target) {
             SiteMap.navigate(target);
-        else window.dispatchEvent(event);
+            Composite.asynchron((forward) => {
+                var source = window.location.hash;
+                var target = SiteMap.locate(source);
+                if (!source
+                        && window.location.href.match(/[^#]#$/))
+                    source = "#";
+                if (source != target)
+                    forward(target);
+            }, forward);
+        } else forward(target);
     });
     
     /**
@@ -785,7 +801,7 @@ if (typeof SiteMap === "undefined") {
      *  organizes partial rendering.
      */
     window.addEventListener("hashchange", (event) => {
-
+        
         //Without a SiteMap no automatic rendering can be initiated.
         if (Object.keys(SiteMap.paths || {}).length <= 0)
             return;
