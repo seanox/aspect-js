@@ -99,8 +99,10 @@ BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed ar
 BF: Composite Asynchron: Corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
 BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox  
+BF: Composite Expression Parse: Correction of the detection of value- and method-expressions  
 BF: Extension Capitalize: Correction for use with empty strings  
 BF: MVC: Correction of the embedded use of SiteMap.accept(path)  
+BF: MVC: Correction of initial forwarding from / to /#  
 CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  
 CR: Test: Enhancement of console output monitoring  
 CR: Test: Optimization of console forwarding  
