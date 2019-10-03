@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0 20190929
+ *  DataSource 1.2.0 20191003
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20190929
+ *  @version 1.2.0 20191003
  */
 if (typeof DataSource === "undefined") {
     
@@ -92,7 +92,7 @@ if (typeof DataSource === "undefined") {
     
     (function() {
         
-        var locale = (navigator.browserLanguage || navigator.language || "").trim().toLowerCase();
+        var locale = (navigator.language || "").trim().toLowerCase();
         locale = locale.match(/^([a-z]+)/);
         if (!locale)
             throw new Error("Locale not available");
@@ -155,6 +155,9 @@ if (typeof DataSource === "undefined") {
                 || !DataSource.locales) 
             throw new Error("Locale not available");
 
+        if (typeof locale !== "string")
+            throw new TypeError("Invalid locale: " + typeof locale);        
+        
         locale = (locale || "").trim().toLowerCase();
         if (!locale
                 || !DataSource.locales.includes(locale))
