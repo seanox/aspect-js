@@ -94,7 +94,7 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.2.0 201910xx (summary of the next version)  
+## 1.2.0 201912xx (summary of the next version)  
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
 BF: Composite Asynchron: Corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
@@ -126,6 +126,7 @@ CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM
 CR: Composite Mount Locate: Stricter use of property and qualifier (name)  
 CR: Composite Mount Lookup: Stricter use of property and qualifier (name)  
 CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)  
+CR: Composite Release: Addition of the CSS rule when the page is loaded  
 CR: Composite Hardening: Added optional hardening from markup  
 CR: Composite Include: Modules with a condition are only reloaded if the condition is true  
 CR: DataSource Locales: As standard marked are at the beginning  

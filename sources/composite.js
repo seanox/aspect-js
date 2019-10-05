@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191003
+ *  Composite 1.2.0 20191005
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191003
+ *  @version 1.2.0 20191005
  */
 if (typeof Composite === "undefined") {
     
@@ -2557,6 +2557,20 @@ if (typeof Composite === "undefined") {
     //  - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
     //    are protected by the MutationObserver and cannot be manipulated.
     window.addEventListener("load", (event) => {
+    
+        //The inverse indicator release shows when an element has been rendered
+        //because the renderer removes this attribute. This effect is used for
+        //CSS to show elements only in rendered state. A corresponding CSS rule
+        //is automatically added to the HEAD when the page is loaded.
+        if (document.querySelector("html")) {
+            if (!document.querySelector("html head"))
+                document.querySelector("html").appendChild(document.createElement("head"));
+            var style = document.createElement("style");
+            style.setAttribute("type", "text/css");
+            style.innerHTML = "*[release] {display:none!important;}";
+            document.querySelector("html head").appendChild(style);
+        }
+    
         (new MutationObserver((records) => {
             records.forEach((record) => {
 
