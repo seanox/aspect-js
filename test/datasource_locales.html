@@ -38,10 +38,10 @@
         Test.create({expected:/\bLocale not available/i, test:function() {
             DataSource.localize(" ");
         }});         
-        Test.create({expected:/\bLocale not available/i, test:function() {
+        Test.create({expected:/\bInvalid locale: undefined/i, test:function() {
             DataSource.localize();
         }});         
-        Test.create({expected:/\bLocale not available/i, test:function() {
+        Test.create({expected:/\bInvalid locale: object/i, test:function() {
             DataSource.localize(null);
         }});         
         
