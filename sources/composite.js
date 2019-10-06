@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191005
+ *  Composite 1.2.0 20191006
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191005
+ *  @version 1.2.0 20191006
  */
 if (typeof Composite === "undefined") {
     
@@ -2016,27 +2016,25 @@ if (typeof Composite === "undefined") {
                 return;
             }
             
-            //Only composites are docked as models.
-            //Composites without conditions are docked by the renderer at first
-            //detection. Composites with condition are docked and undocked
-            //depending on the result of the condition.
+            //Only composites (as elements) are docked as models.
+            //This excludes the placeholders (are text nodes) of conditions.
+            //For conditions, the placeholder output is handled as normal markup.
             
             var dock = function(object) {
                 Composite.models = Composite.models || [];
-                if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
-                        || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ID)
-                        || Composite.models.includes(object.attributes[Composite.ATTRIBUTE_ID]))
-                    return;
-                Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
-                var meta = Composite.mount.lookup(object.template || object.element);
-                if (meta && meta.model && typeof meta.model.dock === "function")
-                    meta.model.dock.call(meta.model);
+                if (selector instanceof Element
+                        && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
+                        && !Composite.models.includes(object.attributes[Composite.ATTRIBUTE_ID])) {
+                    Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
+                    var meta = Composite.mount.lookup(object.template || object.element);
+                    if (meta && meta.model && typeof meta.model.dock === "function")
+                        meta.model.dock.call(meta.model);
+                }
             };
             
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
-                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
-                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION))
-                dock(object);
+            if (selector instanceof Element
+                    && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                dock(object);   
             
             //The condition attribute is interpreted.
             //The condition is a very special implementation.
@@ -2430,7 +2428,6 @@ if (typeof Composite === "undefined") {
                     Composite.render(node, lock.share());
                 });
             }
-
         } finally {
             lock.release();
         }
