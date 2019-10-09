@@ -38,16 +38,16 @@
         Test.create({test:function() {
             Assert.assertTrue((new Date().getTime() -timing) < 2500);
         }}); 
-        Test.create({timeout:4000, test:function() {
+        Test.create({timeout:500, test:function() {
             var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
-            for (var loop = 0; loop < 250; loop++)
+            for (var loop = 0; loop < 1750; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }}); 
-        Test.create({timeout:1000, test:function() {
+        Test.create({timeout:500, test:function() {
             var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
-            for (var loop = 0; loop < 25000; loop++)
+            for (var loop = 0; loop < 30000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
