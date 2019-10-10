@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191006
+ *  Composite 1.2.0 20191010
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191006
+ *  @version 1.2.0 20191010
  */
 if (typeof Composite === "undefined") {
     
@@ -399,7 +399,6 @@ if (typeof Composite === "undefined") {
                         this.ticks--;
                         if (this.ticks > 0)
                             return;
-                        context.lock = false;
                         if (context == Composite.render) {
                             
                             //If the selector is a string, several elements must
@@ -407,9 +406,8 @@ if (typeof Composite === "undefined") {
                             //relationship in the DOM. Therefore they are all
                             //considered and mounted separately. 
                             
-                            var nodes;
+                            var nodes = [];
                             if (typeof this.selector == "string") {
-                                nodes = [];
                                 var scope = document.querySelectorAll(this.selector);
                                 Array.from(scope).forEach((node) => {
                                     if (nodes.includes(node))
@@ -420,7 +418,7 @@ if (typeof Composite === "undefined") {
                                             nodes.push(node);
                                     });
                                 });
-                            } else {
+                            } else if (this.selector instanceof Element) {
                                 nodes = this.selector.querySelectorAll("*");
                                 nodes = [this.selector].concat(Array.from(nodes));
                             }
@@ -436,7 +434,8 @@ if (typeof Composite === "undefined") {
                         } else throw new Error("Invalid context: " + context);
                         var selector = context.queue.shift();
                         if (selector)
-                            context.call(null, selector);  
+                            Composite.asynchron(context, selector);
+                        context.lock = false;
                 }};
             
             if (context == Composite.render)
@@ -1364,7 +1363,7 @@ if (typeof Composite === "undefined") {
      *  the attributes are collected. It is not possible to remove attributes.    
      *  
      *      Composite.customize("@ATTRIBUTES-STATICS", "...");
-     * 
+     *      
      *  @param  variants
      *  @throws An error occurs in the following cases:
      *      - namespace is not valid or is not supported
@@ -1591,7 +1590,7 @@ if (typeof Composite === "undefined") {
      *      
      *      Release
      *      ----
-     *  Inverse indicator that an element was rendered.
+     *  TODO: Inverse indicator that an element was rendered.
      *  The renderer removes this attribute when an element is rendered. This
      *  effect can be used for CSS to display elements only in rendered state.    
      *             
@@ -1654,7 +1653,7 @@ if (typeof Composite === "undefined") {
         }
 
         var lock = Composite.lock(Composite.render, selector);
-            
+        
         try {
 
             if (typeof selector === "string") {
@@ -1677,6 +1676,7 @@ if (typeof Composite === "undefined") {
             //used or not. Only the return value false (not void, not empty)
             //terminates the rendering for the macro without using the standard
             //functions.
+            //TODO:
             Composite.macros = Composite.macros || {};
             var macro = Composite.macros[selector.nodeName.toLowerCase()];
             if (macro && macro(selector) === false)
@@ -1695,6 +1695,7 @@ if (typeof Composite === "undefined") {
             //Only the return value false (not void, not empty) terminates the
             //loop and the rendering for the selector without using the standard
             //functions.
+            //TODO:
             Composite.selectors = Composite.selectors || {};
             if (selector.parentNode) {
                 for (var macro in Composite.selectors) {
@@ -1730,6 +1731,7 @@ if (typeof Composite === "undefined") {
                 //processes them. This does not affect the implementation of the
                 //rendering. The method call with a acceptor:
                 //    Composite.customize(function(element) {...});
+                //TODO:
                 Composite.acceptors = Composite.acceptors || [];
                 Composite.acceptors.forEach((acceptor) => {
                     acceptor.call(null, selector);
@@ -1828,7 +1830,7 @@ if (typeof Composite === "undefined") {
                         //already known.
                         var placeholder = document.createTextNode("");
                         object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
-                                condition:condition, template:selector.cloneNode(true), output:null, complete:false
+                                condition:condition, template:selector.cloneNode(true), output:null, complete:false, share:null
                         };
 
                         //The Meta object is registered.
@@ -1839,6 +1841,11 @@ if (typeof Composite === "undefined") {
                         delete Composite.render.meta[serial];
                         
                         selector.parentNode.replaceChild(placeholder, selector);
+                        
+                        //The placeholder now exists in the DOM.
+                        //On object level is now switched from template to
+                        //placeholder and the normal markup processing is
+                        //continued.                         
                         
                         selector = placeholder;
                         serial = selector.ordinal();
@@ -1853,14 +1860,31 @@ if (typeof Composite === "undefined") {
                 }
             }
             
-            //The placeholder(-output) is interpreted.
-            //Placeholder output is only processed via the placeholder.
-            //Therefore the placeholder output is replaced by the placeholder at
-            //variable level (selector + serial + object).
+            //The placeholder-output is interpreted.
+            //The output is controlled by the placeholder.
             if (object.hasOwnProperty("placeholder")) {
+                
+                //The corresponding placeholder is determined for the output so
+                //that the rendering can be forwarded. 
+                //The placeholder uses the lock to exclude recursions.
+                //Therefore the passing of the lock is important here.
+                Composite.render(object.placeholder.element, lock.share());
+                
+                //The placeholder takes care of everything.
+                //It checks if the output is still needed in the DOM and updates
+                //it if necessary. So there is nothing more to do here and
+                //rendering can be aborted.
+                
+                //The placeholder now exists in the DOM.
+                //On object level is now switched from template to
+                //placeholder and the normal markup processing is
+                //continued.                         
+                
                 selector = object.placeholder.element;
                 serial = selector.ordinal();
                 object = Composite.render.meta[serial];                
+                
+                return;
             }
             
             //A text node contain static and dynamic contents as well as
@@ -2019,7 +2043,7 @@ if (typeof Composite === "undefined") {
             //Only composites (as elements) are docked as models.
             //This excludes the placeholders (are text nodes) of conditions.
             //For conditions, the placeholder output is handled as normal markup.
-            
+
             var dock = function(object) {
                 Composite.models = Composite.models || [];
                 if (selector instanceof Element
@@ -2041,13 +2065,29 @@ if (typeof Composite === "undefined") {
             //So it was important that a condition can remove and add a node in
             //the DOM. To do this, a placeholder and a template are created for
             //an element with a condition. The placeholder is a text node
-            //without content and therefore invisible in the user interface. The
-            //placeholder is the cached markup of the element.
-            //Thus the renderer can insert or remove the markup after the
+            //without content and therefore invisible in the user interface.
+            //The placeholder is the cached markup of the element.
+            //Thus the renderer can insert or remove the markup before the
             //placeholder according to the condition.
             if (selector.nodeType == Node.TEXT_NODE
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 var placeholder = object;
+                
+                //If the share from the placeholder corresponds to the current
+                //lock, the rendering for placeholder and output has already
+                //been done and nothing more needs to be done.
+                if (placeholder.share == lock.ordinal())
+                    return;
+                placeholder.share = lock.ordinal();
+                
+                //If the placeholder share does not match the current lock, the
+                //placeholder and output rendering must be performed. Both are
+                //only taken over by the placeholder. It decides whether the
+                //output has to be added, updated or removed in the DOM and does
+                //so. The goal is that a conditon consists of two parts. Both
+                //parts are checked and rendered, but the expression(s) are
+                //called only once in one render cycle.
+
                 if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
                     
                     //Load modules/components/composite resources.
@@ -2059,11 +2099,9 @@ if (typeof Composite === "undefined") {
                             //meta-objects do not exist for templates, so it
                             //must be created temporarily and then removed again.
                             var serial = placeholder.template.ordinal();
-                            var object = {serial:serial, element:placeholder.template, attributes:object.attributes, lock:true};
+                            var object = {serial:serial, element:placeholder.template, attributes:object.attributes, share:null};
                             Composite.render.meta[serial] = object; 
-                            
-                            Composite.render.include(placeholder.template);                    
-                            
+                            Composite.render.include(placeholder.template);
                             delete Composite.render.meta[serial];
                         }
                         placeholder.complete = true;
@@ -2074,6 +2112,7 @@ if (typeof Composite === "undefined") {
                     
                     if (!placeholder.output
                             || !document.body.contains(placeholder.output)) {
+                    
                         //The placeholder output is rendered recursively and
                         //finally and inserted before the placeholder.
                         //Therefore, rendering can be stopped afterwards.
@@ -2084,7 +2123,7 @@ if (typeof Composite === "undefined") {
                         //the attributes of the placeholder are available for
                         //rendering.
                         var serial = template.ordinal();
-                        var object = {serial:serial, element:template, attributes:object.attributes, lock:true};
+                        var object = {serial:serial, element:template, attributes:object.attributes};
                         Composite.render.meta[serial] = object; 
                         
                         //The placeholder output is rendered recursively and
@@ -2095,10 +2134,20 @@ if (typeof Composite === "undefined") {
                         selector.parentNode.insertBefore(template, selector);
                         return;
                     }
+                    
+                    //The output now exists in the DOM.
+                    //The render task of the placeholder is done.
+                    //On object level is now switched from placeholder to
+                    //output and the normal markup processing is continued.                    
+                    
                     selector = placeholder.output;
                     serial = selector.ordinal();
                     object = Composite.render.meta[serial];
+                    
                 } else {
+                    
+                    //The output is removed from the DOM because the condition
+                    //is not explicitly true.
                     if (!placeholder.output)
                         return;
                     selector.parentNode.removeChild(placeholder.output);
@@ -2137,25 +2186,21 @@ if (typeof Composite === "undefined") {
             //true. If the content can be loaded successfully, the import
             //attribute is removed.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
+
                 selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_IMPORT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, value);
-                //Attributes can only be deleted in objects that are not
-                //locked. Locked objects are reused and require all
-                //attributes for (re)rendering. Here the attribute 'import'
-                //is affected/meant.
+
                 Composite.render.cache = Composite.render.cache || {};
                 
                 if (!value) {
-                    if (!object.lock)
-                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
                 
                 } else if (value instanceof Element
                         || value instanceof NodeList) {
                     selector.appendChild(value, true);
-                    if (!object.lock)
-                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
 
                 } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
                     var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
@@ -2165,15 +2210,13 @@ if (typeof Composite === "undefined") {
                     selector.appendChild(data, true);
                     var serial = selector.ordinal();
                     var object = Composite.render.meta[serial];
-                    if (!object.lock)
-                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
                 
                 } else if (typeof Composite.render.cache[value] !== "undefined") {
                     selector.innerHTML = Composite.render.cache[value];
                     var serial = selector.ordinal();
                     var object = Composite.render.meta[serial];
-                    if (!object.lock)
-                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
                 
                 } else {
                     Composite.asynchron((selector, lock, url) => {
@@ -2184,12 +2227,12 @@ if (typeof Composite === "undefined") {
                             request.send();
                             if (request.status != "200")
                                 throw Error("HTTP status " + request.status + " for " + url);
-                            Composite.render.cache[url] = request.responseText;
-                            selector.innerHTML = request.responseText;
+                            var content = request.responseText.trim();
+                            Composite.render.cache[url] = content;
+                            selector.innerHTML = content;
                             var serial = selector.ordinal();
                             var object = Composite.render.meta[serial];
-                            if (!object.lock)
-                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                            delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                         } catch (error) {
                             Composite.fire(Composite.EVENT_AJAX_ERROR, error);
                             throw error;
@@ -2416,15 +2459,6 @@ if (typeof Composite === "undefined") {
                     //replaced by the placeholder,
                     if (!selector.contains(node))
                         return;
-                    if (node.nodeType != Node.TEXT_NODE) {
-                        var serial = node.ordinal();
-                        var object = Composite.render.meta[serial];
-                        //Ignore all placeholder outputs.
-                        //Rendering is only done via the placeholder.
-                        if (object)
-                            if (object.hasOwnProperty("placeholder"))
-                                return;
-                    }
                     Composite.render(node, lock.share());
                 });
             }
@@ -2453,9 +2487,11 @@ if (typeof Composite === "undefined") {
         
         var object = null;
         if (composite instanceof Element) {
+            if (!composite.hasAttribute(Composite.ATTRIBUTE_ID))
+                throw new Error("Unknown composite without id");
             object = Composite.render.meta[composite.ordinal()];   
             if (!object)
-                throw new TypeError("Unknown composite");
+                throw new Error("Unknown composite");
         }
         
         Composite.render.cache = Composite.render.cache || {};
@@ -2465,7 +2501,6 @@ if (typeof Composite === "undefined") {
             Composite.render.cache[context + ".composite"] = null;
             var request = new XMLHttpRequest();
             request.overrideMimeType("text/plain");
-            
             request.onreadystatechange = function() {
                 if (request.readyState != 4
                         || request.status == "404")
@@ -2489,7 +2524,7 @@ if (typeof Composite === "undefined") {
                 
                 var content = request.responseText.trim();
                 if (content) {
-                    Composite.render.cache[request.responseURL] = request.responseText;
+                    Composite.render.cache[request.responseURL] = content;
                     if (request.responseURL.match(/\.css$/)) {
                         var head = document.querySelector("html head");
                         if (!head)
@@ -2505,7 +2540,8 @@ if (typeof Composite === "undefined") {
                             throw exception;
                         }
                     } else if (request.responseURL.match(/\.html$/)) {
-                        object.attributes[Composite.ATTRIBUTE_IMPORT] = request.responseURL;                                    
+                        if (composite instanceof Element)
+                            composite.innerHTML = content;
                     }
                 }
             };
