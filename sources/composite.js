@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191010
+ *  Composite 1.2.0 20191011
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191010
+ *  @version 1.2.0 20191011
  */
 if (typeof Composite === "undefined") {
     
@@ -2343,12 +2343,12 @@ if (typeof Composite === "undefined") {
                 if (!object.iterate) {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
                     var content = iterate.match(Composite.PATTERN_EXPRESSION_EXCLUSIVE);
-                    content = content && !content[2] ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE)  : null;
+                    content = content && !content[2] ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE) : null;
                     if (content) {
                         object.iterate = {name:content[1].trim(),
                                 expression:"{{" + content[2].trim() + "}}"
                         };
-                        object.template = selector.cloneNode(true);
+                        object.template = selector.innerHTML;
                     } else console.error("Invalid iterate: " + iterate);
                 }
                 if (object.iterate) {
@@ -2364,7 +2364,8 @@ if (typeof Composite === "undefined") {
                             iterate = Array.from(iterate);
                             iterate.forEach((item, index, array) => {
                                 window[object.iterate.name] = {item:item, index:index, data:array};
-                                var template = object.template.cloneNode(true);
+                                var template = document.createElement("div");
+                                template.innerHTML = object.template;
                                 Composite.render(template, lock.share());
                                 selector.appendChild(template.childNodes);
                                 delete Composite.render.meta[template.ordinal()];                                 

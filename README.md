@@ -102,6 +102,7 @@ BF: Composite Mount Synchronization: Correction for the input-elements: select, 
 BF: Composite Render Condition: Exclusive use of the placeholder  
 BF: Composite Render Include: Optimization/correction of the strategy  
 BF: Composite Render Include: Loading and inserting HTML content for elements  
+BF: Composite Render Iterate: Optimization by using markup as template instead of node copy  
 BF: Composite Expression Parse: Correction of the detection of value- and method-expressions  
 BF: Composite Lock Managment: Queue progress only after release functionality  
 BF: Extension Capitalize: Correction for use with empty strings  

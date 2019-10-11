@@ -9,6 +9,7 @@
       When importing modules in combination with conditions (placeholder/template)
   BF: Composite Render Include: Loading and inserting HTML content for elements
       Is now done directly and is no longer delegated to the renderer via the IMPORT attribute.
+  BF: Composite Render Iterate: Optimization by using markup as template instead of node copy
   BF: Composite Expression Parse: Correction of the detection of value- and method-expressions
   BF: Composite Lock Managment: Queue progress only after release functionality
   BF: Extension Capitalize: Correction for use with empty strings
