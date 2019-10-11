@@ -102,7 +102,6 @@ BF: Composite Mount Synchronization: Correction for the input-elements: select, 
 BF: Composite Render Condition: Exclusive use of the placeholder  
 BF: Composite Render Include: Optimization/correction of the strategy  
 BF: Composite Render Include: Loading and inserting HTML content for elements  
-BF: Composite Render Iterate: Optimization by using markup as template instead of node copy  
 BF: Composite Expression Parse: Correction of the detection of value- and method-expressions  
 BF: Composite Lock Managment: Queue progress only after release functionality  
 BF: Extension Capitalize: Correction for use with empty strings  
@@ -118,6 +117,7 @@ CR: Test Suite: Optimization of error output
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
 CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)  
+CR: Composite Render Iterate: Optimization by using markup as template instead of node copy  
 CR: Composite Scan: Omission of the intermediate step between render and mount  
 CR: Composite Mount: Revision of the object/model binding  
 CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM  

@@ -9,7 +9,6 @@
       When importing modules in combination with conditions (placeholder/template)
   BF: Composite Render Include: Loading and inserting HTML content for elements
       Is now done directly and is no longer delegated to the renderer via the IMPORT attribute.
-  BF: Composite Render Iterate: Optimization by using markup as template instead of node copy
   BF: Composite Expression Parse: Correction of the detection of value- and method-expressions
   BF: Composite Lock Managment: Queue progress only after release functionality
   BF: Extension Capitalize: Correction for use with empty strings
@@ -29,6 +28,7 @@
       Can be used to control visibility so that only final rendered output/content is visible.
       CSS: *[release] {display:none;}      
   CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)    
+  CR: Composite Render Iterate: Optimization by using markup as template instead of node copy
   CR: Composite Scan: Omission of the intermediate step between render and mount
   CR: Composite Mount: Revision of the object/model binding
   CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM
