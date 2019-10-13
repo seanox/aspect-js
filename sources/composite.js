@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191011
+ *  Composite 1.2.0 20191013
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191011
+ *  @version 1.2.0 20191013
  */
 if (typeof Composite === "undefined") {
     
@@ -276,24 +276,24 @@ if (typeof Composite === "undefined") {
          *  see also https://www.w3schools.com/jsref/dom_obj_event.asp
          */
         get events() {return "abort after|print animation|end animation|iteration animation|start"
-            + " before|print before|unload blur"
-            + " can|play can|play|through change click context|menu copy cut"
-            + " dbl|click drag drag|end drag|enter drag|leave drag|over drag|start drop duration|change"
-            + " ended error"
-            + " focus focus|in focus|out"
-            + " hash|change"
-            + " input invalid"
-            + " key|down key|press key|up"
-            + " load loaded|data loaded|meta|data load|start"
-            + " message mouse|down mouse|enter mouse|leave mouse|move mouse|over mouse|out mouse|up mouse|wheel"
-            + " offline online open"
-            + " page|hide page|show paste pause play playing popstate progress"
-            + " rate|change resize reset"
-            + " scroll search seeked seeking select show stalled storage submit suspend"
-            + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
-            + " unload"
-            + " volume|change"
-            + " waiting wheel"},
+                + " before|print before|unload blur"
+                + " can|play can|play|through change click context|menu copy cut"
+                + " dbl|click drag drag|end drag|enter drag|leave drag|over drag|start drop duration|change"
+                + " ended error"
+                + " focus focus|in focus|out"
+                + " hash|change"
+                + " input invalid"
+                + " key|down key|press key|up"
+                + " load loaded|data loaded|meta|data load|start"
+                + " message mouse|down mouse|enter mouse|leave mouse|move mouse|over mouse|out mouse|up mouse|wheel"
+                + " offline online open"
+                + " page|hide page|show paste pause play playing popstate progress"
+                + " rate|change resize reset"
+                + " scroll search seeked seeking select show stalled storage submit suspend"
+                + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
+                + " unload"
+                + " volume|change"
+                + " waiting wheel"},
         
         /** Patterns with the supported events */
         get PATTERN_EVENT_FUNCTIONS() {return (function() {
@@ -499,7 +499,7 @@ if (typeof Composite === "undefined") {
                 throw new TypeError("Invalid namespace: " + typeof namespace);        
             namespace = (namespace || "").trim();
             if (!namespace.match(/^(?:[a-z]\w*)(?:(?:\:\w+)|(?:\.[a-z]\w*))*$/i))
-                return null;
+                throw new Error("Invalid namespace: " + namespace);
             namespace = namespace.split(/[\.\:]/);
             if (!namespace
                     || namespace.length <= 0)
@@ -2186,7 +2186,6 @@ if (typeof Composite === "undefined") {
             //true. If the content can be loaded successfully, the import
             //attribute is removed.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
-
                 selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_IMPORT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
@@ -2348,7 +2347,7 @@ if (typeof Composite === "undefined") {
                         object.iterate = {name:content[1].trim(),
                                 expression:"{{" + content[2].trim() + "}}"
                         };
-                        object.template = selector.innerHTML;
+                        object.template = selector.cloneNode(true);
                     } else console.error("Invalid iterate: " + iterate);
                 }
                 if (object.iterate) {
@@ -2365,7 +2364,7 @@ if (typeof Composite === "undefined") {
                             iterate.forEach((item, index, array) => {
                                 window[object.iterate.name] = {item:item, index:index, data:array};
                                 var template = document.createElement("div");
-                                template.innerHTML = object.template;
+                                template.appendChild(object.template.cloneNode(true).childNodes);
                                 Composite.render(template, lock.share());
                                 selector.appendChild(template.childNodes);
                                 delete Composite.render.meta[template.ordinal()];                                 
@@ -2377,10 +2376,9 @@ if (typeof Composite === "undefined") {
                         if (variable !== undefined)
                             window[object.iterate.name] = variable;
                     }
-                    //The output of iterate is rendered recursively and finally
-                    //and inserted in the iterate container. Therefore,
-                    //rendering can be stopped afterwards.
-                    return;
+                    //The content is final gerender, the enclosing container
+                    //element itself, or more precisely the attributes, still
+                    //needs to be updated.
                 }
             }
             
@@ -2391,14 +2389,13 @@ if (typeof Composite === "undefined") {
             //is the text element. The result is output here as textContent.
             //Elements of type: script + style are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                var attributes = Array.from(selector.attributes || []);
-                attributes = attributes.map(entry => entry.name);
-                attributes = attributes.concat(Array.from(object.attributes));
+                var attributes = [];
+                for (var key in object.attributes)
+                    if (object.attributes.hasOwnProperty(key))
+                        attributes.push(key);
                 if (Composite.ATTRIBUTE_VALUE in selector)
-                    attributes.push(Composite.ATTRIBUTE_VALUE);
-                attributes = attributes.filter((value, index, array) => {
-                    return array.indexOf(value) === index;
-                });
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE))
+                        attributes.push(Composite.ATTRIBUTE_VALUE);
                 attributes.forEach((attribute) => {
                     //Ignore all internal attributes
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
@@ -2409,16 +2406,23 @@ if (typeof Composite === "undefined") {
                         return;
                     var context = serial + ":" + attribute;
                     value = Expression.eval(context, value);
-                    value = String(value).encodeHtml();
-                    value = value.replace(/"/g, "&quot;");
-                    //Special case attribute value, here primarily the value of
-                    //the property must be set, the value of the attribute is
-                    //optional. Changing the value does not trigger an event, so
-                    //no unwanted recursions occur.
-                    if (attribute.toLowerCase() == Composite.ATTRIBUTE_VALUE
-                            && Composite.ATTRIBUTE_VALUE in selector)
-                        selector.value = value;
-                    selector.setAttribute(attribute, value);
+                    //If the type value is 'undefined', the attribute is
+                    //removed. Since the attribute contains an expression, the
+                    //removal is only temporary and is checked again at the next
+                    //render cycle and possibly inserted again if the expression
+                    //returns a return value.
+                    if (typeof value !== "undefined") {
+                        value = String(value).encodeHtml();
+                        value = value.replace(/"/g, "&quot;");
+                        //Special case attribute value, here primarily the value of
+                        //the property must be set, the value of the attribute is
+                        //optional. Changing the value does not trigger an event, so
+                        //no unwanted recursions occur.
+                        if (attribute.toLowerCase() == Composite.ATTRIBUTE_VALUE
+                                && Composite.ATTRIBUTE_VALUE in selector)
+                            selector.value = value;
+                        selector.setAttribute(attribute, value);
+                    } else selector.removeAttribute(attribute);
                 });
             }
 
@@ -2449,11 +2453,12 @@ if (typeof Composite === "undefined") {
             //The following are ignored:
             //  - Elements of type: script + style and custom tags
             //  - Elements with functions that modify the inner markup
-            //  - Elements that are a placeholder
+            //  - Elements that are a iterates
             //These elements manipulate the inner markup.
             //This is intercepted by the MutationObserver.
             if (selector.childNodes
-                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
+                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
+                    && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))) {
                 Array.from(selector.childNodes).forEach((node) => {
                     //The rendering is recursive, if necessary the node is then
                     //no longer available. For example, if a condition is
