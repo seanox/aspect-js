@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.1.0 20190520
+ *  Messages 1.1.0 20191024
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20190520
+ *  @version 1.1.0 20191024
  */
 if (typeof Messages === "undefined") {
     
@@ -90,7 +90,7 @@ if (typeof Messages === "undefined") {
         var localize = DataSource.localize;
         DataSource.localize = function(locale) {
             for (var property in Messages)
-                if (typeof Messages[property] == "string")
+                if (typeof Messages[property] === "string")
                     delete Messages[property];
             DataSource.localize.internal(locale);
 

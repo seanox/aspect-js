@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191013
+ *  Composite 1.2.0 20191024
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191013
+ *  @version 1.2.0 20191024
  */
 if (typeof Composite === "undefined") {
     
@@ -407,7 +407,7 @@ if (typeof Composite === "undefined") {
                             //considered and mounted separately. 
                             
                             var nodes = [];
-                            if (typeof this.selector == "string") {
+                            if (typeof this.selector === "string") {
                                 var scope = document.querySelectorAll(this.selector);
                                 Array.from(scope).forEach((node) => {
                                     if (nodes.includes(node))
@@ -2039,26 +2039,33 @@ if (typeof Composite === "undefined") {
                 
                 return;
             }
-            
-            //Only composites (as elements) are docked as models.
-            //This excludes the placeholders (are text nodes) of conditions.
-            //For conditions, the placeholder output is handled as normal markup.
 
-            var dock = function(object) {
+            //Only composites are mounted based on their model.
+            //This excludes the placeholders (are text nodes) of conditions.
+
+            var dock = function(model) {
                 Composite.models = Composite.models || [];
-                if (selector instanceof Element
-                        && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)
-                        && !Composite.models.includes(object.attributes[Composite.ATTRIBUTE_ID])) {
-                    Composite.models.push(object.attributes[Composite.ATTRIBUTE_ID]);
-                    var meta = Composite.mount.lookup(object.template || object.element);
-                    if (meta && meta.model && typeof meta.model.dock === "function")
-                        meta.model.dock.call(meta.model);
-                }
+                if (typeof model !== "string"
+                        || Composite.models.includes(model))
+                    return;
+                Composite.models.push(model);
+                model = Object.lookup(model);
+                if (model && typeof model.dock === "function")
+                    model.dock.call(model);
             };
-            
+
+            //Only composites are mounted based on their model.
+            //This excludes the placeholders (are text nodes) of conditions.
             if (selector instanceof Element
-                    && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
-                dock(object);   
+                    && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                var model = (object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                if (!model.match(Composite.PATTERN_COMPOSITE_ID))
+                    throw new Error("Invalid composite id" + (model ? ": " + model : ""));
+                var meta = Composite.mount.lookup(selector);
+                //TODO: Use Composite.mount.lookup + only meta.model 
+                if (meta && meta.meta && meta.meta.model)
+                    dock(meta.meta.model);
+            }
             
             //The condition attribute is interpreted.
             //The condition is a very special implementation.
@@ -2093,13 +2100,13 @@ if (typeof Composite === "undefined") {
                     //Load modules/components/composite resources.
                     //Composites with condition are only loaded with the first use.                    
                     if (!placeholder.complete) {
-                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                        if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                             //The include method is designed for the renderer
                             //and expects meta objects in the meta cache. These
                             //meta-objects do not exist for templates, so it
                             //must be created temporarily and then removed again.
                             var serial = placeholder.template.ordinal();
-                            var object = {serial:serial, element:placeholder.template, attributes:object.attributes, share:null};
+                            var object = {serial:serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
                             Composite.render.meta[serial] = object; 
                             Composite.render.include(placeholder.template);
                             delete Composite.render.meta[serial];
@@ -2107,8 +2114,18 @@ if (typeof Composite === "undefined") {
                         placeholder.complete = true;
                     }
                     
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
-                        dock(object);
+                    //Only composites are mounted based on their model.
+                    //This excludes the placeholders (are text nodes) of conditions.
+                    if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                        var model = (placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                        if (!model.match(Composite.PATTERN_COMPOSITE_ID))
+                            throw new Error("Invalid composite id" + (model ? ": " + model : ""));
+                        var meta = Composite.mount.lookup(selector.parentNode);
+                        //TODO: Use Composite.mount.lookup + only meta.model 
+                        if (meta && meta.meta && meta.meta.model)
+                            model = meta.meta.model + "." + model;
+                        dock(model);
+                    }
                     
                     if (!placeholder.output
                             || !document.body.contains(placeholder.output)) {
@@ -2487,7 +2504,7 @@ if (typeof Composite === "undefined") {
      */
     Composite.render.include = function(composite) {
         
-        if (!(typeof composite == "string"
+        if (!(typeof composite === "string"
                 || composite instanceof Element))
             throw new TypeError("Invalid composite: " + typeof composite);
         
