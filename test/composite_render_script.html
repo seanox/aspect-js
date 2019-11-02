@@ -47,18 +47,37 @@
         }});
         Test.create({test:function() {
             Assert.assertEquals(300, importCv);
-            Assert.assertEquals(15, importCx);
+            Assert.assertEquals(16, importCx);
         }});
         Test.create({test:function() {
             var content = document.querySelector("#OutputE ~ div").innerHTML.replace(/\s+/g, " ").trim();
             Assert.assertEquals("importAv = 100; importAx++; <script type=\"text/javascript\"> importBv = 200; importBx++; <\/script> <script type=\"composite/javascript\"> importCv = 300; importCx++; <\/script>", content);
-        }});       
+        }}); 
+        Test.create({test:function() {
+            Assert.assertEquals(10, targets["BODY"]);
+        }});
+        Test.create({test:function() {
+            Assert.assertEquals(2, targets["SCRIPT"]);
+        }});        
         
         var count = 0;
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (++count <= 9)
-                Composite.render(document.body);
-            else Test.start();
+        var targets = {};
+        Composite.listen(Composite.EVENT_RENDER_END, function(event, target) {
+            if (typeof targets[target.nodeName] === "undefined")
+                targets[target.nodeName] = 0;
+            targets[target.nodeName]++;
+            //10 render calls are initiated directly.
+            //Two other events occur during the import of scripts (test case e)
+            //This is why the (re)rendering is done with care that it is only triggered by the BODY.
+            if (target.nodeName == "BODY") {
+                ++count;
+                if (count <= 9)
+                    Composite.render(document.body);
+                if (count == 10)
+                    Test.start();
+                if (count > 10)
+                    throw new Error("More render calls than expected");
+            }
         }); 
     
         var ModelA = {
@@ -80,6 +99,10 @@
   <body>
     <div id="OutputA">A:</div>
     <div>
+      <!-- 
+        JavaScript is only executed initially because the renderer ignores script + style tags.
+        Expected result: A0
+      -->    
       <script type="text/javascript" condition={{ModelA.isVisibleA()}}>
          OutputA.textContent += "A" + count;        
       </script>
