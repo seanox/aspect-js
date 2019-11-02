@@ -100,7 +100,8 @@ O2: 1x2++; output2.textContent = x2;
 O3: 1 falsex3++; output3.textContent = x3;
 O4: 1 falsex4++; output4.textContent = x4;
 E::E
-S:1:1:S    
+SA:1:1:SA
+SB:1:1:SB    
 OnA: true
 OnB: false
 A3-1 
@@ -126,7 +127,8 @@ O2: 2x2++; output2.textContent = x2;
 O3: 1 true 
 O4: 1 true 
 E:abc:E
-S:2:2:S    
+SA:2:1:SA
+SB:2:2:SB   
 OnA: true
 OnB: true
 OnA: true
@@ -148,7 +150,8 @@ O2: 3x2++; output2.textContent = x2;
 O3: 1 falsex3++; output3.textContent = x3;
 O4: 2 falsex4++; output4.textContent = x4;
 E::E
-S:3:3:S    
+SA:3:1:SA    
+SB:3:3:SB   
 OnA: false
 OnB: false
 A3-1 
@@ -175,7 +178,8 @@ O2: 4x2++; output2.textContent = x2;
 O3: 1 true 
 O4: 2 true 
 E:abc:E
-S:4:4:S    
+SA:4:1:SA    
+SB:4:4:SB    
 OnA: false
 OnB: true
 OnA: false
@@ -197,7 +201,8 @@ O2: 5x2++; output2.textContent = x2;
 O3: 1 falsex3++; output3.textContent = x3;
 O4: 3 falsex4++; output4.textContent = x4;
 E::E
-S:5:5:S    
+SA:5:1:SA    
+SB:5:5:SB   
 OnA: true
 OnB: false
 A3-1 
@@ -232,8 +237,10 @@ OnB: true
         condition="{{not Model.toggleE()}}"><span>{{list.item}}</span></span>:E
     
     {{s1:(s1 || 0) +1}}
-    S:{{s1}}:<span id="outputS1" condition="{{true}}" import="{{testS(s1)}}">---</span>:S    
-
+    SA:{{s1}}:<span id="outputS1" condition="{{true}}" import="{{testS(s1)}}">---</span>:SA   
+    <!-- Expectation: testS(s1) is imported once, since the import is only executed once. --> 
+    SB:{{s1}}:<span id="outputS1" condition="{{true}}" output="{{testS(s1)}}">---</span>:SB   
+    <!-- Expectation: testS(s1) is output multiple, since the output is executed serveral times. --> 
     OnA: {{Model.onA}}
     OnB: {{Model.onB}}
     <span condition="{{Model.toggleB()}}">A3-1 
