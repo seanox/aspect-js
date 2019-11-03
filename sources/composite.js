@@ -645,8 +645,8 @@ if (typeof Composite === "undefined") {
      *  validate is expected in the model. The current element and the current
      *  value (if available) are passed as arguments.
      *  
-     *  The validation can have three states:
-     *      true, not true, undefined/void
+     *  The validation can have four states:
+     *      true, not true, text, undefined/void
      *      
      *          true
      *          ----
@@ -660,6 +660,12 @@ if (typeof Composite === "undefined") {
      *  A return value indicates that the default action of the browser should
      *  not be executed and so it is blocked. In this case, a possible value is
      *  not synchronized with the model.
+     *  
+     *          text
+     *          ----
+     *  Text corresponds to: Invalid + error message.
+     *  If the error message is empty, the message from the message attribute is
+     *  used alternatively.
      *  
      *          undefined/void
      *          ----
@@ -770,16 +776,21 @@ if (typeof Composite === "undefined") {
         //If the attribute NOTIFICATION is also used, a value is not expected,
         //the message is also displayed as an overlay/notification/report.
         if (valid !== true) {
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE)) {
-                var message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
+            var message;
+            if (typeof valid === "string"
+                    && valid.trim())
+                message = valid.trim();
+            if (typeof message !== "string") {
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE))
+                    message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
                 if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
-                if (message && typeof selector.setCustomValidity === "function") {
-                    selector.setCustomValidity(message);
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
-                            && typeof selector.reportValidity === "function")
-                        selector.reportValidity();
-                }
+            }
+            if (message && typeof selector.setCustomValidity === "function") {
+                selector.setCustomValidity(message);
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
+                        && typeof selector.reportValidity === "function")
+                    selector.reportValidity();
             }
         }     
         
