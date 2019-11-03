@@ -26,12 +26,16 @@
        
         var PASSWORD_PATTERN = "\\w{6,}";
         var PASSWORD_MESSAGE = "Mandatory with at least 6 characters.";
+        
+        var validateValues = [];
 
         var model = {
             email: "",
             password: "",
             validates: [],
             validate: function(element, value) {
+                if (typeof value !== "undefined")
+                    validateValues.push(value);
                 if (!model.validates.includes(element.id))
                     model.validates.push(element.id);
                 if (element == document.querySelector("#model #submit")
@@ -173,7 +177,10 @@
         
         Test.create({test:function() {
             Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
-        }});        
+        }});     
+        Test.create({test:function() {
+            Assert.assertEquals("Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"));
+        }});     
     </script>
     <script type="text/test">
 E:MR|

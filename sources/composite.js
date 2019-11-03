@@ -733,6 +733,18 @@ if (typeof Composite === "undefined") {
         //are primarily a property and the validation is located in the
         //surrounding model and not in the property object itself.
         
+        var value;
+        if (selector instanceof Element) {
+            if (selector.tagName.match(/^input$/i)
+                    && selector.type.match(/^radio|checkbox/i))
+                value = selector.checked;
+            else if (selector.tagName.match(/^select/i)
+                    && "selectedIndex" in selector)
+                value = selector.options[selector.selectedIndex].value;
+            else if (Composite.ATTRIBUTE_VALUE in selector)
+                value = selector[Composite.ATTRIBUTE_VALUE];
+        }        
+        
         //Implicit validation via the model.
         //If a corresponding validate method has been implemented in the model.
         //The declaration with the attribute validate is not required here.
