@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191024
+ *  Composite 1.2.0 20191103
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191024
+ *  @version 1.2.0 20191103
  */
 if (typeof Composite === "undefined") {
     
@@ -1159,15 +1159,14 @@ if (typeof Composite === "undefined") {
         
         if (!(element instanceof Element))
             return null;
-
+        
         var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
 
-        //Composites have a meta object where only composite and model are filled.
-        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
+        //Composites have only a meta object with composite and model.
+        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
-            return {composite:serial, model:serial};
-        }
+            else return {composite:serial, model:serial};
 
         var meta = {composite:null, model:null, property:null, name:null};
 
@@ -2039,10 +2038,10 @@ if (typeof Composite === "undefined") {
                 
                 return;
             }
-
+            
+            //Internal method for docking models.
             //Only composites are mounted based on their model.
             //This excludes the placeholders (are text nodes) of conditions.
-
             var dock = function(model) {
                 Composite.models = Composite.models || [];
                 if (typeof model !== "string"
@@ -2061,10 +2060,7 @@ if (typeof Composite === "undefined") {
                 var model = (object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                 if (!model.match(Composite.PATTERN_COMPOSITE_ID))
                     throw new Error("Invalid composite id" + (model ? ": " + model : ""));
-                var meta = Composite.mount.lookup(selector);
-                //TODO: Use Composite.mount.lookup + only meta.model 
-                if (meta && meta.meta && meta.meta.model)
-                    dock(meta.meta.model);
+                dock(model);
             }
             
             //The condition attribute is interpreted.
@@ -2120,20 +2116,15 @@ if (typeof Composite === "undefined") {
                         var model = (placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                         if (!model.match(Composite.PATTERN_COMPOSITE_ID))
                             throw new Error("Invalid composite id" + (model ? ": " + model : ""));
-                        var meta = Composite.mount.lookup(selector.parentNode);
-                        //TODO: Use Composite.mount.lookup + only meta.model 
-                        if (meta && meta.meta && meta.meta.model)
-                            model = meta.meta.model + "." + model;
                         dock(model);
                     }
                     
-                    if (!placeholder.output
-                            || !document.body.contains(placeholder.output)) {
-                    
+                    if (!placeholder.output) {
+
                         //The placeholder output is rendered recursively and
                         //finally and inserted before the placeholder.
                         //Therefore, rendering can be stopped afterwards.
-                        var template = placeholder.template.cloneNode(true);
+                        var template = placeholder.template.cloneNode(true);                 
                         placeholder.output = template;
                         
                         //The meta object is prepared and registered so that
@@ -2410,9 +2401,10 @@ if (typeof Composite === "undefined") {
                 for (var key in object.attributes)
                     if (object.attributes.hasOwnProperty(key))
                         attributes.push(key);
-                if (Composite.ATTRIBUTE_VALUE in selector)
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE))
-                        attributes.push(Composite.ATTRIBUTE_VALUE);
+                if (Composite.ATTRIBUTE_VALUE in selector
+                        && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
+                        && !attributes.includes(Composite.ATTRIBUTE_VALUE))
+                    attributes.push(Composite.ATTRIBUTE_VALUE);
                 attributes.forEach((attribute) => {
                     //Ignore all internal attributes
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
@@ -2431,10 +2423,10 @@ if (typeof Composite === "undefined") {
                     if (typeof value !== "undefined") {
                         value = String(value).encodeHtml();
                         value = value.replace(/"/g, "&quot;");
-                        //Special case attribute value, here primarily the value of
-                        //the property must be set, the value of the attribute is
-                        //optional. Changing the value does not trigger an event, so
-                        //no unwanted recursions occur.
+                        //Special case attribute value, here primarily the value
+                        //of the property must be set, the value of the
+                        //attribute is optional. Changing the value does not
+                        //trigger an event, so no unwanted recursions occur.
                         if (attribute.toLowerCase() == Composite.ATTRIBUTE_VALUE
                                 && Composite.ATTRIBUTE_VALUE in selector)
                             selector.value = value;
