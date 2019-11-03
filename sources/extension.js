@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.0 20190906
+ *  Extension 1.1.0 20190906
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0 20190906
+ *  @version 1.1.0 20190906
  */
 if (typeof Namespace === "undefined") {
 
