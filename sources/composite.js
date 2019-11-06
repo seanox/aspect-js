@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191103
+ *  Composite 1.2.0 20191106
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191103
+ *  @version 1.2.0 20191106
  */
 if (typeof Composite === "undefined") {
     
@@ -2062,6 +2062,31 @@ if (typeof Composite === "undefined") {
                 return;
             }
             
+            //Internal method for emulating the composite hierarchy for a
+            //temporary container element. The help method is required for the
+            //lookup and locate methods to work with templates, because both
+            //require the complete composite hierarchy to determine the
+            //namespace of the models.
+            //TODO: return value
+            var imitate = function(element) {
+                if (!(element instanceof Element))
+                    return null;
+                var container = document.createElement("div");
+                var construct = container; 
+                for (; element; element = element.parentNode) {
+                    if (!(element instanceof Element)
+                            || !element.hasAttribute(Composite.ATTRIBUTE_ID))
+                        continue;
+                    var temp = document.createElement("div");
+                    temp.setAttribute(Composite.ATTRIBUTE_ID, element.getAttribute(Composite.ATTRIBUTE_ID));
+                    if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+                        temp.setAttribute(Composite.ATTRIBUTE_COMPOSITE, "");
+                    temp.appendChild(construct);
+                    construct = temp;
+                }
+                return container;
+            };            
+            
             //Internal method for docking models.
             //Only composites are mounted based on their model.
             //This excludes the placeholders (are text nodes) of conditions.
@@ -2143,11 +2168,20 @@ if (typeof Composite === "undefined") {
                     }
                     
                     if (!placeholder.output) {
-
+                        
                         //The placeholder output is rendered recursively and
                         //finally and inserted before the placeholder.
                         //Therefore, rendering can be stopped afterwards.
-                        var template = placeholder.template.cloneNode(true);                 
+                        var template = placeholder.template.cloneNode(true);
+
+                        //TODO: Doku
+                        var container = imitate(selector.parentNode);
+                        container.appendChild(template);
+                                                
+                        //The placeholder output is rendered recursively and
+                        //finally and inserted before the placeholder.
+                        //Therefore, rendering can be stopped afterwards.
+                        //var template = placeholder.template.cloneNode(true);                 
                         placeholder.output = template;
                         
                         //The meta object is prepared and registered so that
@@ -2258,7 +2292,7 @@ if (typeof Composite === "undefined") {
                             if (request.status != "200")
                                 throw Error("HTTP status " + request.status + " for " + url);
                             var content = request.responseText.trim();
-                            Composite.render.cache[url] = content;
+                            Composite.render.cache[request.responseURL] = content;
                             selector.innerHTML = content;
                             var serial = selector.ordinal();
                             var object = Composite.render.meta[serial];
@@ -2395,6 +2429,8 @@ if (typeof Composite === "undefined") {
                             iterate.forEach((item, index, array) => {
                                 window[object.iterate.name] = {item:item, index:index, data:array};
                                 var template = document.createElement("div");
+                                var container = imitate(selector.parentNode);
+                                container.appendChild(template);
                                 template.appendChild(object.template.cloneNode(true).childNodes);
                                 Composite.render(template, lock.share());
                                 selector.appendChild(template.childNodes);
@@ -2532,88 +2568,104 @@ if (typeof Composite === "undefined") {
                 throw new Error("Unknown composite");
         }
         
+        //For module/composites only resources of the current domain are used,
+        //therefore only the URI and not the URL is used as key in the cache.
         Composite.render.cache = Composite.render.cache || {};
         var context = Composite.MODULES + "/" + (composite instanceof Element ? composite.id : composite);        
         
-        if (typeof Composite.render.cache[context + ".composite"] === "undefined") {
-            Composite.render.cache[context + ".composite"] = null;
-            var request = new XMLHttpRequest();
-            request.overrideMimeType("text/plain");
-            request.onreadystatechange = function() {
-                if (request.readyState != 4
-                        || request.status == "404")
-                    return;
-                if (request.status != "200")
-                    throw new Error("HTTP status " + request.status + " for " + request.responseURL);
-                
-                //CSS is inserted into the HEad element as a style element.
-                //Without a head element, the inserting causes an error.
-
-                //JavaScript is not inserted as an element, it is executed
-                //directly. For this purpose eval is used. Since the method may
-                //form its own namespace for variables, it is important to
-                //initialize the global variable better with window[...].
-                
-                //HTML/Markup is preloaded into the render cache if available.
-                //If markup exists for the composite, the import attribute with
-                //the URL is added to the item. Inserting then takes over the
-                //import implementation, which then also accesses the render
-                //cache.
-                
-                var content = request.responseText.trim();
-                if (content) {
-                    Composite.render.cache[request.responseURL] = content;
-                    if (request.responseURL.match(/\.css$/)) {
-                        var head = document.querySelector("html head");
-                        if (!head)
-                            throw new Error("No head element found");
-                        var style = document.createElement("style");
-                        style.setAttribute("type", "text/css");
-                        style.textContent = content;
-                        head.appendChild(style);
-                    } else if (request.responseURL.match(/\.js$/)) {
-                        try {eval(content);
-                        } catch (exception) {
-                            console.error(request.responseURL, exception.name + ": " + exception.message);
-                            throw exception;
-                        }
-                    } else if (request.responseURL.match(/\.html$/)) {
-                        if (composite instanceof Element)
-                            composite.innerHTML = content;
-                    }
+        //If the module has already been loaded, it is only necessary to check
+        //whether the markup must be inserted. CSS should already exist in the
+        //head and the JavaScript will only be executed once.
+        if (typeof Composite.render.cache[context + ".composite"] !== "undefined") {
+            if (typeof Composite.render.cache[context + ".html"] !== "undefined") {
+                if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                        && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
+                        && !composite.innerHTML.trim()) {
+                    if (composite instanceof Element)
+                        composite.innerHTML = Composite.render.cache[context + ".html"];
                 }
-            };
-
-            //The sequence of loading is strictly defined.
-            //    sequence: CSS, JS, HTML
-            request.open("HEAD", context + ".css", false);
-            request.send();
-            if (request.status != 404) {
-                request.open("GET", context + ".css", false);
-                request.send();
             }
-            request.open("HEAD", context + ".js", false);
-            request.send();
-            if (request.status != 404) {
-                request.open("GET", context + ".js", false);
-                request.send();
-            }
+            return;
+        }
+        
+        Composite.render.cache[context + ".composite"] = null;
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("text/plain");
+        request.onreadystatechange = function() {
+            if (request.readyState != 4
+                    || request.status == "404")
+                return;
+            if (request.status != "200")
+                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
             
-            //HTML/Markup is only loaded if it is a known composite object and
-            //the element does not contain a markup (inner HTML) and the
-            //attributes import and output are not set. Thus is the assumption
-            //that for an empty element outsourced markup should exist.
-            if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                    && !composite.innerHTML.trim()) {
-                request.open("HEAD", context + ".html", false);
-                request.send();
-                if (request.status != 404) {
-                    request.open("GET", context + ".html", false);
-                    request.send();
+            //CSS is inserted into the HEad element as a style element.
+            //Without a head element, the inserting causes an error.
+
+            //JavaScript is not inserted as an element, it is executed directly.
+            //For this purpose eval is used. Since the method may form its own
+            //namespace for variables, it is important to initialize the global
+            //variable better with window[...].
+            
+            //HTML/Markup is preloaded into the render cache if available.
+            //If markup exists for the composite, the import attribute with the
+            //URL is added to the item. Inserting then takes over the import
+            //implementation, which then also accesses the render cache.
+            
+            var content = request.responseText.trim();
+            if (content) {
+                var url = document.createElement("a");
+                url.href = request.responseURL;
+                Composite.render.cache[url.pathname] = content;
+                if (request.responseURL.match(/\.css$/)) {
+                    var head = document.querySelector("html head");
+                    if (!head)
+                        throw new Error("No head element found");
+                    var style = document.createElement("style");
+                    style.setAttribute("type", "text/css");
+                    style.textContent = content;
+                    head.appendChild(style);
+                } else if (request.responseURL.match(/\.js$/)) {
+                    try {eval(content);
+                    } catch (exception) {
+                        console.error(request.responseURL, exception.name + ": " + exception.message);
+                        throw exception;
+                    }
+                } else if (request.responseURL.match(/\.html$/)) {
+                    if (composite instanceof Element)
+                        composite.innerHTML = content;
                 }
             }
-        }        
+        };
+
+        //The sequence of loading is strictly defined.
+        //    sequence: CSS, JS, HTML
+        request.open("HEAD", context + ".css", false);
+        request.send();
+        if (request.status != 404) {
+            request.open("GET", context + ".css", false);
+            request.send();
+        }
+        request.open("HEAD", context + ".js", false);
+        request.send();
+        if (request.status != 404) {
+            request.open("GET", context + ".js", false);
+            request.send();
+        }
+        
+        //HTML/Markup is only loaded if it is a known composite object and the
+        //element does not contain a markup (inner HTML) and the attributes
+        //import and output are not set. Thus is the assumption that for an
+        //empty element outsourced markup should exist.
+        if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
+                && !composite.innerHTML.trim()) {
+            request.open("HEAD", context + ".html", false);
+            request.send();
+            if (request.status != 404) {
+                request.open("GET", context + ".html", false);
+                request.send();
+            }
+        }
     };
 
     //Listener when an error occurs and triggers a matching composite-event.
