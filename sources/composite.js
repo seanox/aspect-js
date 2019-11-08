@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191106
+ *  Composite 1.2.0 20191108
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191106
+ *  @version 1.2.0 20191108
  */
 if (typeof Composite === "undefined") {
     
@@ -166,6 +166,9 @@ if (typeof Composite === "undefined") {
         /** Constant for attribute render */
         get ATTRIBUTE_RENDER() {return "render"},  
         
+        /** Constant for attribute release */
+        get ATTRIBUTE_RELEASE() {return "release"},
+        
         /** Constant for attribute text */
         get ATTRIBUTE_TEXT() {return "text"},
 
@@ -180,17 +183,18 @@ if (typeof Composite === "undefined") {
 
         /**
          *  Pattern for all accepted attributes.
-         *  Accepted attributes are all attributes, even without an expression that
-         *  is cached in the meta object. Other attributes are only cached if they
-         *  contain an expression.
+         *  Accepted attributes are all attributes, even without an expression
+         *  that is cached in the meta object. Other attributes are only cached
+         *  if they contain an expression.
          */
         get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i},
         
         /**
          *  Pattern for all static attributes.
-         *  Static attributes are not removed from the element during rendering, but
-         *  are also set in the meta object like non-static attributes.
-         *  These attributes are also intended for direct use in JavaScript and CSS.
+         *  Static attributes are not removed from the element during rendering,
+         *  but are also set in the meta object like non-static attributes.
+         *  These attributes are also intended for direct use in JavaScript and
+         *  CSS.
          */
         get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i},
 
@@ -201,9 +205,9 @@ if (typeof Composite === "undefined") {
         get PATTERN_EXPRESSION_CONTAINS() {return /\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}/g},   
         
         /**
-         *  Patterns to test whether an expression is exclusive, i.e. an expression
-         *  without additional text fragments before or after.
-         *  The test is based on the check that the text has an expression (group 1)
+         *  Patterns to test whether an expression is exclusive, i.e. an
+         *  expression without additional text fragments before or after.
+         *  The test based on the check that the text has an expression (group1)
          *  and at the end no more literal or other expressions (group 2) exist.
          */
         get PATTERN_EXPRESSION_EXCLUSIVE() {return /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*(.*)$/},
@@ -223,9 +227,9 @@ if (typeof Composite === "undefined") {
 
         /** 
          *  Pattern for all composite-script elements.
-         *  These elements are not automatically executed by the browser but must be
-         *  triggered by rendering. Therefore, these scripts can be combined and
-         *  controlled with the condition attribute.
+         *  These elements are not automatically executed by the browser but
+         *  must be triggered by rendering. Therefore, these scripts can be
+         *  combined and controlled with the condition attribute.
          */
         get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i},
 
@@ -1612,9 +1616,10 @@ if (typeof Composite === "undefined") {
      *      
      *      Release
      *      ----
-     *  TODO: Inverse indicator that an element was rendered.
-     *  The renderer removes this attribute when an element is rendered. This
-     *  effect can be used for CSS to display elements only in rendered state.    
+     *  Inverse indicator that an element was rendered.
+     *  The renderer removes this attribute when an element is rendered.
+     *  This effect is used by CSS to display elements only when rendered.
+     *  The required CSS rule is automatically added to the head.   
      *             
      *      Scripting
      *      ----
@@ -1775,7 +1780,8 @@ if (typeof Composite === "undefined") {
                             //for the rendering.
                             if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                                     && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    && !Composite.statics.includes(attribute.name))
+                                    && !Composite.statics.includes(attribute.name)
+                                    && attribute.name != Composite.ATTRIBUTE_RELEASE)
                                 selector.removeAttribute(attribute.name);
                             
                             object.attributes[attribute.name] = attribute.value;
@@ -2066,8 +2072,8 @@ if (typeof Composite === "undefined") {
             //temporary container element. The help method is required for the
             //lookup and locate methods to work with templates, because both
             //require the complete composite hierarchy to determine the
-            //namespace of the models.
-            //TODO: return value
+            //namespace of the models. The return value is a DIV structure that
+            //corresponds to the composite hierarchy.
             var imitate = function(element) {
                 if (!(element instanceof Element))
                     return null;
@@ -2174,7 +2180,9 @@ if (typeof Composite === "undefined") {
                         //Therefore, rendering can be stopped afterwards.
                         var template = placeholder.template.cloneNode(true);
 
-                        //TODO: Doku
+                        //Rendering templates should have the same effects as
+                        //rendering markups in the current DOM. This requires
+                        //the real composite hierarchy, which is simulated here.
                         var container = imitate(selector.parentNode);
                         container.appendChild(template);
                                                 
@@ -2536,6 +2544,10 @@ if (typeof Composite === "undefined") {
                     Composite.render(node, lock.share());
                 });
             }
+            
+            if (selector.hasAttribute(Composite.ATTRIBUTE_RELEASE))
+                selector.removeAttribute(Composite.ATTRIBUTE_RELEASE);
+            
         } finally {
             lock.release();
         }
