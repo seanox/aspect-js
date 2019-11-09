@@ -56,8 +56,25 @@
  *  component. For example, the input mask and result table of a search can be
  *  separate facets of a face, as can articles or sections of a face. Both face
  *  and facet can be accessed via virtual paths. The path to a facet has the
- *  effect that the face is displayed with any other faces, but the requested
- *  facet is displayed in the visible area and focused.
+ *  effect that the face is displayed with any other faces.
+ *  The facet is no longer automatically focused, because the own implementation
+ *  is very simple and much flexible.
+ *   
+ *  window.addEventListener("hashchange", (event) => {
+ *      var path = Path.normalize(event.newURL || "#");
+ *      var target = SiteMap.lookup(path);
+ *      if (target) {
+ *          target = target.facet || target.face;
+ *          if (target) {
+ *              target = target.replace(/(?!=#)#/, " #");
+ *              target = document.querySelector(target);
+ *              if (target) {
+ *                  target.scrollIntoView(true);
+ *                  target.focus();
+ *              }
+ *          }
+ *      }
+ *  }); 
  *  
  *  Faces are also components that can be nested.
  *  Thus, parent faces become partial faces when the path refers to a sub-face.
@@ -84,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.0.1 20191024
+ *  MVC 1.1.0 20191109
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.0.1 20191024
+ *  @version 1.1.0 20191109
  */
 if (typeof Path === "undefined") {
     
@@ -243,8 +260,8 @@ if (typeof SiteMap === "undefined") {
      *  search can be separate facets of a face, as can articles or sections of
      *  a face. Both face and facet can be accessed via virtual paths. The path
      *  to a facet has the effect that the face is displayed with any other
-     *  faces, but the requested facet is displayed in the visible area and
-     *  focused.
+     *  faces. The facet is no longer automatically focused, because the own
+     *  implementation is very simple and much flexible.
      *  
      *  Faces are also components that can be nested.
      *  Thus, parent faces become partial faces when the path refers to a
@@ -416,25 +433,11 @@ if (typeof SiteMap === "undefined") {
                 return meta.path + meta.facet;
             return meta.path + "#" + meta.facet;
         };
-        
-        var focus = function(focus) {
-            Composite.asynchron((focus) => {
-                focus = focus ? document.querySelector("#" + focus) : focus;
-                if (focus) {
-                    focus.scrollIntoView(true);
-                    focus.focus();
-                }
-            }, (focus.facet || focus.face).replace(/^.*#/, ""));
-        };
 
         if (paths.hasOwnProperty(path))
-            return {path:path, face:path, facet:null, focus:function() {
-                focus(this);
-            }};
+            return {path:path, face:path, facet:null};
         else if (facets.hasOwnProperty(path))
-            return {path:canonical(facets[path]), face:facets[path].path, facet:facets[path].facet, focus:function() {
-                focus(this);
-            }};
+            return {path:canonical(facets[path]), face:facets[path].path, facet:facets[path].facet};
         return null;
     };
 
@@ -571,7 +574,7 @@ if (typeof SiteMap === "undefined") {
      *      SiteMap.customize(RegExp, function);
      * 
      *  Permit methods and acceptors are regarded as one set and called in the
-     *  order of their registration. 
+     *  order of their registration.
      *  
      *      Important note about how the SiteMap works:
      *      ----
@@ -845,16 +848,6 @@ if (typeof SiteMap === "undefined") {
         
         source = SiteMap.lookup(source);
         target = SiteMap.lookup(target);
-        
-        //The new focus is determined and set with a delay after the rendering.
-        //This is important because the target may not exist before rendering.
-        //The focus is only changed if the face or facet has changed.
-        //In the case of functional links, the focus must not be set, since it
-        //scrolls relative to the last position.
-        if (source && target
-                && (source.face != target.face
-                        || source.facet != target.facet))
-            target.focus();
         
         //Only if the face is changed or initial, a rendering is necessary.
         if (source.face == target.face

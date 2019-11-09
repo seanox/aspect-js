@@ -1703,7 +1703,6 @@ if (typeof Composite === "undefined") {
             //used or not. Only the return value false (not void, not empty)
             //terminates the rendering for the macro without using the standard
             //functions.
-            //TODO:
             Composite.macros = Composite.macros || {};
             var macro = Composite.macros[selector.nodeName.toLowerCase()];
             if (macro && macro(selector) === false)
@@ -1722,7 +1721,6 @@ if (typeof Composite === "undefined") {
             //Only the return value false (not void, not empty) terminates the
             //loop and the rendering for the selector without using the standard
             //functions.
-            //TODO:
             Composite.selectors = Composite.selectors || {};
             if (selector.parentNode) {
                 for (var macro in Composite.selectors) {
@@ -1758,7 +1756,6 @@ if (typeof Composite === "undefined") {
                 //processes them. This does not affect the implementation of the
                 //rendering. The method call with a acceptor:
                 //    Composite.customize(function(element) {...});
-                //TODO:
                 Composite.acceptors = Composite.acceptors || [];
                 Composite.acceptors.forEach((acceptor) => {
                     acceptor.call(null, selector);
