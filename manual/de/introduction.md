@@ -132,7 +132,7 @@ HTTP-Methode GET nachgeladen wird, oder eine
 
 ### condition
 
-Das condition-Attribut legt fest, ob ein Element im DOM erhalten bleibt.  
+Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt.  
 Der mit dem Attribut angegebene Ausdruck muss explizit `true` oder `false`
 zurückliefern. Mit `false` wird ein Element temporär aus dem DOM entfernt und
 lässt sich später durch das Auffrischen des __Eltern-Elements__ wieder einfügen,
@@ -300,13 +300,8 @@ welche die Ziele festlegt.
 Inverser Indikator dafür, dass ein Element gerendert wurde.  
 Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser
 Effekt kann für CSS verwendet werden, um Elemente nur im gerenderten Zustand
-anzuzeigen.  
-
-```css
-*[release] {
-    display:none;
-}  
-```
+anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem Laden
+der Seite hinzugefügt.
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -347,6 +342,16 @@ welche eine direkte Ausgabe in das innere HTML vom Element bewirken.
 ```html
 <p output="Today is {{new Date().toDateString()}}
     and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+```
+
+Oder mit der Verwendung vom Attribut [release](markup.md#release) werden
+Element und Ausgabe erst mit Abschluss vom Rendering sichtbar.
+
+```html
+<p release>
+  Today is {{new Date().toDateString()}}
+  and it's {{new Date().toLocaleTimeString()}} o'clock.
 </p>
 ```
 

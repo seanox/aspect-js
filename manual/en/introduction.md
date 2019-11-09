@@ -294,13 +294,8 @@ which sets the targets.
 
 Inverse indicator that an element was rendered.  
 The renderer removes this attribute when an element is rendered. This effect can
-be used for CSS to display elements only in rendered state.  
-
-```css
-*[release] {
-    display:none;
-}  
-```
+be used for CSS to display elements only in rendered state. A corresponding CSS
+rule is automatically added to the HEAD when the page is loaded.
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -341,6 +336,16 @@ cause a direct output into the inner HTML of the element.
 ```html
 <p output="Today is {{new Date().toDateString()}}
     and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+```
+
+Or by using the [release](markup.md#release) attribute, the element and output
+only become visible when the rendering is complete.
+
+```html
+<p release>
+  Today is {{new Date().toDateString()}}
+  and it's {{new Date().toLocaleTimeString()}} o'clock.
 </p>
 ```
 
