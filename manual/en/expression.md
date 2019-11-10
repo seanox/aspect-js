@@ -204,24 +204,23 @@ All types of expressions can be combined.
 ## Supplement
 
 Expressions are interpreted by the renderer that starts after loading the page.
-So expressions can be visible when loading the page. We recommend that you swap
-the data to the [DataSource](datasource.md) and use the attributes
-[release](markup.md#release) or [output](markup.md#output) and
-[import](markup.md#import) in the markup.
+So expressions can be visible when loading the page. It is recommended to use
+the attribute [release](markup.md#release).
+
+```html
+<h1 release>{{'Hello World!'}}</h1>
+```
+
+Alternatively, content can be stored in the DataSource in combination with the
+attributes [output](markup.md#output) and [import](markup.md#import).
 
 ```css
-*[release] {
-  display:none;
-}
-
 h1:after {
   content:attr(title)
 }
 ```
 
 ```html
-<h1 release>{{'Hello World!'}}</h1>
-
 <h1 title="{{'Hello World!'}}"/>
 
 <h1 output="{{'Hello World!'}}"/>

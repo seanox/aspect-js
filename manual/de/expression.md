@@ -204,24 +204,24 @@ Alle der gennannten Arten von Expressions lassen sich kombinieren.
 ## Ergänzung
 
 Expressions werden durch den Renderer interpretiert, der nach dem Laden der
-Seite startet. Somit können Expressions beim Laden der Seite sichtbar sein. Hier
-empfiehlt sich die Auslagerung in die DataSource und sowie die Verwendung der
-Attribute [release](markup.md#release) oder [output](markup.md#output) und
-[import](markup.md#import) im Markup.
+Seite startet. Somit können Expressions beim Laden der Seite sichtbar sein.  
+Hier empfiehlt sich die Verwendung vom Attribut [release](markup.md#release).
+
+```html
+<h1 release>{{'Hello World!'}}</h1>
+```
+
+Alternativ sind die Auslagerung von Inhalten in die DataSource in Kombination
+mit den Attributen [output](markup.md#output) und [import](markup.md#import)
+möglich.
 
 ```css
-*[release] {
-  display:none;
-}
-
 h1:after {
   content:attr(title)
 }
 ```
 
 ```html
-<h1 release>{{'Hello World!'}}</h1>
-
 <h1 title="{{'Hello World!'}}"/>
 
 <h1 output="{{'Hello World!'}}"/>
