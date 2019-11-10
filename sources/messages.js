@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.1.1 20191024
+ *  Messages 1.2.x 20191110
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.1 20191024
+ *  @version 1.2.x 20191110
  */
 if (typeof Messages === "undefined") {
     
@@ -89,11 +89,9 @@ if (typeof Messages === "undefined") {
         //loading of the key-value pairs is embedded.
         var localize = DataSource.localize;
         DataSource.localize = function(locale) {
-            for (var property in Messages)
-                if (typeof Messages[property] === "string")
-                    delete Messages[property];
             DataSource.localize.internal(locale);
 
+            window["Messages"] = {}
             var xpath = "/locales/" + DataSource.locale + "/label";
             var label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
             for (var node = label.iterateNext(); node; node = label.iterateNext()) {
@@ -103,7 +101,12 @@ if (typeof Messages === "undefined") {
                 var value = ((node.getAttribute("value") || "").trim()
                         + " " + (node.textContent).trim()).trim();
                 value = value.unescape();
-                Messages[key] = value;
+                Object.defineProperty(Messages, key, {
+                    value: value,
+                    enumerable: false,
+                    configurable: false,
+                    writable: false
+                });
             }
         };
         
