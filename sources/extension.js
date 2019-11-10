@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.0 20190906
+ *  Extension 1.1.x 20191110
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20190906
+ *  @version 1.1.x 20191110
  */
 if (typeof Namespace === "undefined") {
 
@@ -92,7 +92,8 @@ if (typeof Namespace === "undefined") {
 
 /**
  *  Enhancement of the JavaScript API
- *  Adds a static function for creating a alhpanumeric (U)UID with fixed size.
+ *  Adds a static function to create a alhpanumeric serial (U)UID with fixed size.
+ *  The quality of the ID is dependent of the length.
  *  @param size optional, default is 16
  */
 if (Math.uniqueId === undefined) {
@@ -108,6 +109,28 @@ if (Math.uniqueId === undefined) {
             else unique += String.fromCharCode(65 +random); 
         }
         return unique;
+    };
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds a static function to create a alhpanumeric serial (U)UID with fixed size.
+ *  Compared to Math.uniqueId(), the (U)UID contains a serial reference to time.
+ *  The quality of the ID is dependent of the length.
+ *  @param size optional, default is 16
+ */
+if (Math.uniqueSerialId === undefined) {
+    Math.uniqueSerialId = function(size) {
+        size = size || 16;
+        if (size < 0)
+            size = 16;
+        var serial = "";
+        serial = (new Date().getTime() -946684800000).toString(36);
+        serial = (serial.length.toString(36) + serial).toUpperCase();
+        serial = Math.uniqueId() + serial;
+        if (serial.length > size)
+            serial = serial.substr(serial.length -size);
+        return serial;
     };
 };
 
@@ -286,8 +309,8 @@ Element.prototype.appendChild = function(node, exclusive) {
  */
 if (RegExp.quote === undefined) {
     RegExp.quote = function(text) {
-        if (text == null
-                || text == undefined)
+        if (text == undefined
+                || text == null)
             return null;
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
@@ -298,8 +321,12 @@ if (RegExp.quote === undefined) {
  *  Adds a property to get the UID for the window instance.
  */  
 if (window.serial === undefined) {
-    var timestamp = (new Date().getTime() -946684800000).toString(36);
-    window.serial = Math.uniqueId(10) + (timestamp.length.toString(36) + timestamp).toUpperCase();
+    Object.defineProperty(window, "serial", {
+        value: Math.uniqueSerialId(),
+        enumerable: false,
+        configurable: false,
+        writable: false
+    });
 };
 
 /**
@@ -309,5 +336,10 @@ if (window.serial === undefined) {
  *  current working directory.
  */  
 if (window.location.pathcontext === undefined) {
-    window.location.pathcontext = window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/";
+    Object.defineProperty(window.location, "pathcontext", {
+        value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/",
+        enumerable: false,
+        configurable: false,
+        writable: false
+    });
 };
