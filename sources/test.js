@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20190906
+ *  Test 1.1.x 20191110
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20190906
+ *  @version 1.1.x 20191110
  */
 if (typeof Test === "undefined") {
     
@@ -429,33 +429,33 @@ if (typeof Test === "undefined") {
             
             Test.output = Test.output || console;
             Test.monitor = Test.monitor || {
-                start:function(status) {
+                start: function(status) {
                     Test.output.log(new Date().toUTCString() + " Test is started"
                             + ", " + numerical(status.queue.size, "task") + " in the queue");
                 },
-                suspend:function(status) {
+                suspend: function(status) {
                     Test.output.log(new Date().toUTCString() + " Test is suspended"
                             + ", " + numerical(status.queue.length, "task") + " still outstanding");
                 },
-                resume:function(status) {
+                resume: function(status) {
                     Test.output.log(new Date().toUTCString() + " Test is continued "
                             + ", " + numerical(status.queue.size, "task") + " in the queue");
                 },
-                interrupt:function(status) {
+                interrupt: function(status) {
                     Test.output.log(new Date().toUTCString() + " Test is interrupted"
                             + "\n\t" + numerical(status.queue.size -status.queue.progress, "task") + " still outstanding"
                             + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
                             + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
                 },
-                perform:function(status) {
+                perform: function(status) {
                 },
-                response:function(status) {
+                response: function(status) {
                     var timing = new Date().getTime() -status.task.timing;
                     if (status.task.error)
                         Test.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
                     else Test.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
                 },
-                finish:function(status) {
+                finish: function(status) {
                     Test.output.log(new Date().toUTCString() + " Test is finished"
                             + "\n\t" + numerical(status.queue.size, "task") + " were performed"
                             + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
@@ -637,27 +637,66 @@ if (typeof Test === "undefined") {
         Test.status = function() {
             
             var task = null;
-            if (Test.task)
-                task = {
-                    title:Test.task.title,
-                    meta:Test.task.meta,
-                    running:Test.task.running,
-                    timing:Test.task.timing,
-                    timeout:Test.task.timeout,
-                    duration:Test.task.duration,
-                    error:Test.task.error
-                };
-
+            if (Test.task) {
+                task = {};
+                Object.defineProperty(task, "title", {
+                    value: Test.task.title,
+                    enumerable: true
+                });
+                Object.defineProperty(task, "meta", {
+                    value: Test.task.meta,
+                    enumerable: true
+                });
+                Object.defineProperty(task, "running", {
+                    value: Test.task.running,
+                    enumerable: true
+                });
+                Object.defineProperty(task, "timing", {
+                    value: Test.task.timing,
+                    enumerable: true
+                });
+                Object.defineProperty(task, "timeout", {
+                    value: Test.task.timeout,
+                    enumerable: true
+                });
+                Object.defineProperty(task, "duration", {
+                    value: Test.task.duration,
+                    enumerable: true
+                });
+                Object.defineProperty(task, "error", {
+                    value: Test.task.error,
+                    enumerable: true
+                });
+            }
+            
             var queue = null;
-            if (Test.queue)
-                queue = {
-                    timing:Test.queue.timing,
-                    size:Test.queue.size,
-                    length:Test.queue.stack.length,
-                    progress:Test.queue.progress,
-                    lock:Test.queue.lock,
-                    faults:Test.queue.faults
-                };
+            if (Test.queue) {
+                queue = {};
+                Object.defineProperty(queue, "timing", {
+                    value: Test.queue.timing,
+                    enumerable: true
+                });
+                Object.defineProperty(queue, "size", {
+                    value: Test.queue.size,
+                    enumerable: true
+                });
+                Object.defineProperty(queue, "length", {
+                    value: Test.queue.stack.length,
+                    enumerable: true
+                });
+                Object.defineProperty(queue, "progress", {
+                    value: Test.queue.progress,
+                    enumerable: true
+                });
+                Object.defineProperty(queue, "lock", {
+                    value: Test.queue.lock,
+                    enumerable: true
+                });
+                Object.defineProperty(queue, "faults", {
+                    value: Test.queue.faults,
+                    enumerable: true
+                });
+            }
             
             return {task:task, queue:queue};
         };    
