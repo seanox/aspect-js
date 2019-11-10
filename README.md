@@ -113,11 +113,13 @@ CR: Test: Optimization of console forwarding
 CR: Test: Extension of console forwarding by listeners  
 CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames  
 CR: Test: Extension for central catching of errors with activated Test-AP  
+CR: Test: Optimization for using readonly meta objects for return values  
 CR: Test Suite: Optimization of error output  
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
 CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)  
 CR: Composite Render Iterate: Correction/Optimization in general  
+CR: Composite Render Iterate: Optimization for using readonly meta object  
 CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute  
 CR: Composite Scan: Omission of the intermediate step between render and mount  
 CR: Composite Mount: Revision of the object/model binding  
@@ -138,6 +140,9 @@ CR: Composite Include: Modules with a condition are only reloaded if the conditi
 CR: MVC: Omission of autofocus, since the use scrollIntoView can be too individual  
 CR: DataSource Locales: As standard marked are at the beginning  
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
+CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs  
+CR: Extension: Optimization for using readonly meta objects for return values  
+CR: Messages: Update to use constant key/value pairs  
 CR: Build: Optimization of target 'changes'  
 CR: Build: Additional compression via javascript-minifier.com  
 
