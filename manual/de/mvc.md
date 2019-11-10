@@ -168,8 +168,7 @@ eigenständige Ansicht. So können z.B. bei einem Such-Formular die Eingabemaske
 und die Ergebnistabelle separate Facets eines Faces sein, ebenso wie Article 
 und/oder Section in einem Face. Sowohl Face als auch Facets sind über virtuelle
 Pfade erreichbar. Der Pfad zu Facets bewirkt, dass das umschliessende Face mit
-allen seinen übergeordneten Faces angezeigt und das adressiert Facets in den
-sichtbaren Bereich geholt und fokussiert wird.
+allen seinen übergeordneten Faces angezeigt.
 
 
 #### Face Flow
@@ -215,10 +214,10 @@ SiteMap.customize({...});
 ```javascript
 var map = {
     "#": ["news", "products", "about", "contact", "legal"],
-    "products#papers": ["paperA4", "paperA5", "paperA6"],
-    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "products#pens": ["pencil", "ballpoint", "stylograph"],
-    "legal": ["terms", "privacy"],
+    "#products#papers": ["paperA4", "paperA5", "paperA6"],
+    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "#products#pens": ["pencil", "ballpoint", "stylograph"],
+    "#legal": ["terms", "privacy"],
     ...
 };
 
@@ -230,10 +229,10 @@ Oder etwas kürzer als direkter Aufruf der Customize-Methode:
 ```javascript
 SiteMap.customize({
     "#": ["news", "products", "about", "contact", "legal"],
-    "products#papers": ["paperA4", "paperA5", "paperA6"],
-    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "products#pens": ["pencil", "ballpoint", "stylograph"],
-    "legal": ["terms", "privacy"],
+    "#products#papers": ["paperA4", "paperA5", "paperA6"],
+    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "#products#pens": ["pencil", "ballpoint", "stylograph"],
+    "#legal": ["terms", "privacy"],
     ...
 });
 ```

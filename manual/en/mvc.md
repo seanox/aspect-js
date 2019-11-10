@@ -165,8 +165,7 @@ Facets are parts of a face (projection) and are not normally a standalone view.
 For example, the input mask and result table of a search can be separate facets
 of a face, as can articles or sections of a face. Both face and facet can be
 accessed via virtual paths. The path to facets causes the surrounding face with
-all its superordinate faces to be displayed and the addressed facets to be
-brought into the visible area and focused.
+all its superordinate faces to be displayed.
 
 
 #### Face Flow
@@ -210,10 +209,10 @@ SiteMap.customize({...});
 ```javascript
 var map = {
     "#": ["news", "products", "about", "contact", "legal"],
-    "products#papers": ["paperA4", "paperA5", "paperA6"],
-    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "products#pens": ["pencil", "ballpoint", "stylograph"],
-    "legal": ["terms", "privacy"],
+    "#products#papers": ["paperA4", "paperA5", "paperA6"],
+    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "#products#pens": ["pencil", "ballpoint", "stylograph"],
+    "#legal": ["terms", "privacy"],
     ...
 };
 
@@ -225,10 +224,10 @@ Or a littel shorter the direct call of the customize method:
 ```javascript
 SiteMap.customize({
     "#": ["news", "products", "about", "contact", "legal"],
-    "products#papers": ["paperA4", "paperA5", "paperA6"],
-    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "products#pens": ["pencil", "ballpoint", "stylograph"],
-    "legal": ["terms", "privacy"],
+    "#products#papers": ["paperA4", "paperA5", "paperA6"],
+    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "#products#pens": ["pencil", "ballpoint", "stylograph"],
+    "#legal": ["terms", "privacy"],
     ...
 });
 ```
