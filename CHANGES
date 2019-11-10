@@ -30,6 +30,7 @@
       CSS: *[release] {display:none;}      
   CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)    
   CR: Composite Render Iterate: Correction/Optimization in general
+  CR: Composite Render Iterate: Optimization for using readonly meta object
   CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
       The deletion is only temporary, the renderer still knows the attribute and checks it again in each render cycle.
   CR: Composite Scan: Omission of the intermediate step between render and mount

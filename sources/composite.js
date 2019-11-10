@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191108
+ *  Composite 1.2.x 20191110
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191108
+ *  @version 1.2.x 20191110
  */
 if (typeof Composite === "undefined") {
     
@@ -395,11 +395,11 @@ if (typeof Composite === "undefined") {
         if (context.lock === undefined
                 || context.lock === false) {
             context.lock = {ticks:1, selector:selector, queue:[],
-                    share:function() {
+                    share: function() {
                         this.ticks++;
                         return this;
                     },
-                    release:function() {
+                    release: function() {
                         this.ticks--;
                         if (this.ticks > 0)
                             return;
@@ -2366,9 +2366,9 @@ if (typeof Composite === "undefined") {
                     }
                     interval = parseInt(interval);
                     object.interval = {
-                        object:object,
-                        selector:selector,
-                        task:function(interval) {
+                        object: object,
+                        selector: selector,
+                        task: function(interval) {
                             var serial = interval.selector.ordinal();
                             var object = Composite.render.meta[serial];
                             var interrupt = !document.body.contains(interval.selector);
@@ -2432,7 +2432,20 @@ if (typeof Composite === "undefined") {
                         if (iterate) {
                             iterate = Array.from(iterate);
                             iterate.forEach((item, index, array) => {
-                                window[object.iterate.name] = {item:item, index:index, data:array};
+                                var meta = {} 
+                                Object.defineProperty(meta, "item", {
+                                    value: item,
+                                    enumerable: true
+                                });
+                                Object.defineProperty(meta, "index", {
+                                    value: index,
+                                    enumerable: true
+                                });
+                                Object.defineProperty(meta, "data", {
+                                    value: array,
+                                    enumerable: true
+                                });
+                                window[object.iterate.name] = meta;
                                 var template = document.createElement("div");
                                 var container = imitate(selector.parentNode);
                                 container.appendChild(template);
