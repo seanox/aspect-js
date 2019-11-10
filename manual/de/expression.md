@@ -211,8 +211,8 @@ Hier empfiehlt sich die Verwendung vom Attribut [release](markup.md#release).
 <h1 release>{{'Hello World!'}}</h1>
 ```
 
-Alternativ sind die Auslagerung von Inhalten in die DataSource in Kombination
-mit den Attributen [output](markup.md#output) und [import](markup.md#import)
+Alternativ ist die Auslagerung von Inhalten in die DataSource in Kombination mit
+den Attributen [output](markup.md#output) und [import](markup.md#import)
 möglich.
 
 ```css
