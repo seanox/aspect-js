@@ -62,7 +62,8 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge.
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge.  
+Die Qualität der (U)UID ist abhängig von ihrer Länge.
 
 ```javascript
 Math.uniqueId()
@@ -70,6 +71,21 @@ Math.uniqueId()
     
 Math.uniqueId(32)
     returns e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
+```
+
+
+### Math.uniqueSerialId
+
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge
+und einem seriellen Bezug zur Zeit.  
+Die Qualität der (U)UID ist abhängig von ihrer Länge.
+
+```javascript
+Math.uniqueSerialId()
+    returns e.g. "0GQ96VN87ZZ2JTYY"
+    
+Math.uniqueSerialId(32)
+    returns e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
 ```
 
 

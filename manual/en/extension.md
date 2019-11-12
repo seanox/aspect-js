@@ -60,7 +60,8 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Static function for creating a alhpanumeric (U)UID with fixed size.
+Static function for creating a alhpanumeric (U)UID with fixed size.  
+The quality of the ID is dependent of the length.
 
 ```javascript
 Math.uniqueId()
@@ -68,6 +69,20 @@ Math.uniqueId()
     
 Math.uniqueId(32)
     returns e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
+```
+
+### Math.uniqueSerialId
+
+Static function for creating a alhpanumeric (U)UID with fixed size and a serial
+relation to time.  
+The quality of the ID is dependent of the length.
+
+```javascript
+Math.uniqueSerialId()
+    returns e.g. "0GQ96VN87ZZ2JTYY"
+    
+Math.uniqueSerialId(32)
+    returns e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
 ```
 
 
