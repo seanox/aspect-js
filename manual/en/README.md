@@ -47,6 +47,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [Tag](markup.md#tag)   
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
+    * [Parameters](markup.md#parameters)
   * [Hardening](markup.md#hardening)
 
 
@@ -83,7 +84,7 @@ Machine translation with [DeepL](https://deepl.com).
   
   
 ### Resource Bundle
-  
+
 * [Resource Bundle](messages.md#resource-bundle)
 
 
@@ -137,11 +138,11 @@ Machine translation with [DeepL](https://deepl.com).
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
-    
-    
+
+
 ### Extension
-    
-* [Extension](extension.md#extension)    
+
+* [Extension](extension.md#extension)
   * [Namespace](extension.md#namespace)
   * [Element](extension.md#element)
   * [Math](extension.md#math)
