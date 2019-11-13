@@ -184,3 +184,4 @@ Machine translation with [DeepL](https://deepl.com).
   * [Monitoring](test.md#monitoring)
   * [Control](test.md#control)
   * [Events](test.md#events)
+  * [Extension](test.md#extension)

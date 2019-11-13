@@ -53,9 +53,10 @@ Test.start();
 * [Monitoring](#monitoring)
 * [Control](#control)
 * [Events](#events)
+* [Erweiterung](#erweiterung)
 
 
-### Testfall
+## Testfall
 
 Der kleinste Bestandteil in einem Integrationstest, der hier als "Task"
 verwendet wird, da "Case" ein Schlüsselwort im JavaScript ist. Es kann allein
@@ -78,35 +79,35 @@ Task ist primär ein Meta-Objekt.
 ```
 
 
-#### name
+### name
 
 Optionaler Name vom Testfall.
 
 
-#### test
+### test
 
 Die implementierte Methode, die als Testfall ausgeführt werden soll.
 
 
-#### timeout
+### timeout
 
 Optional Angabe der maximalen Laufzeit des Testfalls in Millisekunden.
 Das Überschreiten von diesem Wetr führt zum Ausfall des Tests.  
 Es wird ein Wert größer als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
-#### expected
+### expected
 
 Optional, um das Auftreten von definierten Fehlern zu testen.
 Der Fehler muss auftreten, damit der Test erfolgreich ist.
 Als Wert wird ein Fehlerobjekt oder eine RegExp erwartet.
 
-#### ignore
+### ignore
 
 Optional true, wenn der Test ignoriert werden so
 
 
-### Szenario
+## Szenario
 
 Ein Szenario ist eine Abfolge von vielen Testfällen (Tasks).
 
@@ -133,7 +134,7 @@ Test.start();
 ```
 
 
-### Suite 
+## Suite 
 
 Eine Suite ist ein komplexes Paket aus verschiedenen Testfällen, Szenarien und
 anderen Suiten. In der Regel besteht eine Suite aus verschiedenen Dateien, die
@@ -142,8 +143,8 @@ Kaskade von verschiedenen Dateien und wo der Test in jeder Datei und an jedem
 Stelle gestartet werden kann. Dies ermöglicht einen Integrationstest auf
 verschiedenen Ebenen und mit unterschiedlicher Komplexität.
 
- 
-### Assert
+
+## Assert
 
 Die Testfälle werden mit Behauptungen (Assertions) implementiert. Das Test-API
 bietet elementare Aussagen, die erweitert werden können. Die Funktion ist
@@ -340,7 +341,6 @@ Die Konfiguration kann einmalig und mehrfach aufgerufen werden. Als Parameter
 wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
 übernommen und unbekanntes wird ignoriert.
 
-
 ```javascript
 Test.configure({
     log:function(message) {
@@ -510,7 +510,6 @@ Buffer output erweitert. Der Buffer enthält Zwischenspeicher für die Level: LOG,
 WARN, ERROR und INFO sowie eine Methoden zum Leeren.
 
 ```javascript
-
 var log   = console.output.log;
 var warn  = console.output.warn;
 var error = console.output.error;
@@ -538,7 +537,7 @@ korrespondierenden console-Methoden. Womit es oft einfacher ist `arguments` zu
 verwenden.
 
 
-### Monitoring
+## Monitoring
 
 Das Monitoring überwacht den Testablauf während der Ausführung wird über die
 verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
@@ -548,7 +547,7 @@ Details zur Konfiguration und und Verwendung werden im Abschnitt
 [Konfiguration - Monitor](#monitor) beschrieben.
 
 
-### Control
+## Control
 
 Der Testverlauf und die Verarbeitung der einzelnen Tests kann per Test-API
 gesteuert werden.
@@ -632,7 +631,7 @@ ausgeführt wird, wird `false` zurückgegeben.
 ```
 
 
-### Events
+## Events
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
 Überwachung der Testausführung. Die Callback-Methoden werden für entsprechende
@@ -663,6 +662,133 @@ Test.listen(Test.EVENT_PERFORM, function(event, status) {
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
 });      
+```
+
+
+## Erweiterung
+
+Mit der Test-API werden auch Erweiterungen der JavaScript-API aktiv.
+
+### Element
+
+#### Element.prototype.typeValue
+
+Methode, die die Tastatureingabe für Element-Objekte simuliert.
+Folgende Ereignisse werden während der Simulation ausgelöst: 
+    focus, keydown, keyup, change
+
+```html
+<form action="/api/example" methode="POST">
+  <input type="text" id="inputText"/>
+  <input type="submit"/> 
+</form>
+```
+
+```javascript
+document.querySelector("#inputText").typeValue("Hello World!");
+});      
+```
+        
+        
+#### Element.prototype.toPlainString
+
+Methode, die eine einfache Zeichenkette für ein Element-Objekt erzeugt.
+Die Zeichenkette bassiert auf `Element.prototype.outerHTML`.
+
+```html
+<form action="/api/example" methode="POST">
+  <input type="text" id="inputText"/>
+  <input type="submit"/> 
+</form>
+});      
+```
+
+```javascript
+console.log(document.querySelector("form").toPlainString());
+```
+
+Output:
+
+```
+<form xmlns="http://www.w3.org/1999/xhtml" action="/api/example" methode="POST">
+  <input type="text" id="inputText" />
+  <input type="submit" /> 
+</form>
+```
+        
+        
+#### Element.prototype.trigger
+
+Methode, um ein Ereignis für ein Element auszulösen.
+
+```javascript
+document.queryElement("#button").trigger("click");
+```
+
+Aufruf der Methode mit der Option bubbles.  
+Entscheidt ob das Ereignis durch die Ereigniskette laufen soll oder nicht.
+Standardwert: false
+
+```javascript
+document.queryElement("#button").trigger("click", true);
+```
+
+Aufruf der Methode mit den Option bubbles und cancel.  
+Damit wird festgelegt, ob das Ereignis abgebrochen werden kann.  
+Standardwert: true
+
+```javascript
+document.queryElement("#button").trigger("click", true, false);
+```
+
+        
+### Node
+
+#### Node.prototype.toPlainString   
+
+Methode, die eine einfache Zeichenkette für ein Knoten-Objekt erzeugt.
+Die Zeichenkette bassiert auf `XMLSerializer.serializeToString(node)`.
+
+```javascript
+var text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+         + "<note>"
+         + "  <to>Tove</to>"
+         + "  <from>Jani</from>"
+         + "  <heading>Reminder</heading>"
+         + "  <body>Don't forget me this weekend!</body>"
+         + "</note>";
+  
+var parser = new DOMParser();
+var xml = parser.parseFromString(text, "text/xml");
+
+var nodes = xml.evaluate("/note", xml, null, XPathResult.ANY_TYPE, null);
+var result = nodes.iterateNext();
+console.log(result.toPlainString());
+```
+
+Output:
+
+```
+<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>
+```
+    
+
+### Object
+
+#### Object.prototype.toPlainString
+
+Methode, die eine einfache Zeichenkette für ein Objekt erzeugt.
+Die Zeichenkette bassiert auf `JSON.stringify(object)`.
+
+```javascript
+var example = {a:1, b:2, c:function() {return;}};
+console.log(example.toPlainString());
+```
+
+Output:
+
+```
+{"a":1,"b":2}
 ```
 
 

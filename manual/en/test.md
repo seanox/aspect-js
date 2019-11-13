@@ -52,6 +52,7 @@ Test.start();
 * [Monitoring](#monitoring)
 * [Control](#control)
 * [Events](#events)
+* [Extension](#extension)
 
 
 ## Task
@@ -131,6 +132,7 @@ Test.create({ignore:true, test:function() {
 
 Test.start();
 ```
+
 
 ## Suite
 
@@ -366,7 +368,7 @@ Test.configure({
 });
 
 ```
-         
+
 
 ### Output
 
@@ -656,6 +658,133 @@ Test.listen(Test.EVENT_PERFORM, function(event, status) {
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
 });      
+```
+
+
+## Extension
+
+The Test API also activates extensions of the JavaScript API.
+
+### Element
+
+#### Element.prototype.typeValue
+
+Method that simulates keyboard input for element objects.
+The following events are triggered during simulation: 
+    focus, keydown, keyup, change
+
+```html
+<form action="/api/example" methode="POST">
+  <input type="text" id="inputText"/>
+  <input type="submit"/> 
+</form>
+```
+
+```javascript
+document.querySelector("#inputText").typeValue("Hello World!");
+});      
+```
+        
+        
+#### Element.prototype.toPlainString
+
+Method that creates a simple string for an element object.
+The string is based on `Element.prototype.outerHTML`.
+
+```html
+<form action="/api/example" methode="POST">
+  <input type="text" id="inputText"/>
+  <input type="submit"/> 
+</form>
+});      
+```
+
+```javascript
+console.log(document.querySelector("form").toPlainString());
+```
+
+Output:
+
+```
+<form xmlns="http://www.w3.org/1999/xhtml" action="/api/example" methode="POST">
+  <input type="text" id="inputText" />
+  <input type="submit" /> 
+</form>
+```
+        
+        
+#### Element.prototype.trigger
+
+Method to trigger an event for an element.
+
+```javascript
+document.queryElement("#button").trigger("click");
+```
+
+Method call with option bubbles.  
+Decides whether the event should run through the event chain or not.
+Default: false
+
+```javascript
+document.queryElement("#button").trigger("click", true);
+```
+
+Method call with option bubbles and cancel.  
+This determines whether the event can be canceled.    
+Default: true
+
+```javascript
+document.queryElement("#button").trigger("click", true, false);
+```
+
+        
+### Node
+
+#### Node.prototype.toPlainString   
+
+Method that creates a simple string for a node object.
+The string is based on `XMLSerializer.serializeToString(node)`.
+
+```javascript
+var text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+         + "<note>"
+         + "  <to>Tove</to>"
+         + "  <from>Jani</from>"
+         + "  <heading>Reminder</heading>"
+         + "  <body>Don't forget me this weekend!</body>"
+         + "</note>";
+  
+var parser = new DOMParser();
+var xml = parser.parseFromString(text, "text/xml");
+
+var nodes = xml.evaluate("/note", xml, null, XPathResult.ANY_TYPE, null);
+var result = nodes.iterateNext();
+console.log(result.toPlainString());
+```
+
+Output:
+
+```
+<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>
+```
+    
+
+### Object
+
+#### Object.prototype.toPlainString
+
+Method that creates a simple string for an object.
+The string is based on `JSON.stringify(object)`.
+
+```javascript
+var example = {a:1, b:2, c:function() {return;}};
+console.log(example.toPlainString());
+```
+
+Output:
+
+```
+{"a":1,"b":2}
 ```
 
 
