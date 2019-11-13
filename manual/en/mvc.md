@@ -263,10 +263,10 @@ SiteMap.customize({...}, function(path) {...});
 ```javascript
 SiteMap.customize({
     "#": ["news", "products", "about", "contact", "legal"],
-    "products#papers": ["paperA4", "paperA5", "paperA6"],
-    "products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "products#pens": ["pencil", "ballpoint", "stylograph"],
-    "legal": ["terms", "privacy"], ...},
+    "#products#papers": ["paperA4", "paperA5", "paperA6"],
+    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "#products#pens": ["pencil", "ballpoint", "stylograph"],
+    "#legal": ["terms", "privacy"], ...},
     
     function(path) {
         ...
@@ -275,28 +275,28 @@ SiteMap.customize({
 ```
 
 All requested paths pass through the permit method(s). This can decide what
-happens to the path. From the permit method a return value is expected, which
-can have the following characteristics:
+happens to the path. The following return values are expected from each permit
+method:
 
 __True__ The validation is successful and the iteration via further permit
-method is continued. If all permit methods return true and thus confirm the
+methods is continued. If all permit methods return true and thus confirm the
 path, it is used.
 
-__String__ The validation (iteration over further permit-merhodes) will be
+__String__ The validation (iteration over further permit-merhods) will be
 aborted and it will be forwarded to the path corresponding to the string. 
 
 __Otherwise__ The path is regarded as invalid/unauthorized, the validation
-(iteration over further permit-merhodes) will be aborted and is forwarded to the
+(iteration over further permit-merhods) will be aborted and is forwarded to the
 original path.
 
 
 #### Acceptors
 
 Acceptors work in a similar way to permit methods.  
-In difference, permit methods are called for each path and acceptors are only
-called for those that match the RegExp pattern. Also from the permit method a
-return value is expected, which have the same characteristics of
-[Permissions](#permissions). 
+In difference to this, the methods of the acceptors are only called for those
+paths whose RegExp pattern corresponds to the requested path. Also the methods
+of the acceptors are expected to return the same kind of values as the
+[Permissions](#permissions) methods. 
 
 ```javascript
 SiteMap.customize(RegExp, function(path) {...});

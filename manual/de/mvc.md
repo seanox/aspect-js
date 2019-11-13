@@ -257,6 +257,114 @@ __entfernt) werden.__
 ```
 
 
+#### Permissions
+
+Das Berechtigungskonzept basiert auf einer oder mehreren permit-Methode, die
+zusammen mit dem Face-Flow-Meta-Objekt übergeben werden.
+
+```javascript
+SiteMap.customize({...}, function(path) {...});
+```
+
+```javascript
+SiteMap.customize({
+    "#": ["news", "products", "about", "contact", "legal"],
+    "#products#papers": ["paperA4", "paperA5", "paperA6"],
+    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+    "#products#pens": ["pencil", "ballpoint", "stylograph"],
+    "#legal": ["terms", "privacy"], ...},
+    
+    function(path) {
+        ...
+    }    
+});
+```
+
+Alle angeforderten Pfade durchlaufen die permit-Methode(n). Diese entscheiden,
+was mit dem Pfad passiert. Von jeder permit-Methode werden folgende
+Rückgabewerte erwartet:
+
+__True__ Die Validierung ist erfolgreich und die Iteration über weitere
+permit-Methoden wird fortgesetzt. Wenn alle permit-Methoden wahr sind und damit
+den Pfad bestätigen, wird er verwendet.
+
+__String__ Die Validierung (Iteration über weitere permit-Merhoden) wird
+abgebrochen und es folgt einen Weiterleitung an die zurückgegebene Zeichenkette. 
+
+__Otherwise__ Der Pfad gilt als ungültig/unautorisiert, die Validierung
+(Iteration über weitere permit-Merhoden) wird abgebrochen und an den
+ursprünglichen Pfad weitergeleitet.
+
+
+#### Acceptors
+
+Akzeptoren arbeiten ähnlich wie die permit-Methoden.  
+Im Unterschied dazu werden die Methoden der Akzeptoren nur bei den Pfaden
+aufgerufen, deren RegExp-Muster dem angefragten Pfad entsprechen. Auch von den
+Methoden der Akzeptoren werden die gleiche Arten von Rückgabewerte wie bei den
+[Permissions](#permissions) erwartet.
+
+```javascript
+SiteMap.customize(RegExp, function(path) {...});
+```
+
+```javascript
+SiteMap.customize(/^phone.*$/i, function(path) {
+    dial the phone number
+});
+SiteMap.customize(/^mail.*$/i, function(path) {
+    send a mail
+});
+```
+
+
+### Navigation
+
+Die Navigation kann durch Änderung des URL-Hash im Browser (direkte Eingabe),
+durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
+`window.location.href` und `SiteMap.navigate(path)` erfolgen.
+
+```
+<a href="#a#b#c">Goto root + a + b + c</a>
+<a href="##">Back to the parent</a>
+<a href="##x">Back to the parent + z</a>
+```
+
+```javascript
+SiteMap.navigate("#a#b#c");
+SiteMap.navigate("##");
+SiteMap.navigate("##x");
+```
+
+Relative Pfade ohne Hash am Anfang sind möglich, funktionieren aber nur mit
+`SiteMap.navigate(path)`.
+
+```javascript
+SiteMap.navigate("x#y#z");
+```
+
+
+### Permission Concept
+
+Das Berechtigungskonzept basiert auf permit-Methoden, die als Callback-Methoden
+mit der Konfiguration des Face-Flows definiert werden. Es können mehrere
+permit-Methoden definiert werden, die mit jedem angeforderten Pfad überprüft
+werden. Nur wenn alle permit-Methoden den angeforderten Pfad mit "wahr"
+bestätigen, wird er verwendet und der Renderer macht die abhängigen Faces und
+Facets sichtbar.
+ 
+Details werden im Abschnitt [Permissions](#permissions) beschrieben.
+
+
+### Acceptors
+
+Akzeptoren werden zusammen mit dem Berechtigungskonzept ausgeführt.  
+Sie haben die gleiche Wirkung, betreffen aber nur Pfade, die einem regulären
+Ausdruck entsprechen. Akzeptoren können zur Bestätigung von Berechtigungen
+und/oder für versteckte Hintergrundaktivitäten verwendet werden.  
+
+Details werden im Abschnitt [Acceptors](#acceptors) beschrieben.
+
 TODO:
 
 
