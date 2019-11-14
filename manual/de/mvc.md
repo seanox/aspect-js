@@ -365,6 +365,64 @@ und/oder für versteckte Hintergrundaktivitäten verwendet werden.
 
 Details werden im Abschnitt [Acceptors](#acceptors) beschrieben.
 
+
+## Virtual Paths
+
+Virtuelle Pfade werden für die Navigation und Kontrolle vom Face-Flow verwendet.    
+Das Ziel kann ein Face, ein Facet oder eine Funktion sein.  
+Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL für die Pfade
+verwendet.
+
+```
+https://example.local/example/#path
+```
+
+In Anlehung an das Dateisystem werden auch hier absolute und relative Pfade
+sowie Funktionspfade unterstützt.  
+Pfade bestehen ausschließlich aus Wortzeichen und Unterstrichen (basierend auf
+zusammengesetzten IDs) und müssen mit einem Buchstaben beginnen. Als Separator
+und Root wird das Hash-Zeichen verwenden. Leerzeichen werden nicht unterstützt.
+
+```
+#a#b#c#d
+```
+
+Pfade verwenden nur Kleinbuchstaben. Grossbuchstaben werden beim Normalisieren
+automatisch durch Kleinbuchstaben ersetzt.
+
+```
+#a#b#c#d == #A#b#C#d
+```
+
+Zwischen den Pfadsegmenten kann das Hash-Zeichen (`#`) auch als Rück- /
+Eltern-Sprunganweisung verwendet werden. Der Weite vom Rücksprung entspricht
+dann der Anzahl der zusätzlichen Hash-Zeichen.
+
+```
+#a#b#c#d##x   -> #a#b#c#x
+#a#b#c#d###x  -> #a#b#x
+#a#b#c#d####x -> #a#x
+```
+
+Die Navigation kann durch Änderung des URL-Hash im Browser (direkte Eingabe),
+durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
+`window.location.href` und `SiteMap.navigate(path)` erfolgen.
+
+Es gibt verschiedene Arten von Pfaden, die im Folgenden erläutert werden.
+
+
+### Functional Path
+
+Der Pfad besteht aus drei oder mehr Hash-Zeichen (`#####+`) und ist nur
+temporär, er dient einem Funktionsaufruf, ohne den aktuellen Pfad (URL-Hash) zu
+ändern.  
+Dies ist nützlich für funktionale Links, z.B. um ein Popup zu öffnen oder eine
+Mail im Hintergrund zu senden.
+
+```
+<a href="###">Do something, the logic is in the model</a>
+```
+
 TODO:
 
 
