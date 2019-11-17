@@ -541,12 +541,12 @@ if (typeof SiteMap === "undefined") {
      *  path, it is used.
      *       
      *      String:
-     *  The validation (iteration over further permit-merhodes) will be aborted
+     *  The validation (iteration over further permit-merhods) will be aborted
      *  and it will be forwarded to the path corresponding to the string. 
-
+     * 
      *      In all other cases:
      *  The path is regarded as invalid/unauthorized, the validation (iteration
-     *  over further permit-merhodes) will be aborted and is forwarded to the
+     *  over further permit-merhods) will be aborted and is forwarded to the
      *  original path.
      *  
      *  A permit method for paths can optionally be passed to each meta object.
