@@ -142,6 +142,7 @@ CR: DataSource Locales: As standard marked are at the beginning
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs  
 CR: Extension: Optimization for using readonly meta objects for return values  
+CR: Extension Namespace: Optimization and extension  
 CR: Messages: Update to use constant key/value pairs  
 CR: Build: Optimization of target 'changes'  
 CR: Build: Additional compression via javascript-minifier.com  

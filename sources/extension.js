@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.x 20191110
+ *  Extension 1.1.x 20191117
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.x 20191110
+ *  @version 1.1.x 20191117
  */
 if (typeof Namespace === "undefined") {
 
@@ -42,51 +42,139 @@ if (typeof Namespace === "undefined") {
      *  This means that it is not a real element of the programming language,
      *  but is represented by chained static objects.
      *  Each level in this object chain represents a namespace.
-     *  As is typical for objects, the namespaces are separated by a dot. 
+     *  As is typical for objects, namespaces use letters, numbers and
+     *  underscores that are separated by dots.
+     *  As a special feature, arrays are also supported. If an object level in
+     *  the namespace is a pure number, an array is assumed.
      */
     Namespace = {
             
         /** Pattern for the namespace separator */
-        get PATTERN_NAMESPACE_SEPARATOR() {return /[\\\/\.]/},
+        get PATTERN_NAMESPACE_SEPARATOR() {return /\./},
         
         /** Pattern for a valid namespace. */
-        get PATTERN_NAMESPACE() {return /^(?:[\\\/]*[a-z][\w]*)(?:[\\\/\.][a-z][\w]*)*$/i},
-        
-        /** Pattern to detect if there are conflicts in the namespace. */
-        get PATTERN_NAMESPACE_SEPARATOR_CONFLICT() {return /(\..*[\\\/])|(\\.*[\.\/])|(\/.*[\\\.])/}                
+        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*$/i}
     };
+    
+    /** 
+     *  Validates a requested namespace and creates a corresponding meta object.
+     *  The method has the following various signatures:
+     *      Namespace.locate();
+     *      Namespace.locate(namespace);
+     *      Namespace.locate(object, namespace);
+     *  @return the created meta object
+     *  @throws An error occurs in case of invalid data types or syntax 
+     */
+    Namespace.locate = function(variants) {
+        
+        var scope;
+        var namespace;
+        
+        if (arguments.length == 0)
+            return {scope:window};
+        
+        if (arguments.length > 1) {
+            scope = arguments[0];
+            namespace = arguments[1];
+        } else if (arguments.length > 0) {
+            scope = window;
+            namespace = arguments[0];
+        } else throw new TypeError("Invalid namespace");
+        
+        if (typeof scope !== "object")
+            throw new TypeError("Invalid scope: " + typeof scope);        
+        if (typeof namespace !== "string")
+            throw new TypeError("Invalid namespace: " + typeof namespace);
+
+        if (!namespace.match(Namespace.PATTERN_NAMESPACE)
+                || (scope == window && namespace.match(/^\d/)))
+            throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
+        
+        return {scope:scope, namespace:namespace};
+    };    
     
     /**
      *  Creates a namespace to pass string.
-     *  Slash and dot are supported as separators.
+     *  Without arguments, the method returns the global namespace window.
+     *  The method has the following various signatures:
+     *      Namespace.using();
+     *      Namespace.using(namespace);
+     *      Namespace.using(object, namespace);
+     *  @param  object
      *  @param  namespace
-     *  @return the created namespace
-     *  @throws An error occurs in the following cases:
-     *      - event is not valid or is not supported
-     *      - callback function is not implemented correctly or does not exist
+     *  @return the created or already existing object(-level)
+     *  @throws An error occurs in case of invalid data types or syntax 
      */
-    Namespace.using = function(namespace) {
+    Namespace.using = function(variants) {
         
-        if (namespace == null)
+        if (arguments.length == 0)
+            return window;
+        
+        var meta = Namespace.locate.apply(null, arguments);
+        if (meta == null)
             return null;
-
-        if (typeof namespace !== "string")
-            throw new TypeError("Invalid namespace: " + typeof namespace);
-        if (!namespace.match(Namespace.PATTERN_NAMESPACE)
-                || namespace.match(Namespace.PATTERN_NAMESPACE_SEPARATOR_CONFLICT))
-            throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
         
-        var scope = window;
-        namespace = namespace.replace(/^[\\\/]/, "");
-        namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
-            if (typeof scope[entry] === "undefined") {
-                scope[entry] = {};
-            } else if (scope[entry] instanceof Object) {
+        meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
+            if (typeof meta.scope[entry] === "undefined") {
+                if (index < array.length -1
+                        && array[index +1].match(/^\d+$/))
+                    meta.scope[entry] = [];
+                else meta.scope[entry] = {};
+            } else if (meta.scope[entry] instanceof Object) {
             } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
-            scope = scope[entry];
+            meta.scope = meta.scope[entry];
         });
+        return meta.scope; 
+    };
+
+    /** 
+     *  Resolves a namespace and returns the determined object(-level).
+     *  If the namespace does not exist, null is returned.
+     *  Without arguments, the method returns the global namespace window.
+     *  The method has the following various signatures:
+     *      Namespace.lookup();
+     *      Namespace.lookup(namespace);
+     *      Namespace.lookup(object, namespace);
+     *  @param  object
+     *  @param  namespace
+     *  @return the determined object(-level)
+     *  @throws An error occurs in case of invalid data types or syntax
+     */
+    Namespace.lookup = function(variants) {
         
-        return scope; 
+        if (arguments.length == 0)
+            return window;        
+        
+        var meta = Namespace.locate.apply(null, arguments);
+        if (meta == null)
+            return null;
+        
+        meta.namespace = meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
+        if (!meta.namespace
+                || meta.namespace.length <= 0)
+            return null;
+        for (var index = 0; meta.scope && index < meta.namespace.length; index++) {
+            if (meta.namespace[index] in meta.scope
+                    && meta.scope[meta.namespace[index]] instanceof Object)
+                meta.scope = meta.scope[meta.namespace[index]];
+            else return null;
+        }
+        return meta.scope;
+    };
+    
+    /**
+     *  Checks whether a namespace exists.
+     *  The method has the following various signatures:
+     *      Namespace.exits();
+     *      Namespace.exits(namespace);
+     *      Namespace.exits(object, namespace);     *  
+     *  @param  object
+     *  @param  namespace
+     *  @return true if the namespace exists
+     *  @throws An error occurs in case of invalid data types or syntax
+     */    
+    Namespace.exits = function(variants) {
+        return Namespace.lookup.apply(null, arguments) != null;     
     };
 };
 
