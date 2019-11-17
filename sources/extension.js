@@ -120,7 +120,8 @@ if (typeof Namespace === "undefined") {
                         && array[index +1].match(/^\d+$/))
                     meta.scope[entry] = [];
                 else meta.scope[entry] = {};
-            } else if (meta.scope[entry] instanceof Object) {
+            } else if (meta.scope[entry] instanceof Object
+                    || meta.scope[entry] === null) {
             } else throw new Error("Invalid namespace: " + array.slice(0, index +1).join("."));
             meta.scope = meta.scope[entry];
         });
@@ -155,7 +156,8 @@ if (typeof Namespace === "undefined") {
             return null;
         for (var index = 0; meta.scope && index < meta.namespace.length; index++) {
             if (meta.namespace[index] in meta.scope
-                    && meta.scope[meta.namespace[index]] instanceof Object)
+                    && (meta.scope[meta.namespace[index]] instanceof Object
+                            || meta.scope[entry] === null))
                 meta.scope = meta.scope[meta.namespace[index]];
             else return null;
         }
@@ -165,15 +167,15 @@ if (typeof Namespace === "undefined") {
     /**
      *  Checks whether a namespace exists.
      *  The method has the following various signatures:
-     *      Namespace.exits();
-     *      Namespace.exits(namespace);
-     *      Namespace.exits(object, namespace);     *  
+     *      Namespace.exists();
+     *      Namespace.exists(namespace);
+     *      Namespace.exists(object, namespace);     *  
      *  @param  object
      *  @param  namespace
      *  @return true if the namespace exists
      *  @throws An error occurs in case of invalid data types or syntax
-     */    
-    Namespace.exits = function(variants) {
+     */
+    Namespace.exists = function(variants) {
         return Namespace.lookup.apply(null, arguments) != null;     
     };
 };
