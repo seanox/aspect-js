@@ -37,10 +37,10 @@
  *          namespace
  *          ----
  *  The namespace is a sequence of characters or words consisting of letters,
- *  numbers, and an underscore that describes the path in an object tree. The
- *  dot is used as a separator, it defines the boundary from one level to the
- *  next in the object tree. Each element in the namespace must contain at least
- *  one character, begin with a letter, and end with a letter or number.
+ *  numbers, and underscores that describes the path in an object tree. The dot
+ *  is used as a separator, it defines the boundary from one level to the next
+ *  in the object tree. Each element in the namespace must contain at least one
+ *  character ans begin with a letter.
  *  
  *          scope
  *          ----
@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.x 20191110
+ *  Composite 1.2.x 20191118
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.x 20191110
+ *  @version 1.2.x 20191118
  */
 if (typeof Composite === "undefined") {
     
@@ -245,6 +245,12 @@ if (typeof Composite === "undefined") {
         
         /** Pattern for a scope (namespace) */
         get PATTERN_CUSTOMIZE_SCOPE() {return /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i},
+        
+        /** Pattern for the namespace separator */
+        get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g},
+        
+        /** Pattern for a valid namespace. */
+        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*(\:\w+)*$/i},
         
         /** Pattern for a datasource url */
         get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i},
@@ -478,16 +484,28 @@ if (typeof Composite === "undefined") {
     
     /**
      *  Enhancement of the JavaScript API
-     *  Adds a static function to determine an object via the namespace.
+     *  Adds a static function to validate the namespace for an object.
+     *  Without arguments, the method returns the global namespace window.
+     *  In difference to the namespace function of the same name, qualifiers are
+     *  also supported in the namespace. The effect is the same. Qualifiers are
+     *  optional namespace elements at the end that use the colon as a separator.
      *  The method has the following various signatures:
-     *      Object.lookup(namespace);
-     *      Object.lookup(object, namespace);
-     */ 
-    if (Object.lookup === undefined)
-        Object.lookup = function(variants) {
+     *      Object.using();
+     *      Object.using(namespace);
+     *      Object.using(object, namespace);
+     *  @param  object
+     *  @param  namespace
+     *  @return the created or already existing object(-level)
+     *  @throws An error occurs in case of invalid data types or syntax 
+     */     
+    if (Object.locate === undefined)
+        Object.locate = function(variants) {
         
             var scope;
             var namespace;
+            
+            if (arguments.length == 0)
+                return {scope:window};
             
             if (arguments.length > 1) {
                 scope = arguments[0];
@@ -496,34 +514,87 @@ if (typeof Composite === "undefined") {
                 scope = window;
                 namespace = arguments[0];
             } else throw new TypeError("Invalid namespace");
-
+            
             if (typeof scope !== "object")
                 throw new TypeError("Invalid scope: " + typeof scope);        
             if (typeof namespace !== "string")
-                throw new TypeError("Invalid namespace: " + typeof namespace);        
-            namespace = (namespace || "").trim();
-            if (!namespace.match(/^(?:[a-z]\w*)(?:(?:\:\w+)|(?:\.[a-z]\w*))*$/i))
-                throw new Error("Invalid namespace: " + namespace);
-            namespace = namespace.split(/[\.\:]/);
-            if (!namespace
-                    || namespace.length <= 0)
-                return null;
-            for (var index = 0; scope && index < namespace.length; index++) {
-                if (namespace[index] in scope
-                        && scope[namespace[index]] instanceof Object)
-                    scope = scope[namespace[index]];
-                else return null;
-            }
-            return scope;
+                throw new TypeError("Invalid namespace: " + typeof namespace);
+    
+            if (!namespace.match(Composite.PATTERN_NAMESPACE)
+                    || (scope == window && namespace.match(/^\d/)))
+                throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
+            
+            namespace = namespace.replace(Composite.PATTERN_NAMESPACE_SEPARATOR, ".");
+            
+            return {scope:scope, namespace:namespace};
+        };      
+        
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a static function to create a namespace for an object.
+     *  Without arguments, the method returns the global namespace window.
+     *  In difference to the namespace function of the same name, qualifiers are
+     *  also supported in the namespace. The effect is the same. Qualifiers are
+     *  optional namespace elements at the end that use the colon as a separator.
+     *  The method has the following various signatures:
+     *      Object.using();
+     *      Object.using(namespace);
+     *      Object.using(object, namespace);
+     *  @param  object
+     *  @param  namespace
+     *  @return the created or already existing object(-level)
+     *  @throws An error occurs in case of invalid data types or syntax 
+     */ 
+    if (Object.using === undefined)
+        Object.using = function(variants) {
+            var meta = Object.locate.apply(null, arguments);
+            if (typeof meta.namespace === "undefined")
+                return meta.scope; 
+            return Namespace.using.call(null, meta.scope, meta.namespace);
+        };
+    
+    /**
+     *  Enhancement of the JavaScript API
+     *  Adds a static function to determine an object via the namespace.
+     *  Without arguments, the method returns the global namespace window.
+     *  In difference to the namespace function of the same name, qualifiers are
+     *  also supported in the namespace. The effect is the same. Qualifiers are
+     *  optional namespace elements at the end that use the colon as a separator.
+     *  The method has the following various signatures:
+     *      Object.lookup();
+     *      Object.lookup(namespace);
+     *      Object.lookup(object, namespace);
+     *  @param  object
+     *  @param  namespace
+     *  @return the determined object(-level)
+     *  @throws An error occurs in case of invalid data types or syntax
+     */ 
+    if (Object.lookup === undefined)
+        Object.lookup = function(variants) {
+            var meta = Object.locate.apply(null, arguments);
+            if (typeof meta.namespace === "undefined")
+                return meta.scope; 
+            return Namespace.lookup.call(null, meta.scope, meta.namespace);       
         };
         
     /**
      *  Enhancement of the JavaScript API
      *  Adds a static function to check whether an object exists in a namespace.
+     *  In difference to the namespace function of the same name, qualifiers are
+     *  also supported in the namespace. The effect is the same. Qualifiers are
+     *  optional namespace elements at the end that use the colon as a separator.
+     *  The method has the following various signatures:
+     *      Object.exists();
+     *      Object.exists(namespace);
+     *      Object.exists(object, namespace);
+     *  @param  object
+     *  @param  namespace
+     *  @return true if the namespace exists
+     *  @throws An error occurs in case of invalid data types or syntax
      */ 
     if (Object.exists === undefined)
-        Object.exists = function(namespace) {
-            return Object.lookup(namespace) != null; 
+        Object.exists = function(variants) {
+            return Object.lookup.apply(null, arguments) != null;   
         };        
 
     /**
