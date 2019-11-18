@@ -111,6 +111,8 @@ if (typeof Namespace === "undefined") {
             return window;
         
         var meta = Namespace.locate.apply(null, arguments);
+        if (typeof meta.namespace === "undefined")
+            return meta.scope;         
         meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
             if (typeof meta.scope[entry] === "undefined") {
                 if (index < array.length -1
@@ -144,6 +146,8 @@ if (typeof Namespace === "undefined") {
             return window;        
         
         var meta = Namespace.locate.apply(null, arguments);
+        if (typeof meta.namespace === "undefined")
+            return meta.scope;         
         meta.namespace = meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
         if (!meta.namespace
                 || meta.namespace.length <= 0)
