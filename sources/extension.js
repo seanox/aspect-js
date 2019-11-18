@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.x 20191117
+ *  Extension 1.1.x 20191118
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.x 20191117
+ *  @version 1.1.x 20191118
  */
 if (typeof Namespace === "undefined") {
 
@@ -111,9 +111,6 @@ if (typeof Namespace === "undefined") {
             return window;
         
         var meta = Namespace.locate.apply(null, arguments);
-        if (meta == null)
-            return null;
-        
         meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
             if (typeof meta.scope[entry] === "undefined") {
                 if (index < array.length -1
@@ -147,9 +144,6 @@ if (typeof Namespace === "undefined") {
             return window;        
         
         var meta = Namespace.locate.apply(null, arguments);
-        if (meta == null)
-            return null;
-        
         meta.namespace = meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
         if (!meta.namespace
                 || meta.namespace.length <= 0)
@@ -157,7 +151,7 @@ if (typeof Namespace === "undefined") {
         for (var index = 0; meta.scope && index < meta.namespace.length; index++) {
             if (meta.namespace[index] in meta.scope
                     && (meta.scope[meta.namespace[index]] instanceof Object
-                            || meta.scope[entry] === null))
+                            || meta.scope[meta.namespace[index]] === null))
                 meta.scope = meta.scope[meta.namespace[index]];
             else return null;
         }
