@@ -91,7 +91,7 @@ if (typeof Messages === "undefined") {
         DataSource.localize = function(locale) {
             DataSource.localize.internal(locale);
 
-            window["Messages"] = {}
+            window["Messages"] = {};
             var xpath = "/locales/" + DataSource.locale + "/label";
             var label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
             for (var node = label.iterateNext(); node; node = label.iterateNext()) {
