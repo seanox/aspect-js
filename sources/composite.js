@@ -2503,7 +2503,7 @@ if (typeof Composite === "undefined") {
                         if (iterate) {
                             iterate = Array.from(iterate);
                             iterate.forEach((item, index, array) => {
-                                var meta = {} 
+                                var meta = {}; 
                                 Object.defineProperty(meta, "item", {
                                     value: item,
                                     enumerable: true
