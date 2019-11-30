@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.x 20191118
+ *  Extension 1.1.0 20191130
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.x 20191118
+ *  @version 1.1.0 20191130
  */
 if (typeof Namespace === "undefined") {
 
@@ -105,12 +105,12 @@ if (typeof Namespace === "undefined") {
      *  @return the created or already existing object(-level)
      *  @throws An error occurs in case of invalid data types or syntax 
      */
-    Namespace.using = function(variants) {
+    Namespace.using = function(...variants) {
         
         if (arguments.length == 0)
             return window;
         
-        var meta = Namespace.locate.apply(null, arguments);
+        var meta = Namespace.locate(...variants);
         if (typeof meta.namespace === "undefined")
             return meta.scope;         
         meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
@@ -140,12 +140,12 @@ if (typeof Namespace === "undefined") {
      *  @return the determined object(-level)
      *  @throws An error occurs in case of invalid data types or syntax
      */
-    Namespace.lookup = function(variants) {
+    Namespace.lookup = function(...variants) {
         
         if (arguments.length == 0)
             return window;        
         
-        var meta = Namespace.locate.apply(null, arguments);
+        var meta = Namespace.locate(...arguments);
         if (typeof meta.namespace === "undefined")
             return meta.scope;         
         meta.namespace = meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
@@ -173,8 +173,8 @@ if (typeof Namespace === "undefined") {
      *  @return true if the namespace exists
      *  @throws An error occurs in case of invalid data types or syntax
      */
-    Namespace.exists = function(variants) {
-        return Namespace.lookup.apply(null, arguments) != null;     
+    Namespace.exists = function(...variants) {
+        return Namespace.lookup(...variants) != null;     
     };
 };
 
@@ -410,10 +410,7 @@ if (RegExp.quote === undefined) {
  */  
 if (window.serial === undefined) {
     Object.defineProperty(window, "serial", {
-        value: Math.uniqueSerialId(),
-        enumerable: false,
-        configurable: false,
-        writable: false
+        value: Math.uniqueSerialId()
     });
 };
 
@@ -425,9 +422,6 @@ if (window.serial === undefined) {
  */  
 if (window.location.pathcontext === undefined) {
     Object.defineProperty(window.location, "pathcontext", {
-        value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/",
-        enumerable: false,
-        configurable: false,
-        writable: false
+        value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
     });
 };
