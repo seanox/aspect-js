@@ -54,7 +54,7 @@
     
     Condition 01: false
     Condition 01: true
-    Condition 01: Unexpected token !
+    Condition 01: Unexpected token '!'
     1  !   &gt;  2
     Condition 01: number
     
