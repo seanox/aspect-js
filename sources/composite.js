@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.x 20191118
+ *  Composite 1.2.0 20191130
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.x 20191118
+ *  @version 1.2.0 20191118
  */
 if (typeof Composite === "undefined") {
     
@@ -546,8 +546,8 @@ if (typeof Composite === "undefined") {
      *  @throws An error occurs in case of invalid data types or syntax 
      */ 
     if (Object.using === undefined)
-        Object.using = function(variants) {
-            var meta = Object.locate.apply(null, arguments);
+        Object.using = function(...variants) {
+            var meta = Object.locate(...variants);
             if (typeof meta.namespace === "undefined")
                 return meta.scope; 
             return Namespace.using.call(null, meta.scope, meta.namespace);
@@ -570,8 +570,8 @@ if (typeof Composite === "undefined") {
      *  @throws An error occurs in case of invalid data types or syntax
      */ 
     if (Object.lookup === undefined)
-        Object.lookup = function(variants) {
-            var meta = Object.locate.apply(null, arguments);
+        Object.lookup = function(...variants) {
+            var meta = Object.locate(...variants);
             if (typeof meta.namespace === "undefined")
                 return meta.scope; 
             return Namespace.lookup.call(null, meta.scope, meta.namespace);       
@@ -593,8 +593,8 @@ if (typeof Composite === "undefined") {
      *  @throws An error occurs in case of invalid data types or syntax
      */ 
     if (Object.exists === undefined)
-        Object.exists = function(variants) {
-            return Object.lookup.apply(null, arguments) != null;   
+        Object.exists = function(...variants) {
+            return Object.lookup(...variants) != null;   
         };        
 
     /**
@@ -603,7 +603,7 @@ if (typeof Composite === "undefined") {
      *  The original method is reused in the background.
      */ 
     XMLHttpRequest.prototype.internalOpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function(variants) {
+    XMLHttpRequest.prototype.open = function(...variants) {
 
         var callback = function() {
             if (arguments.length > 0) {
@@ -641,7 +641,7 @@ if (typeof Composite === "undefined") {
             this.addEventListener("loadend", callback);
         }
         
-        this.internalOpen.apply(this, arguments);
+        this.internalOpen(...variants);
     };
     
     /**
@@ -677,7 +677,7 @@ if (typeof Composite === "undefined") {
      *  @param variants up to five additional optional arguments that are passed
      *      as arguments when the callback function is called
      */
-    Composite.fire = function(event, variants) {
+    Composite.fire = function(event, ...variants) {
 
         event = (event || "").trim();
         if (!Composite.listeners
@@ -686,11 +686,9 @@ if (typeof Composite === "undefined") {
         var listeners = Composite.listeners[event.toLowerCase()];
         if (!Array.isArray(listeners))
             return;
-        variants = Array.from(arguments);
-        variants = variants.slice(1);
-        variants.unshift(event);
+        variants = [event, ...variants];
         listeners.forEach((callback) => {
-            callback.apply(null, variants);
+            callback(...variants);
         });        
     };
 
@@ -702,13 +700,10 @@ if (typeof Composite === "undefined") {
      *  @param variants up to five additional optional arguments that are passed
      *      as arguments when the callback function is called
      */
-    Composite.asynchron = function(task, variants) {
-        
-        arguments = Array.from(arguments);
-        arguments = arguments.slice(1);
-        window.setTimeout((invoke, variants) => {
-            invoke.apply(null, variants);
-        }, 0, task, arguments);
+    Composite.asynchron = function(task, ...variants) {
+        window.setTimeout((invoke, ...variants) => {
+            invoke(...variants);
+        }, 0, task, ...variants);
     };
     
     /**
