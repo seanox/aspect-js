@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.x 20191110
+ *  Test 1.1.0 20191130
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.x 20191110
+ *  @version 1.1.0 20191130
  */
 if (typeof Test === "undefined") {
     
@@ -967,15 +967,14 @@ if (typeof Test === "undefined") {
             console.output[level] += Array.from(variants).join(", ");
             
             if (output)
-                output.apply(null, variants);
+                output(...variants);
             
-            var values = Array.from(variants);
-            values.unshift(level);
+            var values = [level, ...variants];
             
             var listeners = console.listeners;
             if (Array.isArray(listeners))
                 listeners.forEach((callback) => {
-                    callback.apply(null, values);
+                    callback(...values);
                 }); 
             
             arguments = Array.from(arguments);
@@ -984,7 +983,7 @@ if (typeof Test === "undefined") {
             if (parent && parent !== window
                     && parent.console
                     && typeof parent.console.forward === "function")
-                parent.console.forward.apply(null, arguments);
+                parent.console.forward(...arguments);
         };
         
         /** Redirect for the level: LOG */
