@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.2.x 20191110
+ *  Messages 1.2.0 20191130
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.x 20191110
+ *  @version 1.2.0 20191130
  */
 if (typeof Messages === "undefined") {
     
@@ -102,10 +102,7 @@ if (typeof Messages === "undefined") {
                         + " " + (node.textContent).trim()).trim();
                 value = value.unescape();
                 Object.defineProperty(Messages, key, {
-                    value: value,
-                    enumerable: false,
-                    configurable: false,
-                    writable: false
+                    value: value
                 });
             }
         };
