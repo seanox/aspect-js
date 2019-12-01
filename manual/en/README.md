@@ -83,9 +83,9 @@ Machine translation with [DeepL](https://deepl.com).
   * [Supplement](datasource.md#supplement)
   
   
-### Resource Bundle
+### Resource Bundle (i18n)
 
-* [Resource Bundle](messages.md#resource-bundle)
+* [Resource Bundle (i18n)](messages.md#resource-bundle-messages-i18n)
 
 
 ### Model View Controler

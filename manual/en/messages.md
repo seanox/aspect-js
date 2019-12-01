@@ -1,7 +1,7 @@
 [DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controler](mvc.md)
 - - -
 
-# Resource Bundle (Messages)
+# Resource Bundle (Messages / i18n)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
 internationalization and localization (i18n). The implementation is based on a
@@ -62,6 +62,10 @@ cause an error when the method is called.
 ```javascript
 DataSource.localize("de");
 ```
+
+The currently used language can be retrieved via `DataSource.locale`.  
+All available languages are returned by `DataSource.locales` as an array that
+starts with the as default declared language.
 
 
 - - -
