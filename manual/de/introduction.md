@@ -413,7 +413,7 @@ das Ergebnis verkettet, aggregiert und per XSLT transformiert werden kann.
 [Mehr erfahren](datasource.md#datasource)
 
 
-## Resource Bundle (Messages)
+## Resource Bundle (Messages / i18n)
 
 (Resource)Messages ist eine statische Erweiterung der
 [DataSource](datasource.md#datasource) für Internationalisierung und

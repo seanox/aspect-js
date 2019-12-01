@@ -406,7 +406,7 @@ result can be concatenated, aggregated and transformed using XSLT.
 [Learn more](datasource.md#datasource)
 
 
-## Resource Bundle (Messages)
+## Resource Bundle (Messages / i18n)
 
 (Resource)Messages is a static [DataSource](datasource.md#datasource) extension
 for internationalization and localization. The implementation is based on a set

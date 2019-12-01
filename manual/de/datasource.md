@@ -85,9 +85,6 @@ Die Auswahl der Sprache erfolgt automatisch auf der Grundlage der
 Spracheinstellung des Browsers. Wenn die dort eingestellte Sprache nicht
 unterstützt wird, wird die als "Standard" deklarierte Sprache verwendet.
 
-Die verfügbaren Sprachinformationen können per `DataSource.locale` und 
-`DataSource.locales` abgefragt werden.
-
 Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geänder
 werden.  
 Akzeptiert werden nur Gebietsschemen, die mit der DataSource verfügbar sind,
@@ -96,6 +93,11 @@ andere Angaben führen beim Methoden-Aufruf zu einem Fehler.
 ```javascript
 DataSource.localize("de");
 ```
+
+Die aktuell verwendete Sprache kann als Gebietsschema per `DataSource.locale`
+abgefragt werden.  
+Alle verfügbaren Sprachen liefert `DataSource.locales` als Array von
+Gebietsschemen, das mit dem als default deklarierte Gebietsschema beginnt.
 
 
 ## Locator
@@ -154,7 +156,7 @@ im Original zurückgegeben.
 DataSource.fetch("xml://paper", "xslt://article", true);
 ```
 
-Weitere Details zur Funktionsweise der Transformation werden im Abschnitt
+Details zur Funktionsweise der Transformation werden im Abschnitt
 [transform](#transform) beschrieben.
 
 

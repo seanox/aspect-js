@@ -66,9 +66,11 @@ andere Angaben führen beim Methoden-Aufruf zu einem Fehler.
 DataSource.localize("de");
 ```
 
-Die aktuell verwendete Sprache kann per `DataSource.locale` abgefragt werden.  
-Alle verfügbaren Sprachen liefert `die DataSource.locales` als Array, das mit
-der als default deklarierte Sprache beginnt.
+Die aktuell verwendete Sprache kann als Gebietsschema per `DataSource.locale`
+abgefragt werden.  
+Alle verfügbaren Sprachen liefert `DataSource.locales` als Array von
+Gebietsschemen, das mit dem als default deklarierte Gebietsschema beginnt.
+
 
 
 - - -
