@@ -14,7 +14,7 @@ activated deliberately at runtime.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     ...
 }});
 
@@ -64,7 +64,7 @@ used in a scenario.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
 
@@ -114,19 +114,19 @@ A scenario is a sequence of a lot of test cases (tasks).
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
-Test.create({name:"example", timeout:1000, test:function() {
+Test.create({name:"example", timeout:1000, test() {
     Assert.assertTrue(true);
 }});
-Test.create({error:Error test:function() {
+Test.create({error:Error test() {
     throw new Error();
 }});
-Test.create({error:/^My Error/i, test:function() {
+Test.create({error:/^My Error/i, test() {
     throw new Error("My Error");
 }});
-Test.create({ignore:true, test:function() {
+Test.create({ignore:true, test() {
     Assert.assertTrue(true);
 }});
 
@@ -159,10 +159,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue("message", true);
 }});
 
@@ -179,10 +179,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertFalse(false);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertFalse("message", false);
 }});
 
@@ -200,10 +200,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertEquals(expected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertEquals("message", expected, value);
 }});
 
@@ -221,10 +221,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotEquals(unexpected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotEquals("message", unexpected, value);
 }});
 
@@ -242,10 +242,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertSame(expected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertSame("message", expected, value);
 }});
 
@@ -263,10 +263,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotSame(unexpected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotSame("message", unexpected, value);
 }});
 
@@ -283,10 +283,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNull(null);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNull("message", null);
 }});
 
@@ -303,10 +303,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotNull(null);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotNull("message", null);
 }});
 
@@ -322,10 +322,10 @@ The method has different signatures.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.fail();
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.fail("message");
 }});
 
@@ -342,27 +342,27 @@ and the unknown is ignored.
 
 ```javascript
 Test.configure({
-    log:function(message) {
+    log(message) {
         ...
     },
-    error:function(message) {
+    error(message) {
         ...
     },
     ...
 });
 
 Test.configure({
-    start:function(status) {
+    start(status) {
         ...
     },
-    perform:function(status) {
+    perform(status) {
         ...
     },
-    response:function(status) {
+    response(status) {
         ...
     },
     
-    finish:function(status) {
+    finish(status) {
         ...
     }
 });
@@ -377,10 +377,10 @@ If not specified, console object is used.
 
 ```javascript
 Test.configure({
-    log:function(message) {
+    log(message) {
         ...
     },
-    error:function(message) {
+    error(message) {
         ...
     }
 });
@@ -398,34 +398,34 @@ about the test process.
 ```javascript
 Test.configure({
 
-    start:function(status) {
+    start(status) {
         The method is called with the start.
     },
     
-    suspend:function(status) {
+    suspend(status) {
         The method is called with suspension.
     },
     
-    resume:function(status) {
+    resume(status) {
         The method is called if the test run is stopped and is to be
         continued later.
     },
     
-    interrupt:function(status) {
+    interrupt(status) {
         The method is called if you want to abort the test run.
         The test run cannot then be resumed.
     },
     
-    perform:function(status) {
+    perform(status) {
         The method is called before a test task is performed.
     },
     
-    response:function(status) {
+    response(status) {
         The method is called when a test task has been performed.
         Here you can find the result of the test task.
     },
     
-    finish:function(status) {
+    finish(status) {
         The method is called when all test tasks have been completed.
     }
 });
@@ -777,7 +777,7 @@ Method that creates a simple string for an object.
 The string is based on `JSON.stringify(object)`.
 
 ```javascript
-var example = {a:1, b:2, c:function() {return;}};
+var example = {a:1, b:2, c() {return;}};
 console.log(example.toPlainString());
 ```
 

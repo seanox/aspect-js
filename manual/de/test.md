@@ -15,7 +15,7 @@ das Test-API zur Laufzeit bewusst aktiviert werden.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     ...
 }});
 
@@ -65,7 +65,7 @@ implementiert werden, wird aber immer in einem Szenario verwendet.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
 
@@ -114,19 +114,19 @@ Ein Szenario ist eine Abfolge von vielen Testfällen (Tasks).
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
-Test.create({name:"example", timeout:1000, test:function() {
+Test.create({name:"example", timeout:1000, test() {
     Assert.assertTrue(true);
 }});
-Test.create({error:Error test:function() {
+Test.create({error:Error test() {
     throw new Error();
 }});
-Test.create({error:/^My Error/i, test:function() {
+Test.create({error:/^My Error/i, test() {
     throw new Error("My Error");
 }});
-Test.create({ignore:true, test:function() {
+Test.create({ignore:true, test() {
     Assert.assertTrue(true);
 }});
 
@@ -160,10 +160,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue("message", true);
 }});
 
@@ -180,10 +180,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertFalse(false);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertFalse("message", false);
 }});
 
@@ -201,10 +201,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertEquals(expected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertEquals("message", expected, value);
 }});
 
@@ -222,10 +222,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotEquals(unexpected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotEquals("message", unexpected, value);
 }});
 
@@ -243,10 +243,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertSame(expected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertSame("message", expected, value);
 }});
 
@@ -264,10 +264,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotSame(unexpected, value);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotSame("message", unexpected, value);
 }});
 
@@ -284,10 +284,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNull(null);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNull("message", null);
 }});
 
@@ -304,10 +304,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotNull(null);
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertNotNull("message", null);
 }});
 
@@ -323,10 +323,10 @@ Die Methode hat unterschiedliche Signaturen.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.fail();
 }});
-Test.create({test:function() {
+Test.create({test() {
     Assert.fail("message");
 }});
 
@@ -343,27 +343,27 @@ wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
 
 ```javascript
 Test.configure({
-    log:function(message) {
+    log(message) {
         ...
     },
-    error:function(message) {
+    error(message) {
         ...
     },
     ...
 });
 
 Test.configure({
-    start:function(status) {
+    start(status) {
         ...
     },
-    perform:function(status) {
+    perform(status) {
         ...
     },
-    response:function(status) {
+    response(status) {
         ...
     },
     
-    finish:function(status) {
+    finish(status) {
         ...
     }
 });
@@ -378,10 +378,10 @@ Wenn nicht angegeben, wird das console-Objekt verwendet.
 
 ```javascript
 Test.configure({
-    log:function(message) {
+    log(message) {
         ...
     },
-    error:function(message) {
+    error(message) {
         ...
     }
 });
@@ -399,34 +399,34 @@ der Konsole ausgegeben.
 ```javascript
 Test.configure({
 
-    start:function(status) {
+    start(status) {
         Aufruf der Methode beim Start.
     },
     
-    suspend:function(status) {
+    suspend(status) {
         Aufruf der Methode bei einer Unterbrechung.
     },
     
-    resume:function(status) {
+    resume(status) {
         Aufruf der Methode beim Fortgesetzt des Testverlaufs, wenn
         dieser zuvor unterbrochen wurde.
     },
     
-    interrupt:function(status) {
+    interrupt(status) {
         Aufruf der Methode beim Abbruch vom Testlauf.
         Der Testlauf kann nicht fortgesetzt werden.
     },
     
-    perform:function(status) {
+    perform(status) {
         Aufruf der Methode bevor eine Testaufgabe ausgeführt wird.
     },
     
-    response:function(status) {
+    response(status) {
         Aufruf der Methode nach der Ausführung einer Testaufgabe.
         Hier ist das Ergebnis der Testaufgabe enthalten.
     },
     
-    finish:function(status) {
+    finish(status) {
         Aufruf der Methode, wenn alle Testaufgaben abgeschlossen sind.
     }
 });
@@ -781,7 +781,7 @@ Methode, die eine einfache Zeichenkette für ein Objekt erzeugt.
 Die Zeichenkette bassiert auf `JSON.stringify(object)`.
 
 ```javascript
-var example = {a:1, b:2, c:function() {return;}};
+var example = {a:1, b:2, c() {return;}};
 console.log(example.toPlainString());
 ```
 
