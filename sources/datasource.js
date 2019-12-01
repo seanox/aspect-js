@@ -87,7 +87,7 @@ if (typeof DataSource === "undefined") {
         };     
     };    
     
-    /** The available languages in the 'locales.xml' with label-value pairs. */
+    /** The currently used language. */
     DataSource.locale;
     
     (function() {
