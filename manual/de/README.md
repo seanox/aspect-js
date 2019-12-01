@@ -7,7 +7,7 @@
 * [Markup](#markup)
 * [Expression Language](#expression-language)
 * [DataSource](#datasource)
-* [Resource Bundle](#resource-bundle)
+* [Resource Bundle](#resource-bundle-i18n)
 * [Model View Controler](#model-view-controler)
 * [Komponenten](#komponenten)
 * [Erweiterung](#erweiterung)
