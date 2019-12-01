@@ -270,12 +270,45 @@ Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
 
 ### message
 
-TODO:
+Message ist ein Bestandteil der Validierung und wird zur Textausgabe im
+Fall einer unbestätigten Validierung verwendet.
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate message="Valid e-mail address required"
+      events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate message="{{Messages['Model.text1.validation.message']}}"
+      events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+[Mehr erfahren](markup.md#message)
 
 
 ### notification
 
-TODO:
+Notification ist ein Bestandteil der Validierung und zeigt den die Fehlerausgabe
+als Info-Box (Browser-Feature) am entsprechenden Element an.
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate message="Valid e-mail address required" notification
+      events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+[Mehr erfahren](markup.md#notification)
 
 
 ### render
@@ -398,21 +431,21 @@ Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung.
 
 ```
-+------------------------------------------+--------------+---------------------------------+
-|  View                                    |  Controller  |  Model                          |
-+------------------------------------------+--------------+---------------------------------+
-|  Markup                                  |  Composite   |  JavaScript                     |
-|                                          |  Path        |                                 |
-|                                          |  SiteMap     |                                 |
-+------------------------------------------+--------------+---------------------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {                  |
-|    <input id="message" events="input"/>  |              |      message:"",                | 
-|    <button id="submit"/>                 |              |      submit: {                  |
-|  </form>                                 |              |          onClick: function() {  |
-|                                          |              |          }                      |
-|                                          |              |      }                          |
-|                                          |              |  }                              |
-+------------------------------------------+--------------+---------------------------------+
++------------------------------------------+--------------+-----------------------+
+|  View                                    |  Controller  |  Model                |
++------------------------------------------+--------------+-----------------------+
+|  Markup                                  |  Composite   |  JavaScript           |
+|                                          |  Path        |                       |
+|                                          |  SiteMap     |                       |
++------------------------------------------+--------------+-----------------------+
+|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|    <input id="message" events="input"/>  |              |      message:"",      | 
+|    <button id="submit"/>                 |              |      submit: {        |
+|  </form>                                 |              |          onClick() {  |
+|                                          |              |          }            |
+|                                          |              |      }                |
+|                                          |              |  }                    |
++------------------------------------------+--------------+-----------------------+
 ```
 
 [Mehr erfahren](mvc.md)
@@ -597,7 +630,7 @@ das Test-API zur Laufzeit bewusst aktiviert werden.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     ...
 }});
 
@@ -616,7 +649,7 @@ implementiert werden, wird aber immer in einem Szenario verwendet.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
 
@@ -667,19 +700,19 @@ Ein Szenario ist eine Abfolge von vielen Testfällen (Tasks).
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
     Assert.assertTrue(true);
 }});
-Test.create({name:"example", timeout:1000, test:function() {
+Test.create({name:"example", timeout:1000, test() {
     Assert.assertTrue(true);
 }});
-Test.create({error:Error test:function() {
+Test.create({error:Error test() {
     throw new Error();
 }});
-Test.create({error:/^My Error/i, test:function() {
+Test.create({error:/^My Error/i, test() {
     throw new Error("My Error");
 }});
-Test.create({ignore:true, test:function() {
+Test.create({ignore:true, test() {
     Assert.assertTrue(true);
 }});
 
@@ -710,7 +743,7 @@ einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
 ```javascript
 Test.activate();
 
-Test.create({test:function() {
+Test.create({test() {
 
     Assert.assertTrue(true);
     Assert.assertTrue("message", true);

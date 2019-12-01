@@ -1,4 +1,4 @@
-[DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [TOC](README.md#resource-bundle-i18n) | [Model View Controler](mvc.md)
 - - -
 
 # Resource Bundle (Messages / i18n)
