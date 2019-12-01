@@ -17,15 +17,15 @@
     
         var ModelA = {
             a:"ma",
-            getB:function() {
+            getB() {
                 return "mb";
             },
-            isC:function() {
+            isC() {
                 return true;
             }  
         }
         
-        Test.create({test:function() {
+        Test.create({test() {
             var content = Output.textContent;
             content = content.replace(/undefined/, "");
             content = content.replace(/\s+/g, " ").trim();

@@ -16,34 +16,34 @@
     
         var TestModel = {
             isVisibleA: true,
-            outputA: function() {
+            outputA() {
                 return "A1<span>A2<span>A3</span></span>";
             },
             isVisibleB: false,
-            outputB: function() {
+            outputB() {
                 return "B1<span>B2 B3:{{TestModel.isVisibleB3}}<span condition='{{TestModel.isVisibleB3}}'>B3</span></span>";
             },
             isVisibleB3: false,
-            outputB3: function() {
+            outputB3() {
                 return "B3";
             },
             isVisibleC: false,
-            outputC: function() {
+            outputC() {
             }
         };
 
         var results = [];
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());            
         }}); 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-2']", snapshots.shift());
         }}); 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-3']", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
         }});
         

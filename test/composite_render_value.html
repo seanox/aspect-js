@@ -14,19 +14,19 @@
     
         Test.activate();
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("a1:0 a2:1 a3:2 b1:3 b2:4 b3:6", snapshots.shift());  
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("a1:7 a2:8 a3:9 b1:3 b2:4 b3:6", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("a1:7 a2:8 a3:9 b1:7 b2:8 b3:6", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("a1:7 a2:8 a3:9 b1:7 b2:7 b3:9", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("a1:7 a2:8 a3:9 b1:10 b2:7 b3:7", snapshots.shift());
         }});
         

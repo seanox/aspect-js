@@ -34,16 +34,16 @@
         Composite.listen(Composite.EVENT_RENDER_START, snapshot);
         Composite.listen(Composite.EVENT_RENDER_END, snapshot);
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertTrue(snapshots[0].indexOf(" release") > 0);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertFalse(snapshots[1].indexOf(" release") > 0);
         }});        
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertFalse(snapshots[2].indexOf(" release") > 0);
         }});        
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertFalse(snapshots[3].indexOf(" release") > 0);
         }});        
     </script>

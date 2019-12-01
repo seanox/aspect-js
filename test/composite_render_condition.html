@@ -19,27 +19,27 @@
     
         var Model = {
             onA: false,
-            toggleA: function() {
+            toggleA() {
                 this.onA = !this.onA;
                 return this.onA;
             },
             onB: false,
-            toggleB: function() {
+            toggleB() {
                 this.onB = !this.onB;
                 return this.onB;
             },
             onC: false,
-            toggleC: function() {
+            toggleC() {
                 this.onC = !this.onC;
                 return this.onC;
             },
             onD: false,
-            toggleD: function() {
+            toggleD() {
                 this.onD = !this.onD;
                 return this.onD;
             },
             onE: false,
-            toggleE: function() {
+            toggleE() {
                 this.onE = !this.onE;
                 return this.onE;
             },
@@ -68,19 +68,19 @@
         var x3 = 0;
         var x4 = 0;
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-2']", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-3']", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-5']", snapshots.shift());
         }});
     </script>

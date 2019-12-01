@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.0 20191130
+ *  Extension 1.1.0 20191201
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191130
+ *  @version 1.1.0 20191201
  */
 if (typeof Namespace === "undefined") {
 
@@ -90,7 +90,7 @@ if (typeof Namespace === "undefined") {
                 || (scope == window && namespace.match(/^\d/)))
             throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
         
-        return {scope:scope, namespace:namespace};
+        return {scope, namespace};
     };    
     
     /**

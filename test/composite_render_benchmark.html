@@ -16,7 +16,7 @@
     
         Test.activate();
     
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertTrue(String(timing) + "ms", timing < 2500);
         }});
     

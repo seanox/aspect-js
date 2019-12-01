@@ -14,7 +14,7 @@
     
         Test.activate(); 
       
-        Test.create({test:function() {
+        Test.create({test() {
             
             Assert.assertNull(Path.normalize());
             Assert.assertNull(Path.normalize(null));
@@ -35,7 +35,7 @@
             Assert.assertEquals("#", Path.normalize("#x#y#z###", "#"));
         }});
   
-        Test.create({test:function() {
+        Test.create({test() {
             
             Assert.assertEquals("#aaa", Path.normalize("aaa"));
             Assert.assertEquals("#aaa#bbb", Path.normalize("aaa#bbb"));
@@ -47,7 +47,7 @@
             Assert.assertEquals("#", Path.normalize("aaa#bbb#ccc#####"));
         }});
   
-        Test.create({test:function() {
+        Test.create({test() {
             
             Assert.assertEquals("#aaa", Path.normalize("#aaa"));
             Assert.assertEquals("#aaa#bbb", Path.normalize("#aaa#bbb"));
@@ -59,7 +59,7 @@
             Assert.assertEquals("#", Path.normalize("#aaa#bbb#ccc#####")); 
         }});
   
-        Test.create({test:function() { 
+        Test.create({test() { 
             
             Assert.assertEquals("#a#b#c#d#f", Path.normalize("#a#b#c#d#e##f"));
             Assert.assertEquals("#a#b#c#f", Path.normalize("#a#b#c#d#e###f"));
@@ -67,7 +67,7 @@
             Assert.assertEquals("#f", Path.normalize("####f"));
         }});
   
-        Test.create({test:function() {
+        Test.create({test() {
             
             Assert.assertEquals("#a#b#c#d#f", Path.normalize("#x#y#z", "#a#b#c#d#e##f"));
             Assert.assertEquals("#a#b#c#f", Path.normalize("#x#y#z", "#a#b#c#d#e###f"));
@@ -77,7 +77,7 @@
             Assert.assertEquals("#f", Path.normalize("#x#y#z", "######f"));
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             
             Assert.assertEquals("#a#b#c#d#f", Path.normalize("httpx://local/#x#y#z", "httpx://local/#a#b#c#d#e##f"));
             Assert.assertEquals("#a#b#c#f", Path.normalize("httpx://local/#x#y#z", "httpx://local/#a#b#c#d#e###f"));
@@ -87,31 +87,31 @@
             Assert.assertEquals("#f", Path.normalize("httpx://local#x#y#z", "httpx://local######f"));
         }});      
   
-        Test.create({expected:/\bInvalid path: \[object Object\]/i, test:function() {
+        Test.create({expected:/\bInvalid path: \[object Object\]/i, test() {
             Assert.assertNull(Path.normalize({}));
         }});
   
-        Test.create({expected:/\bInvalid path: true/i, test:function() {
+        Test.create({expected:/\bInvalid path: true/i, test() {
             Assert.assertNull(Path.normalize(true));
         }});
   
-        Test.create({expected:/\bInvalid path: #1#2#3/i, test:function() {
+        Test.create({expected:/\bInvalid path: #1#2#3/i, test() {
             Assert.assertNull(Path.normalize("#1#2#3"));
         }});
         
-        Test.create({expected:/\bInvalid root: \[object Object\]/i, test:function() {
+        Test.create({expected:/\bInvalid root: \[object Object\]/i, test() {
             Assert.assertNull(Path.normalize({}, "#"));
         }});
   
-        Test.create({expected:/\bInvalid root: true/i, test:function() {
+        Test.create({expected:/\bInvalid root: true/i, test() {
             Assert.assertNull(Path.normalize(true, "#"));
         }});
   
-        Test.create({expected:/\bInvalid root: #1#2#3/i, test:function() {
+        Test.create({expected:/\bInvalid root: #1#2#3/i, test() {
             Assert.assertNull(Path.normalize("#1#2#3", "#"));
         }});      
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("#a#b#c#d", Path.normalize("#a#b#c#d"));
             Assert.assertEquals("#a#b#c#x", Path.normalize("#a#b#c#d##x"));
             Assert.assertEquals("#a#b#x", Path.normalize("#a#b#c#d###x"));

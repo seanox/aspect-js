@@ -40,17 +40,17 @@
             elementCount3++;
         });
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test']", document.body.textContent);
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(19, elementCount1);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(19, elementCount2);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(19, elementCount3);
         }});
         

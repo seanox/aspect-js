@@ -18,7 +18,7 @@
         var eT = false;
         var eS = false;
     
-        Test.create({test:function() {
+        Test.create({test() {
             var text = snapshots.join("\r\n");
             Assert.assertEquals(5, (text.match(/checked/g) || []).length);
             Assert.assertEquals(4, (text.match(/disabled/g) || []).length);

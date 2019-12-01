@@ -71,15 +71,15 @@
             objectArray: [{value: ""},{value: ""}],
             object: {a: {value: ""}, b: ""},
             buttonArray: [
-                {onClick: function(event) {
+                {onClick(event) {
                     clickStack.push("a" + event.target.value);
                 }},
-                {onClick: function(event) {
+                {onClick(event) {
                     clickStack.push("b" + event.target.value);
                 }}
             ],
             button: {
-                onClick: function(event) {
+                onClick(event) {
                     clickStack.push("c" + event.target.value);
                 }
             }
@@ -91,15 +91,15 @@
             objectArray: [{value: ""},{value: ""}],
             object: {a: {value: ""}, b: ""},
             buttonArray: [
-                {onClick: function(event) {
+                {onClick(event) {
                     clickStack.push("d" + event.target.value);
                 }},
-                {onClick: function(event) {
+                {onClick(event) {
                     clickStack.push("e" + event.target.value);
                 }}
             ],
             button: {
-                onClick: function(event) {
+                onClick(event) {
                     clickStack.push("f" + event.target.value);
                 }
             }
@@ -111,15 +111,15 @@
             objectArray: [{value: ""},{value: ""}],
             object: {a: {value: ""}, b: ""},
             buttonArray: [
-                {onClick: function(event) {
+                {onClick(event) {
                     clickStack.push("g" + event.target.value);
                 }},
-                {onClick: function(event) {
+                {onClick(event) {
                     clickStack.push("h" + event.target.value);
                 }}
             ],
             button: {
-                onClick: function(event) {
+                onClick(event) {
                     clickStack.push("i" + event.target.value);
                 }
             }
@@ -172,19 +172,19 @@
             }, 250);
         });     
         
-        Test.create({test:function() {
+        Test.create({test() {
             var pattern = '{"textArray":["AA","AB"],"text":"AL","objectArray":[{"value":"AE"},{"value":"AF"}],"object":{"a":{"value":"AM"},"b":"AN"},"buttonArray":[{},{}],"button":{}}';
             Assert.assertEquals(pattern, modelA.toPlainString());
         }}); 
-        Test.create({test:function() {
+        Test.create({test() {
             var pattern = '{"textArray":["BA","BB"],"text":"BL","objectArray":[{"value":"BE"},{"value":"BF"}],"object":{"a":{"value":"BM"},"b":"BN"},"buttonArray":[{},{}],"button":{}}';
             Assert.assertEquals(pattern, modelB.toPlainString());
         }});         
-        Test.create({test:function() {
+        Test.create({test() {
             var pattern = '{"textArray":["CA","CB"],"text":"CL","objectArray":[{"value":"CE"},{"value":"CF"}],"object":{"a":{"value":"CM"},"b":"CN"},"buttonArray":[{},{}],"button":{}}';
             Assert.assertEquals(pattern, modelC.toPlainString());
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             var pattern = 'aA1 bA2 dA1 eA2 gA1 hA2';
             Assert.assertEquals(pattern, clickStack.join(" "));
         }});   

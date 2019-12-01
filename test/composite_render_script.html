@@ -20,43 +20,43 @@
         var importCv = 5;        
         var importCx = 6;
     
-        Test.create({test:function() {
+        Test.create({test() {
             var content = OutputA.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("A:A0", content);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             var content = OutputB.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("B:B4B5B6B7B8B9", content);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             var content = OutputC.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("C:C0C1C2", content);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             var content = OutputD.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("D:D0D2D4D6D8", content);
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(1, importAv);
             Assert.assertEquals(2, importAx);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(3, importBv);
             Assert.assertEquals(4, importBx);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(300, importCv);
             Assert.assertEquals(16, importCx);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             var content = document.querySelector("#OutputE ~ div").innerHTML.replace(/\s+/g, " ").trim();
             Assert.assertEquals("importAv = 100; importAx++; <script type=\"text/javascript\"> importBv = 200; importBx++; <\/script> <script type=\"composite/javascript\"> importCv = 300; importCx++; <\/script>", content);
         }}); 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(10, targets["BODY"]);
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals(2, targets["SCRIPT"]);
         }});        
         
@@ -81,16 +81,16 @@
         }); 
     
         var ModelA = {
-            isVisibleA:function() {
+            isVisibleA() {
                 return count % 2 == 0;
             },
-            isVisibleB:function() {
+            isVisibleB() {
                 return count > 3;
             },
-            isVisibleC:function() {
+            isVisibleC() {
                 return count < 3;
             },
-            isVisibleD:function() {
+            isVisibleD() {
                 return count % 2 == 0;
             }
         };

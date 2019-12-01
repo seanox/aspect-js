@@ -32,7 +32,7 @@
  *  task, because case is a keyword. It can be implemented alone, but is always
  *  used in a scenario.
  *  
- *  Test.create({test:function() {
+ *  Test.create({test() {
  *      Assert.assertTrue(true);
  *  }});
  *  
@@ -43,23 +43,23 @@
  *      ----
  *  A scenario is a sequence of a lot of test cases usually in one file.
  *  
- *  Test.create({test:function() {
+ *  Test.create({test() {
  *      Assert.assertTrue(true);
  *  }});
  *  
- *  Test.create({name:"example", timeout:1000, test:function() {
+ *  Test.create({name:"example", timeout:1000, test() {
  *      Assert.assertTrue(true);
  *  }});
  *  
- *  Test.create({error:Error test:function() {
+ *  Test.create({error:Error test() {
  *      throw new Error();
  *  }});
  *  
- *  Test.create({error:/^My Error/i, test:function() {
+ *  Test.create({error:/^My Error/i, test() {
  *      throw new Error("My Error");
  *  }});
  *  
- *  Test.create({ignore:true, test:function() {
+ *  Test.create({ignore:true, test() {
  *      Assert.assertTrue(true);
  *  }});
  *  
@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191130
+ *  Test 1.1.0 20191201
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191130
+ *  @version 1.1.0 20191201
  */
 if (typeof Test === "undefined") {
     
@@ -176,11 +176,11 @@ if (typeof Test === "undefined") {
          *      
          *  var output = {
          *  
-         *      log:function(message) {
+         *      log(message) {
          *          ...
          *      },
          *      
-         *      error:function(message) {
+         *      error(message) {
          *          ...
          *      }
          *  };
@@ -200,34 +200,34 @@ if (typeof Test === "undefined") {
          *      
          *  var monitor = {
          *  
-         *      start:function(status) {
+         *      start(status) {
          *          The method is called with the start.
          *      },
          *      
-         *      suspend:function(status) {
+         *      suspend(status) {
          *          The method is called with suspension.
          *      },
          *      
-         *      resume:function(status) {
+         *      resume(status) {
          *          The method is called if the test run is stopped and is to be
          *          continued later.
          *      },
          *      
-         *      interrupt:function(status) {
+         *      interrupt(status) {
          *          The method is called if you want to abort the test run.
          *          The test run cannot then be resumed.
          *      },
          *      
-         *      perform:function(status) {
+         *      perform(status) {
          *          The method is called before a test task is performed.
          *      },
          *      
-         *      response:function(status) {
+         *      response(status) {
          *          The method is called when a test task has been performed.
          *          Here you can find the result of the test task.
          *      },
          *      
-         *      finish:function(status) {
+         *      finish(status) {
          *          The method is called when all test tasks have been completed.
          *      }
          *  };
@@ -360,23 +360,23 @@ if (typeof Test === "undefined") {
          *  
          *      usage:
          *      
-         *  Test.create({test:function() {
+         *  Test.create({test() {
          *      Assert.assertTrue(true);
          *  }});
          *  
-         *  Test.create({name:"example", timeout:1000, test:function() {
+         *  Test.create({name:"example", timeout:1000, test() {
          *      Assert.assertTrue(true);
          *  }});
          *  
-         *  Test.create({error:Error test:function() {
+         *  Test.create({error:Error test() {
          *      throw new Error();
          *  }});
          *  
-         *  Test.create({error:/^My Error/i, test:function() {
+         *  Test.create({error:/^My Error/i, test() {
          *      throw new Error("My Error");
          *  }});
          *  
-         *  Test.create({ignore:true, test:function() {
+         *  Test.create({ignore:true, test() {
          *      Assert.assertTrue(true);
          *  }});
          *  
@@ -429,33 +429,33 @@ if (typeof Test === "undefined") {
             
             Test.output = Test.output || console;
             Test.monitor = Test.monitor || {
-                start: function(status) {
+                start(status) {
                     Test.output.log(new Date().toUTCString() + " Test is started"
                             + ", " + numerical(status.queue.size, "task") + " in the queue");
                 },
-                suspend: function(status) {
+                suspend(status) {
                     Test.output.log(new Date().toUTCString() + " Test is suspended"
                             + ", " + numerical(status.queue.length, "task") + " still outstanding");
                 },
-                resume: function(status) {
+                resume(status) {
                     Test.output.log(new Date().toUTCString() + " Test is continued "
                             + ", " + numerical(status.queue.size, "task") + " in the queue");
                 },
-                interrupt: function(status) {
+                interrupt(status) {
                     Test.output.log(new Date().toUTCString() + " Test is interrupted"
                             + "\n\t" + numerical(status.queue.size -status.queue.progress, "task") + " still outstanding"
                             + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
                             + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
                 },
-                perform: function(status) {
+                perform(status) {
                 },
-                response: function(status) {
+                response(status) {
                     var timing = new Date().getTime() -status.task.timing;
                     if (status.task.error)
                         Test.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
                     else Test.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
                 },
-                finish: function(status) {
+                finish(status) {
                     Test.output.log(new Date().toUTCString() + " Test is finished"
                             + "\n\t" + numerical(status.queue.size, "task") + " were performed"
                             + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
@@ -503,7 +503,7 @@ if (typeof Test === "undefined") {
                     var timeout = false;
                     if ((meta.timeout || 0) > 0)
                         timeout = new Date().getTime() +meta.timeout;
-                    Test.task = {title:null, meta:meta, running:true, timing:new Date().getTime(), timeout:timeout, duration:false, error:null};
+                    Test.task = {title:null, meta, running:true, timing:new Date().getTime(), timeout, duration:false, error:null};
                     Test.task.title = "#" + meta.serial;
                     if (typeof meta.name === "string"
                             && meta.name.trim().length > 0)
@@ -698,7 +698,7 @@ if (typeof Test === "undefined") {
                 });
             }
             
-            return {task:task, queue:queue};
+            return {task, queue};
         };    
     
         if (typeof Assert === "undefined") {
@@ -720,7 +720,7 @@ if (typeof Test === "undefined") {
              */
             Assert.create = function(arguments, size) {
     
-                var assert = {message:null, values:[], error:function() {
+                var assert = {message:null, values:[], error() {
                     var words = Array.from(arguments);
                     words.forEach((argument, index, array) => {
                         array[index] = String(argument).replace(/\{(\d+)\}/g, (match, index) => {

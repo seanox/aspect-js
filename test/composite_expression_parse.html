@@ -34,7 +34,7 @@
             return [{x:[{y:"f12[0]->x->y"}]}];
         };         
         
-        Test.create({test:function() {
+        Test.create({test() {
             var pattern = Test.read("composite_expression_parse_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.innerHTML);              
         }});         

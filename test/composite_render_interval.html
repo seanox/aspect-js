@@ -129,13 +129,13 @@
             })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
         });
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("0101 1 1 1 1", snapshots.A + " " + snapshots.B + " " + snapshots.C + " " + snapshots.S1 + " " + snapshots.S2);
         }}); 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("101 10101 10101 101 10101", snapshots.xA + " " + snapshots.xB + " " + snapshots.xC + " " + snapshots.xS1 + " " + snapshots.xS2);
         }}); 
-        Test.create({test:function() {
+        Test.create({test() {
             var test = snapshots.xBC + " " + snapshots.xS12;
             Assert.assertTrue("101 101" == test || "1 101" == test);
         }});         

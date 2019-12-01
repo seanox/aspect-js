@@ -14,18 +14,18 @@
     
         Test.activate();
       
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("2U90", (" a").hashCode());
             Assert.assertEquals("32CF0", ("a ").hashCode());
             Assert.assertEquals("3Q2N0", (" a ").hashCode());
             Assert.assertEquals("22P0", ("a").hashCode());
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("B1VXT0PNSYNNG5", ("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.").hashCode());
         }});      
   
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("B1VXT0PNSYMRG5", ("Lorem ipsum dolor sit amet, consetetur sadipscing Elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.").hashCode());
         }});      
   

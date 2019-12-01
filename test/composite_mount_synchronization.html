@@ -35,7 +35,7 @@
             ]
         }    
         
-        Test.create({test:function() {
+        Test.create({test() {
             var assert = '{"user":{"name":"A","address":{"city":"B","citycode":"C","street":"D","number":"E"}},"views":[{"textA":"F"},{"textA":"G"}]}';
             Assert.assertEquals(assert, model.toPlainString());
         }});  

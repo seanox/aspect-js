@@ -110,7 +110,7 @@
             });
         });
         
-        Test.create({test:function() {
+        Test.create({test() {
             
             var temp = document.createElement("div");
             temp.innerHTML = snapshots[0];
@@ -153,7 +153,7 @@
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("x-title1"));
         }});   
 
-        Test.create({test:function() {
+        Test.create({test() {
             
             var temp = document.createElement("div");
             temp.innerHTML = snapshots[1];
@@ -188,7 +188,7 @@
             Assert.assertEquals("x6", temp.querySelector("iframe[name='targetC']").getAttribute("x-title1"));
         }});   
 
-        Test.create({test:function() {
+        Test.create({test() {
             
             var temp = document.createElement("div");
             temp.innerHTML = snapshots[2];
@@ -223,7 +223,7 @@
             Assert.assertEquals("x6x", temp.querySelector("iframe[name='targetC']").getAttribute("x-title1"));
         }}); 
         
-        Test.create({test:function() {
+        Test.create({test() {
             
             var temp = document.createElement("div");
             temp.innerHTML = snapshots[3];

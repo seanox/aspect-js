@@ -14,41 +14,41 @@
     
         Test.activate();
 
-        Test.create({expected:/\bInvalid scope: undefined/i, test:function() {
+        Test.create({expected:/\bInvalid scope: undefined/i, test() {
             Composite.customize();
         }});
-        Test.create({expected:/\bInvalid scope: object/i, test:function() {
+        Test.create({expected:/\bInvalid scope: object/i, test() {
             Composite.customize(null);
         }});
-        Test.create({expected:/\bInvalid scope/i, test:function() {
+        Test.create({expected:/\bInvalid scope/i, test() {
             Composite.customize("");
         }});
-        Test.create({expected:/\bInvalid callback: string/i, test:function() {
+        Test.create({expected:/\bInvalid callback: string/i, test() {
             Composite.customize("", "");
         }});
-        Test.create({expected:/\bInvalid scope/i, test:function() {
+        Test.create({expected:/\bInvalid scope/i, test() {
             Composite.customize("", null);
         }});
-        Test.create({expected:/\bInvalid scope: object/i, test:function() {
+        Test.create({expected:/\bInvalid scope: object/i, test() {
             Composite.customize(new Object(), function() {});
         }});
-        Test.create({expected:/\bInvalid scope: function/i, test:function() {
+        Test.create({expected:/\bInvalid scope: function/i, test() {
             Composite.customize(function() {}, "");
         }});
-        Test.create({expected:/\bInvalid scope: function/i, test:function() {
+        Test.create({expected:/\bInvalid scope: function/i, test() {
             Composite.customize(function() {}, null);
         }});
-        Test.create({expected:/\bInvalid scope/i, test:function() {
+        Test.create({expected:/\bInvalid scope/i, test() {
             Composite.customize("", function() {});
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             Composite.customize(function() {});
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Composite.customize("abc", function() {});
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Composite.customize("abc > def", function() {});
         }});
         

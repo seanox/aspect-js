@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191109
+ *  MVC 1.1.0 20191201
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191109
+ *  @version 1.1.0 20191201
  */
 if (typeof Path === "undefined") {
     
@@ -435,7 +435,7 @@ if (typeof SiteMap === "undefined") {
         };
 
         if (paths.hasOwnProperty(path))
-            return {path:path, face:path, facet:null};
+            return {path, face:path, facet:null};
         else if (facets.hasOwnProperty(path))
             return {path:canonical(facets[path]), face:facets[path].path, facet:facets[path].facet};
         return null;
@@ -671,7 +671,7 @@ if (typeof SiteMap === "undefined") {
                 if (!paths[key].includes(facet))
                     paths[key].push(facet);
                 //The facet map object is assembled.
-                facets[Path.normalize(key, facet)] = {path:key, facet:facet};
+                facets[Path.normalize(key, facet)] = {path:key, facet};
             });
         });
         

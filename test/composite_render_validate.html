@@ -33,7 +33,7 @@
             email: "",
             password: "",
             validates: [],
-            validate: function(element, value) {
+            validate(element, value) {
                 if (typeof value !== "undefined")
                     validateValues.push(value);
                 if (!model.validates.includes(element.id))
@@ -47,25 +47,25 @@
             },
             submitClicks: 0,
             submit: {
-                onClick: function(event) {
+                onClick(event) {
                     model.submitClicks++;
                 }
             },
             buttonClicks: 0,
             button: {
-                onClick: function(event) {
+                onClick(event) {
                     model.buttonClicks++;
                 }
             },
             unsafeClicks: 0,
             unsafe: {
-                onClick: function(event) {
+                onClick(event) {
                     model.unsafeClicks++;
                 }
             },
             linkClicks: 0,
             link: {
-                onClick: function(event) {
+                onClick(event) {
                     model.linkClicks++;
                 }
             }
@@ -175,10 +175,10 @@
             }, 1000);
         });
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
         }});     
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"));
         }});     
     </script>

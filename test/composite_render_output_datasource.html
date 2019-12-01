@@ -33,25 +33,25 @@
                 Composite.asynchron(Test.start);                
         }); 
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());  
         }});
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-2']", snapshots.shift());  
         }});        
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-3']", snapshots.shift());
         }});        
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
         }});        
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-5']", snapshots.shift());
         }});        
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-6']", snapshots.shift());
         }});         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-7']", snapshots.shift());
         }});         
     </script>

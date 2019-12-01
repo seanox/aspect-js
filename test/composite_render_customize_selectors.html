@@ -38,7 +38,7 @@
             insertTestValue(element, 5);
         });
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test']", document.body.textContent);
         }});
         

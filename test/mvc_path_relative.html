@@ -100,7 +100,7 @@
                 logging("X: " + event.newURL.replace(/\d+$/, "0000"));
         });
         
-        Test.create({test:function() {
+        Test.create({test() {
             var content = document.body.innerHTML;
             content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
             content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
@@ -114,7 +114,7 @@
             errors += "\r\n" + error.message;
             errors = errors.trim();          
         });
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("", errors);
         }});      
     </script>

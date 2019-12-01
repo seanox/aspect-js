@@ -20,7 +20,7 @@
             return ++TestModel.ticks + "-" + "{{TestModel.ping()}}";
         };
         
-        Test.create({test:function() {
+        Test.create({test() {
             try {Assert.assertSameTo("script[type='text/test-1']", document.body.innerHTML);
             } catch (exception) {
                 try {Assert.assertSameTo("script[type='text/test-2']", document.body.innerHTML);

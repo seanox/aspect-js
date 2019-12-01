@@ -20,28 +20,28 @@
             c:123,
             d:new Date(),
             e:{},
-            f:function() {},
+            f() {},
             g:{
                 g_a:null,
                 g_b:"",
                 g_c:123,
                 g_d:new Date(),
                 g_e:{},
-                g_f:function() {},
+                g_f() {},
                 g_g:{
                     g_g_a:null,
                     g_g_b:"",
                     g_g_c:123,
                     g_g_d:new Date(),
                     g_g_e:{},
-                    g_g_f:function() {},
+                    g_g_f() {},
                     g_g_g:{
                         g_g_g_a:null,
                         g_g_g_b:"",
                         g_g_g_c:123,
                         g_g_g_d:new Date(),
                         g_g_g_e:{},
-                        g_g_g_f:function() {}
+                        g_g_g_f() {}
                     }
                 }
             },
@@ -58,15 +58,15 @@
             }
         };
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA"));
         }});
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertNotNull(Object.lookup("exampleA"));
         }});
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA.a"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.b"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.c"));
@@ -77,7 +77,7 @@
             Assert.assertEquals("object", typeof Object.lookup("exampleA.h"));
         }}); 
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertNull(Object.lookup("exampleA.a"));
             Assert.assertNull(Object.lookup("exampleA.b"));
             Assert.assertNull(Object.lookup("exampleA.c"));
@@ -88,7 +88,7 @@
             Assert.assertNotNull(Object.lookup("exampleA.h"));
         }}); 
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g"));
@@ -96,7 +96,7 @@
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertNotNull(Object.lookup("exampleA:g"));
             Assert.assertNotNull(Object.lookup("exampleA:g:g_g"));
             Assert.assertNotNull(Object.lookup("exampleA:g:g_g:g_g_g"));
@@ -104,29 +104,29 @@
             Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }});
         
-        Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g.g_g_g/i, test:function() {
+        Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g.g_g_g/i, test() {
             Object.lookup("exampleA.g:g_g.g_g_g");
         }});         
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertNotNull(Object.lookup("exampleA.g"));
             Assert.assertNotNull(Object.lookup("exampleA.g:g_g"));
             Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
             Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }}); 
         
-        Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g\.g_g_g/i, test:function() {
+        Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g\.g_g_g/i, test() {
             Object.lookup("exampleA.g:g_g.g_g_g");
         }}); 
         
-        Test.create({test:function() {
+        Test.create({test() {
            Assert.assertEquals("A", Object.lookup("exampleA.h:h_d:0").value);
            Assert.assertEquals("B", Object.lookup("exampleA.h:h_d:1").value);
            Assert.assertEquals("C", Object.lookup("exampleA.h:h_d:2").value);

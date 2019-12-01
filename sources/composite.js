@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191130
+ *  Composite 1.2.0 20191201
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191118
+ *  @version 1.2.0 20191201
  */
 if (typeof Composite === "undefined") {
     
@@ -401,11 +401,11 @@ if (typeof Composite === "undefined") {
         if (context.lock === undefined
                 || context.lock === false) {
             context.lock = {ticks:1, selector:selector, queue:[],
-                    share: function() {
+                    share() {
                         this.ticks++;
                         return this;
                     },
-                    release: function() {
+                    release() {
                         this.ticks--;
                         if (this.ticks > 0)
                             return;
@@ -526,7 +526,7 @@ if (typeof Composite === "undefined") {
             
             namespace = namespace.replace(Composite.PATTERN_NAMESPACE_SEPARATOR, ".");
             
-            return {scope:scope, namespace:namespace};
+            return {scope, namespace};
         };      
         
     /**
@@ -1340,10 +1340,7 @@ if (typeof Composite === "undefined") {
             return null;
         
         var lookup = {
-            meta: {
-                composite: meta.composite,
-                model: meta.model,
-            },
+            meta,
             composite: Object.lookup(meta.composite),
             model: Object.lookup(meta.model)
         };
@@ -1362,12 +1359,7 @@ if (typeof Composite === "undefined") {
         } 
         
         var lookup = {
-            meta: {
-                composite: meta.composite,
-                model: meta.model,
-                property: meta.property,
-                name: meta.name
-            },
+            meta,
             composite: Object.lookup(meta.composite),
             model: Object.lookup(meta.model),
             get property() {
@@ -1547,7 +1539,7 @@ if (typeof Composite === "undefined") {
             Composite.selectors = Composite.selectors || {};
             if (callback == null)
                 delete Composite.selectors[hash];
-            else Composite.selectors[hash] = {selector:scope, callback:callback};
+            else Composite.selectors[hash] = {selector:scope, callback};
         } 
     };
     
@@ -1827,7 +1819,7 @@ if (typeof Composite === "undefined") {
                     acceptor.call(null, selector);
                 });
 
-                object = {serial:serial, element:selector, attributes:{}};
+                object = {serial, element:selector, attributes:{}};
                 Composite.render.meta[serial] = object;
                 if ((selector instanceof Element)
                         && selector.attributes) {
@@ -1921,7 +1913,7 @@ if (typeof Composite === "undefined") {
                         //already known.
                         var placeholder = document.createTextNode("");
                         object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
-                                condition:condition, template:selector.cloneNode(true), output:null, complete:false, share:null
+                                condition, template:selector.cloneNode(true), output:null, complete:false, share:null
                         };
 
                         //The Meta object is registered.
@@ -2051,8 +2043,8 @@ if (typeof Composite === "undefined") {
                             return "";
                         var node = document.createTextNode("");
                         var serial = node.ordinal();
-                        var object = {serial:serial, element:node, attributes:{}, value:null,
-                            render:function() {
+                        var object = {serial, element:node, attributes:{}, value:null,
+                            render() {
                                 if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
                                     var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
                                     var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
@@ -2091,7 +2083,7 @@ if (typeof Composite === "undefined") {
                             } else {
                                 var node = document.createTextNode(word);
                                 var serial = node.ordinal();
-                                var object = {serial:serial, element:node, attributes:{}};
+                                var object = {serial, element:node, attributes:{}};
                                 object.element.textContent = word;
                                 object.attributes[Composite.ATTRIBUTE_TEXT] = word;
                                 Composite.render.meta[serial] = object; 
@@ -2219,7 +2211,7 @@ if (typeof Composite === "undefined") {
                             //meta-objects do not exist for templates, so it
                             //must be created temporarily and then removed again.
                             var serial = placeholder.template.ordinal();
-                            var object = {serial:serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
+                            var object = {serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
                             Composite.render.meta[serial] = object; 
                             Composite.render.include(placeholder.template);
                             delete Composite.render.meta[serial];
@@ -2259,7 +2251,7 @@ if (typeof Composite === "undefined") {
                         //the attributes of the placeholder are available for
                         //rendering.
                         var serial = template.ordinal();
-                        var object = {serial:serial, element:template, attributes:object.attributes};
+                        var object = {serial, element:template, attributes:object.attributes};
                         Composite.render.meta[serial] = object; 
                         
                         //The placeholder output is rendered recursively and
@@ -2432,9 +2424,9 @@ if (typeof Composite === "undefined") {
                     }
                     interval = parseInt(interval);
                     object.interval = {
-                        object: object,
-                        selector: selector,
-                        task: function(interval) {
+                        object,
+                        selector,
+                        task(interval) {
                             var serial = interval.selector.ordinal();
                             var object = Composite.render.meta[serial];
                             var interrupt = !document.body.contains(interval.selector);

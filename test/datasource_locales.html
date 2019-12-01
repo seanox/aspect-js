@@ -14,11 +14,11 @@
 
         Test.activate();
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("xx", DataSource.locale);
         }});
 
-        Test.create({test:function() {
+        Test.create({test() {
             DataSource.localize("xx");
             Assert.assertEquals("xx", DataSource.locale);
             DataSource.localize("xde");
@@ -29,19 +29,19 @@
             Assert.assertEquals("xx", DataSource.locale);
         }});
         
-        Test.create({expected:/\bLocale not available/i, test:function() {
+        Test.create({expected:/\bLocale not available/i, test() {
             DataSource.localize("xxx");
         }});
-        Test.create({expected:/\bLocale not available/i, test:function() {
+        Test.create({expected:/\bLocale not available/i, test() {
             DataSource.localize("");
         }});         
-        Test.create({expected:/\bLocale not available/i, test:function() {
+        Test.create({expected:/\bLocale not available/i, test() {
             DataSource.localize(" ");
         }});         
-        Test.create({expected:/\bInvalid locale: undefined/i, test:function() {
+        Test.create({expected:/\bInvalid locale: undefined/i, test() {
             DataSource.localize();
         }});         
-        Test.create({expected:/\bInvalid locale: object/i, test:function() {
+        Test.create({expected:/\bInvalid locale: object/i, test() {
             DataSource.localize(null);
         }});         
         

@@ -14,7 +14,7 @@
     
         Test.activate();
         
-        Test.create({test:function() {
+        Test.create({test() {
             var result = document.body.innerHTML.replace(/[\r\n]+/g," ").trim();
             result = result.replace(/(onReceive ){2,}/g, "onReceive "); 
             var pattern1 = "Test in progress..."

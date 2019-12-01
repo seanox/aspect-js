@@ -14,7 +14,7 @@
 
         Test.activate();
 
-        Test.create({test:function() {
+        Test.create({test() {
             DataSource.localize("xx");
             Assert.assertEquals("xxA", Messages["all.a"]);
             Assert.assertEquals("xxB", Messages["all.b"]);
@@ -23,7 +23,7 @@
             Assert.assertTrue(typeof Messages["xen"] === "undefined");
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             DataSource.localize("xde");
             Assert.assertEquals("xdeA", Messages["all.a"]);
             Assert.assertEquals("xdeB", Messages["all.b"]);
@@ -32,7 +32,7 @@
             Assert.assertTrue(typeof Messages["xen"] === "undefined");
         }});
         
-        Test.create({test:function() {
+        Test.create({test() {
             DataSource.localize("xen");
             Assert.assertEquals("xenA", Messages["all.a"]);
             Assert.assertEquals("xenB", Messages["all.b"]);

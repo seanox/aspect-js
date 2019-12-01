@@ -18,7 +18,7 @@
             list: ["a", "b", "c"]
         }; 
     
-        Test.create({test:function() {
+        Test.create({test() {
             var pattern = Test.read("composite_render_param_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.innerHTML);           
         }});

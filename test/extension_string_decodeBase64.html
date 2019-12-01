@@ -14,19 +14,19 @@
     
         Test.activate();
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("", ("").decodeBase64());
         }});
         
-        Test.create({expected:/\bmalformed character sequence/i, test:function() {
+        Test.create({expected:/\bmalformed character sequence/i, test() {
             Assert.assertNull(("הצü").decodeBase64());
         }});        
 
-        Test.create({expected:/\bmalformed character sequence/i, test:function() {
+        Test.create({expected:/\bmalformed character sequence/i, test() {
             Assert.assertNull(("Peter und der Wolf").decodeBase64());
         }});        
         
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("", ("").encodeBase64().decodeBase64());
             Assert.assertEquals("הצü", ("הצü").encodeBase64().decodeBase64());
             Assert.assertEquals("Peter und der Wolf", ("Peter und der Wolf").encodeBase64().decodeBase64());
@@ -34,7 +34,7 @@
             Assert.assertEquals("%0D", ("%0D").encodeBase64().decodeBase64());
         }});
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertEquals("", ("").encodeBase64());
             Assert.assertEquals("w6TDtsO8", ("הצü").encodeBase64());
             Assert.assertEquals("UGV0ZXIgdW5kIGRlciBXb2xm", ("Peter und der Wolf").encodeBase64());

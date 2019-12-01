@@ -23,14 +23,14 @@
     
         var modelA = {
             status:true,
-            dock: function() {
+            dock() {
                 stack.push("A:dock");
             },
-            undock: function() {
+            undock() {
                 stack.push("A:undock");
             },
             button: {
-                onClick: function() {
+                onClick() {
                     stack.push("A:onClick");
                     modelA.status = !modelA.status;
                 }
@@ -39,11 +39,11 @@
         
         var modelB = {
             status:true,
-            undock: function() {
+            undock() {
                 stack.push("B:undock");
             },
             button: {
-                onClick: function() {
+                onClick() {
                     stack.push("B:onClick");
                     modelB.status = !modelB.status;
                 }
@@ -52,11 +52,11 @@
         
         var modelC = {
             status:true,
-            dock: function() {
+            dock() {
                 stack.push("C:dock");
             },
             button: {
-                onClick: function() {
+                onClick() {
                     stack.push("C:onClick");
                     modelC.status = !modelC.status;
                 }
@@ -66,7 +66,7 @@
         var modelD = {
             status:true,
             button: {
-                onClick: function() {
+                onClick() {
                     stack.push("D:onClick");
                     modelD.status = !modelD.status;
                 }
@@ -78,22 +78,22 @@
             //Test with the assignment via the qualifier.    
             buttonA: {
                 modelA: {
-                    onClick:function(event) {
+                    onClick(event) {
                         modelA.button.onClick.call(event);
                     }
                 },
                 modelB: {
-                    onClick:function(event) {
+                    onClick(event) {
                         modelB.button.onClick.call(event);
                     }
                 },
                 modelC: {
-                    onClick:function(event) {
+                    onClick(event) {
                         modelC.button.onClick.call(event);
                     }
                 },
                 modelD: {
-                    onClick:function(event) {
+                    onClick(event) {
                         modelD.button.onClick.call(event);
                     }
                 }
@@ -101,7 +101,7 @@
             
             //Test with indirect/secondary assignment via the qualifier.
             buttonB: {
-                onClick: function(event) {
+                onClick(event) {
                     var target = String(event.target.id.match(/[^:]+$/));
                     if (target)
                         target = Object.lookup(target + ":button:onClick");
@@ -126,11 +126,11 @@
             buttonDD: modelD.button,
         };
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-1']", stack.join("\n")); 
         }});         
 
-        Test.create({test:function() {
+        Test.create({test() {
             Assert.assertSameTo("script[type='text/test-2']", snapshots.join("\n")); 
         }});  
         

@@ -15,7 +15,7 @@
     
         Test.activate();
 
-        Test.create({test:function() {
+        Test.create({test() {
             document.body.textContent = normalizeOutput(document.body.innerHTML);
             var pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.textContent);
@@ -24,10 +24,10 @@
             Test.start();
         });
         Example = {
-            xa: function() {
+            xa() {
                 return 122;        
             },
-            xb: function() {
+            xb() {
                 var element = document.createElement("i");
                 element.innerHTML = "Hallo";
                 return element;        
