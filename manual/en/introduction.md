@@ -607,6 +607,14 @@ the implementation of components.
 TODO:
 
 
+## Extension
+
+The JavaScript API for Seanox aspect-js has been extended by some general
+functions.
+
+[Learn more](extension.md)
+
+
 ## Test
 
 The Test-API supports the implementation and execution of integration tests and

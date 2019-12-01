@@ -616,6 +616,14 @@ verwenden.
 TODO:
 
 
+## Erweiterung
+
+Das JavaScript-API wurde für Seanox aspect-js um einige allgemeine Funktionen
+erweitert.
+
+[Mehr erfahren](extension.md)
+
+
 ## Test
 
 Das Test-API unterstützt die Implementierung und Ausführung von

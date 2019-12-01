@@ -29,12 +29,89 @@ that it is not a real element of the programming language, but is represented by
 chained static objects. Each level in this object chain represents a namespace.
 As is typical for objects, the namespace are separated by a dot. 
 
+### Namespace.using
+
+Creates a namespace to pass string.  
+Without arguments, the method returns the global namespace window.    
+The method has different signatures.
+
 ```javascript
 Namespace.using("app.example");
-app.example.Model {
+app.example {
     ...
 }
+
+Namespace.using("app.example", "more");
+app.example.more {
+    ...
+}
+
+Namespace.using()
+    returns window
 ```
+     
+
+### Namespace.locate
+
+Validates a requested namespace and creates a corresponding meta object.  
+The method has different signatures.
+
+```javascript
+Namespace.using("app.example.more");
+
+Namespace.locate("app.example.more")
+    returns {scope:app.example.more, namespace:"app.example.more"}
+
+Namespace.locate(app.example, "more")
+    returns {scope:app.example.more, namespace:"app.example.more"}
+
+Namespace.locate()
+    returns window
+```
+
+
+### Namespace.lookup
+
+Resolves a namespace and returns the determined object(-level).  
+If the namespace does not exist, `null` is returned.  
+Without arguments, the method returns the global namespace `window`.  
+The method has different signatures.
+
+```javascript
+Namespace.using("app.example.more");
+
+Namespace.lookup("app.example.more")
+    returns app.example.more
+
+Namespace.lookup(app.example, "more")
+    returns app.example.more
+
+Namespace.lookup()
+    returns window
+```
+
+
+### Namespace.exists
+
+Checks whether a namespace exists.  
+The method has different signatures.
+
+```javascript
+Namespace.using("app.example.more");
+
+Namespace.exists("app.example.more")
+    returns true
+
+Namespace.exists(app.example, "more")
+    returns true
+    
+Namespace.exists(app.example, "nothing")
+    returns false
+
+Namespace.exists()
+    returns true
+```
+
 
 ## Element
 
@@ -114,7 +191,7 @@ Static function to determine an object via the namespace.
 var earth = {
     europe: {
         germany: {
-            countPopulation: function() {
+            countPopulation() {
                 return 83000000;
             }
         } 
@@ -143,7 +220,7 @@ Static function to check whether an object exists in a namespace.
 var earth = {
     europe: {
         germany: {
-            countPopulation: function() {
+            countPopulation() {
                 return 83000000;
             }
         } 
@@ -186,6 +263,16 @@ Function for capitalizing string objects.
 ```javascript
 ("hello world").capitalize();
     returns "Hello world"
+```
+
+
+### String.prototype.uncapitalize
+
+Function for uncapitalize string objects.
+
+```javascript
+("Hello World").capitalize();
+    returns "hello World"
 ```
 
 
@@ -301,11 +388,11 @@ Composite.EVENT_AJAX_END
 These can be used to react centrally and application-wide at AJAX events.
 
 ```javascript
-Composite.listen(Composite.EVENT_AJAX_START, function(varargs) {
+Composite.listen(Composite.EVENT_AJAX_START, function(...varargs) {
     show spinner
 });
 
-Composite.listen(Composite.EVENT_AJAX_END, function(varargs) {
+Composite.listen(Composite.EVENT_AJAX_END, function(...varargs) {
     hide spinner
 });
 ```

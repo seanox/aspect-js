@@ -28,13 +28,90 @@ verwandte Komponenten und Ressourcen zu gruppieren. Die Implementierung erfolgt
 in JavaScript auf Objektebene. Das bedeutet, dass es kein reales Element der
 Programmiersprache ist, sondern durch verkettete statische Objekte repräsentiert
 wird. Jede Ebene in dieser Objektkette repräsentiert einen Namensraum. Wie bei
-Objekten üblich, werden die Namensräume durch einen Punkt getrennt. 
+Objekten üblich, werden die Namensräume durch einen Punkt getrennt.
+
+### Namespace.using
+
+Erstellt einen Namensraum, um Zeichenkette zu übergeben.  
+Ohne Argumente gibt die Methode das globale Namensraumfenster zurück.  
+Die Methode hat verschiedenen Signaturen.
 
 ```javascript
 Namespace.using("app.example");
-app.example.Model {
+app.example {
     ...
 }
+
+Namespace.using("app.example", "more");
+app.example.more {
+    ...
+}
+
+Namespace.using()
+    returns window
+```
+     
+
+### Namespace.locate
+
+Validiert einen angeforderten Namensraum und erzeugt ein entsprechendes
+Metaobjekt.  
+Die Methode hat verschiedenen Signaturen.
+
+```javascript
+Namespace.using("app.example.more");
+
+Namespace.locate("app.example.more")
+    returns {scope:app.example.more, namespace:"app.example.more"}
+
+Namespace.locate(app.example, "more")
+    returns {scope:app.example.more, namespace:"app.example.more"}
+
+Namespace.locate()
+    returns window
+```
+
+
+### Namespace.lookup
+
+Löst einen Namensraum auf und ermittelt das Objekt.  
+Wenn der Namensraum nicht existiert, wird `null` zurückgegeben.  
+Ohne Argumente gibt die Methode das globale Namensraum `window` zurück.  
+Die Methode hat verschiedenen Signaturen.
+
+```javascript
+Namespace.using("app.example.more");
+
+Namespace.lookup("app.example.more")
+    returns app.example.more
+
+Namespace.lookup(app.example, "more")
+    returns app.example.more
+
+Namespace.lookup()
+    returns window
+```
+
+
+### Namespace.exists
+
+Prüft, ob ein Namensraum existiert.
+Die Methode hat verschiedenen Signaturen.
+
+```javascript
+Namespace.using("app.example.more");
+
+Namespace.exists("app.example.more")
+    returns true
+
+Namespace.exists(app.example, "more")
+    returns true
+    
+Namespace.exists(app.example, "nothing")
+    returns false
+
+Namespace.exists()
+    returns true
 ```
 
 
@@ -118,7 +195,7 @@ Statische Funktion zum Bestimmen eines Objekts über den Namensraum.
 var earth = {
     europe: {
         germany: {
-            countPopulation: function() {
+            countPopulation() {
                 return 83000000;
             }
         } 
@@ -147,7 +224,7 @@ Statische Funktion, um zu prüfen, ob ein Objekt in einem Namensraum existiert.
 var earth = {
     europe: {
         germany: {
-            countPopulation: function() {
+            countPopulation() {
                 return 83000000;
             }
         } 
@@ -190,6 +267,16 @@ Funktion zur Kapitalisierung von String-Objekten.
 ```javascript
 ("hello world").capitalize();
     returns "Hello world"
+```
+
+
+### String.prototype.uncapitalize
+
+Funktion zur Dekapitalisierung von String-Objekten.
+
+```javascript
+("Hello World").capitalize();
+    returns "hello World"
 ```
 
 
@@ -305,11 +392,11 @@ Composite.EVENT_AJAX_END
 Mit diesen kann zentral und anwendungsweit auf AJAX-Ereignisse reagiert werden.
 
 ```javascript
-Composite.listen(Composite.EVENT_AJAX_START, function(varargs) {
+Composite.listen(Composite.EVENT_AJAX_START, function(...varargs) {
     show spinner
 });
 
-Composite.listen(Composite.EVENT_AJAX_END, function(varargs) {
+Composite.listen(Composite.EVENT_AJAX_END, function(...varargs) {
     hide spinner
 });
 ```
