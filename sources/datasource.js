@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0 20191003
+ *  DataSource 1.2.0 20191206
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191003
+ *  @version 1.2.0 20191206
  */
 if (typeof DataSource === "undefined") {
     
@@ -62,17 +62,11 @@ if (typeof DataSource === "undefined") {
         get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i},    
         
         /** Constant for attribute type */
-        get ATTRIBUTE_TYPE() {return "type"}
+        get ATTRIBUTE_TYPE() {return "type"},
+        
+        /** The currently used language. */
+        get locale() {return DataSource.locales ? DataSource.locales.selection : null;}
     };
-    
-    /** Internal cache of locales.xml */
-    DataSource.data;
-
-    /** List of available locales (as standard marked are at the beginning) */
-    DataSource.locales;
-    
-    /** Internal cache of XML/XSLT data. */
-    DataSource.cache;
     
     /**
      *  Enhancement of the JavaScript API
@@ -87,16 +81,27 @@ if (typeof DataSource === "undefined") {
         };     
     };    
     
-    /** The currently used language. */
-    DataSource.locale;
-    
     (function() {
+
+        //DataSource.cache
+        //    Internal cache of XML/XSLT data    
+        Object.defineProperty(DataSource, "cache", {
+            value: {},
+            enumerable: true
+        });        
         
+        //DataSource.locales
+        //    List of available locales (as standard marked are at the beginning)
+        Object.defineProperty(DataSource, "locales", {
+            value: [],
+            enumerable: true
+        });        
+
         var locale = (navigator.language || "").trim().toLowerCase();
         locale = locale.match(/^([a-z]+)/);
         if (!locale)
             throw new Error("Locale not available");
-        DataSource.locale = locale[0];
+        DataSource.locales.selection = locale[0];
         
         var request;
         request = new XMLHttpRequest();
@@ -109,14 +114,17 @@ if (typeof DataSource === "undefined") {
         request.open("GET", DataSource.DATA + "/locales.xml", false);
         request.overrideMimeType("application/xslt+xml");
         request.send();
-
-        if (request.status == 200)
-            DataSource.data = request.responseXML;
+        
+        //DataSource.data
+        //    Internal cache of locales.xml
+        Object.defineProperty(DataSource, "data", {
+            value: request.status == 200 ? request.responseXML : null,
+            enumerable: true
+        });
         if (!DataSource.data
                 && request.status != 404)
             throw new Error("Locale not available");
-        
-        DataSource.locales = [];
+
         if (!DataSource.data)
             return;
         
@@ -139,7 +147,7 @@ if (typeof DataSource === "undefined") {
             locale = DataSource.locales && DataSource.locales.length > 0 ? DataSource.locales[0] : null;
         if (!locale)
             throw new Error("Locale not available");
-        DataSource.locale = locale;
+        DataSource.locales.selection = locale;
     })();
     
     /**
@@ -163,7 +171,7 @@ if (typeof DataSource === "undefined") {
                 || !DataSource.locales.includes(locale))
             throw new Error("Locale not available");
 
-        DataSource.locale = locale;
+        DataSource.locales.selection = locale;
     };
     
     /**
