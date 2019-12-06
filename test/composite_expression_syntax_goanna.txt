@@ -122,7 +122,7 @@
     X3: <input id="HiddenField_3" value="Test-HF_C" type="hidden">
 
     O1: <span>undefined</span>
-    O2: <span>function() {
+    O2: <span>xa() {
                 return 122;        
             }</span>
     O3: <span>122</span>
