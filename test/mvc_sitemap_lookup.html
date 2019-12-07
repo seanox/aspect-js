@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+        white-space:pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+      
+        SiteMap.customize({
+            "#": ["news", "projects", "seanox", "contact", "contact#about"],
+            "#projects#aspect": ["description", "features", "licence", "requirement", "download"],
+            "#projects#aspect-js": ["description", "features", "licence", "requirement", "download"],
+            "#projects#devwex": ["description", "features", "licence", "requirement", "download"],
+            "#projects#review": ["description", "features", "licence", "requirement", "download"],
+            "#projects#roundup": ["description", "features", "licence", "requirement", "download"],
+            "#projects#test": ["description", "features", "licence", "requirement", "download"],
+            "#projects#wotexx": ["description", "features", "licence", "requirement", "download"],
+            "#legal": ["terms", "privacy"],
+            "#error": null
+        });
+  
+        Test.create({test() {
+            
+            var tests = [
+                "#",
+                "#project",
+                "#projects",
+                "#projects#xyz",
+                "#projects#devwex",
+                "#projects#devwexx",
+                "#projects#devwex#xyz",
+                "#projects#devwex#description",      
+                "#projects#devwex#description#features",
+                "#projects#devwex#description#features#licence",
+                "#projects#devwex#features",
+                "#projects#devwex#licence",
+                "#projects#devwex#licence#x",
+                "#projects#devwex#licence#x#y",
+                "#projects#devwex#licence#x#y#z",
+                "#projects#devwex#licence##x",
+                "#projects#devwex#licence###x###y",
+                "#projects#devwex#licence####x####y####z",
+                "#projects#devwex#licence#1#2#3",
+                "#projects#review",      
+                "#projects#review#description",      
+                "#projects#review#features",      
+                "#projects#review#licence",         
+                "#projects#wotexx",      
+                "#projects#wotexx#description",      
+                "#projects#wotexx#features",      
+                "#projects#wotexx#licence",     
+                "#projects#wotexx#licence#",     
+                "#projects#wotexx#licence##",     
+                "#projects#wotexx#licence###",     
+                "#projects#wotexx#licence####",
+                "#projects#aspect-js",
+                "#projects#aspect-js#",
+                "#projects#aspect-js#1",
+                "#projects#aspect-js#1#2",
+                "#projects#aspect-js#1##2",
+                "#x",
+                "#x#",
+                "#x##",
+                "#x###",
+                "#x####",
+                "#"            
+            ];  
+            
+            document.body.innerHTML = "";
+            tests.forEach((test, index, array) => {
+                document.body.innerHTML = document.body.innerHTML.trim();
+                if (document.body.innerHTML)
+                    document.body.innerHTML += "\r\n";
+                var lookup = SiteMap.lookup(test);
+                if (typeof lookup === "object")
+                    lookup = lookup === null ? "null" : lookup.toPlainString();
+                document.body.innerHTML += "A: " + test
+                        + "\r\nB: " + lookup;
+            });
+            Assert.assertSameTo("script[type='text/test']", document.body.textContent);
+        }});
+        
+        Test.start(true);
+    </script>
+    <script type="text/test">
+A: #
+B: {"path":"#","face":"#","facet":null}
+A: #project
+B: null
+A: #projects
+B: {"path":"#projects","face":"#","facet":"projects"}
+A: #projects#xyz
+B: null
+A: #projects#devwex
+B: {"path":"#projects#devwex","face":"#projects#devwex","facet":null}
+A: #projects#devwexx
+B: null
+A: #projects#devwex#xyz
+B: null
+A: #projects#devwex#description
+B: {"path":"#projects#devwex#description","face":"#projects#devwex","facet":"description"}
+A: #projects#devwex#description#features
+B: null
+A: #projects#devwex#description#features#licence
+B: null
+A: #projects#devwex#features
+B: {"path":"#projects#devwex#features","face":"#projects#devwex","facet":"features"}
+A: #projects#devwex#licence
+B: {"path":"#projects#devwex#licence","face":"#projects#devwex","facet":"licence"}
+A: #projects#devwex#licence#x
+B: null
+A: #projects#devwex#licence#x#y
+B: null
+A: #projects#devwex#licence#x#y#z
+B: null
+A: #projects#devwex#licence##x
+B: null
+A: #projects#devwex#licence###x###y
+B: null
+A: #projects#devwex#licence####x####y####z
+B: null
+A: #projects#devwex#licence#1#2#3
+B: null
+A: #projects#review
+B: {"path":"#projects#review","face":"#projects#review","facet":null}
+A: #projects#review#description
+B: {"path":"#projects#review#description","face":"#projects#review","facet":"description"}
+A: #projects#review#features
+B: {"path":"#projects#review#features","face":"#projects#review","facet":"features"}
+A: #projects#review#licence
+B: {"path":"#projects#review#licence","face":"#projects#review","facet":"licence"}
+A: #projects#wotexx
+B: {"path":"#projects#wotexx","face":"#projects#wotexx","facet":null}
+A: #projects#wotexx#description
+B: {"path":"#projects#wotexx#description","face":"#projects#wotexx","facet":"description"}
+A: #projects#wotexx#features
+B: {"path":"#projects#wotexx#features","face":"#projects#wotexx","facet":"features"}
+A: #projects#wotexx#licence
+B: {"path":"#projects#wotexx#licence","face":"#projects#wotexx","facet":"licence"}
+A: #projects#wotexx#licence#
+B: null
+A: #projects#wotexx#licence##
+B: null
+A: #projects#wotexx#licence###
+B: null
+A: #projects#wotexx#licence####
+B: null
+A: #projects#aspect-js
+B: {"path":"#projects#aspect-js","face":"#projects#aspect-js","facet":null}
+A: #projects#aspect-js#
+B: null
+A: #projects#aspect-js#1
+B: null
+A: #projects#aspect-js#1#2
+B: null
+A: #projects#aspect-js#1##2
+B: null
+A: #x
+B: null
+A: #x#
+B: null
+A: #x##
+B: null
+A: #x###
+B: null
+A: #x####
+B: null
+A: #
+B: {"path":"#","face":"#","facet":null}
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
