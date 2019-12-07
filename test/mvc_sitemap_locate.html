@@ -82,6 +82,13 @@
                 document.body.innerHTML += "A: " + test
                         + "\r\nB: " + SiteMap.locate(test);
             });
+            tests.forEach((test, index, array) => {
+                document.body.innerHTML = document.body.innerHTML.trim();
+                if (document.body.innerHTML)
+                    document.body.innerHTML += "\r\n";
+                document.body.innerHTML += "A: " + test
+                        + "\r\nB: " + SiteMap.locate(test, true);
+            });            
             Assert.assertSameTo("script[type='text/test']", document.body.textContent);
         }});
         
@@ -148,6 +155,90 @@ A: #projects#wotexx#licence##
 B: #projects#wotexx
 A: #projects#wotexx#licence###
 B: #projects
+A: #projects#wotexx#licence####
+B: #
+A: #projects#aspect-js
+B: #projects#aspect-js
+A: #projects#aspect-js#
+B: #projects#aspect-js
+A: #projects#aspect-js#1
+B: #projects#aspect-js
+A: #projects#aspect-js#1#2
+B: #projects#aspect-js
+A: #projects#aspect-js#1##2
+B: #projects#aspect-js
+A: #x
+B: #
+A: #x#
+B: #
+A: #x##
+B: #
+A: #x###
+B: #
+A: #x####
+B: #
+A: #
+B: #
+A: #
+B: #
+A: #project
+B: #
+A: #projects
+B: #
+A: #projects#xyz
+B: #
+A: #projects#devwex
+B: #projects#devwex
+A: #projects#devwexx
+B: #
+A: #projects#devwex#xyz
+B: #projects#devwex
+A: #projects#devwex#description
+B: #projects#devwex
+A: #projects#devwex#description#features
+B: #projects#devwex
+A: #projects#devwex#description#features#licence
+B: #projects#devwex
+A: #projects#devwex#features
+B: #projects#devwex
+A: #projects#devwex#licence
+B: #projects#devwex
+A: #projects#devwex#licence#x
+B: #projects#devwex
+A: #projects#devwex#licence#x#y
+B: #projects#devwex
+A: #projects#devwex#licence#x#y#z
+B: #projects#devwex
+A: #projects#devwex#licence##x
+B: #projects#devwex
+A: #projects#devwex#licence###x###y
+B: #
+A: #projects#devwex#licence####x####y####z
+B: #
+A: #projects#devwex#licence#1#2#3
+B: #projects#devwex
+A: #projects#review
+B: #projects#review
+A: #projects#review#description
+B: #projects#review
+A: #projects#review#features
+B: #projects#review
+A: #projects#review#licence
+B: #projects#review
+A: #projects#wotexx
+B: #projects#wotexx
+A: #projects#wotexx#description
+B: #projects#wotexx
+A: #projects#wotexx#features
+B: #projects#wotexx
+A: #projects#wotexx#licence
+B: #projects#wotexx
+A: #projects#wotexx#licence#
+B: #projects#wotexx
+A: #projects#wotexx#licence##
+B: #projects#wotexx
+A: #projects#wotexx#licence###
+B: #
 A: #projects#wotexx#licence####
 B: #
 A: #projects#aspect-js
