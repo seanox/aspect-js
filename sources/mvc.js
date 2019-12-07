@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191201
+ *  MVC 1.1.0 20191207
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191201
+ *  @version 1.1.0 20191207
  */
 if (typeof Path === "undefined") {
     
@@ -119,7 +119,7 @@ if (typeof Path === "undefined") {
     Path = {
             
         /** Pattern for a valid path. */
-        get PATTERN_PATH() {return /^(?:(?:#*(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)(?:#+(?:[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)*)*$/},
+        get PATTERN_PATH() {return /(^$)|(^#+$)|(^[a-z](\-*\w)*)|(^([a-z](\-*\w)*)*((#+[a-z](\-*\w)*)+)#*$)/},
     
         /** Pattern for a url path. */
         get PATTERN_URL() {return /^[a-z]+:\/.*?(#.*)*$/i},
