@@ -86,8 +86,7 @@ if (typeof DataSource === "undefined") {
         //DataSource.cache
         //    Internal cache of XML/XSLT data    
         Object.defineProperty(DataSource, "cache", {
-            value: {},
-            enumerable: true
+            value: {}
         });        
         
         //DataSource.locales
@@ -118,8 +117,7 @@ if (typeof DataSource === "undefined") {
         //DataSource.data
         //    Internal cache of locales.xml
         Object.defineProperty(DataSource, "data", {
-            value: request.status == 200 ? request.responseXML : null,
-            enumerable: true
+            value: request.status == 200 ? request.responseXML : null
         });
         if (!DataSource.data
                 && request.status != 404)
