@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191201
+ *  Test 1.1.0 20191208
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191201
+ *  @version 1.1.0 20191208
  */
 if (typeof Test === "undefined") {
     
@@ -1066,6 +1066,9 @@ if (typeof Test === "undefined") {
          */      
         if (Object.prototype.toPlainString === undefined)
             Object.prototype.toPlainString = function() {
+                if (this != null
+                        && typeof this[Symbol.iterator] === 'function')
+                    return JSON.stringify([...this])
                 return JSON.stringify(this);
             };     
           
