@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191207
+ *  MVC 1.1.0 20191208
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191207
+ *  @version 1.1.0 20191208
  */
 if (typeof Path === "undefined") {
     
@@ -290,35 +290,69 @@ if (typeof SiteMap === "undefined") {
         get PATTERN_PATH() {return /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/},
 
         /** Pattern for a valid face path with optional facets. */
-        get PATTERN_PATH_FACETS() {return /^(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)(\s+(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/}
+        get PATTERN_PATH_FACETS() {return /^(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)(\s+(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/},
+        
+        /**
+         *  Primarily, the root is always used when loading the page, since the
+         *  renderer is executed before the MVC. Therefore, the renderer may not
+         *  yet know all the paths and authorizations. After the renderer, the
+         *  MVC is loaded and triggers the renderer again if the path requested
+         *  with the URL differs.
+         */        
+        get location() {
+            if (SiteMap.history.size <= 0)
+                return "#";
+            var history = Array.from(SiteMap.history);
+            return history[history.length -1];
+        },
+                
+        set location(path) {
+            if (SiteMap.history.has(path)) {
+                var values = Array.from(SiteMap.history.values());
+                while (SiteMap.history.has(path)
+                        && values.includes(path)) {
+                    var entry = values.pop();
+                    if (entry == path)
+                        return;
+                    SiteMap.history.delete(entry);
+                }
+            } else SiteMap.history.add(path);  
+        }
     };
+    
+    (function() {
+        
+        //SiteMap.paths
+        //    Assosiative array with all paths without facets paths (key:path, value:facets)    
+        Object.defineProperty(SiteMap, "paths", {
+            value: new Map()
+        });
 
-    /**
-     *  Primarily, the root is always used when loading the page, since the
-     *  renderer is executed before the MVC. Therefore, the renderer may not yet
-     *  know all the paths and authorizations. After the renderer, the MVC is
-     *  loaded and triggers the renderer again if the path requested with the
-     *  URL differs.
-     */
-    SiteMap.location = "#";
+        //SiteMap.facets
+        //    Assosiative array with all paths with facet paths {path:key, facet:facet}
+        //    The sum of all paths and assigned facets)
+        Object.defineProperty(SiteMap, "facets", {
+            value: new Map()
+        });
+
+        //SiteMap.acceptors
+        //    Set with all supported acceptors
+        Object.defineProperty(SiteMap, "acceptors", {
+            value: new Set()
+        });
+
+        //SiteMap.history
+        //    Set with the path history (optimized)
+        Object.defineProperty(SiteMap, "history", {
+            value: new Set()
+        });
+    })();
     
     /**
      *  Internal counter of the path changes, is actually only used for
      *  initiation/detection of the initial rendering.
      */
     SiteMap.ticks;
-    
-    /** Assosiative array with all real paths without facets paths (key:path, value:facets). */
-    SiteMap.paths;
-
-    /** 
-     *   Assosiative array with all paths with facet paths {path:key, facet:facet}
-     *   The sum of all paths and assigned facets).
-     */
-    SiteMap.facets;
-
-    /** Array with all supported acceptors. */  
-    SiteMap.acceptors;
     
     /**
      *  Checks a path using existing/registered permit methods.
@@ -329,10 +363,8 @@ if (typeof SiteMap === "undefined") {
      *  @return true if the path has been confirmed as permitted 
      */
     SiteMap.permit = function(path) {
-
-        var acceptors = (SiteMap.acceptors || []).slice();
-        while (acceptors.length > 0) {
-            var acceptor = acceptors.shift();
+        
+        for (let acceptor of SiteMap.acceptors) {
             if (acceptor.pattern
                     && !acceptor.pattern.test(path))
                 continue; 
@@ -343,7 +375,6 @@ if (typeof SiteMap === "undefined") {
                 return acceptor; 
             }
         }
-        
         return true;
     };
 
@@ -385,9 +416,9 @@ if (typeof SiteMap === "undefined") {
         if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
             return path;
 
-        var paths = Object.keys(SiteMap.paths || {});
+        var paths = Array.from(SiteMap.paths.keys());
         if (!strict)
-            paths = paths.concat(Object.keys(SiteMap.facets || {}));
+            paths = paths.concat(Array.from(SiteMap.facets.keys()));
         while (paths && path.length > 1) {
             if (paths.includes(path))
                 return path;
@@ -420,9 +451,6 @@ if (typeof SiteMap === "undefined") {
      */
     SiteMap.lookup = function(path) {
         
-        var paths = SiteMap.paths || {};
-        var facets = SiteMap.facets || {};
-        
         if (arguments.length <= 0)
             path = SiteMap.location;
 
@@ -434,10 +462,12 @@ if (typeof SiteMap === "undefined") {
             return meta.path + "#" + meta.facet;
         };
 
-        if (paths.hasOwnProperty(path))
+        if (SiteMap.paths.has(path)) {
             return {path, face:path, facet:null};
-        else if (facets.hasOwnProperty(path))
-            return {path:canonical(facets[path]), face:facets[path].path, facet:facets[path].facet};
+        } else if (SiteMap.facets.has(path)) {
+            var facet = SiteMap.facets.get(path);
+            return {path:canonical(facet), face:facet.path, facet:facet.facet};
+        }
         return null;
     };
 
@@ -604,8 +634,7 @@ if (typeof SiteMap === "undefined") {
                 && arguments[0] instanceof RegExp) {
             if (typeof arguments[1] !== "function")
                 throw new TypeError("Invalid acceptor: " + typeof arguments[1]);
-            SiteMap.acceptors = SiteMap.acceptors || [];
-            SiteMap.acceptors.push({pattern:arguments[0], action:arguments[1]});
+            SiteMap.acceptors.add({pattern:arguments[0], action:arguments[1]});
             return;
         }
 
@@ -614,25 +643,25 @@ if (typeof SiteMap === "undefined") {
             throw new TypeError("Invalid map: " + typeof arguments[0]);
         var map = arguments[0];
 
-        var acceptors = (SiteMap.acceptors || []).slice();
+        var acceptors = new Set(SiteMap.acceptors);
         if (arguments.length > 1) {
             if (typeof arguments[1] !== "function")
                 throw new TypeError("Invalid permit: " + typeof arguments[1]);
-            acceptors.push({pattern:null, action:arguments[1]});
+            acceptors.add({pattern:null, action:arguments[1]});
         }
         
-        var paths = {};
-        Object.keys(SiteMap.paths || {}).forEach((key) => {
+        var paths = new Map();
+        SiteMap.paths.forEach((value, key, map) => {
             if (typeof key === "string"
                     && key.match(SiteMap.PATTERN_PATH))
-                paths[key] = SiteMap.paths[key];
+            paths.set(key, value);
         });
 
-        var facets = {};
-        Object.keys(SiteMap.facets || {}).forEach((key) => {
+        var facets = new Map();
+        SiteMap.facets.forEach((value, key, map) => {
             if (typeof key === "string"
                     && key.match(SiteMap.PATTERN_PATH))
-                facets[key] = SiteMap.facets[key];
+                facets.set(key, value);
         });
 
         Object.keys(map).forEach((key) => {
@@ -652,7 +681,8 @@ if (typeof SiteMap === "undefined") {
             //The entry is added to the path map, if necessary as empty array.
             //Thus the following path map object will be created:
             //    {#path:[facet, facet, ...], ...}
-            paths[key] = paths[key] || [];
+            if (!paths.has(key))
+                paths.set(key, []); 
             
             //In the next step, the facets for a path are determined.
             //These are added to the path in the path map if these do not
@@ -668,16 +698,25 @@ if (typeof SiteMap === "undefined") {
                 if (!facet.match(SiteMap.PATTERN_PATH_FACET))
                     throw new Error("Invalid facet: " + facet);
                 //If the facet does not exist at the path, the facet is added.
-                if (!paths[key].includes(facet))
-                    paths[key].push(facet);
+                if (!paths.get(key).includes(facet))
+                    paths.get(key).push(facet);
                 //The facet map object is assembled.
-                facets[Path.normalize(key, facet)] = {path:key, facet};
+                facets.set(Path.normalize(key, facet), {path:key, facet});
             });
         });
         
-        SiteMap.acceptors = acceptors;
-        SiteMap.paths = paths;
-        SiteMap.facets = facets;
+        SiteMap.acceptors.clear();
+        acceptors.forEach((value, key, map) => {
+            SiteMap.acceptors.add(value);
+        });
+        SiteMap.paths.clear();
+        paths.forEach((value, key, map) => {
+            SiteMap.paths.set(key, value);
+        });
+        SiteMap.facets.clear();
+        facets.forEach((value, key, map) => {
+            SiteMap.facets.set(key, value);
+        });
     };
     
     /**
@@ -760,7 +799,7 @@ if (typeof SiteMap === "undefined") {
 
         //Without a SiteMap the page will be rendered initially after loading.
         //Then the page has to take control.
-        if (Object.keys(SiteMap.paths || {}).length <= 0) {
+        if (SiteMap.paths.size <= 0) {
             Composite.render(document.body);
             return;
         }
@@ -806,7 +845,7 @@ if (typeof SiteMap === "undefined") {
     window.addEventListener("hashchange", (event) => {
         
         //Without a SiteMap no automatic rendering can be initiated.
-        if (Object.keys(SiteMap.paths || {}).length <= 0)
+        if (SiteMap.paths.size <= 0)
             return;
             
         var source = Path.normalize(SiteMap.location);
