@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191208
+ *  MVC 1.1.0 20191209
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191208
+ *  @version 1.1.0 20191209
  */
 if (typeof Path === "undefined") {
     
@@ -319,34 +319,31 @@ if (typeof SiteMap === "undefined") {
             } else SiteMap.history.add(path);  
         }
     };
-    
-    (function() {
         
-        //SiteMap.paths
-        //    Assosiative array with all paths without facets paths (key:path, value:facets)    
-        Object.defineProperty(SiteMap, "paths", {
-            value: new Map()
-        });
+    //SiteMap.paths
+    //    Map with all paths without facets paths (key:path, value:facets)    
+    Object.defineProperty(SiteMap, "paths", {
+        value: new Map()
+    });
 
-        //SiteMap.facets
-        //    Assosiative array with all paths with facet paths {path:key, facet:facet}
-        //    The sum of all paths and assigned facets)
-        Object.defineProperty(SiteMap, "facets", {
-            value: new Map()
-        });
+    //SiteMap.facets
+    //    Map with all paths with facet paths {path:key, facet:facet}
+    //    The sum of all paths and assigned facets)
+    Object.defineProperty(SiteMap, "facets", {
+        value: new Map()
+    });
 
-        //SiteMap.acceptors
-        //    Set with all supported acceptors
-        Object.defineProperty(SiteMap, "acceptors", {
-            value: new Set()
-        });
+    //SiteMap.acceptors
+    //    Set with all supported acceptors
+    Object.defineProperty(SiteMap, "acceptors", {
+        value: new Set()
+    });
 
-        //SiteMap.history
-        //    Set with the path history (optimized)
-        Object.defineProperty(SiteMap, "history", {
-            value: new Set()
-        });
-    })();
+    //SiteMap.history
+    //    Set with the path history (optimized)
+    Object.defineProperty(SiteMap, "history", {
+        value: new Set()
+    });
     
     /**
      *  Internal counter of the path changes, is actually only used for
