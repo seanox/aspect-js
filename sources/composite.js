@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191201
+ *  Composite 1.2.0 20191209
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191201
+ *  @version 1.2.0 20191209
  */
 if (typeof Composite === "undefined") {
     
@@ -330,7 +330,7 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     *  List of attributes to be hardened.
+     *  Set of attributes to be hardened.
      *  The hardening of attributes is part of the safety concept and should
      *  make it more difficult to manipulate the markup at runtime. Hardening
      *  observes attributes and undoes changes.
@@ -357,28 +357,52 @@ if (typeof Composite === "undefined") {
      *      iterate       output            release
      *      render        validate
      */
-    Composite.statics;    
+    Object.defineProperty(Composite, "statics", {
+        value: new Set()
+    });  
     
-    /** Assoziative array for custom tags (key:tag, value:function) */
-    Composite.macros;
-
-    /** Assoziative array for custom selectors (key:hash, value:{selector, function}) */
-    Composite.selectors;
+    /**
+     *  Composite.macros
+     *      Map for custom tags (key:tag, value:function)
+     */
+    Object.defineProperty(Composite, "macros", {
+        value: new Map()
+    });  
     
-    /** Assoziative array with acceptor and their registered listerners */
-    Composite.acceptors;
-
-    /** Assoziative array with events and their registered listerners */
-    Composite.listeners;
+    /**
+     *  Composite.selectors
+     *      Map for custom selectors (key:hash, value:{selector, function})
+     */
+    Object.defineProperty(Composite, "selectors", {
+        value: new Map()
+    });  
+    
+    /**
+     *  Composite.acceptors
+     *      Set with acceptor and their registered listerners
+     */
+    Object.defineProperty(Composite, "acceptors", {
+        value: new Set()
+    });  
+    
+    /**
+     *  Composite.listeners
+     *      Map with events and their registered listerners
+     */
+    Object.defineProperty(Composite, "listeners", {
+        value: new Map()
+    }); 
     
     /** 
-     *  Array with docked models.
-     *  The array is used for the logic to call the dock and undock methods,
+     *  Set with docked models.
+     *  The set is used for the logic to call the dock and undock methods,
      *  because the static models themselves have no status and the decision
      *  about the current existence in the DOM is not stable.
-     *  All docked models are included in the array.
+     *  All docked models are included in the set.
      */
-    Composite.models;
+    Object.defineProperty(Composite, "models", {
+        value: new Set()
+    });  
 
     /**
      *  Lock mechanism for the render, mound and scan methods. The lock controls
@@ -664,10 +688,10 @@ if (typeof Composite === "undefined") {
             throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
         
         event = event.toLowerCase();
-        Composite.listeners = Composite.listeners || [];
-        if (!Array.isArray(Composite.listeners[event]))
-            Composite.listeners[event] = [];
-        Composite.listeners[event].push(callback);
+        if (!Composite.listeners.has(event)
+                || !Array.isArray(Composite.listeners.get(event)))
+            Composite.listeners.set(event, []);
+        Composite.listeners.get(event).push(callback);
     };
     
     /**
@@ -680,10 +704,10 @@ if (typeof Composite === "undefined") {
     Composite.fire = function(event, ...variants) {
 
         event = (event || "").trim();
-        if (!Composite.listeners
+        if (Composite.listeners.size <= 0
                 || !event)
             return;
-        var listeners = Composite.listeners[event.toLowerCase()];
+        var listeners = Composite.listeners.get(event.toLowerCase());
         if (!Array.isArray(listeners))
             return;
         variants = [event, ...variants];
@@ -1466,7 +1490,6 @@ if (typeof Composite === "undefined") {
         //The composite-specific static attributes (PATTERN_ATTRIBUTE_ACCEPT)
         //are excluded from this function because they are already actively
         //monitored by the MutationObserver.
-        Composite.statics = Composite.statics || [];
         if (typeof scope === "string"
                 && arguments.length > 1 
                 && typeof arguments[1] === "string"
@@ -1475,9 +1498,9 @@ if (typeof Composite === "undefined") {
             var statics = (arguments[1] || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
-                if (!Composite.statics.includes(entry)
+                if (!Composite.statics.has(entry)
                         && !entry.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
-                    Composite.statics.push(entry);
+                    Composite.statics.add(entry);
                     changes.push(entry); 
                 }
             });
@@ -1509,8 +1532,7 @@ if (typeof Composite === "undefined") {
         //registered as a acceptor.
         if (typeof scope === "function"
                 && arguments.length == 1) {
-            Composite.acceptors = Composite.acceptors || [];
-            Composite.acceptors.push(scope);
+            Composite.acceptors.add(scope);
             return;
         }
 
@@ -1530,16 +1552,14 @@ if (typeof Composite === "undefined") {
             throw new Error("Invalid scope");
             
         if (scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE)) {
-            Composite.macros = Composite.macros || {};
             if (callback == null)
-                delete Composite.macros[scope.toLowerCase()];
-            else Composite.macros[scope.toLowerCase()] = callback;
+                Composite.macros.delete(scope.toLowerCase());
+            else Composite.macros.set(scope.toLowerCase(), callback);
         } else {
             var hash = scope.toLowerCase().hashCode();
-            Composite.selectors = Composite.selectors || {};
             if (callback == null)
-                delete Composite.selectors[hash];
-            else Composite.selectors[hash] = {selector:scope, callback};
+                Composite.selectors.delete(hash);
+            else Composite.selectors.set(hash, {selector:scope, callback});
         } 
     };
     
@@ -1761,8 +1781,7 @@ if (typeof Composite === "undefined") {
             //used or not. Only the return value false (not void, not empty)
             //terminates the rendering for the macro without using the standard
             //functions.
-            Composite.macros = Composite.macros || {};
-            var macro = Composite.macros[selector.nodeName.toLowerCase()];
+            var macro = Composite.macros.get(selector.nodeName.toLowerCase());
             if (macro && macro(selector) === false)
                 return;
             
@@ -1779,10 +1798,8 @@ if (typeof Composite === "undefined") {
             //Only the return value false (not void, not empty) terminates the
             //loop and the rendering for the selector without using the standard
             //functions.
-            Composite.selectors = Composite.selectors || {};
             if (selector.parentNode) {
-                for (var macro in Composite.selectors) {
-                    macro = Composite.selectors[macro];
+                for (let [key, macro] of Composite.selectors) {
                     var nodes = selector.parentNode.querySelectorAll(macro.selector);
                     if (Array.from(nodes).includes(selector)) {
                         if (macro.callback(selector) === false)
@@ -1814,7 +1831,6 @@ if (typeof Composite === "undefined") {
                 //processes them. This does not affect the implementation of the
                 //rendering. The method call with a acceptor:
                 //    Composite.customize(function(element) {...});
-                Composite.acceptors = Composite.acceptors || [];
                 Composite.acceptors.forEach((acceptor) => {
                     acceptor.call(null, selector);
                 });
@@ -1825,17 +1841,16 @@ if (typeof Composite === "undefined") {
                         && selector.attributes) {
                     Array.from(selector.attributes).forEach((attribute) => {
                         attribute = {name:attribute.name.toLowerCase(), value:(attribute.value || "").trim()};
-                        Composite.statics = Composite.statics || []; 
                         if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                 || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                                || Composite.statics.includes(attribute.name)) {
+                                || Composite.statics.has(attribute.name)) {
                             
                             //Remove all internal attributes but not the statics.
                             //Static attributes are still used in the markup or
                             //for the rendering.
                             if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                                     && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    && !Composite.statics.includes(attribute.name)
+                                    && !Composite.statics.has(attribute.name)
                                     && attribute.name != Composite.ATTRIBUTE_RELEASE)
                                 selector.removeAttribute(attribute.name);
                             
@@ -1857,7 +1872,7 @@ if (typeof Composite === "undefined") {
                                     && (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
                                             || attribute.name == Composite.ATTRIBUTE_ID
                                             || attribute.name == Composite.ATTRIBUTE_EVENTS
-                                            || Composite.statics.includes(attribute.name)))
+                                            || Composite.statics.has(attribute.name)))
                                 attribute.value = Expression.eval(selector.ordinal() + ":" + attribute.name, attribute.value);
                             
                             //The initial value of the static attribute is
@@ -1872,7 +1887,7 @@ if (typeof Composite === "undefined") {
                             //registered for the restore. This is a part of the
                             //markup hardening of the MutationObserver.
                             object.statics = object.statics || {};
-                            if (Composite.statics.includes(attribute.name))
+                            if (Composite.statics.has(attribute.name))
                                 object.statics[attribute.name] = attribute.value;
                             
                             //The result of the expression must be written back
@@ -1880,7 +1895,7 @@ if (typeof Composite === "undefined") {
                             if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
                                     || attribute.name == Composite.ATTRIBUTE_ID
                                     || attribute.name == Composite.ATTRIBUTE_EVENTS
-                                    || Composite.statics.includes(attribute.name))
+                                    || Composite.statics.has(attribute.name))
                                 selector.setAttribute(attribute.name, attribute.value);
                         }
                     });
@@ -2152,11 +2167,10 @@ if (typeof Composite === "undefined") {
             //Only composites are mounted based on their model.
             //This excludes the placeholders (are text nodes) of conditions.
             var dock = function(model) {
-                Composite.models = Composite.models || [];
                 if (typeof model !== "string"
-                        || Composite.models.includes(model))
+                        || Composite.models.has(model))
                     return;
-                Composite.models.push(model);
+                Composite.models.add(model);
                 model = Object.lookup(model);
                 if (model && typeof model.dock === "function")
                     model.dock.call(model);
@@ -2799,7 +2813,6 @@ if (typeof Composite === "undefined") {
                 //Changes at the renderer-specific and static attributes are
                 //monitored. Manipulations are corrected/restored.
                 if (object && record.type == "attributes") {
-                    Composite.statics = Composite.statics || []; 
                     var attribute = (record.attributeName || "").toLowerCase().trim();
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
@@ -2822,7 +2835,7 @@ if (typeof Composite === "undefined") {
                                     || object.attributes[attribute] !== record.target.getAttribute(attribute))
                                 record.target.setAttribute(attribute, object.attributes[attribute]);
                         }
-                    } else if (Composite.statics.includes(attribute)) {
+                    } else if (Composite.statics.has(attribute)) {
                         object.statics = object.statics || {};
                         if (!object.statics.hasOwnProperty(attribute)) {
                             //If the renderer has not registered an initial
@@ -2896,8 +2909,8 @@ if (typeof Composite === "undefined") {
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                                 var meta = Composite.mount.lookup(node);
                                 if (meta && meta.meta && meta.meta.model && meta.model
-                                        && Composite.models.includes(meta.meta.model)) {
-                                    Composite.models = Composite.models.filter(model => model != meta.meta.model);
+                                        && Composite.models.has(meta.meta.model)) {
+                                    Composite.models.delete(meta.meta.model);
                                     if (typeof meta.model.undock === "function")
                                         meta.model.undock.call(meta.model);
                                 }
@@ -2954,9 +2967,12 @@ if (typeof Expression === "undefined") {
         /** Constant for element type logic */
         get TYPE_LOGIC() {return 9}
     };
-
-    /** Cache (expression/script) */
-    Expression.cache;
+    
+    //Expression.cache
+    //    Cache (expression/script)    
+    Object.defineProperty(Expression, "cache", {
+        value: new Map()
+    });    
     
     /**
      *  Resolves a value-expression recursively if necessary.
@@ -3284,8 +3300,6 @@ if (typeof Expression === "undefined") {
      */
     Expression.eval = function(variants) {
         
-        Expression.cache = Expression.cache || [];
-        
         var expression = null;
         if (arguments.length > 1)
             expression = arguments[1];
@@ -3297,10 +3311,10 @@ if (typeof Expression === "undefined") {
             serial = arguments[0];
         
         var script = null;
-        script = serial ? Expression.cache[serial] || null : null;
+        script = serial ? Expression.cache.get(serial) || null : null;
         if (!script)
             script = Expression.parse(expression);
-        Expression.cache[serial] = script;
+        Expression.cache.set(serial, script);
         
         try {return eval(script);
         } catch (exception) {
