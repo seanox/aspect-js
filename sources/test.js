@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191208
+ *  Test 1.1.0 20191211
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191208
+ *  @version 1.1.0 20191211
  */
 if (typeof Test === "undefined") {
     
@@ -130,16 +130,29 @@ if (typeof Test === "undefined") {
         
         if (typeof Test.activate.lock !== "undefined")
             return;
-        Test.activate.lock = true;
+
+        /** 
+         *  Test.lock
+         *      Lock with the activation of the test API.
+         *      The flag cannot be revoked at runtime.    
+         */
+        Object.defineProperty(Test.activate, "lock", {
+            value: true
+        });
+
+        /** 
+         *  Test.stack
+         *  Stack of created/registered test tasks (backlog)
+         */
+        Object.defineProperty(Test, "stack", {
+            value: new Set()
+        }); 
         
         /** The output to be used for all messages and errors */
         Test.output;
         
         /** The monitor to be used */
         Test.monitor;
-        
-        /** Stack of created/registered test tasks (backlog) */
-        Test.stack;
         
         /** Queue of currently running test tasks */ 
         Test.queue;
@@ -165,6 +178,9 @@ if (typeof Test === "undefined") {
         /**
          *  Optional configuration of the test environment.
          *  You can configure (also separately): the output and a monitor.
+         *  
+         *      Test.configure({ouput: {...}, monitor: {...}});
+         *  
          *  
          *      Output
          *      ----
@@ -392,13 +408,12 @@ if (typeof Test === "undefined") {
                     && meta.ignore === true)
                 return;
             
-            Test.stack = Test.stack || [];
-            if (Test.stack.indexOf(meta) >= 0)
+            if (Test.stack.has(meta))
                 return;
             if (Test.serial == undefined)
                 Test.serial = 0;
             meta.serial = ++Test.serial;
-            Test.stack.push(meta);
+            Test.stack.add(meta);
         };
 
         /**
@@ -415,7 +430,9 @@ if (typeof Test === "undefined") {
 
             if (auto && document.readyState == "loaded") {
                 if (typeof Test.autostart === "undefined") {
-                    Test.autostart = true;
+                    Object.defineProperty(Test, "autostart", {
+                        value: true
+                    });  
                     window.addEventListener("load", () => {
                         Test.start();
                     });
@@ -463,10 +480,9 @@ if (typeof Test === "undefined") {
                 }            
             };
 
-            Test.stack = Test.stack || [];
             Test.queue = Test.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
             if (Test.queue.stack.length == 0) {
-                Test.queue.stack = Test.stack.slice();
+                Test.queue.stack = Array.from(Test.stack);
                 Test.queue.size = Test.queue.stack.length;
                 Test.queue.timing = new Date().getTime();
             }
