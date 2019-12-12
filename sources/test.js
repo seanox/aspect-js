@@ -165,9 +165,6 @@ if (typeof Test === "undefined") {
         /** Queue of currently running test tasks */ 
         Test.queue;
 
-        /** Counter for identification of test tasks */
-        Test.serial;
-        
         /** The currently performed test task */  
         Test.task;
         
@@ -412,10 +409,12 @@ if (typeof Test === "undefined") {
             
             if (Test.stack.has(meta))
                 return;
-            if (Test.serial == undefined)
-                Test.serial = 0;
-            meta.serial = ++Test.serial;
+            
             Test.stack.add(meta);
+            var stack = Array.from(Test.stack);
+            Object.defineProperty(meta, "serial", {
+                value: Math.max(stack.length, stack.length > 1 ? stack[stack.length -2].serial +1: 1)
+            });       
         };
 
         /**
