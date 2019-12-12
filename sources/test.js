@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191211
+ *  Test 1.1.0 20191212
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191211
+ *  @version 1.1.0 20191212
  */
 if (typeof Test === "undefined") {
     
@@ -132,7 +132,7 @@ if (typeof Test === "undefined") {
             return;
 
         /** 
-         *  Test.lock
+         *  Test.activate.lock
          *      Lock with the activation of the test API.
          *      The flag cannot be revoked at runtime.    
          */
@@ -142,10 +142,18 @@ if (typeof Test === "undefined") {
 
         /** 
          *  Test.stack
-         *  Stack of created/registered test tasks (backlog)
+         *      Stack of created/registered test tasks (backlog)
          */
         Object.defineProperty(Test, "stack", {
             value: new Set()
+        }); 
+
+        /** 
+         *  Test.listeners
+         *      Map with events and their registered listeners
+         */
+        Object.defineProperty(Test, "listeners", {
+            value: new Map()
         }); 
         
         /** The output to be used for all messages and errors */
@@ -153,9 +161,12 @@ if (typeof Test === "undefined") {
         
         /** The monitor to be used */
         Test.monitor;
-        
+
         /** Queue of currently running test tasks */ 
         Test.queue;
+
+        /** Counter for identification of test tasks */
+        Test.serial;
         
         /** The currently performed test task */  
         Test.task;
@@ -163,17 +174,8 @@ if (typeof Test === "undefined") {
         /** Timer for processing the queue */
         Test.interval;
         
-        /** Counter for identification of test tasks */
-        Test.serial;
-        
         /** Timer for controlling test tasks with timeout */
         Test.timeout;
-        
-        /** Indicator if the autostart function can be used */
-        Test.autostart;
-        
-        /** Assoziative array with events and their registered listeners */
-        Test.listeners;
 
         /**
          *  Optional configuration of the test environment.
@@ -311,10 +313,10 @@ if (typeof Test === "undefined") {
                 throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
             
             event = event.toLowerCase();
-            Test.listeners = Test.listeners || [];
-            if (!Array.isArray(Test.listeners[event]))
-                Test.listeners[event] = [];
-            Test.listeners[event].push(callback);
+            if (!Test.listeners.has(event)
+                    && !Array.isArray(Test.listeners.get(event)))
+                Test.listeners.set(event, []);
+            Test.listeners.get(event).push(callback);
         };  
         
         /**
@@ -336,17 +338,17 @@ if (typeof Test === "undefined") {
                 } catch (error) {
                     console.error(error);
                 }        
-
+                
                 event = (event || "").trim();
-                if (!context.Test.listeners
+                if (context.Test.listeners.size <= 0
                         || !event)
                     return;
-                var listeners = context.Test.listeners[event.toLowerCase()];
+                var listeners = context.Test.listeners.get(event.toLowerCase());
                 if (!Array.isArray(listeners))
                     return;
                 listeners.forEach((callback) => {
-                    Composite.asynchron(callback, event, status);
-                }); 
+                    callback(event, status);
+                });                  
             };
             
             invoke(window, event, status);
@@ -424,13 +426,13 @@ if (typeof Test === "undefined") {
          *  @param auto true, the start is triggered when the page is loaded
          */
         Test.start = function(auto) {
-
+            
             if (Test.interval)
                 return;
 
             if (auto && document.readyState == "loaded") {
-                if (typeof Test.autostart === "undefined") {
-                    Object.defineProperty(Test, "autostart", {
+                if (typeof Test.start.auto === "undefined") {
+                    Object.defineProperty(Test.start, "auto", {
                         value: true
                     });  
                     window.addEventListener("load", () => {
