@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.0 20191201
+ *  Extension 1.1.0 20191213
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191201
+ *  @version 1.1.0 20191213
  */
 if (typeof Namespace === "undefined") {
 
@@ -372,20 +372,20 @@ if (String.prototype.unescape === undefined) {
  *  @param node      node(s)
  *  @param exclusive existing children will be removed first
  */
-Element.prototype.internalAppendChild = Element.prototype.appendChild;
+Element.prototype.appendChild$origin = Element.prototype.appendChild;
 Element.prototype.appendChild = function(node, exclusive) {
     if (exclusive)
         this.innerHTML = "";
     if (node instanceof Node) {
-        this.internalAppendChild(node);
+        this.appendChild$origin(node);
     } else if (Array.isArray(node)
             || node instanceof NodeList
             || (Symbol && Symbol.iterator
                     && node && typeof node[Symbol.iterator])) {
         node = Array.from(node);
         for (var loop = 0; loop < node.length; loop++)
-            this.internalAppendChild(node[loop]);
-    } else this.internalAppendChild(node);
+            this.appendChild$origin(node[loop]);
+    } else this.appendChild$origin(node);
 };
 
 /**
