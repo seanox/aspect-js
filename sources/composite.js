@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191209
+ *  Composite 1.2.0 20191213
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191209
+ *  @version 1.2.0 20191213
  */
 if (typeof Composite === "undefined") {
     
@@ -626,7 +626,7 @@ if (typeof Composite === "undefined") {
      *  Implements an own open method for event management.
      *  The original method is reused in the background.
      */ 
-    XMLHttpRequest.prototype.internalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(...variants) {
 
         var callback = function() {
@@ -653,8 +653,8 @@ if (typeof Composite === "undefined") {
             }
         };
         
-        if (typeof this.internalInit === "undefined") {
-            this.internalInit = true;
+        if (typeof this.open$init === "undefined") {
+            this.open$init = true;
             this.addEventListener("loadstart", callback);
             this.addEventListener("progress", callback);
             this.addEventListener("readystatechange", callback);
@@ -665,7 +665,7 @@ if (typeof Composite === "undefined") {
             this.addEventListener("loadend", callback);
         }
         
-        this.internalOpen(...variants);
+        this.open$origin(...variants);
     };
     
     /**
