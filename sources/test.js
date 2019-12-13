@@ -933,7 +933,7 @@ if (typeof Test === "undefined") {
                 throw new Error(message);
             }
         };
-    
+        
         /**
          *  Redirection of the console level INFO, ERROR, WARN, LOG when using
          *  tests. The outputs are buffered for analysis and listeners can be
@@ -951,8 +951,10 @@ if (typeof Test === "undefined") {
             console.output.info = "";
         };
         
-        /** Array of registered listeners for occurring console outputs. */
-        console.listeners = [];
+        /** Set of registered listeners for occurring console outputs. */
+        Object.defineProperty(console, "listeners", {
+            value: new Set()
+        });        
         
         /**
          *  Registers a callback function for console output.
@@ -962,9 +964,7 @@ if (typeof Test === "undefined") {
          *  @param callback callback function
          */
         console.listen = function(callback) {
-            
-            console.listeners = console.listeners || [];
-            console.listeners.push(callback);
+            console.listeners.add(callback);
         };
         
         /** 
@@ -986,11 +986,9 @@ if (typeof Test === "undefined") {
             
             var values = [level, ...variants];
             
-            var listeners = console.listeners;
-            if (Array.isArray(listeners))
-                listeners.forEach((callback) => {
-                    callback(...values);
-                }); 
+            console.listeners.forEach((callback) => {
+                callback(...values);
+            }); 
             
             arguments = Array.from(arguments);
             if (arguments.length > 2)
@@ -1002,27 +1000,27 @@ if (typeof Test === "undefined") {
         };
         
         /** Redirect for the level: LOG */
-        console.forward.log = console.log;
+        console.log$origin = console.log;
         console.log = function(message) {
-            console.forward("log", arguments, console.forward.log);
+            console.forward("log", arguments, console.log$origin);
         };
         
         /** Redirect for the level: WARN */
-        console.forward.warn = console.warn;
+        console.warn$origin = console.warn;
         console.warn = function(message) {
-            console.forward("warn", arguments, console.forward.warn);
+            console.forward("warn", arguments, console.warn$origin);
         };
         
         /** Redirect for the level: ERROR */
-        console.forward.error = console.error;
+        console.error$origin = console.error;
         console.error = function(message) {
-            console.forward("error", arguments, console.forward.error);
+            console.forward("error", arguments, console.error$origin);
         };
         
         /** Redirect for the level: INFO */
-        console.forward.info = console.info;
+        console.info$origin = console.info;
         console.info = function(message) {
-            console.forward("info", arguments, console.forward.info);
+            console.forward("info", arguments, console.info$origin);
         };
         
         /** In the case of an error, the errors are forwarded to the console. */
