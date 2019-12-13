@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191212
+ *  Test 1.1.0 20191213
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191212
+ *  @version 1.1.0 20191213
  */
 if (typeof Test === "undefined") {
     
@@ -155,141 +155,7 @@ if (typeof Test === "undefined") {
         Object.defineProperty(Test, "listeners", {
             value: new Map()
         }); 
-        
-        /** The output to be used for all messages and errors */
-        Test.output;
-        
-        /** The monitor to be used */
-        Test.monitor;
 
-        /** Queue of currently running test tasks */ 
-        Test.queue;
-
-        /** The currently performed test task */  
-        Test.task;
-        
-        /** Timer for processing the queue */
-        Test.interval;
-        
-        /** Timer for controlling test tasks with timeout */
-        Test.timeout;
-
-        /**
-         *  Optional configuration of the test environment.
-         *  You can configure (also separately): the output and a monitor.
-         *  
-         *      Test.configure({ouput: {...}, monitor: {...}});
-         *  
-         *  
-         *      Output
-         *      ----
-         *      
-         *  Simple function or object for outputting messages and errors.
-         *  If not specified, console object is used.    
-         *  
-         *      Implementation of an output (as function or object):
-         *      
-         *  var output = {
-         *  
-         *      log(message) {
-         *          ...
-         *      },
-         *      
-         *      error(message) {
-         *          ...
-         *      }
-         *  };
-         *  
-         *      Monitor
-         *      ----
-         *      
-         *  Monitors the test procedure and is informed about the various cycles
-         *  during execution. The monitor also controls the data output. For
-         *  example, the output can be redirected to DOM elements. Without a
-         *  monitor the tests will also be performed, but there will be an
-         *  output about success and failure.
-         *  If no monitor is specified, the internal monitor is used with a
-         *  simple console output.     
-         *  
-         *      Implementation of a monitor (as function or object):
-         *      
-         *  var monitor = {
-         *  
-         *      start(status) {
-         *          The method is called with the start.
-         *      },
-         *      
-         *      suspend(status) {
-         *          The method is called with suspension.
-         *      },
-         *      
-         *      resume(status) {
-         *          The method is called if the test run is stopped and is to be
-         *          continued later.
-         *      },
-         *      
-         *      interrupt(status) {
-         *          The method is called if you want to abort the test run.
-         *          The test run cannot then be resumed.
-         *      },
-         *      
-         *      perform(status) {
-         *          The method is called before a test task is performed.
-         *      },
-         *      
-         *      response(status) {
-         *          The method is called when a test task has been performed.
-         *          Here you can find the result of the test task.
-         *      },
-         *      
-         *      finish(status) {
-         *          The method is called when all test tasks have been completed.
-         *      }
-         *  };
-         *  
-         *  The current status is passed to all monitor methods as an object.
-         *  The status is a snapshot of the current test run with details of the
-         *  current task and the queue. The details are read-only and cannot be
-         *  changed.
-         *   
-         *      structure of status: {task:..., queue:...}
-         *      
-         *  task.title      title of the test task    
-         *  task.meta       meta information about the test itself
-         *                  name, test, timeout, expected, serial
-         *  task.running    indicator when the test task is in progress
-         *  task.timing     start time from the test task in milliseconds
-         *  task.timeout    optional, the time in milliseconds when a timeout is
-         *                  expected
-         *  task.duration   total execution time of the test task in
-         *                  milliseconds, is set with the end of the test task
-         *  task.error      optional, if an unexpected error (also asser error)
-         *                  has occurred, which terminated the test task
-         *  
-         *  queue.timing    start time in milliseconds 
-         *  queue.size      original queue length
-         *  queue.length    number of outstanding tests
-         *  queue.progress  number of tests performed     
-         *  queue.lock      indicator when a test is performed and the queue is
-         *                  waiting
-         *  queue.faults    number of detected faults
-         *  
-         *  @param options
-         */
-        Test.configure = function(options) {
-            
-            if (typeof options !== "object"
-                    && typeof options !== "function")
-                return;
-            
-            if (typeof options.output === "object"
-                    || typeof options.output === "function")
-                Test.output = options.output;
-            if (typeof options.monitor === "object"
-                    || typeof options.monitor === "function")
-                Test.monitor = options.monitor;
-        };
-        
         /**
          *  Registers a callback function for test events.
          *  @param  event    see Test.EVENT_***
@@ -328,10 +194,14 @@ if (typeof Test === "undefined") {
          */
         Test.fire = function(event, status) {
             
+            if (typeof Test.worker === "object")
+                Test.worker.status = event; 
+            
             var invoke = function(context, event, status) {
-                if (typeof context.Test.monitor === "object"
-                    && typeof context.Test.monitor[event] === "function")
-                try {context.Test.monitor[event](status);
+                if (typeof context.Test.worker === "object"
+                        && typeof context.Test.worker.monitor === "object"
+                        && typeof context.Test.worker.monitor[event] === "function")
+                try {context.Test.worker.monitor[event](status);
                 } catch (error) {
                     console.error(error);
                 }        
@@ -418,24 +288,127 @@ if (typeof Test === "undefined") {
         };
 
         /**
-         *  (Re)Starts the test run.
-         *  The start can be done manually or when using auto = true, by loading
-         *  the page. If the page is already loaded, the parameter auto is
+         *  Starts the test run.
+         *  The execution of the tests can optionally be configured with the
+         *  start by passing a meta object. The parameters in the meta object
+         *  are optional and cannot be changed at test runtime. Only with the
+         *  next start can new parameters be passed as meta objects.
+         *  
+         *      Test.configure({auto: boolean, ouput: {...}, monitor: {...}});
+         *      
+         *      auto
+         *      ----
+         *  true, the start is triggered when the page is loaded     
+         *  If the page is already loaded, the parameter auto is
          *  ignored and the start is executed immediately.
-         *  @param auto true, the start is triggered when the page is loaded
+         *  
+         *      output
+         *      ----
+         *  Simple function or object for outputting messages and errors.
+         *  If not specified, console object is used.    
+         *  
+         *      Implementation of an output (as function or object):
+         *      
+         *  var output = {
+         *  
+         *      log(message) {
+         *          ...
+         *      },
+         *      
+         *      error(message) {
+         *          ...
+         *      }
+         *  };
+         *  
+         *      monitor
+         *      ----
+         *  Monitors the test procedure and is informed about the various cycles
+         *  during execution. The monitor also controls the data output. For
+         *  example, the output can be redirected to DOM elements. Without a
+         *  monitor the tests will also be performed, but there will be an
+         *  output about success and failure.
+         *  If no monitor is specified, the internal monitor is used with a
+         *  simple console output.     
+         *  
+         *      Implementation of a monitor (as function or object):
+         *      
+         *  var monitor = {
+         *  
+         *      start(status) {
+         *          The method is called with the start.
+         *      },
+         *      
+         *      suspend(status) {
+         *          The method is called with suspension.
+         *      },
+         *      
+         *      resume(status) {
+         *          The method is called if the test run is stopped and is to be
+         *          continued later.
+         *      },
+         *      
+         *      interrupt(status) {
+         *          The method is called if you want to abort the test run.
+         *          The test run cannot then be resumed.
+         *      },
+         *      
+         *      perform(status) {
+         *          The method is called before a test task is performed.
+         *      },
+         *      
+         *      response(status) {
+         *          The method is called when a test task has been performed.
+         *          Here you can find the result of the test task.
+         *      },
+         *      
+         *      finish(status) {
+         *          The method is called when all test tasks have been completed.
+         *      }
+         *  };
+         *  
+         *  The current status is passed to all monitor methods as an object.
+         *  The status is a snapshot of the current test run with details of the
+         *  current task and the queue. The details are read-only and cannot be
+         *  changed.
+         *   
+         *      structure of status: {task:..., queue:...}
+         *      
+         *  task.title      title of the test task    
+         *  task.meta       meta information about the test itself
+         *                  name, test, timeout, expected, serial
+         *  task.running    indicator when the test task is in progress
+         *  task.timing     start time from the test task in milliseconds
+         *  task.timeout    optional, the time in milliseconds when a timeout is
+         *                  expected
+         *  task.duration   total execution time of the test task in
+         *                  milliseconds, is set with the end of the test task
+         *  task.error      optional, if an unexpected error (also asser error)
+         *                  has occurred, which terminated the test task
+         *  
+         *  queue.timing    start time in milliseconds 
+         *  queue.size      original queue length
+         *  queue.length    number of outstanding tests
+         *  queue.progress  number of tests performed     
+         *  queue.lock      indicator when a test is performed and the queue is
+         *                  waiting
+         *  queue.faults    number of detected faults
+         *  
+         *  @param meta  
          */
-        Test.start = function(auto) {
+        Test.start = function(meta) {
             
-            if (Test.interval)
+            if (typeof Test.worker !== "undefined")
                 return;
 
-            if (auto && document.readyState == "loaded") {
+            if (meta && meta.auto
+                    && (document.readyState == "loading"
+                        || document.readyState == "interactive")) {
                 if (typeof Test.start.auto === "undefined") {
                     Object.defineProperty(Test.start, "auto", {
                         value: true
                     });  
                     window.addEventListener("load", () => {
-                        Test.start();
+                        Test.start(meta);
                     });
                 }
                 return;
@@ -444,23 +417,32 @@ if (typeof Test === "undefined") {
             var numerical = function(number, text) {
                 return number + " " + text + (number != 1 ? "s" : "");
             };
+
+            Test.worker = {};
+
+            //Test.worker.output
+            //    Output to be used for all messages and errors
+            Test.worker.output = meta ? meta.output : null;
+            Test.worker.output = Test.worker.output || console;
             
-            Test.output = Test.output || console;
-            Test.monitor = Test.monitor || {
+            //Test.worker.monitor
+            //    Monitoring of test processing
+            Test.worker.monitor = meta ? meta.monitor : null;
+            Test.worker.monitor = Test.worker.monitor || {
                 start(status) {
-                    Test.output.log(new Date().toUTCString() + " Test is started"
+                    Test.worker.output.log(new Date().toUTCString() + " Test is started"
                             + ", " + numerical(status.queue.size, "task") + " in the queue");
                 },
                 suspend(status) {
-                    Test.output.log(new Date().toUTCString() + " Test is suspended"
+                    Test.worker.output.log(new Date().toUTCString() + " Test is suspended"
                             + ", " + numerical(status.queue.length, "task") + " still outstanding");
                 },
                 resume(status) {
-                    Test.output.log(new Date().toUTCString() + " Test is continued "
+                    Test.worker.output.log(new Date().toUTCString() + " Test is continued "
                             + ", " + numerical(status.queue.size, "task") + " in the queue");
                 },
                 interrupt(status) {
-                    Test.output.log(new Date().toUTCString() + " Test is interrupted"
+                    Test.worker.output.log(new Date().toUTCString() + " Test is interrupted"
                             + "\n\t" + numerical(status.queue.size -status.queue.progress, "task") + " still outstanding"
                             + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
                             + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
@@ -470,64 +452,81 @@ if (typeof Test === "undefined") {
                 response(status) {
                     var timing = new Date().getTime() -status.task.timing;
                     if (status.task.error)
-                        Test.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
-                    else Test.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
+                        Test.worker.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
+                    else Test.worker.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
                 },
                 finish(status) {
-                    Test.output.log(new Date().toUTCString() + " Test is finished"
+                    Test.worker.output.log(new Date().toUTCString() + " Test is finished"
                             + "\n\t" + numerical(status.queue.size, "task") + " were performed"
                             + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
                             + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
                 }            
             };
 
-            Test.queue = Test.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
-            if (Test.queue.stack.length == 0) {
-                Test.queue.stack = Array.from(Test.stack);
-                Test.queue.size = Test.queue.stack.length;
-                Test.queue.timing = new Date().getTime();
+            //Test.worker.queue
+            //    Queue of currently running test tasks
+            Test.worker.queue = Test.worker.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
+            if (Test.worker.queue.stack.length == 0) {
+                Test.worker.queue.stack = Array.from(Test.stack);
+                Test.worker.queue.size = Test.worker.queue.stack.length;
+                Test.worker.queue.timing = new Date().getTime();
             }
             
-            Test.timeout = window.setInterval(() => {
-
-                if (!Test.task
-                        || !Test.task.running
-                        || !Test.queue.lock)
+            //Test.worker.timeout
+            //    Timer for controlling test tasks with timeout
+            Test.worker.timeout = window.setInterval(() => {
+            
+                if (Test.worker.status == Test.EVENT_SUSPEND)
                     return;
-                if (!Test.task.timeout
-                        || Test.task.timeout > new Date().getTime())
+                
+                if (typeof Test.worker.task === "undefined"
+                        || !Test.worker.task.running
+                        || !Test.worker.queue.lock)
                     return;
-                Test.task.duration = new Date().getTime() -task.timing;
-                Test.task.error = new Error("Timeout occurred, expected " + Test.task.timeout + " ms but was " + Test.task.duration + " ms");
+                
+                var task = Test.worker.task;
+                if (!task.timeout
+                        || task.timeout > new Date().getTime())
+                    return;
+                
+                task.duration = new Date().getTime() -task.timing;
+                task.error = new Error("Timeout occurred, expected " + task.timeout + " ms but was " + task.duration + " ms");
                 Test.fire(Test.EVENT_RESPONSE, Test.status());
-                Test.queue.faults++;
-                Test.queue.lock = false;
+                Test.worker.queue.faults++;
+                Test.worker.queue.lock = false;
             }, 25);
             
-            Test.interval = window.setInterval(() => {
-                
-                if (!Test.queue.lock
-                        && Test.queue.progress <= 0)
-                    Test.fire(Test.EVENT_START, Test.status());
-                
-                if (Test.queue.lock)
+            //Test.worker.interval
+            //    Timer for processing the queue
+            Test.worker.interval = window.setInterval(() => {
+
+                if (Test.worker.status == Test.EVENT_SUSPEND)
                     return;
                 
-                if (Test.queue.stack.length > 0) {
-                    Test.queue.lock = true;
-                    Test.queue.progress++;
-                    var meta = Test.queue.stack.shift();
+                if (!Test.worker.queue.lock
+                        && Test.worker.queue.progress <= 0)
+                    Test.fire(Test.EVENT_START, Test.status());
+                
+                if (Test.worker.queue.lock)
+                    return;
+                
+                if (Test.worker.queue.stack.length > 0) {
+                    Test.worker.queue.lock = true;
+                    Test.worker.queue.progress++;
+                    var meta = Test.worker.queue.stack.shift();
                     var timeout = false;
                     if ((meta.timeout || 0) > 0)
                         timeout = new Date().getTime() +meta.timeout;
-                    Test.task = {title:null, meta, running:true, timing:new Date().getTime(), timeout, duration:false, error:null};
-                    Test.task.title = "#" + meta.serial;
+                    //Test.worker.task
+                    //    Currently performed test task
+                    Test.worker.task = {title:null, meta, running:true, timing:new Date().getTime(), timeout, duration:false, error:null};
+                    Test.worker.task.title = "#" + meta.serial;
                     if (typeof meta.name === "string"
                             && meta.name.trim().length > 0)
-                        Test.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
+                        Test.worker.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                     Test.fire(Test.EVENT_PERFORM, Test.status());
                     Composite.asynchron(() => {
-                        var task = Test.task;
+                        var task = Test.worker.task;
                         try {task.meta.test();
                         } catch (error) {
                             task.error = error;
@@ -553,74 +552,69 @@ if (typeof Test === "undefined") {
                                     && !task.error) {
                                 task.error = new Error("Timeout occurred, expected " + task.meta.timeout + " ms but was " + task.duration + " ms");                            
                                 Test.fire(Test.EVENT_RESPONSE, Test.status());
-                                Test.queue.faults++;
+                                Test.worker.queue.faults++;
                             }
                             if (!task.error
                                     || !String(task.error.message).match(/^Timeout occurred/)) {
                                 if (task.error)
-                                    Test.queue.faults++;
+                                    Test.worker.queue.faults++;
                                 Test.fire(Test.EVENT_RESPONSE, Test.status());
                             }
-                            Test.queue.lock = false;
+                            Test.worker.queue.lock = false;
                         }
                     });
                     return;
                 }
                 
-                window.clearTimeout(Test.interval);
-                Test.interval = null;
-                Test.task = null;
+                window.clearTimeout(Test.worker.interval);
+                window.clearTimeout(Test.worker.timeout);
                 Test.fire(Test.EVENT_FINISH, Test.status());
+                delete Test.worker;
             }, 25);
         };
-        
+
         /**
          *  Suspends the current test run, which can be continued from the
          *  current test with Test.resume().
+         *  @throws An error occurs in the following cases:
+         *      - No worker is present or cannot be suspended
          */
         Test.suspend = function() {
 
-            if (!Test.interval)
-                return;
-            window.clearTimeout(Test.interval);
-            Test.interval = null;
-            while (Test.queue.lock)
-                continue;
-            Test.task = null;
+            if (typeof Test.worker === "undefined")
+                throw new Error("Suspend is not available"); 
             Test.fire(Test.EVENT_SUSPEND, Test.status());
         };
         
-        /** Continues the test run if it was previously suspended. */
+        /** 
+         *  Continues the test run if it was previously suspended.
+         *  @throws An error occurs in the following cases:
+         *      - No worker is present or cannot be resumed
+         */
         Test.resume = function() {
-
-            if (!Test.interval)
-                return;
-            while (Test.queue.lock)
-                continue;
-            Test.task = null;        
-            if (Test.queue.stack.length <= 0)
-                return;
-            Test.start();
+            
+            if (typeof Test.worker === "undefined"
+                    || Test.worker.status !== Test.EVENT_SUSPEND)
+                throw new Error("Resume is not available"); 
             Test.fire(Test.EVENT_RESUME, Test.status());
         };
         
         /**
          *  Interrupts the current test run and discards all outstanding tests.
          *  The test run can be restarted with Test.start().
+         *  @throws An error occurs in the following cases:
+         *      - No worker is present or cannot be interrupted
          */
         Test.interrupt = function() {
             
-            if (!Test.interval)
-                return;
-            window.clearTimeout(Test.interval);
-            Test.interval = null;
-            while (Test.queue.lock)
-                continue;
-            Test.task = null;        
-            Test.queue.stack = [];
+            if (typeof Test.worker === "undefined")
+                throw new Error("Interrupt is not available"); 
+            window.clearTimeout(Test.worker.interval);
+            window.clearTimeout(Test.worker.timeout);
             Test.fire(Test.EVENT_INTERRUPT, Test.status());
+            delete Test.worker;
         };
-        
+
         /**
          *  Makes a snapshot of the status of the current test.
          *  The status contains details of the current task and the queue. The
@@ -653,69 +647,73 @@ if (typeof Test === "undefined") {
          */
         Test.status = function() {
             
-            var task = null;
-            if (Test.task) {
-                task = {};
-                Object.defineProperty(task, "title", {
-                    value: Test.task.title,
+            var status = {};
+            if (typeof Test.worker === "object"
+                    && typeof Test.worker.task === "object") {
+                status.task = {};
+                Object.defineProperty(status.task, "title", {
+                    value: Test.worker.task.title,
                     enumerable: true
                 });
-                Object.defineProperty(task, "meta", {
-                    value: Test.task.meta,
+                Object.defineProperty(status.task, "meta", {
+                    value: Test.worker.task.meta,
                     enumerable: true
                 });
-                Object.defineProperty(task, "running", {
-                    value: Test.task.running,
+                Object.defineProperty(status.task, "running", {
+                    value: Test.worker.task.running,
                     enumerable: true
                 });
-                Object.defineProperty(task, "timing", {
-                    value: Test.task.timing,
+                Object.defineProperty(status.task, "timing", {
+                    value: Test.worker.task.timing,
                     enumerable: true
                 });
-                Object.defineProperty(task, "timeout", {
-                    value: Test.task.timeout,
+                Object.defineProperty(status.task, "timeout", {
+                    value: Test.worker.task.timeout,
                     enumerable: true
                 });
-                Object.defineProperty(task, "duration", {
-                    value: Test.task.duration,
+                Object.defineProperty(status.task, "duration", {
+                    value: Test.worker.task.duration,
                     enumerable: true
                 });
-                Object.defineProperty(task, "error", {
-                    value: Test.task.error,
-                    enumerable: true
-                });
-            }
-            
-            var queue = null;
-            if (Test.queue) {
-                queue = {};
-                Object.defineProperty(queue, "timing", {
-                    value: Test.queue.timing,
-                    enumerable: true
-                });
-                Object.defineProperty(queue, "size", {
-                    value: Test.queue.size,
-                    enumerable: true
-                });
-                Object.defineProperty(queue, "length", {
-                    value: Test.queue.stack.length,
-                    enumerable: true
-                });
-                Object.defineProperty(queue, "progress", {
-                    value: Test.queue.progress,
-                    enumerable: true
-                });
-                Object.defineProperty(queue, "lock", {
-                    value: Test.queue.lock,
-                    enumerable: true
-                });
-                Object.defineProperty(queue, "faults", {
-                    value: Test.queue.faults,
+                Object.defineProperty(status.task, "error", {
+                    value: Test.worker.task.error,
                     enumerable: true
                 });
             }
             
-            return {task, queue};
+            if (typeof Test.worker === "object"
+                    && typeof Test.worker.queue === "object") {
+                status.queue = {};
+                Object.defineProperty(status.queue, "timing", {
+                    value: Test.worker.queue.timing,
+                    enumerable: true
+                });
+                Object.defineProperty(status.queue, "size", {
+                    value: Test.worker.queue.size,
+                    enumerable: true
+                });
+                Object.defineProperty(status.queue, "length", {
+                    value: Test.worker.queue.stack.length,
+                    enumerable: true
+                });
+                Object.defineProperty(status.queue, "progress", {
+                    value: Test.worker.queue.progress,
+                    enumerable: true
+                });
+                Object.defineProperty(status.queue, "lock", {
+                    value: Test.worker.queue.lock,
+                    enumerable: true
+                });
+                Object.defineProperty(status.queue, "faults", {
+                    value: Test.worker.queue.faults,
+                    enumerable: true
+                });
+            }
+            
+            if (typeof status.task === "undefined"
+                    && typeof status.queue === "undefined")
+                return false;
+            return status;
         };    
     
         if (typeof Assert === "undefined") {
