@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.2.0 20191201
+ *  Messages 1.2.0 20191213
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191201
+ *  @version 1.2.0 20191213
  */
 if (typeof Messages === "undefined") {
     
@@ -89,7 +89,7 @@ if (typeof Messages === "undefined") {
         //loading of the key-value pairs is embedded.
         var localize = DataSource.localize;
         DataSource.localize = function(locale) {
-            DataSource.localize.internal(locale);
+            DataSource.localize$origin(locale);
 
             window["Messages"] = {};
             var xpath = "/locales/" + DataSource.locale + "/label";
@@ -107,7 +107,7 @@ if (typeof Messages === "undefined") {
             }
         };
         
-        DataSource.localize.internal = localize;
+        DataSource.localize$origin = localize;
         
         if (DataSource.data
                 && DataSource.locale
