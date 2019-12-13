@@ -115,6 +115,7 @@ CR: Test: Extension for passing events (Test + Console) to the enclosing object 
 CR: Test: Extension for central catching of errors with activated Test-AP  
 CR: Test: Optimization for using readonly meta objects for return values  
 CR: Test Suite: Optimization of error output  
+CR: Test: Omission of the method Test.configure(...), function is taken over by Test.start(...)  
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
 CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)  
