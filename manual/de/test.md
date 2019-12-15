@@ -336,38 +336,23 @@ Test.start();
 
 ## Konfiguration
 
-Optional kann das Test-API, mit Fokus auf Überwachung konfiguriert werden.  
-Die Konfiguration kann einmalig und mehrfach aufgerufen werden. Als Parameter
-wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
-übernommen und unbekanntes wird ignoriert.
+Optional kann das Test-API mit jedem Start konfiguriert werden.  
+Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
+wird partiell übernommen und unbekanntes wird ignoriert.
 
 ```javascript
-Test.configure({
-    log(message) {
-        ...
-    },
-    error(message) {
-        ...
-    },
-    ...
-});
+Test.start({auto: boolean, ouput: {...}, monitor: {...}});
+```
 
-Test.configure({
-    start(status) {
-        ...
-    },
-    perform(status) {
-        ...
-    },
-    response(status) {
-        ...
-    },
-    
-    finish(status) {
-        ...
-    }
-});
 
+### auto
+
+Option die den Start beim Laden der Seite ausgelöst.  
+Wenn die Seite bereits geladen ist, wird der Parameter auto ignoriert und der
+Start sofort ausgeführt.
+
+```javascript
+Test.start({auto: true});
 ```
 
 
@@ -377,14 +362,14 @@ Funktion oder Objekt zur Ausgabe von Meldungen und Fehlern.
 Wenn nicht angegeben, wird das console-Objekt verwendet.
 
 ```javascript
-Test.configure({
+Test.start({output: {
     log(message) {
         ...
     },
     error(message) {
         ...
     }
-});
+}});
 ```
 
 
@@ -397,7 +382,7 @@ Der Monitor ist optional. Ohne diesen werden Informationen zum Testverlauf in
 der Konsole ausgegeben.
 
 ```javascript
-Test.configure({
+Test.start({monitor: {
 
     start(status) {
         Aufruf der Methode beim Start.
@@ -429,7 +414,7 @@ Test.configure({
     finish(status) {
         Aufruf der Methode, wenn alle Testaufgaben abgeschlossen sind.
     }
-});
+}});
 ```
 
 Allen Monitor-Methoden wird der aktuelle Status als Meta-Objekt übergeben.  
@@ -554,10 +539,9 @@ gesteuert werden.
 
 ```javascript
 Test.start();
-Test.start(boolean);
+Test.start({auto: boolean});
 ```
 
-(Neu)Start der Testausführung.  
 Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
 der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
 `auto` ignoriert und der Start sofort ausgeführt.

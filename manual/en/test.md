@@ -335,38 +335,23 @@ Test.start();
 
 ## Configuration
 
-Optionally, the Test-API can be configured with a focus on monitoring.  
-The configuration can be called up once or several times. A meta object is
-expected as parameter. The configuration contained in it is partially adopted
-and the unknown is ignored.
+Optionally, the test API can be configured with each start. 
+A meta object is expected as parameter. The configuration contained in it is
+partially adopted and the unknown is ignored.
 
 ```javascript
-Test.configure({
-    log(message) {
-        ...
-    },
-    error(message) {
-        ...
-    },
-    ...
-});
+Test.start({auto: boolean, ouput: {...}, monitor: {...}});
+```
 
-Test.configure({
-    start(status) {
-        ...
-    },
-    perform(status) {
-        ...
-    },
-    response(status) {
-        ...
-    },
-    
-    finish(status) {
-        ...
-    }
-});
 
+### auto
+
+Option that triggers the start when loading the page.  
+If the page is already loaded, the auto parameter is ignored and the start is
+executed immediately.
+
+```javascript
+Test.start({auto: true});
 ```
 
 
@@ -376,14 +361,14 @@ Function or object for outputting messages and errors.
 If not specified, console object is used.
 
 ```javascript
-Test.configure({
+Test.start({output: {
     log(message) {
         ...
     },
     error(message) {
         ...
     }
-});
+}});
 ```
 
 
@@ -396,7 +381,7 @@ The monitor is optional. Without this, the console is used to output information
 about the test process.
 
 ```javascript
-Test.configure({
+Test.start({monitor: {
 
     start(status) {
         The method is called with the start.
@@ -428,7 +413,7 @@ Test.configure({
     finish(status) {
         The method is called when all test tasks have been completed.
     }
-});
+}});
 ```
 
 The current status is passed to all monitor methods as an meta-object.  
@@ -551,10 +536,9 @@ Test-API.
 
 ```javascript
 Test.start();
-Test.start(boolean);
+Test.start({auto: boolean});
 ```
 
-(Re)Starts the test execution.  
 The start can be done manually or when using `auto = true`, by loading the
 page. If the page is already loaded, the parameter `auto` is ignored and the
 start is executed immediately.

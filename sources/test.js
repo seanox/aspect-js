@@ -294,7 +294,7 @@ if (typeof Test === "undefined") {
          *  are optional and cannot be changed at test runtime. Only with the
          *  next start can new parameters be passed as meta objects.
          *  
-         *      Test.configure({auto: boolean, ouput: {...}, monitor: {...}});
+         *      Test.start({auto: boolean, ouput: {...}, monitor: {...}});
          *      
          *      auto
          *      ----
