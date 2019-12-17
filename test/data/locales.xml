@@ -4,15 +4,21 @@
     <label key="all.a" value="xxA"/>
     <label key="all.b">xxB</label>
     <label key="xx" value="xxX"/>
+    <label key="xx" value="xxX2"/>
+    <label key="xx" value="xxX3"/>
   </xx>
   <xde>
     <label key="all.a" value="xdeA"/>
     <label key="all.b">xdeB</label>
     <label key="xde" value="xdeX"/>
+    <label key="xde" value="xdeX2"/>
+    <label key="xde" value="xdeX3"/>
   </xde>
   <xen>
     <label key="all.a" value="xenA"/>
     <label key="all.b">xenB</label>
     <label key="xen" value="xenX"/>
+    <label key="xen" value="xenX2"/>
+    <label key="xen" value="xenX3"/>
   </xen>
 </locales>
