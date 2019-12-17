@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191209
+ *  MVC 1.1.0 20191217
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191209
+ *  @version 1.1.0 20191217
  */
 if (typeof Path === "undefined") {
     
@@ -290,7 +290,7 @@ if (typeof SiteMap === "undefined") {
         get PATTERN_PATH() {return /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/},
 
         /** Pattern for a valid face path with optional facets. */
-        get PATTERN_PATH_FACETS() {return /^(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)(\s+(#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/},
+        get PATTERN_PATH_FACET() {return /^([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)((#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/},
         
         /**
          *  Primarily, the root is always used when loading the page, since the
@@ -693,7 +693,7 @@ if (typeof SiteMap === "undefined") {
                     throw new TypeError("Invalid facet: " + typeof facet);
                 facet = facet.toLowerCase().trim();
                 if (!facet.match(SiteMap.PATTERN_PATH_FACET))
-                    throw new Error("Invalid facet: " + facet);
+                    throw new Error("Invalid facet" + (facet ? ": " + facet : ""));
                 //If the facet does not exist at the path, the facet is added.
                 if (!paths.get(key).includes(facet))
                     paths.get(key).push(facet);
