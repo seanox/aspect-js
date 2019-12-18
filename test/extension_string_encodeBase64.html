@@ -19,11 +19,11 @@
         }});
         
         Test.create({expected:/\bmalformed character sequence/i, test() {
-            Assert.assertNull(("הצü").decodeBase64());
+            ("הצü").decodeBase64();
         }});        
 
         Test.create({expected:/\bmalformed character sequence/i, test() {
-            Assert.assertNull(("Peter und der Wolf").decodeBase64());
+            ("Peter und der Wolf").decodeBase64();
         }});        
         
         Test.create({test() {

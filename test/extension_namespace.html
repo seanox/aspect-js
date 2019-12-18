@@ -24,7 +24,7 @@
             Assert.assertEquals(window, Namespace.using());
         }});        
         Test.create({expected:TypeError, test() {
-            Assert.assertNull(Namespace.using(null));
+            Namespace.using(null);
         }});
         Test.create({expected:TypeError, test() {
             Namespace.using(false);
