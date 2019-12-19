@@ -629,28 +629,27 @@ if (typeof Composite === "undefined") {
     XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(...variants) {
 
-        var callback = () => {
-            if (arguments.length > 0) {
-                var event = arguments[0];
-                if (event.type == "loadstart")
-                    event = Composite.EVENT_AJAX_START;
-                else if (event.type == "progress")
-                    event = Composite.EVENT_AJAX_PROGRESS; 
-                else if (event.type == "readystatechange")
-                    event = Composite.EVENT_AJAX_RECEIVE; 
-                else if (event.type == "load")
-                    event = Composite.EVENT_AJAX_LOAD; 
-                else if (event.type == "abort")
-                    event = Composite.EVENT_AJAX_ABORT; 
-                else if (event.type == "error")
-                    event = Composite.EVENT_AJAX_ERROR;   
-                else if (event.type == "timeout")
-                    event = Composite.EVENT_AJAX_TIMEOUT;   
-                else if (event.type == "loadend")
-                    event = Composite.EVENT_AJAX_END; 
-                else return;
-                Composite.fire(event, arguments); 
-            }
+        var callback = (event = null) => {
+            if (!event)
+                return;
+            if (event.type == "loadstart")
+                event = Composite.EVENT_AJAX_START;
+            else if (event.type == "progress")
+                event = Composite.EVENT_AJAX_PROGRESS; 
+            else if (event.type == "readystatechange")
+                event = Composite.EVENT_AJAX_RECEIVE; 
+            else if (event.type == "load")
+                event = Composite.EVENT_AJAX_LOAD; 
+            else if (event.type == "abort")
+                event = Composite.EVENT_AJAX_ABORT; 
+            else if (event.type == "error")
+                event = Composite.EVENT_AJAX_ERROR;   
+            else if (event.type == "timeout")
+                event = Composite.EVENT_AJAX_TIMEOUT;   
+            else if (event.type == "loadend")
+                event = Composite.EVENT_AJAX_END; 
+            else return;
+            Composite.fire(event, arguments); 
         };
         
         if (typeof this.open$init === "undefined") {
