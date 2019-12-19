@@ -106,7 +106,7 @@
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191217
+ *  @version 1.1.0 20191219
  */
 if (typeof Path === "undefined") {
     
@@ -119,7 +119,7 @@ if (typeof Path === "undefined") {
     Path = {
             
         /** Pattern for a valid path. */
-        get PATTERN_PATH() {return /(^$)|(^#+$)|(^[a-z](\-*\w)*)|(^([a-z](\-*\w)*)*((#+[a-z](\-*\w)*)+)#*$)/},
+        get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/},
     
         /** Pattern for a url path. */
         get PATTERN_URL() {return /^[a-z]+:\/.*?(#.*)*$/i},
@@ -190,50 +190,60 @@ if (typeof Path === "undefined") {
      *      - if the root and/or the path is invalid
      */
     Path.normalize = function(variants) {
-            
-        var path = null;
-        var root = null;
-        if (arguments.length == 1) {
-            path = arguments[0];
-        } else if (arguments.length >= 1) {
+        
+        if (arguments.length <= 0)
+            return null;
+        if (arguments.length > 0
+                && arguments[0] == null)
+            return null;
+        if (arguments.length > 1
+                && arguments[1] == null)
+            return null;        
+
+        if (arguments.length > 1
+                && arguments[0] != null
+                && typeof arguments[0] !== "string")
+            throw new TypeError("Invalid root: " + typeof arguments[0]);
+        var root = "#";
+        if (arguments.length > 1) {
             root = arguments[0];
             try {root = Path.normalize(root);
             } catch (exception) {
-                throw new TypeError("Invalid root" + (String(root).trim() ? ": " + root : ""));
-            }
-            path = arguments[1];
+                root = (root || "").trim();
+                throw new TypeError("Invalid root" + (root ? ": " + root : ""));
+            }        
         }
         
-        if (root == null
-                || root.match(/^(#+)*$/))
-            root = "#";
-
-        if (path == null)
-            return null;
-        
-        if (typeof path === "string"
+        if (arguments.length > 1
+                && arguments[1] != null
+                && typeof arguments[1] !== "string")
+            throw new TypeError("Invalid path: " + typeof arguments[1]);
+        if (arguments.length > 0
+                && arguments[0] != null
+                && typeof arguments[0] !== "string")
+            throw new TypeError("Invalid path: " + typeof arguments[0]);
+        var path = "";
+        if (arguments.length == 1)
+            path = arguments[0];
+        if (arguments.length == 1
                 && path.match(Path.PATTERN_URL))
             path = path.replace(Path.PATTERN_URL, "$1");
+        else if (arguments.length > 1)
+            path = arguments[1];
+        path = (path || "").trim();
         
-        if (typeof path !== "string"
-                || !path.match(Path.PATTERN_PATH))
+        if (!path.match(Path.PATTERN_PATH))
             throw new TypeError("Invalid path" + (String(path).trim() ? ": " + path : ""));
         
-        path = path.toLowerCase();
+        path = path.replace(/([^#])#$/, "$1");
+        path = path.replace(/^([^#])/, "#$1");
         
         //Functional paths are detected.
         if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
             return "###";
 
-        //Paths to the current root are detected.
-        if (path.length == 0)
-            return root;
-        
-        //Relative paths are extended with the root.
-        if (path.match(/^[^#].*$/))
-            path = root + "#" + path;
-        if (path.match(/^#{2}.*$/))
-            path = root + path;
+        path = root + path;
+        path = path.toLowerCase();
         
         //Path will be balanced
         var pattern = /#[^#]+#{2}/;
@@ -398,11 +408,19 @@ if (typeof SiteMap === "undefined") {
         //Invalid paths are shortened when searching for a valid partial path.
         //Theoretically, the shortening must end automatically with the root or
         //the current path.
-        try {path = Path.normalize(SiteMap.location, path);
+        
+        var locate = (path) => {
+            var variants = [SiteMap.location, path];
+            if (path.match(/(^#[^\#].*$)|(^#$)/))
+                variants.shift();
+            return variants;
+        };
+        
+        try {path = Path.normalize(...locate(path));
         } catch (exception) {
             while (true) {
                 path = path.replace(/(^[^#]+$)|(#[^#]*$)/, "");
-                try {path = Path.normalize(SiteMap.location, path);
+                try {path = Path.normalize(...locate(path));
                 } catch (exception) {
                     continue;
                 }

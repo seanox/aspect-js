@@ -57,6 +57,8 @@
   CR: Composite Hardening: Added optional hardening from markup
       Hardening makes it difficult to manipulate the attributes in the markup.
   CR: Composite Include: Modules with a condition are only reloaded if the condition is true
+  CR: MVC Path: Support paths with beginning numbers
+      Any word character (alphanumeric character) and underscore can be used.
   CR: MVC: Omission of autofocus, since the use scrollIntoView can be too individual
       The own implementation is very simple and much flexible.
       window.addEventListener("hashchange", (event) => {
