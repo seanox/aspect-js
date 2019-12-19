@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191213
+ *  Composite 1.2.0 20191219
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191213
+ *  @version 1.2.0 20191219
  */
 if (typeof Composite === "undefined") {
     
@@ -629,7 +629,7 @@ if (typeof Composite === "undefined") {
     XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(...variants) {
 
-        var callback = function() {
+        var callback = () => {
             if (arguments.length > 0) {
                 var event = arguments[0];
                 if (event.type == "loadstart")
@@ -1152,7 +1152,7 @@ if (typeof Composite === "undefined") {
                             //property value. Other targets are ignored.
                             //The synchronization expects a positive validation,
                             //otherwise it will not be executed.
-                            var accept = function(property) {
+                            var accept = (property) => {
                                 var type = typeof property;
                                 if (typeof property === "undefined")
                                     return false;
@@ -1504,7 +1504,7 @@ if (typeof Composite === "undefined") {
                     changes.push(entry); 
                 }
             });
-            var scanning = function(element) {
+            var scanning = (element) => {
                 if (!(element instanceof Element))
                     return;
                 var serial = element.ordinal();
@@ -2144,7 +2144,7 @@ if (typeof Composite === "undefined") {
             //require the complete composite hierarchy to determine the
             //namespace of the models. The return value is a DIV structure that
             //corresponds to the composite hierarchy.
-            var imitate = function(element) {
+            var imitate = (element) => {
                 if (!(element instanceof Element))
                     return null;
                 var container = document.createElement("div");
@@ -2166,7 +2166,7 @@ if (typeof Composite === "undefined") {
             //Internal method for docking models.
             //Only composites are mounted based on their model.
             //This excludes the placeholders (are text nodes) of conditions.
-            var dock = function(model) {
+            var dock = (model) => {
                 if (typeof model !== "string"
                         || Composite.models.has(model))
                     return;
@@ -2685,7 +2685,7 @@ if (typeof Composite === "undefined") {
         Composite.render.cache[context + ".composite"] = null;
         var request = new XMLHttpRequest();
         request.overrideMimeType("text/plain");
-        request.onreadystatechange = function() {
+        request.onreadystatechange = () => {
             if (request.readyState != 4
                     || request.status == "404")
                 return;
@@ -2880,7 +2880,7 @@ if (typeof Composite === "undefined") {
                 //method is called if an object binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
-                        var cleanup = function(node) {
+                        var cleanup = (node) => {
                             //Clean up all the child elements first.
                             if (node.childNodes) {
                                 Array.from(node.childNodes).forEach((node) => {
@@ -3097,7 +3097,7 @@ if (typeof Expression === "undefined") {
         
         expression = expression.replace(/(^\n+)|(\n+$)/g, "");
 
-        var collate = function(word) {
+        var collate = (word) => {
             if (word.type == Expression.TYPE_TEXT)
                 cascade.text.push(word);
             else if (word.type == Expression.TYPE_EXPRESSION)
@@ -3234,7 +3234,7 @@ if (typeof Expression === "undefined") {
         //Create a flat sequence from the cascade.
         
         var words = [];
-        var merge = function(word) {
+        var merge = (word) => {
             if (Array.isArray(word))
                 word.forEach((entry) => {
                     merge(entry);    

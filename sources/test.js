@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191213
+ *  Test 1.1.0 20191219
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191213
+ *  @version 1.1.0 20191219
  */
 if (typeof Test === "undefined") {
     
@@ -197,7 +197,7 @@ if (typeof Test === "undefined") {
             if (typeof Test.worker === "object")
                 Test.worker.status = event; 
             
-            var invoke = function(context, event, status) {
+            var invoke = (context, event, status) => {
                 if (typeof context.Test.worker === "object"
                         && typeof context.Test.worker.monitor === "object"
                         && typeof context.Test.worker.monitor[event] === "function")
@@ -414,7 +414,7 @@ if (typeof Test === "undefined") {
                 return;
             }
             
-            var numerical = function(number, text) {
+            var numerical = (number, text) => {
                 return number + " " + text + (number != 1 ? "s" : "");
             };
 

@@ -469,7 +469,7 @@ if (typeof SiteMap === "undefined") {
         if (arguments.length <= 0)
             path = SiteMap.location;
 
-        var canonical = function(meta) {
+        var canonical = (meta) => {
             if (!meta.facet)
                 return meta.path;
             if (meta.path.endsWith("#"))

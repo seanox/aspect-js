@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.2.0 20191217
+ *  Messages 1.2.0 20191219
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191217
+ *  @version 1.2.0 20191219
  */
 if (typeof Messages === "undefined") {
     
@@ -88,7 +88,7 @@ if (typeof Messages === "undefined") {
         //To initialize, the DataSource.localize method must be overwritten and
         //loading of the key-value pairs is embedded.
         var localize = DataSource.localize;
-        DataSource.localize = function(locale) {
+        DataSource.localize = (locale) => {
             DataSource.localize$origin(locale);
 
             window["Messages"] = {};
