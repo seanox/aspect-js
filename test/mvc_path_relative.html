@@ -104,7 +104,8 @@
             targets.push("D #xxx#y");
             targets.push("D #xxx");
             
-            window.location.href = "#x" + timing;
+            targets.push("D #");
+            
             window.location.href = "#";
             window.setTimeout(autoforward, 250);  
         });
@@ -246,6 +247,9 @@ H: ["#","#a#b#c#d","#a#b","#xxx","#xxx#y"]
 D: #xxx
 X: http://.../mvc_path_relative.html#xxx
 H: ["#","#a#b#c#d","#a#b","#xxx"]
+D: #
+X: http://.../mvc_path_relative.html#
+H: ["#"]
     </script>
   </head>
   <body>
