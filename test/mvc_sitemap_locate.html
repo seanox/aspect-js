@@ -26,54 +26,54 @@
             "#legal": ["terms", "privacy"],
             "#error": null
         });
+        
+        var tests = [
+            "#",
+            "#project",
+            "#projects",
+            "#projects#xyz",
+            "#projects#devwex",
+            "#projects#devwexx",
+            "#projects#devwex#xyz",
+            "#projects#devwex#description",      
+            "#projects#devwex#description#features",
+            "#projects#devwex#description#features#licence",
+            "#projects#devwex#features",
+            "#projects#devwex#licence",
+            "#projects#devwex#licence#x",
+            "#projects#devwex#licence#x#y",
+            "#projects#devwex#licence#x#y#z",
+            "#projects#devwex#licence##x",
+            "#projects#devwex#licence###x###y",
+            "#projects#devwex#licence####x####y####z",
+            "#projects#devwex#licence#1#2#3",
+            "#projects#review",      
+            "#projects#review#description",      
+            "#projects#review#features",      
+            "#projects#review#licence",         
+            "#projects#wotexx",      
+            "#projects#wotexx#description",      
+            "#projects#wotexx#features",      
+            "#projects#wotexx#licence",     
+            "#projects#wotexx#licence#",     
+            "#projects#wotexx#licence##",     
+            "#projects#wotexx#licence###",     
+            "#projects#wotexx#licence####",
+            "#projects#aspect-js",
+            "#projects#aspect-js#",
+            "#projects#aspect-js#1",
+            "#projects#aspect-js#1#2",
+            "#projects#aspect-js#1##2",
+            "#x",
+            "#x#",
+            "#x##",
+            "#x###",
+            "#x####",
+            "#"            
+        ];         
   
         Test.create({test() {
-            
-            var tests = [
-                "#",
-                "#project",
-                "#projects",
-                "#projects#xyz",
-                "#projects#devwex",
-                "#projects#devwexx",
-                "#projects#devwex#xyz",
-                "#projects#devwex#description",      
-                "#projects#devwex#description#features",
-                "#projects#devwex#description#features#licence",
-                "#projects#devwex#features",
-                "#projects#devwex#licence",
-                "#projects#devwex#licence#x",
-                "#projects#devwex#licence#x#y",
-                "#projects#devwex#licence#x#y#z",
-                "#projects#devwex#licence##x",
-                "#projects#devwex#licence###x###y",
-                "#projects#devwex#licence####x####y####z",
-                "#projects#devwex#licence#1#2#3",
-                "#projects#review",      
-                "#projects#review#description",      
-                "#projects#review#features",      
-                "#projects#review#licence",         
-                "#projects#wotexx",      
-                "#projects#wotexx#description",      
-                "#projects#wotexx#features",      
-                "#projects#wotexx#licence",     
-                "#projects#wotexx#licence#",     
-                "#projects#wotexx#licence##",     
-                "#projects#wotexx#licence###",     
-                "#projects#wotexx#licence####",
-                "#projects#aspect-js",
-                "#projects#aspect-js#",
-                "#projects#aspect-js#1",
-                "#projects#aspect-js#1#2",
-                "#projects#aspect-js#1##2",
-                "#x",
-                "#x#",
-                "#x##",
-                "#x###",
-                "#x####",
-                "#"            
-            ];  
-            
+            document.location.href = "#";
             document.body.innerHTML = "";
             tests.forEach((test, index, array) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
@@ -82,6 +82,7 @@
                 document.body.innerHTML += "A: " + test
                         + "\r\nB: " + SiteMap.locate(test);
             });
+            document.body.innerHTML += "\r\n-----------\r\n";
             tests.forEach((test, index, array) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
                 if (document.body.innerHTML)
@@ -89,12 +90,38 @@
                 document.body.innerHTML += "A: " + test
                         + "\r\nB: " + SiteMap.locate(test, true);
             });            
-            Assert.assertSameTo("script[type='text/test']", document.body.textContent);
+            Assert.assertSameTo("script[type='text/test1']", document.body.textContent);
         }});
+        
+        Test.create({test() {
+            SiteMap.forward("#projects");
+            document.body.innerHTML = "";
+            var filter = /^#projects#/;
+            tests.forEach((test, index, array) => {
+                document.body.innerHTML = document.body.innerHTML.trim();
+                if (document.body.innerHTML)
+                    document.body.innerHTML += "\r\n";
+                if (test.match(filter))
+                    test = test.replace(filter, "");
+                document.body.innerHTML += "A: " + test
+                        + "\r\nB: " + SiteMap.locate(test);
+            });
+            document.body.innerHTML += "\r\n-----------\r\n";
+            tests.forEach((test, index, array) => {
+                document.body.innerHTML = document.body.innerHTML.trim();
+                if (document.body.innerHTML)
+                    document.body.innerHTML += "\r\n";
+                if (test.match(filter))
+                    test = test.replace(filter, "");
+                document.body.innerHTML += "A: " + test
+                        + "\r\nB: " + SiteMap.locate(test, true);
+            });            
+            Assert.assertSameTo("script[type='text/test2']", document.body.textContent);
+        }});        
         
         Test.start({auto:true});
     </script>
-    <script type="text/test">
+    <script type="text/test1">
 A: #
 B: #
 A: #project
@@ -179,6 +206,7 @@ A: #x####
 B: #
 A: #
 B: #
+-----------
 A: #
 B: #
 A: #project
@@ -250,6 +278,177 @@ B: #projects#aspect-js
 A: #projects#aspect-js#1#2
 B: #projects#aspect-js
 A: #projects#aspect-js#1##2
+B: #projects#aspect-js
+A: #x
+B: #
+A: #x#
+B: #
+A: #x##
+B: #
+A: #x###
+B: #
+A: #x####
+B: #
+A: #
+B: #
+    </script>
+    <script type="text/test2">
+A: #
+B: #
+A: #project
+B: #
+A: #projects
+B: #projects
+A: xyz
+B: #projects
+A: devwex
+B: #projects#devwex
+A: devwexx
+B: #projects
+A: devwex#xyz
+B: #projects#devwex
+A: devwex#description
+B: #projects#devwex#description
+A: devwex#description#features
+B: #projects#devwex#description
+A: devwex#description#features#licence
+B: #projects#devwex#description
+A: devwex#features
+B: #projects#devwex#features
+A: devwex#licence
+B: #projects#devwex#licence
+A: devwex#licence#x
+B: #projects#devwex#licence
+A: devwex#licence#x#y
+B: #projects#devwex#licence
+A: devwex#licence#x#y#z
+B: #projects#devwex#licence
+A: devwex#licence##x
+B: #projects#devwex
+A: devwex#licence###x###y
+B: #
+A: devwex#licence####x####y####z
+B: #
+A: devwex#licence#1#2#3
+B: #projects#devwex#licence
+A: review
+B: #projects#review
+A: review#description
+B: #projects#review#description
+A: review#features
+B: #projects#review#features
+A: review#licence
+B: #projects#review#licence
+A: wotexx
+B: #projects#wotexx
+A: wotexx#description
+B: #projects#wotexx#description
+A: wotexx#features
+B: #projects#wotexx#features
+A: wotexx#licence
+B: #projects#wotexx#licence
+A: wotexx#licence#
+B: #projects#wotexx#licence
+A: wotexx#licence##
+B: #projects#wotexx
+A: wotexx#licence###
+B: #projects
+A: wotexx#licence####
+B: #
+A: aspect-js
+B: #projects#aspect-js
+A: aspect-js#
+B: #projects#aspect-js
+A: aspect-js#1
+B: #projects#aspect-js
+A: aspect-js#1#2
+B: #projects#aspect-js
+A: aspect-js#1##2
+B: #projects#aspect-js
+A: #x
+B: #
+A: #x#
+B: #
+A: #x##
+B: #
+A: #x###
+B: #
+A: #x####
+B: #
+A: #
+B: #
+-----------
+A: #
+B: #
+A: #project
+B: #
+A: #projects
+B: #
+A: xyz
+B: #
+A: devwex
+B: #projects#devwex
+A: devwexx
+B: #
+A: devwex#xyz
+B: #projects#devwex
+A: devwex#description
+B: #projects#devwex
+A: devwex#description#features
+B: #projects#devwex
+A: devwex#description#features#licence
+B: #projects#devwex
+A: devwex#features
+B: #projects#devwex
+A: devwex#licence
+B: #projects#devwex
+A: devwex#licence#x
+B: #projects#devwex
+A: devwex#licence#x#y
+B: #projects#devwex
+A: devwex#licence#x#y#z
+B: #projects#devwex
+A: devwex#licence##x
+B: #projects#devwex
+A: devwex#licence###x###y
+B: #
+A: devwex#licence####x####y####z
+B: #
+A: devwex#licence#1#2#3
+B: #projects#devwex
+A: review
+B: #projects#review
+A: review#description
+B: #projects#review
+A: review#features
+B: #projects#review
+A: review#licence
+B: #projects#review
+A: wotexx
+B: #projects#wotexx
+A: wotexx#description
+B: #projects#wotexx
+A: wotexx#features
+B: #projects#wotexx
+A: wotexx#licence
+B: #projects#wotexx
+A: wotexx#licence#
+B: #projects#wotexx
+A: wotexx#licence##
+B: #projects#wotexx
+A: wotexx#licence###
+B: #
+A: wotexx#licence####
+B: #
+A: aspect-js
+B: #projects#aspect-js
+A: aspect-js#
+B: #projects#aspect-js
+A: aspect-js#1
+B: #projects#aspect-js
+A: aspect-js#1#2
+B: #projects#aspect-js
+A: aspect-js#1##2
 B: #projects#aspect-js
 A: #x
 B: #

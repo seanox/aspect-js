@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191217
+ *  MVC 1.1.0 20191220
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191219
+ *  @version 1.1.0 20191220
  */
 if (typeof Path === "undefined") {
     
@@ -311,7 +311,7 @@ if (typeof SiteMap === "undefined") {
          */        
         get location() {
             if (SiteMap.history.size <= 0)
-                return "#";
+                return window.location.hash || "#";
             var history = Array.from(SiteMap.history);
             return history[history.length -1];
         },
@@ -448,11 +448,36 @@ if (typeof SiteMap === "undefined") {
      *  All paths are checked against the SiteMap. Invalid paths are searched
      *  for a valid partial path. To do this, the path is shortened piece by
      *  piece. If no valid partial path can be found, the root is the target.
+     *  
+     *  In difference to the forward method, navigate is not executed directly,
+     *  instead the change is triggered by the location hash.
+     *  
      *  @param path (URL is also supported, only the hash is used here and the
      *      URL itself is ignored)
      */    
     SiteMap.navigate = function(path) {
         window.location.hash = SiteMap.locate(path);
+    };
+
+    /**
+     *  Forwards to the given path, if it exists in the SiteMap.
+     *  All paths are checked against the SiteMap. Invalid paths are searched
+     *  for a valid partial path. To do this, the path is shortened piece by
+     *  piece. If no valid partial path can be found, the root is the target.
+     *  
+     *  In difference to the navigate method, the forwarding is executed
+     *  directly, instead the navigate method triggers asynchronous forwarding
+     *  by changing the location hash.
+     *  
+     *  @param path (URL is also supported, only the hash is used here and the
+     *      URL itself is ignored)
+     */  
+    SiteMap.forward = function(path) {
+        
+        var event = document.createEvent("HTMLEvents");
+        event.initEvent("hashchange", false, true);
+        event.newURL = path;
+        window.dispatchEvent(event);
     };
     
     /**
@@ -830,25 +855,18 @@ if (typeof SiteMap === "undefined") {
         //trigger the hashchange event. Therefore, this must be checked with a
         //time delay and, if necessary, triggered manually.
         
-        var forward = function(target) {
-            var event = document.createEvent("HTMLEvents");
-            event.initEvent("hashchange", false, true);
-            event.newURL = target;
-            window.dispatchEvent(event);
-        };
-
         if (source != target) {
             SiteMap.navigate(target);
-            Composite.asynchron((forward) => {
+            Composite.asynchron(() => {
                 var source = window.location.hash;
                 var target = SiteMap.locate(source);
                 if (!source
                         && window.location.href.match(/[^#]#$/))
                     source = "#";
                 if (source != target)
-                    forward(target);
-            }, forward);
-        } else forward(target);
+                    SiteMap.forward(target);
+            });
+        } else SiteMap.forward(target);
     });
     
     /**
@@ -925,7 +943,7 @@ if (typeof SiteMap === "undefined") {
             render = target;
         else if (target.startsWith(source))
             render = source;
-        render = render.match(/((?:#[^#]+)|(?:^))#*$/)[0];
+        render = render.match(/((?:#[^#]+)|(?:^))#*$/);
         if (render && render[1])
             Composite.render(render[1]);
         else Composite.render(document.body);
