@@ -356,12 +356,6 @@ if (typeof SiteMap === "undefined") {
     });
     
     /**
-     *  Internal counter of the path changes, is actually only used for
-     *  initiation/detection of the initial rendering.
-     */
-    SiteMap.ticks;
-    
-    /**
      *  Checks a path using existing/registered permit methods.
      *  The path is only allowed if all permit methods confirm the check with
      *  the return value true.
@@ -837,36 +831,9 @@ if (typeof SiteMap === "undefined") {
             }
         });
 
-        //Without a SiteMap the page will be rendered initially after loading.
-        //Then the page has to take control.
-        if (SiteMap.paths.size <= 0) {
-            Composite.render(document.body);
-            return;
-        }
-
-        var source = window.location.hash;
-        var target = SiteMap.locate(source);
-
-        if (!source
-                && window.location.href.match(/[^#]#$/))
-            source = "#";
-
-        //Some browsers have problems with forwarding from / to /# and do not
-        //trigger the hashchange event. Therefore, this must be checked with a
-        //time delay and, if necessary, triggered manually.
-        
-        if (source != target) {
-            SiteMap.navigate(target);
-            Composite.asynchron(() => {
-                var source = window.location.hash;
-                var target = SiteMap.locate(source);
-                if (!source
-                        && window.location.href.match(/[^#]#$/))
-                    source = "#";
-                if (source != target)
-                    SiteMap.forward(target);
-            });
-        } else SiteMap.forward(target);
+        //The initial rendering is started by the direct call of the hashchange
+        //event, thus without trigger.
+        SiteMap.forward(window.location.hash || "#");
     });
     
     /**
@@ -877,21 +844,30 @@ if (typeof SiteMap === "undefined") {
      */
     window.addEventListener("hashchange", (event) => {
         
-        //Without a SiteMap no automatic rendering can be initiated.
-        if (SiteMap.paths.size <= 0)
+        //Determine if it is the initial rendering.
+        //If this is the case, the history is empty.
+        //In case of the initial rendering:
+        //    - SiteMap.location must be set finally
+        //    - window.location.hash must be set finally
+        //    - Body must be rendered
+        var initial = SiteMap.history.size <= 0;
+        
+        //Without a SiteMap no partiell rendering can be initiated.
+        if (SiteMap.paths.size <= 0) {
+            if (initial)
+                Composite.render(document.body);
             return;
-            
+        }
+
         var source = Path.normalize(SiteMap.location);
         var locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
         var target = SiteMap.locate(locate);
-        
-        //Discrepancies in the path cause a forwarding to a valid path.
-        if (locate != target) {
-            SiteMap.navigate(target);
-            return;
-        }        
-        
-        SiteMap.ticks = (SiteMap.ticks || 0) +1;
+
+        //Initially, no function path is useful, and so in this case will be
+        //forwarded to the root.
+        if (target.match(Path.PATTERN_PATH_FUNCTIONAL)
+                && initial)
+            target = "#";
         
         //For functional interaction paths, the old path must be restored.
         //Rendering is not necessary because the face/facet does not change or
@@ -903,6 +879,12 @@ if (typeof SiteMap === "undefined") {
             window.scrollTo(x, y);
             return;
         }
+
+        //If window.location.hash, SiteMap.location and new URL match, no update
+        //or rendering is required.
+        if (target == window.location.hash
+                && target == SiteMap.location)
+            return;
         
         //If the permission is not confirmed, will be forwarded to the next
         //higher known/permitted path, based on the requested path.
@@ -911,19 +893,36 @@ if (typeof SiteMap === "undefined") {
         var forward = SiteMap.permit(target);
         if (forward !== true) {
             if (typeof forward === "string")
-                SiteMap.navigate(forward);
-            else SiteMap.navigate(target != "#" ? target + "##" : "#");
+                SiteMap.forward(forward);
+            else SiteMap.forward(target != "#" ? target + "##" : "#");
             return;
         }
         
+        //The locations are updated synchronously.
+        //The possible triggering of the hashchange-event can be ignored,
+        //because SiteMap.location and window.location.hash are the same and
+        //therefore no update or rendering is triggered.
         SiteMap.location = target;
+        window.location.replace(target);
         
-        source = SiteMap.lookup(source);
-        target = SiteMap.lookup(target);
+        var lookup = (path) => {
+            while (path && path.length > 0) {
+                var lookup = SiteMap.lookup(path);
+                if (lookup)
+                    return lookup;
+                path = Path.normalize(path + "##");
+            }
+        };
+        
+        //Source and target for rendering are determined.
+        //With SiteMap filters, the current path does not have to correspond to
+        //the current face/facet and may have to be determined via the parent.
+        source = lookup(source);
+        target = lookup(target);        
         
         //Only if the face is changed or initial, a rendering is necessary.
         if (source.face == target.face
-                && SiteMap.ticks > 1)
+                && !initial)
             return;
         
         source = source.face;
@@ -938,13 +937,14 @@ if (typeof SiteMap === "undefined") {
         //  old: #a#b#c#d#e#f  new: #a#b#c#d      -> render #d
         //  old: #a#b#c#d      new: #a#b#c#d#e#f  -> render #d
         //  old: #a#b#c#d      new: #e#f          -> render # (body)
+        //Initially always the body is rendered.
         var render = "#";
         if (source.startsWith(target))
             render = target;
         else if (target.startsWith(source))
             render = source;
         render = render.match(/((?:#[^#]+)|(?:^))#*$/);
-        if (render && render[1])
+        if (render && render[1] && !initial)
             Composite.render(render[1]);
         else Composite.render(document.body);
     });
