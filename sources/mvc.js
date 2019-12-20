@@ -884,7 +884,8 @@ if (typeof SiteMap === "undefined") {
         //If window.location.hash, SiteMap.location and new URL match, no update
         //or rendering is required.
         if (target == window.location.hash
-                && target == SiteMap.location)
+                && target == SiteMap.location
+                && !initial)
             return;
         
         //If the permission is not confirmed, will be forwarded to the next
