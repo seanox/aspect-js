@@ -826,7 +826,8 @@ if (typeof SiteMap === "undefined") {
                 var source = SiteMap.lookup(Path.normalize(SiteMap.location));
                 if (source && target
                         && source.face == target.face
-                        && source.facet == target.facet)
+                        && source.facet == target.facet
+                        && typeof target.focus === "function")
                     target.focus();
             }
         });
@@ -919,11 +920,6 @@ if (typeof SiteMap === "undefined") {
         //the current face/facet and may have to be determined via the parent.
         source = lookup(source);
         target = lookup(target);        
-        
-        //Only if the face is changed or initial, a rendering is necessary.
-        if (source.face == target.face
-                && !initial)
-            return;
         
         source = source.face;
         if (!source.endsWith("#"))
