@@ -139,7 +139,8 @@ CR: Composite Release: Addition of the CSS rule when the page is loaded
 CR: Composite Hardening: Added optional hardening from markup  
 CR: Composite Include: Modules with a condition are only reloaded if the condition is true  
 CR: MVC Path: Support paths with beginning numbers  
-CR: MVC: Omission of autofocus, since the use scrollIntoView can be too individual  
+CR: MVC SiteMap: Omission of autofocus, since the use scrollIntoView can be too individual  
+CR: MVC SiteMap: Added the forward method  
 CR: DataSource Locales: As standard marked are at the beginning  
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
 CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs  
