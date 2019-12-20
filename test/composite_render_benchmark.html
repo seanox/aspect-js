@@ -30,7 +30,8 @@
   <body>
     {{x:10}}
     {{s:0}}
-    <div iterate="{{a:new Array(x)}}">
+    Info: Output is hidden
+    <div iterate="{{a:new Array(x)}}" style="display:none;">
       A:{{a.index}}
       {{s:s +1}}
       <div iterate="{{b:new Array(x)}}">
