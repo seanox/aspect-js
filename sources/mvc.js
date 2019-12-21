@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191220
+ *  MVC 1.1.0 20191221
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191220
+ *  @version 1.1.0 20191221
  */
 if (typeof Path === "undefined") {
     
@@ -295,12 +295,29 @@ if (typeof SiteMap === "undefined") {
      *  and/or redirected/forwarded with own logic. 
      */
     SiteMap = {
-            
-        /** Pattern for a valid face path. */
-        get PATTERN_PATH() {return /^(#([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)*)+$/},
-
-        /** Pattern for a valid face path with optional facets. */
-        get PATTERN_PATH_FACET() {return /^([a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)((#[a-z](?:(?:\w+)|(?:[\w\-]+\w+))*)+)*$/},
+           
+        /** 
+         *  Pattern for a valid face path:
+         *      - Paths and path segments must always begin with a letter
+         *      - Allowed are the characters a-z _ 0-9 and -
+         *      - Character - always embedded between the characters: a-z _ 0-9,
+         *        it can not be used at the beginning and end
+         *      - Character # is used to separate the path segments
+         *      - After the separator # at least one letter is expected
+         *      - Only # as root path is also allowed
+         */
+        get PATTERN_PATH_FACE() {return /(^((#[a-z][\-\w]+\w)|(#[a-z]\w*))+$)|(^#$)/},
+        
+        /** 
+         *  Pattern for a valid facet path:
+         *      - Paths and path segments must always begin with a letter
+         *      - Allowed are the characters a-z _ 0-9 and -
+         *      - Character - always embedded between the characters: a-z _ 0-9,
+         *        it can not be used at the beginning and end
+         *      - Character # is used to separate the path segments
+         *      - After the separator # at least one letter is expected 
+         */
+        get PATTERN_PATH_FACET() {return /^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*$/},
         
         /**
          *  Primarily, the root is always used when loading the page, since the
@@ -687,14 +704,14 @@ if (typeof SiteMap === "undefined") {
         var paths = new Map();
         SiteMap.paths.forEach((value, key, map) => {
             if (typeof key === "string"
-                    && key.match(SiteMap.PATTERN_PATH))
+                    && key.match(SiteMap.PATTERN_PATH_FACE))
             paths.set(key, value);
         });
 
         var facets = new Map();
         SiteMap.facets.forEach((value, key, map) => {
             if (typeof key === "string"
-                    && key.match(SiteMap.PATTERN_PATH))
+                    && key.match(SiteMap.PATTERN_PATH_FACET))
                 facets.set(key, value);
         });
 
@@ -703,7 +720,7 @@ if (typeof SiteMap === "undefined") {
             //A map entry is based on a path (datatype string beginning with #)
             //and an array of String or null as value. 
             if (typeof key !== "string"
-                    || !key.match(SiteMap.PATTERN_PATH))
+                    || !key.match(SiteMap.PATTERN_PATH_FACE))
                 return;
             var value = map[key];
             if (value != null
@@ -844,7 +861,7 @@ if (typeof SiteMap === "undefined") {
      *  organizes partial rendering.
      */
     window.addEventListener("hashchange", (event) => {
-        
+
         //Determine if it is the initial rendering.
         //If this is the case, the history is empty.
         //In case of the initial rendering:
@@ -859,7 +876,7 @@ if (typeof SiteMap === "undefined") {
                 Composite.render(document.body);
             return;
         }
-
+        
         var source = Path.normalize(SiteMap.location);
         var locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
         var target = SiteMap.locate(locate);
@@ -917,8 +934,6 @@ if (typeof SiteMap === "undefined") {
         };
         
         //Source and target for rendering are determined.
-        //With SiteMap filters, the current path does not have to correspond to
-        //the current face/facet and may have to be determined via the parent.
         source = lookup(source);
         target = lookup(target);        
         
