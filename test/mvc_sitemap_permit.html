@@ -31,33 +31,11 @@
             return false;
         });
       
-        var timing = new Date().getTime();
-        var meta = {};
-        meta["#x" + timing] = null;
-        SiteMap.customize(meta);      
-        
         var logging = function(message) {
             document.body.innerHTML += "\r\n" + message;
             document.body.innerHTML = document.body.innerHTML.trim();
         };
         
-        var autoforward = function() {
-            if (targets.length <= 0)
-                return;
-            var target = targets.shift();
-            logging("A: " + target);
-            window.location.href = target;
-            if (targets.length <= 0) {
-                window.setTimeout((target) => {
-                    Test.start(); 
-                }, 50);
-            } else {
-                window.setTimeout((target) => {
-                    autoforward(); 
-                }, 25);
-            }
-        };
-  
         var targets;
         window.addEventListener("load", (event) => {
             targets = [];
@@ -82,20 +60,32 @@
             targets.push("#projects#wotexx#features");      
             targets.push("#projects#wotexx#licence");
             targets.push("#projects#test#description");
-            
-            window.location.href = "#x" + timing;
-            window.location.href = "#";
-            window.setTimeout(autoforward, 250);          
+            targets.push("#");
+
+            Composite.asynchron(() => {
+                document.body.innerHTML = "";
+                var target = targets.shift();
+                logging("\r\n" + target);
+                window.location.href = target;
+            });       
         });
   
+        var timeout;
         window.addEventListener("hashchange", (event) => {
-            if (event.newURL.match(/^\w+:\/\//))
-                logging("B: " + event.newURL.replace(/\d+$/, "0000"));
-        });
+            if (timeout)
+                window.clearTimeout(timeout);
+            logging("T: " + event.newURL);
+            timeout = window.setTimeout(() => {
+                if (targets.length > 0) {
+                    var target = targets.shift();
+                    logging("\r\n" + target);
+                    window.location.href = target;
+                } else Test.start();
+            }, 50);
+        });        
         
         Test.create({test() {
             var content = document.body.innerHTML;
-            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
             content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
             content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");            
             document.body.textContent = content;
@@ -112,55 +102,79 @@
         }});      
     </script>
     <script type="text/test">
-A: #
-A: #project
-B: http://.../mvc_sitemap_permit.html#project
-B: http://.../mvc_sitemap_permit.html#
-A: #projects
-B: http://.../mvc_sitemap_permit.html#projects
-A: #projects#xyz
-B: http://.../mvc_sitemap_permit.html#projects#xyz
-B: http://.../mvc_sitemap_permit.html#projects
-A: #projects#devwex
-B: http://.../mvc_sitemap_permit.html#projects#devwex
-A: #projects#devwexx
-B: http://.../mvc_sitemap_permit.html#projects#devwexx
-B: http://.../mvc_sitemap_permit.html#projects
-A: #projects#devwex#xyz
-B: http://.../mvc_sitemap_permit.html#projects#devwex#xyz
-B: http://.../mvc_sitemap_permit.html#projects#devwex
-A: #projects#devwex#description
-B: http://.../mvc_sitemap_permit.html#projects#devwex#description
-A: #projects#devwex#description#features
-B: http://.../mvc_sitemap_permit.html#projects#devwex#description#features
-B: http://.../mvc_sitemap_permit.html#projects#devwex#description
-A: #projects#devwex#description#features#licence
-B: http://.../mvc_sitemap_permit.html#projects#devwex#description#features#licence
-B: http://.../mvc_sitemap_permit.html#projects#devwex#description
-A: #projects#devwex#features
-B: http://.../mvc_sitemap_permit.html#projects#devwex#features
-A: #projects#devwex#licence
-B: http://.../mvc_sitemap_permit.html#projects#devwex#licence
-A: #projects#review
-B: http://.../mvc_sitemap_permit.html#projects#review
-A: #projects#review#description
-B: http://.../mvc_sitemap_permit.html#projects#review#description
-A: #projects#review#features
-B: http://.../mvc_sitemap_permit.html#projects#review#features
-A: #projects#review#licence
-B: http://.../mvc_sitemap_permit.html#projects#review#licence
-A: #projects#wotexx
-B: http://.../mvc_sitemap_permit.html#projects#wotexx
-A: #projects#wotexx#description
-B: http://.../mvc_sitemap_permit.html#projects#wotexx#description
-A: #projects#wotexx#features
-B: http://.../mvc_sitemap_permit.html#projects#wotexx#features
-A: #projects#wotexx#licence
-B: http://.../mvc_sitemap_permit.html#projects#wotexx#licence
-A: #projects#test#description
-B: http://.../mvc_sitemap_permit.html#projects#test#description
-B: http://.../mvc_sitemap_permit.html#projects#test
-B: http://.../mvc_sitemap_permit.html#projects
+#
+
+#project
+T: http://.../mvc_sitemap_permit.html#project
+T: http://.../mvc_sitemap_permit.html#
+
+#projects
+T: http://.../mvc_sitemap_permit.html#projects
+
+#projects#xyz
+T: http://.../mvc_sitemap_permit.html#projects#xyz
+T: http://.../mvc_sitemap_permit.html#projects
+
+#projects#devwex
+T: http://.../mvc_sitemap_permit.html#projects#devwex
+
+#projects#devwexx
+T: http://.../mvc_sitemap_permit.html#projects#devwexx
+T: http://.../mvc_sitemap_permit.html#projects
+
+#projects#devwex#xyz
+T: http://.../mvc_sitemap_permit.html#projects#devwex#xyz
+T: http://.../mvc_sitemap_permit.html#projects#devwex
+
+#projects#devwex#description
+T: http://.../mvc_sitemap_permit.html#projects#devwex#description
+
+#projects#devwex#description#features
+T: http://.../mvc_sitemap_permit.html#projects#devwex#description#features
+T: http://.../mvc_sitemap_permit.html#projects#devwex#description
+
+#projects#devwex#description#features#licence
+T: http://.../mvc_sitemap_permit.html#projects#devwex#description#features#licence
+T: http://.../mvc_sitemap_permit.html#projects#devwex#description
+
+#projects#devwex#features
+T: http://.../mvc_sitemap_permit.html#projects#devwex#features
+
+#projects#devwex#licence
+T: http://.../mvc_sitemap_permit.html#projects#devwex#licence
+
+#projects#review
+T: http://.../mvc_sitemap_permit.html#projects#review
+
+#projects#review#description
+T: http://.../mvc_sitemap_permit.html#projects#review#description
+
+#projects#review#features
+T: http://.../mvc_sitemap_permit.html#projects#review#features
+
+#projects#review#licence
+T: http://.../mvc_sitemap_permit.html#projects#review#licence
+
+#projects#wotexx
+T: http://.../mvc_sitemap_permit.html#projects#wotexx
+
+#projects#wotexx#description
+T: http://.../mvc_sitemap_permit.html#projects#wotexx#description
+
+#projects#wotexx#features
+T: http://.../mvc_sitemap_permit.html#projects#wotexx#features
+
+#projects#wotexx#licence
+T: http://.../mvc_sitemap_permit.html#projects#wotexx#licence
+
+#projects#test#description
+T: #projects#test##
+T: #projects#test#description##
+T: http://.../mvc_sitemap_permit.html#projects#test#description
+T: http://.../mvc_sitemap_permit.html#projects
+
+#
+T: http://.../mvc_sitemap_permit.html#
     </script>
   </head>
   <body>

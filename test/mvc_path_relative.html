@@ -29,45 +29,16 @@
             "#xxx#y#z": null
         });
         
-        var timing = new Date().getTime();
-        var meta = {};
-        meta["#x" + timing] = null;
-        SiteMap.customize(meta);      
-        
         var logging = function(message) {
             document.body.innerHTML += "\r\n" + message;
             document.body.innerHTML = document.body.innerHTML.trim();
         };
         
-        var autoforward = function() {
-            if (targets.length <= 0)
-                return;
-            var target = targets.shift();
-            var mode = String(target.match(/^[A-Z]/));
-            target = target.substring(2);
-            logging(mode + ": " + target);
-            if (mode == "A")
-                SiteMap.navigate(target);
-            else if (mode == "B")
-                window.location.href = target;
-            else if (mode == "C")
-                window.location.hash = target;
-            else if (mode == "D")
-                window.location.hash = target;
-            if (targets.length <= 0) {
-                window.setTimeout((target) => {
-                    Test.start(); 
-                }, 50);
-            } else {
-                window.setTimeout((target) => {
-                    autoforward(); 
-                }, 25);
-            }
-        };
-        
         var targets;
         window.addEventListener("load", (event) => {
             targets = [];
+            
+            targets.push("D #");
   
             targets.push("A #a#b#c#d");
             targets.push("A ##");
@@ -106,16 +77,46 @@
             
             targets.push("D #");
             
-            window.location.href = "#";
-            window.setTimeout(autoforward, 250);  
+            Composite.asynchron(() => {
+                document.body.innerHTML = "";
+                var target = targets.shift();
+                var mode = String(target.match(/^[A-Z]/));
+                target = target.substring(2);
+                logging(mode + ": " + target);
+                if (mode == "A")
+                    SiteMap.navigate(target);
+                else if (mode == "B")
+                    window.location.href = target;
+                else if (mode == "C")
+                    window.location.hash = target;
+                else if (mode == "D")
+                    window.location.hash = target;
+            });
         });
   
+        var timeout;
         window.addEventListener("hashchange", (event) => {
-            if (event.newURL.match(/^\w+:\/\//)) {
-                logging("X: " + event.newURL.replace(/\d+$/, "0000"));
-                logging("H: " + SiteMap.history.toPlainString());
-            }
-        });
+            if (timeout)
+                window.clearTimeout(timeout);
+            logging("T: " + event.newURL);
+            logging("H: " + SiteMap.history.toPlainString());            
+            timeout = window.setTimeout(() => {
+                if (targets.length > 0) {
+                    var target = targets.shift();
+                    var mode = String(target.match(/^[A-Z]/));
+                    target = target.substring(2);
+                    logging(mode + ": " + target);
+                    if (mode == "A")
+                        SiteMap.navigate(target);
+                    else if (mode == "B")
+                        window.location.href = target;
+                    else if (mode == "C")
+                        window.location.hash = target;
+                    else if (mode == "D")
+                        window.location.hash = target;
+                } else Test.start();
+            }, 50);
+        });        
         
         Test.create({test() {
             var content = document.body.innerHTML;
@@ -137,118 +138,118 @@
     </script>
     <script type="text/test">
 A: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 A: ##
-X: http://.../mvc_path_relative.html#a#b#c
+T: http://.../mvc_path_relative.html#a#b#c
 H: ["#","#a#b#c#d","#a#b#c"]
 A: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 A: ###x
-X: http://.../mvc_path_relative.html#a#b#x
+T: http://.../mvc_path_relative.html#a#b#x
 H: ["#","#a#b#c#d","#a#b#x"]
 A: y#z
-X: http://.../mvc_path_relative.html#a#b#x#y#z
+T: http://.../mvc_path_relative.html#a#b#x#y#z
 H: ["#","#a#b#c#d","#a#b#x","#a#b#x#y#z"]
 A: ####c
-X: http://.../mvc_path_relative.html#a#b#c
+T: http://.../mvc_path_relative.html#a#b#c
 H: ["#","#a#b#c#d","#a#b#x","#a#b#x#y#z","#a#b#c"]
 A: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 A: ####b
-X: http://.../mvc_path_relative.html#a#b
+T: http://.../mvc_path_relative.html#a#b
 H: ["#","#a#b#c#d","#a#b"]
 B: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 B: ##
-X: http://.../mvc_path_relative.html##
-H: ["#","#a#b#c#d"]
-X: http://.../mvc_path_relative.html#a#b#c
+T: http://.../mvc_path_relative.html##
+H: ["#","#a#b#c#d","#a#b#c"]
+T: http://.../mvc_path_relative.html#a#b#c
 H: ["#","#a#b#c#d","#a#b#c"]
 B: ##x
-X: http://.../mvc_path_relative.html##x
-H: ["#","#a#b#c#d","#a#b#c"]
-X: http://.../mvc_path_relative.html#a#b#x
+T: http://.../mvc_path_relative.html##x
+H: ["#","#a#b#c#d","#a#b#c","#a#b#x"]
+T: http://.../mvc_path_relative.html#a#b#x
 H: ["#","#a#b#c#d","#a#b#c","#a#b#x"]
 B: #a#b#x#y#z
-X: http://.../mvc_path_relative.html#a#b#x#y#z
+T: http://.../mvc_path_relative.html#a#b#x#y#z
 H: ["#","#a#b#c#d","#a#b#c","#a#b#x","#a#b#x#y#z"]
 B: ####c
-X: http://.../mvc_path_relative.html####c
-H: ["#","#a#b#c#d","#a#b#c","#a#b#x","#a#b#x#y#z"]
-X: http://.../mvc_path_relative.html#a#b#c
+T: http://.../mvc_path_relative.html####c
+H: ["#","#a#b#c#d","#a#b#c"]
+T: http://.../mvc_path_relative.html#a#b#c
 H: ["#","#a#b#c#d","#a#b#c"]
 B: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 B: ####b
-X: http://.../mvc_path_relative.html####b
-H: ["#","#a#b#c#d"]
-X: http://.../mvc_path_relative.html#a#b
+T: http://.../mvc_path_relative.html####b
+H: ["#","#a#b#c#d","#a#b"]
+T: http://.../mvc_path_relative.html#a#b
 H: ["#","#a#b#c#d","#a#b"]
 C: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 C: ##
-X: http://.../mvc_path_relative.html##
-H: ["#","#a#b#c#d"]
-X: http://.../mvc_path_relative.html#a#b#c
+T: http://.../mvc_path_relative.html##
+H: ["#","#a#b#c#d","#a#b#c"]
+T: http://.../mvc_path_relative.html#a#b#c
 H: ["#","#a#b#c#d","#a#b#c"]
 C: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 C: ###x
-X: http://.../mvc_path_relative.html###x
-H: ["#","#a#b#c#d"]
-X: http://.../mvc_path_relative.html#a#b#x
+T: http://.../mvc_path_relative.html###x
+H: ["#","#a#b#c#d","#a#b#x"]
+T: http://.../mvc_path_relative.html#a#b#x
 H: ["#","#a#b#c#d","#a#b#x"]
 C: y#z
-X: http://.../mvc_path_relative.html#y#z
-H: ["#","#a#b#c#d","#a#b#x"]
-X: http://.../mvc_path_relative.html#
+T: http://.../mvc_path_relative.html#y#z
+H: ["#"]
+T: http://.../mvc_path_relative.html#
 H: ["#"]
 C: ####c
-X: http://.../mvc_path_relative.html####c
+T: http://.../mvc_path_relative.html####c
 H: ["#"]
-X: http://.../mvc_path_relative.html#
+T: http://.../mvc_path_relative.html#
 H: ["#"]
 C: #a#b#c#d
-X: http://.../mvc_path_relative.html#a#b#c#d
+T: http://.../mvc_path_relative.html#a#b#c#d
 H: ["#","#a#b#c#d"]
 C: ####b
-X: http://.../mvc_path_relative.html####b
-H: ["#","#a#b#c#d"]
-X: http://.../mvc_path_relative.html#a#b
+T: http://.../mvc_path_relative.html####b
+H: ["#","#a#b#c#d","#a#b"]
+T: http://.../mvc_path_relative.html#a#b
 H: ["#","#a#b#c#d","#a#b"]
 D: #xxx
-X: http://.../mvc_path_relative.html#xxx
+T: http://.../mvc_path_relative.html#xxx
 H: ["#","#a#b#c#d","#a#b","#xxx"]
 D: #xxx#y
-X: http://.../mvc_path_relative.html#xxx#y
+T: http://.../mvc_path_relative.html#xxx#y
 H: ["#","#a#b#c#d","#a#b","#xxx","#xxx#y"]
 D: #xxx#y#z
-X: http://.../mvc_path_relative.html#xxx#y#z
+T: http://.../mvc_path_relative.html#xxx#y#z
 H: ["#","#a#b#c#d","#a#b","#xxx","#xxx#y","#xxx#y#z"]
 D: #xxx
-X: http://.../mvc_path_relative.html#xxx
+T: http://.../mvc_path_relative.html#xxx
 H: ["#","#a#b#c#d","#a#b","#xxx"]
 D: #xxx#y
-X: http://.../mvc_path_relative.html#xxx#y
+T: http://.../mvc_path_relative.html#xxx#y
 H: ["#","#a#b#c#d","#a#b","#xxx","#xxx#y"]
 D: #xxx#y#z
-X: http://.../mvc_path_relative.html#xxx#y#z
+T: http://.../mvc_path_relative.html#xxx#y#z
 H: ["#","#a#b#c#d","#a#b","#xxx","#xxx#y","#xxx#y#z"]
 D: #xxx#y
-X: http://.../mvc_path_relative.html#xxx#y
+T: http://.../mvc_path_relative.html#xxx#y
 H: ["#","#a#b#c#d","#a#b","#xxx","#xxx#y"]
 D: #xxx
-X: http://.../mvc_path_relative.html#xxx
+T: http://.../mvc_path_relative.html#xxx
 H: ["#","#a#b#c#d","#a#b","#xxx"]
 D: #
-X: http://.../mvc_path_relative.html#
+T: http://.../mvc_path_relative.html#
 H: ["#"]
     </script>
   </head>

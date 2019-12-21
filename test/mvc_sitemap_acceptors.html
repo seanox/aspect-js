@@ -27,25 +27,20 @@
             "#error": null
         });
         
-        var timing = new Date().getTime();
-        var meta = {};
-        meta["#x" + timing] = null;
-        SiteMap.customize(meta);
-        
         SiteMap.customize(/es|ea/, (path) => {
-            logging("C: " + path);
+            logging("1: " + path);
             return true;
         });
         SiteMap.customize(/w#d/, (path) => {
-            logging("D: " + path);
+            logging("2: " + path);
             return false;
         });
         SiteMap.customize(/w#l/, (path) => {
-            logging("E: " + path);
+            logging("3: " + path);
             return "#legal#terms#aaa#bbb#ccc";
         });      
         SiteMap.customize(/#d/, (path) => {
-            logging("F: " + path);
+            logging("4: " + path);
             return true;
         });      
         
@@ -54,23 +49,6 @@
             document.body.innerHTML = document.body.innerHTML.trim();
         };
         
-        var autoforward = function() {
-            if (targets.length <= 0)
-                return;
-            var target = targets.shift();
-            logging("A: " + target);
-            window.location.href = target;
-            if (targets.length <= 0) {
-                window.setTimeout((target) => {
-                    Test.start(); 
-                }, 50);
-            } else {
-                window.setTimeout((target) => {
-                    autoforward(); 
-                }, 25);
-            }
-        };
-  
         var targets;
         window.addEventListener("load", (event) => {
             targets = [];
@@ -94,20 +72,32 @@
             targets.push("#projects#wotexx#description");      
             targets.push("#projects#wotexx#features");      
             targets.push("#projects#wotexx#licence");
+            targets.push("#");
             
-            window.location.href = "#x" + timing;
-            window.location.href = "#";
-            window.setTimeout(autoforward, 250);  
+            Composite.asynchron(() => {
+                document.body.innerHTML = "";
+                var target = targets.shift();
+                logging("\r\n" + target);
+                window.location.href = target;
+            });
         });
   
+        var timeout;
         window.addEventListener("hashchange", (event) => {
-            if (event.newURL.match(/^\w+:\/\//))
-                logging("B: " + event.newURL.replace(/\d+$/, "0000"));
+            if (timeout)
+                window.clearTimeout(timeout);
+            logging("T: " + event.newURL);
+            timeout = window.setTimeout(() => {
+                if (targets.length > 0) {
+                    var target = targets.shift();
+                    logging("\r\n" + target);
+                    window.location.href = target;
+                } else Test.start();
+            }, 50);
         });
         
         Test.create({test() {
             var content = document.body.innerHTML;
-            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
             content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
             content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");   
             document.body.textContent = content;
@@ -124,71 +114,95 @@
         }});       
     </script>
     <script type="text/test">
-A: #
-A: #project
-B: http://.../mvc_sitemap_acceptors.html#project
-B: http://.../mvc_sitemap_acceptors.html#
-A: #projects
-B: http://.../mvc_sitemap_acceptors.html#projects
-A: #projects#xyz
-B: http://.../mvc_sitemap_acceptors.html#projects#xyz
-B: http://.../mvc_sitemap_acceptors.html#projects
-A: #projects#devwex
-F: #projects#devwex
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex
-A: #projects#devwexx
-B: http://.../mvc_sitemap_acceptors.html#projects#devwexx
-B: http://.../mvc_sitemap_acceptors.html#projects
-A: #projects#devwex#xyz
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#xyz
-F: #projects#devwex
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex
-A: #projects#devwex#description
-C: #projects#devwex#description
-F: #projects#devwex#description
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
-A: #projects#devwex#description#features
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description#features
-C: #projects#devwex#description
-F: #projects#devwex#description
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
-A: #projects#devwex#description#features#licence
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description#features#licence
-C: #projects#devwex#description
-F: #projects#devwex#description
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
-A: #projects#devwex#features
-C: #projects#devwex#features
-F: #projects#devwex#features
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#features
-A: #projects#devwex#licence
-F: #projects#devwex#licence
-B: http://.../mvc_sitemap_acceptors.html#projects#devwex#licence
-A: #projects#review
-B: http://.../mvc_sitemap_acceptors.html#projects#review
-A: #projects#review#description
-C: #projects#review#description
-D: #projects#review#description
-B: http://.../mvc_sitemap_acceptors.html#projects#review#description
-B: http://.../mvc_sitemap_acceptors.html#projects#review
-A: #projects#review#features
-C: #projects#review#features
-B: http://.../mvc_sitemap_acceptors.html#projects#review#features
-A: #projects#review#licence
-E: #projects#review#licence
-B: http://.../mvc_sitemap_acceptors.html#projects#review#licence
-B: http://.../mvc_sitemap_acceptors.html#legal#terms
-A: #projects#wotexx
-B: http://.../mvc_sitemap_acceptors.html#projects#wotexx
-A: #projects#wotexx#description
-C: #projects#wotexx#description
-F: #projects#wotexx#description
-B: http://.../mvc_sitemap_acceptors.html#projects#wotexx#description
-A: #projects#wotexx#features
-C: #projects#wotexx#features
-B: http://.../mvc_sitemap_acceptors.html#projects#wotexx#features
-A: #projects#wotexx#licence
-B: http://.../mvc_sitemap_acceptors.html#projects#wotexx#licence 
+#
+
+#project
+T: http://.../mvc_sitemap_acceptors.html#project
+T: http://.../mvc_sitemap_acceptors.html#
+
+#projects
+T: http://.../mvc_sitemap_acceptors.html#projects
+
+#projects#xyz
+T: http://.../mvc_sitemap_acceptors.html#projects#xyz
+T: http://.../mvc_sitemap_acceptors.html#projects
+
+#projects#devwex
+4: #projects#devwex
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex
+
+#projects#devwexx
+T: http://.../mvc_sitemap_acceptors.html#projects#devwexx
+T: http://.../mvc_sitemap_acceptors.html#projects
+
+#projects#devwex#xyz
+4: #projects#devwex
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#xyz
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex
+
+#projects#devwex#description
+1: #projects#devwex#description
+4: #projects#devwex#description
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
+
+#projects#devwex#description#features
+1: #projects#devwex#description
+4: #projects#devwex#description
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#description#features
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
+
+#projects#devwex#description#features#licence
+1: #projects#devwex#description
+4: #projects#devwex#description
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#description#features#licence
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#description
+
+#projects#devwex#features
+1: #projects#devwex#features
+4: #projects#devwex#features
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#features
+
+#projects#devwex#licence
+4: #projects#devwex#licence
+T: http://.../mvc_sitemap_acceptors.html#projects#devwex#licence
+
+#projects#review
+T: http://.../mvc_sitemap_acceptors.html#projects#review
+
+#projects#review#description
+1: #projects#review#description
+2: #projects#review#description
+T: #projects#review#description##
+T: http://.../mvc_sitemap_acceptors.html#projects#review#description
+T: http://.../mvc_sitemap_acceptors.html#projects#review
+
+#projects#review#features
+1: #projects#review#features
+T: http://.../mvc_sitemap_acceptors.html#projects#review#features
+
+#projects#review#licence
+3: #projects#review#licence
+T: #legal#terms#aaa#bbb#ccc
+T: http://.../mvc_sitemap_acceptors.html#projects#review#licence
+T: http://.../mvc_sitemap_acceptors.html#legal#terms
+
+#projects#wotexx
+T: http://.../mvc_sitemap_acceptors.html#projects#wotexx
+
+#projects#wotexx#description
+1: #projects#wotexx#description
+4: #projects#wotexx#description
+T: http://.../mvc_sitemap_acceptors.html#projects#wotexx#description
+
+#projects#wotexx#features
+1: #projects#wotexx#features
+T: http://.../mvc_sitemap_acceptors.html#projects#wotexx#features
+
+#projects#wotexx#licence
+T: http://.../mvc_sitemap_acceptors.html#projects#wotexx#licence
+
+#
+T: http://.../mvc_sitemap_acceptors.html#
     </script>
   </head>
   <body>
