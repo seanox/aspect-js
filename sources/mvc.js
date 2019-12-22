@@ -511,6 +511,12 @@ if (typeof SiteMap === "undefined") {
      *  Returns the meta data for a path.
      *  The meta data is an object with the following structure:
      *      {path:..., face:..., facet:...}
+     *      
+     *  If variable paths are used, an additional data field is available. It
+     *  contains the additional data passed with the path, comparable to
+     *  PHAT_INFO in CGI.    
+     *      {path:..., face:..., facet:..., data:...}
+     *      
      *  If no meta data can be determined because the path is invalid or not
      *  declared in the SiteMap, null is returned.
      *  @param  path optional, without SiteMap.location is used
@@ -532,12 +538,15 @@ if (typeof SiteMap === "undefined") {
         for (let variable of SiteMap.variables) {
             if (!(path + "#").startsWith(variable + "#"))
                 continue;
-            
             if (SiteMap.paths.has(variable)) {
-                return {path, face:variable, facet:null};
+                return {path, face:variable, facet:null, get data() {
+                    return path.substring(variable.length) || null;
+                }};
             } else if (SiteMap.facets.has(variable)) {
                 var facet = SiteMap.facets.get(variable);
-                return {path, face:facet.path, facet:facet.facet};
+                return {path, face:facet.path, facet:facet.facet, get data() {
+                    return path.substring(facet.path.length +facet.facet.length) || null;
+                }};
             }
             break;
         }
