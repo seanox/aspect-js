@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191221
+ *  MVC 1.1.0 20191222
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191221
+ *  @version 1.1.0 20191222
  */
 if (typeof Path === "undefined") {
     
@@ -319,6 +319,14 @@ if (typeof SiteMap === "undefined") {
          */
         get PATTERN_PATH_FACET() {return /^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*$/},
         
+        /** 
+         *  Pattern for a valid variable facet path:
+         *      - Same conditions as for the pattern for a valid facet path
+         *      - Every path must end with ...
+         *      - Only ... as facet path is also allowed
+         */
+        get PATTERN_PATH_FACET_VARIABLE() {return /(^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*(\.){3}$)|(^\.{3}$)/},
+        
         /**
          *  Primarily, the root is always used when loading the page, since the
          *  renderer is executed before the MVC. Therefore, the renderer may not
@@ -358,6 +366,12 @@ if (typeof SiteMap === "undefined") {
     //    The sum of all paths and assigned facets)
     Object.defineProperty(SiteMap, "facets", {
         value: new Map()
+    });
+
+    //SiteMap.variables
+    //    TODO:
+    Object.defineProperty(SiteMap, "variables", {
+        value: new Set()
     });
 
     //SiteMap.acceptors
@@ -411,7 +425,7 @@ if (typeof SiteMap === "undefined") {
      *  @return the real path determined in the SiteMap, or the unchanged
      *      function path.
      */  
-    SiteMap.locate = function(path, strict) {
+    SiteMap.locate = function(path) {
         
         path = path || "";
         
@@ -443,9 +457,11 @@ if (typeof SiteMap === "undefined") {
             return path;
 
         var paths = Array.from(SiteMap.paths.keys());
-        if (!strict)
-            paths = paths.concat(Array.from(SiteMap.facets.keys()));
+        paths = paths.concat(Array.from(SiteMap.facets.keys()));
         while (paths && path.length > 1) {
+            for (let variable of SiteMap.variables)
+                if ((path + "#").startsWith(variable + "#"))
+                    return path;
             if (paths.includes(path))
                 return path;
             path = Path.normalize(path + "##");
@@ -513,6 +529,19 @@ if (typeof SiteMap === "undefined") {
             return meta.path + "#" + meta.facet;
         };
 
+        for (let variable of SiteMap.variables) {
+            if (!(path + "#").startsWith(variable + "#"))
+                continue;
+            
+            if (SiteMap.paths.has(variable)) {
+                return {path, face:variable, facet:null};
+            } else if (SiteMap.facets.has(variable)) {
+                var facet = SiteMap.facets.get(variable);
+                return {path, face:facet.path, facet:facet.facet};
+            }
+            break;
+        }
+        
         if (SiteMap.paths.has(path)) {
             return {path, face:path, facet:null};
         } else if (SiteMap.facets.has(path)) {
@@ -586,6 +615,12 @@ if (typeof SiteMap === "undefined") {
      *          "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
      *          "#products#pens": ["pencil", "ballpoint", "stylograph"],
      *          "#legal": ["terms", "privacy"],
+     *          ...
+     *      };
+     *      
+     *      sitemap = {
+     *          "#": ["news", "products", "about", "contact...", "legal"],
+     *          "#product": ["..."],
      *          ...
      *      };
      *      
@@ -714,6 +749,13 @@ if (typeof SiteMap === "undefined") {
                     && key.match(SiteMap.PATTERN_PATH_FACET))
                 facets.set(key, value);
         });
+        
+        var variables = new Set();
+        SiteMap.variables.forEach((variable) => {
+            if (typeof variable === "string"
+                    && key.match(SiteMap.PATTERN_PATH_FACE))
+                variables.add(variable);
+        });
 
         Object.keys(map).forEach((key) => {
 
@@ -741,13 +783,33 @@ if (typeof SiteMap === "undefined") {
             //    {#facet-path:{path:#path, facet:facet}, ...}
             value = value || [];
             value.forEach((facet) => {
+
                 //Facets is an array of strings with the names of the facets.
                 //The names must correspond to the PATTERN_PATH_FACET.
                 if (typeof facet !== "string")
                     throw new TypeError("Invalid facet: " + typeof facet);
                 facet = facet.toLowerCase().trim();
-                if (!facet.match(SiteMap.PATTERN_PATH_FACET))
+                if (!facet.match(SiteMap.PATTERN_PATH_FACET)
+                        && !facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE))
                     throw new Error("Invalid facet" + (facet ? ": " + facet : ""));
+                
+                //Variable paths are collected additionally, so that later on
+                //when determining the path, the complete SiteMap does not have
+                //to be searched for variable paths. Variable paths are also
+                //registered without ... at the end as normal paths.
+                if (facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE)) {
+                    //If the facet is only "...", it is registered as a variable
+                    //face, otherwise as a variable facet.
+                    facet = facet.replace(/\.+$/, "");
+                    var variable = facet ? key.replace(/#+$/, "") + "#" + facet : key;
+                    if (!variables.has(variable))
+                        variables.add(variable);
+                    //If the face is only "...", it is registered as a face.
+                    //Therefore nothing needs to be done now.
+                    if (!facet)
+                        return;
+                }
+                
                 //If the facet does not exist at the path, the facet is added.
                 if (!paths.get(key).includes(facet))
                     paths.get(key).push(facet);
@@ -760,13 +822,24 @@ if (typeof SiteMap === "undefined") {
         acceptors.forEach((value, key, map) => {
             SiteMap.acceptors.add(value);
         });
+        
         SiteMap.paths.clear();
         paths.forEach((value, key, map) => {
             SiteMap.paths.set(key, value);
         });
+        
         SiteMap.facets.clear();
         facets.forEach((value, key, map) => {
             SiteMap.facets.set(key, value);
+        });
+        
+        SiteMap.variables.clear();
+        variables = Array.from(variables);
+        variables.sort((value1, value2) => {
+            return value1.localeCompare(value2);
+        });
+        variables.forEach((value) => {
+            SiteMap.variables.add(value);
         });
     };
     
@@ -924,18 +997,12 @@ if (typeof SiteMap === "undefined") {
         SiteMap.location = target;
         window.location.replace(target);
         
-        var lookup = (path) => {
-            while (path && path.length > 0) {
-                var lookup = SiteMap.lookup(path);
-                if (lookup)
-                    return lookup;
-                path = Path.normalize(path + "##");
-            }
-        };
-        
         //Source and target for rendering are determined.
-        source = lookup(source);
-        target = lookup(target);        
+        //Because of possible variable paths, the current path does not have to
+        //correspond to the current face/facet and must be determined via the
+        //parent if necessary.
+        source = SiteMap.lookup(source);
+        target = SiteMap.lookup(target);        
         
         source = source.face;
         if (!source.endsWith("#"))

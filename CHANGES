@@ -76,6 +76,9 @@
               }
           }
       }); 
+  CR: MVC SiteMap: Added variable paths for faces and facets
+      The character sequence ... at the end of a facet in the SiteMap configuration defines a variable path for a face(t).
+      The path can be of any length and can be used to pass parameters and is comparable to PATH_INFO in CGI.
   CR: MVC SiteMap: Added the forward method
       In difference to navigate, forwarding is executed directly and without triggers.
   CR: DataSource Locales: As standard marked are at the beginning
