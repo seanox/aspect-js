@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191219
+ *  Composite 1.2.0 20191223
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191219
+ *  @version 1.2.0 20191223
  */
 if (typeof Composite === "undefined") {
     
@@ -2501,7 +2501,12 @@ if (typeof Composite === "undefined") {
                         selector.innerHTML = "";
                         iterate = Expression.eval(context, object.iterate.expression);
                         if (iterate) {
-                            iterate = Array.from(iterate);
+                            if (iterate instanceof XPathResult) {
+                                var meta = {entry:null, array:[], iterate:iterate};
+                                while (meta.entry = meta.iterate.iterateNext())
+                                    meta.array.push(meta.entry);
+                                iterate = meta.array;
+                            } else iterate = Array.from(iterate);
                             iterate.forEach((item, index, array) => {
                                 var meta = {}; 
                                 Object.defineProperty(meta, "item", {
