@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0 20191206
+ *  DataSource 1.2.0 20191223
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191206
+ *  @version 1.2.0 20191223
  */
 if (typeof DataSource === "undefined") {
     
@@ -250,6 +250,8 @@ if (typeof DataSource === "undefined") {
      *  Optionally the data can be transformed via XSLT.
      *  @param  locators  locator
      *  @param  transform locator of the transformation style
+     *      With the boolean true, the style is derived from the locator by
+     *      using the file extension xslt.
      *  @param  raw       option in combination with transform
      *      true returns the complete XML document, otherwise only the root
      *      entity as node
@@ -296,8 +298,15 @@ if (typeof DataSource === "undefined") {
         if (!transform)
             return data.clone();
         
-        var style = DataSource.fetch(locator.replace(/^[a-z]+/i, "xslt"));
-        return DataSource.transform(data, style, raw);
+        var style = locator.replace(/^[a-z]+/i, "xslt");
+        if (typeof transform !== "boolean") {
+            style = transform;
+            if (typeof style !== "string"
+                    || !style.match(DataSource.PATTERN_LOCATOR))
+                throw new Error("Invalid style: " + String(style));  
+        }
+        
+        return DataSource.transform(data, DataSource.fetch(style), raw);
     };
     
     /**
