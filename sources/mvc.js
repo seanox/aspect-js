@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191222
+ *  MVC 1.1.0 20191223
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191222
+ *  @version 1.1.0 20191223
  */
 if (typeof Path === "undefined") {
     
@@ -934,6 +934,10 @@ if (typeof SiteMap === "undefined") {
         //The initial rendering is started by the direct call of the hashchange
         //event, thus without trigger.
         SiteMap.forward(window.location.hash || "#");
+        
+        //Update of the hash and thus of the page focus, if the new focus (hash)
+        //was hidden before rendering or did not exist.
+        window.location.hash = window.location.hash;
     });
     
     /**
@@ -1035,5 +1039,9 @@ if (typeof SiteMap === "undefined") {
         if (render && render[1] && !initial)
             Composite.render(render[1]);
         else Composite.render(document.body);
+        
+        //Update of the hash and thus of the page focus, if the new focus (hash)
+        //was hidden before rendering or did not exist.
+        window.location.hash = window.location.hash; 
     });
 };
