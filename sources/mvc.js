@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191223
+ *  MVC 1.1.0 20191226
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191223
+ *  @version 1.1.0 20191226
  */
 if (typeof Path === "undefined") {
     
@@ -369,7 +369,7 @@ if (typeof SiteMap === "undefined") {
     });
 
     //SiteMap.variables
-    //    TODO:
+    //     Set with all variables paths
     Object.defineProperty(SiteMap, "variables", {
         value: new Set()
     });
@@ -477,13 +477,16 @@ if (typeof SiteMap === "undefined") {
      *  piece. If no valid partial path can be found, the root is the target.
      *  
      *  In difference to the forward method, navigate is not executed directly,
-     *  instead the change is triggered by the location hash.
+     *  instead the change is triggered asynchronous by the location hash.
      *  
      *  @param path (URL is also supported, only the hash is used here and the
      *      URL itself is ignored)
      */    
     SiteMap.navigate = function(path) {
-        window.location.hash = SiteMap.locate(path);
+        Composite.asynchron((path) => {
+            window.location.hash = path;
+        }, SiteMap.locate(path));
+        SiteMap.locate(path)
     };
 
     /**
@@ -934,10 +937,6 @@ if (typeof SiteMap === "undefined") {
         //The initial rendering is started by the direct call of the hashchange
         //event, thus without trigger.
         SiteMap.forward(window.location.hash || "#");
-        
-        //Update of the hash and thus of the page focus, if the new focus (hash)
-        //was hidden before rendering or did not exist.
-        window.location.hash = window.location.hash;
     });
     
     /**
@@ -973,14 +972,11 @@ if (typeof SiteMap === "undefined") {
                 && initial)
             target = "#";
         
-        //For functional interaction paths, the old path must be restored.
+        //For functional interaction paths, old paths are visually restored.
         //Rendering is not necessary because the face/facet does not change or
         //the called function has partially triggered rendering.
         if (target.match(Path.PATTERN_PATH_FUNCTIONAL)) {
-            var x = window.pageXOffset || document.documentElement.scrollLeft;
-            var y = window.pageYOffset || document.documentElement.scrollTop;
-            window.location.replace(source);
-            window.scrollTo(x, y);
+            history.replaceState(null, document.title, SiteMap.location);
             return;
         }
 
@@ -1008,7 +1004,9 @@ if (typeof SiteMap === "undefined") {
         //because SiteMap.location and window.location.hash are the same and
         //therefore no update or rendering is triggered.
         SiteMap.location = target;
-        window.location.replace(target);
+        if (source.match(Path.PATTERN_PATH_FUNCTIONAL))
+            window.location.replace(target);
+        else window.location.assign(target);
         
         //Source and target for rendering are determined.
         //Because of possible variable paths, the current path does not have to
