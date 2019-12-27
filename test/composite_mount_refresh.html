@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style type="text/css">
+      body {
+        font-family:monospace;
+      }
+      body div {
+        margin:1em;
+      }
+      input[type="text"] {
+        width:2em;
+      }
+      input[type="button"] {
+        width:3em;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+        
+        var countClick = 0;
+        var countRender = 0;
+        var about = {
+            contact: {
+                onClick() {
+                    countClick++;
+                }    
+            },
+            refresh: {
+                onClick() {
+                    Composite.render(document.body);
+                }    
+            }
+        }
+        
+        Test.create({test() {
+            while (countRender < 9) {
+                document.querySelector("#contact").click();
+                document.querySelector("#refresh").click();
+            }
+            var result = document.body.textContent.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("Render:9, Click:4 refresh contact", result);
+        }});
+        
+        Test.start({auto:true});
+    </script>
+  </head>
+  <body>
+    <!--
+    
+      The rendering is indirectly triggered twice with the Refresh button.
+      First in the OnClick.method, then indirectly via the render attribute.
+      Due to an error in the mount method, the contact button was not mounted correctly on the second pass.
+      The error has been fixed, the test remains, that it is difficult to adjust and would be annoying if the error is not noticed later.
+    
+    -->
+    {{countRender:countRender +1}}
+    Render:{{countRender}}, Click:{{countClick}}
+    <div id="about" composite static condition="{{true}}">
+      <button id="refresh" events="click" render="body">refresh</button>
+      <div iterate="{{interate:[1]}}">
+        <button id="contact">contact</button>
+      </div>
+    </div>
+  </body>
+</html>
