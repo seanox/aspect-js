@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0 20191223
+ *  DataSource 1.2.0 20191226
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191223
+ *  @version 1.2.0 20191226
  */
 if (typeof DataSource === "undefined") {
     
@@ -206,11 +206,13 @@ if (typeof DataSource === "undefined") {
         //The escape attribute converts text to HTML.
         //Without the escape attribute, the HTML tag symbols < and > are masked
         //and output as text.
-        
         var escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
         escape = !!escape.match(/^yes|on|true|1$/i);
-        
-        var result = processor.transformToDocument(xml);
+
+        //Workaround for some browsers, e.g. MS Edge, if they have problems with
+        //!DOCTYPE + !ENTITY. Therefore the document is copied so that the
+        //DOCTYPE declaration is omitted.
+        var result = processor.transformToDocument(xml.clone());
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
