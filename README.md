@@ -155,9 +155,9 @@ CR: Build: Additional compression via javascript-minifier.com
 
 
 # Contact
-[Mail](http://seanox.de/contact)  
 [Issues](https://github.com/seanox/aspect-js-tutorial/issues)  
 [Requests](https://github.com/seanox/aspect-js-tutorial/pulls)
+[Mail](http://seanox.de/contact)  
 
 
 # Thanks!
