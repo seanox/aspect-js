@@ -40,8 +40,8 @@ Standardmässig befindet sich der Datenspeicher in `./data` relativ zum
 Anwendungsverzeichnis. Der Datenspeicher enthält die unterstützten Sprachen als
 Unterverzeichnisse. Jede Sprache enthält ihren eigenen Inhalt. Redundante
 Daten/Felder und weitere Unterverzeichnisse entsprechen dem Konzept. Die
-DataSource verwendet hauptsächlich XML-Dateien. Die Transformation mit XSLT ist
-optional möglich.
+DataSource verwendet hauptsächlich XML-Dateien. Optional ist die Transformation
+mit XSLT möglich.
 
 ```
 +- data
@@ -74,7 +74,7 @@ Die unterstützten Sprachen sind in der Datei `locales.xml` in Gebietsschemata
 organisiert, die alle unterstützten Sprachen als Satz enthält.
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <locales>
   <de/>
   <en default="true"/>
@@ -83,7 +83,7 @@ organisiert, die alle unterstützten Sprachen als Satz enthält.
 
 Die Auswahl der Sprache erfolgt automatisch auf der Grundlage der
 Spracheinstellung des Browsers. Wenn die dort eingestellte Sprache nicht
-unterstützt wird, wird die als "Standard" deklarierte Sprache verwendet.
+unterstützt wird, wird die als `default` deklarierte Sprache verwendet.
 
 Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geänder
 werden.  
@@ -164,7 +164,7 @@ Details zur Funktionsweise der Transformation werden im Abschnitt
 
 Die Transformation von XML-Daten mit XSLT (1.0) bietet eine zusätzliche
 Möglichkeit zur Generierung von dynamischen Daten sowie Inhalten und kann dirket
-mit fetch-Methode und einem entsprechenden Locator durchgeführt werden.  
+mit per fetch-Methode und einem entsprechenden Locator durchgeführt werden.  
 Beide Methoden, fetch und transform akzeptiert als Parameter Locator und
 XMLDocument, auch im Mix. 
 
@@ -197,7 +197,7 @@ in XML- und XSLT-Dateien verwendet werden kann. Das Attribut erwartet die Werte
 macht diese rückgängig.
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
@@ -213,7 +213,7 @@ macht diese rückgängig.
 ```
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article escape="on">
   <![CDATA[
   <p>
@@ -239,19 +239,19 @@ zusammengefasst, dessen Name selbst definiert werden kann.
 Als Beispiel 3 XML-Dateien: paper.xml, envelope.xml, pen.xml, pen.xml
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article>
   <id>100</id>
   <description>Paper</description>
   <price>1.00</price>
 </article>
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article>
   <id>200</id>
   <description>Envelope</description>
   <price>2.00</price>
 </article>
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article>
   <id>300</id>
   <description>Pen</description>
@@ -266,7 +266,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
 ```
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <collector>
   <article>
     <id>100</id>
@@ -293,7 +293,7 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
 ```
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <articles>
   <article>
     <id>100</id>

@@ -72,7 +72,7 @@ The supported languages are organized in locales in the `locales.xml` file,
 which contains all supported languages as a set.
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <locales>
   <de/>
   <en default="true"/>
@@ -194,7 +194,7 @@ and XSLT files. The attribute expects the values `yes`, `on`, `true` or `1`.
 In this case the automatic escaping is cancelled or undone.
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
@@ -210,7 +210,7 @@ In this case the automatic escaping is cancelled or undone.
 ```
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article escape="on">
   <![CDATA[
   <p>
@@ -236,19 +236,19 @@ can be defined yourself.
 As an example, 3 XML files: paper.xml, envelope.xml, pen.xml
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article>
   <id>100</id>
   <description>Paper</description>
   <price>1.00</price>
 </article>
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article>
   <id>200</id>
   <description>Envelope</description>
   <price>2.00</price>
 </article>
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <article>
   <id>300</id>
   <description>Pen</description>
@@ -263,7 +263,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
 ```
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <collector>
   <article>
     <id>100</id>
@@ -290,7 +290,7 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
 ```
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <articles>
   <article>
     <id>100</id>
