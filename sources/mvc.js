@@ -517,7 +517,7 @@ if (typeof SiteMap === "undefined") {
      *      
      *  If variable paths are used, an additional data field is available. It
      *  contains the additional data passed with the path, comparable to
-     *  PHAT_INFO in CGI.    
+     *  PATH_INFO in CGI.    
      *      {path:..., face:..., facet:..., data:...}
      *      
      *  If no meta data can be determined because the path is invalid or not
