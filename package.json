@@ -1,8 +1,8 @@
 {
   "name": "seanox",
-  "version": "1.1.0",
-  "description": "Fullstack JavaScript UI Framework for SPAs incl. rendering, mvc, models, expression language, datasource, virtual paths, unit test and some more",
-  "main": "releases/aspect-js.js",
+  "version": "1.2.0",
+  "description": "Fullstack JavaScript UI Framework for SPAs incl. rendering, markup hardening, mvc, models, expression language, datasource, virtual paths, unit test and some more",
+  "main": "releases/aspect-js-min.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seanox/aspect-js.git"
@@ -15,10 +15,13 @@
     "spa",
     "single page application",
     "rendering",
+    "markup hardening",
     "mvc",
     "models",
+    "object binding",
     "el",
-    "expression ",
+    "expression",
+    "expression language",
     "nonsql",
     "datasource",
     "virtual paths",

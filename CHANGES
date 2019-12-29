@@ -1,4 +1,4 @@
-1.2.0 201912xx
+1.2.0 20191231
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
   BF: Composite Asynchron: Corection of passed arguments
   BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models

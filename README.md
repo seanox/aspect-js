@@ -66,8 +66,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox aspect-js 1.1.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.1.0.zip)  
-[Seanox aspect-js 1.1.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.1.0-src.zip)
+[Seanox aspect-js 1.2.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.2.0.zip)  
+[Seanox aspect-js 1.2.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.2.0-src.zip)
 
 
 # Release Channels
@@ -94,7 +94,7 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.2.0 201912xx (summary of the next version)  
+## 1.2.0 20191231 (summary of the current version)  
 BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
 BF: Composite Asynchron: Corection of passed arguments  
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
@@ -155,10 +155,9 @@ CR: Build: Additional compression via javascript-minifier.com
 
 
 # Contact
-[Support](http://seanox.de/contact?support)  
-[Development](http://seanox.de/contact?development)  
-[Project](http://seanox.de/contact?service)  
-[Page](http://seanox.de/contact)
+[Mail](http://seanox.de/contact)
+[Issues](https://github.com/seanox/aspect-js-tutorial/issues)
+[Requests](https://github.com/seanox/aspect-js-tutorial/pulls)
 
 
 # Thanks!
