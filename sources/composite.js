@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191227
+ *  Composite 1.2.1 20191230
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191227
+ *  @version 1.2.1 20191230
  */
 if (typeof Composite === "undefined") {
     
@@ -3136,22 +3136,21 @@ if (typeof Expression === "undefined") {
         //Separation of expressions in literal and script as partial words.
         //The expression objects are retained but their value changes from text
         //to array with literal and script as partial words.
+        //It was difficult to control the missed quotation marks ('/").
+        //Replacing them with Unicode notation was the easiest way. 
+        //All other attempts used wild masking and unmasking.
 
         cascade.expression.forEach((entry) => {
             var text = entry.data;
-            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, "$1\n$2\n");
-            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, "$1\r$2\r");
+            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\'])/g, "$1$2\\u0027");
+            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\"])/g, "$1$2\\u0022");
             var words = [];
             var pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
                 text = text.replace(pattern, (match, script, literal) => {
-                    script = script.replace(/\n/g, "\'");
-                    script = script.replace(/\r/g, "\"");
                     script = {type:Expression.TYPE_SCRIPT, data:script};
                     collate(script);
                     words.push(script);
-                    literal = literal.replace(/\n/g, "\'");
-                    literal = literal.replace(/\r/g, "\"");
                     literal = {type:Expression.TYPE_LITERAL, data:literal};
                     collate(literal);
                     words.push(literal);
@@ -3159,8 +3158,6 @@ if (typeof Expression === "undefined") {
                 });
             }
             if (text.length > 0) {
-                text = text.replace(/\n/g, "\'");
-                text = text.replace(/\r/g, "\"");
                 text = {type:Expression.TYPE_SCRIPT, data:text};
                 collate(text);
                 words.push(text);

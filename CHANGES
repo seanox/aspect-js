@@ -1,3 +1,7 @@
+1.2.0 2020xxxx
+  BF: Composite Expression Parse: Correction in the detection/processing of escape sequences
+      Error example: {{alert('abc\'123')}}
+
 1.2.0 20191231
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
   BF: Composite Asynchron: Corection of passed arguments
