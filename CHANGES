@@ -1,4 +1,4 @@
-1.2.0 2020xxxx
+1.2.1 2020xxxx
   BF: Composite Expression Parse: Correction in the detection/processing of escape sequences
       Error example: {{'abc\'123'}}
 
