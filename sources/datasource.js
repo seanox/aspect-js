@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0 20191226
+ *  DataSource 1.2.1 20191231
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191226
+ *  @version 1.2.1 20191231
  */
 if (typeof DataSource === "undefined") {
     
@@ -55,8 +55,15 @@ if (typeof DataSource === "undefined") {
         /** Path of the DataSource for: data (sub-directory of work path) */
         get DATA() {return window.location.pathcontext + "/data"},
 
-        /** Pattern for a DataSource locators */
-        get PATTERN_LOCATOR() {return /^([a-z]+):\/(\/[\w\-\/]+)$/},
+        /** 
+         *  Pattern for a DataSource locator
+         *  The locator syntax is based on the URL syntax.
+         *  Only the parts schema and path are used.
+         *  A path segment begins with a word character _ a-z 0-9, optionally
+         *  more word characters and additionally - can follow, but can not end
+         *  with the - character. Paths are separated by the / character.
+         */
+        get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/},
         
         /** Pattern to detect JavaScript elements */
         get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i},    
@@ -97,7 +104,7 @@ if (typeof DataSource === "undefined") {
         });        
 
         var locale = (navigator.language || "").trim().toLowerCase();
-        locale = locale.match(/^([a-z]+)/);
+        locale = locale.match(/(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/);
         if (!locale)
             throw new Error("Locale not available");
         DataSource.locales.selection = locale[0];
@@ -332,7 +339,7 @@ if (typeof DataSource === "undefined") {
         if (arguments.length == 2
                 && typeof arguments[0] === "string"
                 && Array.isArray(arguments[1])) {
-            if (!arguments[0].match(/[a-z]\w+/i))
+            if (!arguments[0].match(/\w+/i))
                 throw new TypeError("Invalid collector");
             collector = arguments[0];
             collection = collection.concat(arguments[1]);
