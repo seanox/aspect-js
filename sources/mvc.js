@@ -121,7 +121,7 @@ if (typeof Path === "undefined") {
         /** 
          *  Pattern for a valid path.
          *  The syntax of the path is based on XML entities (DOM).
-         *  A path segment begins with a word character _  a-z 0-9, optionally
+         *  A path segment begins with a word character _ a-z 0-9, optionally
          *  more word characters and additionally - can follow, but can not end
          *  with the - character. Paths are separated by the # character.
          */
