@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191227
+ *  MVC 1.1.1 20191231
  *  Copyright (C) 2019 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191227
+ *  @version 1.1.1 20191231
  */
 if (typeof Path === "undefined") {
     
@@ -118,11 +118,17 @@ if (typeof Path === "undefined") {
      */    
     Path = {
             
-        /** Pattern for a valid path. */
+        /** 
+         *  Pattern for a valid path.
+         *  The syntax of the path is based on XML entities (DOM).
+         *  A path segment begins with a word character _  a-z 0-9, optionally
+         *  more word characters and additionally - can follow, but can not end
+         *  with the - character. Paths are separated by the # character.
+         */
         get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/},
     
         /** Pattern for a url path. */
-        get PATTERN_URL() {return /^[a-z]+:\/.*?(#.*)*$/i},
+        get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i},
     
         /** Pattern for a functional path. */
         get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/}
@@ -131,10 +137,10 @@ if (typeof Path === "undefined") {
     /**
      *  Normalizes a path.
      *  Paths consist exclusively of word characters and underscores (based on
-     *  composite IDs) and must begin with a letter and use the hash character
-     *  as separator and root. Between the path segments, the hash character can
-     *  also be used as a back jump (parent) directive. The back jump then
-     *  corresponds to the number of additional hash characters.
+     *  composite IDs) and must begin with a word character and use the hash
+     *  character as separator and root. Between the path segments, the hash
+     *  character can also be used as a back jump (parent) directive. The back
+     *  jump then corresponds to the number of additional hash characters.
      *  
      *      Note:
      *  Paths use lowercase letters. Upper case letters are automatically
@@ -298,26 +304,26 @@ if (typeof SiteMap === "undefined") {
            
         /** 
          *  Pattern for a valid face path:
-         *      - Paths and path segments must always begin with a letter
-         *      - Allowed are the characters a-z _ 0-9 and -
+         *      - Paths and path segments must always begin with a word character
+         *      - Allowed are the word characters a-z _ 0-9 and additionally -
          *      - Character - always embedded between the characters: a-z _ 0-9,
          *        it can not be used at the beginning and end
          *      - Character # is used to separate the path segments
-         *      - After the separator # at least one letter is expected
+         *      - After the separator # at least a word character is expected
          *      - Only # as root path is also allowed
          */
-        get PATTERN_PATH_FACE() {return /(^((#[a-z][\-\w]+\w)|(#[a-z]\w*))+$)|(^#$)/},
+        get PATTERN_PATH_FACE() {return /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/},
         
         /** 
          *  Pattern for a valid facet path:
-         *      - Paths and path segments must always begin with a letter
-         *      - Allowed are the characters a-z _ 0-9 and -
+         *      - Paths and path segments must always begin with a word character
+         *      - Allowed are the word characters a-z _ 0-9 and additionally -
          *      - Character - always embedded between the characters: a-z _ 0-9,
          *        it can not be used at the beginning and end
          *      - Character # is used to separate the path segments
-         *      - After the separator # at least one letter is expected 
+         *      - After the separator # at least a word character is expected 
          */
-        get PATTERN_PATH_FACET() {return /^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*$/},
+        get PATTERN_PATH_FACET() {return /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/},
         
         /** 
          *  Pattern for a valid variable facet path:
@@ -325,7 +331,7 @@ if (typeof SiteMap === "undefined") {
          *      - Every path must end with ...
          *      - Only ... as facet path is also allowed
          */
-        get PATTERN_PATH_FACET_VARIABLE() {return /(^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*(\.){3}$)|(^\.{3}$)/},
+        get PATTERN_PATH_FACET_VARIABLE() {return /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/},
         
         /**
          *  Primarily, the root is always used when loading the page, since the
