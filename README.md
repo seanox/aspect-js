@@ -44,7 +44,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2019 Seanox Software Solutions
+Copyright (C) 2020 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -156,7 +156,7 @@ CR: Build: Additional compression via javascript-minifier.com
 
 # Contact
 [Issues](https://github.com/seanox/aspect-js-tutorial/issues)  
-[Requests](https://github.com/seanox/aspect-js-tutorial/pulls)
+[Requests](https://github.com/seanox/aspect-js-tutorial/pulls)  
 [Mail](http://seanox.de/contact)  
 
 
