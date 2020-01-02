@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.1 20191231
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  DataSource 1.2.0x 20200102
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.1 20191231
+ *  @version 1.2.0x 20200102
  */
 if (typeof DataSource === "undefined") {
     
@@ -67,6 +67,9 @@ if (typeof DataSource === "undefined") {
         
         /** Pattern to detect JavaScript elements */
         get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i},    
+        
+        /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
+        get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/},
         
         /** Constant for attribute type */
         get ATTRIBUTE_TYPE() {return "type"},
@@ -104,7 +107,7 @@ if (typeof DataSource === "undefined") {
         });        
 
         var locale = (navigator.language || "").trim().toLowerCase();
-        locale = locale.match(/(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/);
+        locale = locale.match(DataSource.PATTERN_WORD);
         if (!locale)
             throw new Error("Locale not available");
         DataSource.locales.selection = locale[0];
@@ -307,7 +310,7 @@ if (typeof DataSource === "undefined") {
         if (!transform)
             return data.clone();
         
-        var style = locator.replace(/^[a-z]+/i, "xslt");
+        var style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
         if (typeof transform !== "boolean") {
             style = transform;
             if (typeof style !== "string"
@@ -339,20 +342,17 @@ if (typeof DataSource === "undefined") {
         if (arguments.length == 2
                 && typeof arguments[0] === "string"
                 && Array.isArray(arguments[1])) {
-            if (!arguments[0].match(/\w+/i))
+            if (!arguments[0].match(DataSource.PATTERN_WORD))
                 throw new TypeError("Invalid collector");
             collector = arguments[0];
-            collection = collection.concat(arguments[1]);
+            collection = Array.from(arguments[1]);
         } else if (arguments.length == 1
                 && Array.isArray(arguments[0])) {
             collection = collection.concat(arguments[0]);
-        } else {
-            for (var loop = 0; loop < arguments.length; loop++)
-                collection.push(arguments[loop]);
-        }
+        } else collection = Array.from(arguments);
         
         DataSource.cache = DataSource.cache || {};
-        var hash = collection.join().hashCode();
+        var hash = collector.hashCode() + ":" + collection.join().hashCode();
         collection.forEach((entry) => {
             hash += ":" + String(entry).hashCode();
         });
