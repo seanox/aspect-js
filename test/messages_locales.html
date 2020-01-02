@@ -41,6 +41,22 @@
             Assert.assertTrue(typeof Messages["xde"] === "undefined");            
         }});
         
+        Test.create({test() {
+            DataSource.localize("_1");
+            Assert.assertEquals("#_1", Messages["xxx"]);
+            Assert.assertEquals("_1", DataSource.locale);
+        }});
+        Test.create({test() {
+            DataSource.localize("de_de");
+            Assert.assertEquals("#de_de", Messages["xxx"]);
+            Assert.assertEquals("de_de", DataSource.locale);
+        }});
+        Test.create({test() {
+            DataSource.localize("de-de");
+            Assert.assertEquals("#de-de", Messages["xxx"]);
+            Assert.assertEquals("de-de", DataSource.locale);
+        }});
+        
         Test.start({auto:true});
     </script>
   </head>

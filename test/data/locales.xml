@@ -21,4 +21,13 @@
     <label key="xen" value="xenX2"/>
     <label key="xen" value="xenX3"/>
   </xen>
+  <_1>
+    <label key="xxx" value="#_1"/>
+  </_1>
+  <de-de>
+    <label key="xxx" value="#de-de"/>
+  </de-de>
+  <de_de>
+    <label key="xxx" value="#de_de"/>
+  </de_de>
 </locales>
