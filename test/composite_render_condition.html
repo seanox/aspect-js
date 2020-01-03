@@ -83,6 +83,13 @@
         Test.create({test() {
             Assert.assertSameTo("script[type='text/test-5']", snapshots.shift());
         }});
+        Test.create({test() {
+            var error = String(console.output.error);
+            Assert.assertTrue(error.includes("Invalid condition: {{null"));
+            Assert.assertTrue(error.includes("Invalid condition: null}}"));
+            Assert.assertTrue(error.includes("Invalid condition: {{null}}{{null}}"));
+            Assert.assertTrue(error.includes("Invalid condition: true"));
+        }});
     </script>
     <script type="text/test-1">
 A1AA
@@ -90,6 +97,10 @@ B1B
 C1C
 D1D
 E1E
+F1F
+F2F
+F3F
+F4F 
 OnA: false
 A2AA
 B2B
@@ -117,6 +128,10 @@ B1B
 C1C
 D1D
 E1E
+F1F
+F2F
+F3F
+F4F
 OnA: false
 A2AA
 B2B
@@ -140,6 +155,10 @@ B1B
 C1C
 D1D
 E1E
+F1F
+F2F
+F3F
+F4F
 OnA: true
 A2A
 B2BB
@@ -168,6 +187,10 @@ B1B
 C1C
 D1D
 E1E
+F1F
+F2F
+F3F
+F4F
 OnA: true
 A2A
 B2BB
@@ -191,6 +214,10 @@ B1B
 C1C
 D1D
 E1E
+F1F
+F2F
+F3F
+F4F
 OnA: false
 A2AA
 B2B
@@ -219,6 +246,11 @@ OnB: true
     C1<span condition="{{1}}">C</span>C
     D1<span condition="{{0}}">D</span>D
     E1<span condition="{{null}}">E</span>E
+    
+    F1<span condition="{{null">X</span>F
+    F2<span condition="null}}">X</span>F
+    F3<span condition="{{null}}{{null}}">X</span>F
+    F4<span condition="true">X</span>F    
 
     OnA: {{Model.onA}}
     A2<span condition="{{Model.toggleA()}}">A</span>A

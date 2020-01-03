@@ -10,6 +10,22 @@
       The syntax is more consistently based on URL syntax.
       A locator can use any word characters (_ a-z A-Z 0-9) and additionally the - character.
       This means that the DataSource can also be used better for mandators and detailed locales (e.g. en_us).
+  CR: Composite Render Condition: Added console error output for faulty expression
+      The behaviour of the function remains unchanged.
+  CR: Composite Render Condition: Added console error output for faulty expression
+  CR: Composite Render: Optimization in the detection and validation of expressions
+  CR: Composite Render: Simplification of the syntax restrictions for variable expressions
+      The variable name is based on a word (_ a-z A-Z 0-9) and additionally - characters
+      and can now begin with any word character (_ a-z A-Z 0-9).
+  CR: Composite Render: Simplification of the syntax restrictions for composite IDs
+      The composite ID is based on a word (_ a-z A-Z 0-9) and additionally - characters
+      and can now begin with any word character (_ a-z A-Z 0-9).
+  CR: Composite Render: Simplification of the syntax restrictions for element IDs
+      The element ID is based on words (_ a-z A-Z 0-9) and additionally - characters
+      and can now begin with any word character (_ a-z A-Z 0-9).
+  CR: Composite Render: Simplification of the syntax restrictions for custom tags
+      The custom tags is based on words (_ a-z A-Z 0-9) and additionally - characters
+      and can now begin with any word character (_ a-z A-Z 0-9).
       
 1.2.0 20191231
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 

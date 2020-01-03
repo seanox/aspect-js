@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.1 20191230
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Composite 1.2.0x 20200103
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.1 20191230
+ *  @version 1.2.0x 20200103
  */
 if (typeof Composite === "undefined") {
     
@@ -202,23 +202,26 @@ if (typeof Composite === "undefined") {
          *  Pattern to detect if a string contains an expression.
          *  Escaping characters via slash is supported.
          */
-        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}/g},   
-        
+        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{.*?\}\}/g}, 
+
         /**
-         *  Patterns to test whether an expression is exclusive, i.e. an
-         *  expression without additional text fragments before or after.
-         *  The test based on the check that the text has an expression (group1)
-         *  and at the end no more literal or other expressions (group 2) exist.
+         *  Patterns for condition expressions.
+         *  Conditions are explicitly a single expression and not a variable
+         *  expression.
          */
-        get PATTERN_EXPRESSION_EXCLUSIVE() {return /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*(.*)$/},
-        
+        get PATTERN_EXPRESSION_CONDITION() {return /^\s*\{\{\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i},
+
         /**
          *  Patterns for expressions with variable.
+         *  Variables are at the beginning of the expression and are separated
+         *  from the expression by a colon. The variable name must conform to
+         *  the usual JavaScript conditions and starts with _ or a letter, other
+         *  word characters (_ 0-9 a-z A-Z) may follow.
          *      group 1: variable
          *      group 2: expression
          */
-        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*(_*[a-z]\w*)\s*:\s*(.*?)\s*$/i},    
-
+        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*\{\{\s*((?:(?:_*[a-z])|(?:_\w*))\w*)\s*:\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i},
+        
         /** Pattern for all to ignore (script-)elements */
         get PATTERN_ELEMENT_IGNORE() {return /script|style/i},
 
@@ -233,18 +236,18 @@ if (typeof Composite === "undefined") {
          */
         get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i},
 
-        /** Pattern for a composite id */
-        get PATTERN_COMPOSITE_ID() {return /^[a-z]\w*$/i},
+        /** Pattern for a composite id (based on a word) */
+        get PATTERN_COMPOSITE_ID() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/},
 
-        /**
-         *  Pattern for a element id
+        /** 
+         *  Pattern for a element id (e.g. name:qualifier...)
          *      group 1: name
-         *      group 2: qualifier (optional)
+         *      group 2: qualifier(s) (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^([a-z]\w*)(?:\:((?:\w*)(?:\:\w*)*)){0,1}$/i},
+        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:(((((\w+\-+(?=\w))+)\w*)|(\w+))))*)$/},
         
-        /** Pattern for a scope (namespace) */
-        get PATTERN_CUSTOMIZE_SCOPE() {return /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i},
+        /** Pattern for a scope (custom tag, based on a word) */
+        get PATTERN_CUSTOMIZE_SCOPE() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/},
         
         /** Pattern for the namespace separator */
         get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g},
@@ -1291,7 +1294,7 @@ if (typeof Composite === "undefined") {
             if (serial[1])
                 meta.property = serial[1];
             if (serial[2])
-                meta.name = serial[2];
+                meta.name = serial[2].replace(/(^:+)|(:+$)/g , "");
         }
 
         for (var scope = element.parentNode; scope; scope = scope.parentNode) {
@@ -1638,11 +1641,14 @@ if (typeof Composite === "undefined") {
      *      Condition
      *      ----
      *  The declaration can be used with all HTML elements, but not with script
-     *  and style. The condition defines whether an element is (re)rendered or
-     *  not. As result of the expression true/false is expected and will be se
-     *  as an absolute value for the condition attribute - only true or false.
-     *  Elements are hidden with the condition attribute via CSS and only
-     *  explicitly displayed with [condition=true].
+     *  and style. The condition defines whether an element exists in the DOM or
+     *  not. An expression is expected that explicitly returns true. Only then
+     *  will the element exist in the DOM. With all other return values, the
+     *  element is removed from the DOM. The condition is validated with each
+     *  render cycle that includes the element. Thus, elements that are removed
+     *  are also reinserted into the DOM.
+     *  Invalid or incorrect expressions behave like not true and cause a
+     *  console error output.
      *  JavaScript (composite/javascript) elements are executed or not.     
      *      
      *      Import
@@ -1689,7 +1695,9 @@ if (typeof Composite === "undefined") {
      *  and the result is added to the inner HTML.
      *  The expression for the iteration is a parameter expression. The
      *  parameter is a meta object and supports access to the iteration cycle.
-     *      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}
+     *      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data
+     *  Invalid or incorrect expressions behave like an empty iterator and cause
+     *  a console error output.   
      *      
      *      Release
      *      ----
@@ -2052,8 +2060,7 @@ if (typeof Composite === "undefined") {
                     //later, but do not generate any output.
                     
                     content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match, offset, content) => {
-                        match = match.substring(2, match.length -2).trim();
-                        if (!match)
+                        if (!match.substring(2, match.length -2).trim())
                             return "";
                         var node = document.createTextNode("");
                         var serial = node.ordinal();
@@ -2071,11 +2078,11 @@ if (typeof Composite === "undefined") {
                                 this.value = word;
                                 this.element.textContent = word;
                             }};
-                        var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
-                        if (param) {
-                            object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
-                            object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
-                        } else object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
+                            var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                            if (param) {
+                                object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
+                                object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
+                            } else object.attributes[Composite.ATTRIBUTE_VALUE] = match; 
                         Composite.render.meta[serial] = object; 
                         return "{{" + serial + "}}";
                     });
@@ -2209,11 +2216,13 @@ if (typeof Composite === "undefined") {
                 //placeholder and output rendering must be performed. Both are
                 //only taken over by the placeholder. It decides whether the
                 //output has to be added, updated or removed in the DOM and does
-                //so. The goal is that a conditon consists of two parts. Both
+                //so. The goal is that a condition consists of two parts. Both
                 //parts are checked and rendered, but the expression(s) are
                 //called only once in one render cycle.
 
-                if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
+                if (placeholder.condition
+                        && placeholder.condition.match(Composite.PATTERN_EXPRESSION_CONDITION)
+                        && Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
                     
                     //Load modules/components/composite resources.
                     //Composites with condition are only loaded with the first use.                    
@@ -2286,6 +2295,10 @@ if (typeof Composite === "undefined") {
                     object = Composite.render.meta[serial];
                     
                 } else {
+                    
+                    var condition = (placeholder.condition || "").trim();
+                    if (!condition.match(Composite.PATTERN_EXPRESSION_CONDITION))
+                        console.error("Invalid condition" + (condition ? ": " + condition : ""));
                     
                     //The output is removed from the DOM because the condition
                     //is not explicitly true.
@@ -2482,8 +2495,7 @@ if (typeof Composite === "undefined") {
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
-                    var content = iterate.match(Composite.PATTERN_EXPRESSION_EXCLUSIVE);
-                    content = content && !content[2] ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE) : null;
+                    var content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                     if (content) {
                         object.iterate = {name:content[1].trim(),
                                 expression:"{{" + content[2].trim() + "}}"

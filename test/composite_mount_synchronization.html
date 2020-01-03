@@ -54,28 +54,28 @@
   <body>
     <form id="model" composite static>
       <input type="text" id="user:name" placeholder="user:name"
-           events="input" render="body,#user\:name_text">
+          events="input" render="body,#user\:name_text">
       <span id="user:name_text">{{model.user.name}}</span>     
       <input type="text" id="user:address:city" placeholder="user:address:city"
-           events="input" render="body,#user\:address\:city_text">
+          events="input" render="body,#user\:address\:city_text">
       <span id="user:address:city_text">{{model.user.address.city}}</span>
       <input type="text" id="user:address:citycode" placeholder="user:address:citycode"
-           events="input" render="#user\:address\:citycode_text">
+          events="input" render="#user\:address\:citycode_text">
       <span id="user:address:citycode_text">{{model.user.address.citycode}}</span>
       <input type="text" id="user:address:street" placeholder="user:address:street"
-           events="input" render="#user\:address\:street_text">
+          events="input" render="#user\:address\:street_text">
       <span id="user:address:street_text">{{model.user.address.street}}</span>
       <input type="text" id="user:address:number" placeholder="user:address:number"
-           events="input" render="#user\:address\:number_text">
+          events="input" render="#user\:address\:number_text">
       <span id="user:address:number_text">{{model.user.address.number}}</span>
       <div id="views:0">
         <input type="text" id="textA" placeholder="user:name"
-             events="input" render="body,#views_0_textA">
+            events="input" render="body,#views_0_textA">
         <span id="views_0_textA">{{model.views[0].textA}}</span>     
       </div>
       <div id="views:1">
         <input type="text" id="textA" placeholder="user:name"
-             events="input" render="body,#views_1_textA">
+            events="input" render="body,#views_1_textA">
         <span id="views_1_textA">{{model.views[1].textA}}</span>     
       </div>
     </form>
