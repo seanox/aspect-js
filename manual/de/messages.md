@@ -4,9 +4,10 @@
 # Resource Bundle (Messages / i18n)
 
 (Resource)Messages ist eine statische Erweiterung der
-[DataSource](datasource.md) für Internationalisierung und Lokalisierung (i18n).  
+[DataSource](datasource.md) für Internationalisierung, Lokalisierung (i18n)
+sowie für Mandanten bezogene Texte.  
 Die Implementierung basiert auf einer Menge von Schlüssel-Wert-Paaren in Form
-von Label-Elementen, die in der Datei `locales.xml` in der DataSource
+von Label-Elementen, die in der Datei `locales.xml` im DataSource-Verzeichnis
 definiert werden.
 
 ```
@@ -26,7 +27,7 @@ organisiert. Locales sind eine Menge von unterstützten Ländercodes. In jedem
 Ländercode werden die Schlüssel-Wert-Paare als Label-Einträge festgelegt.  
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <locales>
   <de>
     <label key="contact.title" value="Kontakt"/>
@@ -57,7 +58,7 @@ Messages["contact.title"];
 <h1 output="{{Messages['contact.title']}}"/>
 ```
 
-Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geänder
+Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geändert
 werden.  
 Akzeptiert werden nur Gebietsschemen, die mit der DataSource verfügbar sind,
 andere Angaben führen beim Methoden-Aufruf zu einem Fehler.
@@ -70,7 +71,6 @@ Die aktuell verwendete Sprache kann als Gebietsschema per `DataSource.locale`
 abgefragt werden.  
 Alle verfügbaren Sprachen liefert `DataSource.locales` als Array von
 Gebietsschemen, das mit dem als default deklarierte Gebietsschema beginnt.
-
 
 
 - - -

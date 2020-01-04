@@ -4,9 +4,9 @@
 # Resource Bundle (Messages / i18n)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
-internationalization and localization (i18n). The implementation is based on a
-set of key-value or label-value data which is stored in the `locales.xml` of
-the DataSource.
+internationalization, localization (i18n) and customer-related texts.  
+The implementation is based on a set of key-value or label-value data which is
+stored in the `locales.xml` in the DataSource directory.
 
 ```
 +- data
@@ -25,7 +25,7 @@ Locales is a set of supported country codes. In each country code, the key
 values are recorded as label entries.  
 
 ```xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <locales>
   <de>
     <label key="contact.title" value="Kontakt"/>
