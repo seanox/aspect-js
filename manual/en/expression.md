@@ -18,6 +18,14 @@ The Expression Language can be used from the BODY tag on in the complete markup
 as free text as well as in all attributes. Only in the STYLE and SCRIPT tags the
 Expression Language is not supported.
 
+The renderer interprets the expression syntax `{{...}}` hard and therefore the
+character sequence `{{` as well as `}}` must be used inside of the
+expression by escape sequence/escape symbol.
+
+The renderer interprets the expression syntax `{{...}}` hard and therefore the
+character sequence `{{` as well as `}}` must be used inside the expression via
+escape sequence `\{\{` and/or `\}\}`.
+
 
 ## Contents Overview
 

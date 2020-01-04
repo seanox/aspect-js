@@ -17,6 +17,10 @@ Die Expression Language kann ab dem BODY-Tag im kompletten Markup als Freitext
 sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
 SCRIPT, hier wird die Expression Language nicht unterstützt.
 
+Der Renderer interpretiert die Expression-Syntax `{{...}}` hart und daher
+müssen die Zeichenfolge `{{` sowie `}}` innerhalb der Expression per
+Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
+
 
 ## Inhalt
 
