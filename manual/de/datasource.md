@@ -85,7 +85,7 @@ Die Auswahl der Sprache erfolgt automatisch auf der Grundlage der
 Spracheinstellung des Browsers. Wenn die dort eingestellte Sprache nicht
 unterstützt wird, wird die als `default` deklarierte Sprache verwendet.
 
-Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geänder
+Zur Laufzeit kann die Sprache per JavaScript über das Gebietsschema geändert
 werden.  
 Akzeptiert werden nur Gebietsschemen, die mit der DataSource verfügbar sind,
 andere Angaben führen beim Methoden-Aufruf zu einem Fehler.
