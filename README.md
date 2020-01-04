@@ -1,3 +1,16 @@
+<p>
+  <a href="https://github.com/seanox/aspect-js-tutorial/pulls">
+    <img src="https://img.shields.io/badge/development-active-green?style=for-the-badge">
+  </a>
+  <a href="https://github.com/seanox/aspect-js-tutorial/issues">
+    <img src="https://img.shields.io/badge/maintenance-active-green?style=for-the-badge">
+  </a>
+  <a href="http://seanox.de/contact">
+    <img src="https://img.shields.io/badge/support-active-green?style=for-the-badge">
+  </a>
+</p>
+
+
 # Description
 Influenced by the good experiences from JSF (Java Server Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
