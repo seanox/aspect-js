@@ -416,10 +416,10 @@ das Ergebnis verkettet, aggregiert und per XSLT transformiert werden kann.
 ## Resource Bundle (Messages / i18n)
 
 (Resource)Messages ist eine statische Erweiterung der
-[DataSource](datasource.md#datasource) für Internationalisierung und
-Lokalisierung.  
+[DataSource](datasource.md) für Internationalisierung, Lokalisierung (i18n)
+sowie für Mandanten bezogene Texte.  
 Die Implementierung basiert auf einer Menge von Schlüssel-Wert-Paaren in Form
-von Label-Elementen, die in der Datei `locales.xml` in der DataSource
+von Label-Elementen, die in der Datei `locales.xml` im DataSource-Verzeichnis
 definiert werden.
 
 [Mehr erfahren](messages.md)

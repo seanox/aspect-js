@@ -408,10 +408,10 @@ result can be concatenated, aggregated and transformed using XSLT.
 
 ## Resource Bundle (Messages / i18n)
 
-(Resource)Messages is a static [DataSource](datasource.md#datasource) extension
-for internationalization and localization. The implementation is based on a set
-of key-value or label-value data which is stored in the `locales.xml` of the
-DataSource.
+(Resource)Messages is a static [DataSource](datasource.md) extension for
+internationalization, localization (i18n) and customer-related texts.  
+The implementation is based on a set of key-value or label-value data which is
+stored in the `locales.xml` in the DataSource directory.
 
 [Learn more](messages.md)
 
