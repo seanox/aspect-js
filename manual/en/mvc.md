@@ -7,21 +7,21 @@ The Model View Controller (MVC) is a design pattern for separating interaction,
 data, and presentation.
 
 ```
-+------------------------------------------+--------------+---------------------------------+
-|  View                                    |  Controller  |  Model                          |
-+------------------------------------------+--------------+---------------------------------+
-|  Markup                                  |  Composite   |  JavaScript                     |
-|                                          |  Path        |                                 |
-|                                          |  SiteMap     |                                 |
-+------------------------------------------+--------------+---------------------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {                  |
-|    <input id="message" events="input"/>  |              |      message:"",                | 
-|    <button id="submit"/>                 |              |      submit: {                  |
-|  </form>                                 |              |          onClick: function() {  |
-|                                          |              |          }                      |
-|                                          |              |      }                          |
-|                                          |              |  }                              |
-+------------------------------------------+--------------+---------------------------------+
++------------------------------------------+--------------+-----------------------+
+|  View                                    |  Controller  |  Model                |
++------------------------------------------+--------------+-----------------------+
+|  Markup                                  |  Composite   |  JavaScript           |
+|                                          |  Path        |                       |
+|                                          |  SiteMap     |                       |
++------------------------------------------+--------------+-----------------------+
+|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|    <input id="message" events="input"/>  |              |      message: "",     | 
+|    <button id="submit"/>                 |              |      submit: {        |
+|  </form>                                 |              |          onClick() {  |
+|                                          |              |          }            |
+|                                          |              |      }                |
+|                                          |              |  }                    |
++------------------------------------------+--------------+-----------------------+
 ```
 
 
@@ -82,10 +82,11 @@ In Seanox aspect-js the views are represented by the markup.
   * [Permission Concept](#permission-concept)
   * [Acceptors](#acceptors)
 * [Virtual Paths](#virtual-paths)
-  * [Functional Path](#functional-path)
   * [Root Path](#root-path)
   * [Relative Path](#relative-path)
   * [Absolute Path](#absolute-path)
+  * [Variable Path](#variable-path)
+  * [Functional Path](#functional-path)
 * [Object-/Model-Binding](#object-model-binding)
   * [Terms](#terms)
     * [namespace](#namespace)
@@ -321,7 +322,7 @@ input), by using hash links, and in JavaScript with `window.location.hash`,
 ```
 <a href="#a#b#c">Goto root + a + b + c</a>
 <a href="##">Back to the parent</a>
-<a href="##x">Back to the parent + z</a>
+<a href="##x">Back to the parent + x</a>
 ```
 
 ```javascript
@@ -404,19 +405,6 @@ input), by using hash links, and in JavaScript with `window.location.hash`,
 There are different types of paths, which are explained below.
 
 
-### Functional Path
-
-The path consists of three or more hash characters (`###+`) and are only
-temporary, they serve a function call without changing the current path (URL
-hash).  
-This is useful for functional links, e.g. to open a popup or to send a
-mail in the background.
-
-```
-<a href="###">Do something, the logic is in the model</a>
-```
-
-
 ### Root Path
 
 These paths are empty or contain only one hash character.
@@ -428,12 +416,12 @@ These paths are empty or contain only one hash character.
 
 ### Relative Path
 
-These paths begin without hash or begin with two or more hash (`##+`)
-characters and are relative to the current path.
+These paths begin without hash or begin with two or more hash characters (`##+`)
+and are relative to the current path.
      
 ```
 <a href="##">Back to the parent</a>
-<a href="##x">Back to the parent + z</a>
+<a href="##x">Back to the parent + x</a>
 ```
 
 Relative paths without hash at the beginning are possible, but only work with
@@ -456,6 +444,24 @@ are resolved.
 ```
 
 
+### Variable Path
+
+TODO:
+
+
+### Functional Path
+
+The path consists of three or more hash characters (`###+`) and are only
+temporary, they serve a function call without changing the current path (URL
+hash).  
+This is useful for functional links, e.g. to open a popup or to send a
+mail in the background.
+
+```
+<a href="###">Do something, the logic is in the model</a>
+```
+
+
 ## Object-/Model-Binding
 
 Object binding is about linking HTML elements with corresponding model objects
@@ -474,11 +480,11 @@ View Controller.
 #### namespace
 
 The namespace is a sequence of characters or words consisting of letters,
-numbers, and an underscore that describes the path in an object tree.  
+numbers, and underscores that describes the path in an object tree.  
 The dot is used as a separator, it defines the boundary from one level to the
 next in the object tree.  
-Each element in the namespace must contain at least one character, begin with a
-letter, and end with a letter or number.
+Each element in the namespace must contain at least one character and begin with
+a letter.
 
 
 #### scope
@@ -509,9 +515,9 @@ The implementation of both methods is optional.
 
 ```javascript
 var model = {
-    dock: function() {
+    dock() {
     },
-    undock: function() {
+    undock() {
     }
 };
 ```
@@ -620,14 +626,14 @@ synchronization and interaction between UI and application logic.
 ```javascript
 var model = {
     message: "Hello", 
-    dock: function() {
+    dock() {
         ...
     },
-    undock: function() {
+    undock() {
         ...
     },
     submit: {
-        onClick: function(event) {
+        onClick(event) {
             ...    
         }
     }
@@ -654,21 +660,21 @@ object structure of the JavaScript model can be decoupled.
 ```javascript
 var model = {
     message: "Hello", 
-    dock: function() {
+    dock() {
         ...
     },
-    undock: function() {
+    undock() {
         ...
     },
     submit: {
-        onClick: function(event) {
+        onClick(event) {
             ...    
         }
     },
     subModel: {
         subMessage: "Is everything clear?",
         subButton: {
-            onClick: function(event) {
+            onClick(event) {
                 ...    
             }
         }
@@ -706,10 +712,10 @@ view.
 
 ```javascript
 var model = {
-    dock: function() {
+    dock() {
         ...
     },
-    undock: function() {
+    undock() {
         ...
     }
 };
@@ -772,7 +778,7 @@ listeners.
 ```javascript
 var contact= {
     mail: {
-        onClick: function(event) {
+        onClick(event) {
             var mail = "mailto:mail@local?subject=Test&body=Greetings";
             document.location.href = mail;
             return false;

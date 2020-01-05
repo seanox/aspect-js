@@ -7,21 +7,21 @@ Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung.
 
 ```
-+------------------------------------------+--------------+---------------------------------+
-|  View                                    |  Controller  |  Model                          |
-+------------------------------------------+--------------+---------------------------------+
-|  Markup                                  |  Composite   |  JavaScript                     |
-|                                          |  Path        |                                 |
-|                                          |  SiteMap     |                                 |
-+------------------------------------------+--------------+---------------------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {                  |
-|    <input id="message" events="input"/>  |              |      message:"",                | 
-|    <button id="submit"/>                 |              |      submit: {                  |
-|  </form>                                 |              |          onClick: function() {  |
-|                                          |              |          }                      |
-|                                          |              |      }                          |
-|                                          |              |  }                              |
-+------------------------------------------+--------------+---------------------------------+
++------------------------------------------+--------------+-----------------------+
+|  View                                    |  Controller  |  Model                |
++------------------------------------------+--------------+-----------------------+
+|  Markup                                  |  Composite   |  JavaScript           |
+|                                          |  Path        |                       |
+|                                          |  SiteMap     |                       |
++------------------------------------------+--------------+-----------------------+
+|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|    <input id="message" events="input"/>  |              |      message: "",     | 
+|    <button id="submit"/>                 |              |      submit: {        |
+|  </form>                                 |              |          onClick() {  |
+|                                          |              |          }            |
+|                                          |              |      }                |
+|                                          |              |  }                    |
++------------------------------------------+--------------+-----------------------+
 ```
 
 
@@ -67,7 +67,7 @@ In Seanox aspect-js werden die Views durch das Markup repräsentiert.
 * [Model](#model)
 * [View](#view)
 * [SiteMap](#sitemap)
-  * [Terms](#terms)
+  * [Begriffe](#begriffe)
     * [Page](#page)
     * [Face](#face)
     * [Facets](#facets)
@@ -80,12 +80,13 @@ In Seanox aspect-js werden die Views durch das Markup repräsentiert.
   * [Permission Concept](#permission-concept)
   * [Acceptors](#acceptors)
 * [Virtual Paths](#virtual-paths)
-  * [Functional Path](#functional-path)
   * [Root Path](#root-path)
   * [Relative Path](#relative-path)
   * [Absolute Path](#absolute-path)
+  * [Variable Path](#variable-path)
+  * [Functional Path](#functional-path)
 * [Object-/Model-Binding](#object-model-binding)
-  * [Terms](#terms)
+  * [Begriffe](#begriffe)
     * [namespace](#namespace)
     * [scope](#scope)
     * [model](#model)
@@ -138,7 +139,7 @@ Einfügen und Entfernen der Ansichten (Faces und Facets).
 ```
 
 
-### Terms
+### Begriffe
 
 
 #### Page
@@ -327,7 +328,7 @@ durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
 ```
 <a href="#a#b#c">Goto root + a + b + c</a>
 <a href="##">Back to the parent</a>
-<a href="##x">Back to the parent + z</a>
+<a href="##x">Back to the parent + x</a>
 ```
 
 ```javascript
@@ -411,6 +412,50 @@ durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
 Es gibt verschiedene Arten von Pfaden, die im Folgenden erläutert werden.
 
 
+### Root Path
+
+Diese Pfade sind leer oder enthalten nur ein Hash-Zeichen.
+
+```
+<a href="#">Back to the root</a>
+```
+
+
+### Relative Path
+
+Diese Pfade beginnen ohne Hash oder mit zwei oder mehr Hash-Zeichen (`###+`)
+und sind relativ zum aktuellen Pfad.
+     
+```
+<a href="##">Back to the parent</a>
+<a href="##x">Back to the parent + x</a>
+```
+
+Relative Pfade ohne Hash am Anfang sind möglich, funktionieren aber nur mit
+`SiteMap.navigate(path)`.
+
+```javascript
+SiteMap.navigate("x#y#z");
+```
+
+
+### Absolute Path
+
+Diese Pfade beginnen mit einem Hash-Zeichen.
+Alle Pfade werden ausgeglichen, d.h. die Direktiven mit mehreren Hash-Zeichen
+werden aufgelöst.
+
+```
+<a href="#">Back to the root</a>
+<a href="#a#b#c">Back to the root + a + b + c</a>
+```
+
+
+### Variable Path
+
+TODO:
+
+
 ### Functional Path
 
 Der Pfad besteht aus drei oder mehr Hash-Zeichen (`#####+`) und ist nur
@@ -422,6 +467,31 @@ Mail im Hintergrund zu senden.
 ```
 <a href="###">Do something, the logic is in the model</a>
 ```
+
+
+## Object-/Model-Binding
+
+Bei der Objektbindung geht es darum, HTML-Elemente mit entsprechenden
+Modell-Objekten zu verknüpfen, die im JavaScript existieren.
+
+Das Object-/Model-Binding gehört ebenfalls zum Model View Controller und ist in
+Seanox aspect-js in der Composite API implementiert, auf der SiteMap als
+Erweiterung und basiert.    
+Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
+beschrieben.
+
+
+### Begriffe
+
+
+#### namespace
+
+Der Namensraum ist eine Folge von Zeichen oder Wörtern, die aus Buchstaben,
+Zahlen und Unterstrichen besteht und den Pfad in einem Objektbaum beschreibt.  
+Der Punkt wird als Trennzeichen verwendet, er definiert die Grenze von einer
+Ebene zur nächsten im Objektbaum.  
+Jedes Element im Namensraum muss mindestens ein Zeichen enthalten und mit einem
+Buchstaben beginnen.
 
 TODO:
 
