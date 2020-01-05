@@ -490,12 +490,17 @@ View Controller.
 
 #### namespace
 
-The namespace is a sequence of characters or words consisting of letters,
-numbers, and underscores that describes the path in an object tree.  
-The dot is used as a separator, it defines the boundary from one level to the
-next in the object tree.  
-Each element in the namespace must contain at least one character and begin with
-a letter.
+Comparable to packages in other programming languages, namespaces can be used to
+map hierarchical structures and to group thematically related components and
+resources.  
+The implementation happens in JavaScript at object level.  
+This means that it is not a real element of the programming language, but is
+represented by chained static objects. Each level in this object chain
+represents a namespace.  
+As is typical for object identifiers, namespaces also use letters, numbers, and
+underscores separated by dots.  
+As a special feature, arrays are also supported. If an object level in the
+namespace is a pure number, an array is assumed.
 
 
 #### scope

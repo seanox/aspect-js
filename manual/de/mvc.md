@@ -498,12 +498,17 @@ beschrieben.
 
 #### namespace
 
-Der Namensraum ist eine Folge von Zeichen oder Wörtern, die aus Buchstaben,
-Zahlen und Unterstrichen besteht und den Pfad in einem Objektbaum beschreibt.  
-Der Punkt wird als Trennzeichen verwendet, er definiert die Grenze von einer
-Ebene zur nächsten im Objektbaum.  
-Jedes Element im Namensraum muss mindestens ein Zeichen enthalten und mit einem
-Buchstaben beginnen.
+Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
+Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
+Komponenten und Ressourcen genutzt werden.  
+Die Implementierung erfolgt in JavaScript auf Objektebene.  
+Das heißt, es ist kein reales Element der Programmiersprache, sondern wird durch
+verkettete statische Objekte repräsentiert.  
+Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
+Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
+Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden.  
+Als Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene in der
+Namensraum eine reine Zahl ist, wird ein Array angenommen.
 
 TODO:
 

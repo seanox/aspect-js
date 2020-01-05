@@ -22,12 +22,18 @@ functions.
 ## Namespace
 
 Namespace at object level.  
-Comparable to packages in other programming languages, namespace can be used to
+Comparable to packages in other programming languages, namespaces can be used to
 map hierarchical structures and to group thematically related components and
-resources. The implementation happens in JavaScript at object level. This means
-that it is not a real element of the programming language, but is represented by
-chained static objects. Each level in this object chain represents a namespace.
-As is typical for objects, the namespace are separated by a dot. 
+resources.  
+The implementation happens in JavaScript at object level.  
+This means that it is not a real element of the programming language, but is
+represented by chained static objects. Each level in this object chain
+represents a namespace.  
+As is typical for object identifiers, namespaces also use letters, numbers, and
+underscores separated by dots.  
+As a special feature, arrays are also supported. If an object level in the
+namespace is a pure number, an array is assumed.
+
 
 ### Namespace.using
 
