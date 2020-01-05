@@ -457,7 +457,40 @@ are resolved.
 
 ### Variable Path
 
-TODO:
+Variable paths are a mapping from virtual to physical paths.  
+This explanation sounds a bit confusing in the context of the SiteMap and its
+virtual paths. Here, it means another additional virtual mapping of paths inside
+of the SiteMap.  
+A path of the SiteMap represents a fixed target, which can be Face and Facet.
+The path can now be extended without changing the target. The target can then
+use the extended path, for example, to pass parameters, which is comparable to
+PATH_TRANSLATED and PATH_INFO in CGI. 
+
+To configure variable paths, the character string `...` is used, which can
+follow a facet or be used directly as a facet.
+
+```javascript
+SiteMap.customize({
+    "#": ["home", "projects", "about", "contact..."],
+    "#project": ["..."],
+    ...
+});
+```
+
+The paths `#contact` and `#project` are variable in this example and can
+therefore be extended as required. The target is fixed in both cases and the
+requests are answered by `#contact` and `#project`.  
+The extension of the path can be determined with the method
+`SiteMap.lookup(path)`. The returned meta object contains the extended path
+in the data property for variable paths with extended paths.  
+
+```
+SiteMap.lookup("#contact#support");
+    returns {path:"#contact#support", face:"#", facet:"contact", data:"#support"}
+    
+SiteMap.lookup("#project#a#b#c");
+    returns {path:"#contact#support", face:"#project", facet:"", data:"#a#b#c"}
+```
 
 
 ### Functional Path
@@ -498,9 +531,8 @@ This means that it is not a real element of the programming language, but is
 represented by chained static objects. Each level in this object chain
 represents a namespace.  
 As is typical for object identifiers, namespaces also use letters, numbers, and
-underscores separated by dots.  
-As a special feature, arrays are also supported. If an object level in the
-namespace is a pure number, an array is assumed.
+underscores separated by dots. As a special feature, arrays are also supported.
+If an object level in the namespace is a pure number, an array is assumed.
 
 
 #### scope

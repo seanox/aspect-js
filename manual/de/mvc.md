@@ -465,7 +465,40 @@ werden aufgelöst.
 
 ### Variable Path
 
-TODO:
+Variable Pfade sind eine Abbildung (Mapping) von virtuellen auf physische Pfade.  
+Die Erklärung klingt im Kontext der SiteMap und derer virtueller Pfade etwas
+verwirrend und meint hier eine weitere zusätzliche virtuelle Abbildung von
+Pfaden innerhalb der SiteMap.  
+Dabei bildet ein Pfad der SiteMap ein festes Ziel, was Face und Facet sein
+können. Der Pfad kann nun beliebig erweitert werden ohne dass sich das Ziel
+ändert. Das Ziel kann den erweiterten Pfad dann z.B. zur Parameterübergabe
+nutzen, was vergleichbar mit PATH_TRANSLATED und PATH_INFO im CGI ist. 
+
+Zur Konfiguration variabler Pfade wird die Zeichenfolge `...` verwendet, die
+einem Facet nachgestellt oder direkt als Facet verwendet werden kann.
+
+```javascript
+SiteMap.customize({
+    "#": ["home", "projects", "about", "contact..."],
+    "#project": ["..."],
+    ...
+});
+```
+
+Die Pfade `#contact` und `#project` sind in diesem Beispiel variable und
+können somit beliebig erweitert werden. Das Ziel ist in beiden Fällen fest und
+die Anfragen werden von `#contact` bzw. `#project` verarbeitet.  
+Die Erweitertung vom Pfad kann mit der Methode `SiteMap.lookup(path)`
+ermittelt werden. Das zurückgegebene Meta-Objekt enthält bei variablen Pfaden
+mit erweiterten Pfaden diesen im data-Property. 
+
+```
+SiteMap.lookup("#contact#support");
+    returns {path:"#contact#support", face:"#", facet:"contact", data:"#support"}
+    
+SiteMap.lookup("#project#a#b#c");
+    returns {path:"#contact#support", face:"#project", facet:"", data:"#a#b#c"}
+```
 
 
 ### Functional Path
@@ -506,9 +539,9 @@ Das heißt, es ist kein reales Element der Programmiersprache, sondern wird durch
 verkettete statische Objekte repräsentiert.  
 Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
 Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
-Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden.  
-Als Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene in der
-Namensraum eine reine Zahl ist, wird ein Array angenommen.
+Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
+Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
+eine reine Zahl ist, wird ein Array angenommen.
 
 TODO:
 

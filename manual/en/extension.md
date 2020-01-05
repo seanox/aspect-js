@@ -30,9 +30,8 @@ This means that it is not a real element of the programming language, but is
 represented by chained static objects. Each level in this object chain
 represents a namespace.  
 As is typical for object identifiers, namespaces also use letters, numbers, and
-underscores separated by dots.  
-As a special feature, arrays are also supported. If an object level in the
-namespace is a pure number, an array is assumed.
+underscores separated by dots. As a special feature, arrays are also supported.
+If an object level in the namespace is a pure number, an array is assumed.
 
 
 ### Namespace.using

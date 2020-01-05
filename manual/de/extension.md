@@ -30,9 +30,9 @@ Das heißt, es ist kein reales Element der Programmiersprache, sondern wird durch
 verkettete statische Objekte repräsentiert.  
 Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
 Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
-Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden.  
-Als Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene in der
-Namensraum eine reine Zahl ist, wird ein Array angenommen.
+Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
+Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
+eine reine Zahl ist, wird ein Array angenommen.
 
 
 ### Namespace.using
