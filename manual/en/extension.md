@@ -241,6 +241,29 @@ Object.exists("foo");
 ```
 
 
+### Object.using
+
+Equivalent to [Namespace.using](#namespaceusing) as a static object function.  
+Creates a namespace to pass string.  
+Without arguments, the method returns the global namespace window.    
+The method has different signatures.
+
+```javascript
+Object.using("app.example");
+app.example {
+    ...
+}
+
+Object.using("app.example", "more");
+app.example.more {
+    ...
+}
+
+Object.using()
+    returns window
+```
+
+
 ## RegExp
 
 ### RegExp.quote

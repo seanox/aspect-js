@@ -184,8 +184,8 @@ gefunden werden, entspricht der Wert der Variablen `undefined`.
 
 Mit der Expression-Language lassen sich zur Laufzeit auch globale Variablen
 erzeugen und setzen. Dazu muss die Expression mit dem Namen einer Variablen
-(Bezeichner) beginnen, die dem Muster `_*[a-z]\w*` entspricht und durch einen
-Doppelpunkt von der eigentlichen Expression getrennt ist.  
+(Bezeichner) beginnen, der als Wort die Zeichen `_ a-z A-Z 0-9` verwendet und
+durch einen Doppelpunkt von der eigentlichen Expression getrennt ist.  
 
 ```
 {{foo:1 +2 +3 + 'x Hallo'}}

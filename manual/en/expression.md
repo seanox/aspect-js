@@ -148,7 +148,7 @@ Value represents the value of an object property or variable.
 Anything that is not a literal and keyword is potentially a value.  
 Values refer to variables or object properties.  
 With object properties, the reference is directly to the property or, if
-available, to a corresponding getter (get method). 
+available, to a corresponding getter (get method).
 
 ```
 {{Example.object.field}}
@@ -186,9 +186,9 @@ the variable corresponds to `undefined`.
 ### Variable-Expression
 
 With the expression language, global variables can also be created and set at
-the runtime. The expression must begin with the name of a variable (identifier)
-that corresponds to the pattern `_*[a-z]\w*` and is separated from the actual
-expression by a colon.
+the runtime. The expression must begin with the name of a variable (identifier),
+which use as word the characters `_ a-z A-Z 0-9` and is separated from the
+actual expression by a colon.  
   
 ```
 {{foo:1 +2 +3 + 'x Hallo'}}

@@ -245,6 +245,29 @@ Object.exists("foo");
 ```
 
 
+### Object.using
+
+Äquivalent zu [Namespace.using](#namespaceusing) als statische Object-Funktion.  
+Erstellt einen Namensraum, um Zeichenkette zu übergeben.  
+Ohne Argumente gibt die Methode das globale Namensraumfenster zurück.  
+Die Methode hat verschiedenen Signaturen.
+
+```javascript
+Object.using("app.example");
+app.example {
+    ...
+}
+
+Object.using("app.example", "more");
+app.example.more {
+    ...
+}
+
+Object.using()
+    returns window
+```
+
+
 ## RegExp
 
 ### RegExp.quote
