@@ -691,8 +691,8 @@ Output:
 
 ```
 <form xmlns="http://www.w3.org/1999/xhtml" action="/api/example" methode="POST">
-  <input type="text" id="inputText" />
-  <input type="submit" /> 
+  <input type="text" id="inputText"/>
+  <input type="submit"/> 
 </form>
 ```
         
