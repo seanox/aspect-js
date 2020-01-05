@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -24,17 +24,17 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.0 20191213
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Extension 1.1.0x 20200105
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191213
+ *  @version 1.1.0x20200105
  */
 if (typeof Namespace === "undefined") {
 
     /**
-     *  Namespaces at object level.
+     *  Namespace at object level.
      *  Comparable to packages in other programming languages, namespaces can be
      *  used to map hierarchical structures and to group thematically related
      *  components and resources.
@@ -42,18 +42,18 @@ if (typeof Namespace === "undefined") {
      *  This means that it is not a real element of the programming language,
      *  but is represented by chained static objects.
      *  Each level in this object chain represents a namespace.
-     *  As is typical for objects, namespaces use letters, numbers and
-     *  underscores that are separated by dots.
+     *  As is typical for object identifiers, namespaces also use letters,
+     *  numbers, and underscores separated by dots.
      *  As a special feature, arrays are also supported. If an object level in
      *  the namespace is a pure number, an array is assumed.
      */
     Namespace = {
             
         /** Pattern for the namespace separator */
-        get PATTERN_NAMESPACE_SEPARATOR() {return /\./},
+        get PATTERN_NAMESPACE_SEPARATOR() {return /\./;},
         
         /** Pattern for a valid namespace. */
-        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*$/i}
+        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*$/i;}
     };
     
     /** 
@@ -180,6 +180,29 @@ if (typeof Namespace === "undefined") {
 
 /**
  *  Enhancement of the JavaScript API
+ *  Modifies the method to support node and nodes as NodeList and Array.
+ *  If the option exclusive is used, existing children will be removed first.
+ *  @param node      node(s)
+ *  @param exclusive existing children will be removed first
+ */
+Element.prototype.appendChild$origin = Element.prototype.appendChild;
+Element.prototype.appendChild = function(node, exclusive) {
+    if (exclusive)
+        this.innerHTML = "";
+    if (node instanceof Node) {
+        this.appendChild$origin(node);
+    } else if (Array.isArray(node)
+            || node instanceof NodeList
+            || (Symbol && Symbol.iterator
+                    && node && typeof node[Symbol.iterator])) {
+        node = Array.from(node);
+        for (var loop = 0; loop < node.length; loop++)
+            this.appendChild$origin(node[loop]);
+    } else this.appendChild$origin(node);
+};
+
+/**
+ *  Enhancement of the JavaScript API
  *  Adds a static function to create a alhpanumeric serial (U)UID with fixed size.
  *  The quality of the ID is dependent of the length.
  *  @param size optional, default is 16
@@ -219,6 +242,22 @@ if (Math.uniqueSerialId === undefined) {
         if (serial.length > size)
             serial = serial.substr(serial.length -size);
         return serial;
+    };
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Creates a literal pattern for the specified text.
+ *  Metacharacters or escape sequences in the text thus lose their meaning.
+ *  @param  text text to be literalized
+ *  @return a literal pattern for the specified text 
+ */
+if (RegExp.quote === undefined) {
+    RegExp.quote = function(text) {
+        if (text == undefined
+                || text == null)
+            return null;
+        return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
 };
 
@@ -362,45 +401,6 @@ if (String.prototype.unescape === undefined) {
         text = text.replace(/^(["'])/, "\$1");
         text = text.replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
         return eval("\"" + text + "\"");
-    };
-};
-
-/**
- *  Enhancement of the JavaScript API
- *  Modifies the method to support node and nodes as NodeList and Array.
- *  If the option exclusive is used, existing children will be removed first.
- *  @param node      node(s)
- *  @param exclusive existing children will be removed first
- */
-Element.prototype.appendChild$origin = Element.prototype.appendChild;
-Element.prototype.appendChild = function(node, exclusive) {
-    if (exclusive)
-        this.innerHTML = "";
-    if (node instanceof Node) {
-        this.appendChild$origin(node);
-    } else if (Array.isArray(node)
-            || node instanceof NodeList
-            || (Symbol && Symbol.iterator
-                    && node && typeof node[Symbol.iterator])) {
-        node = Array.from(node);
-        for (var loop = 0; loop < node.length; loop++)
-            this.appendChild$origin(node[loop]);
-    } else this.appendChild$origin(node);
-};
-
-/**
- *  Enhancement of the JavaScript API
- *  Creates a literal pattern for the specified text.
- *  Metacharacters or escape sequences in the text thus lose their meaning.
- *  @param  text text to be literalized
- *  @return a literal pattern for the specified text 
- */
-if (RegExp.quote === undefined) {
-    RegExp.quote = function(text) {
-        if (text == undefined
-                || text == null)
-            return null;
-        return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
 };
 

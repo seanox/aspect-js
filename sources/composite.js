@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0x 20200103
+ *  Composite 1.2.0x 20200105
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200103
+ *  @version 1.2.0x 20200105
  */
 if (typeof Composite === "undefined") {
     
@@ -128,58 +128,58 @@ if (typeof Composite === "undefined") {
     Composite = {
             
         /** Path of the Composite for: moduels (sub-directory of work path) */
-        get MODULES() {return window.location.pathcontext + "/modules"},
+        get MODULES() {return window.location.pathcontext + "/modules";},
 
         /** Constant for attribute composite */
-        get ATTRIBUTE_COMPOSITE() {return "composite"},
+        get ATTRIBUTE_COMPOSITE() {return "composite";},
         
         /** Constant for attribute condition */
-        get ATTRIBUTE_CONDITION() {return "condition"},
+        get ATTRIBUTE_CONDITION() {return "condition";},
 
         /** Constant for attribute events */
-        get ATTRIBUTE_EVENTS() {return "events"},
+        get ATTRIBUTE_EVENTS() {return "events";},
 
         /** Constant for attribute id */
-        get ATTRIBUTE_ID() {return "id"},
+        get ATTRIBUTE_ID() {return "id";},
         
         /** Constant for attribute import */
-        get ATTRIBUTE_IMPORT() {return "import"},
+        get ATTRIBUTE_IMPORT() {return "import";},
 
         /** Constant for attribute interval */
-        get ATTRIBUTE_INTERVAL() {return "interval"},
+        get ATTRIBUTE_INTERVAL() {return "interval";},
 
         /** Constant for attribute iterate */
-        get ATTRIBUTE_ITERATE() {return "iterate"},
+        get ATTRIBUTE_ITERATE() {return "iterate";},
 
         /** Constant for attribute message */
-        get ATTRIBUTE_MESSAGE() {return "message"},
+        get ATTRIBUTE_MESSAGE() {return "message";},
         
         /** Constant for attribute notification */
-        get ATTRIBUTE_NOTIFICATION() {return "notification"},
+        get ATTRIBUTE_NOTIFICATION() {return "notification";},
 
         /** Constant for attribute name */
-        get ATTRIBUTE_NAME() {return "name"},
+        get ATTRIBUTE_NAME() {return "name";},
 
         /** Constant for attribute output */
-        get ATTRIBUTE_OUTPUT() {return "output"},
+        get ATTRIBUTE_OUTPUT() {return "output";},
         
         /** Constant for attribute render */
-        get ATTRIBUTE_RENDER() {return "render"},  
+        get ATTRIBUTE_RENDER() {return "render";},  
         
         /** Constant for attribute release */
-        get ATTRIBUTE_RELEASE() {return "release"},
+        get ATTRIBUTE_RELEASE() {return "release";},
         
         /** Constant for attribute text */
-        get ATTRIBUTE_TEXT() {return "text"},
+        get ATTRIBUTE_TEXT() {return "text";},
 
         /** Constant for attribute type */
-        get ATTRIBUTE_TYPE() {return "type"},
+        get ATTRIBUTE_TYPE() {return "type";},
         
         /** Constant for attribute validate */
-        get ATTRIBUTE_VALIDATE() {return "validate"},
+        get ATTRIBUTE_VALIDATE() {return "validate";},
         
         /** Constant for attribute value */
-        get ATTRIBUTE_VALUE() {return "value"},
+        get ATTRIBUTE_VALUE() {return "value";},
 
         /**
          *  Pattern for all accepted attributes.
@@ -187,7 +187,7 @@ if (typeof Composite === "undefined") {
          *  that is cached in the meta object. Other attributes are only cached
          *  if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i;},
         
         /**
          *  Pattern for all static attributes.
@@ -196,20 +196,20 @@ if (typeof Composite === "undefined") {
          *  These attributes are also intended for direct use in JavaScript and
          *  CSS.
          */
-        get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i},
+        get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i;},
 
         /** 
          *  Pattern to detect if a string contains an expression.
          *  Escaping characters via slash is supported.
          */
-        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{.*?\}\}/g}, 
+        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{.*?\}\}/g;}, 
 
         /**
          *  Patterns for condition expressions.
          *  Conditions are explicitly a single expression and not a variable
          *  expression.
          */
-        get PATTERN_EXPRESSION_CONDITION() {return /^\s*\{\{\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i},
+        get PATTERN_EXPRESSION_CONDITION() {return /^\s*\{\{\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i;},
 
         /**
          *  Patterns for expressions with variable.
@@ -220,13 +220,13 @@ if (typeof Composite === "undefined") {
          *      group 1: variable
          *      group 2: expression
          */
-        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*\{\{\s*((?:(?:_*[a-z])|(?:_\w*))\w*)\s*:\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i},
+        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*\{\{\s*((?:(?:_*[a-z])|(?:_\w*))\w*)\s*:\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i;},
         
         /** Pattern for all to ignore (script-)elements */
-        get PATTERN_ELEMENT_IGNORE() {return /script|style/i},
+        get PATTERN_ELEMENT_IGNORE() {return /script|style/i;},
 
         /** Pattern for all script elements */
-        get PATTERN_SCRIPT() {return /script/i},
+        get PATTERN_SCRIPT() {return /script/i;},
 
         /** 
          *  Pattern for all composite-script elements.
@@ -234,55 +234,55 @@ if (typeof Composite === "undefined") {
          *  must be triggered by rendering. Therefore, these scripts can be
          *  combined and controlled with the condition attribute.
          */
-        get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i},
+        get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
         /** Pattern for a composite id (based on a word) */
-        get PATTERN_COMPOSITE_ID() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/},
+        get PATTERN_COMPOSITE_ID() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
 
         /** 
          *  Pattern for a element id (e.g. name:qualifier...)
          *      group 1: name
          *      group 2: qualifier(s) (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:(((((\w+\-+(?=\w))+)\w*)|(\w+))))*)$/},
+        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:(((((\w+\-+(?=\w))+)\w*)|(\w+))))*)$/;},
         
         /** Pattern for a scope (custom tag, based on a word) */
-        get PATTERN_CUSTOMIZE_SCOPE() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/},
+        get PATTERN_CUSTOMIZE_SCOPE() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
         
         /** Pattern for the namespace separator */
-        get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g},
+        get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g;},
         
         /** Pattern for a valid namespace. */
-        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*(\:\w+)*$/i},
+        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*(\:\w+)*$/i;},
         
         /** Pattern for a datasource url */
-        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i},
+        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i;},
 
         /** Pattern for all accepted events */
-        get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/},
+        get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/;},
         
         /** Constants of events during rendering */
-        get EVENT_RENDER_START() {return "RenderStart"},
-        get EVENT_RENDER_NEXT() {return "RenderNext"},
-        get EVENT_RENDER_END() {return "RenderEnd"},
+        get EVENT_RENDER_START() {return "RenderStart";},
+        get EVENT_RENDER_NEXT() {return "RenderNext";},
+        get EVENT_RENDER_END() {return "RenderEnd";},
 
         /** Constants of events during mounting */
-        get EVENT_MOUNT_START() {return "MountStart"},
-        get EVENT_MOUNT_NEXT() {return "MountNext"},
-        get EVENT_MOUNT_END() {return "MountEnd"},
+        get EVENT_MOUNT_START() {return "MountStart";},
+        get EVENT_MOUNT_NEXT() {return "MountNext";},
+        get EVENT_MOUNT_END() {return "MountEnd";},
 
         /** Constants of events when using AJAX */
-        get EVENT_AJAX_START() {return "AjaxStart"},
-        get EVENT_AJAX_PROGRESS() {return "AjaxProgress"},
-        get EVENT_AJAX_RECEIVE() {return "AjaxReceive"},
-        get EVENT_AJAX_LOAD() {return "AjaxLoad"},
-        get EVENT_AJAX_ABORT() {return "AjaxAbort"},
-        get EVENT_AJAX_TIMEOUT() {return "AjaxTimeout"},
-        get EVENT_AJAX_ERROR() {return "AjaxError"},
-        get EVENT_AJAX_END() {return "AjaxEnd"},
+        get EVENT_AJAX_START() {return "AjaxStart";},
+        get EVENT_AJAX_PROGRESS() {return "AjaxProgress";},
+        get EVENT_AJAX_RECEIVE() {return "AjaxReceive";},
+        get EVENT_AJAX_LOAD() {return "AjaxLoad";},
+        get EVENT_AJAX_ABORT() {return "AjaxAbort";},
+        get EVENT_AJAX_TIMEOUT() {return "AjaxTimeout";},
+        get EVENT_AJAX_ERROR() {return "AjaxError";},
+        get EVENT_AJAX_END() {return "AjaxEnd";},
 
         /** Constants of events when errors occur */
-        get EVENT_ERROR() {return "Error"},
+        get EVENT_ERROR() {return "Error";},
         
         /** 
          *  List of possible DOM events
@@ -306,7 +306,7 @@ if (typeof Composite === "undefined") {
                 + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
                 + " unload"
                 + " volume|change"
-                + " waiting wheel"},
+                + " waiting wheel";},
         
         /** Patterns with the supported events */
         get PATTERN_EVENT_FUNCTIONS() {return (function() {
@@ -315,21 +315,21 @@ if (typeof Composite === "undefined") {
             });
             pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
             return pattern;
-        })()},
+        })();},
         
         /** Patterns with the supported events as plain array */
         get PATTERN_EVENT_NAMES() {return (function() {
             return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).split(/\s+/);
-        })()},
+        })();},
         
         /** Patterns with the supported events as plain array (lower case) */
         get PATTERN_EVENT_FILTER() {return (function() {
             return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).toLowerCase().split(/\s+/);
-        })()}        
+        })();}        
     };
     
     /**
@@ -2957,31 +2957,31 @@ if (typeof Expression === "undefined") {
     Expression = {
             
         /** Constant for element type text */
-        get TYPE_TEXT() {return 1},
+        get TYPE_TEXT() {return 1;},
         
         /** Constant for element type expression */
-        get TYPE_EXPRESSION() {return 2},
+        get TYPE_EXPRESSION() {return 2;},
         
         /** Constant for element type literal */
-        get TYPE_LITERAL() {return 3},
+        get TYPE_LITERAL() {return 3;},
         
         /** Constant for element type script */
-        get TYPE_SCRIPT() {return 4},
+        get TYPE_SCRIPT() {return 4;},
         
         /** Constant for element type keyword */
-        get TYPE_KEYWORD() {return 5},
+        get TYPE_KEYWORD() {return 5;},
         
         /** Constant for element type other */
-        get TYPE_OTHER() {return 6},
+        get TYPE_OTHER() {return 6;},
         
         /** Constant for element type method */
-        get TYPE_METHOD() {return 7},
+        get TYPE_METHOD() {return 7;},
         
         /** Constant for element type value */
-        get TYPE_VALUE() {return 8},
+        get TYPE_VALUE() {return 8;},
         
         /** Constant for element type logic */
-        get TYPE_LOGIC() {return 9}
+        get TYPE_LOGIC() {return 9;}
     };
     
     //Expression.cache

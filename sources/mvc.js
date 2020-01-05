@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0x 20191231
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  MVC 1.1.0x 20200105
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0x 20191231
+ *  @version 1.1.0x 20200105
  */
 if (typeof Path === "undefined") {
     
@@ -125,13 +125,13 @@ if (typeof Path === "undefined") {
          *  more word characters and additionally - can follow, but can not end
          *  with the - character. Paths are separated by the # character.
          */
-        get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/},
+        get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/;},
     
         /** Pattern for a url path. */
-        get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i},
+        get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i;},
     
         /** Pattern for a functional path. */
-        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/}
+        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/;}
     };
     
     /**
@@ -312,7 +312,7 @@ if (typeof SiteMap === "undefined") {
          *      - After the separator # at least a word character is expected
          *      - Only # as root path is also allowed
          */
-        get PATTERN_PATH_FACE() {return /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/},
+        get PATTERN_PATH_FACE() {return /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/;},
         
         /** 
          *  Pattern for a valid facet path:
@@ -323,7 +323,7 @@ if (typeof SiteMap === "undefined") {
          *      - Character # is used to separate the path segments
          *      - After the separator # at least a word character is expected 
          */
-        get PATTERN_PATH_FACET() {return /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/},
+        get PATTERN_PATH_FACET() {return /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/;},
         
         /** 
          *  Pattern for a valid variable facet path:
@@ -331,7 +331,7 @@ if (typeof SiteMap === "undefined") {
          *      - Every path must end with ...
          *      - Only ... as facet path is also allowed
          */
-        get PATTERN_PATH_FACET_VARIABLE() {return /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/},
+        get PATTERN_PATH_FACET_VARIABLE() {return /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/;},
         
         /**
          *  Primarily, the root is always used when loading the page, since the
