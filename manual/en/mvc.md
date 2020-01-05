@@ -237,9 +237,9 @@ __The navigation only accepts paths that are defined in the face-flow. Invalid__
 __paths are forwarded to the next higher known/permitted path, based on the__
 __requested path.__
 
-__Without a face-flow there will be no valid paths. Should a user interface or__
-__components be used without face-flow, they must be marked as ___static___,__
-__otherwise the components will be hidden (removed from the DOM).__
+__Without a face flow there are no valid paths. If a user interface or__
+__components without face flow are used, they must be marked as ___static___,__
+__otherwise the components are hidden (removed from the DOM).__
 
 ```html
 <html>
@@ -317,7 +317,8 @@ SiteMap.customize(/^mail.*$/i, function(path) {
 
 The navigation can be effected by changing the URL hash in the browser (direct
 input), by using hash links, and in JavaScript with `window.location.hash`,
-`window.location.href` and `SiteMap.navigate(path)`.
+`window.location.href`, `SiteMap.navigate(path)` and
+`SiteMap.forward(path)`.
 
 ```
 <a href="#a#b#c">Goto root + a + b + c</a>
@@ -330,6 +331,15 @@ SiteMap.navigate("#a#b#c");
 SiteMap.navigate("##");
 SiteMap.navigate("##x");
 ```
+
+```javascript
+SiteMap.forward("#a#b#c");
+SiteMap.forward("##");
+SiteMap.forward("##x");
+```
+
+In difference to the navigate method, the forwarding is executed directly
+instead of triggering an asynchronous forwarding by changing the location hash.
 
 Relative paths without hash at the beginning are possible, but only work with
 `SiteMap.navigate(path)`.
@@ -400,7 +410,8 @@ additional hash characters.
 
 The navigation can be effected by changing the URL hash in the browser (direct
 input), by using hash links, and in JavaScript with `window.location.hash`,
-`window.location.href` and `SiteMap.navigate(path)`.
+`window.location.href`, `SiteMap.navigate(path)` and
+`SiteMap.forward(path)`.
 
 There are different types of paths, which are explained below.
 

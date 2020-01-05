@@ -242,9 +242,9 @@ __Die Navigation akzeptiert nur Pfade, die im Face-Flow definiert sind.__
 __Ungültige Pfade werden basierend auf dem angeforderten Pfad zum nächst__
 __höheren bekannten/berechtigten Pfad weitergeleitet.__
 
-__Ohne Face-Flow gibt es keine gültigen Pfade. Wird eine Benutzeroberfläche__
+__Ohne Face-Flow gibt es keine gültigen Pfade. Werden eine Benutzeroberfläche__
 __oder Komponenten ohne Face-Flow verwendet, müssen diese als statisch__
-__gekennzeichnet werden, da die Komponenten sind ausgeblendet (aus dem DOM__
+__gekennzeichnet werden, da die Komponenten sonst ausgeblendet (aus dem DOM__
 __entfernt) werden.__
 
 ```html
@@ -323,7 +323,8 @@ SiteMap.customize(/^mail.*$/i, function(path) {
 
 Die Navigation kann durch Änderung des URL-Hash im Browser (direkte Eingabe),
 durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
-`window.location.href` und `SiteMap.navigate(path)` erfolgen.
+`window.location.href`, `SiteMap.navigate(path)` und
+`SiteMap.forward(path)` erfolgen.
 
 ```
 <a href="#a#b#c">Goto root + a + b + c</a>
@@ -336,6 +337,16 @@ SiteMap.navigate("#a#b#c");
 SiteMap.navigate("##");
 SiteMap.navigate("##x");
 ```
+
+```javascript
+SiteMap.forward("#a#b#c");
+SiteMap.forward("##");
+SiteMap.forward("##x");
+```
+
+Im Unterschied zur navigate-Methode wird die Weiterleitung direkt ausgeführt,
+anstatt eine asynchrone Weiterleitung durch Änderung des Location-Hashes
+auszulösen.
 
 Relative Pfade ohne Hash am Anfang sind möglich, funktionieren aber nur mit
 `SiteMap.navigate(path)`.
@@ -407,7 +418,8 @@ dann der Anzahl der zusätzlichen Hash-Zeichen.
 
 Die Navigation kann durch Änderung des URL-Hash im Browser (direkte Eingabe),
 durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
-`window.location.href` und `SiteMap.navigate(path)` erfolgen.
+`window.location.href`, `SiteMap.navigate(path)` und
+`SiteMap.forward(path)`. erfolgen.
 
 Es gibt verschiedene Arten von Pfaden, die im Folgenden erläutert werden.
 
