@@ -44,7 +44,7 @@ Ländercode werden die Schlüssel-Wert-Paare als Label-Einträge festgelegt.
 
 Die Auswahl der Sprache erfolgt automatisch auf der Grundlage der
 Spracheinstellung vom Browser. Wenn die dort eingestellte Sprache nicht
-unterstützt wird, wird die als "Standard" deklarierte Sprache verwendet.
+unterstützt wird, wird die als `default` deklarierte Sprache verwendet.
 
 Nach dem Laden der Anwendung ist Messages als assosiatives Array verfügbar und
 kann im JavaScript direkt und im Markup per Expression Language verwendet
