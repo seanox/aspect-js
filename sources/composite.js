@@ -111,12 +111,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0x 20200105
+ *  Composite 1.2.0x 20200106
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200105
+ *  @version 1.2.0x 20200106
  */
 if (typeof Composite === "undefined") {
     
@@ -125,7 +125,7 @@ if (typeof Composite === "undefined") {
      *  The processing runs in the background and starts automatically when a
      *  page is loaded.
      */
-    Composite = {
+    window["Composite"] = {
             
         /** Path of the Composite for: moduels (sub-directory of work path) */
         get MODULES() {return window.location.pathcontext + "/modules";},
@@ -2954,7 +2954,7 @@ if (typeof Expression === "undefined") {
      *  complete markup as free text. and in all attributes. Only the STYLE and
      *  SCRIPT, here the Expression Language is not supported.
      */
-    Expression = {
+    window["Expression"] = {
             
         /** Constant for element type text */
         get TYPE_TEXT() {return 1;},

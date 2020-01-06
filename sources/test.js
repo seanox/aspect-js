@@ -83,12 +83,12 @@
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0x 20200105
+ *  Test 1.1.0x 20200106
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0x 20200105
+ *  @version 1.1.0x 20200106
  */
 if (typeof Test === "undefined") {
     
@@ -106,7 +106,7 @@ if (typeof Test === "undefined") {
      *  are helpful for implementing test are not used productively.
      *  For example, the redirection and caching of console output.
      */
-    Test = {
+    window["Test"] = {
             
         /** Pattern for all accepted events */
         get PATTERN_EVENT() {return /^[a-z]+$/;},
@@ -724,7 +724,7 @@ if (typeof Test === "undefined") {
              *  These methods can be used directly:
              *      Assert.assertEquals(...);
              */ 
-            Assert = {};
+            window["Assert"] = {};
             
             /**
              *  Creates a new assertion based on an array of variant parameters.

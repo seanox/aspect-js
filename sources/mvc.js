@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0x 20200105
+ *  MVC 1.1.0x 20200106
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0x 20200105
+ *  @version 1.1.0x 20200106
  */
 if (typeof Path === "undefined") {
     
@@ -116,7 +116,7 @@ if (typeof Path === "undefined") {
      *  face, a facet or a function.
      *  For more details see method Path.normalize(variants).
      */    
-    Path = {
+    window["Path"] = {
             
         /** 
          *  Pattern for a valid path.
@@ -300,7 +300,7 @@ if (typeof SiteMap === "undefined") {
      *  controlled and influenced. This way, the access to paths can be stopped
      *  and/or redirected/forwarded with own logic. 
      */
-    SiteMap = {
+    window["SiteMap"] = {
            
         /** 
          *  Pattern for a valid face path:

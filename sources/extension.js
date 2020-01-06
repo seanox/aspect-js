@@ -24,12 +24,12 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.0x 20200105
+ *  Extension 1.1.0x 20200106
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0x20200105
+ *  @version 1.1.0x20200106
  */
 if (typeof Namespace === "undefined") {
 
@@ -47,7 +47,7 @@ if (typeof Namespace === "undefined") {
      *  As a special feature, arrays are also supported. If an object level in
      *  the namespace is a pure number, an array is assumed.
      */
-    Namespace = {
+    window["Namespace"] = {
             
         /** Pattern for the namespace separator */
         get PATTERN_NAMESPACE_SEPARATOR() {return /\./;},
