@@ -40,20 +40,20 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0x 20200102
+ *  DataSource 1.2.0x 20200106
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200102
+ *  @version 1.2.0x 20200106
  */
 if (typeof DataSource === "undefined") {
     
     /** Static component for the access and transforming of XML data. */  
-    DataSource = {
+    window["DataSource"] = {
             
         /** Path of the DataSource for: data (sub-directory of work path) */
-        get DATA() {return window.location.pathcontext + "/data"},
+        get DATA() {return window.location.pathcontext + "/data";},
 
         /** 
          *  Pattern for a DataSource locator
@@ -63,16 +63,16 @@ if (typeof DataSource === "undefined") {
          *  more word characters and additionally - can follow, but can not end
          *  with the - character. Paths are separated by the / character.
          */
-        get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/},
+        get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;},
         
         /** Pattern to detect JavaScript elements */
-        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i},    
+        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i;},    
         
         /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
-        get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/},
+        get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
         
         /** Constant for attribute type */
-        get ATTRIBUTE_TYPE() {return "type"},
+        get ATTRIBUTE_TYPE() {return "type";},
         
         /** The currently used language. */
         get locale() {return DataSource.locales ? DataSource.locales.selection : null;}

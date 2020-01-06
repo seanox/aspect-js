@@ -3,6 +3,7 @@
       Error example: {{'abc\'123'}}
   BF: DataSource Collect: Correction of the cache usage with a collector
       Error example: DataSource.collect("data", ["xml://a", "xml://b", "xml://c"]);
+  BF: DataSource Fetch: Correction of the pattern of schema switching     
   CR: MVC Path: Simplification of the syntax restrictions    
       The syntax is more consistently based on XML entities (DOM).
       A path can now begin with any word character (_ a-z A-Z 0-9).
