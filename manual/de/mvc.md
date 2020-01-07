@@ -663,6 +663,156 @@ Namensraum.
 </html>
 ```
 
+
+#### composite
+
+Composite beschreibt ein Konstrukt aus Markup, JavaScript-Modell, CSS und
+eventuell weiteren Ressourcen. Es beschreibt eine Komponente/Modul ohne direkten
+Bezug auf die Darstellung.
+
+
+#### composite-id
+
+Die Composite-ID ist ein anwendungsweit eindeutiger Bezeichner.  
+Sie ist eine Zeichenfolge aus Buchstaben, Zahlen und Unterstrichen besteht und
+optional auch das Minus-Zeichen unterstützt, wenn es nicht am Anfang oder am
+Ende benutzt wird.  
+Eine Composite-ID ist mindestens ein Zeichen lang und wird durch die Kombination
+der Attribute `ID` und `Composite` gebildet.
+
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      ...
+    </form>
+  </body>
+</html>
+```
+
+Die Composite-ID wird beim MVC, Object-/Model-Binding sowie zur  Synchronisation
+und Validierung benötigt und muss daher eine gültige und eindeutige Zeichenfolge
+innerhalb des JavaScript-Namensraums sein. Der Bezeichner  wird auch für den
+Face-Flow verwendet, um Faces und Facets sowie allgemein Modelle/Komponenten zu
+identifizieren und zu kontrollieren.
+
+
+### Binding
+
+In Seanox Aspect-js werden Komponenten auch Composites oder Module genannt, da
+diese aus Markup (View), korrespondierendem JavaScript (Model) und mehr
+bestehen.  
+
+Beim Objekt-/Model-Binding geht es um die Verbindung von View/Markup/HTML mit
+dem entsprechenden JavaScript-Model.  
+Das Binding leitet Interaktionen und Statusänderungen der View an das Model
+weiter und stellt eine Schnittstelle für Middleware-Funktionen und Services
+für die View bereit. Womit keine manuelle Implementierung und Deklaration von
+Ereignissen sowie die Synchronisation und Interaktion zwischen UI und
+Anwendungslogik erforderlich ist.
+
+```javascript
+var model = {
+    message: "Hello", 
+    dock() {
+        ...
+    },
+    undock() {
+        ...
+    },
+    submit: {
+        onClick(event) {
+            ...    
+        }
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="submit" id="submit"/>
+      ...
+    </form>
+  </body>
+</html>
+```
+
+Die Bindung basiert auf den IDs der HTML-Elemente im Markup. Diese IDs
+definieren den Namensraum und das zu verwendende JavaScript-Modell. IDs können
+relative und absolute Namensräume verwenden, basieren aber primär auf der
+Position eines Elements im DOM und einer korrespondierenden Objektstruktur als
+JavaScript-Model.
+
+
+### Dock
+
+If a composite is used/inserted in the DOM, the corresponding model is
+docked/linked and when removing from the DOM, the corresponding model is
+undocked/unlinked.  
+In beiden Fällen kann das Modell optional geeignete Methoden implementieren.  
+Die Dock-Methode wird vor dem Rendern, vor dem Einfügen des Composites in das
+DOM oder nach dem Laden der Seite beim ersten Rendern ausgeführt und kann zur
+Vorbereitung der Darstellung verwendet werden. Die Undock-Methode wird
+ausgeführt, nachdem das Composite aus dem DOM entfernt wurde und kann zur
+Nachbearbeitung bzw. Bereiningung der Darstellung verwendet werden.  
+
+```javascript
+var model = {
+    dock() {
+        ...
+    },
+    undock() {
+        ...
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+Bei einem Composite in Kombination mit einer Bedingung (condition) hängt der
+Aufruf der Methoden vom Ergebnis der Bedingung ab.
+
+
+### Undock
+
+Details werden im Abschnitt [Dock](#undock) beschrieben.
+
+
+### Synchronization
+
+Die Objekt-Bindung umfasst neben der statischen Verknüpfung und Zuordnung von
+HTML-Elementen zum JavaScript-Model auch die Synchronisation von Werten zwischen
+den HTML-Elementen und den Feldern im JavaScript-Model.  
+Die Synchronisation hängt von Ereignissen ab, die für das HTML-Element mit dem
+Attribut `events` deklariert sind und wird nur ausgeführt, wenn eines der
+definierten Ereignisse eintritt.
+
+Details zur Funktionsweise werden im Abschnitt [events](markup.md#events)
+beschrieben.
+
+
+### Validation
+
+Die Synchronisation der Werte zwischen der HTML-Elemente (view) und den
+Feldern vom JavaScript-Model kann durch Validierung überwacht und gesteuert
+werden.   
+Die Validierung wird in HTML über durch die Kombination der Attribute
+`validate` und `events` deklariert und erfordert eine entsprechende
+Validierungsmethode im JavaScript-Model.    
+Details zur Funktionsweise werden im Abschnitt [validate](markup.md#validate)
+beschrieben.
+
 TODO:
 
 

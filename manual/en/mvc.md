@@ -643,18 +643,17 @@ namespace.
 
 #### composite
 
-Composite describes the construct of markup, JavaScript model, and possibly
-existing module resources. It describes a component/module without direct
-reference to a concrete perspective.
+Composite describes a construct of markup, JavaScript model, CSS and possibly
+other resources. It describes a component/module without direct relation to the
+representation.
 
 
 #### composite-id
 
-The Composite-ID is an application-wide unique identifier.  
-It is a sequence of characters or words consisting of letters, numbers, and
-underscores that contains at least one character, begins with a letter, and ends
-with a letter or number. A Composite-ID is formed by combining the attributes
-`ID` and `composite`.
+It is a character sequence consisting of letters, numbers and underscores and
+optionally supports the minus sign if it is not used at the beginning or end.  
+A composite ID is at least one character long and is composed by combining the
+attributes `ID` and `composite`.
 
 ```html
 <html>
@@ -666,18 +665,16 @@ with a letter or number. A Composite-ID is formed by combining the attributes
 </html>
 ```
 
-The Composite-ID is important for MVC and is required for object/model binding,
-synchronization and validation. Therefore, it is important that the sequence of
-characters within the JavaScript namespace is valid and unique. The identifier
-is also used for face-flow to identify and control faces and facets and in
-general to identify and control models/components.
+The composite ID is required for MVC, object/model binding, synchronization and
+validation and must therefore be a valid and unique identifier within the
+JavaScript namespace. The identifier is also used for face flow to identify and
+control faces and facets and generally models/components.
 
 
 ### Binding
 
-In Seanox aspect-js components, also termed composites, are used.  
-Composite, because the components consist of markup (view), corresponding
-JavaScript (model) and more.  
+In Seanox Aspect-js, components are also termed composites or modules because
+they consist of markup (view), corresponding JavaScript (model) and more.  
 
 The object/model binding is about the connection of view/markup/HTML with the
 corresponding JavaScript model. 
@@ -717,61 +714,20 @@ var model = {
 
 The binding is based on the IDs of the HTML elements in the markup. These IDs
 define the namespace and the JavaScript model to be used. IDs can use relative
-and absolute namespaces, thus the position of an element in the DOM and the
-object structure of the JavaScript model can be decoupled.
-
-```javascript
-var model = {
-    message: "Hello", 
-    dock() {
-        ...
-    },
-    undock() {
-        ...
-    },
-    submit: {
-        onClick(event) {
-            ...    
-        }
-    },
-    subModel: {
-        subMessage: "Is everything clear?",
-        subButton: {
-            onClick(event) {
-                ...    
-            }
-        }
-    }
-};
-```
-
-```html
-<html>
-  <body>
-    <form id="model" composite>
-      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
-      <input type="text" id="subModel.subMessage" value="{{model.subModel.subMessage.value}} events="change"/>
-      <input type="submit" id="submit"/>
-      ...
-    </form>
-    <input type="button" id="model.subModel.subButton"/>
-  </body>
-</html>
-```
+and absolute namespaces, but are primarily based on the position of an element
+in the DOM and a corresponding object structure as a JavaScript model.
 
 
 ### Dock
 
-If a view/composite is used in the DOM, the corresponding model is
+If a composite is used/inserted in the DOM, the corresponding model is
 docked/linked and when removing from the DOM, the corresponding model is
 undocked/unlinked.  
-In both cases the model can implement appropriate methods, both methods are
-optional.  
-The dock-method is executed before rendering, before inserting the
-view/composite into the DOM, or after loading the page during initial rendering,
-and can be used to prepare the view. The undock-method is executed after the
-view/composite is removed from the DOM and can be used to postprocess/clean the
-view.   
+In both cases the model can optionally implement appropriate methods.    
+The dock-method is executed before rendering, before inserting the composite
+into the DOM, or after loading the page during initial rendering, and can be
+used to prepare the view. The undock-method is executed after the composite is
+removed from the DOM and can be used to postprocess/clean the view.   
 
 ```javascript
 var model = {
