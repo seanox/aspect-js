@@ -740,8 +740,8 @@ var model = {
 </html>
 ```
 
-Die Bindung basiert auf den IDs der HTML-Elemente im Markup. Diese IDs
-definieren den Namensraum und das zu verwendende JavaScript-Modell. IDs können
+Die Bindung basiert auf den IDs der HTML-Elemente im Markup (View). Diese IDs
+definieren den Namensraum und das zu verwendende JavaScript-Model. IDs können
 relative und absolute Namensräume verwenden, basieren aber primär auf der
 Position eines Elements im DOM und einer korrespondierenden Objektstruktur als
 JavaScript-Model.
@@ -749,9 +749,9 @@ JavaScript-Model.
 
 ### Dock
 
-If a composite is used/inserted in the DOM, the corresponding model is
-docked/linked and when removing from the DOM, the corresponding model is
-undocked/unlinked.  
+Wenn ein Composite im DOM verwendet/eingefügt wird, wird das entsprechende
+JavaScript-Model angedockt/verknüpft und beim Entfernen aus dem DOM
+abgedockt/entknüpft.  
 In beiden Fällen kann das Modell optional geeignete Methoden implementieren.  
 Die Dock-Methode wird vor dem Rendern, vor dem Einfügen des Composites in das
 DOM oder nach dem Laden der Seite beim ersten Rendern ausgeführt und kann zur
@@ -792,8 +792,8 @@ Details werden im Abschnitt [Dock](#undock) beschrieben.
 ### Synchronization
 
 Die Objekt-Bindung umfasst neben der statischen Verknüpfung und Zuordnung von
-HTML-Elementen zum JavaScript-Model auch die Synchronisation von Werten zwischen
-den HTML-Elementen und den Feldern im JavaScript-Model.  
+HTML-Elementen (View) zum JavaScript-Model auch die Synchronisation von Werten
+zwischen den HTML-Elementen und den Feldern im JavaScript-Model.  
 Die Synchronisation hängt von Ereignissen ab, die für das HTML-Element mit dem
 Attribut `events` deklariert sind und wird nur ausgeführt, wenn eines der
 definierten Ereignisse eintritt.
@@ -804,7 +804,7 @@ beschrieben.
 
 ### Validation
 
-Die Synchronisation der Werte zwischen der HTML-Elemente (view) und den
+Die Synchronisation der Werte zwischen der HTML-Elemente (View) und den
 Feldern vom JavaScript-Model kann durch Validierung überwacht und gesteuert
 werden.   
 Die Validierung wird in HTML über durch die Kombination der Attribute
@@ -813,7 +813,42 @@ Validierungsmethode im JavaScript-Model.
 Details zur Funktionsweise werden im Abschnitt [validate](markup.md#validate)
 beschrieben.
 
-TODO:
+
+### Events
+
+Ereignisse, genauer gesagt die Interaktion zwischen View und Modell, werden bei
+der Object-/Model-Binding ebenfalls berücksichtigt. Die Methoden zur Interaktion
+werden nur im Model implementiert. Im Markup selbst ist keine Deklaration
+erforderlich. Das Object-/Model-Binding kennt die verfügbaren Ereignisse im
+HTML und so wird beim Binding das Model nach entsprechenden Methoden durchsucht,
+die dann als Event-Listener registriert werden.
+
+```javascript
+var contact= {
+    mail: {
+        onClick(event) {
+            var mail = "mailto:mail@local?subject=Test&body=Greetings";
+            document.location.href = mail;
+            return false;
+        }
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="contact" composite static>
+      <p>
+        Example for use of events.
+      </p>
+      <button id="mail">
+        Click Me!
+      </button>
+    </div>
+  </body>
+</html>
+```
 
 
 - - -
