@@ -320,7 +320,7 @@ input), by using hash links, and in JavaScript with `window.location.hash`,
 `window.location.href`, `SiteMap.navigate(path)` and
 `SiteMap.forward(path)`.
 
-```
+```html
 <a href="#a#b#c">Goto root + a + b + c</a>
 <a href="##">Back to the parent</a>
 <a href="##x">Back to the parent + x</a>
@@ -420,7 +420,7 @@ There are different types of paths, which are explained below.
 
 These paths are empty or contain only one hash character.
 
-```
+```html
 <a href="#">Back to the root</a>
 ```
 
@@ -430,7 +430,7 @@ These paths are empty or contain only one hash character.
 These paths begin without hash or begin with two or more hash characters (`##+`)
 and are relative to the current path.
      
-```
+```html
 <a href="##">Back to the parent</a>
 <a href="##x">Back to the parent + x</a>
 ```
@@ -449,7 +449,7 @@ These paths begin with one hash characters.
 All paths will be balanced, meaning the directives with multiple hash characters
 are resolved.
 
-```
+```html
 <a href="#">Back to the root</a>
 <a href="#a#b#c">Back to the root + a + b + c</a>
 ```
@@ -501,7 +501,7 @@ hash).
 This is useful for functional links, e.g. to open a popup or to send a
 mail in the background.
 
-```
+```html
 <a href="###">Do something, the logic is in the model</a>
 ```
 
@@ -570,6 +570,18 @@ var model = {
 };
 ```
 
+The object/model binding is based on the IDs of the composites and their
+position and order in the DOM.  
+The root of the namespace is always based on a composite ID.  
+The namespace can be absolute, that is, the namespace corresponds to a composite
+ID, or it is based on the namespace of a parent composite ID in the DOM.
+
+Examples of possible namespaces:
+
+`a` + `a.b` + `a.b.c`  
+`b` + `b.c`  
+`c`
+
 
 #### property
 
@@ -580,7 +592,9 @@ namespace is defined by the parent composite element.
 
 ```javascript
 var model = {
-    fieldA: null
+    foo: {
+        fieldA: null
+    }
 };
 ```
 
@@ -588,17 +602,17 @@ var model = {
 <html>
   <body>
     <div id="model" composite>
-      <input id="fieldA" type="text" events="change"/>
+      <div id="foo">
+        <input id="fieldA" type="text" events="change"/>
+      </div>
     </div>
   </body>
 </html>
 ```
 
-The Composite-API synchronizes event-driven between the HTML element and the
-model component property. For an HTML element, the corresponding events are
-defined using the attribute of the same name.  
-Synchronization only works in one direction, from the HTML element to the
-property of the model component.
+The Composite API synchronizes event-driven the property in the model with the
+value of the HTML element. For an HTML element, the relevant events are defined
+using the attribute of the same name.
 
 
 #### qualifier
@@ -607,7 +621,8 @@ In some cases, the identifier (ID) may not be unique. For example, in cases
 where properties are arrays or an iteration is used. In these cases the
 identifier can be extended by an additional unique qualifier separated by a
 colon.  
-Qualifiers are ignored during object/model binding.
+Qualifiers behave like properties during object/model binding and extend the
+namespace.
 
 ```html
 <input type="text" id="identifier">

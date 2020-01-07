@@ -56,7 +56,7 @@ Komponenten und Abstraktion verwenden.
 
 Die View ist ausschliesslich für die Darstellung bzw. Projektion eines Modells
 verantwortlich.  
-Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Models
+Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Modells
 nicht eingeschränkt ist.  
 In Seanox aspect-js werden die Views durch das Markup repräsentiert.
 
@@ -326,7 +326,7 @@ durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
 `window.location.href`, `SiteMap.navigate(path)` und
 `SiteMap.forward(path)` erfolgen.
 
-```
+```html
 <a href="#a#b#c">Goto root + a + b + c</a>
 <a href="##">Back to the parent</a>
 <a href="##x">Back to the parent + x</a>
@@ -428,7 +428,7 @@ Es gibt verschiedene Arten von Pfaden, die im Folgenden erläutert werden.
 
 Diese Pfade sind leer oder enthalten nur ein Hash-Zeichen.
 
-```
+```html
 <a href="#">Back to the root</a>
 ```
 
@@ -438,7 +438,7 @@ Diese Pfade sind leer oder enthalten nur ein Hash-Zeichen.
 Diese Pfade beginnen ohne Hash oder mit zwei oder mehr Hash-Zeichen (`###+`)
 und sind relativ zum aktuellen Pfad.
      
-```
+```html
 <a href="##">Back to the parent</a>
 <a href="##x">Back to the parent + x</a>
 ```
@@ -457,7 +457,7 @@ Diese Pfade beginnen mit einem Hash-Zeichen.
 Alle Pfade werden ausgeglichen, d.h. die Direktiven mit mehreren Hash-Zeichen
 werden aufgelöst.
 
-```
+```html
 <a href="#">Back to the root</a>
 <a href="#a#b#c">Back to the root + a + b + c</a>
 ```
@@ -503,13 +503,13 @@ SiteMap.lookup("#project#a#b#c");
 
 ### Functional Path
 
-Der Pfad besteht aus drei oder mehr Hash-Zeichen (`#####+`) und ist nur
+Der Pfad besteht aus drei oder mehr Hash-Zeichen (`###+`) und ist nur
 temporär, er dient einem Funktionsaufruf, ohne den aktuellen Pfad (URL-Hash) zu
 ändern.  
 Dies ist nützlich für funktionale Links, z.B. um ein Popup zu öffnen oder eine
 Mail im Hintergrund zu senden.
 
-```
+```html
 <a href="###">Do something, the logic is in the model</a>
 ```
 
@@ -535,13 +535,133 @@ Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
 Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
-Das heißt, es ist kein reales Element der Programmiersprache, sondern wird durch
-verkettete statische Objekte repräsentiert.  
+Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
+durch das Verketteten statischer Objekte abgebildet.  
 Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
 Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
 Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
 Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
 eine reine Zahl ist, wird ein Array angenommen.
+
+Das Object-/Model-Binding basiert auf den IDs der Composites und deren Position
+und Reihenfolge im DOM.  
+Die Wurzel vom Namensraum bildet immer eine Composite-ID.  
+Der Namensraum kann dabei absolut sein, also der Namensraum entspricht einer
+Composite-ID, oder er basiert auf dem Namensraum einer im DOM übergeordneten
+Composite-ID.
+
+```html
+<html>
+  <body>
+    <div id="A">
+      <div id="B">
+        <div id="C">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>  
+```
+
+Beispiele möglicher Namesräume:
+
+`a` + `a.b` + `a.b.c`  
+`b` + `b.c`  
+`c`
+
+
+#### scope
+
+Der Scope basiert auf dem Namensraum und stellt diesen auf der Objektebene dar.  
+Das heisst, der Namensraum ist der Beschreibungstext, der Scope ist das Objekt,
+wenn der Namensraum im Objektbaum aufgelöst wurde.
+
+
+#### model
+
+Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
+in einem beliebigen Namensraum und stellt die Logik für die
+Benutzerschnittstelle (UI-Komponente) und den Übergang von der
+Benutzerschnittstelle zur Geschäftslogik und/oder zum Backend zur Verfügung.  
+Die Verknüpfung bzw. Bindung von Markup und JavaSchript-Modell erfolgt über die
+Composite-API. Dazu muss ein HTML-Element eine gültige und eindeutige ID haben.
+Die ID muss die Anforderungen des Namensraums erfüllen.
+
+Details werden im Abschnitt [Binding](#binding) beschrieben.
+
+Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
+Abwesenheit. So kann das Modell der Komponente über die statischen Methoden
+`dock` und `undock` informiert werden, wenn die Komponente dem DOM hinzugefügt
+bzw. aus diesem entfernt wird, womit sich das Modell vorbereiten bzw.
+finalisieren lässt.  
+Die Implementierung beider Methoden ist optional.
+
+```javascript
+var model = {
+    dock() {
+    },
+    undock() {
+    }
+};
+```
+
+
+#### property
+
+Referenziert ein Element mit einer ID innerhalb vom DOM eines Composites und die
+korrespondierende Eigenschaft im Modell. Die Elemente der Properties nutzen
+einen relativen Bezeichner (ID). Der Namensraum basiert auf vom Composite und
+erweitert sich um ggf. weitere übergeordnete Elemente mit IDs im DOM.
+
+```javascript
+var model = {
+    foo: {
+        fieldA: null
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      <div id="foo">
+        <input id="fieldA" type="text" events="change"/>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
+dem Wert vom HTML-Element. Für ein HTML-Element werden die entsprechenden
+Ereignisse über das gleichnamige Attribut definiert.
+
+
+#### qualifier
+
+In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
+Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen Fällen
+kann der Bezeichner durch einen zusätzlichen eindeutigen Qualifier, getrennt
+durch einen Doppelpunkt, erweitert werden.  
+Qualifier wirken beim Objekt/Modell-Binding wie Properties und verlängern den
+Namensraum.
+
+```html
+<input type="text" id="identifier">
+<input type="text" id="identifier:qualifier">
+```
+ 
+```html
+<html>
+  <body>
+    <form id="model" composite static iterate="{{set:['A','B','C']}}">
+      <input type="text" id="fieldA:{{set.value}}">
+      ...
+    </form>
+  </body>
+</html>
+```
 
 TODO:
 

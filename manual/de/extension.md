@@ -26,13 +26,13 @@ Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
 Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
-Das heißt, es ist kein reales Element der Programmiersprache, sondern wird durch
-verkettete statische Objekte repräsentiert.  
+Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
+durch das Verketteten statischer Objekte abgebildet.  
 Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
 Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
 Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
 Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
-eine reine Zahl ist, wird ein Array angenommen.
+eine reine Zahl ist, wird ein Array angenommen
 
 
 ### Namespace.using
