@@ -36,27 +36,32 @@
  *      
  *          namespace
  *          ----
- *  The namespace is a sequence of characters or words consisting of letters,
- *  numbers, and underscores that describes the path in an object tree. The dot
- *  is used as a separator, it defines the boundary from one level to the next
- *  in the object tree. Each element in the namespace must contain at least one
- *  character ans begin with a letter.
+ *  Comparable to packages in other programming languages, namespaces can be
+ *  used to map hierarchical structures and to group thematically related
+ *  components and resources.
+ *  The implementation happens in JavaScript at object level.
+ *  This means that it is not a real element of the programming language, but is
+ *  represented by chained static objects. Each level in this object chain
+ *  represents a namespace.
+ *  As is typical for object identifiers, namespaces also use letters, numbers,
+ *  and underscores separated by dots. As a special feature, arrays are also
+ *  supported. If an object level in the namespace is a pure number, an array is
+ *  assumed.
  *  
  *          scope
  *          ----
- *  The scope is based on namespace and represents it on the object level. Means
- *  the namespace is the description text, the scope is the result if the 
+ *  The scope is based on namespace and represents it on the object level.
+ *  Means the namespace is the description text, the scope is the object if the
  *  namespace was resolved in the object tree.
  *  
  *          model
  *          ----
  *  The model (model component / component) is a static JavaScript object in any
  *  namespace and provides the logic for the user interface (UI component) and
- *  the transition from user interface to business logic and/or the backend. The
- *  linking and/or binding of markup and JavaSchript model is done by the
- *  Composite-API. For this purpose, an HTML element must be marked with the
- *  attribute `composite` and have a valid Composite-ID. The Composite-ID must
- *  meet the requirements of the namespace.
+ *  the transition from user interface to business logic and/or the backend.
+ *  The linking and/or binding of markup and JavaSchript model is done by the
+ *  Composite-API. For this purpose, an HTML element must have a valid and
+ *  unique ID. The ID must meet the requirements of the namespace.
  *  
  *          property
  *          ----
@@ -71,21 +76,21 @@
  *  where properties are arrays or an iteration is used. In these cases the
  *  identifier can be extended by an additional unique qualifier separated by a
  *  colon.
- *  Qualifiers are ignored during object/model binding.
+ *  Qualifiers behave like properties during object/model binding and extend the
+ *  namespace.
  *  
  *          composite
  *          ----
- *  Composite describes the construct of markup, JavaScript model, and possibly
- *  existing module resources. It describes a component/module without direct
- *  reference to a concrete perspective.
+ *  Composite describes a construct of markup, JavaScript model, CSS and
+ *  possibly other resources. It describes a component/module without direct
+ *  relation to the representation.
  *  
  *          composite-id
  *          ----
- *  The Composite-ID is an application-wide unique identifier.
- *  It is a sequence of characters or words consisting of letters, numbers, and
- *  underscores that contains at least one character, begins with a letter, and
- *  ends with a letter or number. A Composite-ID is formed by combining the
- *  attributes `ID` and `composite`.
+ *  It is a character sequence consisting of letters, numbers and underscores
+ *  and optionally supports the minus sign if it is not used at the beginning or
+ *  end. A composite ID is at least one character long and is composed by
+ *  combining the attributes ID and composite.
  *  
  *  
  *      PRINCIPLES

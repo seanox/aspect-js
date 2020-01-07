@@ -19,6 +19,8 @@ in the DOM.
   * [events](#events)
   * [import](#import)
   * [interval](#interval)
+  * [message](#message)
+  * [notification](#notification)
   * [output](#output)
   * [release](#release)
   * [render](#render)    
@@ -122,7 +124,7 @@ JavaScript models (see [validate](#validate) for more information).
 ```html
 <span id="output1">{{#text1.value}}</span>
 <input id="text1" type="text"
-    events="mouseup keyup change" render="#output1"/>
+    events="input change" render="#output1"/>
 ```
 
 Example for synchronous refreshing of the HTML element _output1_ by the events
@@ -131,7 +133,7 @@ input value of _text1_ is output synchronously with _output1_.
 
 ```javascript
 var Model = {
-    validate: function(element, value) {
+    validate(element, value) {
         return true;
     },
     text1: ""
@@ -141,7 +143,7 @@ var Model = {
 ```html
 <form id="Model" composite>
   <input id="text1" type="text"
-      validate events="mouseup keyup change"/>
+      validate events="input change"/>
   <input type="submit" value="submit"
       validate events="click"/>
 </form>
@@ -172,7 +174,7 @@ the element is executed only once.
 
 ```javascript
 var Model = {
-    publishForm: function() {
+    publishForm() {
         var form = document.createElement("form");
         var label = document.createElement("label");
         label.textContent = "Input";
@@ -186,7 +188,7 @@ var Model = {
         form.appendChild(submit);
         return form;
     },
-    publishImg: function() {
+    publishImg() {
         var img = document.createElement("img");
         img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
         return img;
@@ -361,7 +363,7 @@ always executed for the element.
 
 ```javascript
 var Model = {
-    publishForm: function() {
+    publishForm() {
         var form = document.createElement("form");
         var label = document.createElement("label");
         label.textContent = "Input";
@@ -375,7 +377,7 @@ var Model = {
         form.appendChild(submit);
         return form;
     },
-    publishImg: function() {
+    publishImg() {
         var img = document.createElement("img");
         img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
         return img;
@@ -430,13 +432,8 @@ attributes.
 
 Inverse indicator that an element was rendered.  
 The renderer removes this attribute when an element is rendered. This effect can
-be used for CSS to display elements only in rendered state.  
-
-```css
-*[release] {
-    display:none;
-}  
-```
+be used for CSS to display elements only in rendered state. A corresponding CSS
+rule is automatically added to the HEAD when the page is loaded. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -454,15 +451,15 @@ which sets the targets.
 ```javascript
 var Model = {
     _status1: 0,
-    getStatus1: function() {
+    getStatus1() {
         return ++Model._status1;
     },
     _status2: 0,
-    getStatus2: function() {
+    getStatus2() {
         return ++Model._status2;
     },
     _status3: 0,
-    getStatus3: function() {
+    getStatus3() {
         return ++Model._status3;
     }
 };
@@ -527,7 +524,7 @@ input[type='text'][title]:not([title='']) {
 
 ```javascript
 var Model = {
-    validate: function(element, value) {
+    validate(element, value) {
         var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
         var test = PATTER_EMAIL_SIMPLE.test(value);
         element.setAttribute("title", test ? "" : "Invalid " + element.getAttribute("placeholder"));
@@ -540,7 +537,7 @@ var Model = {
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
-      validate events="mouseup keyup change" render="#Model"/>
+      validate events="input change" render="#Model"/>
   Model.text1: {{Model.text1}}  
   <input type="submit" value="submit" validate events="click"/>
 </form>
@@ -677,7 +674,27 @@ Composite.customize(function(element) {
 
 ## Hardening
 
-TODO:
+In Seanox aspect-js, a hardening of the markup is provided, which makes it
+difficult to manipulate the markup at runtime. On the one hand, hidden markup
+with a condition is physically removed from the DOM and on the other hand, the
+renderer observes manipulations of attributes at runtime. This observation
+is based on a filter with static attributes. Static attributes are read when an
+element is created in the DOM and restored when manipulated (deleted/changed).
+
+```javascript
+Composite.customize("@ATTRIBUTES-STATICS", "action name src type");
+Composite.customize("@Attributes-Statics", "required");
+Composite.customize("@ATTRIBUTES-statics", "method action");
+...
+```
+
+```html
+<form method="POST" action="/service">
+  <input type="user" name="user"
+  <input type="password" name="password"/>
+  <input type="submit"/>
+</form>
+```
 
 
 - - -
