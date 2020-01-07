@@ -50,7 +50,7 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
 Composites sind modulare Komponente und haben in Seanox aspect-js eine
-vielseitige Bedeutung.  
+vielseitige Bedeutung und benötigen zwingend einen Bezeichner (ID).  
 Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
@@ -60,7 +60,7 @@ Die Ressourcen (CSS, JS, Markup) lassen sich für Composite in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
-<article composite>
+<article id="example" composite>
   ...
 </article>
 ```
@@ -71,7 +71,7 @@ Dann wird das Composite als Face unabhängig von virtuellen Pfaden permanent
 sichtbar.
 
 ```html
-<article composite static>
+<article id="example" composite static>
   ...
 </article>
 ```
@@ -83,11 +83,12 @@ beschrieben.
 
 ### condition
 
-Das condition-Attribut legt fest, ob ein Element im DOM erhalten bleibt.  
-Der mit dem Attribut angegebene Ausdruck muss explizit `true` oder `false`
-zurückliefern. Mit `false` wird ein Element temporär aus dem DOM entfernt und
-lässt sich später durch das Auffrischen des __Eltern-Elements__ wieder einfügen,
-wenn der Ausdruck `true` zurückliefert.  
+Das condition-Attribut legt fest, ob ein Element im DOM enhalten bleibt.  
+Der mit dem Attribut angegebene Ausdruck muss explizit `true` zurückliefern,
+damit das Element im DOM erhalten bleibt. Bei abweichenden Rückgabewerten wird
+das Element temporär aus dem DOM entfernt und lässt sich später durch das
+Auffrischen des __Eltern-Elements__ wieder einfügen, wenn der Ausdruck `true`
+zurückliefert.  
 Eine Besonderheit stellt die Kombination mit dem Attribut [interval](#interval)
 dar, da mit dem Entfernen des Elements aus dem DOM auch der zugehörige Timer
 beendet wird. Wird das Element mit einer späteren Auffrischung wieder in das DOM
@@ -118,8 +119,8 @@ Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
-und Synchronisation von HTML-Elementen und den korrespondierenden
-JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).  
+und Synchronisation von HTML-Elementen und dem korrespondierenden
+JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).  
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -128,8 +129,8 @@ JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).
 ```
 
 Beispiel zur synchronen Auffrischung vom HTML-Element _output1_ mit den
-Ereignissen _MouseUp_, _KeyUp_ oder _Change_ beim HTML-Element _text1_. In dem
-Beispiel wird der Eingabewert von _text1_ synchron mit _output1_ ausgegebem.
+Ereignissen _Input_ oder _Change_ beim HTML-Element _text1_. In dem Beispiel
+wird der Eingabewert von _text1_ synchron mit _output1_ ausgegebem.
 
 ```javascript
 var Model = {
@@ -152,8 +153,8 @@ var Model = {
 Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
 Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
 Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
-JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: _MouseUp_,
-_KeyUp_ oder _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
+JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: _Input_ oder
+_Change_ eintritt und die Validierung den Wert `true` zurückgibt.
 
 
 ### import
@@ -161,11 +162,12 @@ _KeyUp_ oder _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
 Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
-Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine absolute oder relative URL zu einer entfernten Ressource, die per
-HTTP-Methode GET nachgeladen wird, oder eine
-[DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
-[DataSource](datasource.md) lädt und transformiert, erwartet.
+Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
+Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
+unterstützt, die per HTTP-Methode GET nachgeladen und eingefüght wird. Zudem
+wird auch eine [DataSource-URL (locator)](datasource.md#locator) unterstützt,
+womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
+einfügt wird.
 
 In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -234,9 +236,9 @@ abgeleitet.
 ```
 
 Beispiel für den Import per DataSource-URL mit spezifischer Daten- und
-Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit dem
-DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
-verwendet, von denen der erste aus die Daten und der zweite auf die
+Transformation-URL (locator). Die Trennung erfolgt durch Leerzeichen, beide
+müssen mit dem DataSource-Protokoll beginnen und es werden nur die ersten beiden
+Einträge verwendet, von denen der erste aus die Daten und der zweite auf die
 Transformation verweist.
 
 ```html
@@ -702,10 +704,17 @@ basiert auf einem Filter mit statischen Attributen. Statische Attribute werden
 mit dem Anlegen eines Elements im DOM gelesen und bei Manipulation (Löschen /
 Ändern) wieder hergestellt.
 
+Zur Konfiguration statischer Attribute wird die Methode
+`Composite.customize(...)` mit dem Parameter `@ATTRIBUTES-STATICS`
+verwendet.  
+Die Konfiguration kann mehrfach erfolgen. Die einzelnen statischen Attribute
+werden dann zusammengefasst.  
+Alle @-Parameter sind unabhängig von der Gross- und Kleinschreibung.
+
 ```javascript
 Composite.customize("@ATTRIBUTES-STATICS", "action name src type");
 Composite.customize("@Attributes-Statics", "required");
-Composite.customize("@ATTRIBUTES-statics", "method action");
+Composite.customize("@attributes-statics", "method action");
 ...
 ```
 

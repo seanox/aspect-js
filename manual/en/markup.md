@@ -50,7 +50,7 @@ initial expression each time it is refreshed (render cycle).
 
 Marks an element in the markup as [Composite](composites.md).  
 Composites are modular components and have a versatile meaning in Seanox
-aspect-js.  
+aspect-js and require an identifier (ID).  
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
 virtual paths in the face-flow, which has a direct effect of the visibility of
 the composites.
@@ -60,7 +60,7 @@ The resources (CSS, JS, Markup) for composites can be outsourced to the module
 directory and are only loaded automatically when necessary.
 
 ```html
-<article composite>
+<article id="example" composite>
   ...
 </article>
 ```
@@ -71,7 +71,7 @@ Then the composite becomes permanently visible as a face independent of virtual
 paths.
 
 ```html
-<article composite static>
+<article id="example" composite static>
   ...
 </article>
 ```
@@ -82,11 +82,11 @@ sections [Composites](composites.md) and [Model View Controler](mvc.md).
 
 ### condition
 
-The condition attribute determines whether an element remains in the DOM. 
-The expression passed to the attribute must explicitly return `true` or
-`false`. With `false` an element is temporarily removed from the DOM and can
-be re-inserted later by refreshing the __parent element__ if the expression
-returns `true`.
+The condition attribute decides whether an element is kept in the DOM.  
+The expression specified with the attribute must explicitly return `true` for
+the element to be retained in the DOM. If the return value differs, the element
+is temporarily removed from the DOM and can be reinserted later by refreshing
+the __parent element__ if the expression returns `true`.  
 A peculiarity is the combination with the attribute [interval](#interval),
 because with the removal of the element from the DOM also the corresponding
 timer is terminated. If the element is inserted into the DOM again with a later
@@ -128,8 +128,8 @@ JavaScript models (see [validate](#validate) for more information).
 ```
 
 Example for synchronous refreshing of the HTML element _output1_ by the events
-_MouseUp_, _KeyUp_ or _Change_ for the HTML element _text1_. In the example, the
-input value of _text1_ is output synchronously with _output1_.
+_Input_ or _Change_ for the HTML element _text1_. In the example, the input
+value of _text1_ is output synchronously with _output1_.
 
 ```javascript
 var Model = {
@@ -152,8 +152,8 @@ var Model = {
 Example for the general usage, implementation and function as well as the
 interaction of the attributes `events` and `validate`. In the example, the
 input value of the composite field text1 is only transferred to the field of the
-same name in the JavaScript model if at least one of the events: MouseUp_,
-_KeyUp_ or _Change_ and the validation returns the value `true`.
+same name in the JavaScript model if at least one of the events: _Input_ or
+_Change_ and the validation returns the value `true`.
 
 
 ### import
@@ -161,10 +161,11 @@ _KeyUp_ or _Change_ and the validation returns the value `true`.
 This declaration loads content dynamically and replaces the inner HTML code of
 an element. If the content was successfully loaded, the `import` attribute is
 removed. The attribute expects as value one element or more elements as NodeList
-or Array -- these are then inserted directly, or an absolute or relative URL to
-a remote resource that is loaded by HTTP method GET, or a
-[DataSource-URL (locator)](datasource.md#locator) that loads and transforms
-content from the [DataSource](datasource.md).
+or Array these are then inserted directly. Also supported is the use of an
+absolute or relative URL to a remote resource, which is reloaded and inserted by
+HTTP method GET. A [DataSource URL (locator)](datasource.md#locator) is also
+supported, which loads and inserts transformed content from the
+[DataSource](datasource.md).
 
 In all cases, the import attribute can be combined with the condition attribute
 and is only executed when the condition is `true`.
@@ -231,7 +232,7 @@ it.
 </article>
 ```
 
-Example of importing a DataSource-URL with a specific data URL and
+Example of importing a DataSource-URL with a specific data URL (locator) and
 transformation URL. The blank character is used for separation. Both URLs must
 begin with the DataSource protocol and only the first two entries are used from
 which the first refers to the data and the second to the transformation.
@@ -681,10 +682,16 @@ renderer observes manipulations of attributes at runtime. This observation
 is based on a filter with static attributes. Static attributes are read when an
 element is created in the DOM and restored when manipulated (deleted/changed).
 
+To configure static attributes, use the method `Composite.customize(...)` and
+using the parameter `@ATTRIBUTES-STATICS`.  
+The configuration can be done several times. The individual static attributes
+are then merged.  
+All @ parameters are case insensitive.
+
 ```javascript
 Composite.customize("@ATTRIBUTES-STATICS", "action name src type");
 Composite.customize("@Attributes-Statics", "required");
-Composite.customize("@ATTRIBUTES-statics", "method action");
+Composite.customize("@attributes-statics", "method action");
 ...
 ```
 
