@@ -154,8 +154,8 @@ available, to a corresponding getter (get method).
 {{Example.object.field}}
 ```
 
-The value expression is tolerant if the value or object is not available and the
-return value is then `undefined`.
+The value expression is tolerant, if the value or object is not available, the
+return value is `undefined`.
 
 
 ### Method-Expression

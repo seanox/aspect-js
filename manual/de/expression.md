@@ -152,7 +152,7 @@ wenn vorhanden auf einen korrespondierenden Getter (get-Methode).
 ```
 
 Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht verfügbar
-ist und der Rückgabewert entspricht dann `undefined`.
+sind, entspricht der Rückgabewert `undefined`.
 
 
 ### Method-Expression
