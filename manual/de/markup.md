@@ -55,7 +55,7 @@ Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
 Der [Model View Controler](mvc.md#sitemap) unterstützt für Composites eine
-automatisches [Object-/Model-Binding](object-binding.md).  
+automatisches [Object/Model-Binding](object-binding.md).  
 Die Ressourcen (CSS, JS, Markup) lassen sich für Composite in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
 

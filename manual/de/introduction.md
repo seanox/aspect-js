@@ -7,14 +7,14 @@
 
 Geprägt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf
 Funktion und einfache Integration ins Markup, entstand der Wunsch nach einer
-ähnlichen client-seitigen fullstack Lösung
+ähnlichen client-seitigen Full-Stack Lösung.
 Bei Seanox aspect-js steht ein minimalistischer Ansatz zur Implementierung von
 Single-Page Applications (SPAs) im Vordergrund.  
 
 Das Framework greift den deklarativen Ansatz von HTML auf und erweitert ihn um
 Expression Language, Rendering mit zusätzlichen Attributen,
-Objekt/Modell-Bindung, Model View Controller, Resource Bundle, NoSQL-Datasource,
-Testumgebung und vieles mehr.
+Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
+NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
 ## Erste Schritte
@@ -22,8 +22,8 @@ Testumgebung und vieles mehr.
 Das Framework besteht aus reinem JavaScript.
 
 Die Releases werden heruntergeladen oder über einen Release-Channel eingebunden.
-Release-Channel stellen kontinuierlich die neuesten endgültigen Hauptversionen
-zur Verfügung, die sind abwärtskompatibel zur Hauptversion. Seanox aspect-js ist
+Release-Channel stellen kontinuierlich die neuesten finalen Hauptversionen zur
+Verfügung, diese sind abwärtskompatibel zur Hauptversion. Seanox aspect-js ist
 somit immer auf dem neuesten Stand.
 
 Jedes Release besteht aus zwei Versionen.  
@@ -64,7 +64,7 @@ Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
 umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
 Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
 unterstützt wird, sowie `STYLE`, welches nicht unterstützt wird. Die Werte der
-Attribute können statische oder mit Verwendung der Expression-Language dynamisch
+Attribute können statisch oder mit Verwendung der Expression-Language dynamisch
 sein. Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
@@ -75,10 +75,11 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 ### output
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Elemente oder mehre
-Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
-[DataSource](datasource.md#datasource) lädt und transformiert, erwartet.
+HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
+Elemente als NodeList bzw. Array erwartet, welche dann direkt eingefügt werden.
+Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
+womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
+einfügt wird.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -101,23 +102,24 @@ eine [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
 
 Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
-`import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
-Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine absolute oder relative URL zu einer entfernten Ressource, die per
-HTTP-Methode GET nachgeladen wird, oder eine
-[DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
-[DataSource](datasource.md#datasource) lädt und transformiert, erwartet.
+`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehre
+Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
+Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
+unterstützt, die per HTTP-Methode GET nachgeladen und eingefügt wird. Zudem wird
+auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt, womit
+ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert einfügt
+wird.
 
 ```html
-<p output="Today is {{new Date().toDateString()}}
+<p import="Today is {{new Date().toDateString()}}
     and it's {{new Date().toLocaleTimeString()}} o'clock.">
 </p>
 
-<p output="xml:/example/content">
+<p import="xml:/example/content">
   loading resource...  
 </p>
 
-<p output="xml:/example/data xslt:/example/style">
+<p import="xml:/example/data xslt:/example/style">
   loading resource...  
 </p>
 
@@ -133,19 +135,16 @@ HTTP-Methode GET nachgeladen wird, oder eine
 ### condition
 
 Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt.  
-Der mit dem Attribut angegebene Ausdruck muss explizit `true` oder `false`
-zurückliefern. Mit `false` wird ein Element temporär aus dem DOM entfernt und
-lässt sich später durch das Auffrischen des __Eltern-Elements__ wieder einfügen,
-wenn der Ausdruck `true` zurückliefert.  
-Eine Besonderheit stellt die Kombination mit dem Attribut [interval](#interval)
-dar, da mit dem Entfernen des Elements aus dem DOM auch der zugehörige Timer
-beendet wird. Wird das Element mit einer späteren Auffrischung wieder in das DOM
-aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
+Der mit dem Attribut angegebene Ausdruck muss explizit `true` zurückliefern,
+damit das Element im DOM erhalten bleibt. Bei abweichenden Rückgabewerten wird
+das Element temporär aus dem DOM entfernt und lässt sich später durch das
+Auffrischen des __Eltern-Elements__ wieder einfügen, wenn der Ausdruck `true`
+zurückliefert.  
 
 ```html
-<p condition="{{Model.visible}}">
+<article condition="{{Model.visible}}">
   ...
-</p>
+</article>
 ```
 
 Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
@@ -153,7 +152,7 @@ ist als Composite-JavaScript möglich.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
-  ...
+    ...
 </script>
 ```
 
@@ -169,10 +168,11 @@ formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
 nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
 Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
 JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
-aber als exakt zu verstehen.
+aber als exakt zu verstehen.  
 Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
-verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch und aktiv, so
-lange das Element im DOM existiert.
+verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
+Auffrischen vom deklarierten HTML-Element und bleibt so lange aktiv, wie das
+Element im DOM existiert.
 
 ```html
 <p interval="1000">
@@ -206,18 +206,18 @@ ist als Composite-JavaScript möglich.
 ### composite
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
-Composites sind modulare Komponente und haben in Seanox aspect-js eine
-vielseitige Bedeutung.  
+Composites sind modulare Komponente die in Seanox aspect-js eine elementare
+Bedeutung haben und die zwingend einen Bezeichner (ID) benötigen.  
 Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
 Der [Model View Controler](mvc.md#sitemap) unterstützt für Composites eine
-automatisches [Objekt-/Model-Binding](object-binding.md).  
+automatisches [Object/Model-Binding](object-binding.md).  
 Die Ressourcen (CSS, JS, Markup) lassen sich für Composite in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
-<article composite>
+<article id="example" composite>
   ...
 </article>
 ```
@@ -233,10 +233,10 @@ beschrieben.
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
+eröffnen primäre Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
-und Synchronisation von HTML-Elementen und den korrespondierenden
-JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).  
+und Synchronisation von HTML-Elementen und dem korrespondierenden
+JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).  
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -250,16 +250,19 @@ JavaScript-Modellen (mehr dazu im Abschnitt [validate](#validate)).
 ### validate
 
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren und steuert sie die Synchronisation zwischen dem Markup
+Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model.  
-Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
-validate-Methode implementieren: `boolean Model.validate(element, value)`. 
-Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
-`true` der Wert aus dem Composite in das JavaScript-Model synchronisiert. 
+Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
+HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
+ermitteln oder wurde keine HTML5-Validierung festgelegt, wird die Validierung
+vom JavaScript-Model aufgerufen, wenn das Modell eine entsprechende
+validate-Methode `boolean validate(element, value)` bereitstellt und das zu
+validierende Element in einem Composite eingebettet ist.
 
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
@@ -276,6 +279,7 @@ Fall einer unbestätigten Validierung verwendet.
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required"
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
@@ -285,6 +289,7 @@ Fall einer unbestätigten Validierung verwendet.
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="{{Messages['Model.text1.validation.message']}}"
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
@@ -302,6 +307,7 @@ als Info-Box (Browser-Feature) am entsprechenden Element an.
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required" notification
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
@@ -314,10 +320,10 @@ als Info-Box (Browser-Feature) am entsprechenden Element an.
 ### render
 
 Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Events
+Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignis
 aufgefrischt werden.  
 Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
-welche die Ziele festlegt.
+welche die Ziele festlegen.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -333,8 +339,8 @@ welche die Ziele festlegt.
 Inverser Indikator dafür, dass ein Element gerendert wurde.  
 Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser
 Effekt kann für CSS verwendet werden, um Elemente nur im gerenderten Zustand
-anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem Laden
-der Seite hinzugefügt.
+anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem
+Laden der Seite hinzugefügt. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -345,11 +351,11 @@ der Seite hinzugefügt.
 
 ## Expression Language
 
-Expressions bzw. die [Expression Language (EL)](expression.md) ist ein einfacher
-Zugang zum clientseitigen JavaScrript und damit zu den Modellen und Komponenten
-im Seanox aspect-js. In den Expressions wird die komplette JavaScript-API
-unterstützt, die mit zusätzliche Schlüsselwörtern angereichert ist, womit auch
-die zahlreichen arithmetische und logische Operatoren verwendet werden können.
+Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
+clientseitigen JavaScrript und damit zu den Modellen und Komponenten im Seanox
+aspect-js. In den Expressions wird das komplette JavaScript-API unterstützt, die
+mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
+arithmetischen und logischen Operatoren verwendet werden können.
 
 Die Expression-Language kann im Markup als Freitext und in den Attributen der
 HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
@@ -482,7 +488,7 @@ Komponenten und Abstraktion verwenden.
 
 Die View ist ausschliesslich für die Darstellung bzw. Projektion eines Modells
 verantwortlich.  
-Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Models
+Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Modells
 nicht eingeschränkt ist.  
 In Seanox aspect-js werden die Views durch das Markup repräsentiert.
 
@@ -549,7 +555,7 @@ das Doppelkreuz (#) als Separator und Wuruel.
 [Mehr erfahren](mvc.md#virtual-paths)
 
 
-### Object-/Model-Binding
+### Object/Model-Binding
 
 TODO:
 
@@ -559,7 +565,7 @@ TODO:
 Seanox aspect-js zielt auf eine modulare und auf Komponenten basierte
 Architektur. Das Framework unterstützt dazu eine deklarative Kennzeichnung von
 Komponenten im Markup, die Auslagerung und das automatische Laden von
-Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
+Ressourcen, sowie ein automatisches Object/Model-Binding.
 
 Eine Komponente besteht im initialen Markup aus einem als Composite
 gekennzeichneten HTML-Element mit einer eindeutigen Id.
@@ -590,7 +596,7 @@ Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
 +- index.html
 ```
 
-Das Laden der Ressourcen und die Objekt/Model-Bindung erfolgt partiell, wenn die
+Das Laden der Ressourcen und die Object/Model-Binding erfolgt partiell, wenn die
 Komponente im UI benötigt wird -- also mit der ersten Anzeige, was über die
 [SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert wird und so
 die Ladezeit stark minimiert, da punktuell jeweils nur für die aktiven
@@ -611,7 +617,7 @@ verwenden.
 [Mehr erfahren](composite.md)
 
 
-### Object-/Model-Binding
+### Object/Model-Binding
 
 TODO:
 
@@ -683,9 +689,9 @@ Die implementierte Methode, die als Testfall ausgeführt werden soll.
 
 #### timeout
 
-Optional Angabe der maximalen Laufzeit des Testfalls in Millisekunden.
-Das Überschreiten von diesem Wetr führt zum Ausfall des Tests.  
-Es wird ein Wert größer als 0 erwartet, ansonsten wird der Timeout ignoriert.
+Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.
+Das Überschreiten von diesem Wert führt zum Ausfall des Tests.  
+Es wird ein Wert grösser als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
 #### expected

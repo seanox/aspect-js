@@ -113,7 +113,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [Absolute Path](mvc.md#absolute-path)
     * [Variable Path](mvc.md#variable-path)
     * [Functional Path](mvc.md#functional-path)
-  * [Object-/Model-Binding](mvc.md#object-model-binding)
+  * [Object/Model-Binding](mvc.md#object-model-binding)
     * [Terms](mvc.md#terms)
       * [namespace](mvc.md#namespace)
       * [scope](mvc.md#scope)

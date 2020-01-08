@@ -85,7 +85,7 @@ In Seanox aspect-js werden die Views durch das Markup repräsentiert.
   * [Absolute Path](#absolute-path)
   * [Variable Path](#variable-path)
   * [Functional Path](#functional-path)
-* [Object-/Model-Binding](#object-model-binding)
+* [Object/Model-Binding](#object-model-binding)
   * [Begriffe](#begriffe)
     * [namespace](#namespace)
     * [scope](#scope)
@@ -514,12 +514,12 @@ Mail im Hintergrund zu senden.
 ```
 
 
-## Object-/Model-Binding
+## Object/Model-Binding
 
-Bei der Objektbindung geht es darum, HTML-Elemente mit entsprechenden
+Bei der Objekt-Bindung geht es darum, HTML-Elemente mit entsprechenden
 Modell-Objekten zu verknüpfen, die im JavaScript existieren.
 
-Das Object-/Model-Binding gehört ebenfalls zum Model View Controller und ist in
+Das Object/Model-Binding gehört ebenfalls zum Model View Controller und ist in
 Seanox aspect-js im Composite API implementiert, auf der SiteMap als Erweiterung
 und basiert.    
 Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
@@ -543,7 +543,7 @@ Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
 Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
 eine reine Zahl ist, wird ein Array angenommen.
 
-Das Object-/Model-Binding basiert auf den IDs der Composites und deren Position
+Das Object/Model-Binding basiert auf den IDs der Composites und deren Position
 und Reihenfolge im DOM.  
 Die Wurzel vom Namensraum bildet immer eine Composite-ID.  
 Der Namensraum kann dabei absolut sein, also der Namensraum entspricht einer
@@ -644,7 +644,7 @@ In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn
 Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen Fällen
 kann der Bezeichner durch einen zusätzlichen eindeutigen Qualifier, getrennt
 durch einen Doppelpunkt, erweitert werden.  
-Qualifier wirken beim Object-/Model-Binding wie Properties und verlängern den
+Qualifier wirken beim Object/Model-Binding wie Properties und verlängern den
 Namensraum.
 
 ```html
@@ -690,7 +690,7 @@ der Attribute `ID` und `Composite` gebildet.
 </html>
 ```
 
-Die Composite-ID wird beim MVC, Object-/Model-Binding sowie zur  Synchronisation
+Die Composite-ID wird beim MVC, Object/Model-Binding sowie zur  Synchronisation
 und Validierung benötigt und muss daher eine gültige und eindeutige Zeichenfolge
 innerhalb des JavaScript-Namensraums sein. Der Bezeichner  wird auch für den
 Face-Flow verwendet, um Faces und Facets sowie allgemein Modelle/Komponenten zu
@@ -703,8 +703,8 @@ In Seanox Aspect-js werden Komponenten auch Composites oder Module genannt, da
 diese aus Markup (View), korrespondierendem JavaScript (Model) und mehr
 bestehen.  
 
-Beim Object-/Model-Binding geht es um die Verbindung von View/Markup/HTML mit
-dem entsprechenden JavaScript-Model.  
+Beim Object/Model-Binding geht es um die Verbindung von View/Markup/HTML mit dem
+entsprechenden JavaScript-Model.  
 Das Binding leitet Interaktionen und Statusänderungen der View an das Model
 weiter und stellt eine Schnittstelle für Middleware-Funktionen und Services
 für die View bereit. Womit keine manuelle Implementierung und Deklaration von
@@ -817,11 +817,11 @@ beschrieben.
 ### Events
 
 Ereignisse, genauer gesagt die Interaktion zwischen View und Modell, werden bei
-der Object-/Model-Binding ebenfalls berücksichtigt. Die Methoden zur Interaktion
+der Object/Model-Binding ebenfalls berücksichtigt. Die Methoden zur Interaktion
 werden nur im Model implementiert. Im Markup selbst ist keine Deklaration
-erforderlich. Das Object-/Model-Binding kennt die verfügbaren Ereignisse im
-HTML und so wird beim Binding das Model nach entsprechenden Methoden durchsucht,
-die dann als Event-Listener registriert werden.
+erforderlich. Das Object/Model-Binding kennt die verfügbaren Ereignisse im HTML
+und so wird beim Binding das Model nach entsprechenden Methoden durchsucht, die
+dann als Event-Listener registriert werden.
 
 ```javascript
 var contact= {

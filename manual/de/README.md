@@ -111,7 +111,7 @@
     * [Absolute Path](mvc.md#absolute-path)
     * [Variable Path](mvc.md#variable-path)
     * [Functional Path](mvc.md#functional-path)
-  * [Object-/Model-Binding](mvc.md#object-model-binding)
+  * [Object/Model-Binding](mvc.md#object-model-binding)
     * [Begriffe](mvc.md#begriffe)
       * [namespace](mvc.md#namespace)
       * [scope](mvc.md#scope)

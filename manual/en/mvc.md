@@ -87,7 +87,7 @@ In Seanox aspect-js the views are represented by the markup.
   * [Absolute Path](#absolute-path)
   * [Variable Path](#variable-path)
   * [Functional Path](#functional-path)
-* [Object-/Model-Binding](#object-model-binding)
+* [Object/Model-Binding](#object-model-binding)
   * [Terms](#terms)
     * [namespace](#namespace)
     * [scope](#scope)
@@ -506,7 +506,7 @@ mail in the background.
 ```
 
 
-## Object-/Model-Binding
+## Object/Model-Binding
 
 Object binding is about linking HTML elements with corresponding model objects
 that exist in JavaScript.
