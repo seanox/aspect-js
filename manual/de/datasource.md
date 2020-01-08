@@ -71,7 +71,7 @@ Der Datenspeicher kann über `DataSource.DATA` geändert werden.
 ## Locales
 
 Die unterstützten Sprachen sind in der Datei `locales.xml` in Gebietsschemata
-organisiert, die alle unterstützten Sprachen als Satz enthält.
+organisiert.
 
 ```xml
 <?xml version="1.0"?>
@@ -165,7 +165,7 @@ Details zur Funktionsweise der Transformation werden im Abschnitt
 Die Transformation von XML-Daten mit XSLT (1.0) bietet eine zusätzliche
 Möglichkeit zur Generierung von dynamischen Daten sowie Inhalten und kann dirket
 mit per fetch-Methode und einem entsprechenden Locator durchgeführt werden.  
-Beide Methoden, fetch und transform akzeptiert als Parameter Locator und
+Beide Methoden, fetch und transform akzeptieren als Parameter Locator und
 XMLDocument, auch im Mix. 
 
 ```javascript
@@ -182,7 +182,7 @@ standardmässig die Root-Entität als Knoten zurückgegeben. Das Verhalten kann mit
 der Option `raw` geändert werden. Wenn dies `true` ist, wird das XMLDocument
 im Original zurückgegeben.
 
-Ein weiteres Besonderheit betrifft JavaScript-Elemente.  
+Eine weitere Besonderheit betrifft JavaScript-Elemente.  
 Diese werden automatisch in Composite/Javascript umgewandelt, so dass sie beim
 Einbetten nicht automatisch ausgeführt werden, sondern vom Renderer bewusst
 interpretiert werden. Dies ist wichtig bei der Verwendung von
@@ -190,7 +190,7 @@ interpretiert werden. Dies ist wichtig bei der Verwendung von
 
 Eine  weitere Besonderheit betrifft die Erstellung/Ausgabe von Text während der
 Transformation. Der XSLT-Prozessor erzeugt immer eine gültige XML-Textausgabe.
-Jede XML-Syntax in einem Text wird automatisch makiert, was die Generierung von
+Jede XML-Syntax in einem Text wird automatisch maskiert, was die Generierung von
 Markup erschwert. Zu diesem Zweck wurde das Attribut `escape` eingeführt, das
 in XML- und XSLT-Dateien verwendet werden kann. Das Attribut erwartet die Werte
 `yes`, `on`, `true` oder `1` und unterdrückt die automatische Maskierung bzw.

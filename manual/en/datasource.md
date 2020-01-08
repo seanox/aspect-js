@@ -68,8 +68,7 @@ The data storage can be changed via `DataSource.DATA`.
 
 ## Locales
 
-The supported languages are organized in locales in the `locales.xml` file,
-which contains all supported languages as a set.
+The supported languages are organized in locales in the `locales.xml` file.
 
 ```xml
 <?xml version="1.0"?>
