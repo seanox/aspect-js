@@ -43,8 +43,9 @@ Test.start();
   * [assertNotNull](#assertnotnull)
   * [fail](#fail)
 * [Configuration](#configuration)
-  * [Output](#output)
-  * [Monitor](#monitor)
+  * [auto](#auto)
+  * [output](#output)
+  * [monitor](#monitor)
 * [Output](#output-1)
   * [Forwarding](#forwarding)
   * [Buffer](#buffer)
@@ -90,15 +91,15 @@ An implemented method to be executed as a test.
 
 ### timeout
 
-Optional the maximum runtime of the test item in milliseconds.
-Exceeding this limit will cause the test to fail.  
+Optional the maximum runtime of the test item in milliseconds.  
+Exceeding this limit will cause the test to fail.    
 A value greater than 0 is expected, otherwise the timeout is ignored.
 
 
 ### expected
 
-Optional to test the occurrence of defined errors.
-The error must occur if the test is successful.
+Optional to test the occurrence of defined errors.  
+The error must occur if the test is successful.  
 An error object or a RegExp is expected as value.
 
 
@@ -255,7 +256,7 @@ Test.start();
 
 ### assertNotSame        
     
-Asserts two values are not the same, as negation of `Assert.assertSame(...)`.  
+Asserts two values are not the same, as negation of `Assert.assertSame(...)`.   
 Difference between equals and same: === / == or !== / !=  
 If the assertion is false, an error with optional message is thrown.   
 The method has different signatures.
@@ -316,7 +317,7 @@ Test.start();
 
 ### fail
 
-Fails a test with an optional message.  
+Fails a test with an optional message.    
 The method has different signatures. 
 
 ```javascript
@@ -355,7 +356,7 @@ Test.start({auto: true});
 ```
 
 
-### Output
+### output
 
 Function or object for outputting messages and errors.  
 If not specified, console object is used.
@@ -372,7 +373,7 @@ Test.start({output: {
 ```
 
 
-### Monitor
+### monitor
 
 Monitors the progress of the test and is informed of the various steps and
 statuses during execution. The monitor can also be used for data output, for
@@ -439,7 +440,7 @@ read-only and cannot be changed.
             total execution time of the test task in milliseconds, is
             set with the end of the test task
         error:
-            optional, if an unexpected error (also asser error) has
+            optional, if an unexpected error (also assertion error) has
             occurred, which terminated the test task
     },
     queue: {
@@ -526,7 +527,7 @@ steps and statuses during execution. The monitor is optional. Without this, the
 console is used to output information about the test process.
     
 Details about configuration and usage are described in chapter
-[Configuration - Monitor](#monitor).
+[Configuration - monitor](#monitor).
 
 
 ## Control

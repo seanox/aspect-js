@@ -8,7 +8,7 @@ Integrationstests und kann für Suiten (suite), Szenarien (scenario) und einzelne
 Testfälle (case) verwendet werden.
 
 Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
-enthalten ist, der sich ohne Probleme entfernen lässt. Da das Test-API einige
+enthalten, der sich ohne Probleme entfernen lässt. Da das Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
 das Test-API zur Laufzeit bewusst aktiviert werden.
 
@@ -44,8 +44,9 @@ Test.start();
   * [assertNotNull](#assertnotnull)
   * [fail](#fail)
 * [Konfiguration](#konfiguration)
-  * [Output](#output)
-  * [Monitor](#monitor)
+  * [auto](#auto)
+  * [output](#output)
+  * [monitor](#monitor)
 * [Output](#output-1)
   * [Forwarding](#forwarding)
   * [Buffer](#buffer)
@@ -91,20 +92,20 @@ Die implementierte Methode, die als Testfall ausgeführt werden soll.
 
 ### timeout
 
-Optional Angabe der maximalen Laufzeit des Testfalls in Millisekunden.
-Das Überschreiten von diesem Wetr führt zum Ausfall des Tests.  
+Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.  
+Das Überschreiten von diesem Wert führt zum Ausfall des Tests.   
 Es wird ein Wert grösser als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
 ### expected
 
-Optional, um das Auftreten von definierten Fehlern zu testen.
-Der Fehler muss auftreten, damit der Test erfolgreich ist.
-Als Wert wird ein Fehlerobjekt oder eine RegExp erwartet.
+Optional, um das Auftreten von definierten Fehlern zu testen.  
+Der Fehler muss auftreten, damit der Test erfolgreich ist.  
+Als Wert wird ein Fehlerobjekt oder ein RegExp erwartet.
 
 ### ignore
 
-Optional true, wenn der Test ignoriert werden so
+Optional true, wenn der Test ignoriert werden soll.
 
 
 ## Szenario
@@ -256,7 +257,7 @@ Test.start();
 
 ### assertNotSame        
     
-Behauptet, dass zwei Werte nicht gleich sind, als Negation von `Assert.assertSame(....)`.
+Behauptet, dass zwei Werte nicht gleich sind, als Negation von `Assert.assertSame(....)`.  
 Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
 Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
 Die Methode hat unterschiedliche Signaturen.
@@ -317,7 +318,7 @@ Test.start();
 
 ### fail
 
-Verusacht das Scheitern einen Test mit mit optionalen Meldung.
+Verusacht das Scheitern eines Test mit einer optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -347,7 +348,7 @@ Test.start({auto: boolean, ouput: {...}, monitor: {...}});
 
 ### auto
 
-Option die den Start beim Laden der Seite ausgelöst.  
+Option die den Start beim Laden der Seite auslöst.  
 Wenn die Seite bereits geladen ist, wird der Parameter auto ignoriert und der
 Start sofort ausgeführt.
 
@@ -356,7 +357,7 @@ Test.start({auto: true});
 ```
 
 
-### Output
+### output
 
 Funktion oder Objekt zur Ausgabe von Meldungen und Fehlern.  
 Wenn nicht angegeben, wird das console-Objekt verwendet.
@@ -373,7 +374,7 @@ Test.start({output: {
 ```
 
 
-### Monitor
+### monitor
 
 Überwacht den Testablauf und wird während der Ausführung über die verschiedenen
 Schritte und Status informiert. Der Monitor kann auch für die Datenausgabe
@@ -393,7 +394,7 @@ Test.start({monitor: {
     },
     
     resume(status) {
-        Aufruf der Methode beim Fortgesetzt des Testverlaufs, wenn
+        Aufruf der Methode beim Fortsetzen des Testverlaufs, wenn
         dieser zuvor unterbrochen wurde.
     },
     
@@ -440,7 +441,7 @@ sind schreibgeschützt und können nicht geändert werden.
             Gesamtausführungszeit der Testaufgabe in Millisekunden nach
             dem Ende der Testaufgabe.
         error:
-            Optional, wenn ein unerwarteter Fehler (auch Asser-Fehler)
+            Optional, wenn ein unerwarteter Fehler (auch Assertion-Fehler)
             aufgetreten ist, der die Testaufgabe beendet hat.
     },
     queue: {
@@ -449,7 +450,7 @@ sind schreibgeschützt und können nicht geändert werden.
         size:
             ursprüngliche Anzahl von Testfällen,
         length:
-            Anzahl ausstehenden Tests,
+            Anzahl ausstehender Tests,
         progress:
             Anzahl durchgeführter Tests,
         lock:
@@ -483,7 +484,7 @@ für die Konsolenausgabe.
 ### Forwarding
 
 Das Forwarding läuft komplett im Hintergrund ab und verteilt die Ausgaben an die
-Browser-Konsolenausgabe und an die Komponenten der Test-API. Bei (I)Frames wird
+Browser-Konsolenausgabe und an die Komponenten vom Test-API. Bei (I)Frames wird
 die Ausgabe an umschliessende bzw. übergeordnete Window-Objekte weitergeleitet
 und ist dort mit aktiviertem Test-API per Buffer und Listener zugänglich.
 
@@ -492,7 +493,7 @@ und ist dort mit aktiviertem Test-API per Buffer und Listener zugänglich.
 
 Bei aktiviertem Test-API wird das JavaScript-API vom console-Objekt um den
 Buffer output erweitert. Der Buffer enthält Zwischenspeicher für die Level: LOG,
-WARN, ERROR und INFO sowie eine Methoden zum Leeren.
+WARN, ERROR und INFO sowie eine Methode zum Leeren.
 
 ```javascript
 var log   = console.output.log;
@@ -516,20 +517,20 @@ console.listen(function(level, message) {
 ```
 
 Die Callback-Methoden werden dann bei jeder Konsolenausgabe unter Angabe vom
-Log-Level, das als erstes Parameter übergeben wird, aufgerufen. Die weitere
-Anzahl von Parametern ist variable und abhängig vom initialen Aufruf der
+Log-Level, der als erster Parameter übergeben wird, aufgerufen. Die weitere
+Anzahl von Parametern ist variabel und abhängig vom initialen Aufruf der
 korrespondierenden console-Methoden. Womit es oft einfacher ist `arguments` zu
 verwenden.
 
 
 ## Monitoring
 
-Das Monitoring überwacht den Testablauf während der Ausführung wird über die
+Das Monitoring überwacht den Testablauf während der Ausführung und wird über die
 verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
 diesen werden Informationen zum Testverlauf in der Konsole ausgegeben.
 
 Details zur Konfiguration und und Verwendung werden im Abschnitt
-[Konfiguration - Monitor](#monitor) beschrieben.
+[Konfiguration - monitor](#monitor) beschrieben.
 
 
 ## Control
@@ -594,7 +595,7 @@ ausgeführt wird, wird `false` zurückgegeben.
             Gesamtausführungszeit der Testaufgabe in Millisekunden nach
             dem Ende der Testaufgabe.
         error:
-            Optional, wenn ein unerwarteter Fehler (auch Asser-Fehler)
+            Optional, wenn ein unerwarteter Fehler (auch Assertion-Fehler)
             aufgetreten ist, der die Testaufgabe beendet hat.
     },
     queue: {
@@ -603,7 +604,7 @@ ausgeführt wird, wird `false` zurückgegeben.
         size:
             ursprüngliche Anzahl von Testfällen,
         length:
-            Anzahl ausstehenden Tests,
+            Anzahl ausstehender Tests,
         progress:
             Anzahl durchgeführter Tests,
         lock:
@@ -619,9 +620,9 @@ ausgeführt wird, wird `false` zurückgegeben.
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
 Überwachung der Testausführung. Die Callback-Methoden werden für entsprechende
-Ereignisse vom Test-API registriert und funktionieren dann ähnlich dem Monitor.
+Ereignisse beim Test-API registriert und funktionieren dann ähnlich dem Monitor.
 
-List der verfügbaren Ereignisse:
+Liste der verfügbaren Ereignisse:
 
 ```javascript
 Test.EVENT_INTERRUPT
@@ -651,13 +652,13 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 
 ## Erweiterung
 
-Mit der Test-API werden auch Erweiterungen der JavaScript-API aktiv.
+Mit dem Test-API werden auch Erweiterungen des JavaScript-API aktiv.
 
 ### Element
 
 #### Element.prototype.typeValue
 
-Methode, die die Tastatureingabe für Element-Objekte simuliert.
+Methode, die Tastatureingaben für Element-Objekte simuliert.
 Folgende Ereignisse werden während der Simulation ausgelöst: 
     focus, keydown, keyup, change
 
@@ -710,7 +711,7 @@ document.queryElement("#button").trigger("click");
 ```
 
 Aufruf der Methode mit der Option bubbles.  
-Entscheidt ob das Ereignis durch die Ereigniskette laufen soll oder nicht.
+Entscheidet ob das Ereignis durch die Ereigniskette laufen soll oder nicht.
 Standardwert: false
 
 ```javascript
