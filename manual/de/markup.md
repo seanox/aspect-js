@@ -593,8 +593,8 @@ var Model = {
 
 In dem Beispiel erwartet das Eingabefeld eine E-Mail-Adresse.  
 Der Wert wird fortlaufend bei der Eingabe überprüft und bei einem ungültigen
-Wert eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
-gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.  
+Wert wird eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei
+einem gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.  
 Unterhalb vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
 JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode
 den Wert `true` zurückgibt.

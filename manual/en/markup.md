@@ -584,9 +584,9 @@ var Model = {
 ```
 
 In this example, the input field expects an e-mail address.  
-The format is checked continuously during input and an error message is written
-to the `title` attribute if the value is invalid, or the content of the
-`title` attribute is deleted if the value is valid.  
+The value is checked continuously during the input and in case of an invalid
+value an error message is written into the attribute `title`, or in case of a
+valid value the content is deleted from the attribute `title`.  
 Below the input field is the control output of the corresponding field in the
 JavaScript model. This field is only synchronized if the validate method return
 the value `true`.  
