@@ -27,9 +27,9 @@ Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
 Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
-durch das Verketteten statischer Objekte abgebildet.  
+durch das Verketten statischer Objekte abgebildet.  
 Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
-Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
+Wie für die Bezeichner von Objekten typisch, verwenden auch Namensräume
 Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
 Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
 eine reine Zahl ist, wird ein Array angenommen
@@ -37,9 +37,9 @@ eine reine Zahl ist, wird ein Array angenommen
 
 ### Namespace.using
 
-Erstellt einen Namensraum, um Zeichenkette zu übergeben.  
-Ohne Argumente gibt die Methode das globale Namensraumfenster zurück.  
-Die Methode hat verschiedenen Signaturen.
+Erstellt einen Namensraum aus der übergeben Zeichenkette.  
+Ohne Argumente gibt die Methode den globale Namensraum `window` zurück.  
+Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Namespace.using("app.example");
@@ -60,8 +60,8 @@ Namespace.using()
 ### Namespace.locate
 
 Validiert einen angeforderten Namensraum und erzeugt ein entsprechendes
-Metaobjekt.  
-Die Methode hat verschiedenen Signaturen.
+Meta-Objekt.  
+Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -81,8 +81,8 @@ Namespace.locate()
 
 Löst einen Namensraum auf und ermittelt das Objekt.  
 Wenn der Namensraum nicht existiert, wird `null` zurückgegeben.  
-Ohne Argumente gibt die Methode das globale Namensraum `window` zurück.  
-Die Methode hat verschiedenen Signaturen.
+Ohne Argumente gibt die Methode den globale Namensraum `window` zurück.  
+Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -100,8 +100,8 @@ Namespace.lookup()
 
 ### Namespace.exists
 
-Prüft, ob ein Namensraum existiert.
-Die Methode hat verschiedenen Signaturen.
+Prüft, ob ein Namensraum existiert.  
+Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -253,9 +253,9 @@ Object.exists("foo");
 ### Object.using
 
 Äquivalent zu [Namespace.using](#namespaceusing) als statische Object-Funktion.  
-Erstellt einen Namensraum, um Zeichenkette zu übergeben.  
-Ohne Argumente gibt die Methode das globale Namensraumfenster zurück.  
-Die Methode hat verschiedenen Signaturen.
+Erstellt einen Namensraum aus der übergeben Zeichenkette.  
+Ohne Argumente gibt die Methode den globale Namensraum `window` zurück.  
+Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Object.using("app.example");
@@ -330,7 +330,7 @@ Funktion zur Dekodierung von Hexadezimalcode in String-Objekten.
 
 ### String.prototype.encodeBase64
 
-Funktion zur Codierung von String-Objekten als Base64.
+Funktion zur Kodierung von String-Objekten als Base64.
 
 ```javascript
 ("hello world").encodeBase64();
@@ -429,7 +429,7 @@ Composite.listen(Composite.EVENT_AJAX_END, function(...varargs) {
 });
 ```
 
-Zu jdem Events lassen sich mehrere Callback-Methoden registrieren, die dann
+Zu jedem Events lassen sich mehrere Callback-Methoden registrieren, die dann
 entsprechend der Reihenfolge bei der Registrierung aufgerufen werden.
 
 

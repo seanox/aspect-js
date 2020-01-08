@@ -391,9 +391,9 @@ https://example.local/example/#path
 
 In Anlehnung an das Dateisystem werden auch hier absolute, relative und
 zusätzlich funktionale Pfade unterstützt.  
-Pfade bestehen ausschliesslich aus Wortzeichen, Unterstrichen und optional dem -
-Zeichen (basierend auf zusammengesetzten IDs). Als Separator und Root wird das
-Hash-Zeichen verwenden. Leerzeichen werden nicht unterstützt.
+Pfade bestehen ausschliesslich aus Wortzeichen, Unterstrichen und optional dem
+Minus-Zeichen (basierend auf zusammengesetzten IDs). Als Separator und Root wird
+das Hash-Zeichen verwendet. Leerzeichen werden nicht unterstützt.
 
 ```
 #a#b#c#d
@@ -407,7 +407,7 @@ automatisch durch Kleinbuchstaben ersetzt.
 ```
 
 Zwischen den Pfadsegmenten kann das Hash-Zeichen (`#`) auch als Rück- /
-Eltern-Sprunganweisung verwendet werden. Der Weite vom Rücksprung entspricht
+Eltern-Sprunganweisung verwendet werden. Die Weite vom Rücksprung entspricht
 dann der Anzahl der zusätzlichen Hash-Zeichen.
 
 ```
@@ -435,7 +435,7 @@ Diese Pfade sind leer oder enthalten nur ein Hash-Zeichen.
 
 ### Relative Path
 
-Diese Pfade beginnen ohne Hash oder mit zwei oder mehr Hash-Zeichen (`###+`)
+Diese Pfade beginnen ohne Hash oder mit zwei oder mehr Hash-Zeichen (`##+`)
 und sind relativ zum aktuellen Pfad.
      
 ```html
@@ -469,13 +469,13 @@ Variable Pfade sind eine Abbildung (Mapping) von virtuellen auf physische Pfade.
 Die Erklärung klingt im Kontext der SiteMap und derer virtueller Pfade etwas
 verwirrend und meint hier eine weitere zusätzliche virtuelle Abbildung von
 Pfaden innerhalb der SiteMap.  
-Dabei bildet ein Pfad der SiteMap ein festes Ziel, was Face und Facet sein
+Dabei bildet ein Pfad der SiteMap ein festes Ziel, welches Face und Facet sein
 können. Der Pfad kann nun beliebig erweitert werden ohne dass sich das Ziel
 ändert. Das Ziel kann den erweiterten Pfad dann z.B. zur Parameterübergabe
 nutzen, was vergleichbar mit PATH_TRANSLATED und PATH_INFO im CGI ist. 
 
 Zur Konfiguration variabler Pfade wird die Zeichenfolge `...` verwendet, die
-einem Facet nachgestellt oder direkt als Facet verwendet werden kann.
+einem Facet nachgestellt wird oder direkt als Facet verwendet werden kann.
 
 ```javascript
 SiteMap.customize({
@@ -485,7 +485,7 @@ SiteMap.customize({
 });
 ```
 
-Die Pfade `#contact` und `#project` sind in diesem Beispiel variable und
+Die Pfade `#contact` und `#project` sind in diesem Beispiel variabel und 
 können somit beliebig erweitert werden. Das Ziel ist in beiden Fällen fest und
 die Anfragen werden von `#contact` bzw. `#project` verarbeitet.  
 Die Erweitertung vom Pfad kann mit der Methode `SiteMap.lookup(path)`
@@ -520,8 +520,8 @@ Bei der Objektbindung geht es darum, HTML-Elemente mit entsprechenden
 Modell-Objekten zu verknüpfen, die im JavaScript existieren.
 
 Das Object-/Model-Binding gehört ebenfalls zum Model View Controller und ist in
-Seanox aspect-js in der Composite API implementiert, auf der SiteMap als
-Erweiterung und basiert.    
+Seanox aspect-js im Composite API implementiert, auf der SiteMap als Erweiterung
+und basiert.    
 Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
 beschrieben.
 
@@ -536,9 +536,9 @@ Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
 Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
-durch das Verketteten statischer Objekte abgebildet.  
+durch das Verketten statischer Objekte abgebildet.  
 Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
-Wie für die Bezeichner von Objekte typisch, verwenden auch Namensräumen
+Wie für die Bezeichner von Objekten typisch, verwenden auch Namensräume
 Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
 Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
 eine reine Zahl ist, wird ein Array angenommen.
@@ -583,13 +583,13 @@ Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
 in einem beliebigen Namensraum und stellt die Logik für die
 Benutzerschnittstelle (UI-Komponente) und den Übergang von der
 Benutzerschnittstelle zur Geschäftslogik und/oder zum Backend zur Verfügung.  
-Die Verknüpfung bzw. Bindung von Markup und JavaSchript-Modell erfolgt über die
+Die Verknüpfung bzw. Bindung von Markup und JavaSchript-Model erfolgt über das
 Composite-API. Dazu muss ein HTML-Element eine gültige und eindeutige ID haben.
 Die ID muss die Anforderungen des Namensraums erfüllen.
 
 Details werden im Abschnitt [Binding](#binding) beschrieben.
 
-Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
+Das Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
 Abwesenheit. So kann das Modell der Komponente über die statischen Methoden
 `dock` und `undock` informiert werden, wenn die Komponente dem DOM hinzugefügt
 bzw. aus diesem entfernt wird, womit sich das Modell vorbereiten bzw.
@@ -610,8 +610,8 @@ var model = {
 
 Referenziert ein Element mit einer ID innerhalb vom DOM eines Composites und die
 korrespondierende Eigenschaft im Modell. Die Elemente der Properties nutzen
-einen relativen Bezeichner (ID). Der Namensraum basiert auf vom Composite und
-erweitert sich um ggf. weitere übergeordnete Elemente mit IDs im DOM.
+einen relativen Bezeichner (ID). Der Namensraum basiert auf dem vom Composite
+und erweitert sich um ggf. weitere übergeordnete Elemente mit IDs im DOM.
 
 ```javascript
 var model = {
@@ -633,7 +633,7 @@ var model = {
 </html>
 ```
 
-Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
+Das Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
 dem Wert vom HTML-Element. Für ein HTML-Element werden die entsprechenden
 Ereignisse über das gleichnamige Attribut definiert.
 
@@ -644,7 +644,7 @@ In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn
 Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen Fällen
 kann der Bezeichner durch einen zusätzlichen eindeutigen Qualifier, getrennt
 durch einen Doppelpunkt, erweitert werden.  
-Qualifier wirken beim Objekt/Modell-Binding wie Properties und verlängern den
+Qualifier wirken beim Object-/Model-Binding wie Properties und verlängern den
 Namensraum.
 
 ```html
@@ -666,16 +666,16 @@ Namensraum.
 
 #### composite
 
-Composite beschreibt ein Konstrukt aus Markup, JavaScript-Modell, CSS und
-eventuell weiteren Ressourcen. Es beschreibt eine Komponente/Modul ohne direkten
-Bezug auf die Darstellung.
+Composite ist ein Konstrukt aus Markup, JavaScript-Model, CSS und eventuell
+weiteren Ressourcen. Es beschreibt eine Komponente/Modul ohne direkten Bezug auf
+die Darstellung.
 
 
 #### composite-id
 
 Die Composite-ID ist ein anwendungsweit eindeutiger Bezeichner.  
-Sie ist eine Zeichenfolge aus Buchstaben, Zahlen und Unterstrichen besteht und
-optional auch das Minus-Zeichen unterstützt, wenn es nicht am Anfang oder am
+Sie ist eine Zeichenfolge, die aus Buchstaben, Zahlen und Unterstrichen besteht
+und optional auch das Minus-Zeichen unterstützt, wenn es nicht am Anfang oder am
 Ende benutzt wird.  
 Eine Composite-ID ist mindestens ein Zeichen lang und wird durch die Kombination
 der Attribute `ID` und `Composite` gebildet.
@@ -703,7 +703,7 @@ In Seanox Aspect-js werden Komponenten auch Composites oder Module genannt, da
 diese aus Markup (View), korrespondierendem JavaScript (Model) und mehr
 bestehen.  
 
-Beim Objekt-/Model-Binding geht es um die Verbindung von View/Markup/HTML mit
+Beim Object-/Model-Binding geht es um die Verbindung von View/Markup/HTML mit
 dem entsprechenden JavaScript-Model.  
 Das Binding leitet Interaktionen und Statusänderungen der View an das Model
 weiter und stellt eine Schnittstelle für Middleware-Funktionen und Services
@@ -757,7 +757,7 @@ Die Dock-Methode wird vor dem Rendern, vor dem Einfügen des Composites in das
 DOM oder nach dem Laden der Seite beim ersten Rendern ausgeführt und kann zur
 Vorbereitung der Darstellung verwendet werden. Die Undock-Methode wird
 ausgeführt, nachdem das Composite aus dem DOM entfernt wurde und kann zur
-Nachbearbeitung bzw. Bereiningung der Darstellung verwendet werden.  
+Nachbereitung bzw. Bereiningung der Darstellung verwendet werden.  
 
 ```javascript
 var model = {
@@ -804,12 +804,12 @@ beschrieben.
 
 ### Validation
 
-Die Synchronisation der Werte zwischen der HTML-Elemente (View) und den
-Feldern vom JavaScript-Model kann durch Validierung überwacht und gesteuert
-werden.   
-Die Validierung wird in HTML über durch die Kombination der Attribute
-`validate` und `events` deklariert und erfordert eine entsprechende
-Validierungsmethode im JavaScript-Model.    
+Die Synchronisation der Werte zwischen den HTML-Elementen (View) und den Feldern
+vom JavaScript-Model kann durch Validierung überwacht und gesteuert werden.   
+Die Validierung wird in HTML durch die Kombination der Attribute `validate` und
+`events` deklariert und erfordert eine entsprechende Validierungsmethode im
+JavaScript-Model.    
+
 Details zur Funktionsweise werden im Abschnitt [validate](markup.md#validate)
 beschrieben.
 

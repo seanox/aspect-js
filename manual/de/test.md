@@ -93,7 +93,7 @@ Die implementierte Methode, die als Testfall ausgeführt werden soll.
 
 Optional Angabe der maximalen Laufzeit des Testfalls in Millisekunden.
 Das Überschreiten von diesem Wetr führt zum Ausfall des Tests.  
-Es wird ein Wert größer als 0 erwartet, ansonsten wird der Timeout ignoriert.
+Es wird ein Wert grösser als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
 ### expected

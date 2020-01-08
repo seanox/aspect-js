@@ -383,9 +383,9 @@ https://example.local/example/#path
 
 According to the file system, absolute, relative and additionally functional
 paths are also supported here.    
-Paths consist exclusively of word characters, underscores and optionally the -
-character (based on combined) IDs. The hash character is used as separator and
-root. Spaces are not supported.
+Paths consist exclusively of word characters, underscores and optionally the
+minus character (based on combined) IDs. The hash character is used as separator
+and root. Spaces are not supported.
 
 ```
 #a#b#c#d
@@ -643,8 +643,8 @@ namespace.
 
 #### composite
 
-Composite describes a construct of markup, JavaScript model, CSS and possibly
-other resources. It describes a component/module without direct relation to the
+Composite is a construct of markup, JavaScript model, CSS and possibly other
+resources. It describes a component/module without direct relation to the
 representation.
 
 
