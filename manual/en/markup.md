@@ -359,8 +359,8 @@ loads and inserts transformed content from the [DataSource](datasource.md).
 In all cases, the output attribute can be combined with the condition attribute
 and is only executed when the condition is `true`.
 
-The behavior is similar to the `import` attribute, except that `output` is
-always executed for the element.
+The behavior is similar to the `import` attribute, except that `output` for
+the element is executed with each relevant render cycle.
 
 ```javascript
 var Model = {
@@ -497,13 +497,51 @@ reacts to corresponding events.
 
 ### validate
 
-The `validate` attribute requires the combination with the `events` attribute.
+The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
-Composites and the corresponding JavaScript model.  
-If `validate` is used, the JavaScript model must implement a corresponding
-validate method: `boolean Model.validate(element, value)`.  
-The return value must be a Boolean value and so only the return value `true`
-synchronizes the value from the composite into the JavaScript model.  
+composite and the corresponding JavaScript model.  
+The validation works in two steps and uses the standard HTML5 validation at the
+beginning. If this cannot determine deviations from the expected result or was
+not specified, the validation of the JavaScript model is used if the model
+provides a corresponding validate method `boolean validate(element, value)`
+and the element to be validated is embedded in a composite.
+
+The synchronization and the default action of the browser are directly
+influenced by the validation, which can use four states as return values:
+`true`, `not true`, `text`, `undefined/void`.
+
+
+#### true
+
+The validation was successful.  
+No error is displayed and the default action of the browser is used.  
+If possible the value is synchronized with the model.
+
+
+#### not true and not undefined/void
+
+The validation failed; an error is displayed.  
+A return value indicates that the default action of the browser should not be
+executed and so it is blocked.  
+In this case, a possible value is not synchronized with the model.
+
+
+#### text
+
+Text corresponds: Validation has failed with an error message.  
+If the error message is empty, the message from the message attribute is used
+alternatively.
+In this case, a possible value is not synchronized with the model.
+     
+
+#### undefined/void
+
+The validation failed; an error is displayed.  
+No return value indicates that the default action of the browser should
+nevertheless be executed. This behavior is important e.g. for the validation of
+input fields, so that the input reaches the user interface.  
+In this case, a possible value is not synchronized with the model. 
+
 A general strategy or standard implementation for error output is deliberately
 not provided, as this is too strict in most cases and can be implemented
 individually as a central solution with little effort.

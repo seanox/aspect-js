@@ -354,8 +354,8 @@ var Model = {
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
 HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
-Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Zudem
-wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
+Elemente als NodeList bzw. Array erwartet, welche dann direkt eingefügt werden.
+Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
 einfügt wird.
 
@@ -363,7 +363,7 @@ In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
 
 Das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
-der Output für das Element immer ausgeführt.
+der Output für das Element mit jedem zutreffenden Render-Zyklus ausgeführt.
 
 ```javascript
 var Model = {
@@ -413,7 +413,8 @@ abgeleitet.
 ```
 
 Beispiel für den Output per DataSource-URL mit spezifischer Daten- und
-Transformation-URL. Die Trennung erfolgt durch Leerzeichen, beide müssen mit dem
+Transformation-URL.  
+Die Trennung erfolgt durch Leerzeichen, beide müssen mit dem
 DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
 verwendet, von denen der erste aus die Daten und der zweite auf die
 Transformation verweist.
@@ -430,7 +431,7 @@ Transformation verweist.
 
 Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
 in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
-So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
+So wird gewährleistet, dass das JavaScript ggf. erst abhängig vom
 umschliessenden condition-Attribut aufgeführt wird.
 
 
@@ -450,10 +451,10 @@ Laden der Seite hinzugefügt.
 ### render
 
 Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Events
+Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignis
 aufgefrischt werden.  
 Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
-welche die Ziele festlegt.
+welche die Ziele festlegen.
 
 ```javascript
 var Model = {
@@ -503,24 +504,52 @@ darstellen und auf entsprechende Ereignisse reagieren.
 
 ### validate
 
-TODO: validate funktioniert zwei stuffig (1. HTML5, 2. Model)
-TODO: validate im Model funktioniert nur, wenn das Element mit dem Attribut validate im Composite liegt (DOM)
-      sonst wird nur HTML5-Validierung verwendet
-TODO: validate hat direkte Auswirkung auf Action und Synchronisation
-      Rückgabewert blockiert die Ausführung, auch die Standard-Action vom Browser wird bei false geblockt
-      z.B. bei Submit-Button        
-
-TODO: action: nicht hier, Platz in der Doku für action suchen
-TODO: action: rückgabewert hat Einfluss auf Browser-Event-Verhalten, Rückgabewert false blockt die Standard-Action vom Browser
-      z.B. bei Submit-Button
-      
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren und steuert sie die Synchronisation zwischen dem Markup
+Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model.  
-Wird `validate` verwendet, muss das JavaScript-Model eine entsprechende
-validate-Methode implementieren: `boolean Model.validate(element, value)`. 
-Der Rückgabewert muss ein boolescher Wert sein und so wird nur beim Rückgabewert
-`true` der Wert aus dem Composite in das JavaScript-Model synchronisiert.  
+Die Validierung funktioniert dabie zweistufig und nutzt zu Beginn die Standard
+HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
+ermitteln oder wurde nicht festgelegt, wird die Validierung im JavaScript-Model
+aufgerufen, wenn das Modell eine entsprechende validate-Methode
+`boolean validate(element, value)` bereitstellt das zu validierende Element
+in einem Composite eingebettet ist.
+
+Die Synchronisation und das Standard-Verhalten (action) vom Browser werden durch
+die Validierung direkt beeinfluss und kann dazu vier Zustände als Rückgabewert
+nutzen: `true`, `not true`, `text`, `undefined/void`.
+
+
+#### true
+
+Die Validierung war erfolgreich.  
+Es wird kein Fehler angezeigt und das Standard-Verhalten (action) vom Browser
+wird verwendet.  
+Wenn möglich wird der Wert mit dem Modell synchronisiert.
+
+
+#### not true and not undefined/void
+
+Die Validierung ist fehlgeschlagen; es wird ein Fehler angezeigt.  
+Ein Rückgabewert gibt an, dass das Standard-Verhalten (action) vom Browser nicht
+ausgeführt werden soll und somit blockiert wird.  
+In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert.
+
+
+#### text
+
+Text entspricht: Validierung ist fehlgeschlagen mit einer Fehlermeldung.  
+Wenn die Fehlermeldung leer ist, wird alternativ die Meldung vom
+message-Attribut verwendet.  
+In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert.
+
+
+#### undefined/void
+
+Die Validierung ist fehlgeschlagen; ein Fehler wird angezeigt.  
+Kein Rückgabewert zeigt an, dass das Standard-Verhalten (action) vom Browser
+trotzdem ausgeführt werden soll. Dieses Verhalten ist z.B. für die Validierung
+von Eingabefeldern wichtig, damit die Eingabe zur Benutzeroberfläche gelangt.  
+In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert. 
 
 Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
 bewusst nicht bereitgestellt, da diese in den meisten Fällen zu starr ist und
