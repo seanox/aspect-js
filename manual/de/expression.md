@@ -7,7 +7,7 @@ Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScrript und damit zu den Modellen und Komponenten im Seanox
 aspect-js. In den Expressions wird das komplette JavaScript-API unterstützt, die
 mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
-arithmetische und logische Operatoren verwendet werden können.
+arithmetischen und logischen Operatoren verwendet werden können.
 
 ```
 {{'Hello World!'}}
@@ -113,7 +113,7 @@ ne  !=        not   !         or  ||
 ### Value
 
 Value repräsentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
-Alles was kein Literal und Keyword ist, ist potentiell eine Value.  
+Alles was kein Literal und Keyword ist, ist potentiell ein Value.  
 Values verweisen auf Variablen oder Objekt-Eigenschaften.  
 Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
 wenn vorhanden auf einen korrespondierenden Getter (get-Methode).  
@@ -136,13 +136,13 @@ Sonstige Logik wird unverändert ausgeführt.
 ## Expressions
 
 Es gibt unterschiedliche Arten von Expressions die kombinierbar sind.  
-Nachfolgend werde diese mit ihrer Unterschieden und Eigenheiten erklärt.
+Nachfolgend werden diese mit ihren Unterschieden und Eigenheiten erklärt.
 
 
 ### Value-Expression
 
 Value repräsentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
-Alles was kein Literal und Keyword ist, ist potentiell eine Value.  
+Alles was kein Literal und Keyword ist, ist potentiell ein Value.  
 Values verweisen auf Variablen oder Objekt-Eigenschaften.  
 Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
 wenn vorhanden auf einen korrespondierenden Getter (get-Methode).  

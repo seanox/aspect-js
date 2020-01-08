@@ -621,7 +621,7 @@ Details zu Syntax und Verwendung werden im Abschnitt
 
 ## Scripting
 
-Eingebettetes Scripting bringt einige Besonderheit mit sich.  
+Eingebettetes Scripting bringt einige Besonderheiten mit sich.  
 Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
 ausgeführt. Daher wurde das Markup für das Rendering um den zusätzlichen
 Skript-Typ `composite/javascript` erweitert, der das normale JavaScript
@@ -681,8 +681,8 @@ Selektoren funktionieren ähnlich wie benutzerdefinierte Tags.
 Im Vergleich zu diesen, verwenden Selektoren einen CSS-Selektor um Elemente zu
 erkennen. Dieser Selektor muss das Element aus Sicht des übergeordneten
 Eltern-Elements ansprechen. Selektoren sind flexibler und multifunktionaler. Auf
-diese Art können verschiedene Selektoren mit unterschiedliche Funktionen für ein
-Element zutreffen.  
+diese Art können verschiedene Selektoren mit unterschiedlichen Funktionen für
+ein Element zutreffen.  
 Selectoren werden nach der Reihenfolge ihrer Registrierung iterative durchlaufen
 und deren Callback-Methoden ausgeführt. Der Rückgabewert der Callback-Methode
 bestimmt dabei, ob die Iteration abgebrochen wird oder nicht.  
@@ -709,9 +709,9 @@ Composite.customize("a.foo", function(element) {
 ### Acceptor
 
 Acceptors sind eine besondere Art der Anpassung vom Rendering. Im Vergleich zu
-den anderen Möglichkeiten, geht es hier um die Manipulation von Element vor dem
-Rendering. Dies ermöglicht individuelle Änderungen an Attributen und/oder dem
-Markup, bevor der Renderer sie verarbeitet. Damit hat ein Acceptor keinen
+den anderen Möglichkeiten, geht es hier um die Manipulation von Elementen vor
+dem Rendering. Dies ermöglicht individuelle Änderungen an Attributen und/oder
+dem Markup, bevor der Renderer sie verarbeitet. Damit hat ein Acceptor keinen
 Einfluss auf die Implementierung vom Rendering.
 
 ```javascript
