@@ -104,7 +104,7 @@ possible as composite JavaScript.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
-  ...
+    ...
 </script>
 ```
 
@@ -315,7 +315,7 @@ composite JavaScript.
 
 ```html
 <script type="composite/javascript" interval="1000">
-  ...
+    ...
 </script>
 ```
 
@@ -567,8 +567,7 @@ var Model = {
     validate(element, value) {
         var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
         var test = PATTER_EMAIL_SIMPLE.test(value);
-        element.setAttribute("title", test ? "" : "Invalid " + element.getAttribute("placeholder"));
-        return test;
+        return test || ("Invalid " + element.getAttribute("placeholder"));
     },
     text1: ""
 };
@@ -619,15 +618,15 @@ The standard scripting is executed automatically by the browser and
 independently of the rendering. Therefore, markup for rendering has been
 extended by the additional script type `composite/javascript`, which uses the
 normal JavaScript but is not recognized by the browser in comparison to
-`text/javascript` and therefore not executed directly. The renderer recognizes
-the JavaScript code and executes it in every render cycle if the cycle contains
-a SCRIPT element. In this way, the execution of the SCRIPT element can also be
-combined with the `condition` attribute.   
+`text/javascript` and therefore not executed directly. But the renderer
+recognizes the JavaScript code and executes it in every revelevant render cycle.
+In this way, the execution of the SCRIPT element can also be combined with the
+`condition` attribute.   
 Embedded scripts must/should be "ThreadSafe".
 
 ```html
 <script type="composite/javascript">
-  ...
+    ...
 </script>
 ```
 
@@ -638,9 +637,9 @@ they are to be used later in the application logic.
 
 ```html
 <script type="composite/javascript">
-  window['Foo'] = function() {
-    ...
-  }
+    window['Foo'] = function() {
+        ...
+    }
 </script>
 ```
 

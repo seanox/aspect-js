@@ -105,7 +105,7 @@ ist als Composite-JavaScript möglich.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
-  ...
+    ...
 </script>
 ```
 
@@ -318,7 +318,7 @@ ist als Composite-JavaScript möglich.
 
 ```html
 <script type="composite/javascript" interval="1000">
-  ...
+    ...
 </script>
 ```
 
@@ -575,8 +575,7 @@ var Model = {
     validate(element, value) {
         var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
         var test = PATTER_EMAIL_SIMPLE.test(value);
-        element.setAttribute("title", test ? "" : "Invalid " + element.getAttribute("placeholder"));
-        return test;
+        return test || ("Invalid " + element.getAttribute("placeholder"));
     },
     text1: ""
 };
@@ -624,18 +623,18 @@ Details zu Syntax und Verwendung werden im Abschnitt
 
 Eingebettetes Scripting bringt einige Besonderheit mit sich.  
 Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
-ausgeführt. Daher wurde Markup für das Rendering um den zusätzlichen Skript-Type
-`composite/javascript` erweitert, der das normale JavaScript verwendet, im
-Vergleich zum Typ `text/javascript` vom Browser aber nicht erkannt und somit
-nicht direkt ausgeführt wird. Der Renderer hingegen erkennt den JavaScript-Code
-und führt diesen in jedem Renderzyklus aus, wenn der Zyklus ein SCRIPT-Element
-enthält. Auf diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem
-Attribut `condition` kombiniert werden.    
+ausgeführt. Daher wurde das Markup für das Rendering um den zusätzlichen
+Skript-Typ `composite/javascript` erweitert, der das normale JavaScript
+verwendet, im Vergleich zum Typ `text/javascript` vom Browser aber nicht
+erkannt und somit nicht direkt ausgeführt wird. Der Renderer hingegen erkennt
+den JavaScript-Code und führt diesen in jedem Renderzyklus aus, wenn der Zyklus
+ein SCRIPT-Element enthält. Auf diese Weise kann die Ausführung vom
+SCRIPT-Element auch mit dem Attribut `condition` kombiniert werden.    
 Eingebettete Skripte müssen/sollten "ThreadSafe" sein.
 
 ```html
 <script type="composite/javascript">
-  ...
+    ...
 </script>
 ```
 
@@ -646,9 +645,9 @@ verwendet werden sollen.
 
 ```html
 <script type="composite/javascript">
-  window['Foo'] = function() {
-    ...
-  }
+    window['Foo'] = function() {
+        ...
+    }
 </script>
 ```
 
