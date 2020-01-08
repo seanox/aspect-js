@@ -49,8 +49,8 @@ initial expression each time it is refreshed (render cycle).
 ### composite
 
 Marks an element in the markup as [Composite](composites.md).  
-Composites are modular components and have a versatile meaning in Seanox
-aspect-js and require an identifier (ID).  
+Composites are modular components that have an elementary meaning in Seanox
+aspect-js and necessarily require an identifier (ID).  
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
 virtual paths in the face-flow, which has a direct effect of the visibility of
 the composites.
@@ -233,9 +233,9 @@ it.
 ```
 
 Example of importing a DataSource-URL with a specific data URL (locator) and
-transformation URL. The blank character is used for separation. Both URLs must
-begin with the DataSource protocol and only the first two entries are used from
-which the first refers to the data and the second to the transformation.
+transformation URL.  
+As a value, the data URL (locator of the XML file) and the transformation URL
+(locator of the XSLT template) are expected, separated by a blank character. 
 
 ```html
 <article import="{{'xml:/example/data xslt:/example/style'}}">
@@ -248,9 +248,9 @@ which the first refers to the data and the second to the transformation.
 ```
 
 When inserting content from the DataSource, script blocks are automatically
-changed to composite/javascript and are only executed by the renderer. This
-ensures that the JavaScript is only executed depending on surrounding condition
-attributes.
+changed to composite/javascript and only executed by the renderer. This ensures
+that the JavaScript is only executed depending on the enclosing condition
+attribute.
 
 
 ### interval

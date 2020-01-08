@@ -117,7 +117,7 @@ Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-eröffnen primäre Funktionen zur ereignisgesteuerte Auffrischung von anderen
+eröffnen primäre Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
 und Synchronisation von HTML-Elementen und dem korrespondierenden
 JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).  
@@ -161,7 +161,7 @@ _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
 
 Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
-`import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
+`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehre
 Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
 unterstützt, die per HTTP-Methode GET nachgeladen und eingefügt wird. Zudem wird
@@ -236,10 +236,9 @@ abgeleitet.
 ```
 
 Beispiel für den Import per DataSource-URL mit spezifischer Daten- und
-Transformation-URL (locator). Die Trennung erfolgt durch Leerzeichen, beide
-müssen mit dem DataSource-Protokoll beginnen und es werden nur die ersten beiden
-Einträge verwendet, von denen der erste aus die Daten und der zweite auf die
-Transformation verweist.
+Transformation-URL.  
+Als Wert wird erst dir Daten-URL (locator der XML-Datei) und getrennt durch ein
+Leerzeichen die die Transformation-URL (locator vom XSLT Template) erwartet. 
 
 ```html
 <article import="{{'xml:/example/data xslt:/example/style'}}">
@@ -252,9 +251,9 @@ Transformation verweist.
 ```
 
 Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
-in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
-So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
-umschliessenden condition-Attribut aufgeführt wird.
+in composite/javascript geändert und erst durch den Renderer ausgeführt. So wird
+gewährleistet, dass das JavaScript ggf. erst abhängig vom umschliessenden
+condition-Attribut aufgeführt wird.
 
 
 ### interval
