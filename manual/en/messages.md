@@ -20,9 +20,11 @@ stored in the `locales.xml` in the DataSource directory.
 +- index.html
 ```
 
-The elements for the supported languages are organized in locales in this file.
-Locales is a set of supported country codes. In each country code, the key
-values are recorded as label entries.  
+The elements for the supported languages, locales and/or clients are organized
+as sets in this file. In each set, the key-value pairs are defined as label
+entries.  
+Clients are used like locales and are therefore not explicitly mentioned in the
+further description. 
 
 ```xml
 <?xml version="1.0"?>

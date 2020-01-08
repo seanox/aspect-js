@@ -22,9 +22,11 @@ definiert werden.
 +- index.html
 ```
 
-Die Elemente für die unterstützten Sprachen sind in dieser Datei in Locales
-organisiert. Locales sind eine Menge von unterstützten Ländercodes. In jedem
-Ländercode werden die Schlüssel-Wert-Paare als Label-Einträge festgelegt.  
+Die Elemente für die unterstützten Sprachen, Gebietsschematas und/oder Mandanten
+werden in dieser Datei als Sets organisiert. In jedem Set werden die
+Schlüssel-Wert-Paare als Label-Einträge festgelegt.  
+Mandanten werden wie Gebietsschemen verwendet und werden daher in der weiteren
+Beschreibung nicht explizit erwähnt.
 
 ```xml
 <?xml version="1.0"?>

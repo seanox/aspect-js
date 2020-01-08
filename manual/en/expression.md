@@ -187,8 +187,8 @@ the variable corresponds to `undefined`.
 
 With the expression language, global variables can also be created and set at
 the runtime. The expression must begin with the name of a variable (identifier),
-which use as word the characters `_ a-z A-Z 0-9` and is separated from the
-actual expression by a colon.  
+which use the word characters `_ a-z A-Z 0-9` and is separated from the actual
+expression by a colon.  
   
 ```
 {{foo:1 +2 +3 + 'x Hallo'}}

@@ -275,9 +275,9 @@ SiteMap.customize({
 });
 ```
 
-All requested paths pass through the permit method(s). This can decide what
-happens to the path. The following return values are expected from each permit
-method:
+All requested paths pass through the registered permit methods. These decide
+what happens to the path. The following return values are expected from each
+permit method:
 
 __True__ The validation is successful and the iteration via further permit
 methods is continued. If all permit methods return true and thus confirm the
@@ -381,10 +381,10 @@ paths.
 https://example.local/example/#path
 ```
 
-In accordance with the file system, also here absolute and relative paths as
-well as functional paths are supported.  
-Paths consist exclusively of word characters and underscores (based on composite
-IDs) and must begin with a letter and use the hash character as separator and
+According to the file system, absolute, relative and additionally functional
+paths are also supported here.    
+Paths consist exclusively of word characters, underscores and optionally the -
+character (based on combined) IDs. The hash character is used as separator and
 root. Spaces are not supported.
 
 ```

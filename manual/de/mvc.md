@@ -169,7 +169,7 @@ eigenständige Ansicht. So können z.B. bei einem Such-Formular die Eingabemaske
 und die Ergebnistabelle separate Facets eines Faces sein, ebenso wie Article 
 und/oder Section in einem Face. Sowohl Face als auch Facets sind über virtuelle
 Pfade erreichbar. Der Pfad zu Facets bewirkt, dass das umschliessende Face mit
-allen seinen übergeordneten Faces angezeigt.
+allen seinen übergeordneten Faces angezeigt wird.
 
 
 #### Face Flow
@@ -185,8 +185,8 @@ und/oder umgeleitet bzw. weitergeleitet werden.
 
 Für die Konfiguration der SiteMap wird die Methode `SiteMap.customize(....)`
 verwendet. Mit dieser Methode ist es möglich, den Face-Flow (Pfade, Faces,
-Facets), die Berechtigungen zu definieren und Akzeptoren zu registrieren, wofür
-die die Methode unterschiedliche Signaturen bereitstellt.  
+Facets) sowie die Berechtigungen zu definieren und Akzeptoren zu registrieren,
+wofür die die Methode unterschiedliche Signaturen bereitstellt.  
 
 Die Konfiguration kann mehrfach aufgerufen werden, auch zur Laufzeit. Die
 SiteMap sammelt alle Konfigurationen kumulativ. Alle Pfade, Faces und Facets
@@ -260,7 +260,7 @@ __entfernt) werden.__
 
 #### Permissions
 
-Das Berechtigungskonzept basiert auf einer oder mehreren permit-Methode, die
+Das Berechtigungskonzept basiert auf einer oder mehreren permit-Methoden, die
 zusammen mit dem Face-Flow-Meta-Objekt übergeben werden.
 
 ```javascript
@@ -281,8 +281,8 @@ SiteMap.customize({
 });
 ```
 
-Alle angeforderten Pfade durchlaufen die permit-Methode(n). Diese entscheiden,
-was mit dem Pfad passiert. Von jeder permit-Methode werden folgende
+Alle angeforderten Pfade durchlaufen die registrierten permit-Methoden. Diese
+entscheiden, was mit dem Pfad passiert. Von jeder permit-Methode werden folgende
 Rückgabewerte erwartet:
 
 __True__ Die Validierung ist erfolgreich und die Iteration über weitere
@@ -389,11 +389,11 @@ verwendet.
 https://example.local/example/#path
 ```
 
-In Anlehung an das Dateisystem werden auch hier absolute und relative Pfade
-sowie Funktionspfade unterstützt.  
-Pfade bestehen ausschließlich aus Wortzeichen und Unterstrichen (basierend auf
-zusammengesetzten IDs) und müssen mit einem Buchstaben beginnen. Als Separator
-und Root wird das Hash-Zeichen verwenden. Leerzeichen werden nicht unterstützt.
+In Anlehnung an das Dateisystem werden auch hier absolute, relative und
+zusätzlich funktionale Pfade unterstützt.  
+Pfade bestehen ausschliesslich aus Wortzeichen, Unterstrichen und optional dem -
+Zeichen (basierend auf zusammengesetzten IDs). Als Separator und Root wird das
+Hash-Zeichen verwenden. Leerzeichen werden nicht unterstützt.
 
 ```
 #a#b#c#d
