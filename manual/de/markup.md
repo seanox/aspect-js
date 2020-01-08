@@ -175,7 +175,6 @@ kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
 Das Verhalten ist vergleichbar mit dem Attribut `output`, im Unterschied wird
 der Import für das Element nur einmalig ausgeführt.
 
-
 ```javascript
 var Model = {
     publishForm() {
@@ -270,12 +269,12 @@ Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
 verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
 Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
 - das Element nicht mehr im DOM existiert
-- das condition-Attribut `false` ist
+- das condition-Attribut verwendet wird, dass nicht `true` ist
 
 Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
 HTML-Code als Vorlage verwendet und während der Intervalle zuerst der innere
 HTML-Code geleert, die Vorlage mit jedem Intervall-Zyklus einzeln generiert und
-das Ergebnis dem inneren HTML-Code hinzugefügt.
+das Ergebnis als innerer HTML-Code eingefügt.
 
 ```html
 <span interval="1000">
@@ -289,10 +288,10 @@ das Ergebnis dem inneren HTML-Code hinzugefügt.
 
 Das SPAN-Element wird alle 1000ms aktualisiert.
 
-Das interval-Attribut kann für einfache HTML-Elementen, wie auch komplexe und
+Das interval-Attribut kann für einfache HTML-Elemente, wie auch komplexe und
 verschachtelte HTML-Konstrukte verwendet werden.
 
-Ein aktiver Intervalle reagiert dynamisch auf Veränderungen im DOM, endet
+Ein aktiver Intervall reagiert dynamisch auf Veränderungen im DOM, endet
 automatisch, wenn das HTML-Element aus dem DOM entfernt wurde und beginnt neu,
 wenn das HTML-Element dem DOM erneut hinzugefügt wird. Daher lässt sich das
 interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
@@ -354,17 +353,17 @@ var Model = {
 ### output
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Elemente oder mehre
-Elemente als NodeList bzw. Array -- diese werden dann direkt eingefügt, oder
-eine [DataSource-URL (locator)](datasource.md#locator) die einen Inhalt aus der
-[DataSource](datasource.md) lädt und transformiert, erwartet.
+HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
+Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Zudem
+wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
+womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
+einfügt wird.
 
 In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
 
 Das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
 der Output für das Element immer ausgeführt.
-
 
 ```javascript
 var Model = {

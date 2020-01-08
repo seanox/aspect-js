@@ -793,7 +793,6 @@ The object/model binding knows the available events for HTML. During binding,
 the model is searched for corresponding methods that will be registered as event
 listeners.
 
-
 ```javascript
 var contact= {
     mail: {

@@ -125,7 +125,6 @@ Namespace.exists()
 Modifies the original method to support node and nodes as NodeList and Array.
 If the option `exclusive` is used, existing children will be removed first.
 
-
 ```javascript
 var nodes = [];
 nodes.push(document.createElement("a"));

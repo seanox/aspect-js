@@ -266,12 +266,12 @@ The interval attribute expects a value in milliseconds. An invalid value causes
 console output. The interval starts automatically with refreshing the declared
 HTML element and will terminated and/or removed when:  
 - The element no longer exists in the DOM.
-- the condition attribute is `false`  
+- the condition attribute is used that is not `true`
 
 If an HTML element is declared as an interval, the original inner HTML code is
 used as a template, and during the intervals the inner HTML code is first
 emptied, the template is generated individually with each interval cycle, and
-the result is added to the inner HTML code.
+the result is inserted as inner HTML code.
 
 ```html
 <span interval="1000">
@@ -352,9 +352,9 @@ var Model = {
 
 The attribute output the value or result of its expression as an inner HTML code
 for an HTML element. As value are expected one element or more elements as
-NodeList or Array -- these are then inserted directly, or a
-[DataSource-URL (locator)](datasource.md#locator) which loads and transforms
-content from the [DataSource](datasource.md).
+NodeList or Array, which are then inserted directly.  
+The [DataSource-URL (locator)](datasource.md#locator) is also supported, which
+loads and inserts transformed content from the [DataSource](datasource.md).
 
 In all cases, the output attribute can be combined with the condition attribute
 and is only executed when the condition is `true`.
