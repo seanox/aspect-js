@@ -501,10 +501,11 @@ The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
 composite and the corresponding JavaScript model.  
 The validation works in two steps and uses the standard HTML5 validation at the
-beginning. If this cannot determine deviations from the expected result or was
-not specified, the validation of the JavaScript model is used if the model
-provides a corresponding validate method `boolean validate(element, value)`
-and the element to be validated is embedded in a composite.
+beginning. If this cannot determine deviations from the expected result or if no
+HTML5 validation is specified, the validation of the JavaScript model is used if
+the model provides a corresponding validate method
+`boolean validate(element, value)` and the element to be validated is
+embedded in a composite.
 
 The synchronization and the default action of the browser are directly
 influenced by the validation, which can use four states as return values:
