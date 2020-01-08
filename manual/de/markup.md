@@ -515,8 +515,8 @@ validate-Methode `boolean validate(element, value)` bereitstellt und das zu
 validierende Element in einem Composite eingebettet ist.
 
 Die Synchronisation und das Standard-Verhalten (action) vom Browser werden durch
-die Validierung direkt beeinfluss und kann dazu vier Zustände als Rückgabewert
-nutzen: `true`, `not true`, `text`, `undefined/void`.
+die Validierung direkt beeinflusst. Diese kann dazu vier Zustände als
+Rückgabewert nutzen: `true`, `not true`, `text`, `undefined/void`.
 
 
 #### true
@@ -592,8 +592,8 @@ var Model = {
 ```
 
 In dem Beispiel erwartet das Eingabefeld eine E-Mail-Adresse.  
-Das Format wird fortlaufend bei der Eingabe überprüft und bei einem ungültigen
-Werte eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
+Der Wert wird fortlaufend bei der Eingabe überprüft und bei einem ungültigen
+Wert eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
 gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.  
 Unterhalb vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
 JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode

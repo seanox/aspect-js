@@ -508,7 +508,7 @@ the model provides a corresponding validate method
 embedded in a composite.
 
 The synchronization and the default action of the browser are directly
-influenced by the validation, which can use four states as return values:
+influenced by the validation. This can use for it four states as return values:
 `true`, `not true`, `text`, `undefined/void`.
 
 
