@@ -40,7 +40,7 @@ Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
 umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
 Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
 unterstützt wird, sowie `STYLE`, welches nicht unterstützt wird. Die Werte der
-Attribute können statische oder mit Verwendung der Expression-Language dynamisch
+Attribute können statisch oder mit Verwendung der Expression-Language dynamisch
 sein. Enthält ein Attribut eine Expression, werden das Attribut und der Wert
 unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
@@ -49,8 +49,8 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 ### composite
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
-Composites sind modulare Komponente und haben in Seanox aspect-js eine
-vielseitige Bedeutung und benötigen zwingend einen Bezeichner (ID).  
+Composites sind modulare Komponente die in Seanox aspect-js eine elementare
+Bedeutung haben und die zwingend einen Bezeichner (ID) benötigen.  
 Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
@@ -66,7 +66,7 @@ Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen.
 ```
 
 Das Attribut hat keinen Wert.  
-Es kann mit dem Attribute `static` kombiniert werden.
+Es kann mit dem Attribut `static` kombiniert werden.
 Dann wird das Composite als Face unabhängig von virtuellen Pfaden permanent
 sichtbar.
 
@@ -83,7 +83,7 @@ beschrieben.
 
 ### condition
 
-Das condition-Attribut legt fest, ob ein Element im DOM enhalten bleibt.  
+Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt.  
 Der mit dem Attribut angegebene Ausdruck muss explizit `true` zurückliefern,
 damit das Element im DOM erhalten bleibt. Bei abweichenden Rückgabewerten wird
 das Element temporär aus dem DOM entfernt und lässt sich später durch das
@@ -164,10 +164,10 @@ eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Elemente oder mehre
 Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
-unterstützt, die per HTTP-Methode GET nachgeladen und eingefüght wird. Zudem
-wird auch eine [DataSource-URL (locator)](datasource.md#locator) unterstützt,
-womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-einfügt wird.
+unterstützt, die per HTTP-Methode GET nachgeladen und eingefügt wird. Zudem wird
+auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt, womit
+ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert einfügt
+wird.
 
 In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -254,7 +254,7 @@ Transformation verweist.
 Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
 in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
 So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
-umschliessenden condition-Attribute aufgeführt wird.
+umschliessenden condition-Attribut aufgeführt wird.
 
 
 ### interval
@@ -293,7 +293,7 @@ Das SPAN-Element wird alle 1000ms aktualisiert.
 Das interval-Attribut kann für einfache HTML-Elementen, wie auch komplexe und
 verschachtelte HTML-Konstrukte verwendet werden.
 
-Ein aktiver Intervalle reagiert dynamisch auch Veränderungen im DOM, endet
+Ein aktiver Intervalle reagiert dynamisch auf Veränderungen im DOM, endet
 automatisch, wenn das HTML-Element aus dem DOM entfernt wurde und beginnt neu,
 wenn das HTML-Element dem DOM erneut hinzugefügt wird. Daher lässt sich das
 interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
@@ -433,7 +433,7 @@ Transformation verweist.
 Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
 in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
 So wird gewährleistet, dass das JavaScript ggf. erst abhängig von
-umschliessenden condition-Attribute aufgeführt wird.
+umschliessenden condition-Attribut aufgeführt wird.
 
 
 ### release
