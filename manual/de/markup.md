@@ -509,10 +509,10 @@ Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model.  
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
-ermitteln oder wurde nicht festgelegt, wird die Validierung im JavaScript-Model
-aufgerufen, wenn das Modell eine entsprechende validate-Methode
-`boolean validate(element, value)` bereitstellt und das zu validierende
-Element in einem Composite eingebettet ist.
+ermitteln oder wurde keine HTML5-Validierung festgelegt, wird die Validierung
+vom JavaScript-Model aufgerufen, wenn das Modell eine entsprechende
+validate-Methode `boolean validate(element, value)` bereitstellt und das zu
+validierende Element in einem Composite eingebettet ist.
 
 Die Synchronisation und das Standard-Verhalten (action) vom Browser werden durch
 die Validierung direkt beeinfluss und kann dazu vier Zustände als Rückgabewert
