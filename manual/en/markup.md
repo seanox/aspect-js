@@ -23,12 +23,12 @@ in the DOM.
   * [notification](#notification)
   * [output](#output)
   * [release](#release)
-  * [render](#render)    
+  * [render](#render)  
   * [validate](#validate)  
 * [Expression Language](#expression-language)
 * [Scripting](#scripting)
 * [Customizing](#customizing)
-  * [Tag](#tag)   
+  * [Tag](#tag)  
   * [Selector](#selector)
   * [Acceptor](#acceptor)
 * [Hardening](markup.md#hardening)
@@ -473,7 +473,7 @@ Events: Wheel
 <input id="text1" type="text"
     events="wheel"
     render="#outputText1, #outputText2, #outputText3"/>
-    
+  
 Target #2:
 <span id="outputText2">{{Model.status2}}</span>
 Events: MouseDown KeyDown
@@ -487,7 +487,7 @@ Events: MouseUp KeyUp
 <input id="text1" type="text"
     events="mouseup keyup"
     render="#outputText3"/>
-    
+  
 ```
 
 The example contains 3 input fields with different events (`events`) and
@@ -533,7 +533,7 @@ Text corresponds: Validation has failed with an error message.
 If the error message is empty, the message from the message attribute is used
 alternatively.
 In this case, a possible value is not synchronized with the model.
-     
+  
 
 #### undefined/void
 
@@ -595,7 +595,7 @@ the value `true`.
 
 The expression language can be used in the markup as free text and in the
 attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here.    
+expression language is not supported here.  
 When used as free text, pure text (plain text) is always generated as output.
 The addition of markup, especially HTML code, is not possible and is only
 supported with the attributes `output` and `import`.
@@ -621,7 +621,7 @@ normal JavaScript but is not recognized by the browser in comparison to
 `text/javascript` and therefore not executed directly. But the renderer
 recognizes the JavaScript code and executes it in every revelevant render cycle.
 In this way, the execution of the SCRIPT element can also be combined with the
-`condition` attribute.   
+`condition` attribute.  
 Embedded scripts must/should be "ThreadSafe".
 
 ```html

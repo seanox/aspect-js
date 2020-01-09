@@ -23,12 +23,12 @@ somit rekursiv auf Veränderungen im DOM.
   * [notification](#notification)
   * [output](#output)
   * [release](#release)
-  * [render](#render)    
+  * [render](#render)  
   * [validate](#validate)  
 * [Expression Language](#expression-language)
 * [Scripting](#scripting)
 * [Customizing](#customizing)
-  * [Tag](#tag)   
+  * [Tag](#tag)  
   * [Selector](#selector)
   * [Acceptor](#acceptor)
 * [Härtung](markup.md#h-rtung)  
@@ -166,8 +166,8 @@ Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
 unterstützt, die per HTTP-Methode GET nachgeladen und eingefügt wird. Zudem wird
 auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt, womit
-ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert einfügt
-wird.
+ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
+eingefügt wird.
 
 In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -357,7 +357,7 @@ HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
 Elemente als NodeList bzw. Array erwartet, welche dann direkt eingefügt werden.
 Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-einfügt wird.
+eingefügt wird.
 
 In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
 kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
@@ -480,7 +480,7 @@ Events: Wheel
 <input id="text1" type="text"
     events="wheel"
     render="#outputText1, #outputText2, #outputText3"/>
-    
+  
 Target #2:
 <span id="outputText2">{{Model.status2}}</span>
 Events: MouseDown KeyDown
@@ -494,7 +494,7 @@ Events: MouseUp KeyUp
 <input id="text1" type="text"
     events="mouseup keyup"
     render="#outputText3"/>
-    
+  
 ```
 
 Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen
@@ -629,7 +629,7 @@ verwendet, im Vergleich zum Typ `text/javascript` vom Browser aber nicht
 erkannt und somit nicht direkt ausgeführt wird. Der Renderer hingegen erkennt
 den JavaScript-Code und führt diesen mit jedem relevanten Renderzyklus aus. Auf
 diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem Attribut
-`condition` kombiniert werden.    
+`condition` kombiniert werden.  
 Eingebettete Skripte müssen/sollten "ThreadSafe" sein.
 
 ```html

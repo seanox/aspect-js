@@ -93,7 +93,7 @@ Die implementierte Methode, die als Testfall ausgeführt werden soll.
 ### timeout
 
 Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.  
-Das Überschreiten von diesem Wert führt zum Ausfall des Tests.   
+Das Überschreiten von diesem Wert führt zum Ausfall des Tests.  
 Es wird ein Wert grösser als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
@@ -155,7 +155,7 @@ einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
 ### assertTrue
 
 Behauptet, dass ein Wert `true` ist.  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -175,7 +175,7 @@ Test.start();
 ### assertFalse
 
 Behauptet, dass ein Wert `false` ist, als Negation von `Assert.assertTrue(....)`.  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -193,10 +193,10 @@ Test.start();
 
 
 ### assertEquals
-    
+  
 Behauptet, dass zwei Werte identisch sind.  
 Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -214,10 +214,10 @@ Test.start();
 
 
 ### assertNotEquals
-    
+  
 Behauptet, dass zwei Werte nicht identisch sind, als Negation von `Assert.assertEquals(....)`.  
-Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`    
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -236,9 +236,9 @@ Test.start();
 
 ### assertSame
 
-Behauptet, dass zwei Werte gleich sind.   
-Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`   
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Behauptet, dass zwei Werte gleich sind.  
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -255,11 +255,11 @@ Test.start();
 ```
 
 
-### assertNotSame        
-    
+### assertNotSame  
+  
 Behauptet, dass zwei Werte nicht gleich sind, als Negation von `Assert.assertSame(....)`.  
 Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -279,7 +279,7 @@ Test.start();
 ### assertNull
 
 Behauptet, dass ein Wert `null` ist.  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -299,7 +299,7 @@ Test.start();
 ### assertNotNull
 
 Behauptet, dass ein Wert nicht `null` ist, als Negation von `Assert.assertNull(....)`.  
-Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.   
+Ist die Behauptung unwahr, führt dies zu einem Fehler mit optionaler Meldung.  
 Die Methode hat unterschiedliche Signaturen.
 
 ```javascript
@@ -388,30 +388,30 @@ Test.start({monitor: {
     start(status) {
         Aufruf der Methode beim Start.
     },
-    
+  
     suspend(status) {
         Aufruf der Methode bei einer Unterbrechung.
     },
-    
+  
     resume(status) {
         Aufruf der Methode beim Fortsetzen des Testverlaufs, wenn
         dieser zuvor unterbrochen wurde.
     },
-    
+  
     interrupt(status) {
         Aufruf der Methode beim Abbruch vom Testlauf.
         Der Testlauf kann nicht fortgesetzt werden.
     },
-    
+  
     perform(status) {
         Aufruf der Methode bevor eine Testaufgabe ausgeführt wird.
     },
-    
+  
     response(status) {
         Aufruf der Methode nach der Ausführung einer Testaufgabe.
         Hier ist das Ergebnis der Testaufgabe enthalten.
     },
-    
+  
     finish(status) {
         Aufruf der Methode, wenn alle Testaufgaben abgeschlossen sind.
     }
@@ -456,7 +456,7 @@ sind schreibgeschützt und können nicht geändert werden.
         lock:
             Indikator, wenn die Queue zur Ausführung eines Test wartet,
         faults:
-            Anzahl der erkannten Fehler        
+            Anzahl der erkannten Fehler  
     }
 }
 ```
@@ -610,7 +610,7 @@ ausgeführt wird, wird `false` zurückgegeben.
         lock:
             Indikator, wenn die Queue zur Ausführung eines Test wartet,
         faults:
-            Anzahl der erkannten Fehler        
+            Anzahl der erkannten Fehler  
     }
 }
 ```
@@ -634,19 +634,19 @@ Test.EVENT_SUSPEND
 ```
 
 Beispiele zur Verwendung:
-        
+  
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {
     ...
-});    
+});  
   
 Test.listen(Test.EVENT_PERFORM, function(event, status) {
     ...
-});      
+});  
   
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
-});      
+});  
 ```
 
 
@@ -671,10 +671,10 @@ Folgende Ereignisse werden während der Simulation ausgelöst:
 
 ```javascript
 document.querySelector("#inputText").typeValue("Hello World!");
-});      
+});  
 ```
-        
-        
+  
+  
 #### Element.prototype.toPlainString
 
 Methode, die eine einfache Zeichenkette für ein Element-Objekt erzeugt.
@@ -685,7 +685,7 @@ Die Zeichenkette bassiert auf `Element.prototype.outerHTML`.
   <input type="text" id="inputText"/>
   <input type="submit"/> 
 </form>
-});      
+});  
 ```
 
 ```javascript
@@ -700,8 +700,8 @@ Output:
   <input type="submit"/> 
 </form>
 ```
-        
-        
+  
+  
 #### Element.prototype.trigger
 
 Methode, um ein Ereignis für ein Element auszulösen.
@@ -726,10 +726,10 @@ Standardwert: true
 document.queryElement("#button").trigger("click", true, false);
 ```
 
-        
+  
 ### Node
 
-#### Node.prototype.toPlainString   
+#### Node.prototype.toPlainString  
 
 Methode, die eine einfache Zeichenkette für ein Knoten-Objekt erzeugt.
 Die Zeichenkette bassiert auf `XMLSerializer.serializeToString(node)`.
@@ -756,7 +756,7 @@ Output:
 ```
 <note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>
 ```
-    
+  
 
 ### Object
 

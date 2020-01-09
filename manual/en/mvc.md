@@ -268,10 +268,10 @@ SiteMap.customize({
     "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
     "#products#pens": ["pencil", "ballpoint", "stylograph"],
     "#legal": ["terms", "privacy"], ...},
-    
+  
     function(path) {
         ...
-    }    
+    }  
 });
 ```
 
@@ -382,7 +382,7 @@ https://example.local/example/#path
 ```
 
 According to the file system, absolute, relative and additionally functional
-paths are also supported here.    
+paths are also supported here.  
 Paths consist exclusively of word characters, underscores and optionally the
 minus character (based on combined) IDs. The hash character is used as separator
 and root. Spaces are not supported.
@@ -429,7 +429,7 @@ These paths are empty or contain only one hash character.
 
 These paths begin without hash or begin with two or more hash characters (`##+`)
 and are relative to the current path.
-     
+  
 ```html
 <a href="##">Back to the parent</a>
 <a href="##x">Back to the parent + x</a>
@@ -487,7 +487,7 @@ in the data property for variable paths with extended paths.
 ```
 SiteMap.lookup("#contact#support");
     returns {path:"#contact#support", face:"#", facet:"contact", data:"#support"}
-    
+  
 SiteMap.lookup("#project#a#b#c");
     returns {path:"#contact#support", face:"#project", facet:"", data:"#a#b#c"}
 ```
@@ -513,7 +513,7 @@ that exist in JavaScript.
 
 The object/model binding part also belongs to the Model View Controller and is
 implemented in Seanox aspect-js by the Composite API. SiteMap is an extension
-and is based on the composite API.    
+and is based on the composite API.  
 For a better understanding, the functionality is described here in the Model
 View Controller.
 
@@ -694,7 +694,7 @@ var model = {
     },
     submit: {
         onClick(event) {
-            ...    
+            ...  
         }
     }
 };
@@ -723,11 +723,11 @@ in the DOM and a corresponding object structure as a JavaScript model.
 If a composite is used/inserted in the DOM, the corresponding model is
 docked/linked and when removing from the DOM, the corresponding model is
 undocked/unlinked.  
-In both cases the model can optionally implement appropriate methods.    
+In both cases the model can optionally implement appropriate methods.  
 The dock-method is executed before rendering, before inserting the composite
 into the DOM, or after loading the page during initial rendering, and can be
 used to prepare the view. The undock-method is executed after the composite is
-removed from the DOM and can be used to postprocess/clean the view.   
+removed from the DOM and can be used to postprocess/clean the view.  
 
 ```javascript
 var model = {

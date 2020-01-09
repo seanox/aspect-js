@@ -45,7 +45,7 @@ Es empfängt (Status)Änderungen und Interaktionen der View, die durch den
 Controler übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
 sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
 View zur Darstellung und Verwaltung der Zustände, für fachliche Funktionalität
-nimmt es weitere Komponenten in Anspruch.    
+nimmt es weitere Komponenten in Anspruch.  
 In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
 repräsentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
 und Delegation angedacht, so dass die statischen Modelle intern weitere
@@ -274,10 +274,10 @@ SiteMap.customize({
     "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
     "#products#pens": ["pencil", "ballpoint", "stylograph"],
     "#legal": ["terms", "privacy"], ...},
-    
+  
     function(path) {
         ...
-    }    
+    }  
 });
 ```
 
@@ -380,7 +380,7 @@ Details werden im Abschnitt [Acceptors](#acceptors) beschrieben.
 
 ## Virtual Paths
 
-Virtuelle Pfade werden für die Navigation und Kontrolle vom Face-Flow verwendet.    
+Virtuelle Pfade werden für die Navigation und Kontrolle vom Face-Flow verwendet.  
 Das Ziel kann ein Face, ein Facet oder eine Funktion sein.  
 Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL für die Pfade
 verwendet.
@@ -437,7 +437,7 @@ Diese Pfade sind leer oder enthalten nur ein Hash-Zeichen.
 
 Diese Pfade beginnen ohne Hash oder mit zwei oder mehr Hash-Zeichen (`##+`)
 und sind relativ zum aktuellen Pfad.
-     
+  
 ```html
 <a href="##">Back to the parent</a>
 <a href="##x">Back to the parent + x</a>
@@ -495,7 +495,7 @@ mit erweiterten Pfaden diesen im data-Property.
 ```
 SiteMap.lookup("#contact#support");
     returns {path:"#contact#support", face:"#", facet:"contact", data:"#support"}
-    
+  
 SiteMap.lookup("#project#a#b#c");
     returns {path:"#contact#support", face:"#project", facet:"", data:"#a#b#c"}
 ```
@@ -521,7 +521,7 @@ Modell-Objekten zu verknüpfen, die im JavaScript existieren.
 
 Das Object/Model-Binding gehört ebenfalls zum Model View Controller und ist in
 Seanox aspect-js im Composite API implementiert, auf der SiteMap als Erweiterung
-und basiert.    
+und basiert.  
 Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
 beschrieben.
 
@@ -722,7 +722,7 @@ var model = {
     },
     submit: {
         onClick(event) {
-            ...    
+            ...  
         }
     }
 };
@@ -805,10 +805,10 @@ beschrieben.
 ### Validation
 
 Die Synchronisation der Werte zwischen den HTML-Elementen (View) und den Feldern
-vom JavaScript-Model kann durch Validierung überwacht und gesteuert werden.   
+vom JavaScript-Model kann durch Validierung überwacht und gesteuert werden.  
 Die Validierung wird in HTML durch die Kombination der Attribute `validate` und
 `events` deklariert und erfordert eine entsprechende Validierungsmethode im
-JavaScript-Model.    
+JavaScript-Model.  
 
 Details zur Funktionsweise werden im Abschnitt [validate](markup.md#validate)
 beschrieben.

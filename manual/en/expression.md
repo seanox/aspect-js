@@ -40,8 +40,8 @@ escape sequence `\{\{` and/or `\}\}`.
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
-  * [Variable-Expression](#variable-expression)    
-  * [Combination](#combination)    
+  * [Variable-Expression](#variable-expression)  
+  * [Combination](#combination)  
 * [Supplement](#supplement)
   
 
@@ -119,7 +119,7 @@ Value represents the value of an object property or variable.
 Anything that is not a literal and keyword is potentially a value.  
 Values refer to variables or object properties.  
 With object properties, the reference is directly to the property or, if
-available, to a corresponding getter (get method).    
+available, to a corresponding getter (get method).  
 If neither an object property nor a variable can be determined, a method or
 other logic is assumed.
 
@@ -196,7 +196,7 @@ expression by a colon.
 
 
 Creates or sets the value for the existing global variable `foo` with
-`6x Hallo`.    
+`6x Hallo`.  
 The expression corresponds to the JavaScript syntax: `var foo = 1 +2 +3 + 'x hello';`
 
 

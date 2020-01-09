@@ -92,7 +92,7 @@ An implemented method to be executed as a test.
 ### timeout
 
 Optional the maximum runtime of the test item in milliseconds.  
-Exceeding this limit will cause the test to fail.    
+Exceeding this limit will cause the test to fail.  
 A value greater than 0 is expected, otherwise the timeout is ignored.
 
 
@@ -154,7 +154,7 @@ The function is simple. If an assertion was not ´true´, a error is thrown.
 ### assertTrue
 
 Asserts that an value is `true`.  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures.
 
 ```javascript
@@ -174,7 +174,7 @@ Test.start();
 ### assertFalse
 
 Asserts that an value is `false`, as negation of `Assert.assertTrue(...)`.  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures. 
 
 ```javascript
@@ -192,10 +192,10 @@ Test.start();
 
 
 ### assertEquals
-    
+  
 Asserts that two values are equals.  
 Difference between equals and same: `=== / ==` or `!== / !=`  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures.
 
 ```javascript
@@ -213,10 +213,10 @@ Test.start();
 
 
 ### assertNotEquals
-    
+  
 Asserts that two values are not equals, as negation of `Assert.assertEquals(...)`.  
 Difference between equals and same: `=== / ==` or `!== / !=`  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures.
 
 ```javascript
@@ -237,7 +237,7 @@ Test.start();
 
 Asserts that two values are the same.  
 Difference between equals and same: `=== / ==` or `!== / !=`  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures.
 
 ```javascript
@@ -254,11 +254,11 @@ Test.start();
 ```
 
 
-### assertNotSame        
-    
-Asserts two values are not the same, as negation of `Assert.assertSame(...)`.   
+### assertNotSame  
+  
+Asserts two values are not the same, as negation of `Assert.assertSame(...)`.  
 Difference between equals and same: === / == or !== / !=  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures.
 
 ```javascript
@@ -278,7 +278,7 @@ Test.start();
 ### assertNull
 
 Asserts that an value is `null`.  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures. 
 
 ```javascript
@@ -298,7 +298,7 @@ Test.start();
 ### assertNotNull
 
 Asserts that an value is not `null`, as negation of `Assert.assertNull(...)`.  
-If the assertion is false, an error with optional message is thrown.   
+If the assertion is false, an error with optional message is thrown.  
 The method has different signatures. 
 
 ```javascript
@@ -317,7 +317,7 @@ Test.start();
 
 ### fail
 
-Fails a test with an optional message.    
+Fails a test with an optional message.  
 The method has different signatures. 
 
 ```javascript
@@ -387,30 +387,30 @@ Test.start({monitor: {
     start(status) {
         The method is called with the start.
     },
-    
+  
     suspend(status) {
         The method is called with suspension.
     },
-    
+  
     resume(status) {
         The method is called if the test run is stopped and is to be
         continued later.
     },
-    
+  
     interrupt(status) {
         The method is called if you want to abort the test run.
         The test run cannot then be resumed.
     },
-    
+  
     perform(status) {
         The method is called before a test task is performed.
     },
-    
+  
     response(status) {
         The method is called when a test task has been performed.
         Here you can find the result of the test task.
     },
-    
+  
     finish(status) {
         The method is called when all test tasks have been completed.
     }
@@ -455,7 +455,7 @@ read-only and cannot be changed.
         lock:
             indicator when a test is performed and the queue is waiting,
         faults:
-            number of detected faults        
+            number of detected faults  
     }
 }
 ```
@@ -525,7 +525,7 @@ makes it easier to use `arguments`.
 Monitoring monitors the progress of the test and is informed of the various
 steps and statuses during execution. The monitor is optional. Without this, the
 console is used to output information about the test process.
-    
+  
 Details about configuration and usage are described in chapter
 [Configuration - monitor](#monitor).
 
@@ -606,7 +606,7 @@ read-only and cannot be changed. If no test is executed, false is returned.
         lock:
             indicator when a test is performed and the queue is waiting,
         faults:
-            number of detected faults        
+            number of detected faults  
     }
 }
 ```
@@ -630,19 +630,19 @@ Test.EVENT_SUSPEND
 ```
 
 Examples of use:
-        
+  
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {
     ...
-});    
+});  
   
 Test.listen(Test.EVENT_PERFORM, function(event, status) {
     ...
-});      
+});  
   
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
-});      
+});  
 ```
 
 
@@ -667,10 +667,10 @@ The following events are triggered during simulation:
 
 ```javascript
 document.querySelector("#inputText").typeValue("Hello World!");
-});      
+});  
 ```
-        
-        
+  
+  
 #### Element.prototype.toPlainString
 
 Method that creates a simple string for an element object.
@@ -681,7 +681,7 @@ The string is based on `Element.prototype.outerHTML`.
   <input type="text" id="inputText"/>
   <input type="submit"/> 
 </form>
-});      
+});  
 ```
 
 ```javascript
@@ -696,8 +696,8 @@ Output:
   <input type="submit"/> 
 </form>
 ```
-        
-        
+  
+  
 #### Element.prototype.trigger
 
 Method to trigger an event for an element.
@@ -715,17 +715,17 @@ document.queryElement("#button").trigger("click", true);
 ```
 
 Method call with option bubbles and cancel.  
-This determines whether the event can be canceled.    
+This determines whether the event can be canceled.  
 Default: true
 
 ```javascript
 document.queryElement("#button").trigger("click", true, false);
 ```
 
-        
+  
 ### Node
 
-#### Node.prototype.toPlainString   
+#### Node.prototype.toPlainString  
 
 Method that creates a simple string for a node object.
 The string is based on `XMLSerializer.serializeToString(node)`.
@@ -752,7 +752,7 @@ Output:
 ```
 <note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>
 ```
-    
+  
 
 ### Object
 

@@ -124,14 +124,14 @@ xml://foo/fileA -> ./data/en/foo/fileA.xml
 ## XPath
 
 XPath wird als funktionale Abfragesprache und für die Transformation von
-dynamischen Inhalten verwendet.    
+dynamischen Inhalten verwendet.  
 Für mehr Informationen siehe:
 [https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
 
 
 ## fetch
 
-Die Daten werden mit einem Locator über die fetch-Methode abgerufen.      
+Die Daten werden mit einem Locator über die fetch-Methode abgerufen.  
 Der Rückgabewert ist ein XMLDocument, das dann mit XPath verwendet werden kann.
 
 ```javascript

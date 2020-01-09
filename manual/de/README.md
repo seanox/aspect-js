@@ -37,12 +37,12 @@
     * [notification](markup.md#notification)
     * [output](markup.md#output)
     * [release](markup.md#release)
-    * [render](markup.md#render)    
+    * [render](markup.md#render)  
     * [validate](markup.md#validate)  
   * [Expression Language](markup.md#expression-language)
   * [Scripting](markup.md#scripting)
   * [Customizing](markup.md#customizing)
-    * [Tag](markup.md#tag)   
+    * [Tag](markup.md#tag)  
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
     * [Parameter](markup.md#parameter)
@@ -64,7 +64,7 @@
     * [Method-Expression](expression.md#method-expression)
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
-    * [Kombination](expression.md#kombination)    
+    * [Kombination](expression.md#kombination)  
   * [Ergänzung](expression.md#erg-nzung)
 
 
@@ -126,8 +126,8 @@
     * [Synchronization](mvc.md#synchronization)
     * [Validation](mvc.md#validation)
     * [Events](mvc.md#events)
-    
-    
+  
+  
 ### Komponenten
 
 * [Komponenten](composite.md#komponenten)

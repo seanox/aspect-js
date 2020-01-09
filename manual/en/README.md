@@ -39,12 +39,12 @@ Machine translation with [DeepL](https://deepl.com).
     * [notification](markup.md#notification)
     * [output](markup.md#output)
     * [release](markup.md#release)
-    * [render](markup.md#render)    
+    * [render](markup.md#render)  
     * [validate](markup.md#validate)  
   * [Expression Language](markup.md#expression-language)
   * [Scripting](markup.md#scripting)
   * [Customizing](markup.md#customizing)
-    * [Tag](markup.md#tag)   
+    * [Tag](markup.md#tag)  
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
     * [Parameters](markup.md#parameters)
@@ -66,8 +66,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [Method-Expression](expression.md#method-expression)
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
-    * [Combination](expression.md#combination)    
-  * [Supplement](expression.md#supplement)    
+    * [Combination](expression.md#combination)  
+  * [Supplement](expression.md#supplement)  
 
 
 ### DataSource
@@ -128,8 +128,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [Synchronization](mvc.md#synchronization)
     * [Validation](mvc.md#validation)
     * [Events](mvc.md#events)
-    
-    
+  
+  
 ### Composite
 
 * [Composite](composite.md#composite)

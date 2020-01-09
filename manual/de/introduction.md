@@ -79,7 +79,7 @@ HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
 Elemente als NodeList bzw. Array erwartet, welche dann direkt eingefügt werden.
 Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-einfügt wird.
+eingefügt wird.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -107,8 +107,8 @@ Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
 unterstützt, die per HTTP-Methode GET nachgeladen und eingefügt wird. Zudem wird
 auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt, womit
-ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert einfügt
-wird.
+ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
+eingefügt wird.
 
 ```html
 <p import="Today is {{new Date().toDateString()}}
@@ -375,7 +375,7 @@ und wir nur mit den Attributen `output` und `import` unterstützt.
 
 Die Expression Language ist zeitweise sichtbar, da der Renderer erst nach dem
 Laden der Page aktiv wird. Alternativ können die Attribute
-[output](markup.md#output) und [import](markup.md#import) vewendet werden,
+[output](markup.md#output) und [import](markup.md#import) verwendet werden,
 welche eine direkte Ausgabe in das innere HTML vom Element bewirken. 
 
 ```html
@@ -445,7 +445,7 @@ Interaktion, Daten und Darstellung.
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
 |  <form id="model" composite>             |  aspect-js   |  var model = {        |
-|    <input id="message" events="input"/>  |              |      message:"",      | 
+|    <input id="message" events="input"/>  |              |      message: "",     | 
 |    <button id="submit"/>                 |              |      submit: {        |
 |  </form>                                 |              |          onClick() {  |
 |                                          |              |          }            |
@@ -477,7 +477,7 @@ Es empfängt (Status)Änderungen und Interaktionen der View, die durch den
 Controler übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
 sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
 View zur Darstellung und Verwaltung der Zustände, für fachliche Funktionalität
-nimmt es weitere Komponenten in Anspruch.    
+nimmt es weitere Komponenten in Anspruch.  
 In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
 repräsentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
 und Delegation angedacht, so dass die statischen Modelle intern weitere
@@ -536,21 +536,20 @@ Weitere Bestandteile der SiteMap sind die Navigation und ein Permission Concept.
 
 ### Virtual Paths
 
-Virtuelle Pfade werden für die Navigation und zur Kontrolle des Face-Flow
-verwendet.  
-Das Ziel kann ein Face, eine Facet oder eine Funktion sein.  
-Bei SPAs (Single-Page-Application) wird das Fragment (anchor part) der URL für
-die Pfade verwendet.
+Virtuelle Pfade werden für die Navigation und Kontrolle vom Face-Flow verwendet.  
+Das Ziel kann ein Face, ein Facet oder eine Funktion sein.  
+Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL für die Pfade
+verwendet.
 
 ```
 https://example.local/example/#path
 ```
 
-Entsprechend dem Dateisystem werden auch hier absolute und relative Pfade sowie
-Funktionspfade unterstützt.  
-Pfade bestehen ausschliesslich aus Wortzeichen und Unterstrichen (basierend auf
-zusammengesetzten IDs) und müssen mit einem Buchstaben beginnen und verwenden
-das Doppelkreuz (#) als Separator und Wuruel.
+In Anlehnung an das Dateisystem werden auch hier absolute, relative und
+zusätzlich funktionale Pfade unterstützt.  
+Pfade bestehen ausschliesslich aus Wortzeichen, Unterstrichen und optional dem
+Minus-Zeichen (basierend auf zusammengesetzten IDs). Als Separator und Root wird
+das Hash-Zeichen verwendet.
 
 [Mehr erfahren](mvc.md#virtual-paths)
 
@@ -561,6 +560,8 @@ TODO:
 
 
 ## Komponenten
+
+TODO:
 
 Seanox aspect-js zielt auf eine modulare und auf Komponenten basierte
 Architektur. Das Framework unterstützt dazu eine deklarative Kennzeichnung von
@@ -637,7 +638,7 @@ Integrationstests und kann für Suiten (suite), Szenarien (scenario) und einzelne
 Testfälle (case) verwendet werden.
 
 Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
-enthalten ist, der sich ohne Probleme entfernen lässt. Da das Test-API einige
+enthalten, der sich ohne Probleme entfernen lässt. Da das Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
 das Test-API zur Laufzeit bewusst aktiviert werden.
 
@@ -689,20 +690,20 @@ Die implementierte Methode, die als Testfall ausgeführt werden soll.
 
 #### timeout
 
-Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.
+Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.  
 Das Überschreiten von diesem Wert führt zum Ausfall des Tests.  
 Es wird ein Wert grösser als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
 #### expected
 
-Optional, um das Auftreten von definierten Fehlern zu testen.
-Der Fehler muss auftreten, damit der Test erfolgreich ist.
-Als Wert wird ein Fehlerobjekt oder eine RegExp erwartet.
+Optional, um das Auftreten von definierten Fehlern zu testen.  
+Der Fehler muss auftreten, damit der Test erfolgreich ist.  
+Als Wert wird ein Fehlerobjekt oder ein RegExp erwartet.
 
 #### ignore
 
-Optional true, wenn der Test ignoriert werden so
+Optional true, wenn der Test ignoriert werden soll.
 
 [Mehr erfahren](test.md#testfall)
 
@@ -793,6 +794,19 @@ Test.start();
 [Mehr erfahren](test.md#assert)
 
 
+## Konfiguration
+
+Optional kann das Test-API mit jedem Start konfiguriert werden.  
+Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
+wird partiell übernommen und unbekanntes wird ignoriert.
+
+```javascript
+Test.start({auto: boolean, ouput: {...}, monitor: {...}});
+```
+
+[Mehr erfahren](test.md#konfiguration)
+
+
 ### Output
 
 Als Entwicklungswerkzeug stellen Browser eine Konsolenausgabe bereit, die zur
@@ -831,7 +845,7 @@ console.listen(function(level, message) {
 
 ### Monitoring
 
-Das Monitoring überwacht den Testablauf während der Ausführung wird über die
+Das Monitoring überwacht den Testablauf während der Ausführung und wird über die
 verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
 diesen werden Informationen zum Testverlauf in der Konsole ausgegeben.
 
@@ -845,9 +859,12 @@ gesteuert werden.
 
 ```javascript
 Test.start();
+Test.start({auto: boolean});
 ```
 
-(Neu)Start der Testausführung.  
+Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
+der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
+`auto` ignoriert und der Start sofort ausgeführt.
 
 ```javascript
 Test.suspend();
@@ -874,6 +891,7 @@ Test.status();
 ```
 
 Macht eine Momentaufnahme des Status des aktuellen Tests.  
+Der Status enthält Details zum aktuellen Test und zur Warteschlange.
 
 [Mehr erfahren](test.md#control)
 
@@ -882,20 +900,20 @@ Macht eine Momentaufnahme des Status des aktuellen Tests.
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
 Überwachung der Testausführung. Die Callback-Methoden werden für entsprechende
-Ereignisse vom Test-API registriert und funktionieren dann ähnlich dem Monitor.
+Ereignisse beim Test-API registriert und funktionieren dann ähnlich dem Monitor.
 
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {
     ...
-});    
+});  
   
 Test.listen(Test.EVENT_PERFORM, function(event, status) {
     ...
-});      
+});  
   
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
-});      
+});  
 ```
 
 [Mehr erfahren](test.md#events)

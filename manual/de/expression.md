@@ -35,8 +35,8 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
-  * [Variable-Expression](#variable-expression)    
-  * [Kombination](#kombination)    
+  * [Variable-Expression](#variable-expression)  
+  * [Kombination](#kombination)  
 * [Ergänzung](#erg-nzung)
   
 
@@ -48,7 +48,7 @@ Wörter werden nach ihren Eigenschaften klassifiziert.
 
 ```
 +-------------------------------------------------------------+
-|            Words (alle Elemente eines Expression)           |            
+|            Words (alle Elemente eines Expression)           |  
 +--------+----------------------------------------------------+
 |  Text  |                     Expression                     |
 |        +-----------+----------------------------------------+

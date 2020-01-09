@@ -55,7 +55,7 @@ app.example.more {
 Namespace.using()
     returns window
 ```
-     
+  
 
 ### Namespace.locate
 
@@ -111,7 +111,7 @@ Namespace.exists("app.example.more")
 
 Namespace.exists(app.example, "more")
     returns true
-    
+  
 Namespace.exists(app.example, "nothing")
     returns false
 
@@ -150,7 +150,7 @@ Die Qualität der (U)UID ist abhängig von ihrer Länge.
 ```javascript
 Math.uniqueId()
     returns e.g. "42X3IUW7622CKY02"
-    
+  
 Math.uniqueId(32)
     returns e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
@@ -165,7 +165,7 @@ Die Qualität der (U)UID ist abhängig von ihrer Länge.
 ```javascript
 Math.uniqueSerialId()
     returns e.g. "0GQ96VN87ZZ2JTYY"
-    
+  
 Math.uniqueSerialId(32)
     returns e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
 ```
@@ -204,12 +204,12 @@ var earth = {
                 return 83000000;
             }
         } 
-    }   
+    }  
 }
 
 Object.lookup("earth");
     returns object earth
-     
+  
 Object.lookup("earth.europe.germany");
     returns object earth.europe.germany
 
@@ -233,12 +233,12 @@ var earth = {
                 return 83000000;
             }
         } 
-    }   
+    }  
 }
 
 Object.exists("earth");
     returns true
-     
+  
 Object.exists("earth.europe.germany");
     returns true
 
