@@ -273,8 +273,9 @@ validierende Element in einem Composite eingebettet ist.
 
 ### message
 
-Message ist ein Bestandteil der Validierung und wird zur Textausgabe im
-Fall einer unbestätigten Validierung verwendet.
+Message ist ein optionaler Bestandteil der Validierung und wird zur
+Text-/Fehler-Ausgabe im Fall einer unbestätigten Validierung verwendet.  
+Das Attribut erfordert die Kombination der Attribute `validate` und `events`. 
 
 ```html
 <form id="Model" composite>
@@ -301,8 +302,11 @@ Fall einer unbestätigten Validierung verwendet.
 
 ### notification
 
-Notification ist ein Bestandteil der Validierung und zeigt den die Fehlerausgabe
-als Info-Box (Browser-Feature) am entsprechenden Element an.
+Notification ist ein optionaler Bestandteil der Validierung und zeigt den die
+Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden Element an.  
+Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
+`message`.
+
 
 ```html
 <form id="Model" composite>

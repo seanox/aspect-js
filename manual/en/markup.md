@@ -348,6 +348,51 @@ var Model = {
 ```
 
 
+### message
+
+Message is an optional part of [Validation](#validate) and is used for
+text/error output in case of an unconfirmed validation.  
+This requires a combination of the attributes `validate` and `events`. 
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
+      validate message="Valid e-mail address required"
+      events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
+      validate message="{{Messages['Model.text1.validation.message']}}"
+      events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+
+### notification
+
+Notification is an optional part of [Validation](#validate) and displays the
+error output as an info box (browser feature) on the corresponding element.  
+This requires a combination of the attributes `validate`, `events` amd
+`message`.
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
+      validate message="Valid e-mail address required" notification
+      events="input change" render="#Model"/>
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+
 ### output
 
 The attribute output the value or result of its expression as an inner HTML code
