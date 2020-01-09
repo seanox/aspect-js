@@ -53,8 +53,7 @@ environment and much more.
   * [Scenario](#scenario)
   * [Suite](#suite)
   * [Assert](#assert)
-* [Configuration](#configuration)
-  * [Output](#output-1)
+  * [Configuration](#configuration)
   * [Monitoring](#monitoring)
   * [Control](#control)
   * [Events](#events-1)
@@ -812,7 +811,7 @@ Test.start();
 [Learn more](test.m#assert)
 
 
-## Configuration
+### Configuration
 
 Optionally, the test API can be configured with each start. 
 A meta object is expected as parameter. The configuration contained in it is
@@ -823,39 +822,6 @@ Test.start({auto: boolean, ouput: {...}, monitor: {...}});
 ```
 
 [Learn more](test.m#configuration)
-
-
-## Output
-
-As a development tool, browsers provide console output that can be used to log
-informations.  
-Logging supports different channels or levels: LOG, WARN, ERROR and INFO.
-
-```javascript
-console.log(message);
-console.warn(message);
-console.error(message);
-console.info(message);
-```
-
-To be able to include console output in tests, the activated Test-API supports
-forwarding, listeners and buffers for console output.
-
-```javascript
-var log   = console.output.log;
-var warn  = console.output.warn;
-var error = console.output.error;
-var info  = console.output.info;
-
-console.output.clear();
-
-console.listen(function(level, message) {
-    message = Array.from(arguments).slice(1);
-    ...
-});
-```
-
-[Learn more](test.m#output)
 
 
 ### Monitoring
