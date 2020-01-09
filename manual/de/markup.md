@@ -17,6 +17,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [composite](#composite)
   * [condition](#condition)
   * [events](#events)
+  * [id](#id)
   * [import](#import)
   * [interval](#interval)
   * [message](#message)
@@ -120,7 +121,12 @@ https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 eröffnen primäre Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
 und Synchronisation von HTML-Elementen und dem korrespondierenden
-JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).  
+JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
+
+Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
+einer Besonderheit, da das Attribut nur initial verarbeitet wird. Änderungen zur
+Laufzeit an einem existierenden Element haben wegen dem Object/Model-Binding
+keine Auswirkungen, solange es im DOM existiert.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -155,6 +161,18 @@ Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
 Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
 JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: _Input_ oder
 _Change_ eintritt und die Validierung den Wert `true` zurückgibt.
+
+
+### id
+
+Die ID (Bezeichner) haben Seanox aspect-js eine elementare Bedeutung.   
+Sie werden u.a. von der SiteMap als Faces und Facets, also als Ziele für
+virtuelle Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
+
+Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
+einer Besonderheit, da das Attribut nur initial verarbeitet wird. Änderungen zur
+Laufzeit an einem existierenden Element haben wegen dem Object/Model-Binding
+keine Auswirkungen, solange es im DOM existiert.
 
 
 ### import
@@ -380,7 +398,7 @@ Das Attribut erfordert die Kombination der Attribute `validate` und `events`.
 ### notification
 
 Notification ist ein optionaler Bestandteil der [Validierung](#validate) und
-zeigt den die Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden
+zeigt die Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden
 Element an.  
 Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
 `message`.

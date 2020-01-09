@@ -17,6 +17,7 @@ in the DOM.
   * [composite](#composite)
   * [condition](#condition)
   * [events](#events)
+  * [id](#id)
   * [import](#import)
   * [interval](#interval)
   * [message](#message)
@@ -119,7 +120,12 @@ This declaration binds one or more events
 provide primary functions for event-driven refreshing of other HTML elements
 (see [render](#render) for more information), and for validating and
 synchronizing and synchronization of HTML elements with the corresponding
-JavaScript models (see [validate](#validate) for more information).  
+JavaScript models (see [validate](#validate) for more information).
+
+As with all attributes, the expression language can be used, with the difference
+that the attribute is only read  at the beginning. Due to the object/model
+binding, changes to an existing element at runtime have no effect as long as it
+exists in the DOM.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -154,6 +160,18 @@ interaction of the attributes `events` and `validate`. In the example, the
 input value of the composite field text1 is only transferred to the field of the
 same name in the JavaScript model if at least one of the events: _Input_ or
 _Change_ and the validation returns the value `true`.
+
+
+### id
+
+The ID (identifier) has an elementary meaning in Seanox aspect-js.   
+It is used by the SiteMap as faces and facets, i.e. as targets for virtual paths
+in face flow and for the object/model binding.
+
+As with all attributes, the expression language can be used, with the difference
+that the attribute is only read  at the beginning. Due to the object/model
+binding, changes to an existing element at runtime have no effect as long as it
+exists in the DOM.
 
 
 ### import

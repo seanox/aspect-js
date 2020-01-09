@@ -203,6 +203,20 @@ ist als Composite-JavaScript möglich.
 [Mehr erfahren](markup.md#interval)
 
 
+### id
+
+Die ID (Bezeichner) haben Seanox aspect-js eine elementare Bedeutung.   
+Sie werden u.a. von der SiteMap als Faces und Facets, also als Ziele für
+virtuelle Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
+
+Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
+einer Besonderheit, da das Attribut nur initial verarbeitet wird. Änderungen zur
+Laufzeit an einem existierenden Element haben wegen dem Object/Model-Binding
+keine Auswirkungen, solange es im DOM existiert.
+
+[Mehr erfahren](markup.md#id)
+
+
 ### composite
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
@@ -302,7 +316,7 @@ Das Attribut erfordert die Kombination der Attribute `validate` und `events`.
 
 ### notification
 
-Notification ist ein optionaler Bestandteil der Validierung und zeigt den die
+Notification ist ein optionaler Bestandteil der Validierung und zeigt die
 Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden Element an.  
 Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
 `message`.

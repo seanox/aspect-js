@@ -31,6 +31,7 @@
     * [composite](markup.md#composite)
     * [condition](markup.md#condition)
     * [events](markup.md#events)
+    * [id](markup.md#id)
     * [import](markup.md#import)
     * [interval](markup.md#interval)
     * [message](markup.md#message)

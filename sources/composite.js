@@ -771,7 +771,7 @@ if (typeof Composite === "undefined") {
      *          undefined/void
      *          ----
      *  The validation failed; an error is displayed.
-     *  A return value indicates that the default action of the browser should
+     *  No return value indicates that the default action of the browser should
      *  nevertheless be executed. This behavior is important e.g. for the
      *  validation of input fields, so that the input reaches the user
      *  interface. In this case, a possible value is not synchronized with the
