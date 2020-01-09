@@ -3,6 +3,7 @@
 
 # Einführung
 
+
 ## Was ist Seanox aspect-js?
 
 Geprägt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf
@@ -36,16 +37,16 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   * [release](#release)
 * [Expression Language](#expression-language)
 * [DataSource](#datasource)
-* [Resource Bundle (Messages / i18n)](#resource-bundle-messages-i18n)
+* [Resource Bundle (Messages / i18n)](#resource-bundle-messages--i18n)
 * [Model View Controller](#model-view-controller)
   * [Controller](#controller)
   * [Model](#model)
   * [View](#view)
 * [SiteMap](#sitemap)
   * [Virtual Paths](#virtual-paths)
-  * [Object/Model-Binding](#object-model-binding)
+  * [Object/Model-Binding](#objectmodel-binding)
 * [Komponenten](#komponenten)
-  * [Object/Model-Binding](#object-model-binding)
+  * [Object/Model-Binding](#objectmodel-binding-1)
 * [Erweiterung](#erweiterung)
 * [Test](#test)
   * [Testfall](#testfall)
@@ -173,7 +174,6 @@ eingefügt wird.
 <p import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
   loading resource...  
 </p>
-
 ```
 
 [Mehr erfahren](markup.md#import)
@@ -367,7 +367,6 @@ Notification ist ein optionaler Bestandteil der Validierung und zeigt die
 Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden Element an.  
 Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
 `message`.
-
 
 ```html
 <form id="Model" composite>
@@ -813,7 +812,7 @@ verschiedenen Ebenen und mit unterschiedlicher Komplexität.
 
 [Mehr erfahren](test.md#suite)
 
- 
+
 ### Assert
 
 Die Testfälle werden mit Behauptungen (Assertions) implementiert. Das Test-API

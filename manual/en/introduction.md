@@ -8,13 +8,61 @@
 
 Influenced by the good experiences with JSF (Java Server Faces) in regard to
 function and an easy integration into the markup, arose a similar client-side
-fullstack solution.  
+full stack solution.  
 Seanox aspect-js focuses on a minimalist approach to implementing
-Single-Page Applications (SPAs).   
+Single-Page Applications (SPAs).  
+
 This framework takes the declarative approach of HTML and extends this with
-expression language, rendering with addional attributes, object/model-binding,
-Model View Controller, Resource Bundle, NoSQL datasource, test environment and
-much more.
+expression language, rendering with addional attributes, object/model binding,
+Model View Controller, Resource Bundle (i18n), NoSQL datasource, test
+environment and much more.
+
+
+## Contents Overview
+
+* [Getting Started](#getting-started)
+* [Scope](#scope)
+* [Attributes](#attributes)
+  * [output](#output)
+  * [import](#import)
+  * [condition](#condition)
+  * [interval](#interval)
+  * [id](#id)
+  * [composite](#composite)
+  * [events](#events)
+  * [validate](#validate)
+  * [message](#message)
+  * [notification](#notification)
+  * [render](#render)
+  * [release](#release)
+* [Expression Language](#expression-language)
+* [DataSource](#datasource)
+* [Resource Bundle (Messages / i18n)](#resource-bundle-messages--i18n)
+* [Model View Controller](#model-view-controller)
+  * [Controller](#controller)
+  * [Model](#model)
+  * [View](#view)
+* [SiteMap](#sitemap)
+  * [Virtual Paths](#virtual-paths)
+  * [Object/Model Binding](#objectmodel-binding)
+* [Components](#components)
+  * [Object/Model Binding](#objectmodel-binding-1)
+* [Extension](#extension)
+* [Test](#test)
+  * [Task](#task)
+    * [name](#name)
+    * [test](#test-1)
+    * [timeout](#timeout)
+    * [expected](#expected)
+    * [ignore](#ignore)
+  * [Szenario](#szenario)
+  * [Suite](#suite)
+  * [Assert](#assert)
+* [Configuration](#configuration)
+  * [Output](#output-1)
+  * [Monitoring](#monitoring)
+  * [Control](#control)
+  * [Events](#events-1)
 
 
 ## Getting Started
@@ -26,7 +74,7 @@ release channel.
 The release channels continuously provide the newest final major versions, which
 are downward compatible to the major version. Seanox aspect-js is always up to
 date when using the release channels.
- 
+
 Each release consists of two versions. The development version contains comments
 on conception, function and usage. The production version is optimized in size
 but not obfuscated.
@@ -62,7 +110,7 @@ The declarative approach is primarily implemented using attributes in Seanox
 aspect-js and can be used with all HTML elements and in combination. Excluded
 are `SCRIPT`,  which is only supported with the type `composite/javascript`,
 and `STYLE`, which is not supported. The values of the attributes can be static
-or dynamic when the expression language is used.   
+or dynamic when the expression language is used.  
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
@@ -74,9 +122,9 @@ initial expression each time it is refreshed (render cycle).
 
 The attribute output the value or result of its expression as an inner HTML code
 for an HTML element. As value are expected one element or more elements as
-NodeList or Array -- these are then inserted directly, or a
-[DataSource-URL (locator)](datasource.md#locator) which loads and transforms
-content from the [DataSource](datasource.md#datasource).
+NodeList or Array, which are then inserted directly.  
+The [DataSource-URL (locator)](datasource.md#locator) is also supported, which
+loads and inserts transformed content from the [DataSource](datasource.md).
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -100,28 +148,28 @@ content from the [DataSource](datasource.md#datasource).
 This declaration loads content dynamically and replaces the inner HTML code of
 an element. If the content was successfully loaded, the `import` attribute is
 removed. The attribute expects as value one element or more elements as NodeList
-or Array -- these are then inserted directly, or an absolute or relative URL to
-a remote resource that is loaded by HTTP method GET, or a
-[DataSource-URL (locator)](datasource.md#locator) that loads and transforms
-content from the [DataSource](datasource.md#datasource).
+or Array these are then inserted directly. Also supported is the use of an
+absolute or relative URL to a remote resource, which is reloaded and inserted by
+HTTP method GET. The [DataSource URL (locator)](datasource.md#locator) is also
+supported, which loads and inserts transformed content from the
+[DataSource](datasource.md).
 
 ```html
-<p output="Today is {{new Date().toDateString()}}
+<p import="Today is {{new Date().toDateString()}}
     and it's {{new Date().toLocaleTimeString()}} o'clock.">
 </p>
 
-<p output="xml:/example/content">
+<p import="xml:/example/content">
   loading resource...  
 </p>
 
-<p output="xml:/example/data xslt:/example/style">
+<p import="xml:/example/data xslt:/example/style">
   loading resource...  
 </p>
 
 <p import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
   loading resource...  
 </p>
-
 ```
 
 [Learn more](markup.md#import)
@@ -129,16 +177,11 @@ content from the [DataSource](datasource.md#datasource).
 
 ### condition
 
-The condition attribute determines whether an element remains in the DOM. 
-The expression passed to the attribute must explicitly return `true` or
-`false`. With `false` an element is temporarily removed from the DOM and can
-be re-inserted later by refreshing the __parent element__ if the expression
-returns `true`.
-A peculiarity is the combination with the attribute
-[interval](markup.md#interval), because with the removal of the element from the
-DOM also the corresponding timer is terminated. If the element is inserted into
-the DOM again with a later refresh, the timer starts again from the beginning
-and is therefore not continued.
+The condition attribute decides whether an element is kept in the DOM.  
+The expression specified with the attribute must explicitly return `true` for
+the element to be retained in the DOM. If the return value differs, the element
+is temporarily removed from the DOM and can be reinserted later by refreshing
+the __parent element__ if the expression returns `true`.  
 
 ```html
 <article condition="{{Model.visible}}">
@@ -151,7 +194,7 @@ possible as composite JavaScript.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
-  ...
+    ...
 </script>
 ```
 
@@ -169,7 +212,7 @@ start until a JavaScript procedure started before has been completed. For this
 reason, the interval is to be understood as near real-time, but not as exact.  
 The interval attribute expects a value in milliseconds. An invalid value causes
 console output. The interval starts automatically and is active as long as the
-element exists in the DOM.  
+element exists in the DOM.   
 
 ```html
 <p interval="1000">
@@ -200,23 +243,41 @@ composite JavaScript.
 [Learn more](markup.md#interval)
 
 
+### id
+
+The ID (identifier) has an elementary meaning in Seanox aspect-js.   
+It is used by the SiteMap as faces and facets, i.e. as targets for virtual paths
+in face flow and for the object/model binding.
+
+As with all attributes, the expression language can be used, with the difference
+that the attribute is only read  at the beginning. Due to the object/model
+binding, changes to an existing element at runtime have no effect as long as it
+exists in the DOM.
+
+[Learn more](markup.md#id)
+
+
 ### composite
 
-Marks an element in the markup as [Composite](composites.md#composites).  
-Composites are modular components and have a versatile meaning in Seanox
-aspect-js. They are used by the [SiteMap](mvc.md#sitemap) as faces, so as
-targets for virtual paths in the face-flow, which has a direct effect of the
-visibility of the composites.
+Marks an element in the markup as [Composite](composites.md).  
+Composites are modular components that have an elementary meaning in Seanox
+aspect-js and necessarily require an identifier (ID).  
+They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
+virtual paths in the face-flow, which has a direct effect of the visibility of
+the composites.
 The [Model View Controler](mvc.md#sitemap) supports automatic
 [object/model binding](object-binding.md) for composites.  
 The resources (CSS, JS, Markup) for composites can be outsourced to the module
 directory and are only loaded automatically when necessary.
 
 ```html
-<article composite>
+<article id="example" composite>
   ...
 </article>
 ```
+
+Details about using composites / modular components are described in
+[Composites](composites.md) and [Model View Controler](mvc.md).
 
 [Learn more](markup.md#composite)
 
@@ -226,9 +287,9 @@ directory and are only loaded automatically when necessary.
 This declaration binds one or more events
 (see https://www.w3.org/TR/DOM-Level-3-Events) to an HTML element. Events
 provide primary functions for event-driven refreshing of other HTML elements
-(see [render](markup.md#render) for more information), and for validating and
+(see [render](#render) for more information), and for validating and
 synchronizing and synchronization of HTML elements with the corresponding
-JavaScript models (see [validate](markup.md#validate) for more information). 
+JavaScript models (see [validate](#validate) for more information).
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -241,20 +302,20 @@ JavaScript models (see [validate](markup.md#validate) for more information).
 
 ### validate
 
-The `validate` attribute requires the combination with the `events` attribute.
+The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
-Composites and the corresponding JavaScript model.  
-If `validate` is used, the JavaScript model must implement a corresponding
-validate method: `boolean Model.validate(element, value)`.  
-The return value must be a Boolean value and so only the return value `true`
-synchronizes the value from the composite into the JavaScript model.  
-A general strategy or standard implementation for error output is deliberately
-not provided, as this is too strict in most cases and can be implemented
-individually as a central solution with little effort.
+composite and the corresponding JavaScript model.  
+The validation works in two steps and uses the standard HTML5 validation at the
+beginning. If this cannot determine deviations from the expected result or if no
+HTML5 validation is specified, the validation of the JavaScript model is used if
+the model provides a corresponding validate method
+`boolean validate(element, value)` and the element to be validated is
+embedded in a composite.
 
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
@@ -265,12 +326,14 @@ individually as a central solution with little effort.
 
 ### message
 
-Message is part of the validation and is used for text output in the case of an
-unverified validation.
+Message is an optional part of [Validation](#validate) and is used for
+text/error output in case of an unconfirmed validation.  
+This requires a combination of the attributes `validate` and `events`. 
 
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required"
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
@@ -280,6 +343,7 @@ unverified validation.
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="{{Messages['Model.text1.validation.message']}}"
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
@@ -291,12 +355,15 @@ unverified validation.
 
 ### notification
 
-Notification is part of the validation and shows the error output as an info box
-(browser feature) on the corresponding element.
+Notification is an optional part of [Validation](#validate) and displays the
+error output as an info box (browser feature) on the corresponding element.  
+This requires a combination of the attributes `validate`, `events` amd
+`message`.
 
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
+      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required" notification
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
@@ -328,7 +395,7 @@ which sets the targets.
 Inverse indicator that an element was rendered.  
 The renderer removes this attribute when an element is rendered. This effect can
 be used for CSS to display elements only in rendered state. A corresponding CSS
-rule is automatically added to the HEAD when the page is loaded.
+rule is automatically added to the HEAD when the page is loaded. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -347,7 +414,7 @@ logical operators can be used.
 
 The expression language can be used in the markup as free text and in the
 attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here.    
+expression language is not supported here.  
 When used as free text, pure text (plain text) is always generated as output.
 The addition of markup, especially HTML code, is not possible and is only
 supported with the attributes `output` and `import`.
@@ -399,9 +466,9 @@ Expressions can create and use global variables at runtime.
 
 DataSource is a NoSQL approach to data storage based on XML data in combination
 with multilingual data separation, optional aggregation and transformation. A
-combination of the approaches of a read only database and a CMS.  
-The DataSource is based on static data that is queried using XPath and the
-result can be concatenated, aggregated and transformed using XSLT.
+combination of the approaches of a read only database and a CMS. 
+The data is queried via XPath, the result can be concatenated and aggregated and
+the result can be transformed with XSLT.
 
 [Learn more](datasource.md#datasource)
 
@@ -409,7 +476,7 @@ result can be concatenated, aggregated and transformed using XSLT.
 ## Resource Bundle (Messages / i18n)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
-internationalization, localization (i18n) and customer-related texts.  
+internationalization, localization (i18n) and client-related texts.  
 The implementation is based on a set of key-value or label-value data which is
 stored in the `locales.xml` in the DataSource directory.
 
@@ -430,7 +497,7 @@ data, and presentation.
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
 |  <form id="model" composite>             |  aspect-js   |  var model = {        |
-|    <input id="message" events="input"/>  |              |      message:"",      | 
+|    <input id="message" events="input"/>  |              |      message: "",     | 
 |    <button id="submit"/>                 |              |      submit: {        |
 |  </form>                                 |              |          onClick() {  |
 |                                          |              |          }            |
@@ -438,6 +505,8 @@ data, and presentation.
 |                                          |              |  }                    |
 +------------------------------------------+--------------+-----------------------+
 ```
+
+[Learn more](mvd.md)
 
 
 ### Controller
@@ -476,8 +545,6 @@ presented is not restricted.
 In the context of Seanox aspect-js, terms face and factes are used for the
 visual representation/projection, which will be explained later.  
 In Seanox aspect-js the views are represented by the markup.
-
-[Learn more](mvc.md)
 
 
 ## SiteMap
@@ -531,21 +598,23 @@ paths.
 https://example.local/example/#path
 ```
 
-In accordance with the file system, also here absolute and relative paths as
-well as functional paths are supported.  
-Paths consist exclusively of word characters and underscores (based on composite
-IDs) and must begin with a letter and use the hash character as separator and
-root.
+According to the file system, absolute, relative and additionally functional
+paths are also supported here.  
+Paths consist exclusively of word characters, underscores and optionally the
+minus character (based on combined) IDs. The hash character is used as separator
+and root. Spaces are not supported.
 
 [Learn more](mvc.md#virtual-paths)
 
 
-### Object-/Model-Binding
+### Object/Model Binding
 
 TODO:
 
 
 ## Components
+
+TODO:
 
 Seanox aspect-js aims at a modular and component-based architecture. The
 framework supports declarative marking of components in the markup, outsourcing
@@ -602,7 +671,7 @@ the implementation of components.
 [Learn more](composite.md)
 
 
-### Object-/Model-Binding
+### Object/Model Binding
 
 TODO:
 
@@ -718,6 +787,9 @@ Test.create({ignore:true, test() {
 Test.start();
 ```
 
+[Learn more](test.md#szenario)
+
+
 ### Suite
 
 A suite is a complex bundle of different test cases, scenarios and other suites.
@@ -790,7 +862,6 @@ console.info(message);
 To be able to include console output in tests, the activated Test-API supports
 forwarding, listeners and buffers for console output.
 
-
 ```javascript
 var log   = console.output.log;
 var warn  = console.output.warn;
@@ -824,6 +895,7 @@ Test-API.
 
 ```javascript
 Test.start();
+Test.start({auto: boolean});
 ```
 
 (Re)Starts the test execution.  
@@ -866,15 +938,15 @@ then work similar to the monitor.
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {
     ...
-});    
+});  
   
 Test.listen(Test.EVENT_PERFORM, function(event, status) {
     ...
-});      
+});  
   
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
-});      
+});  
 ```
 
 [Learn more](test.m#events)

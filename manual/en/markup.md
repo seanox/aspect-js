@@ -181,7 +181,7 @@ an element. If the content was successfully loaded, the `import` attribute is
 removed. The attribute expects as value one element or more elements as NodeList
 or Array these are then inserted directly. Also supported is the use of an
 absolute or relative URL to a remote resource, which is reloaded and inserted by
-HTTP method GET. A [DataSource URL (locator)](datasource.md#locator) is also
+HTTP method GET. The [DataSource URL (locator)](datasource.md#locator) is also
 supported, which loads and inserts transformed content from the
 [DataSource](datasource.md).
 
