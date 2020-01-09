@@ -50,12 +50,7 @@ environment and much more.
 * [Extension](#extension)
 * [Test](#test)
   * [Task](#task)
-    * [name](#name)
-    * [test](#test-1)
-    * [timeout](#timeout)
-    * [expected](#expected)
-    * [ignore](#ignore)
-  * [Szenario](#szenario)
+  * [Scenario](#scenario)
   * [Suite](#suite)
   * [Assert](#assert)
 * [Configuration](#configuration)
@@ -729,35 +724,6 @@ Task is primarily a meta object.
 {name:..., test:..., timeout:..., expected:..., ignore:...}
 ```
 
-
-#### name
-
-Optional name of the test task.
-
-
-#### test
-
-An implemented method to be executed as a test.
-
-
-#### timeout
-
-Optional the maximum runtime of the test item in milliseconds.
-Exceeding this limit will cause the test to fail.  
-A value greater than 0 is expected, otherwise the timeout is ignored.
-
-
-#### expected
-
-Optional to test the occurrence of defined errors.
-The error must occur if the test is successful.
-An error object or a RegExp is expected as value.
-
-
-#### ignore
-
-Optional true, if the test is to be ignored.
-
 [Learn more](test.m#task)
 
 
@@ -846,6 +812,19 @@ Test.start();
 [Learn more](test.m#assert)
 
 
+## Configuration
+
+Optionally, the test API can be configured with each start. 
+A meta object is expected as parameter. The configuration contained in it is
+partially adopted and the unknown is ignored.
+
+```javascript
+Test.start({auto: boolean, ouput: {...}, monitor: {...}});
+```
+
+[Learn more](test.m#configuration)
+
+
 ## Output
 
 As a development tool, browsers provide console output that can be used to log
@@ -898,7 +877,9 @@ Test.start();
 Test.start({auto: boolean});
 ```
 
-(Re)Starts the test execution.  
+The start can be done manually or when using `auto = true`, by loading the
+page. If the page is already loaded, the parameter `auto` is ignored and the
+start is executed immediately.
 
 ```javascript
 Test.suspend();
@@ -924,7 +905,8 @@ The test run can be restarted with `Test.start()`.
 Test.status();
 ```
 
-Makes a snapshot of the status of the current test.
+Makes a snapshot of the status of the current test.  
+The status contains details of the current task and the queue.
 
 [Learn more](test.m#control)
 

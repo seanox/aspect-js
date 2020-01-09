@@ -50,11 +50,6 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 * [Erweiterung](#erweiterung)
 * [Test](#test)
   * [Testfall](#testfall)
-    * [name](#name)
-    * [test](#test-1)
-    * [timeout](#timeout)
-    * [expected](#expected)
-    * [ignore](#ignore)
   * [Szenario](#szenario)
   * [Suite](#suite)
   * [Assert](#assert)
@@ -741,34 +736,6 @@ Task ist primär ein Meta-Objekt.
 {name:..., test:..., timeout:..., expected:..., ignore:...}
 ```
 
-
-#### name
-
-Optionaler Name vom Testfall.
-
-
-#### test
-
-Die implementierte Methode, die als Testfall ausgeführt werden soll.
-
-
-#### timeout
-
-Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.  
-Das Überschreiten von diesem Wert führt zum Ausfall des Tests.  
-Es wird ein Wert grösser als 0 erwartet, ansonsten wird der Timeout ignoriert.
-
-
-#### expected
-
-Optional, um das Auftreten von definierten Fehlern zu testen.  
-Der Fehler muss auftreten, damit der Test erfolgreich ist.  
-Als Wert wird ein Fehlerobjekt oder ein RegExp erwartet.
-
-#### ignore
-
-Optional true, wenn der Test ignoriert werden soll.
-
 [Mehr erfahren](test.md#testfall)
 
 
@@ -890,7 +857,6 @@ aktivierte Test-API Weiterleitungen (Forwarding), Listener und Puffer (Buffer)
 für die Konsolenausgabe.
 
 ```javascript
-
 var log   = console.output.log;
 var warn  = console.output.warn;
 var error = console.output.error;
