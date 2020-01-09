@@ -147,8 +147,8 @@ integration test on different levels and with different complexity.
 ## Assert
 
 The test cases are implemented with assertions. The Test-API provides elementary
-assertions, you can implement more.  
-The function is simple. If an assertion was not ´true´, a error is thrown.
+assertions, you can implement more. The function is simple. If an assertion was
+not ´true´, a error is thrown.
 
 
 ### assertTrue
