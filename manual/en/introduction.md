@@ -314,7 +314,7 @@ composite JavaScript.
 
 ```html
 <script type="composite/javascript" interval="1000">
-  console.log(new Date().toLocaleTimeString());
+    console.log(new Date().toLocaleTimeString());
 </script>
 ```
 
