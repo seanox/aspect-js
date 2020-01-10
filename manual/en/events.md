@@ -1,7 +1,7 @@
-[Erweiterung](extension.md) | [Inhalt](README.md#ereignisse) | [Test](test.md)
+[Extension](extension.md) | [TOC](README.md#events) | [Test](test.md)
 - - -
 
-# Ereignisse
+# Events
 
 Seanox aspect-js provides various events that can be used to implement
 extensions and to notify the application of certain operating states of the
@@ -176,4 +176,4 @@ trigger the error event.
 
 
 - - -
-[Erweiterung](extension.md) | [Inhalt](README.md#ereignisse) | [Test](test.md)
+[Extension](extension.md) | [TOC](README.md#events) | [Test](test.md)
