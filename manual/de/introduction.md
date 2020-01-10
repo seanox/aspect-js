@@ -75,6 +75,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 * [Komponenten](#komponenten)
   * [Object/Model-Binding](#objectmodel-binding-1)
 * [Erweiterung](#erweiterung)
+* [Ereignisse](#ereignisse)
 * [Test](#test)
   * [Testfall](#testfall)
   * [Szenario](#szenario)
@@ -714,6 +715,16 @@ Das JavaScript-API wurde für Seanox aspect-js um einige allgemeine Funktionen
 erweitert.
 
 [Mehr erfahren](extension.md)
+
+
+## Ereignisse
+
+Seanox aspect-js stellt verschiede Ereignisse bereit, die u.a. zur
+Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung über
+bestimmte Betriebszustände des Frameworks und der Laufzeitumgebung genutzt
+werden können.
+
+[Mehr erfahren](events.md)
 
 
 ## Test

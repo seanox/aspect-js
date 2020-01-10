@@ -74,6 +74,7 @@ environment and much more.
 * [Components](#components)
   * [Object/Model Binding](#objectmodel-binding-1)
 * [Extension](#extension)
+* [Events](#events-1)
 * [Test](#test)
   * [Task](#task)
   * [Scenario](#scenario)
@@ -82,7 +83,7 @@ environment and much more.
   * [Configuration](#configuration)
   * [Monitoring](#monitoring)
   * [Control](#control)
-  * [Events](#events-1)
+  * [Events](#events-2)
 
 
 ## Getting Started
@@ -702,6 +703,15 @@ The JavaScript API for Seanox aspect-js has been extended by some general
 functions.
 
 [Learn more](extension.md)
+
+
+## Events
+
+Seanox aspect-js provides various events that can be used to implement
+extensions and to notify the application of certain operating states of the
+framework and runtime environment.
+
+[Learn more](events.md)
 
 
 ## Test

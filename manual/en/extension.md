@@ -1,4 +1,4 @@
-[Components](composite.md) | [TOC](README.md#extension) | [Test](test.md)
+[Components](composite.md) | [TOC](README.md#extension) | [Events](events.md)
 - - -
 
 # Extension
@@ -430,4 +430,4 @@ according to the order in which they were registered.
 
 - - -
 
-[Components](composite.md) | [TOC](README.md#extension) | [Test](test.md)
+[Components](composite.md) | [TOC](README.md#extension) | [Events](events.md)

@@ -1,4 +1,4 @@
-[Erweiterung](extension.md) | [Inhalt](README.md#test)
+[Ereignisse](events.md) | [Inhalt](README.md#test)
 - - -
 
 # Test
@@ -779,4 +779,4 @@ Output:
 
 - - -
 
-[Erweiterung](extension.md) | [Inhalt](README.md#test)
+[Ereignisse](events.md) | [Inhalt](README.md#test)
