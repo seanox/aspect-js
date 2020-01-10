@@ -101,7 +101,7 @@ date when using the release channels.
 - [DE Manual](https://github.com/seanox/aspect-js/blob/master/manual/de)
 - [EN Introduction](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md)
 - [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
-- [EN Tutorial](https://github.com/seanox/aspect-js-tutorial#description)
+- [EN Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 
 # Changes (Change Log)
@@ -129,7 +129,7 @@ CR: Test Suite: Optimization of error output
 CR: Test: Omission of the method Test.configure(...), function is taken over by Test.start(...)  
 CR: Composite Object Lookup: Added support now for arrays (also associative)  
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
-CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)  
+CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)  
 CR: Composite Render Iterate: Correction/Optimization in general  
 CR: Composite Render Iterate: Optimization for using readonly meta object  
 CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute  

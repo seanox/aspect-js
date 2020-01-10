@@ -915,8 +915,8 @@ if (typeof SiteMap === "undefined") {
      */
     window.addEventListener("load", (event) => {
         
-        //Initially the page-module is loaded.
-        //The page-module is similar to an autostart, it is used to initialize
+        //Initially the common-module is loaded.
+        //The common-module is similar to an autostart, it is used to initialize
         //the single page application. It consists of common.js and common.css.
         //The configuration of the SiteMap and essential styles can/should be
         //stored here.

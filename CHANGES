@@ -59,7 +59,7 @@
   CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
       Can be used to control visibility so that only final rendered output/content is visible.
       CSS: *[release] {display:none;}      
-  CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVETNS)    
+  CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)    
   CR: Composite Render Iterate: Correction/Optimization in general
   CR: Composite Render Iterate: Optimization for using readonly meta object
   CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
