@@ -1,4 +1,4 @@
-[Events](events.md) | [TOC](README.md#test)
+[Events](events.md) | [Inhalt](README.md#test)
 - - -
 
 # Test
@@ -775,4 +775,4 @@ Output:
 
 - - -
 
-[Events](events.md) | [TOC](README.md#test)
+[Events](events.md) | [Inhalt](README.md#test)
