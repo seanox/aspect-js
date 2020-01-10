@@ -20,7 +20,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 
 # Merkmale
 * Einfache Integration in Markup und JavaScript (sauberer Code)
-* leichtgewichtige Implementierung (erfordert keine zusätzlichen Frameworks)  
+* Leichtgewichtige Implementierung (erfordert keine zusätzlichen Frameworks)  
 * Komponentenbasierte Architektur
 * Modularisierung (unterstützt Importe zur Laufzeit)  
   Komponentenkonzept für das intelligente/automatische Laden von Ressourcen

@@ -31,7 +31,7 @@ much more.
   component concept for smart/automatic loading of composite resources
 - Event handling
 - Expression Language  
-  meta-language extension in with full JavaScript support
+  meta-language extension with full JavaScript support
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
