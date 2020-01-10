@@ -18,6 +18,32 @@ Model View Controller, Resource Bundle (i18n), NoSQL datasource, test
 environment and much more.
 
 
+# Features
+* Easy integration in markup and JavaScript (clean code)
+* Lightweight implementation (requires no additional frameworks)  
+* Component based architecture
+* Modularization (supports imports at the runtime)  
+  component concept for smart/automatic loading of composite resources
+* Event handling
+* Expression Language  
+  meta-language extension with full JavaScript support
+* Markup rendering  
+  supports: condition, custom tags, events, filter, interval, iterate,
+  rendering, resources messages, validation, ...
+* Markup hardening  
+  makes it difficult to manipulate the attributes in the markup  
+  Non-visible components are removed from the DOM and only reinserted when used  
+* Model View Controller  
+  supports: events, virtual paths, sitemap, permission concept, ...
+* Resource Bundle / Resource Messages  
+  localization, internationalization (i18n) and text outsourcing 
+* NoSQL datasource based on XML  
+  lightweight data management for aggregation / projection / transformation
+* Test environment  
+  for automated unit tests and integration tests
+* ... 
+
+
 ## Contents Overview
 
 * [Getting Started](#getting-started)

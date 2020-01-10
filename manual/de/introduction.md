@@ -18,6 +18,33 @@ Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
 NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
+# Merkmale
+* Einfache Integration in Markup und JavaScript (sauberer Code)
+* leichtgewichtige Implementierung (erfordert keine zusätzlichen Frameworks)  
+* Komponentenbasierte Architektur
+* Modularisierung (unterstützt Importe zur Laufzeit)  
+  Komponentenkonzept für das intelligente/automatische Laden von Ressourcen
+* Event handling
+* Expression Language  
+  Meta-Sprach-Erweiterung mit voller JavaScript-Unterstützung
+* Markup-Rendering  
+  unterstützt: condition, custom tags, events, filter, interval, iterate,
+  rendering, resources messages, validation, ...
+* Markup-Härtung  
+  erschwert die Manipulation der Attribute im Markup  
+  Nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
+  Verwendung eingesetzt  
+* Model View Controller    
+  unterstützt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept, ...
+* Resource-Bundle / Resource-Messages   
+  Lokalisierung, Internationalisierung (i18n) und Text-Auslagerung
+* NoSQL-DataSource auf Basis von XML  
+  leichtgewichtiges Datenmanagement für Aggregation / Projektion / Transformation
+* Testumgebung  
+  für automatisierte Unit-Tests und Integrationatests
+* ... 
+
+
 ## Inhalt
 
 * [Erste Schritte](#erste-schritte)

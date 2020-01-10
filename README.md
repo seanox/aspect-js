@@ -18,7 +18,7 @@ fullstack solution.
 Seanox aspect-js focuses on a minimalist approach to implementing
 Single-Page Applications (SPAs). 
 This framework takes the declarative approach of HTML and extends this with
-expression language, rendering with addional attributes, object/model-binding,
+expression language, rendering with addional attributes, object/model binding,
 Model View Controller, Resource Bundle, NoSQL datasource, test environment and
 much more.
 
@@ -26,28 +26,26 @@ much more.
 # Features
 - Easy integration in markup and JavaScript (clean code)
 - Lightweight implementation (requires no additional frameworks)  
-  less than 64kB for all (so the plan, but there will be a few more bytes)
 - Component based architecture
 - Modularization (supports imports at the runtime)  
   component concept for smart/automatic loading of composite resources
 - Event handling
 - Expression Language  
-  meta-language extension in combination with full JavaScript
+  meta-language extension in with full JavaScript support
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 - Markup hardening  
-  hardening makes it difficult to manipulate the attributes in the markup  
+  makes it difficult to manipulate the attributes in the markup  
   Non-visible components are removed from the DOM and only reinserted when used  
 - Model View Controller  
   supports: events, virtual paths, sitemap, permission concept, ...
 - Resource Bundle / Resource Messages  
-  localization and internationalization (i18n) as well for the outsourcing of
-  texts 
+  localization, internationalization (i18n) and text outsourcing 
 - NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
 - Test environment  
-  something like JUnit for automated unit tests
+  for automated unit tests and integration tests
 - ... 
 
 
@@ -100,9 +98,11 @@ date when using the release channels.
 
 # Manuals
 - [DE Introduction](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md)
+- [EN Introduction](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md)  
+
 - [DE Manual](https://github.com/seanox/aspect-js/blob/master/manual/de)  
-- [EN Introduction](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md)
-- [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
+- [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)  
+
 - [EN Tutorial](https://github.com/seanox/aspect-js-tutorial#description)
 
 
