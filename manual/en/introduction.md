@@ -48,6 +48,7 @@ environment and much more.
 
 * [Getting Started](#getting-started)
 * [Scope](#scope)
+* [Expression Language](#expression-language)
 * [Attributes](#attributes)
   * [output](#output)
   * [import](#import)
@@ -61,7 +62,6 @@ environment and much more.
   * [notification](#notification)
   * [render](#render)
   * [release](#release)
-* [Expression Language](#expression-language)
 * [DataSource](#datasource)
 * [Resource Bundle (Messages / i18n)](#resource-bundle-messages--i18n)
 * [Model View Controller](#model-view-controller)
@@ -122,6 +122,64 @@ __resources, modules, and data requires the use of a web server.__
 ## Scope
 
 Seanox aspect-js works exclusively in the BODY tag, which itself is included.
+
+
+## Expression Language
+
+Expressions or the Expression Language (EL) is a simple access to the
+client-side JavaScrript and thus to the models and components in Seanox
+aspect-js. In the expressions the complete JavaScript API is supported, which is
+enhanced with additional keywords, so that also the numerous arithmetic and
+logical operators can be used.
+
+The expression language can be used in the markup as free text and in the
+attributes of the HTML elements. JavaScript and CSS elements are excluded. The
+expression language is not supported here.  
+When used as free text, pure text (plain text) is always generated as output.
+The addition of markup, especially HTML code, is not possible and is only
+supported with the attributes `output` and `import`.
+ 
+```html
+<body lang="{{DataSource.locale}}">
+  <p>
+    Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.
+  </p>
+</body>
+```
+
+The Expression Language is temporarily visible, since the renderer only becomes
+active after the page has been loaded. Alternatively, the attributes
+[output](markup.md#output) and [import](markup.md#import) can be used, which
+cause a direct output into the inner HTML of the element. 
+
+```html
+<p output="Today is {{new Date().toDateString()}}
+    and it's {{new Date().toLocaleTimeString()}} o'clock.">
+</p>
+```
+
+Or by using the [release](markup.md#release) attribute, the element and output
+only become visible when the rendering is complete.
+
+```html
+<p release>
+  Today is {{new Date().toDateString()}}
+  and it's {{new Date().toLocaleTimeString()}} o'clock.
+</p>
+```
+
+Expressions can create and use global variables at runtime.
+
+```html
+{{now:new Date()}}
+<p>
+  Today is {{now.toDateString()}}
+  and it's {{now.toLocaleTimeString()}} o'clock.
+</p>
+```
+
+[Learn more](expression.md)
 
 
 ## Attributes
@@ -422,64 +480,6 @@ rule is automatically added to the HEAD when the page is loaded.
 ```
 
 [Learn more](markup.md#release)
-
-
-## Expression Language
-
-Expressions or the Expression Language (EL) is a simple access to the
-client-side JavaScrript and thus to the models and components in Seanox
-aspect-js. In the expressions the complete JavaScript API is supported, which is
-enhanced with additional keywords, so that also the numerous arithmetic and
-logical operators can be used.
-
-The expression language can be used in the markup as free text and in the
-attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here.  
-When used as free text, pure text (plain text) is always generated as output.
-The addition of markup, especially HTML code, is not possible and is only
-supported with the attributes `output` and `import`.
- 
-```html
-<body lang="{{DataSource.locale}}">
-  <p>
-    Today is {{new Date().toDateString()}}
-    and it's {{new Date().toLocaleTimeString()}} o'clock.
-  </p>
-</body>
-```
-
-The Expression Language is temporarily visible, since the renderer only becomes
-active after the page has been loaded. Alternatively, the attributes
-[output](markup.md#output) and [import](markup.md#import) can be used, which
-cause a direct output into the inner HTML of the element. 
-
-```html
-<p output="Today is {{new Date().toDateString()}}
-    and it's {{new Date().toLocaleTimeString()}} o'clock.">
-</p>
-```
-
-Or by using the [release](markup.md#release) attribute, the element and output
-only become visible when the rendering is complete.
-
-```html
-<p release>
-  Today is {{new Date().toDateString()}}
-  and it's {{new Date().toLocaleTimeString()}} o'clock.
-</p>
-```
-
-Expressions can create and use global variables at runtime.
-
-```html
-{{now:new Date()}}
-<p>
-  Today is {{now.toDateString()}}
-  and it's {{now.toLocaleTimeString()}} o'clock.
-</p>
-```
-
-[Learn more](expression.md)
 
 
 ## DataSource
