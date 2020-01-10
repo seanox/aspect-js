@@ -141,7 +141,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
-
+  * [Common Standard Component](composite.md#common-standard-component)
+    
 
 ### Extension
 

@@ -3,10 +3,11 @@
 
 # Komponenten
 
-Die Implementierung von Seanox aspect-js zielt auf eine modulare und auf
-Komponenten basierte Architektur. Das Framework unterstützt dazu eine
-deklarative Kennzeichnung von Komponenten im Markup, die Auslagerung und das
-automatische Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
+Die Implementierung von Seanox aspect-js ist auf eine modulare und auf
+Komponenten basierte Architektur ausgerichtet. Das Framework unterstützt dazu
+eine deklarative Kennzeichnung von Komponenten im Markup, die Auslagerung und
+das automatische Laden von Ressourcen, sowie ein automatisches
+Object/Model-Binding.
 
 
 ## Inhalt
@@ -17,12 +18,12 @@ automatische Laden von Ressourcen, sowie ein automatisches Objekt/Model-Bindung.
   * [CSS](#css)
   * [JavaScript](#javascript)
   * [HTML](#html)
-  
+* [Common Standard-Komponente](#common-standard-komponente)  
   
 ## Aufbau
 
-Eine Komponente besteht im initialen Markup aus einem als Composite
-gekennzeichneten HTML-Element mit einer eindeutigen Id.
+Eine Komponente besteht im Markup aus einem als Composite gekennzeichneten
+HTML-Element mit einer eindeutigen Id.
 
 ```html
 <!DOCTYPE HTML>
@@ -41,7 +42,11 @@ gekennzeichneten HTML-Element mit einer eindeutigen Id.
 
 Das innere Markup, CSS und JavaScript lassen sich ins Dateisystem auslagern.  
 Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
-`Composite.MODULES` geändert werden.
+`Composite.MODULES` geändert werden.  
+Der Dateiname der ausgelagerten Ressourcen leitet sich von der ID des als
+Composite gekennzeichneten HTML-Elements ab. Welche Ressourcen bzw. Teile der
+Komponente ausgelagert werden kann für jede Komponente individuell entschieden
+werden. 
 
 ```
 +- modules
@@ -56,11 +61,11 @@ Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
 
 ## Laden
 
-Das Laden der Ressourcen und die Objekt/Model-Bindung erfolgt partiell, wenn die
-Komponente im UI benötigt wird -- also mit der ersten Anzeige, was über die
-[SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert wird und so
-die Ladezeit stark minimiert, da punktuell jeweils nur für die aktiven
-UI-Komponenten benötigten Ressourcen geladen werden.  
+Das Laden der Ressourcen und das Object/Model-Binding erfolgt partiell, wenn die
+Komponente im UI benötigt wird, was die [SiteMap](sitemap.md) als zentrales
+Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
+situationsabhängig nur die für die aktiven UI-Komponenten benötigten Ressourcen
+geladen werden.  
 Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und lässt sich
 komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
 eine feste Reihenfolge: CSS, JS, HTML/Markup.  
@@ -68,19 +73,33 @@ Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
 ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
 mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.  
 Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente für das UI ausgeführt.
+Komponente für das UI ausgeführt und der Inhalt zwischengespeichert.
+
 
 ### CSS
 
 CSS wird als Style-Element in das HEAD-Element eingefügt. Ohne ein HEAD-Element
 verursacht das Einfügen einen Fehler.
 
+
 ### JavaScript
 
 JavaScript wird nicht als Element eingefügt, sondern direkt mit der eval-Methode 
 ausgeführt. Da die eval-Methode ggf. einen eigenen Namensraum für Variablen
-bilden kann, ist es wichtig, die globale Variable besser mit `window[...]` zu
+bilden kann, ist es wichtig, die globale Variable mit `window[...]` zu
 initialisieren.
+
+```javascript
+window['login'] = {
+    validate(element, value) {
+    }
+    logon: {
+        onClick(event) {
+        }
+    }
+}
+```
+
 
 ### HTML
 
@@ -88,6 +107,27 @@ HTML/Markup wird für eine Komponente nur geladen, wenn das HTML-Element der
 Komponente selbst kein inneres HTML besitzt und für das Elemente auch nicht die
 Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
 von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
+
+
+## Common Standard-Komponente
+
+Mit dem Laden der Seite und der Initialisierung des Frameworks und der Anwendung
+wird automatisch auch die Commons-Komponente im Modul-Verzeichnis geladen, die
+aus der JavaScript-Datei `common.js` und/oder dem CSS-Stylesheet `common.css`
+bestehen kann. Beide Dateien sind zur Ablage initialer und anwendungsweiter
+Logik bzw. Styles gedacht.
+
+```
++- modules
+|  |
+|  +- common.css
+|  +- common.js
+|  +- ...
+|
++- index.html
+```
+
+## Object/Model-Binding
 
 TODO:
 

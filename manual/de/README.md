@@ -139,6 +139,7 @@
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
+  * [Common Standard-Komponente](composite.md##common-standard-komponente)
 
 
 ### Erweiterung
