@@ -39,7 +39,7 @@ in the DOM.
 
 The declarative approach is primarily implemented using attributes in Seanox
 aspect-js and can be used with all HTML elements and in combination. Excluded
-are `SCRIPT`,  which is only supported with the type `composite/javascript`,
+are `SCRIPT`, which is only supported with the type `composite/javascript`,
 and `STYLE`, which is not supported. The values of the attributes can be static
 or dynamic when the expression language is used.  
 If an attribute contains an expression, the attribute and the value become
@@ -123,7 +123,7 @@ synchronizing and synchronization of HTML elements with the corresponding
 JavaScript models (see [validate](#validate) for more information).
 
 As with all attributes, the expression language can be used, with the difference
-that the attribute is only read  at the beginning. Due to the object/model
+that the attribute is only read at the beginning. Due to the object/model
 binding, changes to an existing element at runtime have no effect as long as it
 exists in the DOM.
 
@@ -169,7 +169,7 @@ It is used by the SiteMap as faces and facets, i.e. as targets for virtual paths
 in face flow and for the object/model binding.
 
 As with all attributes, the expression language can be used, with the difference
-that the attribute is only read  at the beginning. Due to the object/model
+that the attribute is only read at the beginning. Due to the object/model
 binding, changes to an existing element at runtime have no effect as long as it
 exists in the DOM.
 

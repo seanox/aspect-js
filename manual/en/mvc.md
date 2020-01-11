@@ -513,7 +513,7 @@ that exist in JavaScript.
 
 The object/model binding part also belongs to the Model View Controller and is
 implemented in Seanox aspect-js by the Composite API. SiteMap is an extension
-and is based on the composite API.  
+and is based on the Composite API.  
 For a better understanding, the functionality is described here in the Model
 View Controller.
 
@@ -548,13 +548,13 @@ The model (model component / component) is a static JavaScript object in any
 namespace and provides the logic for the user interface (UI component) and the
 transition from user interface to business logic and/or the backend.  
 The linking and/or binding of markup and JavaSchript model is done by the
-Composite-API. For this purpose, an HTML element must have a valid and unique
+Composite API. For this purpose, an HTML element must have a valid and unique
 ID. The ID must meet the requirements of the namespace.
 
 More details about the binding of object, field and value can be found in
 chapter [Binding](#binding).
 
-The Composite-API can distinguish between the presence and absence of model
+The Composite API can distinguish between the presence and absence of model
 components in the user interface due to their existence in the DOM. The model
 component is informed about the static method `dock` when it appears in the DOM
 and about the static method `undock` when it is removed from the DOM. With

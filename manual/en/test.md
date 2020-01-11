@@ -3,12 +3,12 @@
 
 # Test
 
-The Test-API supports the implementation and execution of integration tests and
+The Test API supports the implementation and execution of integration tests and
 can be used for suites, scenarios and single test cases.
 
-As a modular component of Seanox aspect-js, the Test-API is included in every
-release that can be easily removed. Because the Test-API has some special
-features regarding error handling and console output, the Test-API must be
+As a modular component of Seanox aspect-js, the Test API is included in every
+release that can be easily removed. Because the Test API has some special
+features regarding error handling and console output, the Test API must be
 activated deliberately at runtime.
 
 ```javascript
@@ -146,7 +146,7 @@ integration test on different levels and with different complexity.
 
 ## Assert
 
-The test cases are implemented with assertions. The Test-API provides elementary
+The test cases are implemented with assertions. The Test API provides elementary
 assertions, you can implement more. The function is simple. If an assertion was
 not ´true´, a error is thrown.
 
@@ -336,7 +336,7 @@ Test.start();
 
 ## Configuration
 
-Optionally, the test API can be configured with each start. 
+Optionally, the Test API can be configured with each start. 
 A meta object is expected as parameter. The configuration contained in it is
 partially adopted and the unknown is ignored.
 
@@ -474,17 +474,17 @@ console.error(message);
 console.info(message);
 ```
 
-To be able to include console output in tests, the activated Test-API supports
+To be able to include console output in tests, the activated Test API supports
 forwarding, listeners and buffers for console output.
 
 
 ### Forwarding
 
 The forwarding runs completely in the background and distributes the output to
-the browser console output and to the components of the Test-API. In the case
+the browser console output and to the components of the Test API. In the case
 of (I)Frames, the output is forwarded to enclosing or superordinate
 window-objects and is accessible there via buffer and listener with an activated
-Test-API.
+Test API.
 
 
 ### Buffer
@@ -533,7 +533,7 @@ Details about configuration and usage are described in chapter
 ## Control
 
 The test progress and the execution of the tests can be controlled by the
-Test-API.
+Test API.
 
 ```javascript
 Test.start();
@@ -615,7 +615,7 @@ read-only and cannot be changed. If no test is executed, false is returned.
 ## Events
 
 Events and their callback methods are another way of monitoring test execution.
-The callback methods are registered at the Test-API for corresponding events and
+The callback methods are registered at the Test API for corresponding events and
 then work similar to the monitor.
 
 List of available events:

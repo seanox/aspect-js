@@ -520,7 +520,7 @@ Bei der Objekt-Bindung geht es darum, HTML-Elemente mit entsprechenden
 Modell-Objekten zu verknüpfen, die im JavaScript existieren.
 
 Das Object/Model-Binding gehört ebenfalls zum Model View Controller und ist in
-Seanox aspect-js im Composite API implementiert, auf der SiteMap als Erweiterung
+Seanox aspect-js im Composite-API implementiert, auf der SiteMap als Erweiterung
 und basiert.  
 Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
 beschrieben.
@@ -690,9 +690,9 @@ der Attribute `ID` und `Composite` gebildet.
 </html>
 ```
 
-Die Composite-ID wird beim MVC, Object/Model-Binding sowie zur  Synchronisation
+Die Composite-ID wird beim MVC, Object/Model-Binding sowie zur Synchronisation
 und Validierung benötigt und muss daher eine gültige und eindeutige Zeichenfolge
-innerhalb des JavaScript-Namensraums sein. Der Bezeichner  wird auch für den
+innerhalb des JavaScript-Namensraums sein. Der Bezeichner wird auch für den
 Face-Flow verwendet, um Faces und Facets sowie allgemein Modelle/Komponenten zu
 identifizieren und zu kontrollieren.
 

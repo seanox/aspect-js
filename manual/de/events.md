@@ -161,7 +161,7 @@ Verlauf.
 
 # Error
 
-Die Composite-API unterstützt ein anwendungsweites Event-Management für
+Das Composite-API unterstützt ein anwendungsweites Event-Management für
 Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. für
 Logging oder Fehlerausgaben. 
 

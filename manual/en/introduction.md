@@ -329,7 +329,7 @@ It is used by the SiteMap as faces and facets, i.e. as targets for virtual paths
 in face flow and for the object/model binding.
 
 As with all attributes, the expression language can be used, with the difference
-that the attribute is only read  at the beginning. Due to the object/model
+that the attribute is only read at the beginning. Due to the object/model 
 binding, changes to an existing element at runtime have no effect as long as it
 exists in the DOM.
 
@@ -716,12 +716,12 @@ framework and runtime environment.
 
 ## Test
 
-The Test-API supports the implementation and execution of integration tests and
+The Test API supports the implementation and execution of integration tests and
 can be used for suites, scenarios and single test cases.
 
-As a modular component of Seanox aspect-js, the Test-API is included in every
-release that can be easily removed. Because the Test-API has some special
-features regarding error handling and console output, the Test-API must be
+As a modular component of Seanox aspect-js, the Test API is included in every
+release that can be easily removed. Because the Test API has some special
+features regarding error handling and console output, the Test API must be
 activated deliberately at runtime.
 
 ```javascript
@@ -804,7 +804,7 @@ integration test on different levels and with different complexity.
 
 ### Assert
 
-The test cases are implemented with assertions. The Test-API provides elementary
+The test cases are implemented with assertions. The Test API provides elementary
 assertions, you can implement more. The function is simple. If an assertion was
 not ´true´, a error is thrown.
 
@@ -849,7 +849,7 @@ Test.start();
 
 ### Configuration
 
-Optionally, the test API can be configured with each start. 
+Optionally, the Test API can be configured with each start. 
 A meta object is expected as parameter. The configuration contained in it is
 partially adopted and the unknown is ignored.
 
@@ -872,7 +872,7 @@ console is used to output information about the test process.
 ### Control
 
 The test progress and the execution of the tests can be controlled by the
-Test-API.
+Test API.
 
 ```javascript
 Test.start();
@@ -916,7 +916,7 @@ The status contains details of the current task and the queue.
 ### Events
 
 Events and their callback methods are another way of monitoring test execution.
-The callback methods are registered at the Test-API for corresponding events and
+The callback methods are registered at the Test API for corresponding events and
 then work similar to the monitor.
 
 ```javascript

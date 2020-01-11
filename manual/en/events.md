@@ -95,7 +95,7 @@ The processing itself ends before the event.
 
 # AJAX
 
-The Composite-API supports application-wide event management for the
+The Composite API supports application-wide event management for the
 XMLHttpRequest to implement request-related application logic, e.g. for logging or spinners. 
 
 ```javascript

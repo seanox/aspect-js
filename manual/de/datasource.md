@@ -188,7 +188,7 @@ Einbetten nicht automatisch ausgeführt werden, sondern vom Renderer bewusst
 interpretiert werden. Dies ist wichtig bei der Verwendung von
 [condition](markup.md#condition).
 
-Eine  weitere Besonderheit betrifft die Erstellung/Ausgabe von Text während der
+Eine weitere Besonderheit betrifft die Erstellung/Ausgabe von Text während der
 Transformation. Der XSLT-Prozessor erzeugt immer eine gültige XML-Textausgabe.
 Jede XML-Syntax in einem Text wird automatisch maskiert, was die Generierung von
 Markup erschwert. Zu diesem Zweck wurde das Attribut `escape` eingeführt, das
