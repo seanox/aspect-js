@@ -547,7 +547,7 @@ namespace was resolved in the object tree.
 The model (model component / component) is a static JavaScript object in any
 namespace and provides the logic for the user interface (UI component) and the
 transition from user interface to business logic and/or the backend.  
-The linking and/or binding of markup and JavaSchript model is done by the
+The linking and/or binding of markup and JavaScript model is done by the
 Composite API. For this purpose, an HTML element must have a valid and unique
 ID. The ID must meet the requirements of the namespace.
 

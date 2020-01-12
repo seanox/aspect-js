@@ -11,20 +11,21 @@ automatic object/model binding.
 
 ## Contents Overview
 
-* [Terms](#terms)
-  * [Module](#module)
-  * [Component](#component)
-  * [Composite](#composite)
+* [Module](#module)
+* [Component](#component)
+* [Composite](#composite)
 * [Structure](#structure)
 * [Outsourcing](#outsourcing)
 * [Loading](#loading)
   * [CSS](#css)
   * [JavaScript](#javascript)
   * [HTML](#html)
-* [Common Standard Component](#common-standard-component)    
-  
-  
-# Terms
+* [Common Standard Component](#common-standard-component) 
+* [Object/Model-Binding](#objectmodel-binding)
+  * [Namespace](#namespace)
+  * [Scope](#scope)
+  * [Model](#model)
+  * [Binding](#binding)   
 
 
 ## Module
@@ -65,7 +66,7 @@ that is marked as composite.
 
 ## Outsourcing
 
-The inner markup, CSS and JavaScript can be stored in the file system.  
+The inner markup, CSS and JavaScript of composites can be outsourced.  
 The default directory `./modules` can be changed with the property
 `Composite.MODULES`.  
 The file name of the outsourced resources is derived from the ID of the as
@@ -85,19 +86,19 @@ swapped out can be decided individually for each component.
 
 ## Loading
 
-The loading of resources and the object/model binding takes place partially when
-the component is needed in the UI -- i.e. with the first visibility, which is
-controlled via the [SiteMap](sitemap.md) as the central face-flow management and
-thus minimizes the loading time considerably, since only the resources required
-for the active UI components are loaded.  
-The outsourcing and loading of resources at runtime is optional and can be
-applied completely, partially and not at all. There is a fixed order for loading
-and embedding: CSS, JS, HTML/Markup.  
-If the request for a resource is answered with status 404, it is assumed that
-this resource has not been swapped out. If requests are not answered with status
+The loading of resources and the object/model binding is done partially when the
+composite is needed in the UI, which controls the [SiteMap](sitemap.md) as a
+central face flow management and thus minimizes the loading time considerably,
+because depending on the situation, only the resources of the actively used
+composites are loaded by the UI. 
+The outsourcing and loading of resources at runtime is optional and can be used
+completely, partially or not at all. There is a fixed sequence for reloading and
+including: CSS, JavaScript, HTML/Markup.  
+If the request of a resource with status 404 is answered, it is assumed that
+this resource has not been outsourced. If requests are not answered with status
 200 or 404, an error is assumed.  
-The loading of resources is only performed once with the first request of the
-component for the UI.
+Resources are loaded only once with the first request of the component for the
+UI and the content is then cached.
 
 
 ### CSS
@@ -126,7 +127,7 @@ window['login'] = {
 
 ### HTML
 
-HTML/Markup is only loaded for a component if the HTML element of the component
+HTML/Markup is only loaded for a composite if the HTML element of the component
 itself has no internal HTML and for which elements have not been declared with
 the attributes `import` or `output`. Only in this case an empty component with
 outsourced HTML/Markup is assumed.
@@ -150,7 +151,84 @@ logic or styles.
 +- index.html
 ```
 
+
 ## Object/Model-Binding
+
+
+#### Namespace
+
+Similar to packages in other programming languages, namespaces can be used to
+map hierarchical structures and group thematically related components and
+resources.  
+The implementation is realized in JavaScript on the object level.  
+Because it is not a real element of the programming language, this is
+represented by chaining objects to an object tree.  
+Each level in this object tree represents a namespace.  
+As typical for object identifiers, namespaces use letters, numbers and
+underscores separated by a dot. As a special feature, arrays are also supported.
+If a level in the namespace is a pure number, an array is assumed.
+
+The object/model binding is based on the IDs of the composites and their
+position and order in the DOM.    
+The root of the namespace always forms a composite ID.  
+The namespace can be absolute, that is, the namespace corresponds to a composite
+ID, or it can be based on the namespace of a parent composite in the DOM.
+
+```html
+<html>
+  <body>
+    <div id="A">
+      <div id="B">
+        <div id="C">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>  
+```
+
+Examples of possible namespaces:
+
+`a` + `a.b` + `a.b.c`  
+`b` + `b.c`  
+`c`
+
+
+#### Scope
+
+The scope is based on the namespace as a description text and maps this on the
+object level.  
+
+
+### Model
+
+A model is a JavaScript object in any namespace and provides the transition from
+the user interface to the business logic and/or backend.  
+Conceptually, the implementation of the design patterns facade and delegation is
+intended, so that models internally use further components and abstraction.
+
+
+### Binding
+
+The linking or binding of markup and JavaScript (model) is done via the
+Composite API. For this purpose, an HTML element must have the attribute
+`composite` and a valid and unique ID that meets the requirements of the
+namespace.
+The Composite API detects and monitors the existence of composite markup in the
+DOM. Thus, the corresponding (JavaScript) model can be informed via the `dock`
+`undock` methods when the composite is added to or removed from the DOM as a
+component, allowing the model to be prepared or finalized.  
+
+The implementation of both methods is optional.
+
+```javascript
+var model = {
+    dock() {
+    },
+    undock() {
+    }
+};
+```
 
 TODO:
 

@@ -133,17 +133,21 @@
 ### Komponenten
 
 * [Komponenten](composite.md#komponenten)
-  * [Begriffe](composite.md#begriffe)
-    * [Modul](composite.md#modul)
-    * [Komponente](composite.md#komponente)
-    * [Composite](composite.md#composite)
+  * [Modul](composite.md#modul)
+  * [Komponente](composite.md#komponente)
+  * [Composite](composite.md#composite)
   * [Aufbau](composite.md#aufbau)
   * [Auslagerung](composite.md#auslagerung)
   * [Laden](composite.md#laden)
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
-  * [Common Standard-Komponente](composite.md##common-standard-komponente)
+  * [Common Standard-Komponente](composite.md##common-standard-komponente) 
+  * [Object/Model-Binding](composite.md#objectmodel-binding)
+    * [Namespace](composite.md#namespace)
+    * [Scope](composite.md#scope)
+    * [Model](composite.md#model)
+    * [Binding](composite.md#binding)   
 
 
 ### Erweiterung

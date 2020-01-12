@@ -12,10 +12,9 @@ Object/Model-Binding.
 
 ## Inhalt
 
-* [Begriffe](#begriffe)
-  * [Modul](#modul)
-  * [Komponente](#komponente)
-  * [Composite](#composite)
+* [Modul](#modul)
+* [Komponente](#komponente)
+* [Composite](#composite)
 * [Aufbau](#aufbau)
 * [Auslagerung](#auslagerung)
 * [Laden](#laden)
@@ -23,9 +22,11 @@ Object/Model-Binding.
   * [JavaScript](#javascript)
   * [HTML](#html)
 * [Common Standard-Komponente](#common-standard-komponente)  
-  
-  
-# Begriffe
+* [Object/Model-Binding](#objectmodel-binding)
+  * [Namespace](#namespace)
+  * [Scope](#scope)
+  * [Model](#model)
+  * [Binding](#binding)
 
 
 ## Modul
@@ -68,7 +69,7 @@ HTML-Element mit einer eindeutigen Id.
 
 ## Auslagerung
 
-Das innere Markup, CSS und JavaScript lassen sich ins Dateisystem auslagern.  
+Das innere Markup, CSS und JavaScript von Composites lassen sich auslagern.  
 Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
 `Composite.MODULES` geändert werden.  
 Der Dateiname der ausgelagerten Ressourcen leitet sich von der ID des als
@@ -89,19 +90,19 @@ werden.
 
 ## Laden
 
-Das Laden der Ressourcen und das Object/Model-Binding erfolgt partiell, wenn die
-Komponente im UI benötigt wird, was die [SiteMap](sitemap.md) als zentrales
+Das Laden der Ressourcen und das Object/Model-Binding erfolgt partiell, wenn das
+Composite im UI benötigt wird, was die [SiteMap](sitemap.md) als zentrales
 Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
-situationsabhängig nur die für die aktiven UI-Komponenten benötigten Ressourcen
+situationsabhängig vom UI nur die Ressourcen der aktiv verwendeten Composites
 geladen werden.  
 Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und lässt sich
 komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
-eine feste Reihenfolge: CSS, JS, HTML/Markup.  
+eine feste Reihenfolge: CSS, JavaScript, HTML/Markup.  
 Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
 ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
 mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.  
 Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente für das UI ausgeführt und der Inhalt zwischengespeichert.
+Komponente für das UI ausgeführt und der Inhalt dann zwischengespeichert.
 
 
 ### CSS
@@ -131,7 +132,7 @@ window['login'] = {
 
 ### HTML
 
-HTML/Markup wird für eine Komponente nur geladen, wenn das HTML-Element der
+HTML/Markup wird für ein Composite nur geladen, wenn das HTML-Element der
 Komponente selbst kein inneres HTML besitzt und für das Elemente auch nicht die
 Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
 von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
@@ -155,7 +156,88 @@ Logik bzw. Styles gedacht.
 +- index.html
 ```
 
+
 ## Object/Model-Binding
+
+
+### Namespace
+
+Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
+Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
+Komponenten und Ressourcen genutzt werden.  
+Die Implementierung erfolgt in JavaScript auf Objektebene.  
+Da es kein reales Element der Programmiersprache ist, wird dies durch das
+Verketten von Objekten zu einem Objektbaum abgebildet.  
+Jede Ebene in dieser Objektbaum repräsentiert einen Namensraum.  
+Wie für die Bezeichner von Objekten typisch, verwenden auch Namensräume
+Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
+Besonderheit werden auch Arrays unterstützt. Wenn eine Ebene im Namensraum eine
+reine Zahl ist, wird ein Array angenommen.
+
+Das Object/Model-Binding basiert auf den IDs der Composites sowie deren Position
+und Reihenfolge im DOM.  
+Die Wurzel vom Namensraum bildet immer eine Composite-ID.  
+Der Namensraum kann dabei absolut sein, also der Namensraum entspricht einer
+Composite-ID, oder er basiert auf dem Namensraum eines im DOM übergeordneten
+Composites.
+
+```html
+<html>
+  <body>
+    <div id="A">
+      <div id="B">
+        <div id="C">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>  
+```
+
+Beispiele möglicher Namesräume:
+
+`a` + `a.b` + `a.b.c`  
+`b` + `b.c`  
+`c`
+
+
+### Scope
+
+Der Scope basiert auf dem Namensraum als Beschreibungstext und bildet diesen auf
+der Objektebene ab.  
+
+
+### Model
+
+Ein Model ist ein JavaScript-Objekt in einem beliebigen Namensraum und stellt
+als Schnittstelle den Übergang von der Benutzerschnittstelle (User-Interface)
+zur Geschäftslogik und/oder zum Backend zur Verfügung.  
+Konzeptionell ist die Implementierung der Entwurfsmuster Fassade und Delegation
+angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
+
+
+### Binding
+
+Die Verknüpfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt über das
+Composite-API. Dazu muss ein HTML-Element das Attribut `composite` und eine
+gültige sowie eindeutige ID besitzen, die den Anforderungen des Namensraums
+entspricht.
+
+Das Composite-API erkennt und überwacht die Existenz von Markup der Composites
+im DOM. So kann das korrespondierende (JavaScript-)Model über die Methoden
+`dock` und `undock` informiert werden, wenn das Composite als Komponente dem
+DOM hinzugefügt bzw. aus diesem entfernt wird, womit sich das Model vorbereiten
+bzw. finalisieren lässt.  
+Die Implementierung beider Methoden ist optional.
+
+```javascript
+var model = {
+    dock() {
+    },
+    undock() {
+    }
+};
+```
 
 TODO:
 

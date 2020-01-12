@@ -583,7 +583,7 @@ Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
 in einem beliebigen Namensraum und stellt die Logik für die
 Benutzerschnittstelle (UI-Komponente) und den Übergang von der
 Benutzerschnittstelle zur Geschäftslogik und/oder zum Backend zur Verfügung.  
-Die Verknüpfung bzw. Bindung von Markup und JavaSchript-Model erfolgt über das
+Die Verknüpfung bzw. Bindung von Markup und JavaScript-Model erfolgt über das
 Composite-API. Dazu muss ein HTML-Element eine gültige und eindeutige ID haben.
 Die ID muss die Anforderungen des Namensraums erfüllen.
 

@@ -135,17 +135,21 @@ Machine translation with [DeepL](https://deepl.com).
 ### Composite
 
 * [Composite](composite.md#composite)
-  * [Terms](composite.md#terms)
-    * [Module](composite.md#module)
-    * [Component](composite.md#component)
-    * [Composite](composite.md#composite)
+  * [Module](composite.md#module)
+  * [Component](composite.md#component)
+  * [Composite](composite.md#composite)
   * [Structure](composite.md#structure)
   * [Outsourcing](composite.md#outsourcing)
   * [Loading](composite.md#loading)
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
-  * [Common Standard Component](composite.md#common-standard-component)
+  * [Common Standard Component](composite.md#common-standard-component) 
+  * [Object/Model-Binding](composite.md#objectmodel-binding)
+    * [Namespace](composite.md#namespace)
+    * [Scope](composite.md#scope)
+    * [Model](composite.md#model)
+    * [Binding](composite.md#binding)   
     
 
 ### Extension
