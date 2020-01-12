@@ -29,6 +29,9 @@ Object/Model-Binding.
   * [Property](#property)
   * [Qualifier](#qualifier)
   * [Binding](#binding)
+  * [Events](#events)
+  * [Synchronization](#synchronization)
+  * [Validation](#validation)
 
 
 ## Modul
@@ -287,8 +290,8 @@ entspricht.
 Die Composite-API erkennt und überwacht die Existenz von Markup der Composites
 im DOM. So kann das korrespondierende (JavaScript-)Model über die Methoden
 `dock` und `undock` informiert werden, wenn das Composite als Komponente dem
-DOM hinzugefügt bzw. aus diesem entfernt wird, womit sich das Model vorbereiten
-bzw. finalisieren lässt.  
+DOM hinzugefügt bzw. aus diesem entfernt wird.  
+
 Die Implementierung beider Methoden ist optional.
 
 ```javascript
@@ -299,6 +302,39 @@ var model = {
     }
 };
 ```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+Die dock-Methode wird vor dem Rendern, vor dem Einfügen des Composites in das
+DOM oder nach dem Laden der Seite beim ersten Rendern ausgeführt und kann das
+zur Vorbereitung von Model und Darstellung verwendet werden.  
+Die undock-Methode wird ausgeführt, nachdem das Composite aus dem DOM entfernt
+wurde und lässt für Nachbereitung, Bereiningung und Finalisierung des Models
+nutzen.
+
+Bei einem Composite in Kombination mit einer Bedingung (condition) hängt der
+Aufruf der Methoden vom Ergebnis der Bedingung ab.
+
+
+### Events
+
+TODO:
+
+
+### Synchronization
+
+TODO:
+
+
+### Validation
 
 TODO:
 

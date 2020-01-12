@@ -21,13 +21,16 @@ automatic object/model binding.
   * [JavaScript](#javascript)
   * [HTML](#html)
 * [Common Standard Component](#common-standard-component) 
-* [Object/Model-Binding](#objectmodel-binding)
+* [Object/Model Binding](#objectmodel-binding)
   * [Namespace](#namespace)
   * [Scope](#scope)
   * [Model](#model)
   * [Property](#property)
   * [Qualifier](#qualifier)
   * [Binding](#binding)
+  * [Events](#events)
+  * [Synchronization](#synchronization)
+  * [Validation](#validation)
 
 
 ## Module
@@ -154,7 +157,7 @@ logic or styles.
 ```
 
 
-## Object/Model-Binding
+## Object/Model Binding
 
 
 #### Namespace
@@ -277,7 +280,7 @@ namespace.
 The Composite API detects and monitors the existence of composite markup in the
 DOM. Thus, the corresponding (JavaScript) model can be informed via the `dock`
 `undock` methods when the composite is added to or removed from the DOM as a
-component, allowing the model to be prepared or finalized.  
+component.  
 
 The implementation of both methods is optional.
 
@@ -289,6 +292,38 @@ var model = {
     }
 };
 ```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+The dock method is executed before rendering, before inserting the composite
+into the DOM, or after loading the page during the first render, and can be used
+to prepare model and view.  
+The undock method is executed after the composite is removed from the DOM and
+can be used for postprocessing, cleanup and finalization of the model.
+
+For a composite in combination with a condition, the method call depends on the
+result of the condition.
+
+
+### Events
+
+TODO:
+
+
+### Synchronization
+
+TODO:
+
+
+### Validation
 
 TODO:
 

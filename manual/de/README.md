@@ -149,7 +149,10 @@
     * [Model](composite.md#model)
     * [Property](composite.md#property)
     * [Qualifier](composite.md#qualifier)
-    * [Binding](composite.md#binding)   
+    * [Binding](composite.md#binding)
+    * [Events](composite.md#events)
+    * [Synchronization](composite.md#synchronization)
+    * [Validation](composite.md#validation)
 
 
 ### Erweiterung

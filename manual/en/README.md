@@ -152,6 +152,9 @@ Machine translation with [DeepL](https://deepl.com).
     * [Property](composite.md#property)
     * [Qualifier](composite.md#qualifier)
     * [Binding](composite.md#binding)   
+    * [Events](composite.md#events)
+    * [Synchronization](composite.md#synchronization)
+    * [Validation](composite.md#validation)
 
 
 ### Extension
