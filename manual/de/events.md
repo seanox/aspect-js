@@ -97,7 +97,7 @@ Die Verarbeitung selbst endet vor dem Ereignis.
 
 # AJAX
 
-Das Composite-API unterstützt ein anwendungsweites Event-Management für den
+Die Composite-API unterstützt ein anwendungsweites Event-Management für den
 XMLHttpRequest zur Implementierung Request-bezogener Anwendungslogik, z.B. für
 Logging oder Spinner. 
 
@@ -161,7 +161,7 @@ Verlauf.
 
 # Error
 
-Das Composite-API unterstützt ein anwendungsweites Event-Management für
+Die Composite-API unterstützt ein anwendungsweites Event-Management für
 Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. für
 Logging oder Fehlerausgaben. 
 

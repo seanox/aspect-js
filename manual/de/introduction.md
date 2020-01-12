@@ -132,7 +132,7 @@ einbezogen wird.
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScrript und damit zu den Modellen und Komponenten im Seanox
-aspect-js. In den Expressions wird das komplette JavaScript-API unterstützt, die
+aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt, die
 mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
 arithmetischen und logischen Operatoren verwendet werden können.
 
@@ -711,7 +711,7 @@ TODO:
 
 ## Erweiterung
 
-Das JavaScript-API wurde für Seanox aspect-js um einige allgemeine Funktionen
+Die JavaScript-API wurde für Seanox aspect-js um einige allgemeine Funktionen
 erweitert.
 
 [Mehr erfahren](extension.md)
@@ -729,14 +729,14 @@ werden können.
 
 ## Test
 
-Das Test-API unterstützt die Implementierung und Ausführung von
+Die Test-API unterstützt die Implementierung und Ausführung von
 Integrationstests und kann für Suiten (suite), Szenarien (scenario) und einzelne
 Testfälle (case) verwendet werden.
 
-Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
-enthalten, der sich ohne Probleme entfernen lässt. Da das Test-API einige
+Als modularer Bestandteil von Seanox aspect-js ist die Test-API in jedem Release
+enthalten, der sich ohne Probleme entfernen lässt. Da die Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
-das Test-API zur Laufzeit bewusst aktiviert werden.
+die Test-API zur Laufzeit bewusst aktiviert werden.
 
 ```javascript
 Test.activate();
@@ -819,7 +819,7 @@ verschiedenen Ebenen und mit unterschiedlicher Komplexität.
 
 ### Assert
 
-Die Testfälle werden mit Behauptungen (Assertions) implementiert. Das Test-API
+Die Testfälle werden mit Behauptungen (Assertions) implementiert. Die Test-API
 bietet elementare Aussagen, die erweitert werden können. Die Funktion ist
 einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
 
@@ -864,7 +864,7 @@ Test.start();
 
 ### Konfiguration
 
-Optional kann das Test-API mit jedem Start konfiguriert werden.  
+Optional kann die Test-API mit jedem Start konfiguriert werden.  
 Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
 wird partiell übernommen und unbekanntes wird ignoriert.
 
@@ -932,7 +932,8 @@ Der Status enthält Details zum aktuellen Test und zur Warteschlange.
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
 Überwachung der Testausführung. Die Callback-Methoden werden für entsprechende
-Ereignisse beim Test-API registriert und funktionieren dann ähnlich dem Monitor.
+Ereignisse bei der Test-API registriert und funktionieren dann ähnlich dem
+Monitor.
 
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {

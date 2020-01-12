@@ -520,8 +520,8 @@ Bei der Objekt-Bindung geht es darum, HTML-Elemente mit entsprechenden
 Modell-Objekten zu verknüpfen, die im JavaScript existieren.
 
 Das Object/Model-Binding gehört ebenfalls zum Model View Controller und ist in
-Seanox aspect-js im Composite-API implementiert, auf der SiteMap als Erweiterung
-und basiert.  
+Seanox aspect-js in der Composite-API implementiert, auf der SiteMap als
+Erweiterung und basiert.  
 Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
 beschrieben.
 
@@ -583,13 +583,13 @@ Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
 in einem beliebigen Namensraum und stellt die Logik für die
 Benutzerschnittstelle (UI-Komponente) und den Übergang von der
 Benutzerschnittstelle zur Geschäftslogik und/oder zum Backend zur Verfügung.  
-Die Verknüpfung bzw. Bindung von Markup und JavaScript-Model erfolgt über das
+Die Verknüpfung bzw. Bindung von Markup und JavaScript-Model erfolgt über die
 Composite-API. Dazu muss ein HTML-Element eine gültige und eindeutige ID haben.
 Die ID muss die Anforderungen des Namensraums erfüllen.
 
 Details werden im Abschnitt [Binding](#binding) beschrieben.
 
-Das Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
+Die Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
 Abwesenheit. So kann das Modell der Komponente über die statischen Methoden
 `dock` und `undock` informiert werden, wenn die Komponente dem DOM hinzugefügt
 bzw. aus diesem entfernt wird, womit sich das Modell vorbereiten bzw.
@@ -633,7 +633,7 @@ var model = {
 </html>
 ```
 
-Das Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
+Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
 dem Wert vom HTML-Element. Für ein HTML-Element werden die entsprechenden
 Ereignisse über das gleichnamige Attribut definiert.
 

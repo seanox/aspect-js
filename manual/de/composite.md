@@ -218,12 +218,12 @@ angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
 
 ### Binding
 
-Die Verknüpfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt über das
+Die Verknüpfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt über die
 Composite-API. Dazu muss ein HTML-Element das Attribut `composite` und eine
 gültige sowie eindeutige ID besitzen, die den Anforderungen des Namensraums
 entspricht.
 
-Das Composite-API erkennt und überwacht die Existenz von Markup der Composites
+Die Composite-API erkennt und überwacht die Existenz von Markup der Composites
 im DOM. So kann das korrespondierende (JavaScript-)Model über die Methoden
 `dock` und `undock` informiert werden, wenn das Composite als Komponente dem
 DOM hinzugefügt bzw. aus diesem entfernt wird, womit sich das Model vorbereiten
