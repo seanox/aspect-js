@@ -68,7 +68,7 @@
     * [Acceptor](markup.md#acceptor)
     * [Parameter](markup.md#parameter)
   * [Härtung](markup.md#h-rtung)
-  
+
 
 ### DataSource
 
@@ -147,6 +147,8 @@
     * [Namespace](composite.md#namespace)
     * [Scope](composite.md#scope)
     * [Model](composite.md#model)
+    * [Property](composite.md#property)
+    * [Qualifier](composite.md#qualifier)
     * [Binding](composite.md#binding)   
 
 

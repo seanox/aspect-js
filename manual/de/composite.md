@@ -26,6 +26,8 @@ Object/Model-Binding.
   * [Namespace](#namespace)
   * [Scope](#scope)
   * [Model](#model)
+  * [Property](#property)
+  * [Qualifier](#qualifier)
   * [Binding](#binding)
 
 
@@ -48,7 +50,7 @@ Ein Composite bezeichnet eine funktional eigenständige Komponente die sich aus
 Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
 zusammensetzen kann.
 
-  
+
 ## Aufbau
 
 Eine Komponente besteht im Markup aus einem als Composite gekennzeichneten
@@ -214,6 +216,65 @@ als Schnittstelle den Übergang von der Benutzerschnittstelle (User-Interface)
 zur Geschäftslogik und/oder zum Backend zur Verfügung.  
 Konzeptionell ist die Implementierung der Entwurfsmuster Fassade und Delegation
 angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
+
+
+### Property
+
+Es ist eine Eigenschaft innerhalb eines Models, die HTML-Elements innerhalb
+eines Composites mit gleichnamiger ID referenziert.  
+Elemente der Properties nutzen relativen Bezeichner (ID). Der Namensraum basiert
+auf dem vom Composite und erweitert sich um ggf. weitere übergeordnete Element
+mit IDs.
+
+```javascript
+var model = {
+    foo: {
+        fieldA: null
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      <div id="foo">
+        <input id="fieldA" type="text" events="change"/>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
+dem Wert vom HTML-Element. Für ein HTML-Element werden die entsprechenden
+Ereignisse über das gleichnamige Attribut definiert.
+
+
+### Qualifier
+
+In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
+Eigenschaften Arrays sind oder im Markup eine Iteration verwendet wird. In
+diesen Fällen kann der Bezeichner durch einen zusätzlichen eindeutigen
+Qualifier, getrennt durch einen Doppelpunkt, erweitert werden.  
+Qualifier wirken beim Object/Model-Binding wie Properties und verlängern den
+Namensraum.
+
+```html
+<input type="text" id="identifier">
+<input type="text" id="identifier:qualifier">
+```
+ 
+```html
+<html>
+  <body>
+    <form id="model" composite static iterate="{{set:['A','B','C']}}">
+      <input type="text" id="fieldA:{{set.value}}">
+      ...
+    </form>
+  </body>
+</html>
+```
 
 
 ### Binding

@@ -25,7 +25,9 @@ automatic object/model binding.
   * [Namespace](#namespace)
   * [Scope](#scope)
   * [Model](#model)
-  * [Binding](#binding)   
+  * [Property](#property)
+  * [Qualifier](#qualifier)
+  * [Binding](#binding)
 
 
 ## Module
@@ -44,7 +46,7 @@ may consist of one or more modules, or a module may provide one or more componen
 
 A composite is a functionally independent component that can consist of markup,
 CSS and JavaScript(-Model) and optionally other resources.
-  
+
 
 ## Structure
 
@@ -206,6 +208,64 @@ A model is a JavaScript object in any namespace and provides the transition from
 the user interface to the business logic and/or backend.  
 Conceptually, the implementation of the design patterns facade and delegation is
 intended, so that models internally use further components and abstraction.
+
+
+#### Property
+
+It is a property inside a model that references HTML elements inside a composite
+with the corresponding ID.  
+The elements of the properties use relative identifiers (ID). The namespace is
+based on the namespace of the composite and can be extended by additional parent
+elements with IDs.
+
+```javascript
+var model = {
+    foo: {
+        fieldA: null
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      <div id="foo">
+        <input id="fieldA" type="text" events="change"/>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+The Composite API synchronizes the property in the model with the value of the
+HTML element event-driven. For an HTML element, the corresponding events are
+defined by an attribute with the same name.
+
+
+### Qualifier
+
+In some cases an identifier (ID) is not unique. For example, when properties are
+arrays or an iteration is used in the markup. In these cases the identifier can
+be extended by an additional unique qualifier separated by a colon.   
+Qualifiers have the effect of properties in object/model binding and extend the
+namespace.
+
+```html
+<input type="text" id="identifier">
+<input type="text" id="identifier:qualifier">
+```
+ 
+```html
+<html>
+  <body>
+    <form id="model" composite static iterate="{{set:['A','B','C']}}">
+      <input type="text" id="fieldA:{{set.value}}">
+      ...
+    </form>
+  </body>
+</html>
+```
 
 
 ### Binding

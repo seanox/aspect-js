@@ -149,8 +149,10 @@ Machine translation with [DeepL](https://deepl.com).
     * [Namespace](composite.md#namespace)
     * [Scope](composite.md#scope)
     * [Model](composite.md#model)
+    * [Property](composite.md#property)
+    * [Qualifier](composite.md#qualifier)
     * [Binding](composite.md#binding)   
-    
+
 
 ### Extension
 
