@@ -133,6 +133,10 @@
 ### Komponenten
 
 * [Komponenten](composite.md#komponenten)
+  * [Begriffe](composite.md#begriffe)
+    * [Modul](composite.md#modul)
+    * [Komponente](composite.md#komponente)
+    * [Composite](composite.md#composite)
   * [Aufbau](composite.md#aufbau)
   * [Auslagerung](composite.md#auslagerung)
   * [Laden](composite.md#laden)

@@ -11,13 +11,38 @@ automatic object/model binding.
 
 ## Contents Overview
 
+* [Terms](#terms)
+  * [Module](#module)
+  * [Component](#component)
+  * [Composite](#composite)
 * [Structure](#structure)
 * [Outsourcing](#outsourcing)
 * [Loading](#loading)
   * [CSS](#css)
   * [JavaScript](#javascript)
   * [HTML](#html)
-* [Common Standard Component](#common-standard-component)  
+* [Common Standard Component](#common-standard-component)    
+  
+  
+# Terms
+
+
+## Module
+
+A module represents a closed functional program unit, which is usually provided
+as a program library.
+
+
+## Component
+
+A component describes a functionally and/or technically independent part, which
+may consist of one or more modules, or a module may provide one or more components.
+
+
+## Composite
+
+A composite is a functionally independent component that can consist of markup,
+CSS and JavaScript(-Model) and optionally other resources.
   
 
 ## Structure

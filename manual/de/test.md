@@ -483,7 +483,7 @@ für die Konsolenausgabe.
 
 ### Forwarding
 
-Das Forwarding läuft komplett im Hintergrund ab und verteilt die Ausgaben an die
+Das Forwarding läuft komplett im Hintergrund und verteilt die Ausgaben an die
 Browser-Konsolenausgabe und an die Komponenten vom Test-API. Bei (I)Frames wird
 die Ausgabe an umschliessende bzw. übergeordnete Window-Objekte weitergeleitet
 und ist dort mit aktiviertem Test-API per Buffer und Listener zugänglich.

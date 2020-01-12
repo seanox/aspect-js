@@ -12,6 +12,10 @@ Object/Model-Binding.
 
 ## Inhalt
 
+* [Begriffe](#begriffe)
+  * [Modul](#modul)
+  * [Komponente](#komponente)
+  * [Composite](#composite)
 * [Aufbau](#aufbau)
 * [Auslagerung](#auslagerung)
 * [Laden](#laden)
@@ -19,6 +23,30 @@ Object/Model-Binding.
   * [JavaScript](#javascript)
   * [HTML](#html)
 * [Common Standard-Komponente](#common-standard-komponente)  
+  
+  
+# Begriffe
+
+
+## Modul
+
+Ein Modul stellt eine geschlossene funktionale Programmeinheit dar, die meist
+als Programmbibliothek bereitgestellt wird.
+
+
+## Komponente
+
+Eine Komponente bezeichnet einen funktional und/oder technisch eigenständigen
+Bestandteil, der aus einem oder mehreren Modulen bestehen kann oder ein Modul
+kann eine oder mehrere Komponenten bereitstellen.
+
+
+## Composite
+
+Ein Composite bezeichnet eine funktional eigenständige Komponente die sich aus
+Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
+zusammensetzen kann.
+
   
 ## Aufbau
 

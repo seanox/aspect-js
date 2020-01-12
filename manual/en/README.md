@@ -135,6 +135,10 @@ Machine translation with [DeepL](https://deepl.com).
 ### Composite
 
 * [Composite](composite.md#composite)
+  * [Terms](composite.md#terms)
+    * [Module](composite.md#module)
+    * [Component](composite.md#component)
+    * [Composite](composite.md#composite)
   * [Structure](composite.md#structure)
   * [Outsourcing](composite.md#outsourcing)
   * [Loading](composite.md#loading)
