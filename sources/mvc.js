@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0x 20200106
+ *  MVC 1.1.0x 20200113
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0x 20200106
+ *  @version 1.1.0x 20200113
  */
 if (typeof Path === "undefined") {
     
@@ -1010,7 +1010,6 @@ if (typeof SiteMap === "undefined") {
         //because SiteMap.location and window.location.hash are the same and
         //therefore no update or rendering is triggered.
         SiteMap.location = target;
-        window.location.assign(target);
         
         //Source and target for rendering are determined.
         //Because of possible variable paths, the current path does not have to
@@ -1041,6 +1040,9 @@ if (typeof SiteMap === "undefined") {
         if (render && render[1] && !initial)
             Composite.render(render[1]);
         else Composite.render(document.body);
+        
+        //Focus only after rendering, so that the target is there.
+        window.location.assign(SiteMap.location);
         
         //Update of the hash and thus of the page focus, if the new focus (hash)
         //was hidden before rendering or did not exist.
