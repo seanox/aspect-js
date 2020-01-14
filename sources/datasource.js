@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0x 20200106
+ *  DataSource 1.2.0x 20200114
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200106
+ *  @version 1.2.0x 20200114
  */
 if (typeof DataSource === "undefined") {
     
@@ -89,7 +89,7 @@ if (typeof DataSource === "undefined") {
             clone.appendChild(node);
             return clone; 
         };     
-    };    
+    };
     
     (function() {
 
@@ -105,21 +105,29 @@ if (typeof DataSource === "undefined") {
             value: [],
             enumerable: true
         });        
+        
+        var locale = [];
+        locale = locale.concat(navigator.language);
+        if (typeof navigator.languages !== "undefined")
+            locale = locale.concat(navigator.languages);
+        Array.from(locale).forEach((language) => {
+            language = language.match(/^[a-z]+/i, "");
+            if (language && !locale.includes(language[0]))
+                locale.push(language[0]);
+        });
+        locale = locale.map(language => language.trim().toLowerCase());
+        locale = locale.filter(function(item, index) {
+            return locale.indexOf(item) == index;
+        });
 
-        var locale = (navigator.language || "").trim().toLowerCase();
-        locale = locale.match(DataSource.PATTERN_WORD);
-        if (!locale)
+        if (locale.length <= 0)
             throw new Error("Locale not available");
-        DataSource.locales.selection = locale[0];
         
-        var request;
-        request = new XMLHttpRequest();
-        
+        var request = new XMLHttpRequest();
         request.open("HEAD", DataSource.DATA + "/locales.xml", false);
         request.send();
         if (request.status == 404)
             return;
-        
         request.open("GET", DataSource.DATA + "/locales.xml", false);
         request.overrideMimeType("application/xslt+xml");
         request.send();
@@ -150,12 +158,15 @@ if (typeof DataSource === "undefined") {
                 DataSource.locales.push(name);
         }
         
-        locale = DataSource.locale;
-        if (!xml.evaluate("count(/locales/" + locale + ")", xml, null, XPathResult.ANY_TYPE, null).numberValue)
-            locale = DataSource.locales && DataSource.locales.length > 0 ? DataSource.locales[0] : null;
-        if (!locale)
+        if (DataSource.locales.length <= 0)
             throw new Error("Locale not available");
-        DataSource.locales.selection = locale;
+
+        locale.push(DataSource.locales[0]);
+        locale = locale.filter(function(locale) {
+            return DataSource.locales.includes(locale);
+        });  
+        
+        DataSource.locales.selection = locale.length ? locale[0] : DataSource.locales[0];
     })();
     
     /**
@@ -180,7 +191,7 @@ if (typeof DataSource === "undefined") {
             throw new Error("Locale not available");
 
         DataSource.locales.selection = locale;
-    };
+    };    
     
     /**
      *  Transforms an XMLDocument based on a passed stylesheet.

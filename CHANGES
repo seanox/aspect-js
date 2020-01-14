@@ -4,7 +4,8 @@
   BF: DataSource Collect: Correction of the cache usage with a collector
       Error example: DataSource.collect("data", ["xml://a", "xml://b", "xml://c"]);
   BF: DataSource Fetch: Correction of the pattern of schema switching
-  BF: MVC SiteMap: Optimization to focus from the current target after changing the path     
+  BF: DataSource Fetch: Optimization of the language determination
+  BF: MVC SiteMap: Optimization to focus from the current target after changing the path
   CR: MVC Path: Simplification of the syntax restrictions    
       The syntax is more consistently based on XML entities (DOM).
       A path can now begin with any word character (_ a-z A-Z 0-9).
