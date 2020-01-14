@@ -20,7 +20,9 @@ environment and much more.
 
 # Features
 * Easy integration in markup and JavaScript (clean code)
-* Lightweight implementation (requires no additional frameworks)  
+* Lightweight implementation (requires no additional frameworks)
+* Easy to integrate and combine with other JavaScript frameworks  
+  if the frameworks do not do the same or use the same syntax
 * Component based architecture
 * Modularization (supports imports at the runtime)  
   component concept for smart/automatic loading of composite resources
