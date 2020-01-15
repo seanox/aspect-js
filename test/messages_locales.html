@@ -47,14 +47,14 @@
             Assert.assertEquals("_1", DataSource.locale);
         }});
         Test.create({test() {
-            DataSource.localize("de_de");
-            Assert.assertEquals("#de_de", Messages["xxx"]);
-            Assert.assertEquals("de_de", DataSource.locale);
+            DataSource.localize("xde_de");
+            Assert.assertEquals("#xde_de", Messages["xxx"]);
+            Assert.assertEquals("xde_de", DataSource.locale);
         }});
         Test.create({test() {
-            DataSource.localize("de-de");
-            Assert.assertEquals("#de-de", Messages["xxx"]);
-            Assert.assertEquals("de-de", DataSource.locale);
+            DataSource.localize("xde-de");
+            Assert.assertEquals("#xde-de", Messages["xxx"]);
+            Assert.assertEquals("xde-de", DataSource.locale);
         }});
         
         Test.start({auto:true});

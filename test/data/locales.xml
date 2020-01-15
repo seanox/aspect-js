@@ -24,10 +24,10 @@
   <_1>
     <label key="xxx" value="#_1"/>
   </_1>
-  <de-de>
-    <label key="xxx" value="#de-de"/>
-  </de-de>
-  <de_de>
-    <label key="xxx" value="#de_de"/>
-  </de_de>
+  <xde-de>
+    <label key="xxx" value="#xde-de"/>
+  </xde-de>
+  <xde_de>
+    <label key="xxx" value="#xde_de"/>
+  </xde_de>
 </locales>
