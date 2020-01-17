@@ -695,7 +695,6 @@ erkannt und somit nicht direkt ausgeführt wird. Der Renderer hingegen erkennt
 den JavaScript-Code und führt diesen mit jedem relevanten Renderzyklus aus. Auf
 diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem Attribut
 `condition` kombiniert werden.  
-Eingebettete Skripte müssen/sollten "ThreadSafe" sein.
 
 ```html
 <script type="composite/javascript">

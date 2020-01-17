@@ -51,7 +51,15 @@ kann eine oder mehrere Komponenten bereitstellen.
 
 Ein Composite bezeichnet eine funktional eigenständige Komponente die sich aus
 Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
-zusammensetzen kann.
+zusammensetzen kann.  
+Im Hinblick auf den Model-View-Controler-Ansatz, lassen sich mit einem Composite
+Model und View bereitstellen.
+
+__Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,__
+__was aber ebenfalls verwendet werden kann.__   
+__Ein anderer wichtiger Unterschied besteht beim Laden und Ausführen von__
+__JavaScript, was bei Composites in einem Render-Zyklus linear/synchron__
+__geladen und ausgeführt wird.__
 
 
 ## Aufbau
@@ -214,9 +222,10 @@ der Objektebene ab.
 
 ### Model
 
-Ein Model ist ein JavaScript-Objekt in einem beliebigen Namensraum und stellt
-als Schnittstelle den Übergang von der Benutzerschnittstelle (User-Interface)
-zur Geschäftslogik und/oder zum Backend zur Verfügung.  
+Ein Model ist ein JavaScript-Objekt in einem beliebigen Namensraum, dass die
+Zustände vom User-Interface/View speichert und eine Schnittstelle für den
+Übergang von der Benutzerschnittstelle (User-Interface/View) zur Geschäftslogik
+und/oder zum Backend zur Verfügung stellt.  
 Konzeptionell ist die Implementierung der Entwurfsmuster Fassade und Delegation
 angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
 

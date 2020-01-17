@@ -48,7 +48,15 @@ may consist of one or more modules, or a module may provide one or more componen
 ## Composite
 
 A composite is a functionally independent component that can consist of markup,
-CSS and JavaScript(-Model) and optionally other resources.
+CSS and JavaScript(-Model) and optionally other resources.  
+In relation to the model-view-controller approach, a composite can provide model
+and view.
+
+__This distinguishes the composite concept from the JavaScript module concept,__
+__which can also be used.__   
+__Another important difference is the loading and execution of JavaScript,__
+__which is loaded and executed linear/synchronously in one render cycle for__
+__composites.__
 
 
 ## Structure
@@ -207,8 +215,9 @@ object level.
 
 ### Model
 
-A model is a JavaScript object in any namespace and provides the transition from
-the user interface to the business logic and/or backend.  
+A model is a JavaScript object in any namespace that stores the states of the
+user interface/view and provides an interface for the transition from the user
+interface/view to the business logic and/or backend.  
 Conceptually, the implementation of the design patterns facade and delegation is
 intended, so that models internally use further components and abstraction.
 

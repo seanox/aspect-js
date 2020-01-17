@@ -685,7 +685,6 @@ normal JavaScript but is not recognized by the browser in comparison to
 recognizes the JavaScript code and executes it in every revelevant render cycle.
 In this way, the execution of the SCRIPT element can also be combined with the
 `condition` attribute.  
-Embedded scripts must/should be "ThreadSafe".
 
 ```html
 <script type="composite/javascript">
