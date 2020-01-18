@@ -58,8 +58,8 @@ Model und View bereitstellen.
 __Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,__
 __was aber ebenfalls verwendet werden kann.__   
 __Ein anderer wichtiger Unterschied besteht beim Laden und Ausführen von__
-__JavaScript, was bei Composites in einem Render-Zyklus linear/synchron__
-__geladen und ausgeführt wird.__
+__JavaScript, was bei Composites in einem Render-Zyklus linear/sequenziell und__
+__somit synchron erfolgt.__
 
 
 ## Aufbau

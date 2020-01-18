@@ -54,9 +54,9 @@ and view.
 
 __This distinguishes the composite concept from the JavaScript module concept,__
 __which can also be used.__   
-__Another important difference is the loading and execution of JavaScript,__
-__which is loaded and executed linear/synchronously in one render cycle for__
-__composites.__
+__Another important difference concerns the loading and execution of__
+__JavaScript. With composites it is done in a render cycle linear/sequential__
+__and therefore synchronous.__
 
 
 ## Structure
