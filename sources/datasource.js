@@ -373,7 +373,7 @@ if (typeof DataSource === "undefined") {
         var root = document.implementation.createDocument(null, collector, null, null);
         collection.forEach((entry) => {
             if (typeof entry !== "string")
-                throw TypeError("Invalid collection entry");
+                throw new TypeError("Invalid collection entry");
             root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
         });
 
