@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0x 20200113
+ *  MVC 1.1x.0x 20200122
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0x 20200113
+ *  @version 1.1x.0x 20200122
  */
 if (typeof Path === "undefined") {
     
@@ -914,13 +914,6 @@ if (typeof SiteMap === "undefined") {
      *  The method initiates the initial usage of the path.
      */
     window.addEventListener("load", (event) => {
-        
-        //Initially the common-module is loaded.
-        //The common-module is similar to an autostart, it is used to initialize
-        //the single page application. It consists of common.js and common.css.
-        //The configuration of the SiteMap and essential styles can/should be
-        //stored here.
-        Composite.render.include("common");
         
         //When clicking on a link with the current path, the focus must be set
         //back to face/facet, as the user may have scrolled on the page.
