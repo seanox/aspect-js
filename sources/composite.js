@@ -116,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0x 20200106
+ *  Composite 1.2x.0x 20200122
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200106
+ *  @version 1.2x.0x 20200122
  */
 if (typeof Composite === "undefined") {
     
@@ -1724,7 +1724,6 @@ if (typeof Composite === "undefined") {
      *  executes it in each render cycle when the cycle includes the script
      *  element. In this way, the execution of the script element can also be
      *  combined with the attribute condition.
-     *  Embedded scripts must be 'ThreadSafe'.
      *  
      *      Custom Tag (Macro)
      *      ----
@@ -2384,7 +2383,7 @@ if (typeof Composite === "undefined") {
                             request.open("GET", url, false);
                             request.send();
                             if (request.status != "200")
-                                throw Error("HTTP status " + request.status + " for " + url);
+                                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
                             var content = request.responseText.trim();
                             Composite.render.cache[request.responseURL] = content;
                             selector.innerHTML = content;
@@ -2617,11 +2616,10 @@ if (typeof Composite === "undefined") {
             //cycle when the cycle includes the script element. In this way, the
             //execution of the script element can also be combined with the
             //attribute condition.
-            //Embedded scripts must be 'ThreadSafe'.
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                 var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
-                    try {eval(selector.textContent);
+                    try {Composite.render.include.eval(selector.textContent);
                     } catch (exception) {
                         console.error("Composite JavaScript", exception);
                     }
@@ -2667,8 +2665,9 @@ if (typeof Composite === "undefined") {
      *  it is not tried again. Otherwise, an error is thrown if the request is
      *  not answered with status 200.
      *  @param composite
+     *  @param strict
      */
-    Composite.render.include = function(composite) {
+    Composite.render.include = function(composite, strict) {
         
         if (!(typeof composite === "string"
                 || composite instanceof Element))
@@ -2707,8 +2706,7 @@ if (typeof Composite === "undefined") {
         var request = new XMLHttpRequest();
         request.overrideMimeType("text/plain");
         request.onreadystatechange = () => {
-            if (request.readyState != 4
-                    || request.status == "404")
+            if (request.readyState != 4)
                 return;
             if (request.status != "200")
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
@@ -2740,7 +2738,7 @@ if (typeof Composite === "undefined") {
                     style.textContent = content;
                     head.appendChild(style);
                 } else if (request.responseURL.match(/\.js$/)) {
-                    try {eval(content);
+                    try {Composite.render.include.eval(content);
                     } catch (exception) {
                         console.error(request.responseURL, exception.name + ": " + exception.message);
                         throw exception;
@@ -2754,15 +2752,17 @@ if (typeof Composite === "undefined") {
 
         //The sequence of loading is strictly defined.
         //    sequence: CSS, JS, HTML
-        request.open("HEAD", context + ".css", false);
-        request.send();
-        if (request.status != 404) {
+        var locate = new XMLHttpRequest();
+        locate.open("HEAD", context + ".css", false);
+        locate.send();
+        if (locate.status != 404) {
             request.open("GET", context + ".css", false);
             request.send();
         }
-        request.open("HEAD", context + ".js", false);
-        request.send();
-        if (request.status != 404) {
+        locate.open("HEAD", context + ".js", false);
+        locate.send();
+        if (locate.status != 404
+                || strict) {
             request.open("GET", context + ".js", false);
             request.send();
         }
@@ -2771,16 +2771,49 @@ if (typeof Composite === "undefined") {
         //element does not contain a markup (inner HTML) and the attributes
         //import and output are not set. Thus is the assumption that for an
         //empty element outsourced markup should exist.
-        if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+        if (object
+                && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                 && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                 && !composite.innerHTML.trim()) {
-            request.open("HEAD", context + ".html", false);
-            request.send();
-            if (request.status != 404) {
+            locate.open("HEAD", context + ".html", false);
+            locate.send();
+            if (locate.status != 404) {
                 request.open("GET", context + ".html", false);
                 request.send();
             }
         }
+    };
+
+    /**
+     *  Executes the import of JavaScript und Composite JavaScript.
+     *  As a special feature, Composite JavaScript supports meta-directives.
+     *  
+     *      #import
+     *      ----
+     *  Expects a space-separated list of composite modules whose path must be
+     *  relative to the URL. If the import of a composite module fails, this
+     *  causes an error. The meta directive can be used multiple times in the
+     *  meta section of a Composite JavaScript.    
+     *  
+     *  Meta directives can be used only at the beginning of the composite
+     *  JavaScript. The meta-section ends with the first comment or JavaScript
+     *  line.
+     */
+    Composite.render.include.eval = function(script) {
+        
+        script = script.split(/\s*[\r\n]+\s*/);
+        while (script && script.length > 0) {
+            if (!script[0].match(/^\s*(#import(\s+.*)*)*$/))
+                break;
+            var line = script.shift().replace(/^\s*#import(\s+|$)/, "");
+            line.split(/\s+/).forEach((include) => {
+                if (include)
+                    Composite.render.include(include, true);
+            });
+        }
+        script = script.join("\r\n").trim();
+        if (script)
+            eval(script);
     };
 
     //Listener when an error occurs and triggers a matching composite-event.
@@ -2808,7 +2841,14 @@ if (typeof Composite === "undefined") {
             style.innerHTML = "*[release] {display:none!important;}";
             document.querySelector("html head").appendChild(style);
         }
-    
+        
+        //Initially the common-module is loaded.
+        //The common-module is similar to an autostart, it is used to initialize
+        //the single page application. It consists of common.js and common.css.
+        //The configuration of the SiteMap and essential styles can/should be
+        //stored here.
+        Composite.render.include("common");
+        
         (new MutationObserver((records) => {
             records.forEach((record) => {
 
