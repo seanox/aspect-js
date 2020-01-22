@@ -27,7 +27,7 @@ if (Test.read === undefined) {
         request.open("GET", content, false);
         request.send();
         if (request.status != "200")
-            throw Error("HTTP status " + request.status + " for " + url);
+            throw new Error("HTTP status " + request.status + " for " + request.responseURL);
         return request.responseText;
     };
 };
