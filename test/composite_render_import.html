@@ -12,6 +12,17 @@
     <script type="text/javascript">
     
         Test.activate();
+        
+        var urlCount = new Map();
+        Composite.listen(Composite.EVENT_HTTP_END, (ignore, event) => {
+            var filter = new RegExp("^.*?" + RegExp.quote(window.location.pathcontext));
+            var key = event.target.responseURL.replace(filter, "")
+                    + " " + event.target.status;
+            if (!urlCount.has(key)
+                    || !Array.isArray(urlCount.get(key)))
+                urlCount.set(key, []);
+            urlCount.get(key).push("X");
+        });
       
         var aModel = {
             publishForm() {
@@ -71,6 +82,77 @@
         Test.create({test() {
             Assert.assertNotNull(document.querySelector("form input[type='submit']"));
         }});
+        
+        Test.create({test() {
+            Assert.assertEquals(1, modulA$count);
+        }});
+        Test.create({test() {
+            Assert.assertEquals(1, modulB$count);
+        }});
+        Test.create({test() {
+            Assert.assertEquals(1, modulC$count);
+        }});
+        Test.create({test() {
+            Assert.assertEquals(1, modulX$count);
+        }});
+        Test.create({test() {
+            var styles = document.querySelectorAll("html > head > style[type='text/css']");
+            styles = Array.from(styles);
+            var stylesA = styles.filter(entry => entry.textContent.includes("modulA"));
+            Assert.assertEquals(1, stylesA.length);
+            var stylesB = styles.filter(entry => entry.textContent.includes("modulB"));
+            Assert.assertEquals(1, stylesB.length);
+            var stylesC = styles.filter(entry => entry.textContent.includes("modulC"));
+            Assert.assertEquals(1, stylesC.length);
+            var stylesX = styles.filter(entry => entry.textContent.includes("modulX"));
+            Assert.assertEquals(1, stylesX.length);
+        }});
+        
+        Test.create({test() {
+            // Invalid modules, no error expected
+            Composite.render.include("io/modulE");
+            Composite.render.include("io/modulY");
+        }});
+        
+        Test.create({test() {
+            // To control the events, a resource is manually loaded multiple times.
+            // Modules should be loaded once.
+            var request = new XMLHttpRequest();
+            request.open("GET", "nix.xxx", false);
+            request.send();
+            request.open("GET", "nix.xxx", false);
+            request.send();
+            request.open("GET", "nix.xxx", false);
+            request.send();
+
+            var result = "";
+            for (const [key, value] of urlCount)
+                result += "\r\n" + key + " " + value.join("");
+            Assert.assertSameTo("script[type='text/test']", result);
+        }});
+    </script>
+    <script type="text/test">
+/modules/common.css 404 X
+/modules/common.js 200 XX
+/modules/modulA.css 200 XX
+/modules/modulA.js 200 XX
+/modules/modulB.css 200 XX
+/modules/modulB.js 200 XX
+/modules/modulC.css 200 XX
+/modules/modulC.js 200 XX
+/modules/io/modulX.css 200 XX
+/modules/io/modulX.js 200 XX
+/modules/io/modulY.css 404 X
+/modules/io/modulY.js 404 X
+/modules/modulA.html 404 X
+/resources/import_a.htmlx 200 X
+/resources/import_b.htmlx 200 X
+/resources/import_o.htmlx 404 X
+https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_x.htmlx 200 X
+/resources/import_c.htmlx 200 X
+/modules/io/modulE.css 404 X
+/modules/io/modulE.js 404 X
+/nix.xxx 404 XXX
     </script>
   </head>
   <body>
@@ -86,5 +168,8 @@
     <article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_x.htmlx'}}">
       loading resource...  
     </article>
+    <section iterate="{{x:[1,2,3]}}">
+      <div id="modulA" composite static></div>
+    </section>
   </body>
 </html>

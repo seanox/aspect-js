@@ -6,6 +6,7 @@
   
 #import 
 #import modulB  
+#import io/modulY
 
 if (window['modulB$count'] === undefined)
     window['modulB$count'] = 0;
