@@ -1,4 +1,4 @@
-1.2.1 2020xxxx
+1.3.0 2020xxxx
   BF: Composite Expression Parse: Correction in the detection/processing of escape sequences
       Error example: {{'abc\'123'}}
   BF: DataSource Collect: Correction of the cache usage with a collector
@@ -6,6 +6,9 @@
   BF: DataSource Fetch: Correction of the pattern of schema switching
   BF: DataSource Fetch: Optimization of the language determination
   BF: MVC SiteMap: Optimization to focus from the current target after changing the path
+  BF: Modules: Optimization of JavaScript processing to support import and export
+  BF: Composite Render: Optimization of JavaScript processing to support import and export
+  BF: Composite Events: Correction of the callback of HTTP events  
   CR: MVC Path: Simplification of the syntax restrictions    
       The syntax is more consistently based on XML entities (DOM).
       A path can now begin with any word character (_ a-z A-Z 0-9).
@@ -29,6 +32,11 @@
   CR: Composite Render: Simplification of the syntax restrictions for custom tags
       The custom tag is based on a word (_ a-z A-Z 0-9) and additionally - characters
       and can now begin with any word character (_ a-z A-Z 0-9).
+  CR: Composite Modules: Change so that the common composite is now loaded before the first rendering
+  CR: Composite Modules: Added the meta directive #import to import additional composites/modules
+      Meta directives can be used only at the beginning of the Composite JavaScript.
+      The meta-section ends with the first comment or JavaScript line.
+  CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
       
 1.2.0 20191231
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
