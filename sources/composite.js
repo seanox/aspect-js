@@ -116,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2x.0x 20200122
+ *  Composite 1.2x.0x 20200123
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2x.0x 20200122
+ *  @version 1.2x.0x 20200123
  */
 if (typeof Composite === "undefined") {
     
@@ -276,15 +276,15 @@ if (typeof Composite === "undefined") {
         get EVENT_MOUNT_NEXT() {return "MountNext";},
         get EVENT_MOUNT_END() {return "MountEnd";},
 
-        /** Constants of events when using AJAX */
-        get EVENT_AJAX_START() {return "AjaxStart";},
-        get EVENT_AJAX_PROGRESS() {return "AjaxProgress";},
-        get EVENT_AJAX_RECEIVE() {return "AjaxReceive";},
-        get EVENT_AJAX_LOAD() {return "AjaxLoad";},
-        get EVENT_AJAX_ABORT() {return "AjaxAbort";},
-        get EVENT_AJAX_TIMEOUT() {return "AjaxTimeout";},
-        get EVENT_AJAX_ERROR() {return "AjaxError";},
-        get EVENT_AJAX_END() {return "AjaxEnd";},
+        /** Constants of events when using HTTP */
+        get EVENT_HTTP_START() {return "HttpStart";},
+        get EVENT_HTTP_PROGRESS() {return "HttpProgress";},
+        get EVENT_HTTP_RECEIVE() {return "HttpReceive";},
+        get EVENT_HTTP_LOAD() {return "HttpLoad";},
+        get EVENT_HTTP_ABORT() {return "HttpAbort";},
+        get EVENT_HTTP_TIMEOUT() {return "HttpTimeout";},
+        get EVENT_HTTP_ERROR() {return "HttpError";},
+        get EVENT_HTTP_END() {return "HttpEnd";},
 
         /** Constants of events when errors occur */
         get EVENT_ERROR() {return "Error";},
@@ -641,23 +641,23 @@ if (typeof Composite === "undefined") {
             if (!event)
                 return;
             if (event.type == "loadstart")
-                event = Composite.EVENT_AJAX_START;
+                event = [Composite.EVENT_HTTP_START, event];
             else if (event.type == "progress")
-                event = Composite.EVENT_AJAX_PROGRESS; 
+                event = [Composite.EVENT_HTTP_PROGRESS, event]; 
             else if (event.type == "readystatechange")
-                event = Composite.EVENT_AJAX_RECEIVE; 
+                event = [Composite.EVENT_HTTP_RECEIVE, event]; 
             else if (event.type == "load")
-                event = Composite.EVENT_AJAX_LOAD; 
+                event = [Composite.EVENT_HTTP_LOAD, event]; 
             else if (event.type == "abort")
-                event = Composite.EVENT_AJAX_ABORT; 
+                event = [Composite.EVENT_HTTP_ABORT, event]; 
             else if (event.type == "error")
-                event = Composite.EVENT_AJAX_ERROR;   
+                event = [Composite.EVENT_HTTP_ERROR, event];   
             else if (event.type == "timeout")
-                event = Composite.EVENT_AJAX_TIMEOUT;   
+                event = [Composite.EVENT_HTTP_TIMEOUT, event];   
             else if (event.type == "loadend")
-                event = Composite.EVENT_AJAX_END; 
+                event = [Composite.EVENT_HTTP_END, event]; 
             else return;
-            Composite.fire(event, arguments); 
+            Composite.fire(...event); 
         };
         
         if (typeof this.open$init === "undefined") {
@@ -2391,7 +2391,7 @@ if (typeof Composite === "undefined") {
                             var object = Composite.render.meta[serial];
                             delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                         } catch (error) {
-                            Composite.fire(Composite.EVENT_AJAX_ERROR, error);
+                            Composite.fire(Composite.EVENT_HTTP_ERROR, error);
                             throw error;
                         } finally {
                             lock.release();
@@ -2665,9 +2665,8 @@ if (typeof Composite === "undefined") {
      *  it is not tried again. Otherwise, an error is thrown if the request is
      *  not answered with status 200.
      *  @param composite
-     *  @param strict
      */
-    Composite.render.include = function(composite, strict) {
+    Composite.render.include = function(composite) {
         
         if (!(typeof composite === "string"
                 || composite instanceof Element))
@@ -2701,71 +2700,80 @@ if (typeof Composite === "undefined") {
             }
             return;
         }
-        
+
         Composite.render.cache[context + ".composite"] = null;
-        var request = new XMLHttpRequest();
-        request.overrideMimeType("text/plain");
-        request.onreadystatechange = () => {
-            if (request.readyState != 4)
+
+        //Internal method for loading a composite resource.
+        //Supports CSS, JS and HTML.
+        var loading = (resource) => {
+            var request = new XMLHttpRequest();
+            request.overrideMimeType("text/plain"); 
+
+            //At first, HEAD is used to check if the resource exists.
+            //A HEAD before the GET appeared more friendly than a hard GET with
+            //errors. It costs one request more and has no benefit.
+            //Only server states 200 and 404 are supported, all others will
+            //cause an error.
+            request.open("HEAD", resource, false);
+            request.send();
+            if (request.status == 404)
                 return;
             if (request.status != "200")
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
-            
+
+            //If the resource exists it will be loaded.
+            //Only server states 200 and 404 are supported, all others will
+            //cause an error.
+            request.open("GET", resource, false);
+            request.send();
+            if (request.status == 404)
+                return;
+            if (request.status != "200")
+                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+
             //CSS is inserted into the HEad element as a style element.
             //Without a head element, the inserting causes an error.
 
-            //JavaScript is not inserted as an element, it is executed directly.
-            //For this purpose eval is used. Since the method may form its own
-            //namespace for variables, it is important to initialize the global
-            //variable better with window[...].
+            //JavaScript is not inserted as an element, it is executed
+            //directly. For this purpose eval is used. Since the method may form
+            //its own namespace for variables, it is important to initialize
+            //the global variable better with window[...].
             
             //HTML/Markup is preloaded into the render cache if available.
             //If markup exists for the composite, the import attribute with the
             //URL is added to the item. Inserting then takes over the import
             //implementation, which then also accesses the render cache.
-            
-            var content = request.responseText.trim();
-            if (content) {
-                var url = document.createElement("a");
-                url.href = request.responseURL;
-                Composite.render.cache[url.pathname] = content;
-                if (request.responseURL.match(/\.css$/)) {
-                    var head = document.querySelector("html head");
-                    if (!head)
-                        throw new Error("No head element found");
-                    var style = document.createElement("style");
-                    style.setAttribute("type", "text/css");
-                    style.textContent = content;
-                    head.appendChild(style);
-                } else if (request.responseURL.match(/\.js$/)) {
-                    try {Composite.render.include.eval(content);
-                    } catch (exception) {
-                        console.error(request.responseURL, exception.name + ": " + exception.message);
-                        throw exception;
-                    }
-                } else if (request.responseURL.match(/\.html$/)) {
-                    if (composite instanceof Element)
-                        composite.innerHTML = content;
-                }
-            }
-        };
 
+            var content = request.responseText.trim();
+            if (!content)
+                return;
+            var url = document.createElement("a");
+            url.href = request.responseURL;
+            Composite.render.cache[url.pathname] = content;
+            if (request.responseURL.match(/\.css$/)) {
+                var head = document.querySelector("html head");
+                if (!head)
+                    throw new Error("No head element found");
+                var style = document.createElement("style");
+                style.setAttribute("type", "text/css");
+                style.textContent = content;
+                head.appendChild(style);
+            } else if (request.responseURL.match(/\.js$/)) {
+                try {Composite.render.include.eval(content);
+                } catch (exception) {
+                    console.error(request.responseURL, exception.name + ": " + exception.message);
+                    throw exception;
+                }
+            } else if (request.responseURL.match(/\.html$/)) {
+                if (composite instanceof Element)
+                    composite.innerHTML = content;
+            }
+        }
+        
         //The sequence of loading is strictly defined.
         //    sequence: CSS, JS, HTML
-        var locate = new XMLHttpRequest();
-        locate.open("HEAD", context + ".css", false);
-        locate.send();
-        if (locate.status != 404) {
-            request.open("GET", context + ".css", false);
-            request.send();
-        }
-        locate.open("HEAD", context + ".js", false);
-        locate.send();
-        if (locate.status != 404
-                || strict) {
-            request.open("GET", context + ".js", false);
-            request.send();
-        }
+        loading(context + ".css");
+        loading(context + ".js");
         
         //HTML/Markup is only loaded if it is a known composite object and the
         //element does not contain a markup (inner HTML) and the attributes
@@ -2774,14 +2782,8 @@ if (typeof Composite === "undefined") {
         if (object
                 && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                 && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                && !composite.innerHTML.trim()) {
-            locate.open("HEAD", context + ".html", false);
-            locate.send();
-            if (locate.status != 404) {
-                request.open("GET", context + ".html", false);
-                request.send();
-            }
-        }
+                && !composite.innerHTML.trim())
+            loading(context + ".html");
     };
 
     /**
@@ -2791,9 +2793,18 @@ if (typeof Composite === "undefined") {
      *      #import
      *      ----
      *  Expects a space-separated list of composite modules whose path must be
-     *  relative to the URL. If the import of a composite module fails, this
-     *  causes an error. The meta directive can be used multiple times in the
-     *  meta section of a Composite JavaScript.    
+     *  relative to the URL. 
+     *  
+     *  Composite modules consist of the optional resources CSS, JS and HTML.
+     *  The #import meta-directive can only load CSS and JS.
+     *  The behavior is the same as when loading composites in the markup. The
+     *  server status 404 does not cause an error, because all resources of a
+     *  composite are optional, also JavaScript. Server states other than 200
+     *  and 404 cause an error. CSS resources are added to the HEAD and lead to
+     *  an error if no HEAD element exists in the DOM. Markup (HTML) is not
+     *  loaded because no target can be set for the output.
+     *  The meta directive can be used multiple times in the meta section of a
+     *  Composite JavaScript.    
      *  
      *  Meta directives can be used only at the beginning of the composite
      *  JavaScript. The meta-section ends with the first comment or JavaScript
@@ -2808,7 +2819,7 @@ if (typeof Composite === "undefined") {
             var line = script.shift().replace(/^\s*#import(\s+|$)/, "");
             line.split(/\s+/).forEach((include) => {
                 if (include)
-                    Composite.render.include(include, true);
+                    Composite.render.include(include);
             });
         }
         script = script.join("\r\n").trim();
