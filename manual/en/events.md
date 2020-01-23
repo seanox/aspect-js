@@ -18,15 +18,15 @@ framework and runtime environment.
   * [Composite.EVENT_MOUNT_START](#compositeevent_mount_start)
   * [Composite.EVENT_MOUNT_NEXT](#compositeevent_mount_next)
   * [Composite.EVENT_MOUNT_END](#compositeevent_mount_end)
-* [AJAX](#ajax)
-  * [Composite.EVENT_AJAX_START](#compositeevent_ajax_start)
-  * [Composite.EVENT_AJAX_PROGRESS](#compositeevent_ajax_progress)
-  * [Composite.EVENT_AJAX_RECEIVE](#compositeevent_ajax_receive)
-  * [Composite.EVENT_AJAX_LOAD](#compositeevent_ajax_load)
-  * [Composite.EVENT_AJAX_ABORT](#compositeevent_ajax_abort)
-  * [Composite.EVENT_AJAX_TIMEOUT](#compositeevent_ajax_timeout)
-  * [Composite.EVENT_AJAX_ERROR](#compositeevent_ajax_error)
-  * [Composite.EVENT_AJAX_END](#compositeevent_ajax_end)
+* [HTTP](#http)
+  * [Composite.EVENT_HTTP_START](#compositeevent_http_start)
+  * [Composite.EVENT_HTTP_PROGRESS](#compositeevent_http_progress)
+  * [Composite.EVENT_HTTP_RECEIVE](#compositeevent_http_receive)
+  * [Composite.EVENT_HTTP_LOAD](#compositeevent_http_load)
+  * [Composite.EVENT_HTTP_ABORT](#compositeevent_http_abort)
+  * [Composite.EVENT_HTTP_TIMEOUT](#compositeevent_http_timeout)
+  * [Composite.EVENT_HTTP_ERROR](#compositeevent_http_error)
+  * [Composite.EVENT_HTTP_END](#compositeevent_http_end)
 * [Error](#error)
   * [Composite.EVENT_ERROR](#compositeevent_error)
 
@@ -93,63 +93,63 @@ The event occurs with the final end of the object/model binding.
 The processing itself ends before the event.
 
 
-# AJAX
+# HTTP
 
 The Composite API supports application-wide event management for the
 XMLHttpRequest to implement request-related application logic, e.g. for logging or spinners. 
 
 ```javascript
-Composite.listen(Composite.EVENT_AJAX_***, function(XMLHttpRequest) {
+Composite.listen(Composite.EVENT_HTTP_***, function(XMLHttpRequest) {
     ...
 });
 ```
 
 
-## Composite.EVENT_AJAX_START
+## Composite.EVENT_HTTP_START
 
 Corresponds to the XMLHttpRequest event: `loadstart` and is triggered when a
 request to load data is started.
 
 
-## Composite.EVENT_AJAX_PROGRESS
+## Composite.EVENT_HTTP_PROGRESS
 
 Corresponds to the XMLHttpRequest event: `progress`.  
 The progress event is triggered periodically when a request receives further
 data.
 
 
-## Composite.EVENT_AJAX_RECEIVE
+## Composite.EVENT_HTTP_RECEIVE
 
 Corresponds to the XMLHttpRequest-Event: `readystatechange` and is triggered
 when the status of the request/response changes.
 
 
-## Composite.EVENT_AJAX_LOAD
+## Composite.EVENT_HTTP_LOAD
 
 Corresponds to the XMLHttpRequest event: `load` and is triggered when a
 resource is loaded.
 
 
-## Composite.EVENT_AJAX_ABORT
+## Composite.EVENT_HTTP_ABORT
 
 Corresponds to the XMLHttpRequest event: `abort` and is triggered when the
 loading of a resource is aborted.
 
 
-## Composite.EVENT_AJAX_TIMEOUT
+## Composite.EVENT_HTTP_TIMEOUT
 
 Corresponds to the XMLHttpRequest event: `timeout` and is triggered when the
 loading of a resource is aborted because the maximum loading time has been
 exceeded.
 
 
-## Composite.EVENT_AJAX_ERROR
+## Composite.EVENT_HTTP_ERROR
 
 Corresponds to the XMLHttpRequest event: `error` and is triggered when an error
 occurs.
 
 
-## Composite.EVENT_AJAX_END
+## Composite.EVENT_HTTP_END
 
 Corresponds to the XMLHttpRequest event: `loading` and is triggered when the
 request is completed, regardless of any errors or successful completion.

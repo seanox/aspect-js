@@ -404,27 +404,27 @@ window.location.pathcontext
 
 ## XMLHttpRequest
 
-XMLHttpRequest wurde indirekt um Composite-AJAX-Events erweitert.  
+XMLHttpRequest wurde indirekt um Composite-HTTP-Events erweitert.  
 
 ```javascript
-Composite.EVENT_AJAX_START
-Composite.EVENT_AJAX_PROGRESS
-Composite.EVENT_AJAX_RECEIVE
-Composite.EVENT_AJAX_LOAD
-Composite.EVENT_AJAX_ABORT
-Composite.EVENT_AJAX_TIMEOUT
-Composite.EVENT_AJAX_ERROR
-Composite.EVENT_AJAX_END
+Composite.EVENT_HTTP_START
+Composite.EVENT_HTTP_PROGRESS
+Composite.EVENT_HTTP_RECEIVE
+Composite.EVENT_HTTP_LOAD
+Composite.EVENT_HTTP_ABORT
+Composite.EVENT_HTTP_TIMEOUT
+Composite.EVENT_HTTP_ERROR
+Composite.EVENT_HTTP_END
 ```
 
-Mit diesen kann zentral und anwendungsweit auf AJAX-Ereignisse reagiert werden.
+Mit diesen kann zentral und anwendungsweit auf HTTP-Ereignisse reagiert werden.
 
 ```javascript
-Composite.listen(Composite.EVENT_AJAX_START, function(...varargs) {
+Composite.listen(Composite.EVENT_HTTP_START, function(...varargs) {
     show spinner
 });
 
-Composite.listen(Composite.EVENT_AJAX_END, function(...varargs) {
+Composite.listen(Composite.EVENT_HTTP_END, function(...varargs) {
     hide spinner
 });
 ```

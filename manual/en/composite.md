@@ -53,10 +53,9 @@ In relation to the model-view-controller approach, a composite can provide model
 and view.
 
 __This distinguishes the composite concept from the JavaScript module concept,__
-__which can also be used.__   
-__Another important difference concerns the loading and execution of__
-__JavaScript. With composites it is done in a render cycle linear/sequential__
-__and therefore synchronous.__
+__which can also be used. Another important difference concerns the loading__
+__and execution of JavaScript. With composites it is done in a render cycle__
+__linear/sequential and therefore synchronous.__
 
 
 ## Structure

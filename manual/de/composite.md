@@ -56,10 +56,9 @@ Im Hinblick auf den Model-View-Controler-Ansatz, lassen sich mit einem Composite
 Model und View bereitstellen.
 
 __Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,__
-__was aber ebenfalls verwendet werden kann.__   
-__Ein anderer wichtiger Unterschied besteht beim Laden und Ausführen von__
-__JavaScript, was bei Composites in einem Render-Zyklus linear/sequenziell und__
-__somit synchron erfolgt.__
+__was aber ebenfalls verwendet werden kann. Ein anderer wichtiger Unterschied__
+__besteht beim Laden und Ausführen von JavaScript, was bei Composites in__
+__einem Render-Zyklus linear/sequenziell und somit synchron erfolgt.__
 
 
 ## Aufbau
