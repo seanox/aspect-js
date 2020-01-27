@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0x 20200114
+ *  DataSource 1.2x.0x 20200127
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200114
+ *  @version 1.2x.0x 20200127
  */
 if (typeof DataSource === "undefined") {
     
@@ -196,17 +196,16 @@ if (typeof DataSource === "undefined") {
     /**
      *  Transforms an XMLDocument based on a passed stylesheet.
      *  The data and the stylesheet can be passed as Locator, XMLDocument and in
-     *  mix. The result as a node. In some browsers, the XSLTProcessor may
-     *  create a container object, which is removed automatically. With the
-     *  option raw the cleanup can be deactivated.
+     *  mix. The result as a NodeList. In some browsers, the XSLTProcessor may
+     *  create a container object, which is removed automatically.
+     *  Optionally, a meta object or a map with parameters for the XSLTProcessor
+     *  can be passed.
      *  @param  xml   locator or XMLDocument
      *  @param  style locator or XMLDocument 
-     *  @param  raw   option in combination with transform
-     *      true returns the complete XML document, otherwise only the root
-     *      entity as node 
-     *  @return the transformation result as a node
+     *  @param  meta  optional parameters for the XSLTProcessor 
+     *  @return the transformation result as a NodeList
      */
-    DataSource.transform = function(xml, style, raw) {
+    DataSource.transform = function(xml, style, meta) {
         
         if (typeof xml === "string"
                 && xml.match(DataSource.PATTERN_LOCATOR))
@@ -223,6 +222,12 @@ if (typeof DataSource === "undefined") {
 
         var processor = new XSLTProcessor();
         processor.importStylesheet(style);
+        if (meta && typeof meta === "object") {
+            var set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
+            for (const [key, value] of set)
+                if (typeof meta[key] !== "function")
+                    processor.setParameter(null, key, value);
+        }
         
         //The escape attribute converts text to HTML.
         //Without the escape attribute, the HTML tag symbols < and > are masked
@@ -256,10 +261,6 @@ if (typeof DataSource === "undefined") {
                 node.setAttribute("type", "composite/javascript");
         });
         
-        if (arguments.length > 2
-                && !!raw)
-            return result;
-        
         if (result.body)
             return result.body.childNodes;
         if (result.firstChild
@@ -270,19 +271,20 @@ if (typeof DataSource === "undefined") {
     
     /**
      *  Fetch the data to a locator as XMLDocument.
-     *  Optionally the data can be transformed via XSLT.
+     *  Optionally the data can be transformed via XSLT, for which a meta object
+     *  or a map with parameters for the XSLTProcessor can also be optionally
+     *  passed. When using the transformation, the return type changes to a
+     *  NodeList.
      *  @param  locators  locator
      *  @param  transform locator of the transformation style
      *      With the boolean true, the style is derived from the locator by
      *      using the file extension xslt.
-     *  @param  raw       option in combination with transform
-     *      true returns the complete XML document, otherwise only the root
-     *      entity as node
-     *  @return the fetched data, optionally transformed, as XMLDocument or the
-     *      root entity as a node when the combination transform and raw is used
+     *  @param  meta      optional parameters for the XSLTProcessor
+     *  @return the fetched data as XMLDocument or as NodeList, if the
+     *      transformation is used
      *  @throws Error in the case of invalid arguments
      */    
-    DataSource.fetch = function(locator, transform, raw) {
+    DataSource.fetch = function(locator, transform, meta) {
         
         if (typeof locator !== "string"
                 || !locator.match(DataSource.PATTERN_LOCATOR))
@@ -329,7 +331,7 @@ if (typeof DataSource === "undefined") {
                 throw new Error("Invalid style: " + String(style));  
         }
         
-        return DataSource.transform(data, DataSource.fetch(style), raw);
+        return DataSource.transform(data, DataSource.fetch(style), meta);
     };
     
     /**

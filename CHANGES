@@ -37,6 +37,14 @@
       Meta directives can be used only at the beginning of the Composite JavaScript.
       The meta-section ends with the first comment or JavaScript line.
   CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
+  CR: DataSource Fetch: Omission of the parameter raw
+      When using the transformation a NodeList is always returned.
+  CR: DataSource Fetch: Added optional parameters for the transformation
+      The parameters are passed to the XSLTProcessor as meta-object or map.
+  CR: DataSource Transform: Omission of the parameter raw
+      When using the transformation a NodeList is always returned.
+  CR: DataSource Transform: Added optional parameters for the transformation
+      The parameters are passed to the XSLTProcessor as meta-object or map.
       
 1.2.0 20191231
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
