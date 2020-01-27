@@ -116,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2x.0x 20200123
+ *  Composite 1.2x.0x 20200127
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2x.0x 20200123
+ *  @version 1.2x.0x 20200127
  */
 if (typeof Composite === "undefined") {
     
@@ -1099,13 +1099,26 @@ if (typeof Composite === "undefined") {
                         model = meta.property;
                     else model = null;
 
-                for (var event in model)
-                    if (typeof model[event] === "function"
-                            && event.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
-                        event = event.substring(2).toLowerCase();
-                        if (!events.includes(event))
-                            events.push(event);
+                for (var entry in model)
+                    if (typeof model[entry] === "function"
+                            && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                        entry = entry.substring(2).toLowerCase();
+                        if (!events.includes(entry))
+                            events.push(entry);
                     }
+
+                var prototype = model ? Object.getPrototypeOf(model) : null;
+                while (prototype) {
+                    Object.getOwnPropertyNames(prototype).forEach(entry => {
+                        if (typeof model[entry] === "function"
+                                && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                            entry = entry.substring(2).toLowerCase();
+                            if (!events.includes(entry))
+                                events.push(entry);
+                        }
+                    });
+                    prototype = Object.getPrototypeOf(prototype);
+                }
             }
 
             //The determined events are registered.
@@ -2812,9 +2825,9 @@ if (typeof Composite === "undefined") {
      */
     Composite.render.include.eval = function(script) {
         
-        script = script.split(/\s*[\r\n]+\s*/);
+        script = script.split(/[\r\n]+/);
         while (script && script.length > 0) {
-            if (!script[0].match(/^\s*(#import(\s+.*)*)*$/))
+            if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
                 break;
             var line = script.shift().replace(/^\s*#import(\s+|$)/, "");
             line.split(/\s+/).forEach((include) => {
@@ -2941,7 +2954,9 @@ if (typeof Composite === "undefined") {
                 //after the rendering with obsolete nodes.
                 if (record.addedNodes) {
                     record.addedNodes.forEach((node) => {
-                        if (node instanceof Element
+                        if ((node instanceof Element
+                                || (node instanceof Node
+                                        && node.nodeType == Node.TEXT_NODE))
                                 && !Composite.render.meta[node.ordinal()]
                                 && document.body.contains(node))
                             Composite.render(node);
