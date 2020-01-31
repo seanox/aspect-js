@@ -48,7 +48,7 @@
       When using the transformation a NodeList is always returned.
   CR: DataSource Transform: Added optional parameters for the transformation
       The parameters are passed to the XSLTProcessor as meta-object or map.
-  CR: DataSource Transform: Change of return value from NoteList to DocumentFragment
+  CR: DataSource Transform: Change of return value from NodeList to DocumentFragment
       
 1.2.0 20191231
   BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
