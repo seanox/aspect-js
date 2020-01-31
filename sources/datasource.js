@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2x.0x 20200127
+ *  DataSource 1.2x.0x 20200131
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2x.0x 20200127
+ *  @version 1.2x.0x 20200131
  */
 if (typeof DataSource === "undefined") {
     
@@ -196,14 +196,13 @@ if (typeof DataSource === "undefined") {
     /**
      *  Transforms an XMLDocument based on a passed stylesheet.
      *  The data and the stylesheet can be passed as Locator, XMLDocument and in
-     *  mix. The result as a NodeList. In some browsers, the XSLTProcessor may
-     *  create a container object, which is removed automatically.
+     *  mix. The result as a DocumentFragment.
      *  Optionally, a meta object or a map with parameters for the XSLTProcessor
      *  can be passed.
      *  @param  xml   locator or XMLDocument
      *  @param  style locator or XMLDocument 
      *  @param  meta  optional parameters for the XSLTProcessor 
-     *  @return the transformation result as a NodeList
+     *  @return the transformation result as a DocumentFragment
      */
     DataSource.transform = function(xml, style, meta) {
         
@@ -238,7 +237,7 @@ if (typeof DataSource === "undefined") {
         //Workaround for some browsers, e.g. MS Edge, if they have problems with
         //!DOCTYPE + !ENTITY. Therefore the document is copied so that the
         //DOCTYPE declaration is omitted.
-        var result = processor.transformToDocument(xml.clone());
+        var result = processor.transformToFragment(xml.clone(), document);
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
@@ -261,12 +260,7 @@ if (typeof DataSource === "undefined") {
                 node.setAttribute("type", "composite/javascript");
         });
         
-        if (result.body)
-            return result.body.childNodes;
-        if (result.firstChild
-                && result.firstChild.nodeName.match(/^transformiix\b/i))
-            return result.firstChild.childNodes;
-        return result.childNodes;        
+        return result;
     }; 
     
     /**
@@ -274,13 +268,13 @@ if (typeof DataSource === "undefined") {
      *  Optionally the data can be transformed via XSLT, for which a meta object
      *  or a map with parameters for the XSLTProcessor can also be optionally
      *  passed. When using the transformation, the return type changes to a
-     *  NodeList.
+     *  DocumentFragment.
      *  @param  locators  locator
      *  @param  transform locator of the transformation style
      *      With the boolean true, the style is derived from the locator by
      *      using the file extension xslt.
      *  @param  meta      optional parameters for the XSLTProcessor
-     *  @return the fetched data as XMLDocument or as NodeList, if the
+     *  @return the fetched data as XMLDocument or as DocumentFragment, if the
      *      transformation is used
      *  @throws Error in the case of invalid arguments
      */    
