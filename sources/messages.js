@@ -66,12 +66,12 @@
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.2.0x 20200106
+ *  Messages 1.2.1 20200106
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0x 20200106
+ *  @version 1.2.1 20200106
  */
 if (typeof Messages === "undefined") {
     

@@ -116,12 +116,12 @@
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2x.0x 20200127
+ *  Composite 1.3.0 20200127
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2x.0x 20200127
+ *  @version 1.3.0 20200127
  */
 if (typeof Composite === "undefined") {
     

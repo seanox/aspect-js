@@ -101,12 +101,12 @@
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1x.0x 20200122
+ *  MVC 1.2.0 20200122
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1x.0x 20200122
+ *  @version 1.2.0 20200122
  */
 if (typeof Path === "undefined") {
     

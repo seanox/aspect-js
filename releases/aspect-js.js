@@ -4,7 +4,7 @@
  *  Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -24,17 +24,17 @@
  *      ----
  *  General extension of the JavaScript API.
  *  
- *  Extension 1.1.0 20191213
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Extension 1.1.1 20200106
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191213
+ *  @version 1.1.1 20200106
  */
 if (typeof Namespace === "undefined") {
 
     /**
-     *  Namespaces at object level.
+     *  Namespace at object level.
      *  Comparable to packages in other programming languages, namespaces can be
      *  used to map hierarchical structures and to group thematically related
      *  components and resources.
@@ -42,18 +42,18 @@ if (typeof Namespace === "undefined") {
      *  This means that it is not a real element of the programming language,
      *  but is represented by chained static objects.
      *  Each level in this object chain represents a namespace.
-     *  As is typical for objects, namespaces use letters, numbers and
-     *  underscores that are separated by dots.
+     *  As is typical for object identifiers, namespaces also use letters,
+     *  numbers, and underscores separated by dots.
      *  As a special feature, arrays are also supported. If an object level in
      *  the namespace is a pure number, an array is assumed.
      */
-    Namespace = {
+    window["Namespace"] = {
             
         /** Pattern for the namespace separator */
-        get PATTERN_NAMESPACE_SEPARATOR() {return /\./},
+        get PATTERN_NAMESPACE_SEPARATOR() {return /\./;},
         
         /** Pattern for a valid namespace. */
-        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*$/i}
+        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*$/i;}
     };
     
     /** 
@@ -180,6 +180,29 @@ if (typeof Namespace === "undefined") {
 
 /**
  *  Enhancement of the JavaScript API
+ *  Modifies the method to support node and nodes as NodeList and Array.
+ *  If the option exclusive is used, existing children will be removed first.
+ *  @param node      node(s)
+ *  @param exclusive existing children will be removed first
+ */
+Element.prototype.appendChild$origin = Element.prototype.appendChild;
+Element.prototype.appendChild = function(node, exclusive) {
+    if (exclusive)
+        this.innerHTML = "";
+    if (node instanceof Node) {
+        this.appendChild$origin(node);
+    } else if (Array.isArray(node)
+            || node instanceof NodeList
+            || (Symbol && Symbol.iterator
+                    && node && typeof node[Symbol.iterator])) {
+        node = Array.from(node);
+        for (var loop = 0; loop < node.length; loop++)
+            this.appendChild$origin(node[loop]);
+    } else this.appendChild$origin(node);
+};
+
+/**
+ *  Enhancement of the JavaScript API
  *  Adds a static function to create a alhpanumeric serial (U)UID with fixed size.
  *  The quality of the ID is dependent of the length.
  *  @param size optional, default is 16
@@ -219,6 +242,22 @@ if (Math.uniqueSerialId === undefined) {
         if (serial.length > size)
             serial = serial.substr(serial.length -size);
         return serial;
+    };
+};
+
+/**
+ *  Enhancement of the JavaScript API
+ *  Creates a literal pattern for the specified text.
+ *  Metacharacters or escape sequences in the text thus lose their meaning.
+ *  @param  text text to be literalized
+ *  @return a literal pattern for the specified text 
+ */
+if (RegExp.quote === undefined) {
+    RegExp.quote = function(text) {
+        if (text == undefined
+                || text == null)
+            return null;
+        return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
 };
 
@@ -367,45 +406,6 @@ if (String.prototype.unescape === undefined) {
 
 /**
  *  Enhancement of the JavaScript API
- *  Modifies the method to support node and nodes as NodeList and Array.
- *  If the option exclusive is used, existing children will be removed first.
- *  @param node      node(s)
- *  @param exclusive existing children will be removed first
- */
-Element.prototype.appendChild$origin = Element.prototype.appendChild;
-Element.prototype.appendChild = function(node, exclusive) {
-    if (exclusive)
-        this.innerHTML = "";
-    if (node instanceof Node) {
-        this.appendChild$origin(node);
-    } else if (Array.isArray(node)
-            || node instanceof NodeList
-            || (Symbol && Symbol.iterator
-                    && node && typeof node[Symbol.iterator])) {
-        node = Array.from(node);
-        for (var loop = 0; loop < node.length; loop++)
-            this.appendChild$origin(node[loop]);
-    } else this.appendChild$origin(node);
-};
-
-/**
- *  Enhancement of the JavaScript API
- *  Creates a literal pattern for the specified text.
- *  Metacharacters or escape sequences in the text thus lose their meaning.
- *  @param  text text to be literalized
- *  @return a literal pattern for the specified text 
- */
-if (RegExp.quote === undefined) {
-    RegExp.quote = function(text) {
-        if (text == undefined
-                || text == null)
-            return null;
-        return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
-    };
-};
-
-/**
- *  Enhancement of the JavaScript API
  *  Adds a property to get the UID for the window instance.
  */  
 if (window.serial === undefined) {
@@ -445,29 +445,39 @@ if (window.location.pathcontext === undefined) {
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2.0 20191226
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  DataSource 1.3.0 20200201
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191226
+ *  @version 1.3.0 20200201
  */
 if (typeof DataSource === "undefined") {
     
     /** Static component for the access and transforming of XML data. */  
-    DataSource = {
+    window["DataSource"] = {
             
         /** Path of the DataSource for: data (sub-directory of work path) */
-        get DATA() {return window.location.pathcontext + "/data"},
+        get DATA() {return window.location.pathcontext + "/data";},
 
-        /** Pattern for a DataSource locators */
-        get PATTERN_LOCATOR() {return /^([a-z]+):\/(\/[\w\-\/]+)$/},
+        /** 
+         *  Pattern for a DataSource locator
+         *  The locator syntax is based on the URL syntax.
+         *  Only the parts schema and path are used.
+         *  A path segment begins with a word character _ a-z 0-9, optionally
+         *  more word characters and additionally - can follow, but can not end
+         *  with the - character. Paths are separated by the / character.
+         */
+        get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;},
         
         /** Pattern to detect JavaScript elements */
-        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i},    
+        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i;},    
+        
+        /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
+        get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
         
         /** Constant for attribute type */
-        get ATTRIBUTE_TYPE() {return "type"},
+        get ATTRIBUTE_TYPE() {return "type";},
         
         /** The currently used language. */
         get locale() {return DataSource.locales ? DataSource.locales.selection : null;}
@@ -484,7 +494,7 @@ if (typeof DataSource === "undefined") {
             clone.appendChild(node);
             return clone; 
         };     
-    };    
+    };
     
     (function() {
 
@@ -500,21 +510,29 @@ if (typeof DataSource === "undefined") {
             value: [],
             enumerable: true
         });        
+        
+        var locale = [];
+        locale = locale.concat(navigator.language);
+        if (typeof navigator.languages !== "undefined")
+            locale = locale.concat(navigator.languages);
+        Array.from(locale).forEach((language) => {
+            language = language.match(/^[a-z]+/i, "");
+            if (language && !locale.includes(language[0]))
+                locale.push(language[0]);
+        });
+        locale = locale.map(language => language.trim().toLowerCase());
+        locale = locale.filter(function(item, index) {
+            return locale.indexOf(item) == index;
+        });
 
-        var locale = (navigator.language || "").trim().toLowerCase();
-        locale = locale.match(/^([a-z]+)/);
-        if (!locale)
+        if (locale.length <= 0)
             throw new Error("Locale not available");
-        DataSource.locales.selection = locale[0];
         
-        var request;
-        request = new XMLHttpRequest();
-        
+        var request = new XMLHttpRequest();
         request.open("HEAD", DataSource.DATA + "/locales.xml", false);
         request.send();
         if (request.status == 404)
             return;
-        
         request.open("GET", DataSource.DATA + "/locales.xml", false);
         request.overrideMimeType("application/xslt+xml");
         request.send();
@@ -545,12 +563,15 @@ if (typeof DataSource === "undefined") {
                 DataSource.locales.push(name);
         }
         
-        locale = DataSource.locale;
-        if (!xml.evaluate("count(/locales/" + locale + ")", xml, null, XPathResult.ANY_TYPE, null).numberValue)
-            locale = DataSource.locales && DataSource.locales.length > 0 ? DataSource.locales[0] : null;
-        if (!locale)
+        if (DataSource.locales.length <= 0)
             throw new Error("Locale not available");
-        DataSource.locales.selection = locale;
+
+        locale.push(DataSource.locales[0]);
+        locale = locale.filter(function(locale) {
+            return DataSource.locales.includes(locale);
+        });  
+        
+        DataSource.locales.selection = locale.length ? locale[0] : DataSource.locales[0];
     })();
     
     /**
@@ -575,22 +596,20 @@ if (typeof DataSource === "undefined") {
             throw new Error("Locale not available");
 
         DataSource.locales.selection = locale;
-    };
+    };    
     
     /**
      *  Transforms an XMLDocument based on a passed stylesheet.
      *  The data and the stylesheet can be passed as Locator, XMLDocument and in
-     *  mix. The result as a node. In some browsers, the XSLTProcessor may
-     *  create a container object, which is removed automatically. With the
-     *  option raw the cleanup can be deactivated.
+     *  mix. The result as a DocumentFragment.
+     *  Optionally, a meta object or a map with parameters for the XSLTProcessor
+     *  can be passed.
      *  @param  xml   locator or XMLDocument
      *  @param  style locator or XMLDocument 
-     *  @param  raw   option in combination with transform
-     *      true returns the complete XML document, otherwise only the root
-     *      entity as node 
-     *  @return the transformation result as a node
+     *  @param  meta  optional parameters for the XSLTProcessor 
+     *  @return the transformation result as a DocumentFragment
      */
-    DataSource.transform = function(xml, style, raw) {
+    DataSource.transform = function(xml, style, meta) {
         
         if (typeof xml === "string"
                 && xml.match(DataSource.PATTERN_LOCATOR))
@@ -607,6 +626,12 @@ if (typeof DataSource === "undefined") {
 
         var processor = new XSLTProcessor();
         processor.importStylesheet(style);
+        if (meta && typeof meta === "object") {
+            var set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
+            for (const [key, value] of set)
+                if (typeof meta[key] !== "function")
+                    processor.setParameter(null, key, value);
+        }
         
         //The escape attribute converts text to HTML.
         //Without the escape attribute, the HTML tag symbols < and > are masked
@@ -617,7 +642,7 @@ if (typeof DataSource === "undefined") {
         //Workaround for some browsers, e.g. MS Edge, if they have problems with
         //!DOCTYPE + !ENTITY. Therefore the document is copied so that the
         //DOCTYPE declaration is omitted.
-        var result = processor.transformToDocument(xml.clone());
+        var result = processor.transformToDocument(xml);
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
@@ -640,33 +665,35 @@ if (typeof DataSource === "undefined") {
                 node.setAttribute("type", "composite/javascript");
         });
         
-        if (arguments.length > 2
-                && !!raw)
-            return result;
-        
+        var nodes = result.childNodes;
         if (result.body)
-            return result.body.childNodes;
-        if (result.firstChild
+            nodes = result.body.childNodes;
+        else if (result.firstChild
                 && result.firstChild.nodeName.match(/^transformiix\b/i))
-            return result.firstChild.childNodes;
-        return result.childNodes;        
+            nodes = result.firstChild.childNodes;
+        var fragment = document.createDocumentFragment();
+        nodes = Array.from(nodes);
+        for (var loop = 0; loop < nodes.length; loop++)
+            fragment.appendChild(nodes[loop]);
+        return fragment;
     }; 
     
     /**
      *  Fetch the data to a locator as XMLDocument.
-     *  Optionally the data can be transformed via XSLT.
+     *  Optionally the data can be transformed via XSLT, for which a meta object
+     *  or a map with parameters for the XSLTProcessor can also be optionally
+     *  passed. When using the transformation, the return type changes to a
+     *  DocumentFragment.
      *  @param  locators  locator
      *  @param  transform locator of the transformation style
      *      With the boolean true, the style is derived from the locator by
      *      using the file extension xslt.
-     *  @param  raw       option in combination with transform
-     *      true returns the complete XML document, otherwise only the root
-     *      entity as node
-     *  @return the fetched data, optionally transformed, as XMLDocument or the
-     *      root entity as a node when the combination transform and raw is used
+     *  @param  meta      optional parameters for the XSLTProcessor
+     *  @return the fetched data as XMLDocument or as DocumentFragment, if the
+     *      transformation is used
      *  @throws Error in the case of invalid arguments
      */    
-    DataSource.fetch = function(locator, transform, raw) {
+    DataSource.fetch = function(locator, transform, meta) {
         
         if (typeof locator !== "string"
                 || !locator.match(DataSource.PATTERN_LOCATOR))
@@ -705,7 +732,7 @@ if (typeof DataSource === "undefined") {
         if (!transform)
             return data.clone();
         
-        var style = locator.replace(/^[a-z]+/i, "xslt");
+        var style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
         if (typeof transform !== "boolean") {
             style = transform;
             if (typeof style !== "string"
@@ -713,7 +740,7 @@ if (typeof DataSource === "undefined") {
                 throw new Error("Invalid style: " + String(style));  
         }
         
-        return DataSource.transform(data, DataSource.fetch(style), raw);
+        return DataSource.transform(data, DataSource.fetch(style), meta);
     };
     
     /**
@@ -737,20 +764,17 @@ if (typeof DataSource === "undefined") {
         if (arguments.length == 2
                 && typeof arguments[0] === "string"
                 && Array.isArray(arguments[1])) {
-            if (!arguments[0].match(/[a-z]\w+/i))
+            if (!arguments[0].match(DataSource.PATTERN_WORD))
                 throw new TypeError("Invalid collector");
             collector = arguments[0];
-            collection = collection.concat(arguments[1]);
+            collection = Array.from(arguments[1]);
         } else if (arguments.length == 1
                 && Array.isArray(arguments[0])) {
             collection = collection.concat(arguments[0]);
-        } else {
-            for (var loop = 0; loop < arguments.length; loop++)
-                collection.push(arguments[loop]);
-        }
+        } else collection = Array.from(arguments);
         
         DataSource.cache = DataSource.cache || {};
-        var hash = collection.join().hashCode();
+        var hash = collector.hashCode() + ":" + collection.join().hashCode();
         collection.forEach((entry) => {
             hash += ":" + String(entry).hashCode();
         });
@@ -760,7 +784,7 @@ if (typeof DataSource === "undefined") {
         var root = document.implementation.createDocument(null, collector, null, null);
         collection.forEach((entry) => {
             if (typeof entry !== "string")
-                throw TypeError("Invalid collection entry");
+                throw new TypeError("Invalid collection entry");
             root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
         });
 
@@ -814,12 +838,12 @@ if (typeof DataSource === "undefined") {
  *      
  *  <h1 output="{{Messages['contact.title']}}"/>
  *  
- *  Messages 1.2.0 20191219
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Messages 1.2.1 20200106
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191219
+ *  @version 1.2.1 20200106
  */
 if (typeof Messages === "undefined") {
     
@@ -828,7 +852,7 @@ if (typeof Messages === "undefined") {
      *  internationalization. The implementation is based on a set of key-value
      *  or label-value data.
      */
-    Messages = {};
+    window["Messages"] = {};
     
     (function() {
 
@@ -880,27 +904,32 @@ if (typeof Messages === "undefined") {
  *      
  *          namespace
  *          ----
- *  The namespace is a sequence of characters or words consisting of letters,
- *  numbers, and underscores that describes the path in an object tree. The dot
- *  is used as a separator, it defines the boundary from one level to the next
- *  in the object tree. Each element in the namespace must contain at least one
- *  character ans begin with a letter.
+ *  Comparable to packages in other programming languages, namespaces can be
+ *  used to map hierarchical structures and to group thematically related
+ *  components and resources.
+ *  The implementation happens in JavaScript at object level.
+ *  This means that it is not a real element of the programming language, but is
+ *  represented by chained static objects. Each level in this object chain
+ *  represents a namespace.
+ *  As is typical for object identifiers, namespaces also use letters, numbers,
+ *  and underscores separated by dots. As a special feature, arrays are also
+ *  supported. If an object level in the namespace is a pure number, an array is
+ *  assumed.
  *  
  *          scope
  *          ----
- *  The scope is based on namespace and represents it on the object level. Means
- *  the namespace is the description text, the scope is the result if the 
+ *  The scope is based on namespace and represents it on the object level.
+ *  Means the namespace is the description text, the scope is the object if the
  *  namespace was resolved in the object tree.
  *  
  *          model
  *          ----
  *  The model (model component / component) is a static JavaScript object in any
  *  namespace and provides the logic for the user interface (UI component) and
- *  the transition from user interface to business logic and/or the backend. The
- *  linking and/or binding of markup and JavaSchript model is done by the
- *  Composite-API. For this purpose, an HTML element must be marked with the
- *  attribute `composite` and have a valid Composite-ID. The Composite-ID must
- *  meet the requirements of the namespace.
+ *  the transition from user interface to business logic and/or the backend.
+ *  The linking and/or binding of markup and JavaSchript model is done by the
+ *  Composite-API. For this purpose, an HTML element must have a valid and
+ *  unique ID. The ID must meet the requirements of the namespace.
  *  
  *          property
  *          ----
@@ -915,21 +944,21 @@ if (typeof Messages === "undefined") {
  *  where properties are arrays or an iteration is used. In these cases the
  *  identifier can be extended by an additional unique qualifier separated by a
  *  colon.
- *  Qualifiers are ignored during object/model binding.
+ *  Qualifiers behave like properties during object/model binding and extend the
+ *  namespace.
  *  
  *          composite
  *          ----
- *  Composite describes the construct of markup, JavaScript model, and possibly
- *  existing module resources. It describes a component/module without direct
- *  reference to a concrete perspective.
+ *  Composite describes a construct of markup, JavaScript model, CSS and
+ *  possibly other resources. It describes a component/module without direct
+ *  relation to the representation.
  *  
  *          composite-id
  *          ----
- *  The Composite-ID is an application-wide unique identifier.
- *  It is a sequence of characters or words consisting of letters, numbers, and
- *  underscores that contains at least one character, begins with a letter, and
- *  ends with a letter or number. A Composite-ID is formed by combining the
- *  attributes `ID` and `composite`.
+ *  It is a character sequence consisting of letters, numbers and underscores
+ *  and optionally supports the minus sign if it is not used at the beginning or
+ *  end. A composite ID is at least one character long and is composed by
+ *  combining the attributes ID and composite.
  *  
  *  
  *      PRINCIPLES
@@ -955,12 +984,12 @@ if (typeof Messages === "undefined") {
  *  Thus virtual paths, object structure in JavaScript (namespace) and the
  *  nesting of the DOM must match.
  *
- *  Composite 1.2.0 20191227
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Composite 1.3.0 20200127
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2.0 20191227
+ *  @version 1.3.0 20200127
  */
 if (typeof Composite === "undefined") {
     
@@ -969,61 +998,61 @@ if (typeof Composite === "undefined") {
      *  The processing runs in the background and starts automatically when a
      *  page is loaded.
      */
-    Composite = {
+    window["Composite"] = {
             
         /** Path of the Composite for: moduels (sub-directory of work path) */
-        get MODULES() {return window.location.pathcontext + "/modules"},
+        get MODULES() {return window.location.pathcontext + "/modules";},
 
         /** Constant for attribute composite */
-        get ATTRIBUTE_COMPOSITE() {return "composite"},
+        get ATTRIBUTE_COMPOSITE() {return "composite";},
         
         /** Constant for attribute condition */
-        get ATTRIBUTE_CONDITION() {return "condition"},
+        get ATTRIBUTE_CONDITION() {return "condition";},
 
         /** Constant for attribute events */
-        get ATTRIBUTE_EVENTS() {return "events"},
+        get ATTRIBUTE_EVENTS() {return "events";},
 
         /** Constant for attribute id */
-        get ATTRIBUTE_ID() {return "id"},
+        get ATTRIBUTE_ID() {return "id";},
         
         /** Constant for attribute import */
-        get ATTRIBUTE_IMPORT() {return "import"},
+        get ATTRIBUTE_IMPORT() {return "import";},
 
         /** Constant for attribute interval */
-        get ATTRIBUTE_INTERVAL() {return "interval"},
+        get ATTRIBUTE_INTERVAL() {return "interval";},
 
         /** Constant for attribute iterate */
-        get ATTRIBUTE_ITERATE() {return "iterate"},
+        get ATTRIBUTE_ITERATE() {return "iterate";},
 
         /** Constant for attribute message */
-        get ATTRIBUTE_MESSAGE() {return "message"},
+        get ATTRIBUTE_MESSAGE() {return "message";},
         
         /** Constant for attribute notification */
-        get ATTRIBUTE_NOTIFICATION() {return "notification"},
+        get ATTRIBUTE_NOTIFICATION() {return "notification";},
 
         /** Constant for attribute name */
-        get ATTRIBUTE_NAME() {return "name"},
+        get ATTRIBUTE_NAME() {return "name";},
 
         /** Constant for attribute output */
-        get ATTRIBUTE_OUTPUT() {return "output"},
+        get ATTRIBUTE_OUTPUT() {return "output";},
         
         /** Constant for attribute render */
-        get ATTRIBUTE_RENDER() {return "render"},  
+        get ATTRIBUTE_RENDER() {return "render";},  
         
         /** Constant for attribute release */
-        get ATTRIBUTE_RELEASE() {return "release"},
+        get ATTRIBUTE_RELEASE() {return "release";},
         
         /** Constant for attribute text */
-        get ATTRIBUTE_TEXT() {return "text"},
+        get ATTRIBUTE_TEXT() {return "text";},
 
         /** Constant for attribute type */
-        get ATTRIBUTE_TYPE() {return "type"},
+        get ATTRIBUTE_TYPE() {return "type";},
         
         /** Constant for attribute validate */
-        get ATTRIBUTE_VALIDATE() {return "validate"},
+        get ATTRIBUTE_VALIDATE() {return "validate";},
         
         /** Constant for attribute value */
-        get ATTRIBUTE_VALUE() {return "value"},
+        get ATTRIBUTE_VALUE() {return "value";},
 
         /**
          *  Pattern for all accepted attributes.
@@ -1031,7 +1060,7 @@ if (typeof Composite === "undefined") {
          *  that is cached in the meta object. Other attributes are only cached
          *  if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i;},
         
         /**
          *  Pattern for all static attributes.
@@ -1040,34 +1069,37 @@ if (typeof Composite === "undefined") {
          *  These attributes are also intended for direct use in JavaScript and
          *  CSS.
          */
-        get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i},
+        get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i;},
 
         /** 
          *  Pattern to detect if a string contains an expression.
          *  Escaping characters via slash is supported.
          */
-        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}/g},   
-        
+        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{.*?\}\}/g;}, 
+
         /**
-         *  Patterns to test whether an expression is exclusive, i.e. an
-         *  expression without additional text fragments before or after.
-         *  The test based on the check that the text has an expression (group1)
-         *  and at the end no more literal or other expressions (group 2) exist.
+         *  Patterns for condition expressions.
+         *  Conditions are explicitly a single expression and not a variable
+         *  expression.
          */
-        get PATTERN_EXPRESSION_EXCLUSIVE() {return /^\s*\{\{((?:(?:.*?[^\\](?:\\\\)*)|(?:(?:\\\\)*))*?)\}\}\s*(.*)$/},
-        
+        get PATTERN_EXPRESSION_CONDITION() {return /^\s*\{\{\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i;},
+
         /**
          *  Patterns for expressions with variable.
+         *  Variables are at the beginning of the expression and are separated
+         *  from the expression by a colon. The variable name must conform to
+         *  the usual JavaScript conditions and starts with _ or a letter, other
+         *  word characters (_ 0-9 a-z A-Z) may follow.
          *      group 1: variable
          *      group 2: expression
          */
-        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*(_*[a-z]\w*)\s*:\s*(.*?)\s*$/i},    
-
+        get PATTERN_EXPRESSION_VARIABLE() {return /^\s*\{\{\s*((?:(?:_*[a-z])|(?:_\w*))\w*)\s*:\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i;},
+        
         /** Pattern for all to ignore (script-)elements */
-        get PATTERN_ELEMENT_IGNORE() {return /script|style/i},
+        get PATTERN_ELEMENT_IGNORE() {return /script|style/i;},
 
         /** Pattern for all script elements */
-        get PATTERN_SCRIPT() {return /script/i},
+        get PATTERN_SCRIPT() {return /script/i;},
 
         /** 
          *  Pattern for all composite-script elements.
@@ -1075,55 +1107,55 @@ if (typeof Composite === "undefined") {
          *  must be triggered by rendering. Therefore, these scripts can be
          *  combined and controlled with the condition attribute.
          */
-        get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i},
+        get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
-        /** Pattern for a composite id */
-        get PATTERN_COMPOSITE_ID() {return /^[a-z]\w*$/i},
+        /** Pattern for a composite id (based on a word) */
+        get PATTERN_COMPOSITE_ID() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
 
-        /**
-         *  Pattern for a element id
+        /** 
+         *  Pattern for a element id (e.g. name:qualifier...)
          *      group 1: name
-         *      group 2: qualifier (optional)
+         *      group 2: qualifier(s) (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^([a-z]\w*)(?:\:((?:\w*)(?:\:\w*)*)){0,1}$/i},
+        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:(((((\w+\-+(?=\w))+)\w*)|(\w+))))*)$/;},
         
-        /** Pattern for a scope (namespace) */
-        get PATTERN_CUSTOMIZE_SCOPE() {return /^[a-z](?:(?:\w*)|([\-\w]*\w))$/i},
+        /** Pattern for a scope (custom tag, based on a word) */
+        get PATTERN_CUSTOMIZE_SCOPE() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
         
         /** Pattern for the namespace separator */
-        get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g},
+        get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g;},
         
         /** Pattern for a valid namespace. */
-        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*(\:\w+)*$/i},
+        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*(\:\w+)*$/i;},
         
         /** Pattern for a datasource url */
-        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i},
+        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i;},
 
         /** Pattern for all accepted events */
-        get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/},
+        get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/;},
         
         /** Constants of events during rendering */
-        get EVENT_RENDER_START() {return "RenderStart"},
-        get EVENT_RENDER_NEXT() {return "RenderNext"},
-        get EVENT_RENDER_END() {return "RenderEnd"},
+        get EVENT_RENDER_START() {return "RenderStart";},
+        get EVENT_RENDER_NEXT() {return "RenderNext";},
+        get EVENT_RENDER_END() {return "RenderEnd";},
 
         /** Constants of events during mounting */
-        get EVENT_MOUNT_START() {return "MountStart"},
-        get EVENT_MOUNT_NEXT() {return "MountNext"},
-        get EVENT_MOUNT_END() {return "MountEnd"},
+        get EVENT_MOUNT_START() {return "MountStart";},
+        get EVENT_MOUNT_NEXT() {return "MountNext";},
+        get EVENT_MOUNT_END() {return "MountEnd";},
 
-        /** Constants of events when using AJAX */
-        get EVENT_AJAX_START() {return "AjaxStart"},
-        get EVENT_AJAX_PROGRESS() {return "AjaxProgress"},
-        get EVENT_AJAX_RECEIVE() {return "AjaxReceive"},
-        get EVENT_AJAX_LOAD() {return "AjaxLoad"},
-        get EVENT_AJAX_ABORT() {return "AjaxAbort"},
-        get EVENT_AJAX_TIMEOUT() {return "AjaxTimeout"},
-        get EVENT_AJAX_ERROR() {return "AjaxError"},
-        get EVENT_AJAX_END() {return "AjaxEnd"},
+        /** Constants of events when using HTTP */
+        get EVENT_HTTP_START() {return "HttpStart";},
+        get EVENT_HTTP_PROGRESS() {return "HttpProgress";},
+        get EVENT_HTTP_RECEIVE() {return "HttpReceive";},
+        get EVENT_HTTP_LOAD() {return "HttpLoad";},
+        get EVENT_HTTP_ABORT() {return "HttpAbort";},
+        get EVENT_HTTP_TIMEOUT() {return "HttpTimeout";},
+        get EVENT_HTTP_ERROR() {return "HttpError";},
+        get EVENT_HTTP_END() {return "HttpEnd";},
 
         /** Constants of events when errors occur */
-        get EVENT_ERROR() {return "Error"},
+        get EVENT_ERROR() {return "Error";},
         
         /** 
          *  List of possible DOM events
@@ -1147,7 +1179,7 @@ if (typeof Composite === "undefined") {
                 + " time|update toggle touch|cancel touch|end touch|move touch|start transition|end"
                 + " unload"
                 + " volume|change"
-                + " waiting wheel"},
+                + " waiting wheel";},
         
         /** Patterns with the supported events */
         get PATTERN_EVENT_FUNCTIONS() {return (function() {
@@ -1156,21 +1188,21 @@ if (typeof Composite === "undefined") {
             });
             pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
             return pattern;
-        })()},
+        })();},
         
         /** Patterns with the supported events as plain array */
         get PATTERN_EVENT_NAMES() {return (function() {
             return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).split(/\s+/);
-        })()},
+        })();},
         
         /** Patterns with the supported events as plain array (lower case) */
         get PATTERN_EVENT_FILTER() {return (function() {
             return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).toLowerCase().split(/\s+/);
-        })()}        
+        })();}        
     };
     
     /**
@@ -1477,23 +1509,23 @@ if (typeof Composite === "undefined") {
             if (!event)
                 return;
             if (event.type == "loadstart")
-                event = Composite.EVENT_AJAX_START;
+                event = [Composite.EVENT_HTTP_START, event];
             else if (event.type == "progress")
-                event = Composite.EVENT_AJAX_PROGRESS; 
+                event = [Composite.EVENT_HTTP_PROGRESS, event]; 
             else if (event.type == "readystatechange")
-                event = Composite.EVENT_AJAX_RECEIVE; 
+                event = [Composite.EVENT_HTTP_RECEIVE, event]; 
             else if (event.type == "load")
-                event = Composite.EVENT_AJAX_LOAD; 
+                event = [Composite.EVENT_HTTP_LOAD, event]; 
             else if (event.type == "abort")
-                event = Composite.EVENT_AJAX_ABORT; 
+                event = [Composite.EVENT_HTTP_ABORT, event]; 
             else if (event.type == "error")
-                event = Composite.EVENT_AJAX_ERROR;   
+                event = [Composite.EVENT_HTTP_ERROR, event];   
             else if (event.type == "timeout")
-                event = Composite.EVENT_AJAX_TIMEOUT;   
+                event = [Composite.EVENT_HTTP_TIMEOUT, event];   
             else if (event.type == "loadend")
-                event = Composite.EVENT_AJAX_END; 
+                event = [Composite.EVENT_HTTP_END, event]; 
             else return;
-            Composite.fire(event, arguments); 
+            Composite.fire(...event); 
         };
         
         if (typeof this.open$init === "undefined") {
@@ -1607,7 +1639,7 @@ if (typeof Composite === "undefined") {
      *          undefined/void
      *          ----
      *  The validation failed; an error is displayed.
-     *  A return value indicates that the default action of the browser should
+     *  No return value indicates that the default action of the browser should
      *  nevertheless be executed. This behavior is important e.g. for the
      *  validation of input fields, so that the input reaches the user
      *  interface. In this case, a possible value is not synchronized with the
@@ -1935,13 +1967,26 @@ if (typeof Composite === "undefined") {
                         model = meta.property;
                     else model = null;
 
-                for (var event in model)
-                    if (typeof model[event] === "function"
-                            && event.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
-                        event = event.substring(2).toLowerCase();
-                        if (!events.includes(event))
-                            events.push(event);
+                for (var entry in model)
+                    if (typeof model[entry] === "function"
+                            && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                        entry = entry.substring(2).toLowerCase();
+                        if (!events.includes(entry))
+                            events.push(entry);
                     }
+
+                var prototype = model ? Object.getPrototypeOf(model) : null;
+                while (prototype) {
+                    Object.getOwnPropertyNames(prototype).forEach(entry => {
+                        if (typeof model[entry] === "function"
+                                && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                            entry = entry.substring(2).toLowerCase();
+                            if (!events.includes(entry))
+                                events.push(entry);
+                        }
+                    });
+                    prototype = Object.getPrototypeOf(prototype);
+                }
             }
 
             //The determined events are registered.
@@ -2135,7 +2180,7 @@ if (typeof Composite === "undefined") {
             if (serial[1])
                 meta.property = serial[1];
             if (serial[2])
-                meta.name = serial[2];
+                meta.name = serial[2].replace(/(^:+)|(:+$)/g , "");
         }
 
         for (var scope = element.parentNode; scope; scope = scope.parentNode) {
@@ -2482,11 +2527,14 @@ if (typeof Composite === "undefined") {
      *      Condition
      *      ----
      *  The declaration can be used with all HTML elements, but not with script
-     *  and style. The condition defines whether an element is (re)rendered or
-     *  not. As result of the expression true/false is expected and will be se
-     *  as an absolute value for the condition attribute - only true or false.
-     *  Elements are hidden with the condition attribute via CSS and only
-     *  explicitly displayed with [condition=true].
+     *  and style. The condition defines whether an element exists in the DOM or
+     *  not. An expression is expected that explicitly returns true. Only then
+     *  will the element exist in the DOM. With all other return values, the
+     *  element is removed from the DOM. The condition is validated with each
+     *  render cycle that includes the element. Thus, elements that are removed
+     *  are also reinserted into the DOM.
+     *  Invalid or incorrect expressions behave like not true and cause a
+     *  console error output.
      *  JavaScript (composite/javascript) elements are executed or not.     
      *      
      *      Import
@@ -2533,7 +2581,9 @@ if (typeof Composite === "undefined") {
      *  and the result is added to the inner HTML.
      *  The expression for the iteration is a parameter expression. The
      *  parameter is a meta object and supports access to the iteration cycle.
-     *      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}
+     *      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data
+     *  Invalid or incorrect expressions behave like an empty iterator and cause
+     *  a console error output.   
      *      
      *      Release
      *      ----
@@ -2555,7 +2605,6 @@ if (typeof Composite === "undefined") {
      *  executes it in each render cycle when the cycle includes the script
      *  element. In this way, the execution of the script element can also be
      *  combined with the attribute condition.
-     *  Embedded scripts must be 'ThreadSafe'.
      *  
      *      Custom Tag (Macro)
      *      ----
@@ -2896,8 +2945,7 @@ if (typeof Composite === "undefined") {
                     //later, but do not generate any output.
                     
                     content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match, offset, content) => {
-                        match = match.substring(2, match.length -2).trim();
-                        if (!match)
+                        if (!match.substring(2, match.length -2).trim())
                             return "";
                         var node = document.createTextNode("");
                         var serial = node.ordinal();
@@ -2915,11 +2963,11 @@ if (typeof Composite === "undefined") {
                                 this.value = word;
                                 this.element.textContent = word;
                             }};
-                        var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
-                        if (param) {
-                            object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
-                            object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
-                        } else object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + match + "}}";
+                            var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                            if (param) {
+                                object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
+                                object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
+                            } else object.attributes[Composite.ATTRIBUTE_VALUE] = match; 
                         Composite.render.meta[serial] = object; 
                         return "{{" + serial + "}}";
                     });
@@ -3053,11 +3101,13 @@ if (typeof Composite === "undefined") {
                 //placeholder and output rendering must be performed. Both are
                 //only taken over by the placeholder. It decides whether the
                 //output has to be added, updated or removed in the DOM and does
-                //so. The goal is that a conditon consists of two parts. Both
+                //so. The goal is that a condition consists of two parts. Both
                 //parts are checked and rendered, but the expression(s) are
                 //called only once in one render cycle.
 
-                if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
+                if (placeholder.condition
+                        && placeholder.condition.match(Composite.PATTERN_EXPRESSION_CONDITION)
+                        && Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
                     
                     //Load modules/components/composite resources.
                     //Composites with condition are only loaded with the first use.                    
@@ -3130,6 +3180,10 @@ if (typeof Composite === "undefined") {
                     object = Composite.render.meta[serial];
                     
                 } else {
+                    
+                    var condition = (placeholder.condition || "").trim();
+                    if (!condition.match(Composite.PATTERN_EXPRESSION_CONDITION))
+                        console.error("Invalid condition" + (condition ? ": " + condition : ""));
                     
                     //The output is removed from the DOM because the condition
                     //is not explicitly true.
@@ -3210,7 +3264,7 @@ if (typeof Composite === "undefined") {
                             request.open("GET", url, false);
                             request.send();
                             if (request.status != "200")
-                                throw Error("HTTP status " + request.status + " for " + url);
+                                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
                             var content = request.responseText.trim();
                             Composite.render.cache[request.responseURL] = content;
                             selector.innerHTML = content;
@@ -3218,7 +3272,7 @@ if (typeof Composite === "undefined") {
                             var object = Composite.render.meta[serial];
                             delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                         } catch (error) {
-                            Composite.fire(Composite.EVENT_AJAX_ERROR, error);
+                            Composite.fire(Composite.EVENT_HTTP_ERROR, error);
                             throw error;
                         } finally {
                             lock.release();
@@ -3326,8 +3380,7 @@ if (typeof Composite === "undefined") {
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
                     var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
-                    var content = iterate.match(Composite.PATTERN_EXPRESSION_EXCLUSIVE);
-                    content = content && !content[2] ? content[1].match(Composite.PATTERN_EXPRESSION_VARIABLE) : null;
+                    var content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                     if (content) {
                         object.iterate = {name:content[1].trim(),
                                 expression:"{{" + content[2].trim() + "}}"
@@ -3444,11 +3497,10 @@ if (typeof Composite === "undefined") {
             //cycle when the cycle includes the script element. In this way, the
             //execution of the script element can also be combined with the
             //attribute condition.
-            //Embedded scripts must be 'ThreadSafe'.
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                 var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
-                    try {eval(selector.textContent);
+                    try {Composite.render.include.eval(selector.textContent);
                     } catch (exception) {
                         console.error("Composite JavaScript", exception);
                     }
@@ -3529,85 +3581,131 @@ if (typeof Composite === "undefined") {
             }
             return;
         }
-        
+
         Composite.render.cache[context + ".composite"] = null;
-        var request = new XMLHttpRequest();
-        request.overrideMimeType("text/plain");
-        request.onreadystatechange = () => {
-            if (request.readyState != 4
-                    || request.status == "404")
+
+        //Internal method for loading a composite resource.
+        //Supports CSS, JS and HTML.
+        var loading = (resource) => {
+            var request = new XMLHttpRequest();
+            request.overrideMimeType("text/plain"); 
+
+            //At first, HEAD is used to check if the resource exists.
+            //A HEAD before the GET appeared more friendly than a hard GET with
+            //errors. It costs one request more and has no benefit.
+            //Only server states 200 and 404 are supported, all others will
+            //cause an error.
+            request.open("HEAD", resource, false);
+            request.send();
+            if (request.status == 404)
                 return;
             if (request.status != "200")
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
-            
+
+            //If the resource exists it will be loaded.
+            //Only server states 200 and 404 are supported, all others will
+            //cause an error.
+            request.open("GET", resource, false);
+            request.send();
+            if (request.status == 404)
+                return;
+            if (request.status != "200")
+                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+
             //CSS is inserted into the HEad element as a style element.
             //Without a head element, the inserting causes an error.
 
-            //JavaScript is not inserted as an element, it is executed directly.
-            //For this purpose eval is used. Since the method may form its own
-            //namespace for variables, it is important to initialize the global
-            //variable better with window[...].
+            //JavaScript is not inserted as an element, it is executed
+            //directly. For this purpose eval is used. Since the method may form
+            //its own namespace for variables, it is important to initialize
+            //the global variable better with window[...].
             
             //HTML/Markup is preloaded into the render cache if available.
             //If markup exists for the composite, the import attribute with the
             //URL is added to the item. Inserting then takes over the import
             //implementation, which then also accesses the render cache.
-            
-            var content = request.responseText.trim();
-            if (content) {
-                var url = document.createElement("a");
-                url.href = request.responseURL;
-                Composite.render.cache[url.pathname] = content;
-                if (request.responseURL.match(/\.css$/)) {
-                    var head = document.querySelector("html head");
-                    if (!head)
-                        throw new Error("No head element found");
-                    var style = document.createElement("style");
-                    style.setAttribute("type", "text/css");
-                    style.textContent = content;
-                    head.appendChild(style);
-                } else if (request.responseURL.match(/\.js$/)) {
-                    try {eval(content);
-                    } catch (exception) {
-                        console.error(request.responseURL, exception.name + ": " + exception.message);
-                        throw exception;
-                    }
-                } else if (request.responseURL.match(/\.html$/)) {
-                    if (composite instanceof Element)
-                        composite.innerHTML = content;
-                }
-            }
-        };
 
+            var content = request.responseText.trim();
+            if (!content)
+                return;
+            var url = document.createElement("a");
+            url.href = request.responseURL;
+            Composite.render.cache[url.pathname] = content;
+            if (request.responseURL.match(/\.css$/)) {
+                var head = document.querySelector("html head");
+                if (!head)
+                    throw new Error("No head element found");
+                var style = document.createElement("style");
+                style.setAttribute("type", "text/css");
+                style.textContent = content;
+                head.appendChild(style);
+            } else if (request.responseURL.match(/\.js$/)) {
+                try {Composite.render.include.eval(content);
+                } catch (exception) {
+                    console.error(request.responseURL, exception.name + ": " + exception.message);
+                    throw exception;
+                }
+            } else if (request.responseURL.match(/\.html$/)) {
+                if (composite instanceof Element)
+                    composite.innerHTML = content;
+            }
+        }
+        
         //The sequence of loading is strictly defined.
         //    sequence: CSS, JS, HTML
-        request.open("HEAD", context + ".css", false);
-        request.send();
-        if (request.status != 404) {
-            request.open("GET", context + ".css", false);
-            request.send();
-        }
-        request.open("HEAD", context + ".js", false);
-        request.send();
-        if (request.status != 404) {
-            request.open("GET", context + ".js", false);
-            request.send();
-        }
+        loading(context + ".css");
+        loading(context + ".js");
         
         //HTML/Markup is only loaded if it is a known composite object and the
         //element does not contain a markup (inner HTML) and the attributes
         //import and output are not set. Thus is the assumption that for an
         //empty element outsourced markup should exist.
-        if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+        if (object
+                && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                 && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                && !composite.innerHTML.trim()) {
-            request.open("HEAD", context + ".html", false);
-            request.send();
-            if (request.status != 404) {
-                request.open("GET", context + ".html", false);
-                request.send();
-            }
+                && !composite.innerHTML.trim())
+            loading(context + ".html");
+    };
+
+    /**
+     *  Executes the import of JavaScript und Composite JavaScript.
+     *  As a special feature, Composite JavaScript supports meta-directives.
+     *  
+     *      #import
+     *      ----
+     *  Expects a space-separated list of composite modules whose path must be
+     *  relative to the URL. 
+     *  
+     *  Composite modules consist of the optional resources CSS, JS and HTML.
+     *  The #import meta-directive can only load CSS and JS.
+     *  The behavior is the same as when loading composites in the markup. The
+     *  server status 404 does not cause an error, because all resources of a
+     *  composite are optional, also JavaScript. Server states other than 200
+     *  and 404 cause an error. CSS resources are added to the HEAD and lead to
+     *  an error if no HEAD element exists in the DOM. Markup (HTML) is not
+     *  loaded because no target can be set for the output.
+     *  The meta directive can be used multiple times in the meta section of a
+     *  Composite JavaScript.    
+     *  
+     *  Meta directives can be used only at the beginning of the composite
+     *  JavaScript. The meta-section ends with the first comment or JavaScript
+     *  line.
+     */
+    Composite.render.include.eval = function(script) {
+        
+        script = script.split(/[\r\n]+/);
+        while (script && script.length > 0) {
+            if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
+                break;
+            var line = script.shift().replace(/^\s*#import(\s+|$)/, "");
+            line.split(/\s+/).forEach((include) => {
+                if (include)
+                    Composite.render.include(include);
+            });
         }
+        script = script.join("\r\n").trim();
+        if (script)
+            eval(script);
     };
 
     //Listener when an error occurs and triggers a matching composite-event.
@@ -3635,7 +3733,14 @@ if (typeof Composite === "undefined") {
             style.innerHTML = "*[release] {display:none!important;}";
             document.querySelector("html head").appendChild(style);
         }
-    
+        
+        //Initially the common-module is loaded.
+        //The common-module is similar to an autostart, it is used to initialize
+        //the single page application. It consists of common.js and common.css.
+        //The configuration of the SiteMap and essential styles can/should be
+        //stored here.
+        Composite.render.include("common");
+        
         (new MutationObserver((records) => {
             records.forEach((record) => {
 
@@ -3717,7 +3822,9 @@ if (typeof Composite === "undefined") {
                 //after the rendering with obsolete nodes.
                 if (record.addedNodes) {
                     record.addedNodes.forEach((node) => {
-                        if (node instanceof Element
+                        if ((node instanceof Element
+                                || (node instanceof Node
+                                        && node.nodeType == Node.TEXT_NODE))
                                 && !Composite.render.meta[node.ordinal()]
                                 && document.body.contains(node))
                             Composite.render(node);
@@ -3786,34 +3893,34 @@ if (typeof Expression === "undefined") {
      *  complete markup as free text. and in all attributes. Only the STYLE and
      *  SCRIPT, here the Expression Language is not supported.
      */
-    Expression = {
+    window["Expression"] = {
             
         /** Constant for element type text */
-        get TYPE_TEXT() {return 1},
+        get TYPE_TEXT() {return 1;},
         
         /** Constant for element type expression */
-        get TYPE_EXPRESSION() {return 2},
+        get TYPE_EXPRESSION() {return 2;},
         
         /** Constant for element type literal */
-        get TYPE_LITERAL() {return 3},
+        get TYPE_LITERAL() {return 3;},
         
         /** Constant for element type script */
-        get TYPE_SCRIPT() {return 4},
+        get TYPE_SCRIPT() {return 4;},
         
         /** Constant for element type keyword */
-        get TYPE_KEYWORD() {return 5},
+        get TYPE_KEYWORD() {return 5;},
         
         /** Constant for element type other */
-        get TYPE_OTHER() {return 6},
+        get TYPE_OTHER() {return 6;},
         
         /** Constant for element type method */
-        get TYPE_METHOD() {return 7},
+        get TYPE_METHOD() {return 7;},
         
         /** Constant for element type value */
-        get TYPE_VALUE() {return 8},
+        get TYPE_VALUE() {return 8;},
         
         /** Constant for element type logic */
-        get TYPE_LOGIC() {return 9}
+        get TYPE_LOGIC() {return 9;}
     };
     
     //Expression.cache
@@ -3980,22 +4087,21 @@ if (typeof Expression === "undefined") {
         //Separation of expressions in literal and script as partial words.
         //The expression objects are retained but their value changes from text
         //to array with literal and script as partial words.
+        //It was difficult to control the missed quotation marks ('/").
+        //Replacing them with Unicode notation was the easiest way. 
+        //All other attempts used wild masking and unmasking.
 
         cascade.expression.forEach((entry) => {
             var text = entry.data;
-            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\'])/g, "$1\n$2\n");
-            text = text.replace(/(^|[^\\])((?:\\{2})*\\[\"])/g, "$1\r$2\r");
+            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\'])/g, "$1$2\\u0027");
+            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\"])/g, "$1$2\\u0022");
             var words = [];
             var pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
                 text = text.replace(pattern, (match, script, literal) => {
-                    script = script.replace(/\n/g, "\'");
-                    script = script.replace(/\r/g, "\"");
                     script = {type:Expression.TYPE_SCRIPT, data:script};
                     collate(script);
                     words.push(script);
-                    literal = literal.replace(/\n/g, "\'");
-                    literal = literal.replace(/\r/g, "\"");
                     literal = {type:Expression.TYPE_LITERAL, data:literal};
                     collate(literal);
                     words.push(literal);
@@ -4003,8 +4109,6 @@ if (typeof Expression === "undefined") {
                 });
             }
             if (text.length > 0) {
-                text = text.replace(/\n/g, "\'");
-                text = text.replace(/\r/g, "\"");
                 text = {type:Expression.TYPE_SCRIPT, data:text};
                 collate(text);
                 words.push(text);
@@ -4249,16 +4353,16 @@ if (typeof Expression === "undefined") {
  *  controlled and influenced. This way, the access to paths can be stopped
  *  and/or redirected/forwarded with own logic. 
  *  
- *  The Object-/Model-Binding part also belongs to the Model View Controller and
+ *  The object/model-binding part also belongs to the Model View Controller and
  *  is taken over by the Composite API in this implementation. SiteMap is an
  *  extension and is based on the Composite API.
  *  
- *  MVC 1.1.0 20191227
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  MVC 1.2.0 20200122
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191227
+ *  @version 1.2.0 20200122
  */
 if (typeof Path === "undefined") {
     
@@ -4268,25 +4372,31 @@ if (typeof Path === "undefined") {
      *  face, a facet or a function.
      *  For more details see method Path.normalize(variants).
      */    
-    Path = {
+    window["Path"] = {
             
-        /** Pattern for a valid path. */
-        get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/},
+        /** 
+         *  Pattern for a valid path.
+         *  The syntax of the path is based on XML entities (DOM).
+         *  A path segment begins with a word character _ a-z 0-9, optionally
+         *  more word characters and additionally - can follow, but can not end
+         *  with the - character. Paths are separated by the # character.
+         */
+        get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/;},
     
         /** Pattern for a url path. */
-        get PATTERN_URL() {return /^[a-z]+:\/.*?(#.*)*$/i},
+        get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i;},
     
         /** Pattern for a functional path. */
-        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/}
+        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/;}
     };
     
     /**
      *  Normalizes a path.
      *  Paths consist exclusively of word characters and underscores (based on
-     *  composite IDs) and must begin with a letter and use the hash character
-     *  as separator and root. Between the path segments, the hash character can
-     *  also be used as a back jump (parent) directive. The back jump then
-     *  corresponds to the number of additional hash characters.
+     *  composite IDs) and must begin with a word character and use the hash
+     *  character as separator and root. Between the path segments, the hash
+     *  character can also be used as a back jump (parent) directive. The back
+     *  jump then corresponds to the number of additional hash characters.
      *  
      *      Note:
      *  Paths use lowercase letters. Upper case letters are automatically
@@ -4446,30 +4556,30 @@ if (typeof SiteMap === "undefined") {
      *  controlled and influenced. This way, the access to paths can be stopped
      *  and/or redirected/forwarded with own logic. 
      */
-    SiteMap = {
+    window["SiteMap"] = {
            
         /** 
          *  Pattern for a valid face path:
-         *      - Paths and path segments must always begin with a letter
-         *      - Allowed are the characters a-z _ 0-9 and -
+         *      - Paths and path segments must always begin with a word character
+         *      - Allowed are the word characters a-z _ 0-9 and additionally -
          *      - Character - always embedded between the characters: a-z _ 0-9,
          *        it can not be used at the beginning and end
          *      - Character # is used to separate the path segments
-         *      - After the separator # at least one letter is expected
+         *      - After the separator # at least a word character is expected
          *      - Only # as root path is also allowed
          */
-        get PATTERN_PATH_FACE() {return /(^((#[a-z][\-\w]+\w)|(#[a-z]\w*))+$)|(^#$)/},
+        get PATTERN_PATH_FACE() {return /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/;},
         
         /** 
          *  Pattern for a valid facet path:
-         *      - Paths and path segments must always begin with a letter
-         *      - Allowed are the characters a-z _ 0-9 and -
+         *      - Paths and path segments must always begin with a word character
+         *      - Allowed are the word characters a-z _ 0-9 and additionally -
          *      - Character - always embedded between the characters: a-z _ 0-9,
          *        it can not be used at the beginning and end
          *      - Character # is used to separate the path segments
-         *      - After the separator # at least one letter is expected 
+         *      - After the separator # at least a word character is expected 
          */
-        get PATTERN_PATH_FACET() {return /^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*$/},
+        get PATTERN_PATH_FACET() {return /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/;},
         
         /** 
          *  Pattern for a valid variable facet path:
@@ -4477,7 +4587,7 @@ if (typeof SiteMap === "undefined") {
          *      - Every path must end with ...
          *      - Only ... as facet path is also allowed
          */
-        get PATTERN_PATH_FACET_VARIABLE() {return /(^(([a-z][\-\w]+\w)|([a-z]\w*))(#(([a-z][\-\w]+\w)|([a-z]\w*)))*(\.){3}$)|(^\.{3}$)/},
+        get PATTERN_PATH_FACET_VARIABLE() {return /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/;},
         
         /**
          *  Primarily, the root is always used when loading the page, since the
@@ -4669,7 +4779,7 @@ if (typeof SiteMap === "undefined") {
      *      
      *  If variable paths are used, an additional data field is available. It
      *  contains the additional data passed with the path, comparable to
-     *  PHAT_INFO in CGI.    
+     *  PATH_INFO in CGI.    
      *      {path:..., face:..., facet:..., data:...}
      *      
      *  If no meta data can be determined because the path is invalid or not
@@ -5061,13 +5171,6 @@ if (typeof SiteMap === "undefined") {
      */
     window.addEventListener("load", (event) => {
         
-        //Initially the page-module is loaded.
-        //The page-module is similar to an autostart, it is used to initialize
-        //the single page application. It consists of common.js and common.css.
-        //The configuration of the SiteMap and essential styles can/should be
-        //stored here.
-        Composite.render.include("common");
-        
         //When clicking on a link with the current path, the focus must be set
         //back to face/facet, as the user may have scrolled on the page.
         //However, this is only necessary if face + facet have not changed.
@@ -5156,7 +5259,6 @@ if (typeof SiteMap === "undefined") {
         //because SiteMap.location and window.location.hash are the same and
         //therefore no update or rendering is triggered.
         SiteMap.location = target;
-        window.location.assign(target);
         
         //Source and target for rendering are determined.
         //Because of possible variable paths, the current path does not have to
@@ -5187,6 +5289,9 @@ if (typeof SiteMap === "undefined") {
         if (render && render[1] && !initial)
             Composite.render(render[1]);
         else Composite.render(document.body);
+        
+        //Focus only after rendering, so that the target is there.
+        window.location.assign(SiteMap.location);
         
         //Update of the hash and thus of the page focus, if the new focus (hash)
         //was hidden before rendering or did not exist.
@@ -5256,12 +5361,12 @@ if (typeof SiteMap === "undefined") {
  *  assertion was not true, a error is thrown -- see as an example the
  *  implementation here. 
  *  
- *  Test 1.1.0 20191229
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Test 1.1.1 20200106
+ *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.1.0 20191229
+ *  @version 1.1.1 20200106
  */
 if (typeof Test === "undefined") {
     
@@ -5279,19 +5384,19 @@ if (typeof Test === "undefined") {
      *  are helpful for implementing test are not used productively.
      *  For example, the redirection and caching of console output.
      */
-    Test = {
+    window["Test"] = {
             
         /** Pattern for all accepted events */
-        get PATTERN_EVENT() {return /^[a-z]+$/},
+        get PATTERN_EVENT() {return /^[a-z]+$/;},
         
         /** Constants of events */    
-        get EVENT_FINISH() {return "finish"},
-        get EVENT_INTERRUPT() {return "interrupt"},
-        get EVENT_PERFORM() {return "perform"},
-        get EVENT_RESPONSE() {return "response"},
-        get EVENT_RESUME() {return "resume"},
-        get EVENT_START() {return "start"},
-        get EVENT_SUSPEND() {return "suspend"}
+        get EVENT_FINISH() {return "finish";},
+        get EVENT_INTERRUPT() {return "interrupt";},
+        get EVENT_PERFORM() {return "perform";},
+        get EVENT_RESPONSE() {return "response";},
+        get EVENT_RESUME() {return "resume";},
+        get EVENT_START() {return "start";},
+        get EVENT_SUSPEND() {return "suspend";}
     };
     
     /** 
@@ -5897,7 +6002,7 @@ if (typeof Test === "undefined") {
              *  These methods can be used directly:
              *      Assert.assertEquals(...);
              */ 
-            Assert = {};
+            window["Assert"] = {};
             
             /**
              *  Creates a new assertion based on an array of variant parameters.

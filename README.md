@@ -107,62 +107,35 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.2.0 20191231 (summary of the current version)  
-BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments  
-BF: Composite Asynchron: Corection of passed arguments  
-BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models  
-BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox  
-BF: Composite Render Condition: Exclusive use of the placeholder  
-BF: Composite Render Include: Optimization/correction of the strategy  
-BF: Composite Render Include: Loading and inserting HTML content for elements  
-BF: Composite Expression Parse: Correction of the detection of value- and method-expressions  
-BF: Composite Lock Managment: Queue progress only after release functionality  
-BF: Extension Capitalize: Correction for use with empty strings  
-BF: MVC: Correction of the embedded use of SiteMap.accept(path)  
-BF: MVC: Correction of initial forwarding from / to /#  
-CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js  
-CR: Test: Enhancement of console output monitoring  
-CR: Test: Optimization of console forwarding  
-CR: Test: Extension of console forwarding by listeners  
-CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames  
-CR: Test: Extension for central catching of errors with activated Test-AP  
-CR: Test: Optimization for using readonly meta objects for return values  
-CR: Test Suite: Optimization of error output  
-CR: Test: Omission of the method Test.configure(...), function is taken over by Test.start(...)  
-CR: Composite Object Lookup: Added support now for arrays (also associative)  
-CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.  
-CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)  
-CR: Composite Render Iterate: Correction/Optimization in general  
-CR: Composite Render Iterate: Optimization for using readonly meta object  
-CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute  
-CR: Composite Scan: Omission of the intermediate step between render and mount  
-CR: Composite Mount: Revision of the object/model binding  
-CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM  
-CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)  
-CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser  
-CR: Composite Mount Validation: Enhancement with the attribute message for error output  
-CR: Composite Mount Validation: Relocation to own method Composite.validate(selector)  
-CR: Composite Mount Synchronization: Optimization  
-CR: Composite Mount Action: The return value false can cancel the default action of the browser  
-CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM  
-CR: Composite Mount Locate: Stricter use of property and qualifier (name)  
-CR: Composite Mount Lookup: Stricter use of property and qualifier (name)  
-CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)  
-CR: Composite Release: Addition of the CSS rule when the page is loaded  
-CR: Composite Hardening: Added optional hardening from markup  
-CR: Composite Include: Modules with a condition are only reloaded if the condition is true  
-CR: MVC Path: Support paths with beginning numbers  
-CR: MVC SiteMap: Omission of autofocus, since the use scrollIntoView can be too individual  
-CR: MVC SiteMap: Added variable paths for faces and facets  
-CR: MVC SiteMap: Added the forward method  
-CR: DataSource Locales: As standard marked are at the beginning  
-CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects  
-CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs  
-CR: Extension: Optimization for using readonly meta objects for return values  
-CR: Extension Namespace: Optimization and extension  
-CR: Messages: Update to use constant key/value pairs  
-CR: Build: Optimization of target 'changes'  
-CR: Build: Additional compression via javascript-minifier.com  
+## 1.3.0 20200202 (summary of the current version)  
+BF: Composite Expression Parse: Correction in the detection/processing of escape sequences  
+BF: DataSource Collect: Correction of the cache usage with a collector  
+BF: DataSource Fetch: Correction of the pattern of schema switching  
+BF: DataSource Fetch: Optimization of the language determination  
+BF: MVC SiteMap: Optimization to focus from the current target after changing the path  
+BF: Modules: Optimization of JavaScript processing to support import and export  
+BF: Composite Render: Optimization of JavaScript processing to support import and export  
+BF: Composite Events: Correction of the callback of HTTP events  
+BF: Composite Mount: Correction to find event methods also in prototypes  
+BF: Composite Modules: Correction of the script processing of the #import meta-directive  
+BF: Composite MutationObserver: Correction for recognition of expressions in text nodes  
+CR: MVC Path: Simplification of the syntax restrictions  
+CR: DataSource Locator: Simplification of the syntax restrictions  
+CR: Composite Render Condition: Added console error output for faulty expression  
+CR: Composite Render Condition: Added console error output for faulty expression  
+CR: Composite Render: Optimization in the detection and validation of expressions  
+CR: Composite Render: Simplification of the syntax restrictions for variable expressions  
+CR: Composite Render: Simplification of the syntax restrictions for composite IDs  
+CR: Composite Render: Simplification of the syntax restrictions for element IDs  
+CR: Composite Render: Simplification of the syntax restrictions for custom tags  
+CR: Composite Modules: Change so that the common composite is now loaded before the first rendering  
+CR: Composite Modules: Added the meta directive #import to import additional composites/modules  
+CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...  
+CR: DataSource Fetch: Omission of the parameter raw  
+CR: DataSource Fetch: Added optional parameters for the transformation  
+CR: DataSource Transform: Omission of the parameter raw  
+CR: DataSource Transform: Added optional parameters for the transformation  
+CR: DataSource Transform: Change of return value from NodeList to DocumentFragment  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
