@@ -40,12 +40,12 @@
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.2x.0x 20200131
+ *  DataSource 1.2x.0x 20200201
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2x.0x 20200131
+ *  @version 1.2x.0x 20200201
  */
 if (typeof DataSource === "undefined") {
     
@@ -237,7 +237,7 @@ if (typeof DataSource === "undefined") {
         //Workaround for some browsers, e.g. MS Edge, if they have problems with
         //!DOCTYPE + !ENTITY. Therefore the document is copied so that the
         //DOCTYPE declaration is omitted.
-        var result = processor.transformToFragment(xml.clone(), document);
+        var result = processor.transformToDocument(xml);
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
@@ -260,7 +260,17 @@ if (typeof DataSource === "undefined") {
                 node.setAttribute("type", "composite/javascript");
         });
         
-        return result;
+        var nodes = result.childNodes;
+        if (result.body)
+            nodes = result.body.childNodes;
+        else if (result.firstChild
+                && result.firstChild.nodeName.match(/^transformiix\b/i))
+            nodes = result.firstChild.childNodes;
+        var fragment = document.createDocumentFragment();
+        nodes = Array.from(nodes);
+        for (var loop = 0; loop < nodes.length; loop++)
+            fragment.appendChild(nodes[loop]);
+        return fragment;
     }; 
     
     /**
