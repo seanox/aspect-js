@@ -53,7 +53,10 @@
         };        
         
         var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, (event, element) => {
+            if (element instanceof Node
+                    && element.nodeType == Node.TEXT_NODE)
+                return;
             var snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
