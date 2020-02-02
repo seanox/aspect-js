@@ -79,8 +79,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox aspect-js 1.3.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.3.0.zip)  
-[Seanox aspect-js 1.3.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.3.0-src.zip)
+[Seanox aspect-js 1.3.1](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.3.1.zip)  
+[Seanox aspect-js 1.3.1 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.3.1-src.zip)
 
 
 # Release Channels
@@ -107,7 +107,7 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.3.0 20200202 (summary of the current version)  
+## 1.3.1 20200202 (summary of the current version)  
 BF: Composite Expression Parse: Correction in the detection/processing of escape sequences  
 BF: DataSource Collect: Correction of the cache usage with a collector  
 BF: DataSource Fetch: Correction of the pattern of schema switching  

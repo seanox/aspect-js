@@ -1,3 +1,7 @@
+1.3.1 20200202
+  BF: DataSource: Correction for loading and caching
+      Affects mainly MS Edge.
+
 1.3.0 20200202
   BF: Composite Expression Parse: Correction in the detection/processing of escape sequences
       Error example: {{'abc\'123'}}

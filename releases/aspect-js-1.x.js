@@ -445,12 +445,12 @@ if (window.location.pathcontext === undefined) {
  *  The data is queried with XPath, the result can be concatenated and
  *  aggregated and the result can be transformed with XSLT. 
  *  
- *  DataSource 1.3.0 20200201
+ *  DataSource 1.3.1 20200202
  *  Copyright (C) 2020 Seanox Software Solutions
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.3.0 20200201
+ *  @version 1.3.1 20200202
  */
 if (typeof DataSource === "undefined") {
     
@@ -529,12 +529,12 @@ if (typeof DataSource === "undefined") {
             throw new Error("Locale not available");
         
         var request = new XMLHttpRequest();
+        request.overrideMimeType("application/xslt+xml");
         request.open("HEAD", DataSource.DATA + "/locales.xml", false);
         request.send();
         if (request.status == 404)
             return;
         request.open("GET", DataSource.DATA + "/locales.xml", false);
-        request.overrideMimeType("application/xslt+xml");
         request.send();
         
         //DataSource.data
@@ -642,7 +642,7 @@ if (typeof DataSource === "undefined") {
         //Workaround for some browsers, e.g. MS Edge, if they have problems with
         //!DOCTYPE + !ENTITY. Therefore the document is copied so that the
         //DOCTYPE declaration is omitted.
-        var result = processor.transformToDocument(xml);
+        var result = processor.transformToDocument(xml.clone());
         var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
@@ -713,15 +713,15 @@ if (typeof DataSource === "undefined") {
                 return DataSource.cache[hash];
             
             var request = new XMLHttpRequest();
-            request.open("GET", data, false);
             request.overrideMimeType("application/xslt+xml");
+            request.open("GET", data, false);
             request.send();
             if (request.status != 200)
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
             data = request.responseXML;
             DataSource.cache[hash] = data;
             
-            return data;
+            return data.clone();
         }
         
         if (!type.match(/^xml$/)
