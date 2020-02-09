@@ -55,9 +55,9 @@ Bedeutung haben und die zwingend einen Bezeichner (ID) benötigen.
 Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
-Der [Model View Controller](mvc.md#sitemap) unterstützt für Composites eine
+Der [Model View Controller](mvc.md#sitemap) unterstützt für Composites ein
 automatisches [Object/Model-Binding](object-binding.md).  
-Die Ressourcen (CSS, JS, Markup) lassen sich für Composite in das
+Die Ressourcen (CSS, JS, Markup) lassen sich für Composites in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
@@ -157,17 +157,18 @@ var Model = {
 ```
 
 Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
-Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
-Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
-JavaScript-Model übernommen, wenn mindestens eines der Ereignisse: _Input_ oder
-_Change_ eintritt und die Validierung den Wert `true` zurückgibt.
+Zusammenspiel der Attribute `events` und `validate`.  
+In dem Beispiel wird der Eingabewert vom Composite-Feld text1 nur dann in das
+gleichnamige Feld im JavaScript-Model übernommen, wenn mindestens eines der
+Ereignisse: _Input_ oder _Change_ eintritt und die Validierung den Wert `true`
+zurückgibt.
 
 
 ### id
 
-Die ID (Bezeichner) haben Seanox aspect-js eine elementare Bedeutung.   
-Sie werden u.a. von der SiteMap als Faces und Facets, also als Ziele für
-virtuelle Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
+Die ID (Bezeichner) hat Seanox aspect-js eine elementare Bedeutung.   
+Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziele für virtuelle
+Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
 einer Besonderheit, da das Attribut nur initial verarbeitet wird. Änderungen zur

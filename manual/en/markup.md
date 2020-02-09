@@ -156,10 +156,10 @@ var Model = {
 ```
 
 Example for the general usage, implementation and function as well as the
-interaction of the attributes `events` and `validate`. In the example, the
-input value of the composite field text1 is only transferred to the field of the
-same name in the JavaScript model if at least one of the events: _Input_ or
-_Change_ and the validation returns the value `true`.
+interaction of the attributes `events` and `validate`.  
+In the example, the input value of the composite field text1 is only transferred
+to the field of the same name in the JavaScript model if at least one of the
+events: _Input_ or _Change_ and the validation returns the value `true`.
 
 
 ### id
