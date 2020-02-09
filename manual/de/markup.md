@@ -166,8 +166,8 @@ zurückgibt.
 
 ### id
 
-Die ID (Bezeichner) hat Seanox aspect-js eine elementare Bedeutung.   
-Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziele für virtuelle
+Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung.   
+Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziel für virtuelle
 Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
@@ -240,7 +240,7 @@ Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
 ```
 
 Beispiel für den Import per DataSource-URL.  
-Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
+Wird nur eine URL angegeben, wird die URL für Daten und Transformation daraus
 abgeleitet. 
 
 ```html
@@ -255,8 +255,9 @@ abgeleitet.
 
 Beispiel für den Import per DataSource-URL mit spezifischer Daten- und
 Transformation-URL.  
-Als Wert wird erst dir Daten-URL (locator der XML-Datei) und getrennt durch ein
-Leerzeichen die die Transformation-URL (locator vom XSLT Template) erwartet. 
+Als Wert wird die Daten-URL (locator der XML-Datei) und nachfolgend getrennt
+durch ein Leerzeichen die Transformation-URL (locator vom XSLT Template)
+erwartet. 
 
 ```html
 <article import="{{'xml:/example/data xslt:/example/style'}}">
@@ -465,7 +466,7 @@ var Model = {
 ```
 
 Beispiel für den Output per DataSource-URL.  
-Wird nur eine URL angegeben, werden die Daten- und Transformation-URL daraus
+Wird nur eine URL angegeben, wird die URL für Daten und Transformation daraus
 abgeleitet. 
 
 ```html
