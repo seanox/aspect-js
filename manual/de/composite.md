@@ -1,4 +1,4 @@
-[Model View Controler](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
+[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
 - - -
 
 # Komponenten
@@ -52,7 +52,7 @@ kann eine oder mehrere Komponenten bereitstellen.
 Ein Composite bezeichnet eine funktional eigenständige Komponente die sich aus
 Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
 zusammensetzen kann.  
-Im Hinblick auf den Model-View-Controler-Ansatz, lassen sich mit einem Composite
+Im Hinblick auf den Model-View-Controller-Ansatz, lassen sich mit einem Composite
 Model und View bereitstellen.
 
 __Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,__
@@ -349,4 +349,4 @@ TODO:
 
 - - -
 
-[Model View Controler](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
+[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)

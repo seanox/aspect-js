@@ -1,4 +1,4 @@
-[DataSource](datasource.md) | [TOC](README.md#resource-bundle-i18n) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [TOC](README.md#resource-bundle-i18n) | [Model View Controller](mvc.md)
 - - -
 
 # Resource Bundle (Messages / i18n)
@@ -72,4 +72,4 @@ starts with the as default declared language.
 
 - - -
 
-[DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controller](mvc.md)

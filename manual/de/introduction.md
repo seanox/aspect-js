@@ -354,7 +354,7 @@ Bedeutung haben und die zwingend einen Bezeichner (ID) benötigen.
 Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
-Der [Model View Controler](mvc.md#sitemap) unterstützt für Composites eine
+Der [Model View Controller](mvc.md#sitemap) unterstützt für Composites eine
 automatisches [Object/Model-Binding](object-binding.md).  
 Die Ressourcen (CSS, JS, Markup) lassen sich für Composite in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
@@ -366,7 +366,7 @@ Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen.
 ```
 
 Details zur Verwendung von Composites / modularen Komponente werden in den
-Abschnitten [Composites](composites.md) und [Model View Controler](mvc.md)
+Abschnitten [Composites](composites.md) und [Model View Controller](mvc.md)
 beschrieben.
 
 [Mehr erfahren](markup.md#composite)
@@ -521,7 +521,7 @@ definiert werden.
 
 ## Model View Controller
 
-Der Model View Controler (MVC) ist ein Entwurfsmuster zur Trennung von
+Der Model View Controller (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung.
 
 ```
@@ -550,7 +550,7 @@ Interaktion, Daten und Darstellung.
 Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
 werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur Übermittlung
 der Interaktionen. Da dieser durch Betriebssystem und Browser bereitgestellt
-wird, bezieht sich der Controler in Seanox aspect-js vordergründig auf den
+wird, bezieht sich der Controller in Seanox aspect-js vordergründig auf den
 Applikations-Controller, der Abläufe innerhalb einer Applikation (Face-Flow)
 steuert und das Binding von Markup und JavaScript sowie die Steuerung vom
 Datenfluss zwischen View und Model übernimmt.  
@@ -562,7 +562,7 @@ und SiteMap.
 
 Das Modell ist ein darstellbares/projezierbares Objekt.  
 Es empfängt (Status)Änderungen und Interaktionen der View, die durch den 
-Controler übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
+Controller übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
 sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
 View zur Darstellung und Verwaltung der Zustände, für fachliche Funktionalität
 nimmt es weitere Komponenten in Anspruch.  

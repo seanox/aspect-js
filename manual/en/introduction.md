@@ -346,7 +346,7 @@ aspect-js and necessarily require an identifier (ID).
 They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
 virtual paths in the face-flow, which has a direct effect of the visibility of
 the composites.
-The [Model View Controler](mvc.md#sitemap) supports automatic
+The [Model View Controller](mvc.md#sitemap) supports automatic
 [object/model binding](object-binding.md) for composites.  
 The resources (CSS, JS, Markup) for composites can be outsourced to the module
 directory and are only loaded automatically when necessary.
@@ -358,7 +358,7 @@ directory and are only loaded automatically when necessary.
 ```
 
 Details about using composites / modular components are described in
-[Composites](composites.md) and [Model View Controler](mvc.md).
+[Composites](composites.md) and [Model View Controller](mvc.md).
 
 [Learn more](markup.md#composite)
 

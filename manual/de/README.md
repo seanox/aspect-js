@@ -8,7 +8,7 @@
 * [Markup](#markup)
 * [DataSource](#datasource)
 * [Resource Bundle](#resource-bundle-i18n)
-* [Model View Controler](#model-view-controler)
+* [Model View Controller](#model-view-controller)
 * [Komponenten](#komponenten)
 * [Erweiterung](#erweiterung)
 * [Ereignisse](#ereignisse)
@@ -88,9 +88,9 @@
 * [Resource Bundle (i18n)](messages.md#resource-bundle-messages-i18n)
 
 
-### Model View Controler
+### Model View Controller
 
-* [Model View Controler](mvc.md#model-view-controler)
+* [Model View Controller](mvc.md#model-view-controller)
   * [Controller](mvc.md#controller)
   * [Model](mvc.md#model)
   * [View](mvc.md#view)

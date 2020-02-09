@@ -220,7 +220,7 @@ macht diese rückgängig.
     Seanox aspect-js is a JavasScript framework for implementing  
     dynamic interfaces for web browsers.  
     The framework takes the declarative approach of HTML and combines  
-    markup and JavaScript via the model view controler to components  
+    markup and JavaScript via the model view controller to components  
     that are addressed directly or via virtual paths.  
     The framework provides an expression language based on JavaScript.
   </p>

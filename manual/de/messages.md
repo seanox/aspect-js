@@ -1,4 +1,4 @@
-[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle-i18n) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle-i18n) | [Model View Controller](mvc.md)
 - - -
 
 # Resource Bundle (Messages / i18n)
@@ -77,4 +77,4 @@ Gebietsschemen, das mit dem als default deklarierte Gebietsschema beginnt.
 
 - - -
 
-[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle) | [Model View Controler](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle) | [Model View Controller](mvc.md)
