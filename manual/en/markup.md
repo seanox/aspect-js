@@ -237,8 +237,8 @@ Example of importing a remote resource using the HTTP method GET.
 ```
 
 Example of importing via DataSource-URL.  
-If only one URL is specified, the data and transformation URLs are derived from
-it. 
+If only one URL is specified, the URL for data and transformation are derived
+from it. 
 
 ```html
 <article import="{{'xml:/example/content'}}">
@@ -265,7 +265,7 @@ As a value, the data URL (locator of the XML file) and the transformation URL
 </article>
 ```
 
-When inserting content from the DataSource, script blocks are automatically
+When inserting content from the DataSource, JavaScript blocks are automatically
 changed to composite/javascript and only executed by the renderer. This ensures
 that the JavaScript is only executed depending on the enclosing condition
 attribute.
@@ -288,7 +288,7 @@ HTML element and will terminated and/or removed when:
 
 If an HTML element is declared as an interval, the original inner HTML code is
 used as a template, and during the intervals the inner HTML code is first
-emptied, the template is generated individually with each interval cycle, and
+removed, the template is generated individually with each interval cycle, and
 the result is inserted as inner HTML code.
 
 ```html
@@ -348,7 +348,7 @@ to the inner HTML code.
 The iterate attribute expects a
 [variable expression](expression.md#variable-expression), as well as a
 meta-object that allows access to the iteration.  
-So the variable expression `iterat={tempA:Model.list}}` creates the
+So the variable expression `iterate={tempA:Model.list}}` creates the
 meta-object `tempA = {item, index, data}`.
 
 ```javascript
@@ -370,7 +370,7 @@ var Model = {
 
 Message is an optional part of [Validation](#validate) and is used for
 text/error output in case of an unconfirmed validation.  
-This requires a combination of the attributes `validate` and `events`. 
+This requires a combination with the attributes `validate` and `events`. 
 
 ```html
 <form id="Model" composite>
@@ -397,7 +397,7 @@ This requires a combination of the attributes `validate` and `events`.
 
 Notification is an optional part of [Validation](#validate) and displays the
 error output as an info box (browser feature) on the corresponding element.  
-This requires a combination of the attributes `validate`, `events` amd
+This requires a combination with the attributes `validate`, `events` and
 `message`.
 
 ```html
@@ -472,9 +472,9 @@ If only one URL is specified, the data and transformation URLs are derived from 
 ```
 
 Example of the output via DataSource-URL with a specific data URL and
-transformation URL. The blank character is used for separation. Both URLs must
-begin with the DataSource protocol and only the first two entries are used from
-which the first refers to the data and the second to the transformation.
+transformation URL.  
+The output attribute expects primarily a data URL which can optionally be
+followed by a URL for transformation, separated by a space.
 
 ```html
 <article output="{{'xml:/example/data xslt:/example/style'}}">
@@ -486,7 +486,7 @@ which the first refers to the data and the second to the transformation.
 </article>
 ```
 
-When inserting content from the DataSource, script blocks are automatically
+When inserting content from the DataSource, JavaScript blocks are automatically
 changed to composite/javascript and are only executed by the renderer. This
 ensures that the JavaScript is only executed depending on surrounding condition
 attributes.

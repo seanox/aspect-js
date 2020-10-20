@@ -409,7 +409,7 @@ embedded in a composite.
 
 Message is an optional part of [Validation](#validate) and is used for
 text/error output in case of an unconfirmed validation.  
-This requires a combination of the attributes `validate` and `events`. 
+This requires a combination with the attributes `validate` and `events`. 
 
 ```html
 <form id="Model" composite>
@@ -438,7 +438,7 @@ This requires a combination of the attributes `validate` and `events`.
 
 Notification is an optional part of [Validation](#validate) and displays the
 error output as an info box (browser feature) on the corresponding element.  
-This requires a combination of the attributes `validate`, `events` amd
+This requires a combination with the attributes `validate`, `events` and
 `message`.
 
 ```html

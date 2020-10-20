@@ -269,10 +269,10 @@ erwartet.
 </article>
 ```
 
-Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
-in composite/javascript geändert und erst durch den Renderer ausgeführt. So wird
-gewährleistet, dass das JavaScript ggf. erst abhängig vom umschliessenden
-condition-Attribut aufgeführt wird.
+Beim Einfügen von Inhalten aus der DataSource, werden JavaScript-Blöcke
+automatisch in composite/javascript geändert und erst durch den Renderer
+ausgeführt. So wird gewährleistet, dass das JavaScript ggf. erst abhängig vom
+umschliessenden condition-Attribut aufgeführt wird.
 
 
 ### interval
@@ -293,7 +293,7 @@ Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
 
 Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
 HTML-Code als Vorlage verwendet und während der Intervalle zuerst der innere
-HTML-Code geleert, die Vorlage mit jedem Intervall-Zyklus einzeln generiert und
+HTML-Code entfernt, die Vorlage mit jedem Intervall-Zyklus einzeln generiert und
 das Ergebnis als innerer HTML-Code eingefügt.
 
 ```html
@@ -352,7 +352,7 @@ Ergebnis dem inneren HTML-Code hinzugefügt.
 Das iterate-Attribut erwartet einen
 [Variablen-Ausdruck](expression.md#variable-expression), zu dem ein Meta-Objekt
 erstellt wird, dass den Zugriff auf die Iteration ermöglich.  
-So erzeugt der Variablen-Ausdruck `iterat={{tempA:Model.list}}`
+So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
 das Meta-Objekt `tempA = {item, index, data}`. 
 
 ```javascript
@@ -374,7 +374,8 @@ var Model = {
 
 Message ist ein optionaler Bestandteil der [Validierung](#validate) und wird zur
 Text-/Fehler-Ausgabe im Fall einer unbestätigten Validierung verwendet.  
-Das Attribut erfordert die Kombination der Attribute `validate` und `events`. 
+Das Attribut erfordert die Kombination mit den Attributen `validate` und
+`events`. 
 
 ```html
 <form id="Model" composite>
@@ -402,8 +403,8 @@ Das Attribut erfordert die Kombination der Attribute `validate` und `events`.
 Notification ist ein optionaler Bestandteil der [Validierung](#validate) und
 zeigt die Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden
 Element an.  
-Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
-`message`.
+Das Attribut erfordert die Kombination mit den Attributen `validate`, `events`
+und `message`.
 
 
 ```html
@@ -481,10 +482,8 @@ abgeleitet.
 
 Beispiel für den Output per DataSource-URL mit spezifischer Daten- und
 Transformation-URL.  
-Die Trennung erfolgt durch Leerzeichen, beide müssen mit dem
-DataSource-Protokoll beginnen und es werden nur die ersten beiden Einträge
-verwendet, von denen der erste aus die Daten und der zweite auf die
-Transformation verweist.
+Das output-Attribut erwartet primär eine Daten-URL der optional, durch ein
+Leerzeichen getrennt, eine URL zur Transformation folgen kann.
 
 ```html
 <article output="{{'xml:/example/data xslt:/example/style'}}">
@@ -496,16 +495,16 @@ Transformation verweist.
 </article>
 ```
 
-Beim Einfügen von Inhalten aus der DataSource, werden Script-Blöcke automatisch
-in composite/javascript geändert und werden erst durch den Renderer ausgeführt.
-So wird gewährleistet, dass das JavaScript ggf. erst abhängig vom
+Beim Einfügen von Inhalten aus der DataSource, werden JavaScript-Blöcke
+automatisch in composite/javascript geändert und erst durch den Renderer
+ausgeführt. So wird gewährleistet, dass das JavaScript ggf. erst abhängig vom
 umschliessenden condition-Attribut aufgeführt wird.
 
 
 ### release
 
 Inverser Indikator dafür, dass ein Element gerendert wurde.  
-Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser
+Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wurde. Dieser
 Effekt kann für CSS verwendet werden, um Elemente nur im gerenderten Zustand
 anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem
 Laden der Seite hinzugefügt. 
@@ -518,7 +517,7 @@ Laden der Seite hinzugefügt.
 ### render
 
 Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignis
+Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignissen
 aufgefrischt werden.  
 Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
 welche die Ziele festlegen.

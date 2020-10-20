@@ -334,8 +334,8 @@ ist als Composite-JavaScript möglich.
 
 ### id
 
-Die ID (Bezeichner) hat Seanox aspect-js eine elementare Bedeutung.   
-Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziele für virtuelle
+Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung.   
+Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziel für virtuelle
 Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
@@ -418,7 +418,8 @@ validierende Element in einem Composite eingebettet ist.
 
 Message ist ein optionaler Bestandteil der Validierung und wird zur
 Text-/Fehler-Ausgabe im Fall einer unbestätigten Validierung verwendet.  
-Das Attribut erfordert die Kombination der Attribute `validate` und `events`. 
+Das Attribut erfordert die Kombination mit den Attributen `validate` und
+`events`. 
 
 ```html
 <form id="Model" composite>
@@ -447,8 +448,8 @@ Das Attribut erfordert die Kombination der Attribute `validate` und `events`.
 
 Notification ist ein optionaler Bestandteil der Validierung und zeigt die
 Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden Element an.  
-Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
-`message`.
+Das Attribut erfordert die Kombination mit den Attributes `validate`, `events`
+und `message`.
 
 ```html
 <form id="Model" composite>
@@ -466,7 +467,7 @@ Das Attribut erfordert die Kombination der Attribute `validate`, `events` und
 ### render
 
 Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignis
+Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignissen
 aufgefrischt werden.  
 Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
 welche die Ziele festlegen.
