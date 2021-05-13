@@ -283,11 +283,11 @@ __True__ The validation is successful and the iteration via further permit
 methods is continued. If all permit methods return true and thus confirm the
 path, it is used.
 
-__String__ The validation (iteration over further permit-merhods) will be
+__String__ The validation (iteration over further permit-methods) will be
 aborted and it will be forwarded to the path corresponding to the string. 
 
 __Otherwise__ The path is regarded as invalid/unauthorized, the validation
-(iteration over further permit-merhods) will be aborted and is forwarded to the
+(iteration over further permit-methods) will be aborted and is forwarded to the
 original path.
 
 
