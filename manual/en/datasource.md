@@ -37,7 +37,7 @@ similar to SQL.
 
 By default, the data storage is located as `./data` relative to the application
 directory. The data storage contains the supported languages as subdirectories.
-Each language contains its own content. Redundant data/fiels and more
+Each language contains its own content. Redundant data/fields and more
 subdirectories corresponds to the concept. The DataSource primarily uses XML
 files. Optionally, a transformation with XSLT is possible.
 
@@ -100,7 +100,7 @@ starts with the as default declared language.
 The data in the data storage is addressed with a locator.  
 A locator is a URL (`xml://...` or `xslt://...`) that is used absolute and
 relative to the DataSource data storage, but does not contain a locale (language
-specification) and file extenstion in the path. The locale is determined
+specification) and file extension in the path. The locale is determined
 automatically for the language setting of the browser, or if this is not
 supported, the standard from the `locales.xml` in the DataSource data storage
 is used.
@@ -160,7 +160,7 @@ The transformation via XSLT (1.0) of XML data provides an additional way for
 generating dynamically data and content and can already be done with the fetch
 method, which is based on locators. Sometimes it is necessary to work directly
 with the XMLDocument. In these cases the transform method can be used, because
-the method accepts XMLDocument as well locator (also in mix).  
+the method accepts XMLDocument as well locator (also in a mix).  
 
 ```javascript
 DataSource.fetch("xml://paper", "xslt://article");
@@ -241,12 +241,14 @@ As an example, 3 XML files: paper.xml, envelope.xml, pen.xml
   <description>Paper</description>
   <price>1.00</price>
 </article>
+
 <?xml version="1.0"?>
 <article>
   <id>200</id>
   <description>Envelope</description>
   <price>2.00</price>
 </article>
+
 <?xml version="1.0"?>
 <article>
   <id>300</id>
@@ -282,7 +284,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
 </collector>  
 ```
 
-Collecting with an own articles collector.
+Collecting with an own article's collector.
 
 ```javascript
 DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);

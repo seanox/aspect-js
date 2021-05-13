@@ -13,9 +13,9 @@ Seanox aspect-js focuses on a minimalist approach to implementing
 Single-Page Applications (SPAs).  
 
 This framework takes the declarative approach of HTML and extends this with
-expression language, rendering with addional attributes, object/model binding,
-Model View Controller, Resource Bundle (i18n), NoSQL datasource, test
-environment and much more.
+expression language, rendering with additional attributes, object/model
+binding, Model View Controller, Resource Bundle (i18n), NoSQL datasource,
+test environment and much more.
 
 
 # Features
@@ -828,7 +828,7 @@ Test.start();
 A suite is a complex bundle of different test cases, scenarios and other suites.
 Usually a suite consists of different files, which then represent a complex
 test. An example of a good suite is a cascade of different files und the test
-can be started in any file and place. This makes it possible toperform the
+can be started in any file and place. This makes it possible to perform the
 integration test on different levels and with different complexity.
 
 [Learn more](test.m#suite)

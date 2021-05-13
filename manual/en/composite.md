@@ -128,7 +128,7 @@ important to initialize the global variable better with `window[...]`.
 ```javascript
 window['login'] = {
     validate(element, value) {
-    }
+    },
     logon: {
         onClick(event) {
         }
@@ -259,8 +259,8 @@ defined by an attribute with the same name.
 In some cases an identifier (ID) is not unique. For example, when properties are
 arrays or an iteration is used in the markup. In these cases the identifier can
 be extended by an additional unique qualifier separated by a colon.   
-Qualifiers have the effect of properties in object/model binding and extend the
-namespace.
+Qualifiers have the effect of properties in the object/model binding and extend
+the namespace.
 
 ```html
 <input type="text" id="identifier">

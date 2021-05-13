@@ -220,7 +220,7 @@ var map = {
 SiteMap.customize(map);
 ```
 
-Or a littel shorter the direct call of the customize method:
+Or a little shorter the direct call of the customize method:
 
 ```javascript
 SiteMap.customize({

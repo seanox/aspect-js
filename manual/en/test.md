@@ -1,4 +1,4 @@
-[Events](events.md) | [Inhalt](README.md#test)
+[Events](events.md) | [TOC](README.md#test)
 - - -
 
 # Test
@@ -140,7 +140,7 @@ Test.start();
 A suite is a complex bundle of different test cases, scenarios and other suites.
 Usually a suite consists of different files, which then represent a complex
 test. An example of a good suite is a cascade of different files und the test
-can be started in any file and place. This makes it possible toperform the
+can be started in any file and place. This makes it possible to perform the
 integration test on different levels and with different complexity.
 
 
@@ -464,7 +464,7 @@ read-only and cannot be changed.
 ## Output
 
 As a development tool, browsers provide console output that can be used to log
-informations.  
+information.  
 Logging supports different channels or levels: LOG, WARN, ERROR and INFO.
 
 ```javascript
@@ -775,4 +775,4 @@ Output:
 
 - - -
 
-[Events](events.md) | [Inhalt](README.md#test)
+[Events](events.md) | [TOC](README.md#test)

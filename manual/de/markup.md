@@ -318,7 +318,7 @@ wenn das HTML-Element dem DOM erneut hinzugefügt wird. Daher lässt sich das
 interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
 
 ```html
-<span interval="1000" condition="{{IntevalModel.isVisible()}}">
+<span interval="1000" condition="{{IntervalModel.isVisible()}}">
   ...
 </span>
 ```
@@ -541,7 +541,7 @@ var Model = {
 ```
 
 ```html
-Taget #1:
+Target #1:
 <span id="outputText1">{{Model.status1}}</span>
 Events: Wheel
 <input id="text1" type="text"

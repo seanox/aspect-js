@@ -64,7 +64,7 @@ The processing itself ends before the event.
 
 # Object/Model Binding
 
-These events occur during object/model binding. 
+These events occur during the object/model binding. 
 The callback method is passed the current selector. It can influence this and/or
 the corresponding element, but not the object/model binding.
 

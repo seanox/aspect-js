@@ -141,7 +141,7 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Static function for creating a alhpanumeric (U)UID with fixed size.  
+Static function for creating an alphanumeric (U)UID with fixed size.  
 The quality of the ID is dependent of the length.
 
 ```javascript
@@ -154,7 +154,7 @@ Math.uniqueId(32)
 
 ### Math.uniqueSerialId
 
-Static function for creating a alhpanumeric (U)UID with fixed size and a serial
+Static function for creating an alphanumeric (U)UID with fixed size and a serial
 relation to time.  
 The quality of the ID is dependent of the length.
 
@@ -355,7 +355,7 @@ Function for encoding HTML characters in string objects.
 
 ### String.prototype.hashCode
 
-Function for calculating a alhpanumeric hash value for string objects.
+Function for calculating an alphanumeric hash value for string objects.
 
 ```javascript
 ("hello world").hashCode();

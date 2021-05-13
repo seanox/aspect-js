@@ -133,7 +133,7 @@ initialisieren.
 ```javascript
 window['login'] = {
     validate(element, value) {
-    }
+    },
     logon: {
         onClick(event) {
         }

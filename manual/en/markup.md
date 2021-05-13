@@ -313,7 +313,7 @@ the HTML element is added to the DOM again. Therefore, the interval attribute is
 easy to use and can be controlled with the condition attribute.
 
 ```html
-<span interval="1000" condition="{{IntevalModel.isVisible()}}">
+<span interval="1000" condition="{{IntervalModel.isVisible()}}">
   ...
 </span>
 ```
@@ -531,7 +531,7 @@ var Model = {
 ```
 
 ```html
-Taget #1:
+Target #1:
 <span id="outputText1">{{Model.status1}}</span>
 Events: Wheel
 <input id="text1" type="text"
@@ -683,7 +683,7 @@ independently of the rendering. Therefore, markup for rendering has been
 extended by the additional script type `composite/javascript`, which uses the
 normal JavaScript but is not recognized by the browser in comparison to
 `text/javascript` and therefore not executed directly. But the renderer
-recognizes the JavaScript code and executes it in every revelevant render cycle.
+recognizes the JavaScript code and executes it in every relevant render cycle.
 In this way, the execution of the SCRIPT element can also be combined with the
 `condition` attribute.  
 
