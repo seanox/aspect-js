@@ -99,6 +99,18 @@
             Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""));
         }});
         Test.create({test() {
+            Assert.assertEquals("x1x1x1x2x3x4", OutputF.textContent.replace(/\s+/g, ""));
+        }});
+        Test.create({test() {
+            Assert.assertEquals("__0:1____1:2____2:3__", OutputG.textContent.replace(/\s+/g, ""));
+        }});
+        Test.create({test() {
+            Assert.assertEquals("__0:1____1:2____2:3__", OutputI.textContent.replace(/\s+/g, ""));
+        }});
+        Test.create({test() {
+            Assert.assertEquals("__0:____1:____2:__", OutputJ.textContent.replace(/\s+/g, ""));
+        }});
+        Test.create({test() {
             var error = String(console.output.error);
             Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"));
@@ -166,10 +178,24 @@
         <a>Ex</a>  
       </span>
     </div>   
-    
-    <span iterate=" {{tempX1:[1,2,3]}} ">x1</span>
-    <span iterate=" x {{tempX2:[1,2,3]}}">x2</span>
-    <span iterate=" {{tempX3:[1,2,3]}} x">x3</span>
-    <span iterate="{{tempX4:[1,2,3]}}{{}}">x4</span>     
+
+    <p id="OutputF">
+      <span iterate=" {{tempX1:[1,2,3]}} ">x1</span>
+      <span iterate=" x {{tempX2:[1,2,3]}}">x2</span>
+      <span iterate=" {{tempX3:[1,2,3]}} x">x3</span>
+      <span iterate="{{tempX4:[1,2,3]}}{{}}">x4</span>
+    </p>
+    <p id="OutputG">
+      <span iterate=" {{tempX5:[1,2,3]}} ">__{{tempX5.index}}:{{tempX5.item}}__</span><br/>
+    </p>
+    <p id="OutputH">
+      <span iterate=" {{tempX6:['1','2','3']}} ">__{{tempX6.index}}:{{tempX6.item}}__</span><br/>
+    </p>
+    <p id="OutputI">
+      <span iterate=" {{tempX7:['1','2','3']}} ">__{{tempX7.index}}:{{tempX7.item}}__</span><br/>
+    </p>
+    <p id="OutputJ">
+      <span iterate=" {{tempX7:Array(3)}} ">__{{tempX7.index}}:{{tempX7.item}}__</span><br/>
+    </p>
   </body>
 </html>
