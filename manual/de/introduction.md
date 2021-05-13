@@ -57,6 +57,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   * [import](#import)
   * [condition](#condition)
   * [interval](#interval)
+  * [iterate](#iterate)
   * [id](#id)
   * [composite](#composite)
   * [events](#events)
@@ -330,6 +331,36 @@ ist als Composite-JavaScript möglich.
 ```
 
 [Mehr erfahren](markup.md#interval)
+
+
+### iterate
+
+Die iterative Ausgabe basiert auf Listen, Aufzählungen und Arrays.  
+Wird ein HTML-Element als iterativ deklariert, wird der initiale innerer
+HTML-Code als Vorlage verwendet und während der Iteration der innere HTML-Code
+zunächst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
+Ergebnis dem inneren HTML-Code hinzugefügt.  
+Das iterate-Attribut erwartet einen
+[Variablen-Ausdruck](expression.md#variable-expression), zu dem ein Meta-Objekt
+erstellt wird, dass den Zugriff auf die Iteration ermöglich.  
+So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
+das Meta-Objekt `tempA = {item, index, data}`.
+
+```javascript
+var Model = {
+    months: ["Spring", "Summer", "Autumn", "Winter"]
+};
+```
+
+```html
+<select iterate={{months:Model.months}}>
+  <option id="{{months.index}}">
+    {{months.item}}
+  </option>
+</select>
+```
+
+[Mehr erfahren](markup.md#iterate)
 
 
 ### id

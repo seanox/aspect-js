@@ -20,6 +20,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [id](#id)
   * [import](#import)
   * [interval](#interval)
+  * [iterate](#iterate)
   * [message](#message)
   * [notification](#notification)
   * [output](#output)

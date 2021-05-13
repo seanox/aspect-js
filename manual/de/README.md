@@ -54,6 +54,7 @@
     * [id](markup.md#id)
     * [import](markup.md#import)
     * [interval](markup.md#interval)
+    * [iterate](markup.md#iterate)
     * [message](markup.md#message)
     * [notification](markup.md#notification)
     * [output](markup.md#output)

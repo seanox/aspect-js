@@ -20,6 +20,7 @@ in the DOM.
   * [id](#id)
   * [import](#import)
   * [interval](#interval)
+  * [iterate](#iterate)
   * [message](#message)
   * [notification](#notification)
   * [output](#output)

@@ -56,6 +56,7 @@ environment and much more.
   * [import](#import)
   * [condition](#condition)
   * [interval](#interval)
+  * [iterate](#iterate)
   * [id](#id)
   * [composite](#composite)
   * [events](#events)
@@ -322,6 +323,35 @@ composite JavaScript.
 ```
 
 [Learn more](markup.md#interval)
+
+
+### iterate
+
+The iterative output is based on lists, enumerations and arrays.  
+If an HTML element is declared as iterative, the initial inner HTML code is used
+as template and during the iteration the inner HTML code is removed first, the
+template is generated individually with each iteration and the result is added
+to the inner HTML code.
+The iterate attribute expects a
+[variable expression](expression.md#variable-expression), as well as a
+meta-object that allows access to the iteration.  
+So the variable expression `iterate={tempA:Model.list}}` creates the
+meta-object `tempA = {item, index, data}`.
+
+```javascript
+var Model = {
+    months: ["Spring", "Summer", "Autumn", "Winter"]
+};
+```
+
+```html
+<select iterate={{months:Model.months}}>
+  <option id="{{months.index}}">
+    {{months.item}}
+  </option>
+</select>
+```
+[Learn more](markup.md#iterate)
 
 
 ### id
