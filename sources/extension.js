@@ -203,7 +203,7 @@ Element.prototype.appendChild = function(node, exclusive) {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a static function to create a alphanumeric serial (U)UID with fixed size.
+ * Adds a static function to create an alphanumeric serial (U)UID with fixed size.
  * The quality of the ID is dependent of the length.
  * @param size optional, default is 16
  */
@@ -225,7 +225,7 @@ if (Math.uniqueId === undefined) {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a static function to create a alphanumeric serial (U)UID with fixed size.
+ * Adds a static function to create an alphanumeric serial (U)UID with fixed size.
  * Compared to Math.uniqueId(), the (U)UID contains a serial reference to time.
  * The quality of the ID is dependent of the length.
  * @param size optional, default is 16
@@ -276,7 +276,7 @@ if (String.prototype.capitalize === undefined) {
 /**
  * Enhancement of the JavaScript API
  * Adds a uncapitalize function to the String objects.
- */ 
+ */
 if (String.prototype.uncapitalize === undefined) {
     String.prototype.uncapitalize = function() {
         if (this.length <= 0)
