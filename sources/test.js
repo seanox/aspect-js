@@ -1,110 +1,110 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
- *  Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
+ * im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
+ * Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2020 Seanox Software Solutions
+ * Seanox aspect-js, Fullstack JavaScript UI Framework
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of version 2 of the GNU General Public License as published
+ * by the Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *  
- *  
- *      DESCRIPTION
- *      ----
- *  Test is a simple API and module to implement and execute integration tests.
- *  The tests can be implemented as suites, scenarios and test cases.
- *  
- *  
- *      Case
- *      ----
- *  The smallest and simplest element in an integration test, used here as
- *  task, because case is a keyword. It can be implemented alone, but is always
- *  used in a scenario.
- *  
- *  Test.create({test() {
- *      Assert.assertTrue(true);
- *  }});
- *  
- *  Test.start();
- *  
- *  
- *      Scenario
- *      ----
- *  A scenario is a sequence of a lot of test cases usually in one file.
- *  
- *  Test.create({test() {
- *      Assert.assertTrue(true);
- *  }});
- *  
- *  Test.create({name:"example", timeout:1000, test() {
- *      Assert.assertTrue(true);
- *  }});
- *  
- *  Test.create({error:Error test() {
- *      throw new Error();
- *  }});
- *  
- *  Test.create({error:/^My Error/i, test() {
- *      throw new Error("My Error");
- *  }});
- *  
- *  Test.create({ignore:true, test() {
- *      Assert.assertTrue(true);
- *  }});
- *  
- *  Test.start();
- *  
- *  
- *      Suite
- *      ----
- *  A suite is a complex bundle of different test cases, scenarios and other
- *  suites. Usually a suite consists of different files, which then represent a
- *  complex test. An example of a good suite is a cascade of different files, if
- *  the test can be started in any file and place. This makes it possible to
- *  perform the integration test on different levels and with different
- *  complexity.
- *  
- *      
- *      Assert
- *      ----
- *  The test cases are implemented with assertions. The test module provides
- *  elementary assertions, you can implement more. The function is simple. If an
- *  assertion was not true, a error is thrown -- see as an example the
- *  implementation here. 
- *  
- *  Test 1.1.1 20200106
- *  Copyright (C) 2020 Seanox Software Solutions
- *  Alle Rechte vorbehalten.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * 
+ * 
+ *     DESCRIPTION
+ *     ----
+ * Test is a simple API and module to implement and execute integration tests.
+ * The tests can be implemented as suites, scenarios and test cases.
+ * 
+ * 
+ *     Case
+ *     ----
+ * The smallest and simplest element in an integration test, used here as
+ * task, because case is a keyword. It can be implemented alone, but is always
+ * used in a scenario.
+ * 
+ * Test.create({test() {
+ *     Assert.assertTrue(true);
+ * }});
+ * 
+ * Test.start();
+ * 
+ * 
+ *     Scenario
+ *     ----
+ * A scenario is a sequence of a lot of test cases usually in one file.
+ * 
+ * Test.create({test() {
+ *     Assert.assertTrue(true);
+ * }});
+ * 
+ * Test.create({name:"example", timeout:1000, test() {
+ *     Assert.assertTrue(true);
+ * }});
+ * 
+ * Test.create({error:Error test() {
+ *     throw new Error();
+ * }});
+ * 
+ * Test.create({error:/^My Error/i, test() {
+ *     throw new Error("My Error");
+ * }});
+ * 
+ * Test.create({ignore:true, test() {
+ *     Assert.assertTrue(true);
+ * }});
+ * 
+ * Test.start();
+ * 
+ * 
+ *     Suite
+ *     ----
+ * A suite is a complex bundle of different test cases, scenarios and other
+ * suites. Usually a suite consists of different files, which then represent a
+ * complex test. An example of a good suite is a cascade of different files, if
+ * the test can be started in any file and place. This makes it possible to
+ * perform the integration test on different levels and with different
+ * complexity.
+ * 
+ *     
+ *     Assert
+ *     ----
+ * The test cases are implemented with assertions. The test module provides
+ * elementary assertions, you can implement more. The function is simple. If an
+ * assertion was not true, a error is thrown -- see as an example the
+ * implementation here. 
+ * 
+ * Test 1.1.1 20200106
+ * Copyright (C) 2020 Seanox Software Solutions
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 1.1.1 20200106
+ * @author  Seanox Software Solutions
+ * @version 1.1.1 20200106
  */
 if (typeof Test === "undefined") {
     
     /**
-     *  Static component for creating and executing tests.
-     *  The component provides static functions and objects for implementing
-     *  integration tests.
-     *  
-     *  The Test API is part of aspect-js but has to be activated deliberately,
-     *  otherwise it is not available.
-     *  
-     *      Test.activate();
-     *  
-     *  This is necessary so that some enhancements to the JavaScript API that
-     *  are helpful for implementing test are not used productively.
-     *  For example, the redirection and caching of console output.
+     * Static component for creating and executing tests.
+     * The component provides static functions and objects for implementing
+     * integration tests.
+     * 
+     * The Test API is part of aspect-js but has to be activated deliberately,
+     * otherwise it is not available.
+     * 
+     *     Test.activate();
+     * 
+     * This is necessary so that some enhancements to the JavaScript API that
+     * are helpful for implementing test are not used productively.
+     * For example, the redirection and caching of console output.
      */
     window["Test"] = {
             
@@ -122,9 +122,9 @@ if (typeof Test === "undefined") {
     };
     
     /** 
-     *  Activates the test API.
-     *  The method can be called multiple times, but is ignored after the first
-     *  call. A later deactivation of the test API is not possible.
+     * Activates the test API.
+     * The method can be called multiple times, but is ignored after the first
+     * call. A later deactivation of the test API is not possible.
      */
     Test.activate = function() {
         
@@ -132,37 +132,37 @@ if (typeof Test === "undefined") {
             return;
 
         /** 
-         *  Test.activate.lock
-         *      Lock with the activation of the test API.
-         *      The flag cannot be revoked at runtime.    
+         * Test.activate.lock
+         *     Lock with the activation of the test API.
+         *     The flag cannot be revoked at runtime.    
          */
         Object.defineProperty(Test.activate, "lock", {
             value: true
         });
 
         /** 
-         *  Test.stack
-         *      Stack of created/registered test tasks (backlog)
+         * Test.stack
+         *     Stack of created/registered test tasks (backlog)
          */
         Object.defineProperty(Test, "stack", {
             value: new Set()
         }); 
 
         /** 
-         *  Test.listeners
-         *      Map with events and their registered listeners
+         * Test.listeners
+         *     Map with events and their registered listeners
          */
         Object.defineProperty(Test, "listeners", {
             value: new Map()
         }); 
 
         /**
-         *  Registers a callback function for test events.
-         *  @param  event    see Test.EVENT_***
-         *  @param  callback callback function
-         *  @throws An error occurs in the following cases:
-         *      - event is not valid or is not supported
-         *      - callback function is not implemented correctly or does not exist
+         * Registers a callback function for test events.
+         * @param  event    see Test.EVENT_***
+         * @param  callback callback function
+         * @throws An error occurs in the following cases:
+         *     - event is not valid or is not supported
+         *     - callback function is not implemented correctly or does not exist
          */
         Test.listen = function(event, callback) {
             
@@ -183,14 +183,14 @@ if (typeof Test === "undefined") {
         };  
         
         /**
-         *  Internal method to trigger an event.
-         *  All callback functions for this event are called.
-         *  If the script is in a frame, at the parent object it will also try
-         *  to trigger this method. The parent object is always triggered after
-         *  the current object. If an error occurs when calling the current
-         *  object, the parent object is not triggered.
-         *  @param event  see Test.EVENT_***
-         *  @param status meta object with information about the test execution
+         * Internal method to trigger an event.
+         * All callback functions for this event are called.
+         * If the script is in a frame, at the parent object it will also try
+         * to trigger this method. The parent object is always triggered after
+         * the current object. If an error occurs when calling the current
+         * object, the parent object is not triggered.
+         * @param event  see Test.EVENT_***
+         * @param status meta object with information about the test execution
          */
         Test.fire = function(event, status) {
             
@@ -226,46 +226,46 @@ if (typeof Test === "undefined") {
         };    
         
         /**
-         *  Creates and registers a test task.
-         *  A test task is a function or object with the required meta information
-         *  for performing and a test method to be executed.
-         *  
-         *      structure of meta: {name:..., test:..., timeout:..., expected:..., ignore:...}
-         *      
-         *  meta.name       optional name of the test task
-         *  meta.test       an implemented method to be executed as a test
-         *  meta.timeout    maximum runtime of the test task in milliseconds
-         *                  Exceeding this limit will cause the test to fail.
-         *                  A value greater than 0 is expected, otherwise the
-         *                  timeout is ignored.
-         *  meta.expected   if you want to test for the occurrence of an error
-         *                  The error must occur if the test is successful.
-         *                  An error object or a RegExp is expected as value.
-         *  meta.ignore     true, if the test is to be ignored
-         *  
-         *      usage:
-         *      
-         *  Test.create({test() {
-         *      Assert.assertTrue(true);
-         *  }});
-         *  
-         *  Test.create({name:"example", timeout:1000, test() {
-         *      Assert.assertTrue(true);
-         *  }});
-         *  
-         *  Test.create({error:Error test() {
-         *      throw new Error();
-         *  }});
-         *  
-         *  Test.create({error:/^My Error/i, test() {
-         *      throw new Error("My Error");
-         *  }});
-         *  
-         *  Test.create({ignore:true, test() {
-         *      Assert.assertTrue(true);
-         *  }});
-         *  
-         *  @param meta
+         * Creates and registers a test task.
+         * A test task is a function or object with the required meta information
+         * for performing and a test method to be executed.
+         * 
+         *     structure of meta: {name:..., test:..., timeout:..., expected:..., ignore:...}
+         *     
+         * meta.name       optional name of the test task
+         * meta.test       an implemented method to be executed as a test
+         * meta.timeout    maximum runtime of the test task in milliseconds
+         *                 Exceeding this limit will cause the test to fail.
+         *                 A value greater than 0 is expected, otherwise the
+         *                 timeout is ignored.
+         * meta.expected   if you want to test for the occurrence of an error
+         *                 The error must occur if the test is successful.
+         *                 An error object or a RegExp is expected as value.
+         * meta.ignore     true, if the test is to be ignored
+         * 
+         *     usage:
+         *     
+         * Test.create({test() {
+         *     Assert.assertTrue(true);
+         * }});
+         * 
+         * Test.create({name:"example", timeout:1000, test() {
+         *     Assert.assertTrue(true);
+         * }});
+         * 
+         * Test.create({error:Error test() {
+         *     throw new Error();
+         * }});
+         * 
+         * Test.create({error:/^My Error/i, test() {
+         *     throw new Error("My Error");
+         * }});
+         * 
+         * Test.create({ignore:true, test() {
+         *     Assert.assertTrue(true);
+         * }});
+         * 
+         * @param meta
          */
         Test.create = function(meta) {
             
@@ -288,112 +288,112 @@ if (typeof Test === "undefined") {
         };
 
         /**
-         *  Starts the test run.
-         *  The execution of the tests can optionally be configured with the
-         *  start by passing a meta object. The parameters in the meta object
-         *  are optional and cannot be changed at test runtime. Only with the
-         *  next start can new parameters be passed as meta objects.
+         * Starts the test run.
+         * The execution of the tests can optionally be configured with the
+         * start by passing a meta object. The parameters in the meta object
+         * are optional and cannot be changed at test runtime. Only with the
+         * next start can new parameters be passed as meta objects.
+         * 
+         *     Test.start({auto: boolean, output: {...}, monitor: {...}});
+         *     
+         *     auto
+         *     ----
+         * true, the start is triggered when the page is loaded     
+         * If the page is already loaded, the parameter auto is
+         * ignored and the start is executed immediately.
+         * 
+         *     output
+         *     ----
+         * Simple function or object for outputting messages and errors.
+         * If not specified, console object is used.    
+         * 
+         *     Implementation of an output (as function or object):
+         *     
+         * var output = {
+         * 
+         *     log(message) {
+         *         ...
+         *     },
+         *     
+         *     error(message) {
+         *         ...
+         *     }
+         * };
+         * 
+         *     monitor
+         *     ----
+         * Monitors the test procedure and is informed about the various cycles
+         * during execution. The monitor also controls the data output. For
+         * example, the output can be redirected to DOM elements. Without a
+         * monitor the tests will also be performed, but there will be an
+         * output about success and failure.
+         * If no monitor is specified, the internal monitor is used with a
+         * simple console output.     
+         * 
+         *     Implementation of a monitor (as function or object):
+         *     
+         * var monitor = {
+         * 
+         *     start(status) {
+         *         The method is called with the start.
+         *     },
+         *     
+         *     suspend(status) {
+         *         The method is called with suspension.
+         *     },
+         *     
+         *     resume(status) {
+         *         The method is called if the test run is stopped and is to be
+         *         continued later.
+         *     },
+         *     
+         *     interrupt(status) {
+         *         The method is called if you want to abort the test run.
+         *         The test run cannot then be resumed.
+         *     },
+         *     
+         *     perform(status) {
+         *         The method is called before a test task is performed.
+         *     },
+         *     
+         *     response(status) {
+         *         The method is called when a test task has been performed.
+         *         Here you can find the result of the test task.
+         *     },
+         *     
+         *     finish(status) {
+         *         The method is called when all test tasks have been completed.
+         *     }
+         * };
+         * 
+         * The current status is passed to all monitor methods as an object.
+         * The status is a snapshot of the current test run with details of the
+         * current task and the queue. The details are read-only and cannot be
+         * changed.
          *  
-         *      Test.start({auto: boolean, ouput: {...}, monitor: {...}});
-         *      
-         *      auto
-         *      ----
-         *  true, the start is triggered when the page is loaded     
-         *  If the page is already loaded, the parameter auto is
-         *  ignored and the start is executed immediately.
-         *  
-         *      output
-         *      ----
-         *  Simple function or object for outputting messages and errors.
-         *  If not specified, console object is used.    
-         *  
-         *      Implementation of an output (as function or object):
-         *      
-         *  var output = {
-         *  
-         *      log(message) {
-         *          ...
-         *      },
-         *      
-         *      error(message) {
-         *          ...
-         *      }
-         *  };
-         *  
-         *      monitor
-         *      ----
-         *  Monitors the test procedure and is informed about the various cycles
-         *  during execution. The monitor also controls the data output. For
-         *  example, the output can be redirected to DOM elements. Without a
-         *  monitor the tests will also be performed, but there will be an
-         *  output about success and failure.
-         *  If no monitor is specified, the internal monitor is used with a
-         *  simple console output.     
-         *  
-         *      Implementation of a monitor (as function or object):
-         *      
-         *  var monitor = {
-         *  
-         *      start(status) {
-         *          The method is called with the start.
-         *      },
-         *      
-         *      suspend(status) {
-         *          The method is called with suspension.
-         *      },
-         *      
-         *      resume(status) {
-         *          The method is called if the test run is stopped and is to be
-         *          continued later.
-         *      },
-         *      
-         *      interrupt(status) {
-         *          The method is called if you want to abort the test run.
-         *          The test run cannot then be resumed.
-         *      },
-         *      
-         *      perform(status) {
-         *          The method is called before a test task is performed.
-         *      },
-         *      
-         *      response(status) {
-         *          The method is called when a test task has been performed.
-         *          Here you can find the result of the test task.
-         *      },
-         *      
-         *      finish(status) {
-         *          The method is called when all test tasks have been completed.
-         *      }
-         *  };
-         *  
-         *  The current status is passed to all monitor methods as an object.
-         *  The status is a snapshot of the current test run with details of the
-         *  current task and the queue. The details are read-only and cannot be
-         *  changed.
-         *   
-         *      structure of status: {task:..., queue:...}
-         *      
-         *  task.title      title of the test task    
-         *  task.meta       meta information about the test itself
-         *                  name, test, timeout, expected, serial
-         *  task.running    indicator when the test task is in progress
-         *  task.timing     start time from the test task in milliseconds
-         *  task.timeout    optional, the time in milliseconds when a timeout is
-         *                  expected
-         *  task.duration   total execution time of the test task in
-         *                  milliseconds, is set with the end of the test task
-         *  task.error      optional, if an unexpected error (also asser error)
-         *                  has occurred, which terminated the test task
-         *  
-         *  queue.timing    start time in milliseconds 
-         *  queue.size      original queue length
-         *  queue.length    number of outstanding tests
-         *  queue.progress  number of tests performed     
-         *  queue.lock      indicator when a test is performed and the queue is
-         *                  waiting
-         *  queue.faults    number of detected faults
-         *  
-         *  @param meta  
+         *     structure of status: {task:..., queue:...}
+         *     
+         * task.title      title of the test task    
+         * task.meta       meta information about the test itself
+         *                 name, test, timeout, expected, serial
+         * task.running    indicator when the test task is in progress
+         * task.timing     start time from the test task in milliseconds
+         * task.timeout    optional, the time in milliseconds when a timeout is
+         *                 expected
+         * task.duration   total execution time of the test task in
+         *                 milliseconds, is set with the end of the test task
+         * task.error      optional, if an unexpected error (also assert error)
+         *                 has occurred, which terminated the test task
+         * 
+         * queue.timing    start time in milliseconds 
+         * queue.size      original queue length
+         * queue.length    number of outstanding tests
+         * queue.progress  number of tests performed     
+         * queue.lock      indicator when a test is performed and the queue is
+         *                 waiting
+         * queue.faults    number of detected faults
+         * 
+         * @param meta  
          */
         Test.start = function(meta) {
             
@@ -420,13 +420,13 @@ if (typeof Test === "undefined") {
 
             Test.worker = {};
 
-            //Test.worker.output
-            //    Output to be used for all messages and errors
+            // Test.worker.output
+            //     Output to be used for all messages and errors
             Test.worker.output = meta ? meta.output : null;
             Test.worker.output = Test.worker.output || console;
             
-            //Test.worker.monitor
-            //    Monitoring of test processing
+            // Test.worker.monitor
+            //     Monitoring of test processing
             Test.worker.monitor = meta ? meta.monitor : null;
             Test.worker.monitor = Test.worker.monitor || {
                 start(status) {
@@ -463,8 +463,8 @@ if (typeof Test === "undefined") {
                 }            
             };
 
-            //Test.worker.queue
-            //    Queue of currently running test tasks
+            // Test.worker.queue
+            //     Queue of currently running test tasks
             Test.worker.queue = Test.worker.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
             if (Test.worker.queue.stack.length == 0) {
                 Test.worker.queue.stack = Array.from(Test.stack);
@@ -472,8 +472,8 @@ if (typeof Test === "undefined") {
                 Test.worker.queue.timing = new Date().getTime();
             }
             
-            //Test.worker.timeout
-            //    Timer for controlling test tasks with timeout
+            // Test.worker.timeout
+            //     Timer for controlling test tasks with timeout
             Test.worker.timeout = window.setInterval(() => {
             
                 if (Test.worker.status == Test.EVENT_SUSPEND)
@@ -496,8 +496,8 @@ if (typeof Test === "undefined") {
                 Test.worker.queue.lock = false;
             }, 25);
             
-            //Test.worker.interval
-            //    Timer for processing the queue
+            // Test.worker.interval
+            //     Timer for processing the queue
             Test.worker.interval = window.setInterval(() => {
 
                 if (Test.worker.status == Test.EVENT_SUSPEND)
@@ -517,8 +517,8 @@ if (typeof Test === "undefined") {
                     var timeout = false;
                     if ((meta.timeout || 0) > 0)
                         timeout = new Date().getTime() +meta.timeout;
-                    //Test.worker.task
-                    //    Currently performed test task
+                    // Test.worker.task
+                    //     Currently performed test task
                     Test.worker.task = {title:null, meta, running:true, timing:new Date().getTime(), timeout, duration:false, error:null};
                     Test.worker.task.title = "#" + meta.serial;
                     if (typeof meta.name === "string"
@@ -574,10 +574,10 @@ if (typeof Test === "undefined") {
         };
 
         /**
-         *  Suspends the current test run, which can be continued from the
-         *  current test with Test.resume().
-         *  @throws An error occurs in the following cases:
-         *      - No worker is present or cannot be suspended
+         * Suspends the current test run, which can be continued from the
+         * current test with Test.resume().
+         * @throws An error occurs in the following cases:
+         *     - No worker is present or cannot be suspended
          */
         Test.suspend = function() {
 
@@ -587,9 +587,9 @@ if (typeof Test === "undefined") {
         };
         
         /** 
-         *  Continues the test run if it was previously suspended.
-         *  @throws An error occurs in the following cases:
-         *      - No worker is present or cannot be resumed
+         * Continues the test run if it was previously suspended.
+         * @throws An error occurs in the following cases:
+         *     - No worker is present or cannot be resumed
          */
         Test.resume = function() {
             
@@ -600,10 +600,10 @@ if (typeof Test === "undefined") {
         };
         
         /**
-         *  Interrupts the current test run and discards all outstanding tests.
-         *  The test run can be restarted with Test.start().
-         *  @throws An error occurs in the following cases:
-         *      - No worker is present or cannot be interrupted
+         * Interrupts the current test run and discards all outstanding tests.
+         * The test run can be restarted with Test.start().
+         * @throws An error occurs in the following cases:
+         *     - No worker is present or cannot be interrupted
          */
         Test.interrupt = function() {
             
@@ -616,34 +616,34 @@ if (typeof Test === "undefined") {
         };
 
         /**
-         *  Makes a snapshot of the status of the current test.
-         *  The status contains details of the current task and the queue. The
-         *  details are read-only and cannot be changed. If no test is executed,
-         *  false is returned.
-         *   
-         *      structure of details: {task:..., queue:...}
-         *      
-         *  task.title      title of the test task    
-         *  task.meta       meta information about the test itself
-         *                  name, test, timeout, expected, serial
-         *  task.running    indicator when the test task is in progress
-         *  task.timing     start time from the test task in milliseconds
-         *  task.timeout    optional, the time in milliseconds when a timeout is
-         *                  expected
-         *  task.duration   total execution time of the test task in
-         *                  milliseconds, is set with the end of the test task
-         *  task.error      optional, if an unexpected error (also asser error)
-         *                  has occurred, which terminated the test task
+         * Makes a snapshot of the status of the current test.
+         * The status contains details of the current task and the queue. The
+         * details are read-only and cannot be changed. If no test is executed,
+         * false is returned.
          *  
-         *  queue.timing    start time in milliseconds 
-         *  queue.size      original queue length
-         *  queue.length    number of outstanding tests
-         *  queue.progress  number of tests performed     
-         *  queue.lock      indicator when a test is performed and the queue is
-         *                  waiting
-         *  queue.faults    number of detected faults 
-         *  
-         *  @return an object with detailed status information, otherwise false
+         *     structure of details: {task:..., queue:...}
+         *     
+         * task.title      title of the test task    
+         * task.meta       meta information about the test itself
+         *                 name, test, timeout, expected, serial
+         * task.running    indicator when the test task is in progress
+         * task.timing     start time from the test task in milliseconds
+         * task.timeout    optional, the time in milliseconds when a timeout is
+         *                 expected
+         * task.duration   total execution time of the test task in
+         *                 milliseconds, is set with the end of the test task
+         * task.error      optional, if an unexpected error (also assert error)
+         *                 has occurred, which terminated the test task
+         * 
+         * queue.timing    start time in milliseconds 
+         * queue.size      original queue length
+         * queue.length    number of outstanding tests
+         * queue.progress  number of tests performed     
+         * queue.lock      indicator when a test is performed and the queue is
+         *                 waiting
+         * queue.faults    number of detected faults 
+         * 
+         * @return an object with detailed status information, otherwise false
          */
         Test.status = function() {
             
@@ -719,19 +719,19 @@ if (typeof Test === "undefined") {
         if (typeof Assert === "undefined") {
     
             /**
-             *  A set of assertion methods useful for writing tests.
-             *  Only failed assertions are recorded.
-             *  These methods can be used directly:
-             *      Assert.assertEquals(...);
+             * A set of assertion methods useful for writing tests.
+             * Only failed assertions are recorded.
+             * These methods can be used directly:
+             *     Assert.assertEquals(...);
              */ 
             window["Assert"] = {};
             
             /**
-             *  Creates a new assertion based on an array of variant parameters.
-             *  Size defines the number of test values.
-             *  If more parameters are passed, the first must be the message.
-             *  @param arguments
-             *  @param size
+             * Creates a new assertion based on an array of variant parameters.
+             * Size defines the number of test values.
+             * If more parameters are passed, the first must be the message.
+             * @param arguments
+             * @param size
              */
             Assert.create = function(arguments, size) {
     
@@ -774,13 +774,13 @@ if (typeof Test === "undefined") {
             };
             
             /**
-             *  Asserts that an value is true.
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, value) 
-             *      function(value) 
-             *  @param message
-             *  @param value
+             * Asserts that an value is true.
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
              */       
             Assert.assertTrue = function(variants) {
                 
@@ -791,13 +791,13 @@ if (typeof Test === "undefined") {
             };
             
             /**
-             *  Asserts that an value is false.
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, value) 
-             *      function(value) 
-             *  @param message
-             *  @param value
+             * Asserts that an value is false.
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
              */      
             Assert.assertFalse = function(variants) {
                 
@@ -808,15 +808,15 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             *  Asserts that two values are equals.
-             *  Difference between equals and same: === / == or !== / !=
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, expected, actual) 
-             *      function(expected, actual) 
-             *  @param message
-             *  @param expected
-             *  @param actual
+             * Asserts that two values are equals.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, expected, actual) 
+             *     function(expected, actual) 
+             * @param message
+             * @param expected
+             * @param actual
              */     
             Assert.assertEquals = function(variants) {
                 
@@ -827,15 +827,15 @@ if (typeof Test === "undefined") {
             };
             
             /**
-             *  Asserts that two values are not equals.
-             *  Difference between equals and same: === / == or !== / !=
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, unexpected, actual) 
-             *      function(unexpected, actual) 
-             *  @param message
-             *  @param unexpected
-             *  @param actual
+             * Asserts that two values are not equals.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, unexpected, actual) 
+             *     function(unexpected, actual) 
+             * @param message
+             * @param unexpected
+             * @param actual
              */      
             Assert.assertNotEquals = function(variants) {
                 
@@ -846,15 +846,15 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             *  Asserts that two values are the same.
-             *  Difference between equals and same: === / == or !== / !=
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, expected, actual) 
-             *      function(expected, actual) 
-             *  @param message
-             *  @param expected
-             *  @param actual
+             * Asserts that two values are the same.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, expected, actual) 
+             *     function(expected, actual) 
+             * @param message
+             * @param expected
+             * @param actual
              */      
             Assert.assertSame = function(variants) {
                 
@@ -865,15 +865,15 @@ if (typeof Test === "undefined") {
             };
             
             /**
-             *  Asserts two values are not the same.
-             *  Difference between equals and same: === / == or !== / !=
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, unexpected, actual) 
-             *      function(unexpected, actual) 
-             *  @param message
-             *  @param unexpected
-             *  @param actual
+             * Asserts two values are not the same.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, unexpected, actual) 
+             *     function(unexpected, actual) 
+             * @param message
+             * @param unexpected
+             * @param actual
              */      
             Assert.assertNotSame = function(variants) {
                 
@@ -884,13 +884,13 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             *  Asserts that an value is null.
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, value) 
-             *      function(value) 
-             *  @param message
-             *  @param value
+             * Asserts that an value is null.
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
              */    
             Assert.assertNull = function(variants) {
                 
@@ -901,13 +901,13 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             *  Asserts that an value is not null.
-             *  If the assertion is incorrect, an error with a message is thrown.
-             *  The method has the following various signatures:
-             *      function(message, value) 
-             *      function(value) 
-             *  @param message
-             *  @param value
+             * Asserts that an value is not null.
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
              */
             Assert.assertNotNull = function(variants) {
                 
@@ -918,12 +918,12 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             *  Fails a test with an optional message.
-             *  This assertion will be thrown a error with an optional message.
-             *  The method has the following various signatures:
-             *      function(message) 
-             *      function() 
-             *  @param message
+             * Fails a test with an optional message.
+             * This assertion will be thrown a error with an optional message.
+             * The method has the following various signatures:
+             *     function(message) 
+             *     function() 
+             * @param message
              */
             Assert.fail = function(message) {
     
@@ -935,9 +935,9 @@ if (typeof Test === "undefined") {
         };
         
         /**
-         *  Redirection of the console level INFO, ERROR, WARN, LOG when using
-         *  tests. The outputs are buffered for analysis and listeners can be
-         *  implemented whose callback method is called at console outputs.
+         * Redirection of the console level INFO, ERROR, WARN, LOG when using
+         * tests. The outputs are buffered for analysis and listeners can be
+         * implemented whose callback method is called at console outputs.
          */
             
         /** Cache for analyzing console output */
@@ -957,25 +957,25 @@ if (typeof Test === "undefined") {
         });        
         
         /**
-         *  Registers a callback function for console output.
-         *  Expected method signatures:
-         *      function(level)
-         *      function(level, ...)
-         *  @param callback callback function
+         * Registers a callback function for console output.
+         * Expected method signatures:
+         *     function(level)
+         *     function(level, ...)
+         * @param callback callback function
          */
         console.listen = function(callback) {
             console.listeners.add(callback);
         };
         
         /** 
-         *  General method for redirecting console levels.
-         *  If the script is in a frame, at the parent object it will also try
-         *  to trigger this method. The parent object is always triggered after
-         *  the current object. If an error occurs when calling the current
-         *  object, the parent object is not triggered.
-         *  @param level
-         *  @param variants
-         *  @param output
+         * General method for redirecting console levels.
+         * If the script is in a frame, at the parent object it will also try
+         * to trigger this method. The parent object is always triggered after
+         * the current object. If an error occurs when calling the current
+         * object, the parent object is not triggered.
+         * @param level
+         * @param variants
+         * @param output
          */
         console.forward = function(level, variants, output) {
             
@@ -1032,12 +1032,12 @@ if (typeof Test === "undefined") {
         });        
     
         /**
-         *  Enhancement of the JavaScript API
-         *  Adds a method that simulates keyboard input to the Element objects.
-         *  The following events are triggered during simulation:
-         *      focus, keydown, keyup, change
-         *  @param value simulated input value
-         *  @param clear option false suppresses emptying before input
+         * Enhancement of the JavaScript API
+         * Adds a method that simulates keyboard input to the Element objects.
+         * The following events are triggered during simulation:
+         *     focus, keydown, keyup, change
+         * @param value simulated input value
+         * @param clear option false suppresses emptying before input
          */ 
         if (Element.prototype.typeValue === undefined) {
             Element.prototype.typeValue = function(value, clear) {
@@ -1056,8 +1056,8 @@ if (typeof Test === "undefined") {
         };
     
         /**
-         *  Enhancement of the JavaScript API
-         *  Adds a method that creates a plain string for a Node.
+         * Enhancement of the JavaScript API
+         * Adds a method that creates a plain string for a Node.
          */     
         if (Node.prototype.toPlainString === undefined)
             Node.prototype.toPlainString = function() {
@@ -1065,8 +1065,8 @@ if (typeof Test === "undefined") {
             };    
     
         /**
-         *  Enhancement of the JavaScript API
-         *  Adds a method that creates a plain string for a Element.
+         * Enhancement of the JavaScript API
+         * Adds a method that creates a plain string for a Element.
          */     
         if (Element.prototype.toPlainString === undefined)
             Element.prototype.toPlainString = function() {
@@ -1074,8 +1074,8 @@ if (typeof Test === "undefined") {
         };   
         
         /**
-         *  Enhancement of the JavaScript API
-         *  Adds a method that creates a plain string for a Object.
+         * Enhancement of the JavaScript API
+         * Adds a method that creates a plain string for a Object.
          */      
         if (Object.prototype.toPlainString === undefined)
             Object.prototype.toPlainString = function() {
@@ -1086,12 +1086,12 @@ if (typeof Test === "undefined") {
             };     
           
         /**
-         *  Enhancement of the JavaScript API
-         *  Adds a method to trigger an event for elements.
-         *  @param event   type of event
-         *  @param bubbles deciding whether the event should bubble up through
-         *      the event chain or not
-         *  @param cancel  defining whether the event can be canceled
+         * Enhancement of the JavaScript API
+         * Adds a method to trigger an event for elements.
+         * @param event   type of event
+         * @param bubbles deciding whether the event should bubble up through
+         *     the event chain or not
+         * @param cancel  defining whether the event can be canceled
          */         
         if (Element.prototype.trigger === undefined)
             Element.prototype.trigger = function(event, bubbles, cancel) {

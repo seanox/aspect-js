@@ -1,51 +1,51 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
- *  Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
+ * im Folgenden Seanox Software Solutions oder kurz Seanox genannt. Diese
+ * Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Seanox aspect-js, Fullstack JavaScript UI Framework
- *  Copyright (C) 2020 Seanox Software Solutions
+ * Seanox aspect-js, Fullstack JavaScript UI Framework
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of version 2 of the GNU General Public License as published
+ * by the Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *  
- *  
- *      DESCRIPTION
- *      ----
- *  General extension of the JavaScript API.
- *  
- *  Extension 1.1.1 20200106
- *  Copyright (C) 2020 Seanox Software Solutions
- *  Alle Rechte vorbehalten.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * 
+ * 
+ *     DESCRIPTION
+ *     ----
+ * General extension of the JavaScript API.
+ * 
+ * Extension 1.1.1 20200106
+ * Copyright (C) 2020 Seanox Software Solutions
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 1.1.1 20200106
+ * @author  Seanox Software Solutions
+ * @version 1.1.1 20200106
  */
 if (typeof Namespace === "undefined") {
 
     /**
-     *  Namespace at object level.
-     *  Comparable to packages in other programming languages, namespaces can be
-     *  used to map hierarchical structures and to group thematically related
-     *  components and resources.
-     *  The implementation happens in JavaScript at object level.
-     *  This means that it is not a real element of the programming language,
-     *  but is represented by chained static objects.
-     *  Each level in this object chain represents a namespace.
-     *  As is typical for object identifiers, namespaces also use letters,
-     *  numbers, and underscores separated by dots.
-     *  As a special feature, arrays are also supported. If an object level in
-     *  the namespace is a pure number, an array is assumed.
+     * Namespace at object level.
+     * Comparable to packages in other programming languages, namespaces can be
+     * used to map hierarchical structures and to group thematically related
+     * components and resources.
+     * The implementation happens in JavaScript at object level.
+     * This means that it is not a real element of the programming language,
+     * but is represented by chained static objects.
+     * Each level in this object chain represents a namespace.
+     * As is typical for object identifiers, namespaces also use letters,
+     * numbers, and underscores separated by dots.
+     * As a special feature, arrays are also supported. If an object level in
+     * the namespace is a pure number, an array is assumed.
      */
     window["Namespace"] = {
             
@@ -57,13 +57,13 @@ if (typeof Namespace === "undefined") {
     };
     
     /** 
-     *  Validates a requested namespace and creates a corresponding meta object.
-     *  The method has the following various signatures:
-     *      Namespace.locate();
-     *      Namespace.locate(namespace);
-     *      Namespace.locate(object, namespace);
-     *  @return the created meta object
-     *  @throws An error occurs in case of invalid data types or syntax 
+     * Validates a requested namespace and creates a corresponding meta object.
+     * The method has the following various signatures:
+     *     Namespace.locate();
+     *     Namespace.locate(namespace);
+     *     Namespace.locate(object, namespace);
+     * @return the created meta object
+     * @throws An error occurs in case of invalid data types or syntax 
      */
     Namespace.locate = function(variants) {
         
@@ -94,16 +94,16 @@ if (typeof Namespace === "undefined") {
     };    
     
     /**
-     *  Creates a namespace to pass string.
-     *  Without arguments, the method returns the global namespace window.
-     *  The method has the following various signatures:
-     *      Namespace.using();
-     *      Namespace.using(namespace);
-     *      Namespace.using(object, namespace);
-     *  @param  object
-     *  @param  namespace
-     *  @return the created or already existing object(-level)
-     *  @throws An error occurs in case of invalid data types or syntax 
+     * Creates a namespace to pass string.
+     * Without arguments, the method returns the global namespace window.
+     * The method has the following various signatures:
+     *     Namespace.using();
+     *     Namespace.using(namespace);
+     *     Namespace.using(object, namespace);
+     * @param  object
+     * @param  namespace
+     * @return the created or already existing object(-level)
+     * @throws An error occurs in case of invalid data types or syntax 
      */
     Namespace.using = function(...variants) {
         
@@ -128,17 +128,17 @@ if (typeof Namespace === "undefined") {
     };
 
     /** 
-     *  Resolves a namespace and returns the determined object(-level).
-     *  If the namespace does not exist, null is returned.
-     *  Without arguments, the method returns the global namespace window.
-     *  The method has the following various signatures:
-     *      Namespace.lookup();
-     *      Namespace.lookup(namespace);
-     *      Namespace.lookup(object, namespace);
-     *  @param  object
-     *  @param  namespace
-     *  @return the determined object(-level)
-     *  @throws An error occurs in case of invalid data types or syntax
+     * Resolves a namespace and returns the determined object(-level).
+     * If the namespace does not exist, null is returned.
+     * Without arguments, the method returns the global namespace window.
+     * The method has the following various signatures:
+     *     Namespace.lookup();
+     *     Namespace.lookup(namespace);
+     *     Namespace.lookup(object, namespace);
+     * @param  object
+     * @param  namespace
+     * @return the determined object(-level)
+     * @throws An error occurs in case of invalid data types or syntax
      */
     Namespace.lookup = function(...variants) {
         
@@ -163,15 +163,15 @@ if (typeof Namespace === "undefined") {
     };
     
     /**
-     *  Checks whether a namespace exists.
-     *  The method has the following various signatures:
-     *      Namespace.exists();
-     *      Namespace.exists(namespace);
-     *      Namespace.exists(object, namespace);     *  
-     *  @param  object
-     *  @param  namespace
-     *  @return true if the namespace exists
-     *  @throws An error occurs in case of invalid data types or syntax
+     * Checks whether a namespace exists.
+     * The method has the following various signatures:
+     *     Namespace.exists();
+     *     Namespace.exists(namespace);
+     *     Namespace.exists(object, namespace);     * 
+     * @param  object
+     * @param  namespace
+     * @return true if the namespace exists
+     * @throws An error occurs in case of invalid data types or syntax
      */
     Namespace.exists = function(...variants) {
         return Namespace.lookup(...variants) != null;     
@@ -179,11 +179,11 @@ if (typeof Namespace === "undefined") {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Modifies the method to support node and nodes as NodeList and Array.
- *  If the option exclusive is used, existing children will be removed first.
- *  @param node      node(s)
- *  @param exclusive existing children will be removed first
+ * Enhancement of the JavaScript API
+ * Modifies the method to support node and nodes as NodeList and Array.
+ * If the option exclusive is used, existing children will be removed first.
+ * @param node      node(s)
+ * @param exclusive existing children will be removed first
  */
 Element.prototype.appendChild$origin = Element.prototype.appendChild;
 Element.prototype.appendChild = function(node, exclusive) {
@@ -202,10 +202,10 @@ Element.prototype.appendChild = function(node, exclusive) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a static function to create a alhpanumeric serial (U)UID with fixed size.
- *  The quality of the ID is dependent of the length.
- *  @param size optional, default is 16
+ * Enhancement of the JavaScript API
+ * Adds a static function to create a alphanumeric serial (U)UID with fixed size.
+ * The quality of the ID is dependent of the length.
+ * @param size optional, default is 16
  */
 if (Math.uniqueId === undefined) {
     Math.uniqueId = function(size) {
@@ -224,11 +224,11 @@ if (Math.uniqueId === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a static function to create a alhpanumeric serial (U)UID with fixed size.
- *  Compared to Math.uniqueId(), the (U)UID contains a serial reference to time.
- *  The quality of the ID is dependent of the length.
- *  @param size optional, default is 16
+ * Enhancement of the JavaScript API
+ * Adds a static function to create a alphanumeric serial (U)UID with fixed size.
+ * Compared to Math.uniqueId(), the (U)UID contains a serial reference to time.
+ * The quality of the ID is dependent of the length.
+ * @param size optional, default is 16
  */
 if (Math.uniqueSerialId === undefined) {
     Math.uniqueSerialId = function(size) {
@@ -246,11 +246,11 @@ if (Math.uniqueSerialId === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Creates a literal pattern for the specified text.
- *  Metacharacters or escape sequences in the text thus lose their meaning.
- *  @param  text text to be literalized
- *  @return a literal pattern for the specified text 
+ * Enhancement of the JavaScript API
+ * Creates a literal pattern for the specified text.
+ * Metacharacters or escape sequences in the text thus lose their meaning.
+ * @param  text text to be literalized
+ * @return a literal pattern for the specified text 
  */
 if (RegExp.quote === undefined) {
     RegExp.quote = function(text) {
@@ -262,8 +262,8 @@ if (RegExp.quote === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a capitalize function to the String objects.
+ * Enhancement of the JavaScript API
+ * Adds a capitalize function to the String objects.
  */ 
 if (String.prototype.capitalize === undefined) {
     String.prototype.capitalize = function() {
@@ -274,8 +274,8 @@ if (String.prototype.capitalize === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a uncapitalize function to the String objects.
+ * Enhancement of the JavaScript API
+ * Adds a uncapitalize function to the String objects.
  */ 
 if (String.prototype.uncapitalize === undefined) {
     String.prototype.uncapitalize = function() {
@@ -286,8 +286,8 @@ if (String.prototype.uncapitalize === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a function for encoding the string objects in hexadecimal code.
+ * Enhancement of the JavaScript API
+ * Adds a function for encoding the string objects in hexadecimal code.
  */      
 if (String.prototype.encodeHex === undefined) {
     String.prototype.encodeHex = function() {
@@ -304,8 +304,8 @@ if (String.prototype.encodeHex === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a function for decoding hexadecimal code to the string objects.
+ * Enhancement of the JavaScript API
+ * Adds a function for decoding hexadecimal code to the string objects.
  */     
 if (String.prototype.decodeHex === undefined) {
     String.prototype.decodeHex = function() {
@@ -320,8 +320,8 @@ if (String.prototype.decodeHex === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a method for encoding Base64.
+ * Enhancement of the JavaScript API
+ * Adds a method for encoding Base64.
  */ 
 if (String.prototype.encodeBase64 === undefined) {
     String.prototype.encodeBase64 = function() {
@@ -336,8 +336,8 @@ if (String.prototype.encodeBase64 === undefined) {
 }; 
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a method for decoding Base64.
+ * Enhancement of the JavaScript API
+ * Adds a method for decoding Base64.
  */ 
 if (String.prototype.decodeBase64 === undefined) {
     String.prototype.decodeBase64 = function() {
@@ -352,8 +352,8 @@ if (String.prototype.decodeBase64 === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a HTML encode function to the String objects.
+ * Enhancement of the JavaScript API
+ * Adds a HTML encode function to the String objects.
  */ 
 if (String.prototype.encodeHtml === undefined) {
     String.prototype.encodeHtml = function() {
@@ -364,8 +364,8 @@ if (String.prototype.encodeHtml === undefined) {
 }; 
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a method for calculating a hash value.
+ * Enhancement of the JavaScript API
+ * Adds a method for calculating a hash value.
  */ 
 if (String.prototype.hashCode === undefined) {
     String.prototype.hashCode = function() {
@@ -390,8 +390,8 @@ if (String.prototype.hashCode === undefined) {
 }; 
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a decode of slash sequences (control characters).
+ * Enhancement of the JavaScript API
+ * Adds a decode of slash sequences (control characters).
  */ 
 if (String.prototype.unescape === undefined) {
     String.prototype.unescape = function() {
@@ -405,8 +405,8 @@ if (String.prototype.unescape === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a property to get the UID for the window instance.
+ * Enhancement of the JavaScript API
+ * Adds a property to get the UID for the window instance.
  */  
 if (window.serial === undefined) {
     Object.defineProperty(window, "serial", {
@@ -415,10 +415,10 @@ if (window.serial === undefined) {
 };
 
 /**
- *  Enhancement of the JavaScript API
- *  Adds a property to get the context path.
- *  The context path is a part of the request URI and can be compared with the
- *  current working directory.
+ * Enhancement of the JavaScript API
+ * Adds a property to get the context path.
+ * The context path is a part of the request URI and can be compared with the
+ * current working directory.
  */  
 if (window.location.pathcontext === undefined) {
     Object.defineProperty(window.location, "pathcontext", {
