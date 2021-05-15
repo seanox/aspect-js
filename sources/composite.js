@@ -4,7 +4,7 @@
  * Software unterliegt der Version 2 der GNU General Public License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2020 Seanox Software Solutions
+ * Copyright (C) 2021 Seanox Software Solutions
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as published
@@ -116,12 +116,12 @@
  * Thus virtual paths, object structure in JavaScript (namespace) and the
  * nesting of the DOM must match.
  *
- * Composite 1.3.0 20200127
- * Copyright (C) 2020 Seanox Software Solutions
+ * Composite 1.3.2 20210515
+ * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.0 20200127
+ * @version 1.3.2 20210515
  */
 if (typeof Composite === "undefined") {
     
@@ -3382,24 +3382,25 @@ if (typeof Expression === "undefined") {
      * @return the return value of the interpreted expression or an error if a
      *     error or exception has occurred
      */
-    Expression.eval = function(variants) {
+    Expression.eval = function(...variants) {
         
-        var expression = null;
-        if (arguments.length > 1)
-            expression = arguments[1];
-        else if (arguments.length > 0)
-            expression = arguments[0];
+        var expression;
+        if (variants.length > 1)
+            expression = String(variants[1]);
+        else if (variants.length > 0)
+            expression = String(variants[0]);
 
-        var serial = null;
-        if (arguments.length > 1)
-            serial = arguments[0];
-        
-        var script = null;
-        script = serial ? Expression.cache.get(serial) || null : null;
+        var serial;
+        if (variants.length > 1
+                && variants[0])
+            serial = String(variants[0]);
+
+        var script = serial ? Expression.cache.get(serial) : null;
         if (!script)
             script = Expression.parse(expression);
-        Expression.cache.set(serial, script);
-        
+        if (serial)
+            Expression.cache.set(serial, script);
+
         try {return eval(script);
         } catch (exception) {
             exception.message += "\n\t" + script;
