@@ -627,7 +627,18 @@ if (typeof Composite === "undefined") {
     if (Object.exists === undefined)
         Object.exists = function(...variants) {
             return Object.lookup(...variants) != null;   
-        };        
+        };
+
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a static function to checks that an object is not undefined / null.
+     * @param  object
+     * @return true is neither undefined nor null
+     */
+    if (Object.usable === undefined)
+        Object.usable = function(object) {
+            return object !== undefined && object !== null
+        };
 
     /**
      * Enhancement of the JavaScript API
@@ -883,11 +894,12 @@ if (typeof Composite === "undefined") {
                 message = valid.trim();
             if (typeof message !== "string") {
                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE))
-                    message = object.attributes[Composite.ATTRIBUTE_MESSAGE] || "";
+                    message = String(object.attributes[Composite.ATTRIBUTE_MESSAGE] || "");
                 if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
             }
-            if (message && typeof selector.setCustomValidity === "function") {
+            if (typeof selector.setCustomValidity === "function"
+                    && Object.usable(message)) {
                 selector.setCustomValidity(message);
                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
                         && typeof selector.reportValidity === "function")
@@ -899,7 +911,7 @@ if (typeof Composite === "undefined") {
             return;
         return valid; 
     };
-    
+
     /**
      * Mounts the as selector passed element(s) with all its children where an
      * object/model binding is possible. Mount is possible for all elements
