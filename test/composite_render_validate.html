@@ -130,12 +130,12 @@
             snapshot()
 
             for (let index = 1; index <= 9; index++) {
-                document.querySelector("#model #input_" + index).typeValue("inpput_" + index, true)
+                document.querySelector("#model #input_" + index).typeValue("input_" + index, true)
                 document.querySelector("#model #input_" + index).typeValue("", true)
                 snapshot()
                 // Final must be set a value, otherwise the submit will be blocked
                 // and the test for the IFrames will not work, because TargetA waits for a submit.
-                document.querySelector("#model #input_" + index).typeValue("inpput_" + index + "_fill", true)
+                document.querySelector("#model #input_" + index).typeValue("input_" + index + "_fill", true)
             }
 
             document.querySelector("#model #submit").click()
@@ -204,8 +204,8 @@
             Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"))
         }})
         Test.create({test() {
-            Assert.assertEquals("inpput_1|inpput_1_fill|inpput_2|inpput_2_fill|inpput_3|inpput_3_fill|inpput_4|inpput_4_fill"
-                    + "|inpput_5|inpput_5_fill|inpput_6|inpput_6_fill|inpput_7|inpput_7_fill|inpput_8|inpput_8_fill|inpput_9|inpput_9_fill"
+            Assert.assertEquals("input_1|input_1_fill|input_2|input_2_fill|input_3|input_3_fill|input_4|input_4_fill"
+                    + "|input_5|input_5_fill|input_6|input_6_fill|input_7|input_7_fill|input_8|input_8_fill|input_9|input_9_fill"
                     + "|Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"))
         }})
     </script>
