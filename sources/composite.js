@@ -2375,7 +2375,7 @@ if (typeof Composite === "undefined") {
                 selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_IMPORT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, value);
+                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, String(value));
 
                 Composite.render.cache = Composite.render.cache || {};
                 
@@ -2441,7 +2441,7 @@ if (typeof Composite === "undefined") {
                 selector.innerHTML = "";
                 var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, value);
+                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
                 if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
                     var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
                     data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
@@ -2469,10 +2469,8 @@ if (typeof Composite === "undefined") {
             // declared HTML element and is terminated and removed when:
             //   - the element no longer exists in the DOM
             //   - the condition attribute is false
-            var interval = object.attributes[Composite.ATTRIBUTE_INTERVAL];
-            if (interval
-                    && !object.interval) {
-                interval = String(interval).trim();
+            var interval = String(object.attributes[Composite.ATTRIBUTE_INTERVAL] || "").trim();
+            if (interval && !object.interval) {
                 var context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
                 interval = String(Expression.eval(context, interval));
                 if (interval.match(/^\d+$/)) {
@@ -2526,14 +2524,14 @@ if (typeof Composite === "undefined") {
             //      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}   
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
-                    var iterate = object.attributes[Composite.ATTRIBUTE_ITERATE];
+                    var iterate = String(object.attributes[Composite.ATTRIBUTE_ITERATE] || "").trim();
                     var content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                     if (content) {
                         object.iterate = {name:content[1].trim(),
-                                expression:"{{" + content[2].trim() + "}}"
+                            expression:"{{" + content[2].trim() + "}}"
                         };
                         object.template = selector.cloneNode(true);
-                    } else console.error("Invalid iterate: " + iterate);
+                    } else console.error("Invalid iterate" + (iterate ? ": " + iterate : ""));
                 }
                 if (object.iterate) {
                     // A temporary global variable is required for the iteration.
@@ -2607,7 +2605,7 @@ if (typeof Composite === "undefined") {
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
                         return;                    
-                    var value = object.attributes[attribute] || "";
+                    var value = String(object.attributes[attribute] || "");
                     if (!value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         return;
                     var context = serial + ":" + attribute;
