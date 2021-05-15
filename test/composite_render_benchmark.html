@@ -14,17 +14,17 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
     
         Test.create({test() {
-            Assert.assertTrue(String(timing) + "ms", timing < 2500);
-        }});
+            Assert.assertTrue(String(timing) + "ms", timing < 2500)
+        }})
     
-        var timing = new Date().getTime();
+        var timing = new Date().getTime()
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            timing = new Date().getTime() -timing;
-            Test.start();
-        });       
+            timing = new Date().getTime() -timing
+            Test.start()
+        })
     </script>
   </head>
   <body>

@@ -13,55 +13,55 @@
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
     
-        var TestModel_1 = {};
-        TestModel_1.field_1 = "f1";
-        TestModel_1.field_2 = "f2";
+        var TestModel_1 = {}
+        TestModel_1.field_1 = "f1"
+        TestModel_1.field_2 = "f2"
         TestModel_1.method_1 = function() {
-            return "m1";
-        };
+            return "m1"
+        }
         TestModel_1.method_2 = function(value_1) {
-            return "m2" + value_1;
-        };
+            return "m2" + value_1
+        }
         TestModel_1.getField_3 = function(value_1) {
-            return "f3";
-        };
+            return "f3"
+        }
         TestModel_1.getField_11 = function(value_1) {
-            return [{x:{y:"f11[0]->x->y"}}];
-        };        
+            return [{x:{y:"f11[0]->x->y"}}]
+        }
         TestModel_1.getField_12 = function(value_1) {
-            return [{x:[{y:"f12[0]->x->y"}]}];
-        };         
+            return [{x:[{y:"f12[0]->x->y"}]}]
+        }
         
-        var timing = new Date().getTime();
+        var timing = new Date().getTime()
         Test.create({test() {
-            Assert.assertTrue((new Date().getTime() -timing) < 2500);
-        }}); 
+            Assert.assertTrue((new Date().getTime() -timing) < 2500)
+        }})
         Test.create({timeout:500, test() {
-            var expression = document.querySelector("script[type='text/expression']");
-            expression = expression.innerHTML;
+            var expression = document.querySelector("script[type='text/expression']")
+            expression = expression.innerHTML
             for (var loop = 0; loop < 1750; loop++)
-                Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
-        }}); 
+                Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression))
+        }})
         Test.create({timeout:500, test() {
-            var expression = document.querySelector("script[type='text/expression']");
-            expression = expression.innerHTML;
+            var expression = document.querySelector("script[type='text/expression']")
+            expression = expression.innerHTML
             for (var loop = 0; loop < 25000; loop++)
-                Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
-        }});
+                Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression))
+        }})
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (Test.status().queue != null)
-                return;             
-            Test.start();
-        });   
+                return
+            Test.start()
+        })
     </script>
     <script type="text/expression">
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     </script>
   </head>
@@ -70,61 +70,61 @@
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     {{
         ' A:' + TestModel_1.field_11[0].x.y
       + ' B:' + (TestModel_1.field_11[0].x.y).length
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
-      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
+      + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6)
     }}
     
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}

@@ -14,125 +14,125 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript"> 
     
-        Test.activate();
+        Test.activate()
         
         var TestModel = {
             listA: ["a", "b", "c"],
             listB: ["d", "e", "f"],
             listC: ["-", "A", "B", "C", "D", "E", "F"]
-        };
+        }
         
         var tempB = function() {
-            return "123";
-        };
+            return "123"
+        }
         
         var testS = function(text) {
-            var span = document.createElement("span");
-            span.textContent = text + "{{s1}}";
-            return span;
-        };
+            var span = document.createElement("span")
+            span.textContent = text + "{{s1}}"
+            return span
+        }
 
         Test.create({test() {
-            Assert.assertEquals("", OutputA1.textContent);            
-        }});
+            Assert.assertEquals("", OutputA1.textContent)            
+        }})
         Test.create({test() {
-            Assert.assertEquals("a:0", window["a:0"].id);
-        }});
+            Assert.assertEquals("a:0", window["a:0"].id)
+        }})
         Test.create({test() {
-            Assert.assertEquals("0: a of a,b,c", window["a:0"].value);
-        }});
+            Assert.assertEquals("0: a of a,b,c", window["a:0"].value)
+        }})
         Test.create({test() {
-            Assert.assertEquals("a:1", window["a:1"].id);
-        }});
+            Assert.assertEquals("a:1", window["a:1"].id)
+        }})
         Test.create({test() {
-            Assert.assertEquals("1: b of a,b,c", window["a:1"].value);
-        }});
+            Assert.assertEquals("1: b of a,b,c", window["a:1"].value)
+        }})
         Test.create({test() {
-            Assert.assertEquals("a:2", window["a:2"].id);
-        }});
+            Assert.assertEquals("a:2", window["a:2"].id)
+        }})
         Test.create({test() {
-            Assert.assertEquals("2: c of a,b,c", window["a:2"].value);
-        }});
+            Assert.assertEquals("2: c of a,b,c", window["a:2"].value)
+        }})
         Test.create({test() {
-            Assert.assertEquals("", OutputA2.textContent);            
-        }});
+            Assert.assertEquals("", OutputA2.textContent)            
+        }})
 
         Test.create({test() {
-            Assert.assertEquals("123", OutputB1.textContent);            
-        }});
+            Assert.assertEquals("123", OutputB1.textContent)            
+        }})
         Test.create({test() {
-            Assert.assertEquals("b:0", window["b:0"].id);
-        }});
+            Assert.assertEquals("b:0", window["b:0"].id)
+        }})
         Test.create({test() {
-            Assert.assertEquals("0: d of d,e,f", window["b:0"].value);
-        }});
+            Assert.assertEquals("0: d of d,e,f", window["b:0"].value)
+        }})
         Test.create({test() {
-            Assert.assertEquals("b:1", window["b:1"].id);
-        }});
+            Assert.assertEquals("b:1", window["b:1"].id)
+        }})
         Test.create({test() {
-            Assert.assertEquals("1: e of d,e,f", window["b:1"].value);
-        }});
+            Assert.assertEquals("1: e of d,e,f", window["b:1"].value)
+        }})
         Test.create({test() {
-            Assert.assertEquals("b:2", window["b:2"].id);
-        }});
+            Assert.assertEquals("b:2", window["b:2"].id)
+        }})
         Test.create({test() {
-            Assert.assertEquals("2: f of d,e,f", window["b:2"].value);
-        }});
+            Assert.assertEquals("2: f of d,e,f", window["b:2"].value)
+        }})
         Test.create({test() {
-            Assert.assertEquals("123", OutputB2.textContent);            
-        }});
+            Assert.assertEquals("123", OutputB2.textContent)            
+        }})
         Test.create({test() {
-            var content = document.querySelector("table").outerHTML;
-            Assert.assertEquals("B202EWU5NG1620L", content.hashCode());
-        }});
+            var content = document.querySelector("table").outerHTML
+            Assert.assertEquals("B202EWU5NG1620L", content.hashCode())
+        }})
         Test.create({test() {
-            Assert.assertEquals("161616", OutputS1.textContent);
-            Composite.render(document.body);
-        }});   
+            Assert.assertEquals("161616", OutputS1.textContent)
+            Composite.render(document.body)
+        }})   
         Test.create({test() {
-            Assert.assertEquals("", OutputC.textContent.trim());
-        }});
+            Assert.assertEquals("", OutputC.textContent.trim())
+        }})
         Test.create({test() {
-            Assert.assertEquals("", OutputD.textContent.trim());
-        }});
+            Assert.assertEquals("", OutputD.textContent.trim())
+        }})
         Test.create({test() {
-            Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""));
-        }});
+            Assert.assertEquals("ExExEx", OutputE.textContent.replace(/\s+/g, ""))
+        }})
         Test.create({test() {
-            Assert.assertEquals("x1x1x1x2x3x4", OutputF.textContent.replace(/\s+/g, ""));
-        }});
+            Assert.assertEquals("x1x1x1x2x3x4", OutputF.textContent.replace(/\s+/g, ""))
+        }})
         Test.create({test() {
-            Assert.assertEquals("__0:1____1:2____2:3__", OutputG.textContent.replace(/\s+/g, ""));
-        }});
+            Assert.assertEquals("__0:1____1:2____2:3__", OutputG.textContent.replace(/\s+/g, ""))
+        }})
         Test.create({test() {
-            Assert.assertEquals("__0:1____1:2____2:3__", OutputI.textContent.replace(/\s+/g, ""));
-        }});
+            Assert.assertEquals("__0:1____1:2____2:3__", OutputI.textContent.replace(/\s+/g, ""))
+        }})
         Test.create({test() {
-            Assert.assertEquals("__0:____1:____2:__", OutputJ.textContent.replace(/\s+/g, ""));
-        }});
+            Assert.assertEquals("__0:____1:____2:__", OutputJ.textContent.replace(/\s+/g, ""))
+        }})
         Test.create({test() {
-            Assert.assertEquals("SpringSummerAutumnWinter", OutputK.textContent.replace(/\s+/g, ""));
-        }});
+            Assert.assertEquals("SpringSummerAutumnWinter", OutputK.textContent.replace(/\s+/g, ""))
+        }})
         Test.create({test() {
-            var error = String(console.output.error);
-            Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"));
-            Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"));
-            Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"));
-        }});
+            var error = String(console.output.error)
+            Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"))
+            Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"))
+            Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"))
+        }})
 
-        var snapshots = [];
+        var snapshots = []
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (snapshots.length < 5) {
-                var snapshot = document.body.textContent;
-                snapshot = snapshot.replace(/^\s+/mg, "");
-                snapshots.push(snapshot);
+                var snapshot = document.body.textContent
+                snapshot = snapshot.replace(/^\s+/mg, "")
+                snapshots.push(snapshot)
                 window.setTimeout(() => {
-                    Composite.render(document.body);
-                }, 250);
+                    Composite.render(document.body)
+                }, 250)
                 if (snapshots.length == 5)
-                    Test.start();
+                    Test.start()
             }
-        });         
+        })         
     </script>
   </head>
   <body>

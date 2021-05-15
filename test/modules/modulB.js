@@ -9,5 +9,5 @@
 #import io/modulY
 
 if (window['modulB$count'] === undefined)
-    window['modulB$count'] = 0;
-window['modulB$count'] = window['modulB$count'] +1;
+    window['modulB$count'] = 0
+window['modulB$count'] = window['modulB$count'] +1

@@ -17,7 +17,7 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
         var model = {
             user: {
@@ -36,19 +36,19 @@
         }    
         
         Test.create({test() {
-            var assert = '{"user":{"name":"A","address":{"city":"B","citycode":"C","street":"D","number":"E"}},"views":[{"textA":"F"},{"textA":"G"}]}';
-            Assert.assertEquals(assert, model.toPlainString());
-        }});  
+            var assert = '{"user":{"name":"A","address":{"city":"B","citycode":"C","street":"D","number":"E"}},"views":[{"textA":"F"},{"textA":"G"}]}'
+            Assert.assertEquals(assert, model.toPlainString())
+        }})
         
-        var count = 0;
+        var count = 0
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            var nodes = document.querySelectorAll("input[type='text']");
-            nodes = Array.from(nodes);
+            var nodes = document.querySelectorAll("input[type='text']")
+            nodes = Array.from(nodes)
             if (count < nodes.length)
-                nodes[count++].typeValue(String.fromCharCode(65 +count -1));
+                nodes[count++].typeValue(String.fromCharCode(65 +count -1))
             else if (count++ == nodes.length)
-                Test.start();
-        });        
+                Test.start()
+        })
     </script>
   </head>
   <body>

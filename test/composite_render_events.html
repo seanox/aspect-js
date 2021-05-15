@@ -12,104 +12,104 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
         var model = {
             _textA:[""],    
             set textA(text) {
-                this._textA[0] = text;
-                this._textA.push(text);
+                this._textA[0] = text
+                this._textA.push(text)
             },
             get textA() {
-                return this._textA.join(" ").trim().replace(/\s+/g, " ");
+                return this._textA.join(" ").trim().replace(/\s+/g, " ")
             },
             _textB:[""],    
             set textB(text) {
-                this._textB[0] = text;
-                this._textB.push(text);
+                this._textB[0] = text
+                this._textB.push(text)
             },
             get textB() {
-                return this._textB.join(" ").trim().replace(/\s+/g, " ");
+                return this._textB.join(" ").trim().replace(/\s+/g, " ")
             },
             _textC:[""],    
             set textC(text) {
-                this._textC[0] = text;
-                this._textC.push(text);
+                this._textC[0] = text
+                this._textC.push(text)
             },
             get textC() {
-                return this._textC.join(" ").trim().replace(/\s+/g, " ");
+                return this._textC.join(" ").trim().replace(/\s+/g, " ")
             },
             _textD:[""],    
             set textD(text) {
-                this._textD[0] = text;
-                this._textD.push(text);
+                this._textD[0] = text
+                this._textD.push(text)
             },
             get textD() {
-                return this._textD.join(" ").trim().replace(/\s+/g, " ");
+                return this._textD.join(" ").trim().replace(/\s+/g, " ")
             },
             _textE:[""],    
             set textE(text) {
-                this._textE[0] = text;
-                this._textE.push(text);
+                this._textE[0] = text
+                this._textE.push(text)
             },
             get textE() {
-                return this._textE.join(" ").trim().replace(/\s+/g, " ");
+                return this._textE.join(" ").trim().replace(/\s+/g, " ")
             },
             _textF:[""],    
             set textF(text) {
-                this._textF[0] = text;
-                this._textF.push(text);
+                this._textF[0] = text
+                this._textF.push(text)
             },
             get textF() {
-                return this._textF.join(" ").trim().replace(/\s+/g, " ");
+                return this._textF.join(" ").trim().replace(/\s+/g, " ")
             }
-        };
+        }
         
-        var count = 0;
+        var count = 0
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             switch (++count) {
                 case 1:
-                    textA.value = "";
-                    textB.value = "";
-                    textC.value = "";
-                    textD.value = "";
-                    textE.value = "";
-                    textF.value = "";
+                    textA.value = ""
+                    textB.value = ""
+                    textC.value = ""
+                    textD.value = ""
+                    textE.value = ""
+                    textF.value = ""
                     
                     Composite.asynchron(() => {
-                        textA.typeValue("HelloWorld");
-                    });                    
-                    return;
+                        textA.typeValue("HelloWorld")
+                    })
+                    return
                 case 2:
                     Composite.asynchron(() => {
-                        textB.typeValue("HelloWorld");
-                    });                    
-                    return;
+                        textB.typeValue("HelloWorld")
+                    })
+                    return
                 case 12:
                     Composite.asynchron(() => {
-                        textC.typeValue("HelloWorld");
-                    });                    
-                    return;  
+                        textC.typeValue("HelloWorld")
+                    })
+                    return
                 case 22:
                     Composite.asynchron(() => {
-                        textD.typeValue("HelloWorld");
-                    });                    
-                    return;   
+                        textD.typeValue("HelloWorld")
+                    })
+                    return
                 case 42:
                     Composite.asynchron(() => {
-                        textE.typeValue("HelloWorld");
-                    });  
+                        textE.typeValue("HelloWorld")
+                    })
                     Composite.asynchron(() => {
-                        textF.typeValue("HelloWorld");
-                    });                    
-                    Test.start();
-                    return;                      
+                        textF.typeValue("HelloWorld")
+                    })
+                    Test.start()
+                    return
             }
-        }); 
+        })
         
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test']", document.body.textContent); 
-        }});        
+            Assert.assertSameTo("script[type='text/test']", document.body.textContent)
+        }})
     </script>
     <script type="text/test">
 A:HelloWorld HelloWorld

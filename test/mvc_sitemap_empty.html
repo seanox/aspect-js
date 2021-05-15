@@ -17,15 +17,15 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
        
-        Test.activate();
+        Test.activate()
         
         Test.create({test() {
-            var match = document.body.innerHTML.match(/(id=\S+)/g);
-            Assert.assertTrue(!!match);
-            Assert.assertEquals("id=\"a\" id=\"a1\" id=\"c\" id=\"c1\"", match.join(" "));
-        }});        
+            var match = document.body.innerHTML.match(/(id=\S+)/g)
+            Assert.assertTrue(!!match)
+            Assert.assertEquals("id=\"a\" id=\"a1\" id=\"c\" id=\"c1\"", match.join(" "))
+        }})
         
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
   </head>
   <body>

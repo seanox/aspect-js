@@ -15,84 +15,84 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
     
         var Model = {
             onA: false,
             toggleA() {
-                this.onA = !this.onA;
-                return this.onA;
+                this.onA = !this.onA
+                return this.onA
             },
             onB: false,
             toggleB() {
-                this.onB = !this.onB;
-                return this.onB;
+                this.onB = !this.onB
+                return this.onB
             },
             onC: false,
             toggleC() {
-                this.onC = !this.onC;
-                return this.onC;
+                this.onC = !this.onC
+                return this.onC
             },
             onD: false,
             toggleD() {
-                this.onD = !this.onD;
-                return this.onD;
+                this.onD = !this.onD
+                return this.onD
             },
             onE: false,
             toggleE() {
-                this.onE = !this.onE;
-                return this.onE;
+                this.onE = !this.onE
+                return this.onE
             },
             listE: ["a", "b", "c"]
-        };
+        }
         
         var testS = function(text) {
-            var span = document.createElement("span");
-            span.textContent = text;
-            return span;
-        };        
+            var span = document.createElement("span")
+            span.textContent = text
+            return span
+        }
         
-        var snapshots = [];
+        var snapshots = []
         Composite.listen(Composite.EVENT_RENDER_END, (event, element) => {
             if (element instanceof Node
                     && element.nodeType == Node.TEXT_NODE)
-                return;
-            var snapshot = document.body.textContent;
-            snapshot = snapshot.replace(/^\s+/mg, "");
-            snapshots.push(snapshot);
+                return
+            var snapshot = document.body.textContent
+            snapshot = snapshot.replace(/^\s+/mg, "")
+            snapshots.push(snapshot)
             if (snapshots.length < 5)
-                Composite.asynchron(Composite.render, document.body);
+                Composite.asynchron(Composite.render, document.body)
             else if (snapshots.length == 5)
-                Test.start();
-        });
+                Test.start()
+        })
 
-        var x1 = 0;
-        var x2 = 0;
-        var x3 = 0;
-        var x4 = 0;
+        var x1 = 0
+        var x2 = 0
+        var x3 = 0
+        var x4 = 0
         
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());
-        }});
+            Assert.assertSameTo("script[type='text/test-1']", snapshots.shift())
+        }})
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-2']", snapshots.shift());
-        }});
+            Assert.assertSameTo("script[type='text/test-2']", snapshots.shift())
+        }})
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-3']", snapshots.shift());
-        }});
+            Assert.assertSameTo("script[type='text/test-3']", snapshots.shift())
+        }})
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
-        }});
+            Assert.assertSameTo("script[type='text/test-4']", snapshots.shift())
+        }})
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-5']", snapshots.shift());
-        }});
+            Assert.assertSameTo("script[type='text/test-5']", snapshots.shift())
+        }})
         Test.create({test() {
-            var error = String(console.output.error);
-            Assert.assertTrue(error.includes("Invalid condition: {{null"));
-            Assert.assertTrue(error.includes("Invalid condition: null}}"));
-            Assert.assertTrue(error.includes("Invalid condition: {{null}}{{null}}"));
-            Assert.assertTrue(error.includes("Invalid condition: true"));
-        }});
+            var error = String(console.output.error)
+            Assert.assertTrue(error.includes("Invalid condition: {{null"))
+            Assert.assertTrue(error.includes("Invalid condition: null}}"))
+            Assert.assertTrue(error.includes("Invalid condition: {{null}}{{null}}"))
+            Assert.assertTrue(error.includes("Invalid condition: true"))
+        }})
     </script>
     <script type="text/test-1">
 A1AA
@@ -109,10 +109,10 @@ A2AA
 B2B
 C2CC    
 OnA: true
-O1: 1x1++; output1.textContent = x1;
-O2: 1x2++; output2.textContent = x2;
-O3: 1 falsex3++; output3.textContent = x3;
-O4: 1 falsex4++; output4.textContent = x4;
+O1: 1x1++; output1.textContent = x1
+O2: 1x2++; output2.textContent = x2
+O3: 1 falsex3++; output3.textContent = x3
+O4: 1 falsex4++; output4.textContent = x4
 E::E
 SA:1:1:SA
 SB:1:1:SB    
@@ -140,8 +140,8 @@ A2AA
 B2B
 C2CC    
 OnA: true
-O1: 1x1++; output1.textContent = x1;
-O2: 2x2++; output2.textContent = x2;
+O1: 1x1++; output1.textContent = x1
+O2: 2x2++; output2.textContent = x2
 O3: 1 true 
 O4: 1 true 
 E:abc:E
@@ -167,10 +167,10 @@ A2A
 B2BB
 C2C    
 OnA: false
-O1: 1x1++; output1.textContent = x1;
-O2: 3x2++; output2.textContent = x2;
-O3: 1 falsex3++; output3.textContent = x3;
-O4: 2 falsex4++; output4.textContent = x4;
+O1: 1x1++; output1.textContent = x1
+O2: 3x2++; output2.textContent = x2
+O3: 1 falsex3++; output3.textContent = x3
+O4: 2 falsex4++; output4.textContent = x4
 E::E
 SA:3:1:SA    
 SB:3:3:SB   
@@ -199,8 +199,8 @@ A2A
 B2BB
 C2C    
 OnA: false
-O1: 1x1++; output1.textContent = x1;
-O2: 4x2++; output2.textContent = x2;
+O1: 1x1++; output1.textContent = x1
+O2: 4x2++; output2.textContent = x2
 O3: 1 true 
 O4: 2 true 
 E:abc:E
@@ -226,10 +226,10 @@ A2AA
 B2B
 C2CC    
 OnA: true
-O1: 1x1++; output1.textContent = x1;
-O2: 5x2++; output2.textContent = x2;
-O3: 1 falsex3++; output3.textContent = x3;
-O4: 3 falsex4++; output4.textContent = x4;
+O1: 1x1++; output1.textContent = x1
+O2: 5x2++; output2.textContent = x2
+O3: 1 falsex3++; output3.textContent = x3
+O4: 3 falsex4++; output4.textContent = x4
 E::E
 SA:5:1:SA    
 SB:5:5:SB   

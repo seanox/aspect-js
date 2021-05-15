@@ -12,113 +12,113 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">   
     
-        Test.activate(); 
+        Test.activate()
       
         Test.create({test() {
-            Assert.assertNull(Path.normalize());
-            Assert.assertNull(Path.normalize(null));
+            Assert.assertNull(Path.normalize())
+            Assert.assertNull(Path.normalize(null))
             
-            Assert.assertEquals("#", Path.normalize(""));
-            Assert.assertEquals("#", Path.normalize("#"));
-            Assert.assertEquals("#", Path.normalize("##"));
-            Assert.assertEquals("###", Path.normalize("###"));
-            Assert.assertEquals("###", Path.normalize("####"));
-            Assert.assertEquals("###", Path.normalize("#####"));
+            Assert.assertEquals("#", Path.normalize(""))
+            Assert.assertEquals("#", Path.normalize("#"))
+            Assert.assertEquals("#", Path.normalize("##"))
+            Assert.assertEquals("###", Path.normalize("###"))
+            Assert.assertEquals("###", Path.normalize("####"))
+            Assert.assertEquals("###", Path.normalize("#####"))
 
-            Assert.assertEquals("#1#2#3", Path.normalize("#1#2#3"));
-            Assert.assertEquals("#1#2#3", Path.normalize("#1#2#3", "#"));
+            Assert.assertEquals("#1#2#3", Path.normalize("#1#2#3"))
+            Assert.assertEquals("#1#2#3", Path.normalize("#1#2#3", "#"))
             
-            Assert.assertEquals("#x#y#z", Path.normalize("#x#y#z#", ""));
-            Assert.assertEquals("#x#y", Path.normalize("#x#y#z##", ""));
-            Assert.assertEquals("#x", Path.normalize("#x#y#z###", ""));
+            Assert.assertEquals("#x#y#z", Path.normalize("#x#y#z#", ""))
+            Assert.assertEquals("#x#y", Path.normalize("#x#y#z##", ""))
+            Assert.assertEquals("#x", Path.normalize("#x#y#z###", ""))
             
-            Assert.assertEquals("#x#y#z", Path.normalize("#x#y#z#", "#"));
-            Assert.assertEquals("#x#y", Path.normalize("#x#y#z##", "#"));
-            Assert.assertEquals("#x", Path.normalize("#x#y#z###", "#"));
-        }});
+            Assert.assertEquals("#x#y#z", Path.normalize("#x#y#z#", "#"))
+            Assert.assertEquals("#x#y", Path.normalize("#x#y#z##", "#"))
+            Assert.assertEquals("#x", Path.normalize("#x#y#z###", "#"))
+        }})
         
         Test.create({test() {
-            Assert.assertEquals("#aaa", Path.normalize("aaa"));
-            Assert.assertEquals("#aaa#bbb", Path.normalize("aaa#bbb"));
-            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa#bbb#ccc"));
-            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa#bbb#ccc#"));
-            Assert.assertEquals("#aaa#bbb", Path.normalize("aaa#bbb#ccc##"));
-            Assert.assertEquals("#aaa", Path.normalize("aaa#bbb#ccc###"));
-            Assert.assertEquals("#", Path.normalize("aaa#bbb#ccc####"));
-            Assert.assertEquals("#", Path.normalize("aaa#bbb#ccc#####"));
-        }});
+            Assert.assertEquals("#aaa", Path.normalize("aaa"))
+            Assert.assertEquals("#aaa#bbb", Path.normalize("aaa#bbb"))
+            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa#bbb#ccc"))
+            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("aaa#bbb#ccc#"))
+            Assert.assertEquals("#aaa#bbb", Path.normalize("aaa#bbb#ccc##"))
+            Assert.assertEquals("#aaa", Path.normalize("aaa#bbb#ccc###"))
+            Assert.assertEquals("#", Path.normalize("aaa#bbb#ccc####"))
+            Assert.assertEquals("#", Path.normalize("aaa#bbb#ccc#####"))
+        }})
         
         Test.create({test() {
-            Assert.assertEquals("#aaa", Path.normalize("#aaa"));
-            Assert.assertEquals("#aaa#bbb", Path.normalize("#aaa#bbb"));
-            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc"));
-            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc#"));
-            Assert.assertEquals("#aaa#bbb", Path.normalize("#aaa#bbb#ccc##")); 
-            Assert.assertEquals("#aaa", Path.normalize("#aaa#bbb#ccc###"));
-            Assert.assertEquals("#", Path.normalize("#aaa#bbb#ccc####"));
-            Assert.assertEquals("#", Path.normalize("#aaa#bbb#ccc#####")); 
-        }});
+            Assert.assertEquals("#aaa", Path.normalize("#aaa"))
+            Assert.assertEquals("#aaa#bbb", Path.normalize("#aaa#bbb"))
+            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc"))
+            Assert.assertEquals("#aaa#bbb#ccc", Path.normalize("#aaa#bbb#ccc#"))
+            Assert.assertEquals("#aaa#bbb", Path.normalize("#aaa#bbb#ccc##"))
+            Assert.assertEquals("#aaa", Path.normalize("#aaa#bbb#ccc###"))
+            Assert.assertEquals("#", Path.normalize("#aaa#bbb#ccc####"))
+            Assert.assertEquals("#", Path.normalize("#aaa#bbb#ccc#####"))
+        }})
         
         Test.create({test() { 
-            Assert.assertEquals("#a#b#c#d#f", Path.normalize("#a#b#c#d#e##f"));
-            Assert.assertEquals("#a#b#c#f", Path.normalize("#a#b#c#d#e###f"));
-            Assert.assertEquals("#f", Path.normalize("###f"));              
-            Assert.assertEquals("#f", Path.normalize("####f"));
-        }});
+            Assert.assertEquals("#a#b#c#d#f", Path.normalize("#a#b#c#d#e##f"))
+            Assert.assertEquals("#a#b#c#f", Path.normalize("#a#b#c#d#e###f"))
+            Assert.assertEquals("#f", Path.normalize("###f"))
+            Assert.assertEquals("#f", Path.normalize("####f"))
+        }})
 
         Test.create({test() {
-            Assert.assertEquals("#x#y#z#a#b#c#d#f", Path.normalize("#x#y#z", "#a#b#c#d#e##f"));
-            Assert.assertEquals("#x#y#z#a#b#c#f", Path.normalize("#x#y#z", "#a#b#c#d#e###f"));
-            Assert.assertEquals("#x#f", Path.normalize("#x#y#z", "###f"));              
-            Assert.assertEquals("#f", Path.normalize("#x#y#z", "####f"));              
-            Assert.assertEquals("#f", Path.normalize("#x#y#z", "#####f"));              
-            Assert.assertEquals("#f", Path.normalize("#x#y#z", "######f"));
-        }});
+            Assert.assertEquals("#x#y#z#a#b#c#d#f", Path.normalize("#x#y#z", "#a#b#c#d#e##f"))
+            Assert.assertEquals("#x#y#z#a#b#c#f", Path.normalize("#x#y#z", "#a#b#c#d#e###f"))
+            Assert.assertEquals("#x#f", Path.normalize("#x#y#z", "###f"))
+            Assert.assertEquals("#f", Path.normalize("#x#y#z", "####f"))
+            Assert.assertEquals("#f", Path.normalize("#x#y#z", "#####f"))
+            Assert.assertEquals("#f", Path.normalize("#x#y#z", "######f"))
+        }})
 
         Test.create({expected:/\bInvalid path: httpx:\/\/local\/#a#b#c#d#e##f/i, test() {
-            Path.normalize("httpx://local/#x#y#z", "httpx://local/#a#b#c#d#e##f");
-        }});
+            Path.normalize("httpx://local/#x#y#z", "httpx://local/#a#b#c#d#e##f")
+        }})
         
         Test.create({expected:/\bInvalid path: httpx:\/\/local\/#a#b#c#d#e###f/i, test() {
-            Path.normalize("httpx://local/#x#y#z", "httpx://local/#a#b#c#d#e###f");
-        }});        
+            Path.normalize("httpx://local/#x#y#z", "httpx://local/#a#b#c#d#e###f")
+        }})
         Test.create({expected:/\bInvalid path: httpx:\/\/local\/###f/i, test() {
-            Path.normalize("httpx://local/#x#y#z", "httpx://local/###f");
-        }});        
+            Path.normalize("httpx://local/#x#y#z", "httpx://local/###f")
+        }})
         Test.create({expected:/\bInvalid path: httpx:\/\/local####f/i, test() {
-            Path.normalize("httpx://local#x#y#z", "httpx://local####f");
-        }});        
+            Path.normalize("httpx://local#x#y#z", "httpx://local####f")
+        }})
         Test.create({expected:/\bInvalid path: httpx:\/\/local####f/i, test() {
-            Path.normalize("httpx://local#x#y#z", "httpx://local####f");
-        }});         
+            Path.normalize("httpx://local#x#y#z", "httpx://local####f")
+        }})
         Test.create({expected:/\bInvalid path: httpx:\/\/local#####f/i, test() {
-            Path.normalize("httpx://local#x#y#z", "httpx://local#####f");
-        }});           
+            Path.normalize("httpx://local#x#y#z", "httpx://local#####f")
+        }})
         Test.create({expected:/\bInvalid path: httpx:\/\/local######f/i, test() {
-            Path.normalize("httpx://local#x#y#z", "httpx://local######f");
-        }});        
+            Path.normalize("httpx://local#x#y#z", "httpx://local######f")
+        }})
         
         Test.create({expected:/\bInvalid path: object/i, test() {
-            Path.normalize({});
-        }});
+            Path.normalize({})
+        }})
         Test.create({expected:/\bInvalid path: boolean/i, test() {
-            Path.normalize(true);
-        }});
+            Path.normalize(true)
+        }})
         Test.create({expected:/\bInvalid root: object/i, test() {
-            Path.normalize({}, "#");
-        }});
+            Path.normalize({}, "#")
+        }})
         Test.create({expected:/\bInvalid root: boolean/i, test() {
-            Path.normalize(true, "#");
-        }});
+            Path.normalize(true, "#")
+        }})
         
         Test.create({test() {
-            Assert.assertEquals("#a#b#c#d", Path.normalize("#a#b#c#d"));
-            Assert.assertEquals("#a#b#c#x", Path.normalize("#a#b#c#d##x"));
-            Assert.assertEquals("#a#b#x", Path.normalize("#a#b#c#d###x"));
-            Assert.assertEquals("#a#x", Path.normalize("#a#b#c#d####x"));
-        }});      
+            Assert.assertEquals("#a#b#c#d", Path.normalize("#a#b#c#d"))
+            Assert.assertEquals("#a#b#c#x", Path.normalize("#a#b#c#d##x"))
+            Assert.assertEquals("#a#b#x", Path.normalize("#a#b#c#d###x"))
+            Assert.assertEquals("#a#x", Path.normalize("#a#b#c#d####x"))
+        }})
 
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
   </head>
   <body>

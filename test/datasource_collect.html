@@ -12,61 +12,61 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
 
         Test.create({test() {
-            var collection = DataSource.collect();
-        }});
+            var collection = DataSource.collect()
+        }})
         Test.create({expected:/\bInvalid collection/i, test() {
-            DataSource.collect(null);
-        }}); 
+            DataSource.collect(null)
+        }})
         Test.create({expected:/\bInvalid collection/i, test() {
-            DataSource.collect({});
-        }});
+            DataSource.collect({})
+        }})
 
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a");
-            Assert.assertEquals(1, collection.querySelectorAll("collection > test").length);
-            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_a']").length);
-        }});
+            var collection = DataSource.collect("xml://datasource_collect_a")
+            Assert.assertEquals(1, collection.querySelectorAll("collection > test").length)
+            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_a']").length)
+        }})
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a");
-            Assert.assertEquals(2, collection.querySelectorAll("collection > test").length);
-            Assert.assertEquals(2, collection.querySelectorAll("collection > test[id='collect_a']").length);
-        }});
+            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a")
+            Assert.assertEquals(2, collection.querySelectorAll("collection > test").length)
+            Assert.assertEquals(2, collection.querySelectorAll("collection > test[id='collect_a']").length)
+        }})
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a", "xml://datasource_collect_b");
-            Assert.assertEquals(3, collection.querySelectorAll("collection > test").length);
-            Assert.assertEquals(2, collection.querySelectorAll("collection > test[id='collect_a']").length);
-            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length);
-        }});
+            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a", "xml://datasource_collect_b")
+            Assert.assertEquals(3, collection.querySelectorAll("collection > test").length)
+            Assert.assertEquals(2, collection.querySelectorAll("collection > test[id='collect_a']").length)
+            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length)
+        }})
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c");
-            Assert.assertEquals(3, collection.querySelectorAll("collection > test").length);
-            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_a']").length);
-            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length);
-            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_c']").length);
-        }});
+            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c")
+            Assert.assertEquals(3, collection.querySelectorAll("collection > test").length)
+            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_a']").length)
+            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length)
+            Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_c']").length)
+        }})
         
         Test.create({test() {
-            var collection = DataSource.collect("xxx", ["xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c"]);
-            Assert.assertEquals(3, collection.querySelectorAll("xxx > test").length);
-            Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_a']").length);
-            Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_b']").length);
-            Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_c']").length);
-        }});
+            var collection = DataSource.collect("xxx", ["xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c"])
+            Assert.assertEquals(3, collection.querySelectorAll("xxx > test").length)
+            Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_a']").length)
+            Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_b']").length)
+            Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_c']").length)
+        }})
 
         Test.create({expected:/\b404/i, test() {
-            DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_d");
-        }});
+            DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_d")
+        }})
         Test.create({expected:/\bInvalid collection/i, test() {
-            DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", null);
-        }});
+            DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", null)
+        }})
         Test.create({expected:/\bInvalid collection/i, test() {
-            DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", {});
-        }});
+            DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", {})
+        }})
 
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
   </head>
   <body>

@@ -12,49 +12,49 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
         Test.create({test() {
             SiteMap.customize({
-            });
-        }});        
+            })
+        }})
         Test.create({test() {
             SiteMap.customize({
                 "#": null
-            });
-        }});        
+            })
+        }})
         Test.create({test() {
             SiteMap.customize({
                 "#": []
-            });
-        }});
+            })
+        }})
         Test.create({expected:/\bInvalid facet(?!:)/i, test() {
             SiteMap.customize({
                 "#": [""]
-            });
-        }});        
+            })
+        }})
         Test.create({test() {
             SiteMap.customize({
                 "#": ["1"]
-            });
-        }});        
+            })
+        }})
         Test.create({expected:/\bInvalid facet: #1/i, test() {
             SiteMap.customize({
                 "#": ["#1"]
-            });
-        }});        
+            })
+        }})
         Test.create({test() {
             SiteMap.customize({
                 "#": ["A"]
-            });
-        }});        
+            })
+        }})
         Test.create({expected:/\bInvalid facet: #A/i, test() {
             SiteMap.customize({
                 "#": ["#A"]
-            });
-        }});        
+            })
+        }})
 
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
   </head>
   <body>

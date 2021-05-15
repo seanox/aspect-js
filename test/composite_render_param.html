@@ -12,26 +12,26 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
     
         var ModelA = {
             list: ["a", "b", "c"]
-        }; 
+        }
     
         Test.create({test() {
-            var pattern = Test.read("composite_render_param_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.innerHTML);           
-        }});
+            var pattern = Test.read("composite_render_param_" + navigator.engine + ".txt")
+            Assert.assertSameText(pattern, document.body.innerHTML)
+        }})
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (Test.status().queue != null)
-                return;    
-            var content = document.body.innerHTML;
-            content = content.replace(/([\r\n]+)\s*(?=\1)/g, "");
-            content = content.replace(/script/g, "x-script");
-            document.body.innerHTML = content;
-            Test.start();
-        });  
+                return
+            var content = document.body.innerHTML
+            content = content.replace(/([\r\n]+)\s*(?=\1)/g, "")
+            content = content.replace(/script/g, "x-script")
+            document.body.innerHTML = content
+            Test.start()
+        })
     </script>
   </head>
   <body>
@@ -95,7 +95,7 @@
       {{tempA:tempA +tempB.index}} 
       {{tempA +tempB.index}}
       <script type="composite/javascript">
-        outputA.textContent += " " + tempB.index + ":" + tempA;
+        outputA.textContent += " " + tempB.index + ":" + tempA
       </script>
     </div>
   </body>

@@ -7,5 +7,5 @@
 #import io/modulY
 
 if (window['modulA$count'] === undefined)
-    window['modulA$count'] = 0;
-window['modulA$count'] = window['modulA$count'] +1;
+    window['modulA$count'] = 0
+window['modulA$count'] = window['modulA$count'] +1

@@ -12,23 +12,23 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
     
         Test.create({test() {
-            var content = document.body.textContent.replace(/\s+/g, " ").trim();
-            Assert.assertEquals("Text A: Text B: Text C: Text D: 0XXX 3", content);            
-        }});
+            var content = document.body.textContent.replace(/\s+/g, " ").trim()
+            Assert.assertEquals("Text A: Text B: Text C: Text D: 0XXX 3", content)
+        }})
       
-        var count = 0;
+        var count = 0
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (++count < 3)
-                Composite.render(document.body);
+                Composite.render(document.body)
             else if (count == 3)
-                Test.start();
-        });
+                Test.start()
+        })
         
-        var tempA = 0;
-        var tempD = 0;
+        var tempA = 0
+        var tempD = 0
     </script>
   </head>
   <body>

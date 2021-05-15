@@ -12,7 +12,7 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
       
         SiteMap.customize({
             "#": ["home", "projects", "about", "contact..."],
@@ -21,7 +21,7 @@
             "#team": ["...", "a", "b", "c"],
             "#team#a": ["..."],
             "#team#x": ["..."]                    
-        });
+        })
 
         var tests = [
             "#",
@@ -43,24 +43,24 @@
             "#team#x#a",
             "#team#x#a#b",
             "#"
-        ];  
+        ]
         
         Test.create({test() {
-            document.body.innerHTML = "";
+            document.body.innerHTML = ""
             tests.forEach((test, index, array) => {
-                document.body.innerHTML = document.body.innerHTML.trim();
+                document.body.innerHTML = document.body.innerHTML.trim()
                 if (document.body.innerHTML)
-                    document.body.innerHTML += "\r\n";
-                var lookup = SiteMap.lookup(test);
+                    document.body.innerHTML += "\r\n"
+                var lookup = SiteMap.lookup(test)
                 if (typeof lookup === "object")
-                    lookup = lookup === null ? "null" : lookup.toPlainString();
+                    lookup = lookup === null ? "null" : lookup.toPlainString()
                 document.body.innerHTML += "I: " + test
-                        + "\r\nO: " + lookup;
-            });
-            Assert.assertSameTo("script[type='text/test']", document.body.textContent);
-        }});
+                        + "\r\nO: " + lookup
+            })
+            Assert.assertSameTo("script[type='text/test']", document.body.textContent)
+        }})
         
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
     <script type="text/test">
 I: #

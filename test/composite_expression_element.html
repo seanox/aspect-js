@@ -13,23 +13,23 @@
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
     
         Test.create({test() {
-            var pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.innerHTML);
-        }});
+            var pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt")
+            Assert.assertSameText(pattern, document.body.innerHTML)
+        }})
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (Test.status().queue != null)
-                return;    
-            var element = document.querySelector("#InputTextA");
+                return
+            var element = document.querySelector("#InputTextA")
             if (element.value != "A1")
-                return;
-            element.value = "";
-            element.typeValue("Hallo Berlin");
-            Test.start();
-        });
+                return
+            element.value = ""
+            element.typeValue("Hallo Berlin")
+            Test.start()
+        })
     </script>
   </head>
   <body>

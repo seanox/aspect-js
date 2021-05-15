@@ -12,7 +12,7 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
       
         SiteMap.customize({
             "#": ["news", "projects", "seanox", "contact", "contact#about"],
@@ -25,7 +25,7 @@
             "#projects#wotexx": ["description", "features", "licence", "requirement", "download"],
             "#legal": ["terms", "privacy"],
             "#error": null
-        });
+        })
         
         var tests = [
             "#",
@@ -70,38 +70,38 @@
             "#x###",
             "#x####",
             "#"            
-        ];         
+        ]
   
         Test.create({test() {
-            document.location.href = "#";
-            document.body.innerHTML = "";
+            document.location.href = "#"
+            document.body.innerHTML = ""
             tests.forEach((test, index, array) => {
-                document.body.innerHTML = document.body.innerHTML.trim();
+                document.body.innerHTML = document.body.innerHTML.trim()
                 if (document.body.innerHTML)
-                    document.body.innerHTML += "\r\n";
+                    document.body.innerHTML += "\r\n"
                 document.body.innerHTML += "I: " + test
-                        + "\r\nO: " + SiteMap.locate(test);
-            });
-            Assert.assertSameTo("script[type='text/test1']", document.body.textContent);
-        }});
+                        + "\r\nO: " + SiteMap.locate(test)
+            })
+            Assert.assertSameTo("script[type='text/test1']", document.body.textContent)
+        }})
         
         Test.create({test() {
-            SiteMap.forward("#projects");
-            document.body.innerHTML = "";
-            var filter = /^#projects#/;
+            SiteMap.forward("#projects")
+            document.body.innerHTML = ""
+            var filter = /^#projects#/
             tests.forEach((test, index, array) => {
-                document.body.innerHTML = document.body.innerHTML.trim();
+                document.body.innerHTML = document.body.innerHTML.trim()
                 if (document.body.innerHTML)
-                    document.body.innerHTML += "\r\n";
+                    document.body.innerHTML += "\r\n"
                 if (test.match(filter))
-                    test = test.replace(filter, "");
+                    test = test.replace(filter, "")
                 document.body.innerHTML += "I: " + test
-                        + "\r\nO: " + SiteMap.locate(test);
-            });
-            Assert.assertSameTo("script[type='text/test2']", document.body.textContent);
-        }});        
+                        + "\r\nO: " + SiteMap.locate(test)
+            })
+            Assert.assertSameTo("script[type='text/test2']", document.body.textContent)
+        }})
         
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
     <script type="text/test1">
 I: #

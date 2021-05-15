@@ -13,12 +13,12 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
         Composite.listen(Composite.EVENT_ERROR, (type, event) => {
-            document.body.textContent = "Event: " + event.message;
-            parent["count"] += 1;            
-        });
+            document.body.textContent = "Event: " + event.message
+            parent["count"] += 1
+        })
         window.addEventListener("load", () => {
-            aaa.substring(1);
-        });        
+            aaa.substring(1)
+        })
     </script>
   </head>
   <body>

@@ -12,47 +12,47 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
 
         Test.create({expected:/\bInvalid scope: undefined/i, test() {
-            Composite.customize();
-        }});
+            Composite.customize()
+        }})
         Test.create({expected:/\bInvalid scope: object/i, test() {
-            Composite.customize(null);
-        }});
+            Composite.customize(null)
+        }})
         Test.create({expected:/\bInvalid scope/i, test() {
-            Composite.customize("");
-        }});
+            Composite.customize("")
+        }})
         Test.create({expected:/\bInvalid callback: string/i, test() {
-            Composite.customize("", "");
-        }});
+            Composite.customize("", "")
+        }})
         Test.create({expected:/\bInvalid scope/i, test() {
-            Composite.customize("", null);
-        }});
+            Composite.customize("", null)
+        }})
         Test.create({expected:/\bInvalid scope: object/i, test() {
-            Composite.customize(new Object(), function() {});
-        }});
+            Composite.customize(new Object(), function() {})
+        }})
         Test.create({expected:/\bInvalid scope: function/i, test() {
-            Composite.customize(function() {}, "");
-        }});
+            Composite.customize(function() {}, "")
+        }})
         Test.create({expected:/\bInvalid scope: function/i, test() {
-            Composite.customize(function() {}, null);
-        }});
+            Composite.customize(function() {}, null)
+        }})
         Test.create({expected:/\bInvalid scope/i, test() {
-            Composite.customize("", function() {});
-        }});
+            Composite.customize("", function() {})
+        }})
         
         Test.create({test() {
-            Composite.customize(function() {});
-        }});
+            Composite.customize(function() {})
+        }})
         Test.create({test() {
-            Composite.customize("abc", function() {});
-        }});
+            Composite.customize("abc", function() {})
+        }})
         Test.create({test() {
-            Composite.customize("abc > def", function() {});
-        }});
+            Composite.customize("abc > def", function() {})
+        }})
         
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
     <script type="text/test">
     </script>

@@ -12,79 +12,79 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
         Test.create({test() {
-            var result = document.body.innerHTML.replace(/[\r\n]+/g," ").trim();
-            result = result.replace(/(onReceive ){2,}/g, "onReceive "); 
+            var result = document.body.innerHTML.replace(/[\r\n]+/g," ").trim()
+            result = result.replace(/(onReceive ){2,}/g, "onReceive ")
             var pattern1 = "Test in progress..."
                     + " onReceive onStart onReceive onError onEnd"
                     + " ---"
-                    + " onReceive onStart onReceive onProgress onReceive onSuccess onEnd";
+                    + " onReceive onStart onReceive onProgress onReceive onSuccess onEnd"
             var pattern2 = "Test in progress..."
                 + " onReceive onStart onReceive onProgress onError onEnd"
                 + " ---"
-                + " onReceive onStart onReceive onProgress onReceive onSuccess onEnd";
-            try {Assert.assertEquals(pattern1, result);
+                + " onReceive onStart onReceive onProgress onReceive onSuccess onEnd"
+            try {Assert.assertEquals(pattern1, result)
             } catch (exception) {
-                try {Assert.assertEquals(pattern2, result);
+                try {Assert.assertEquals(pattern2, result)
                 } catch (exception) {
                     throw exception
                 }
             }
-        }});        
+        }})
 
         window.addEventListener("load", () => {
             
-            document.body.innerHTML = "Test in progress...\r\n\r\n";
+            document.body.innerHTML = "Test in progress...\r\n\r\n"
     
             var onStart = function() {
-                document.body.innerHTML += "onStart\r\n";
-            };
+                document.body.innerHTML += "onStart\r\n"
+            }
             var onProgress = function() {
-                document.body.innerHTML += "onProgress\r\n";
-            };
+                document.body.innerHTML += "onProgress\r\n"
+            }
             var onReceive = function() {
-                document.body.innerHTML += "onReceive\r\n";
-            };
+                document.body.innerHTML += "onReceive\r\n"
+            }
             var onSuccess = function() {
-                document.body.innerHTML += "onSuccess\r\n";
-            };
+                document.body.innerHTML += "onSuccess\r\n"
+            }
             var onAbort = function() {
-                document.body.innerHTML += "onAbort\r\n";
-            };
+                document.body.innerHTML += "onAbort\r\n"
+            }
             var onTimeout = function() {
-                document.body.innerHTML += "onTimeout\r\n";
-            };
+                document.body.innerHTML += "onTimeout\r\n"
+            }
             var onError = function() {
-                document.body.innerHTML += "onError\r\n";
-            };
+                document.body.innerHTML += "onError\r\n"
+            }
             var onEnd = function() {
-                document.body.innerHTML += "onEnd\r\n";
-            };
+                document.body.innerHTML += "onEnd\r\n"
+            }
         
-            Composite.listen(Composite.EVENT_HTTP_START, onStart);
-            Composite.listen(Composite.EVENT_HTTP_PROGRESS, onProgress);
-            Composite.listen(Composite.EVENT_HTTP_RECEIVE, onReceive);
-            Composite.listen(Composite.EVENT_HTTP_LOAD, onSuccess);
-            Composite.listen(Composite.EVENT_HTTP_ABORT, onAbort);
-            Composite.listen(Composite.EVENT_HTTP_TIMEOUT, onTimeout);
-            Composite.listen(Composite.EVENT_HTTP_ERROR, onError);
-            Composite.listen(Composite.EVENT_HTTP_END, onEnd);
+            Composite.listen(Composite.EVENT_HTTP_START, onStart)
+            Composite.listen(Composite.EVENT_HTTP_PROGRESS, onProgress)
+            Composite.listen(Composite.EVENT_HTTP_RECEIVE, onReceive)
+            Composite.listen(Composite.EVENT_HTTP_LOAD, onSuccess)
+            Composite.listen(Composite.EVENT_HTTP_ABORT, onAbort)
+            Composite.listen(Composite.EVENT_HTTP_TIMEOUT, onTimeout)
+            Composite.listen(Composite.EVENT_HTTP_ERROR, onError)
+            Composite.listen(Composite.EVENT_HTTP_END, onEnd)
             
-            var request = new XMLHttpRequest();
-            request.open("GET", "https://github.com/seanox");
-            request.send();        
+            var request = new XMLHttpRequest()
+            request.open("GET", "https://github.com/seanox")
+            request.send()
             
             window.setTimeout(function() {
-                document.body.innerHTML += "---\r\n";
-                var request = new XMLHttpRequest();
-                request.open("GET", document.location.href);
-                request.send();    
+                document.body.innerHTML += "---\r\n"
+                var request = new XMLHttpRequest()
+                request.open("GET", document.location.href)
+                request.send()
                 
-                window.setTimeout(Test.start, 2500);
-            }, 2500);
-        });
+                window.setTimeout(Test.start, 2500)
+            }, 2500)
+        })
     </script>
   </head>
   <body>

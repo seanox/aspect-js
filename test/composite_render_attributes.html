@@ -12,38 +12,38 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
-        var eC = false;
-        var eT = false;
-        var eS = false;
+        var eC = false
+        var eT = false
+        var eS = false
     
         Test.create({test() {
-            var text = snapshots.join("\r\n");
-            Assert.assertEquals(5, (text.match(/checked/g) || []).length);
-            Assert.assertEquals(4, (text.match(/disabled/g) || []).length);
-            Assert.assertEquals(3, (text.match(/xxx/g) || []).length);
-        }});
+            var text = snapshots.join("\r\n")
+            Assert.assertEquals(5, (text.match(/checked/g) || []).length)
+            Assert.assertEquals(4, (text.match(/disabled/g) || []).length)
+            Assert.assertEquals(3, (text.match(/xxx/g) || []).length)
+        }})
         
-        var snapshots = [];
+        var snapshots = []
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (snapshots.length == 0) {
-                document.querySelector("input[type='checkbox']").checked = false;
-                document.querySelector("input[type='text']").disabled = false;
-                document.querySelector("span").removeAttribute("xxx");
+                document.querySelector("input[type='checkbox']").checked = false
+                document.querySelector("input[type='text']").disabled = false
+                document.querySelector("span").removeAttribute("xxx")
             }
-            var snapshot = document.body.innerHTML;
-            snapshot = snapshot.replace(/^\s+/mg, "");
-            snapshot = snapshot.replace(/<\!--([\s\.r\n].*?)*-->/g, "");
+            var snapshot = document.body.innerHTML
+            snapshot = snapshot.replace(/^\s+/mg, "")
+            snapshot = snapshot.replace(/<\!--([\s\.r\n].*?)*-->/g, "")
             
-            snapshots.push(snapshot.trim());
+            snapshots.push(snapshot.trim())
             if (snapshots.length < 10) {
-                eC = [1,3,5,7,9].includes(snapshots.length);
-                eT = [0,2,4,6,8].includes(snapshots.length);
-                eS = [3,6,9].includes(snapshots.length);                
-                Composite.render(document.body);
-            } else Test.start();
-        }); 
+                eC = [1,3,5,7,9].includes(snapshots.length)
+                eT = [0,2,4,6,8].includes(snapshots.length)
+                eS = [3,6,9].includes(snapshots.length)
+                Composite.render(document.body)
+            } else Test.start()
+        })
     </script>
   </head>
   <body>

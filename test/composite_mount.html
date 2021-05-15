@@ -20,7 +20,7 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
         var publish = function() {
             var content = '<input type="text" id="textArray:0" events="input">'
@@ -57,13 +57,13 @@
                     + '<input type="button" id="buttonNothing:0" events="click" value="D1">'
                     + '<input type="button" id="buttonNothing:1" events="click" value="D2">'
                     + '<input type="button" id="buttonNothing:2" events="click" value="D3">'
-                    + '<input type="button" id="buttonNothing" events="click" value="E">';
-            var div = document.createElement("div");
-            div.innerHTML = content;
-            return div;            
-        };
+                    + '<input type="button" id="buttonNothing" events="click" value="E">'
+            var div = document.createElement("div")
+            div.innerHTML = content
+            return div
+        }
 
-        var clickStack = [];
+        var clickStack = []
         
         var modelA = {
             textArray: ["", ""],
@@ -72,18 +72,18 @@
             object: {a: {value: ""}, b: ""},
             buttonArray: [
                 {onClick(event) {
-                    clickStack.push("a" + event.target.value);
+                    clickStack.push("a" + event.target.value)
                 }},
                 {onClick(event) {
-                    clickStack.push("b" + event.target.value);
+                    clickStack.push("b" + event.target.value)
                 }}
             ],
             button: {
                 onClick(event) {
-                    clickStack.push("c" + event.target.value);
+                    clickStack.push("c" + event.target.value)
                 }
             }
-        };
+        }
         
         var modelB = {
             textArray: ["", ""],
@@ -92,18 +92,18 @@
             object: {a: {value: ""}, b: ""},
             buttonArray: [
                 {onClick(event) {
-                    clickStack.push("d" + event.target.value);
+                    clickStack.push("d" + event.target.value)
                 }},
                 {onClick(event) {
-                    clickStack.push("e" + event.target.value);
+                    clickStack.push("e" + event.target.value)
                 }}
             ],
             button: {
                 onClick(event) {
-                    clickStack.push("f" + event.target.value);
+                    clickStack.push("f" + event.target.value)
                 }
             }
-        };        
+        }
         
         var modelC = {
             textArray: ["", ""],
@@ -112,82 +112,82 @@
             object: {a: {value: ""}, b: ""},
             buttonArray: [
                 {onClick(event) {
-                    clickStack.push("g" + event.target.value);
+                    clickStack.push("g" + event.target.value)
                 }},
                 {onClick(event) {
-                    clickStack.push("h" + event.target.value);
+                    clickStack.push("h" + event.target.value)
                 }}
             ],
             button: {
                 onClick(event) {
-                    clickStack.push("i" + event.target.value);
+                    clickStack.push("i" + event.target.value)
                 }
             }
-        };        
+        }
         
-        var timeout = null;
+        var timeout = null
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (timeout)
-                window.clearInterval(timeout);
+                window.clearInterval(timeout)
             timeout = window.setTimeout(() => {
                 ("ABC".split(/(?=\w)/)).forEach((context) => {
-                    var i = 0;
-                    document.querySelector("#model" + context + " #textArray\\:0").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textArray\\:1").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textArray\\:2").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textArray").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectArray\\:0").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectArray\\:1").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectArray\\:2").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectArray").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #text\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #text\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #text\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #text").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #object\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #object\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #object\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textNothing\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textNothing\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textNothing\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #textNothing").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectNothing\\:a").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectNothing\\:b").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectNothing\\:c").typeValue(context + String.fromCharCode(65 + i++), true);
-                    document.querySelector("#model" + context + " #objectNothing").typeValue(context + String.fromCharCode(65 + i++), true);
+                    var i = 0
+                    document.querySelector("#model" + context + " #textArray\\:0").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textArray\\:1").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textArray\\:2").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textArray").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectArray\\:0").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectArray\\:1").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectArray\\:2").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectArray").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #text\\:a").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #text\\:b").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #text\\:c").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #text").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #object\\:a").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #object\\:b").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #object\\:c").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textNothing\\:a").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textNothing\\:b").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textNothing\\:c").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #textNothing").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectNothing\\:a").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectNothing\\:b").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectNothing\\:c").typeValue(context + String.fromCharCode(65 + i++), true)
+                    document.querySelector("#model" + context + " #objectNothing").typeValue(context + String.fromCharCode(65 + i++), true)
                     
-                    document.querySelector("#model" + context + " #buttonArray\\:0").click();
-                    document.querySelector("#model" + context + " #buttonArray\\:1").click();
-                    document.querySelector("#model" + context + " #buttonArray\\:2").click();
-                    document.querySelector("#model" + context + " #buttonArray").click();
-                    document.querySelector("#model" + context + " #button\\:0").click();
-                    document.querySelector("#model" + context + " #button\\:1").click();
-                    document.querySelector("#model" + context + " #button\\:2").click();
-                    document.querySelector("#model" + context + " #buttonNothing\\:0").click();
-                    document.querySelector("#model" + context + " #buttonNothing\\:1").click();
-                    document.querySelector("#model" + context + " #buttonNothing\\:2").click();
-                    document.querySelector("#model" + context + " #buttonNothing").click();  
-                }); 
-                Test.start();
-            }, 250);
-        });     
+                    document.querySelector("#model" + context + " #buttonArray\\:0").click()
+                    document.querySelector("#model" + context + " #buttonArray\\:1").click()
+                    document.querySelector("#model" + context + " #buttonArray\\:2").click()
+                    document.querySelector("#model" + context + " #buttonArray").click()
+                    document.querySelector("#model" + context + " #button\\:0").click()
+                    document.querySelector("#model" + context + " #button\\:1").click()
+                    document.querySelector("#model" + context + " #button\\:2").click()
+                    document.querySelector("#model" + context + " #buttonNothing\\:0").click()
+                    document.querySelector("#model" + context + " #buttonNothing\\:1").click()
+                    document.querySelector("#model" + context + " #buttonNothing\\:2").click()
+                    document.querySelector("#model" + context + " #buttonNothing").click()
+                })
+                Test.start()
+            }, 250)
+        })
         
         Test.create({test() {
-            var pattern = '{"textArray":["AA","AB"],"text":"AL","objectArray":[{"value":"AE"},{"value":"AF"}],"object":{"a":{"value":"AM"},"b":"AN"},"buttonArray":[{},{}],"button":{}}';
-            Assert.assertEquals(pattern, modelA.toPlainString());
-        }}); 
+            var pattern = '{"textArray":["AA","AB"],"text":"AL","objectArray":[{"value":"AE"},{"value":"AF"}],"object":{"a":{"value":"AM"},"b":"AN"},"buttonArray":[{},{}],"button":{}}'
+            Assert.assertEquals(pattern, modelA.toPlainString())
+        }})
         Test.create({test() {
-            var pattern = '{"textArray":["BA","BB"],"text":"BL","objectArray":[{"value":"BE"},{"value":"BF"}],"object":{"a":{"value":"BM"},"b":"BN"},"buttonArray":[{},{}],"button":{}}';
-            Assert.assertEquals(pattern, modelB.toPlainString());
-        }});         
+            var pattern = '{"textArray":["BA","BB"],"text":"BL","objectArray":[{"value":"BE"},{"value":"BF"}],"object":{"a":{"value":"BM"},"b":"BN"},"buttonArray":[{},{}],"button":{}}'
+            Assert.assertEquals(pattern, modelB.toPlainString())
+        }})
         Test.create({test() {
-            var pattern = '{"textArray":["CA","CB"],"text":"CL","objectArray":[{"value":"CE"},{"value":"CF"}],"object":{"a":{"value":"CM"},"b":"CN"},"buttonArray":[{},{}],"button":{}}';
-            Assert.assertEquals(pattern, modelC.toPlainString());
-        }});
+            var pattern = '{"textArray":["CA","CB"],"text":"CL","objectArray":[{"value":"CE"},{"value":"CF"}],"object":{"a":{"value":"CM"},"b":"CN"},"buttonArray":[{},{}],"button":{}}'
+            Assert.assertEquals(pattern, modelC.toPlainString())
+        }})
         Test.create({test() {
-            var pattern = 'aA1 bA2 dA1 eA2 gA1 hA2';
-            Assert.assertEquals(pattern, clickStack.join(" "));
-        }});   
+            var pattern = 'aA1 bA2 dA1 eA2 gA1 hA2'
+            Assert.assertEquals(pattern, clickStack.join(" "))
+        }})
     </script>
   </head>
   <body>

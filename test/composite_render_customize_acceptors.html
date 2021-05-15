@@ -12,51 +12,51 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
         var insertTestValue = function(element, value) {
             if (element.textContent.match(new RegExp(value)))
-                return;
-            var text = document.createElement("span");
-            text.textContent = value;
-            element.appendChild(text);
-        };
+                return
+            var text = document.createElement("span")
+            text.textContent = value
+            element.appendChild(text)
+        }
         
-        var elementCount1 = 0;
-        var elementCount2 = 0;
-        var elementCount3 = 0;
+        var elementCount1 = 0
+        var elementCount2 = 0
+        var elementCount3 = 0
         
         Composite.customize((element) => {
-            elementCount1++;
-        });
+            elementCount1++
+        })
         Composite.customize((element) => {
-            elementCount2++;
+            elementCount2++
             if (element instanceof Element
                     && element.hasAttribute("value")
                     && element.getAttribute("value") == "xx3")
-                insertTestValue(element, 3);
-        });
+                insertTestValue(element, 3)
+        })
         Composite.customize((element) => {
-            elementCount3++;
-        });
+            elementCount3++
+        })
         
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test']", document.body.textContent);
-        }});
+            Assert.assertSameTo("script[type='text/test']", document.body.textContent)
+        }})
         
         Test.create({test() {
-            Assert.assertEquals(19, elementCount1);
-        }});
+            Assert.assertEquals(19, elementCount1)
+        }})
         Test.create({test() {
-            Assert.assertEquals(19, elementCount2);
-        }});
+            Assert.assertEquals(19, elementCount2)
+        }})
         Test.create({test() {
-            Assert.assertEquals(19, elementCount3);
-        }});
+            Assert.assertEquals(19, elementCount3)
+        }})
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start();
-        });
+            Test.start()
+        })
     </script>
     <script type="text/test">
       xa

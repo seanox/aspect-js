@@ -20,33 +20,33 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
-        var countClick = 0;
-        var countRender = 0;
+        var countClick = 0
+        var countRender = 0
         var about = {
             contact: {
                 onClick() {
-                    countClick++;
+                    countClick++
                 }    
             },
             refresh: {
                 onClick() {
-                    Composite.render(document.body);
+                    Composite.render(document.body)
                 }    
             }
         }
         
         Test.create({test() {
             while (countRender < 9) {
-                document.querySelector("#contact").click();
-                document.querySelector("#refresh").click();
+                document.querySelector("#contact").click()
+                document.querySelector("#refresh").click()
             }
-            var result = document.body.textContent.replace(/\s+/g, " ").trim();
-            Assert.assertEquals("Render:9, Click:4 refresh contact", result);
-        }});
+            var result = document.body.textContent.replace(/\s+/g, " ").trim()
+            Assert.assertEquals("Render:9, Click:4 refresh contact", result)
+        }})
         
-        Test.start({auto:true});
+        Test.start({auto:true})
     </script>
   </head>
   <body>
