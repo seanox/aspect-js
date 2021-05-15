@@ -573,7 +573,9 @@ darstellen und auf entsprechende Ereignisse reagieren.
 
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
-eines Composites und dem korrespondierenden JavaScript-Model.  
+eines Composites und dem korrespondierenden JavaScript-Model, wo eine
+gleichnamige Eigenschaft als Ziel für die Synchronisation vorhanden sein muss.
+
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
 ermitteln oder wurde keine HTML5-Validierung festgelegt, wird die Validierung

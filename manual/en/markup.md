@@ -563,7 +563,9 @@ reacts to corresponding events.
 
 The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
-composite and the corresponding JavaScript model.  
+composite and the corresponding JavaScript model, where a property with the
+same name must exist as a target for synchronization.
+
 The validation works in two steps and uses the standard HTML5 validation at the
 beginning. If this cannot determine deviations from the expected result or if no
 HTML5 validation is specified, the validation of the JavaScript model is used if
