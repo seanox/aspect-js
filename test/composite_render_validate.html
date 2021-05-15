@@ -17,79 +17,87 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate();
+        Test.activate()
         
-        Composite.customize("@ATTRIBUTES-STATICS", "href name pattern placeholder target type required");
+        Composite.customize("@ATTRIBUTES-STATICS", "href name pattern placeholder target type required")
 
-        var EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$";
+        var EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$"
         var EMAIL_MESSAGE = "Mandatory with a valid e-mail address."
        
-        var PASSWORD_PATTERN = "\\w{6,}";
-        var PASSWORD_MESSAGE = "Mandatory with at least 6 characters.";
+        var PASSWORD_PATTERN = "\\w{6,}"
+        var PASSWORD_MESSAGE = "Mandatory with at least 6 characters."
         
-        var validateValues = [];
+        var validateValues = []
 
         var model = {
             email: "",
             password: "",
+            input_1: null,
+            input_2: null,
+            input_3: null,
+            input_4: null,
+            input_5: null,
+            input_6: null,
+            input_7: null,
+            input_8: null,
+            input_9: null,
             validates: [],
             validate(element, value) {
                 if (typeof value !== "undefined")
-                    validateValues.push(value);
+                    validateValues.push(value)
                 if (!model.validates.includes(element.id))
-                    model.validates.push(element.id);
+                    model.validates.push(element.id)
                 if (element == document.querySelector("#model #submit")
                         || element == document.querySelector("#model #button")
                         || element == document.querySelector("#model #link")) {
-                    return Composite.validate("#model #email, #model #password");
+                    return Composite.validate("#model #email, #model #password")
                 }
-                return Composite.validate(element);
+                return Composite.validate(element)
             },
             submitClicks: 0,
             submit: {
                 onClick(event) {
-                    model.submitClicks++;
+                    model.submitClicks++
                 }
             },
             buttonClicks: 0,
             button: {
                 onClick(event) {
-                    model.buttonClicks++;
+                    model.buttonClicks++
                 }
             },
             unsafeClicks: 0,
             unsafe: {
                 onClick(event) {
-                    model.unsafeClicks++;
+                    model.unsafeClicks++
                 }
             },
             linkClicks: 0,
             link: {
                 onClick(event) {
-                    model.linkClicks++;
+                    model.linkClicks++
                 }
             }
-        };
+        }
         
-        var snapshots = [];
+        var snapshots = []
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             var snapshot = function() {
                 var signatue = function(selector) {
-                    var element = document.querySelector(selector);
-                    var result = "";
+                    var element = document.querySelector(selector)
+                    var result = ""
                     if (element.validationMessage)
-                        result += "M";
+                        result += "M"
                     if (element.customError)
-                        result += "C";
+                        result += "C"
                     if (element.validity.valueMissing)
-                        result += "R";
+                        result += "R"
                     if (element.validity.patternMismatch)
-                        result += "P";
+                        result += "P"
                     if (element.validity.valid)
-                        result += "V";
-                    
-                    return result;
-                };
+                        result += "V"
+                    return result
+                }
 
                 var snapshot = "E:" + signatue("#model #email") + "|" + model.email
                      + "\r\n" + "P:" + signatue("#model #password") + "|" + model.password
@@ -97,240 +105,348 @@
                      + "\r\n" + "S:" + "|S:" + model.submitClicks
                          + "|B:" + model.buttonClicks
                          + "|L:" + model.linkClicks
-                         + "|U:" + model.unsafeClicks;
+                         + "|U:" + model.unsafeClicks
+
+                snapshot += "\r\n" + "I:"
+                document.querySelectorAll("#model *[id^='input_']").forEach(element => {
+                    let message = element.validationMessage
+                    if (message.includes(" "))
+                        message = "default"
+                    snapshot += "|" + message
+                })
+
+                var iframe
+                iframe = document.querySelector("iframe[name='targetA']")
+                iframe = iframe.contentDocument || iframe.contentWindow.document
+                snapshot += "\r\n" + "A:" + iframe.body.textContent.trim()
                 
-                var iframe;
-                iframe = document.querySelector("iframe[name='targetA']");
-                iframe = iframe.contentDocument || iframe.contentWindow.document;
-                snapshot += "\r\n" + "A:" + iframe.body.textContent.trim();
+                iframe = document.querySelector("iframe[name='targetB']")
+                iframe = iframe.contentDocument || iframe.contentWindow.document
+                snapshot += "\r\n" + "B:" + iframe.body.textContent.trim()
                 
-                iframe = document.querySelector("iframe[name='targetB']");
-                iframe = iframe.contentDocument || iframe.contentWindow.document;
-                snapshot += "\r\n" + "B:" + iframe.body.textContent.trim();
-                
-                snapshots.push(snapshot);
-            };
+                snapshots.push(snapshot)
+            }
         
-            snapshot();
+            snapshot()
 
-            document.querySelector("#model #submit").click();
-            snapshot();
-            document.querySelector("#model #button").click();
-            snapshot();
-            document.querySelector("#model #unsafe").click();
-            snapshot();
-            document.querySelector("#model #link").click();
-            snapshot();
+            for (let index = 1; index <= 9; index++) {
+                document.querySelector("#model #input_" + index).typeValue("inpput_" + index, true)
+                document.querySelector("#model #input_" + index).typeValue("", true)
+                snapshot()
+                // Final must be set a value, otherwise the submit will be blocked
+                // and the test for the IFrames will not work, because TargetA waits for a submit.
+                document.querySelector("#model #input_" + index).typeValue("inpput_" + index + "_fill", true)
+            }
+
+            document.querySelector("#model #submit").click()
+            snapshot()
+            document.querySelector("#model #button").click()
+            snapshot()
+            document.querySelector("#model #unsafe").click()
+            snapshot()
+            document.querySelector("#model #link").click()
+            snapshot()
             
-            document.querySelector("#model #email").typeValue("xxx", true);
-            snapshot();
+            document.querySelector("#model #email").typeValue("xxx", true)
+            snapshot()
 
-            document.querySelector("#model #submit").click();
-            snapshot();
-            document.querySelector("#model #button").click();
-            snapshot();
-            document.querySelector("#model #unsafe").click();
-            snapshot();
-            document.querySelector("#model #link").click();
-            snapshot();
+            document.querySelector("#model #submit").click()
+            snapshot()
+            document.querySelector("#model #button").click()
+            snapshot()
+            document.querySelector("#model #unsafe").click()
+            snapshot()
+            document.querySelector("#model #link").click()
+            snapshot()
 
-            document.querySelector("#model #email").typeValue("xxx@xxx", true);
-            snapshot();
+            document.querySelector("#model #email").typeValue("xxx@xxx", true)
+            snapshot()
 
-            document.querySelector("#model #submit").click();
-            snapshot();
-            document.querySelector("#model #button").click();
-            snapshot();
-            document.querySelector("#model #unsafe").click();
-            snapshot();
-            document.querySelector("#model #link").click();
-            snapshot();
+            document.querySelector("#model #submit").click()
+            snapshot()
+            document.querySelector("#model #button").click()
+            snapshot()
+            document.querySelector("#model #unsafe").click()
+            snapshot()
+            document.querySelector("#model #link").click()
+            snapshot()
             
-            document.querySelector("#model #password").typeValue("xxx", true);
-            snapshot();
+            document.querySelector("#model #password").typeValue("xxx", true)
+            snapshot()
 
-            document.querySelector("#model #submit").click();
-            snapshot();
-            document.querySelector("#model #button").click();
-            snapshot();
-            document.querySelector("#model #unsafe").click();
-            snapshot();            
-            document.querySelector("#model #link").click();
-            snapshot();
+            document.querySelector("#model #submit").click()
+            snapshot()
+            document.querySelector("#model #button").click()
+            snapshot()
+            document.querySelector("#model #unsafe").click()
+            snapshot()
+            document.querySelector("#model #link").click()
+            snapshot()
 
-            document.querySelector("#model #password").typeValue("xxxxxx", true);
-            snapshot();
+            document.querySelector("#model #password").typeValue("xxxxxx", true)
+            snapshot()
 
-            document.querySelector("#model #submit").click();
-            snapshot();
-            document.querySelector("#model #button").click();
-            snapshot();
-            document.querySelector("#model #unsafe").click();
-            snapshot();
-            document.querySelector("#model #link").click();
-            
+            document.querySelector("#model #submit").click()
+            snapshot()
+            document.querySelector("#model #button").click()
+            snapshot()
+            document.querySelector("#model #unsafe").click()
+            snapshot()
+            document.querySelector("#model #link").click()
+
             window.setTimeout(() => {
-                snapshot();
-                Test.start();
-            }, 1000);
-        });
+                snapshot()
+                Test.start()
+            }, 1000)
+        })
         
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
-        }});     
+            Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"))
+        }})
         Test.create({test() {
-            Assert.assertEquals("Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"));
-        }});     
+            Assert.assertEquals("inpput_1|inpput_1_fill|inpput_2|inpput_2_fill|inpput_3|inpput_3_fill|inpput_4|inpput_4_fill"
+                    + "|inpput_5|inpput_5_fill|inpput_6|inpput_6_fill|inpput_7|inpput_7_fill|inpput_8|inpput_8_fill|inpput_9|inpput_9_fill"
+                    + "|Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"))
+        }})
     </script>
+    <!-- RegEx to convert the test output: search \x20(\w:) and replace \r\n$1 -->
     <script type="text/test">
 E:MR|
 P:MR|
 V:
 S:|S:0|B:0|L:0|U:0
+I:|default|default|default|default|default|default|default|default|default
 A:
 B:
 E:MR|
 P:MR|
-V:submit
+V:input_1
 S:|S:0|B:0|L:0|U:0
+I:|1|default|default|default|default|default|default|default|default
 A:
 B:
 E:MR|
 P:MR|
-V:submit|button
+V:input_1|input_2
 S:|S:0|B:0|L:0|U:0
+I:||0|default|default|default|default|default|default|default
 A:
 B:
 E:MR|
 P:MR|
-V:submit|button
-S:|S:0|B:0|L:0|U:1
+V:input_1|input_2|input_3
+S:|S:0|B:0|L:0|U:0
+I:|||-1|default|default|default|default|default|default
 A:
 B:
 E:MR|
 P:MR|
-V:submit|button|link
+V:input_1|input_2|input_3|input_4
+S:|S:0|B:0|L:0|U:0
+I:||||false|default|default|default|default|default
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5
+S:|S:0|B:0|L:0|U:0
+I:|||||null|default|default|default|default
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6
+S:|S:0|B:0|L:0|U:0
+I:||||||undefined|default|default|default
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7
+S:|S:0|B:0|L:0|U:0
+I:|||||||true|default|default
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8
+S:|S:0|B:0|L:0|U:0
+I:||||||||test|default
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9
+S:|S:0|B:0|L:0|U:0
+I:|||||||||default
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit
+S:|S:0|B:0|L:0|U:0
+I:|||||||||
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button
+S:|S:0|B:0|L:0|U:0
+I:|||||||||
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button
 S:|S:0|B:0|L:0|U:1
+I:|||||||||
+A:
+B:
+E:MR|
+P:MR|
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link
+S:|S:0|B:0|L:0|U:1
+I:|||||||||
 A:
 B:
 E:MP|
 P:MR|
-V:submit|button|link
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link
 S:|S:0|B:0|L:0|U:1
+I:|||||||||
 A:
 B:
 E:MP|
 P:MR|
-V:submit|button|link
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link
 S:|S:0|B:0|L:0|U:1
+I:|||||||||
 A:
 B:
 E:MP|
 P:MR|
-V:submit|button|link
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link
 S:|S:0|B:0|L:0|U:1
+I:|||||||||
 A:
 B:
 E:MP|
 P:MR|
-V:submit|button|link
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link
 S:|S:0|B:0|L:0|U:2
+I:|||||||||
 A:
 B:
 E:MP|
 P:MR|
-V:submit|button|link
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link
 S:|S:0|B:0|L:0|U:2
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:2
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:2
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:2
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:3
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MR|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:3
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:3
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:3
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:3
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:4
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:MP|
-V:submit|button|link|email
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email
 S:|S:0|B:0|L:0|U:4
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-V:submit|button|link|email|password
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email|password
 S:|S:0|B:0|L:0|U:4
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-V:submit|button|link|email|password
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email|password
 S:|S:1|B:0|L:0|U:4
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-V:submit|button|link|email|password
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email|password
 S:|S:1|B:1|L:0|U:4
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-V:submit|button|link|email|password
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email|password
 S:|S:1|B:1|L:0|U:5
+I:|||||||||
 A:
 B:
 E:V|xxx@xxx
 P:V|xxxxxx
-V:submit|button|link|email|password
+V:input_1|input_2|input_3|input_4|input_5|input_6|input_7|input_8|input_9|submit|button|link|email|password
 S:|S:1|B:1|L:1|U:5
+I:|||||||||
 A:1
 B:2
     </script>
@@ -359,6 +475,53 @@ B:2
           message="{{PASSWORD_MESSAGE}}"
           notification="on"
           events="input">
+
+      <input type="text" id="input_1" placeholder="message: 1"
+          validate required
+          message="1"
+          notification="on"
+          events="input">
+      <input type="text" id="input_2" placeholder="message: 0"
+          validate required
+          message="0"
+          notification="on"
+          events="input">
+      <input type="text" id="input_3" placeholder="message: -1"
+          validate required
+          message="-1"
+          notification="on"
+          events="input">
+      <input type="text" id="input_4" placeholder="message: false"
+          validate required
+          message="false"
+          notification="on"
+          events="input">
+      <input type="text" id="input_5" placeholder="message: null"
+          validate required
+          message="null"
+          notification="on"
+          events="input">
+      <input type="text" id="input_6" placeholder="message: undefined"
+          validate required
+          message="undefined"
+          notification="on"
+          events="input">
+      <input type="text" id="input_7" placeholder="message: true"
+          validate required
+          message="true"
+          notification="on"
+          events="input">
+      <input type="text" id="input_8" placeholder="message: test"
+          validate required
+          message="test"
+          notification="on"
+          events="input">
+      <input type="text" id="input_9" placeholder="message: test"
+          validate required
+          message=""
+          notification="on"
+          events="input">
+
       <input type="submit" id="submit" value="Submit" validate>
       <input type="button" id="button" value="Button" validate>
       <a id="link" href="composite_render_validate_2.html" target="targetB"
