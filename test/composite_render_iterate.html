@@ -111,12 +111,15 @@
             Assert.assertEquals("__0:____1:____2:__", OutputJ.textContent.replace(/\s+/g, ""));
         }});
         Test.create({test() {
+            Assert.assertEquals("SpringSummerAutumnWinter", OutputK.textContent.replace(/\s+/g, ""));
+        }});
+        Test.create({test() {
             var error = String(console.output.error);
             Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"));
         }});
-        
+
         var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (snapshots.length < 5) {
@@ -197,5 +200,11 @@
     <p id="OutputJ">
       <span iterate=" {{tempX7:Array(3)}} ">__{{tempX7.index}}:{{tempX7.item}}__</span><br/>
     </p>
+
+    <select id="OutputK" iterate="{{months:['Spring','Summer','Autumn','Winter']}}">
+      <option id="{{months.index}}">
+        {{months.item}}
+      </option>
+    </select>
   </body>
 </html>
