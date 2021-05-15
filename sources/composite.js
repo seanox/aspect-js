@@ -1080,6 +1080,7 @@ if (typeof Composite === "undefined") {
             // model and to trigger targets of the attribute: render.
             var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                     ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+            events = String(events || "");
             events = events.toLowerCase().split(/\s+/);
             events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
                     && array.indexOf(event) == index);
@@ -1252,10 +1253,12 @@ if (typeof Composite === "undefined") {
                     // query selector rendering are updated. 
                     var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                             ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+                    events = String(events || "");
                     events = events.toLowerCase().split(/\s+/);
                     if (events.includes(action.toLowerCase())) {
                         var render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
                                 ? object.attributes[Composite.ATTRIBUTE_RENDER] : "";
+                        render = String(render || "");
                         if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                             render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
                         Composite.render(render);
@@ -2096,12 +2099,12 @@ if (typeof Composite === "undefined") {
                         var object = {serial, element:node, attributes:{}, value:null,
                             render() {
                                 if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
-                                    var name = (this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                                    var value = (this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                                    var name = String(this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                                    var value = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
                                     window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
                                     word = "";
                                 } else {
-                                    word = this.attributes[Composite.ATTRIBUTE_VALUE];
+                                    word = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "");
                                     word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
                                 }
                                 this.value = word;
@@ -2215,7 +2218,7 @@ if (typeof Composite === "undefined") {
             // This excludes the placeholders (are text nodes) of conditions.
             if (selector instanceof Element
                     && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                var model = (object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                var model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                 if (!model.match(Composite.PATTERN_COMPOSITE_ID))
                     throw new Error("Invalid composite id" + (model ? ": " + model : ""));
                 dock(model);
@@ -2273,7 +2276,7 @@ if (typeof Composite === "undefined") {
                     // Only composites are mounted based on their model.
                     // This excludes the placeholders (are text nodes) of conditions.
                     if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                        var model = (placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                        var model = String(placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                         if (!model.match(Composite.PATTERN_COMPOSITE_ID))
                             throw new Error("Invalid composite id" + (model ? ": " + model : ""));
                         dock(model);
