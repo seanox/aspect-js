@@ -116,12 +116,12 @@
  * Thus virtual paths, object structure in JavaScript (namespace) and the
  * nesting of the DOM must match.
  *
- * Composite 1.3.2 20210515
+ * Composite 1.3.2 20210615
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.2 20210515
+ * @version 1.3.2 20210615
  */
 if (typeof Composite === "undefined") {
     
@@ -512,7 +512,7 @@ if (typeof Composite === "undefined") {
             this.serial = this.serial || ++Object.indication;
             return this.serial;
         };     
-    };
+    }
     
     /**
      * Enhancement of the JavaScript API
@@ -3024,7 +3024,7 @@ if (typeof Composite === "undefined") {
             });
         })).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
     });
-};
+}
 
 if (typeof Expression === "undefined") {    
     
@@ -3421,4 +3421,4 @@ if (typeof Expression === "undefined") {
             return exception.message;
         }
     };
-};
+}

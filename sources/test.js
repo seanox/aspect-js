@@ -4,7 +4,7 @@
  * Software unterliegt der Version 2 der GNU General Public License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2020 Seanox Software Solutions
+ * Copyright (C) 2021 Seanox Software Solutions
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as published
@@ -83,12 +83,12 @@
  * assertion was not true, a error is thrown -- see as an example the
  * implementation here. 
  * 
- * Test 1.1.1 20200106
- * Copyright (C) 2020 Seanox Software Solutions
+ * Test 1.1.1 20210516
+ * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.1.1 20200106
+ * @version 1.1.1 20210516
  */
 if (typeof Test === "undefined") {
     
@@ -1053,7 +1053,7 @@ if (typeof Test === "undefined") {
                 });
                 this.trigger("input");
             };     
-        };
+        }
     
         /**
          * Enhancement of the JavaScript API
@@ -1071,7 +1071,7 @@ if (typeof Test === "undefined") {
         if (Element.prototype.toPlainString === undefined)
             Element.prototype.toPlainString = function() {
                 return this.outerHTML;
-        };   
+            };
         
         /**
          * Enhancement of the JavaScript API
@@ -1104,4 +1104,4 @@ if (typeof Test === "undefined") {
                 this.dispatchEvent(trigger);
             }; 
     };
-};
+}

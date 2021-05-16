@@ -4,7 +4,7 @@
  * Software unterliegt der Version 2 der GNU General Public License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2020 Seanox Software Solutions
+ * Copyright (C) 2021 Seanox Software Solutions
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as published
@@ -24,12 +24,12 @@
  *     ----
  * General extension of the JavaScript API.
  * 
- * Extension 1.1.1 20200106
- * Copyright (C) 2020 Seanox Software Solutions
+ * Extension 1.1.1 20210615
+ * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.1.1 20200106
+ * @version 1.1.1 20210615
  */
 if (typeof Namespace === "undefined") {
 
@@ -176,7 +176,7 @@ if (typeof Namespace === "undefined") {
     Namespace.exists = function(...variants) {
         return Namespace.lookup(...variants) != null;     
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -221,7 +221,7 @@ if (Math.uniqueId === undefined) {
         }
         return unique;
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -243,7 +243,7 @@ if (Math.uniqueSerialId === undefined) {
             serial = serial.substr(serial.length -size);
         return serial;
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -259,7 +259,7 @@ if (RegExp.quote === undefined) {
             return null;
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -271,7 +271,7 @@ if (String.prototype.capitalize === undefined) {
             return this;
         return this.charAt(0).toUpperCase() + this.slice(1);
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -283,7 +283,7 @@ if (String.prototype.uncapitalize === undefined) {
             return this;
         return this.charAt(0).toLowerCase() + this.slice(1);
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -301,7 +301,7 @@ if (String.prototype.encodeHex === undefined) {
         }
         return "0x" + result;
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -317,7 +317,7 @@ if (String.prototype.decodeHex === undefined) {
             result += String.fromCharCode(parseInt(text.substr(loop, 2), 16));
         return result;
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -333,7 +333,7 @@ if (String.prototype.encodeBase64 === undefined) {
             throw new Error("malformed character sequence");
         }
     };
-}; 
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -349,7 +349,7 @@ if (String.prototype.decodeBase64 === undefined) {
             throw new Error("malformed character sequence");
         }
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -361,7 +361,7 @@ if (String.prototype.encodeHtml === undefined) {
         element.textContent = this;
         return element.innerHTML;
     };
-}; 
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -387,7 +387,7 @@ if (String.prototype.hashCode === undefined) {
         this.hash = this.hash.toUpperCase();
         return this.hash;
     };
-}; 
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -402,7 +402,7 @@ if (String.prototype.unescape === undefined) {
         text = text.replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
         return eval("\"" + text + "\"");
     };
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -412,7 +412,7 @@ if (window.serial === undefined) {
     Object.defineProperty(window, "serial", {
         value: Math.uniqueSerialId()
     });
-};
+}
 
 /**
  * Enhancement of the JavaScript API
@@ -424,4 +424,4 @@ if (window.location.pathcontext === undefined) {
     Object.defineProperty(window.location, "pathcontext", {
         value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
     });
-};
+}

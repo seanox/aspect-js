@@ -4,7 +4,7 @@
  * Software unterliegt der Version 2 der GNU General Public License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2020 Seanox Software Solutions
+ * Copyright (C) 2021 Seanox Software Solutions
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as published
@@ -40,12 +40,12 @@
  * The data is queried with XPath, the result can be concatenated and
  * aggregated and the result can be transformed with XSLT. 
  * 
- * DataSource 1.3.1 20200202
- * Copyright (C) 2020 Seanox Software Solutions
+ * DataSource 1.3.1 20210615
+ * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.1 20200202
+ * @version 1.3.1 20210615
  */
 if (typeof DataSource === "undefined") {
     
@@ -89,7 +89,7 @@ if (typeof DataSource === "undefined") {
             clone.appendChild(node);
             return clone; 
         };     
-    };
+    }
     
     (function() {
 
@@ -386,4 +386,4 @@ if (typeof DataSource === "undefined") {
         DataSource.cache[hash] = root;
         return root.clone();
     };
-};
+}
