@@ -18,7 +18,7 @@
     Value EL 02: f2
     Value EL 03: f3
     Value EL 04: function () {
-            return "m1";
+            return "m1"
         }
 
     Value EL 11_1: [object Object]
@@ -62,4 +62,3 @@
     
     Unexpected end of script
     -
-  

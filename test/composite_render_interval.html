@@ -12,9 +12,9 @@
     <script type="text/javascript"> 
     
         Test.activate()
-        
+
         var conditionA = false
-        
+
         var snapshots = {A:"", B:"", C:"", S1:"", S2:"",
                 xA:"", xB:"", xC:"", xBC:"", xS1:"", xS2:"", xS12:"",
                 vA:0, vB:0, vC:0, vS1:0, vS2:0}
@@ -31,9 +31,9 @@
             if (!snapshot.match(/^"\w+\":\"\w+\"(,\"\w+\":\"\w+\")+$/))
                 return
             snapshot = JSON.parse("{" + snapshot + "}")
-            
+
             var value
-            
+
             value = typeof snapshot.A === "undefined" ? "0" : "1"
             if (snapshots.A.slice(-1) !== value)
                 snapshots.A += value
@@ -61,7 +61,7 @@
 
             //Assume that all variables count up and are reset with the refresh
             //from the body to the initial value in the markup.
-            //    -> 10101 / 101 
+            //    -> 10101 / 101
             value = parseInt(snapshots.vB) <= parseInt(snapshot.B) ? "1" : "0"
             if (snapshots.xB.slice(-1) !== value)
                 snapshots.xB += value
@@ -71,17 +71,17 @@
             if (snapshots.xC.slice(-1) !== value)
                 snapshots.xC += value
             snapshots.vC = parseInt(snapshot.C)
-            
+
             value = parseInt(snapshots.vS1) <= parseInt(snapshot.S1) ? "1" : "0"
             if (snapshots.xS1.slice(-1) !== value)
                 snapshots.xS1 += value
             snapshots.vS1 = parseInt(snapshot.S1)
-            
+
             value = parseInt(snapshots.vS2) <= parseInt(snapshot.S2) ? "1" : "0"
             if (snapshots.xS2.slice(-1) !== value)
                 snapshots.xS2 += value
             snapshots.vS2 = parseInt(snapshot.S2)
-            
+
             //Assuming that the counter of B runs faster, B must always be
             //greater than C.
             value = parseInt(snapshot.B) < parseInt(snapshot.C) ? "0" : "1"
@@ -96,14 +96,13 @@
             if (snapshots.xS12.slice(-1) !== value)
                 snapshots.xS12 += value
         }
-        
+
         var count = 0
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (typeof Test.started !== "undefined")
                 return
             Test.started = true
-            
-            (new MutationObserver(function(records) {
+            {(new MutationObserver(function(records) {
                 records.forEach(function(record) {
                     snapshots.snap()
                     count++
@@ -119,16 +118,15 @@
                         conditionA = true
                         Composite.asynchron(Composite.render, document.body)
                     }
-                    
                     if (count == 100)
                         Composite.asynchron(() => {
                             document.body.textContent = "Please wait, test in progress..."
                             Test.start()
                         })
                 })
-            })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true})
+            })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true})}
         })
-        
+
         Test.create({test() {
             Assert.assertEquals("0101 1 1 1 1", snapshots.A + " " + snapshots.B + " " + snapshots.C + " " + snapshots.S1 + " " + snapshots.S2)
         }})
@@ -168,12 +166,12 @@
     S1: {{s1:0}}
     <div id="outputScript1"></div>
     <script type="composite/javascript" interval="3000">
-        outputScript1.textContent = ++s1
+        outputScript1.textContent = ++s1;
     </script>
     S2: {{s2:0}}
     <div id="outputScript2"></div>
     <script type="composite/javascript" interval="1500">
-        outputScript2.textContent = ++s2
+        outputScript2.textContent = ++s2;
     </script>
     <br>
     Please wait, test in progress...
