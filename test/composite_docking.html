@@ -102,7 +102,7 @@
             //Test with indirect/secondary assignment via the qualifier.
             buttonB: {
                 onClick(event) {
-                    var target = String(event.target.id.match(/[^:]+$/));
+                    let target = String(event.target.id.match(/[^:]+$/));
                     if (target)
                         target = Object.lookup(target + ":button:onClick");
                     if (target)
@@ -138,7 +138,7 @@
         const snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             let snapshot = document.body.textContent;
-            snapshot = snapshot.replace(/Model\-/ig, "");
+            snapshot = snapshot.replace(/Model-/ig, "");
             snapshot = snapshot.replace(/\w+:\w+\s+\d+/ig, "");
             snapshot = snapshot.replace(/\s+/g, " ").trim();
             snapshots.push(":" + snapshot);
