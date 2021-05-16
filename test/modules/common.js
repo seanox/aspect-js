@@ -26,7 +26,7 @@ if (Test.read === undefined) {
             else content += "?" + new Date().getTime();
         request.open("GET", content, false);
         request.send();
-        if (request.status != "200")
+        if (request.status !== 200)
             throw new Error("HTTP status " + request.status + " for " + request.responseURL);
         return request.responseText;
     };
