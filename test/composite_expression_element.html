@@ -5,31 +5,31 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
     
         Test.create({test() {
-            var pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt")
-            Assert.assertSameText(pattern, document.body.innerHTML)
-        }})
+            const pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt");
+            Assert.assertSameText(pattern, document.body.innerHTML);
+        }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (Test.status().queue != null)
-                return
-            var element = document.querySelector("#InputTextA")
+                return;
+            const element = document.querySelector("#InputTextA");
             if (element.value != "A1")
-                return
-            element.value = ""
-            element.typeValue("Hallo Berlin")
-            Test.start()
-        })
+                return;
+            element.value = "";
+            element.typeValue("Hallo Berlin");
+            Test.start();
+        });
     </script>
   </head>
   <body>

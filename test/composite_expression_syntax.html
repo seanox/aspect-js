@@ -5,34 +5,34 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
 
         Test.create({test() {
-            document.body.textContent = normalizeOutput(document.body.innerHTML)
-            var pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt")
-            Assert.assertSameText(pattern, document.body.textContent)
-        }})
+            document.body.textContent = normalizeOutput(document.body.innerHTML);
+            const pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
+            Assert.assertSameText(pattern, document.body.textContent);
+        }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start()
-        })
+            Test.start();
+        });
         Example = {
             xa() {
-                return 122
+                return 122;
             },
             xb() {
-                var element = document.createElement("i")
-                element.innerHTML = "Hallo"
-                return element
+                const element = document.createElement("i");
+                element.innerHTML = "Hallo";
+                return element;
             }
-        }
+        };
     </script>
   </head>
   <body>

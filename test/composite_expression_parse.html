@@ -5,42 +5,42 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
     
-        var TestModel_1 = {}
-        TestModel_1.field_1 = "f1"
-        TestModel_1.field_2 = "f2"
+        const TestModel_1 = {};
+        TestModel_1.field_1 = "f1";
+        TestModel_1.field_2 = "f2";
         TestModel_1.method_1 = function() {
-            return "m1"
-        }
+            return "m1";
+        };
         TestModel_1.method_2 = function(value_1) {
-            return "m2" + value_1
-        }
+            return "m2" + value_1;
+        };
         TestModel_1.getField_3 = function(value_1) {
-            return "f3"
-        }
+            return "f3";
+        };
         TestModel_1.getField_11 = function(value_1) {
-            return [{x:{y:"f11[0]->x->y"}}]
-        }
+            return [{x:{y:"f11[0]->x->y"}}];
+        };
         TestModel_1.getField_12 = function(value_1) {
-            return [{x:[{y:"f12[0]->x->y"}]}]
-        }
+            return [{x:[{y:"f12[0]->x->y"}]}];
+        };
         
         Test.create({test() {
-            var pattern = Test.read("composite_expression_parse_" + navigator.engine + ".txt")
-            Assert.assertSameText(pattern, document.body.innerHTML)
-        }})
+            var pattern = Test.read("composite_expression_parse_" + navigator.engine + ".txt");
+            Assert.assertSameText(pattern, document.body.innerHTML);
+        }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start()
-        })
+            Test.start();
+        });
     </script>
   </head>
   <body>

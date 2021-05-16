@@ -5,35 +5,35 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
     
-        var ModelA = {
-            a:"ma",
+        const ModelA = {
+            a: "ma",
             getB() {
-                return "mb"
+                return "mb";
             },
             isC() {
-                return true
+                return true;
             }  
-        }
-        
+        };
+
         Test.create({test() {
-            var content = Output.textContent
-            content = content.replace(/undefined/, "")
-            content = content.replace(/\s+/g, " ").trim()
-            Assert.assertEquals("ma mb true EA EA mercedes", content)
-        }})
+            let content = Output.textContent;
+            content = content.replace(/undefined/, "");
+            content = content.replace(/\s+/g, " ").trim();
+            Assert.assertEquals("ma mb true EA EA mercedes", content);
+        }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start()
-        })
+            Test.start();
+        });
     </script>
   </head>
   <body>

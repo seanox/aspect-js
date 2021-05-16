@@ -123,7 +123,7 @@
 
     O1: <span>undefined</span>
     O2: <span>function xa() {
-                return 122
+                return 122;
             }</span>
     O3: <span>122</span>
     O4: <span>xxxx</span>
