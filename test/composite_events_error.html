@@ -10,31 +10,30 @@
       }
       iframe {
         height:2em;
-      }      
+      }
     </style>
     <script src="aspect-js.js"></script>
-
     <script type="text/javascript">
     
-        Test.activate()
-        
+        Test.activate();
+
         Test.create({test() {
-            var filter = ""
-            for (var loop = 1; loop <= 3; loop++) {
-                var frame = document.querySelector("iframe:nth-child(" + loop + ")")
-                frame = frame.contentDocument || frame.contentWindow.document
-                var text = frame.body.textContent
-                Assert.assertTrue(!!text.match(/TypeError|ReferenceError|not defined|undefined or null reference/))
+            for (let loop = 1; loop <= 3; loop++) {
+                let frame = document.querySelector("iframe:nth-child(" + loop + ")");
+                frame = frame.contentDocument || frame.contentWindow.document;
+                var text = frame.body.textContent;
+                Assert.assertTrue(!!text.match(/TypeError|ReferenceError|not defined|undefined or null reference/));
             }
         }})
-        
-        var count = 0
-        var interval = window.setInterval(function() {
+
+        // must be var because it is used in a frame via parent
+        var count = 0;
+        const interval = window.setInterval(function() {
             if (count < 3)
-                return
-            window.clearInterval(interval)
-            Test.start()
-        }, 250)
+                return;
+            window.clearInterval(interval);
+            Test.start();
+        }, 250);
     </script>
   </head>
   <body>

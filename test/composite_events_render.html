@@ -12,42 +12,42 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
     
-        var TestModel = {}
-        TestModel.ticks = 0
+        TestModel = {};
+        TestModel.ticks = 0;
         TestModel.ping = function() {
-            return ++TestModel.ticks
-        }
+            return ++TestModel.ticks;
+        };
 
-        TestModel.events = []
+        TestModel.events = [];
         TestModel.onEvent = function(event, variants) {
             if (TestModel.events[event] === undefined)
-                TestModel.events[event] = 0
-            TestModel.events[event]++
-        }
-        Composite.listen(Composite.EVENT_RENDER_START, TestModel.onEvent)
-        Composite.listen(Composite.EVENT_RENDER_NEXT, TestModel.onEvent)
-        Composite.listen(Composite.EVENT_RENDER_END, TestModel.onEvent)
+                TestModel.events[event] = 0;
+            TestModel.events[event]++;
+        };
+        Composite.listen(Composite.EVENT_RENDER_START, TestModel.onEvent);
+        Composite.listen(Composite.EVENT_RENDER_NEXT, TestModel.onEvent);
+        Composite.listen(Composite.EVENT_RENDER_END, TestModel.onEvent);
         
         Test.create({test() {
-            var events = TestModel.events[Composite.EVENT_RENDER_START]
-            Assert.assertTrue(events !== undefined)
-            Assert.assertEquals(1, events)
-        }})
+            const events = TestModel.events[Composite.EVENT_RENDER_START];
+            Assert.assertTrue(events !== undefined);
+            Assert.assertEquals(1, events);
+        }});
         Test.create({test() {
-            var events = TestModel.events[Composite.EVENT_RENDER_NEXT]
-            Assert.assertTrue(events !== undefined)
-            Assert.assertEquals(73, events)
-        }})
+            const events = TestModel.events[Composite.EVENT_RENDER_NEXT];
+            Assert.assertTrue(events !== undefined);
+            Assert.assertEquals(73, events);
+        }});
         Test.create({test() {
-            var events = TestModel.events[Composite.EVENT_RENDER_END]
-            Assert.assertTrue(events !== undefined)
-            Assert.assertEquals(1, events)
-        }})
+            const events = TestModel.events[Composite.EVENT_RENDER_END];
+            Assert.assertTrue(events !== undefined);
+            Assert.assertEquals(1, events);
+        }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            Test.start()
-        })
+            Test.start();
+        });
     </script>
   </head>
   <body>
