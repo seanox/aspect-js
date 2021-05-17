@@ -13,8 +13,8 @@
     <script type="text/javascript">
     
         Test.activate();
-    
-        var TestModel = {};
+
+        Namespace.create("TestModel", {});
         TestModel.ticks = 0;
         TestModel.ping = function() {
             return ++TestModel.ticks;
@@ -31,17 +31,17 @@
         Composite.listen(Composite.EVENT_RENDER_END, TestModel.onEvent); 
         
         Test.create({test() {
-            var events = TestModel.events[Composite.EVENT_RENDER_START];
+            const events = TestModel.events[Composite.EVENT_RENDER_START];
             Assert.assertTrue(events !== undefined);
             Assert.assertEquals(1, events);
         }});
         Test.create({test() {
-            var events = TestModel.events[Composite.EVENT_RENDER_NEXT];
+            const events = TestModel.events[Composite.EVENT_RENDER_NEXT];
             Assert.assertTrue(events !== undefined);
             Assert.assertEquals(73, events);
         }});
         Test.create({test() {
-            var events = TestModel.events[Composite.EVENT_RENDER_END];
+            const events = TestModel.events[Composite.EVENT_RENDER_END];
             Assert.assertTrue(events !== undefined);
             Assert.assertEquals(1, events);
         }});

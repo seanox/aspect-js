@@ -14,8 +14,8 @@
     <script type="text/javascript">
     
         Test.activate();
-    
-        var TestModel_1 = {};
+
+        Namespace.create("TestModel_1", {});
         TestModel_1.field_1 = "f1";
         TestModel_1.field_2 = "f2";
         TestModel_1.method_1 = function() {
@@ -34,24 +34,24 @@
             return [{x:[{y:"f12[0]->x->y"}]}];
         };
         
-        var timing = new Date().getTime();
+        const timing = new Date().getTime();
         Test.create({test() {
             Assert.assertTrue((new Date().getTime() -timing) < 2500);
         }});
         Test.create({timeout:500, test() {
-            var expression = document.querySelector("script[type='text/expression']");
+            let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
-            for (var loop = 0; loop < 1750; loop++)
+            for (let loop = 0; loop < 1750; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }});
         Test.create({timeout:500, test() {
-            var expression = document.querySelector("script[type='text/expression']");
+            let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
-            for (var loop = 0; loop < 25000; loop++)
+            for (let loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (Test.status().queue != null)
+            if (Test.status().queue !== null)
                 return;
             Test.start();
         });

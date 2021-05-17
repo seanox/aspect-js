@@ -16,15 +16,15 @@
         Test.activate();
     
         Test.create({test() {
-            var pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt");
+            const pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.innerHTML);
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (Test.status().queue != null)
+            if (Test.status().queue !== undefined)
                 return;
-            var element = document.querySelector("#InputTextA");
-            if (element.value != "A1")
+            const element = document.querySelector("#InputTextA");
+            if (element.value !== "A1")
                 return;
             element.value = "";
             element.typeValue("Hallo Berlin");
