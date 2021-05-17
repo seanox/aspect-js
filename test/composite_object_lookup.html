@@ -5,14 +5,14 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
         
         var exampleA = {
             a:null,
@@ -56,84 +56,84 @@
                     {value:"D"}
                 ]
             }
-        }
+        };
         
         Test.create({test() {
-            Assert.assertEquals("object", typeof Object.lookup("exampleA"))
-        }})
+            Assert.assertEquals("object", typeof Object.lookup("exampleA"));
+        }});
 
         Test.create({test() {
-            Assert.assertNotNull(Object.lookup("exampleA"))
-        }})
+            Assert.assertNotNull(Object.lookup("exampleA"));
+        }});
 
         Test.create({test() {
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.a"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.b"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.c"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.d"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.e"))
-            Assert.assertEquals("function", typeof Object.lookup("exampleA.f"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.h"))
-        }})
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.a"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.b"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.c"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.d"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.e"));
+            Assert.assertEquals("function", typeof Object.lookup("exampleA.f"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.h"));
+        }}); 
 
         Test.create({test() {
-            Assert.assertNull(Object.lookup("exampleA.a"))
-            Assert.assertNull(Object.lookup("exampleA.b"))
-            Assert.assertNull(Object.lookup("exampleA.c"))
-            Assert.assertNotNull(Object.lookup("exampleA.d"))
-            Assert.assertNotNull(Object.lookup("exampleA.e"))
-            Assert.assertNotNull(Object.lookup("exampleA.f"))
-            Assert.assertNotNull(Object.lookup("exampleA.g"))
-            Assert.assertNotNull(Object.lookup("exampleA.h"))
-        }})
+            Assert.assertNull(Object.lookup("exampleA.a"));
+            Assert.assertNull(Object.lookup("exampleA.b"));
+            Assert.assertNull(Object.lookup("exampleA.c"));
+            Assert.assertNotNull(Object.lookup("exampleA.d"));
+            Assert.assertNotNull(Object.lookup("exampleA.e"));
+            Assert.assertNotNull(Object.lookup("exampleA.f"));
+            Assert.assertNotNull(Object.lookup("exampleA.g"));
+            Assert.assertNotNull(Object.lookup("exampleA.h"));
+        }}); 
 
         Test.create({test() {
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"))
-        }})
+            Assert.assertEquals("object", typeof Object.lookup("exampleA:g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+        }});
         
         Test.create({test() {
-            Assert.assertNotNull(Object.lookup("exampleA:g"))
-            Assert.assertNotNull(Object.lookup("exampleA:g:g_g"))
-            Assert.assertNotNull(Object.lookup("exampleA:g:g_g:g_g_g"))
-            Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"))
-            Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"))
-        }})
+            Assert.assertNotNull(Object.lookup("exampleA:g"));
+            Assert.assertNotNull(Object.lookup("exampleA:g:g_g"));
+            Assert.assertNotNull(Object.lookup("exampleA:g:g_g:g_g_g"));
+            Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+        }});
         
         Test.create({test() {
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"))
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"))
-        }})
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+        }});
         
         Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g.g_g_g/i, test() {
-            Object.lookup("exampleA.g:g_g.g_g_g")
-        }})
+            Object.lookup("exampleA.g:g_g.g_g_g");
+        }});         
         
         Test.create({test() {
-            Assert.assertNotNull(Object.lookup("exampleA.g"))
-            Assert.assertNotNull(Object.lookup("exampleA.g:g_g"))
-            Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"))
-            Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"))
-        }})
+            Assert.assertNotNull(Object.lookup("exampleA.g"));
+            Assert.assertNotNull(Object.lookup("exampleA.g:g_g"));
+            Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+        }}); 
         
         Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g\.g_g_g/i, test() {
-            Object.lookup("exampleA.g:g_g.g_g_g")
-        }})
+            Object.lookup("exampleA.g:g_g.g_g_g");
+        }}); 
         
         Test.create({test() {
-           Assert.assertEquals("A", Object.lookup("exampleA.h:h_d:0").value)
-           Assert.assertEquals("B", Object.lookup("exampleA.h:h_d:1").value)
-           Assert.assertEquals("C", Object.lookup("exampleA.h:h_d:2").value)
-           Assert.assertEquals("D", Object.lookup("exampleA.h:h_d:3").value)
-        }})
+           Assert.assertEquals("A", Object.lookup("exampleA.h:h_d:0").value);
+           Assert.assertEquals("B", Object.lookup("exampleA.h:h_d:1").value);
+           Assert.assertEquals("C", Object.lookup("exampleA.h:h_d:2").value);
+           Assert.assertEquals("D", Object.lookup("exampleA.h:h_d:3").value);
+        }});
         
-        Test.start({auto:true})
+        Test.start({auto:true});
     </script>
   </head>
   <body>

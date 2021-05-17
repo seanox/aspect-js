@@ -5,47 +5,47 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
+        font-family: monospace;
       }
       input {
-        display:block;
+        display: block;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        var x = false
+        var x = false;
 
-        Test.activate()
+        Test.activate();
         
-        var snapshots = []
+        var snapshots = [];
         var snapshot = function() {
-            var snapshot = document.body.innerHTML
-            snapshot = snapshot.replace(/^\s+/mg, "")
-            snapshots.push(snapshot)
+            var snapshot = document.body.innerHTML;
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            snapshots.push(snapshot);
             if (snapshots.length == 2) {
-                x = true
-                Composite.asynchron(Composite.render, document.body)
+                x = true;
+                Composite.asynchron(Composite.render, document.body);
             }
             if (snapshots.length == 4)
-                Composite.asynchron(Test.start)
-        }
+                Composite.asynchron(Test.start);
+        };
 
-        Composite.listen(Composite.EVENT_RENDER_START, snapshot)
-        Composite.listen(Composite.EVENT_RENDER_END, snapshot)
+        Composite.listen(Composite.EVENT_RENDER_START, snapshot);
+        Composite.listen(Composite.EVENT_RENDER_END, snapshot);
         
         Test.create({test() {
-            Assert.assertTrue(snapshots[0].indexOf(" release") > 0)
-        }})
+            Assert.assertTrue(snapshots[0].indexOf(" release") > 0);
+        }});
         Test.create({test() {
-            Assert.assertFalse(snapshots[1].indexOf(" release") > 0)
-        }})
+            Assert.assertFalse(snapshots[1].indexOf(" release") > 0);
+        }});        
         Test.create({test() {
-            Assert.assertFalse(snapshots[2].indexOf(" release") > 0)
-        }})
+            Assert.assertFalse(snapshots[2].indexOf(" release") > 0);
+        }});        
         Test.create({test() {
-            Assert.assertFalse(snapshots[3].indexOf(" release") > 0)
-        }})
+            Assert.assertFalse(snapshots[3].indexOf(" release") > 0);
+        }});        
     </script>
   </head>
   <body>

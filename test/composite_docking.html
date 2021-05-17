@@ -19,9 +19,9 @@
     
         Test.activate();
         
-        const stack = ["Step:0"];
-
-        const modelA = {
+        var stack = ["Step:0"];
+    
+        var modelA = {
             status: true,
             dock() {
                 stack.push("A:dock");
@@ -35,9 +35,9 @@
                     modelA.status = !modelA.status;
                 }
             }
-        }
-
-        const modelB = {
+        };
+        
+        var modelB = {
             status: true,
             undock() {
                 stack.push("B:undock");
@@ -48,9 +48,9 @@
                     modelB.status = !modelB.status;
                 }
             }
-        }
-
-        const modelC = {
+        }; 
+        
+        var modelC = {
             status: true,
             dock() {
                 stack.push("C:dock");
@@ -61,9 +61,9 @@
                     modelC.status = !modelC.status;
                 }
             }
-        }
-
-        const modelD = {
+        };
+        
+        var modelD = {
             status: true,
             button: {
                 onClick() {
@@ -71,9 +71,9 @@
                     modelD.status = !modelD.status;
                 }
             }
-        }
-
-        const page = {
+        };
+        
+        var page = {
                 
             //Test with the assignment via the qualifier.    
             buttonA: {
@@ -102,7 +102,7 @@
             //Test with indirect/secondary assignment via the qualifier.
             buttonB: {
                 onClick(event) {
-                    let target = String(event.target.id.match(/[^:]+$/));
+                    var target = String(event.target.id.match(/[^:]+$/));
                     if (target)
                         target = Object.lookup(target + ":button:onClick");
                     if (target)
@@ -127,20 +127,20 @@
         };
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-1']", stack.join("\n"));
+            Assert.assertSameTo("script[type='text/test-1']", stack.join("\n")); 
         }});
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-2']", snapshots.join("\n"));
+            Assert.assertSameTo("script[type='text/test-2']", snapshots.join("\n")); 
         }});
         
-        let count = 0;
-        const snapshots = [];
+        var count = 0;
+        var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
-            let snapshot = document.body.textContent;
-            snapshot = snapshot.replace(/Model-/ig, "");
+            var snapshot = document.body.textContent;
+            snapshot = snapshot.replace(/Model\-/ig, "");
             snapshot = snapshot.replace(/\w+:\w+\s+\d+/ig, "");
-            snapshot = snapshot.replace(/\s+/g, " ").trim();
+            snapshot = snapshot.replace(/\s+/g, " ").trim(); 
             snapshots.push(":" + snapshot);
             stack.push("Step:" + (count +1));
             switch (++count) {

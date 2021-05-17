@@ -5,14 +5,14 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
         
         SiteMap.customize({
             "#": null,
@@ -27,114 +27,114 @@
             "#xxx": null,
             "#xxx#y": null,
             "#xxx#y#z": null
-        })
+        });
         
         var logging = function(message) {
-            document.body.innerHTML += "\r\n" + message
-            document.body.innerHTML = document.body.innerHTML.trim()
-        }
+            document.body.innerHTML += "\r\n" + message;
+            document.body.innerHTML = document.body.innerHTML.trim();
+        };
         
-        var targets
+        var targets;
         window.addEventListener("load", (event) => {
-            targets = []
+            targets = [];
             
-            targets.push("D #")
+            targets.push("D #");
   
-            targets.push("A #a#b#c#d")
-            targets.push("A ##")
-            targets.push("A #a#b#c#d")
-            targets.push("A ###x")
-            targets.push("A y#z")
-            targets.push("A ####c")
-            targets.push("A #a#b#c#d")
-            targets.push("A ####b")
+            targets.push("A #a#b#c#d");
+            targets.push("A ##");
+            targets.push("A #a#b#c#d");
+            targets.push("A ###x");
+            targets.push("A y#z");
+            targets.push("A ####c");
+            targets.push("A #a#b#c#d");  
+            targets.push("A ####b");
             
-            targets.push("B #a#b#c#d")
-            targets.push("B ##")
-            targets.push("B ##x")
-            targets.push("B #a#b#x#y#z")
-            targets.push("B ####c")
-            targets.push("B #a#b#c#d")
-            targets.push("B ####b")
+            targets.push("B #a#b#c#d");
+            targets.push("B ##");
+            targets.push("B ##x");
+            targets.push("B #a#b#x#y#z");
+            targets.push("B ####c");
+            targets.push("B #a#b#c#d");  
+            targets.push("B ####b");          
   
-            targets.push("C #a#b#c#d")
-            targets.push("C ##")
-            targets.push("C #a#b#c#d")
-            targets.push("C ###x")
-            targets.push("C y#z")
-            targets.push("C ####c")
-            targets.push("C #a#b#c#d")
-            targets.push("C ####b")
+            targets.push("C #a#b#c#d");
+            targets.push("C ##");
+            targets.push("C #a#b#c#d");
+            targets.push("C ###x");
+            targets.push("C y#z");
+            targets.push("C ####c");
+            targets.push("C #a#b#c#d");  
+            targets.push("C ####b");
             
-            targets.push("D #xxx")
-            targets.push("D #xxx#y")
-            targets.push("D #xxx#y#z")
-            targets.push("D #xxx")
-            targets.push("D #xxx#y")
-            targets.push("D #xxx#y#z")
-            targets.push("D #xxx#y")
-            targets.push("D #xxx")
+            targets.push("D #xxx");
+            targets.push("D #xxx#y");
+            targets.push("D #xxx#y#z");
+            targets.push("D #xxx");
+            targets.push("D #xxx#y");
+            targets.push("D #xxx#y#z");
+            targets.push("D #xxx#y");
+            targets.push("D #xxx");
             
-            targets.push("D #")
+            targets.push("D #");
             
             Composite.asynchron(() => {
-                document.body.innerHTML = ""
-                var target = targets.shift()
-                var mode = String(target.match(/^[A-Z]/))
-                target = target.substring(2)
-                logging(mode + ": " + target)
+                document.body.innerHTML = "";
+                var target = targets.shift();
+                var mode = String(target.match(/^[A-Z]/));
+                target = target.substring(2);
+                logging(mode + ": " + target);
                 if (mode == "A")
-                    SiteMap.navigate(target)
+                    SiteMap.navigate(target);
                 else if (mode == "B")
-                    window.location.href = target
+                    window.location.href = target;
                 else if (mode == "C")
-                    window.location.hash = target
+                    window.location.hash = target;
                 else if (mode == "D")
-                    window.location.hash = target
-            })
-        })
+                    window.location.hash = target;
+            });
+        });
   
-        var timeout
+        var timeout;
         window.addEventListener("hashchange", (event) => {
             if (timeout)
-                window.clearTimeout(timeout)
-            logging("T: " + event.newURL)
-            logging("H: " + SiteMap.history.toPlainString())
+                window.clearTimeout(timeout);
+            logging("T: " + event.newURL);
+            logging("H: " + SiteMap.history.toPlainString());            
             timeout = window.setTimeout(() => {
                 if (targets.length > 0) {
-                    var target = targets.shift()
-                    var mode = String(target.match(/^[A-Z]/))
-                    target = target.substring(2)
-                    logging(mode + ": " + target)
+                    var target = targets.shift();
+                    var mode = String(target.match(/^[A-Z]/));
+                    target = target.substring(2);
+                    logging(mode + ": " + target);
                     if (mode == "A")
-                        SiteMap.navigate(target)
+                        SiteMap.navigate(target);
                     else if (mode == "B")
-                        window.location.href = target
+                        window.location.href = target;
                     else if (mode == "C")
-                        window.location.hash = target
+                        window.location.hash = target;
                     else if (mode == "D")
-                        window.location.hash = target
-                } else Test.start()
-            }, 50)
-        })
+                        window.location.hash = target;
+                } else Test.start();
+            }, 50);
+        });        
         
         Test.create({test() {
-            var content = document.body.innerHTML
-            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "")
-            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../")
-            content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2")
-            document.body.textContent = content
-            Assert.assertSameTo("script[type='text/test']", content)
-        }})
+            var content = document.body.innerHTML;
+            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
+            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
+            content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");   
+            document.body.textContent = content;
+            Assert.assertSameTo("script[type='text/test']", content);            
+        }});
         
-        var errors = ""
+        var errors = "";
         Composite.listen(Composite.EVENT_ERROR, function(event, error) {
-            errors += "\r\n" + error.message
-            errors = errors.trim()
-        })
+            errors += "\r\n" + error.message;
+            errors = errors.trim();          
+        });
         Test.create({test() {
-            Assert.assertEquals("", errors)
-        }})
+            Assert.assertEquals("", errors);
+        }});      
     </script>
     <script type="text/test">
 A: #a#b#c#d

@@ -14,11 +14,11 @@ if (navigator.engine === undefined) {
         navigator.engine = "goanna";
     if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Chrome\/[\d\.]+ Safari\/[\d\.]+ Edge\/[\d\.]+/i))
         navigator.engine = "edge";
-}
+};
 
 if (Test.read === undefined) {
     Test.read = function(content) {
-        const request = new XMLHttpRequest();
+        var request = new XMLHttpRequest();
         request.overrideMimeType("text/plain");
         if (content)
             if (content.match(/\?/))
@@ -26,11 +26,11 @@ if (Test.read === undefined) {
             else content += "?" + new Date().getTime();
         request.open("GET", content, false);
         request.send();
-        if (request.status !== 200)
+        if (request.status != "200")
             throw new Error("HTTP status " + request.status + " for " + request.responseURL);
         return request.responseText;
     };
-}
+};
 
 if (typeof Assert !== "undefined") {
 
@@ -42,23 +42,23 @@ if (typeof Assert !== "undefined") {
         actual = actual.replace(/\t/g, "    ");
         actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
         actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-        Assert.assertEquals(expected, actual);
+        Assert.assertEquals(expected, actual);    
     };
     
     Assert.assertSameTo = function(selector, actual) {
-        const element = document.querySelector(selector);
-        let content = element.innerHTML.trim().replace(/\t/g, "    ");
+        var element = document.querySelector(selector);
+        var content = element.innerHTML.trim().replace(/\t/g, "    ");
         content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
         content = content.replace(/(^\s+)|(\s+$)/gm, "");
         actual = actual.trim();
         actual = actual.replace(/\t/g, "    ");
         actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
         actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-        Assert.assertEquals(content, actual);
+        Assert.assertEquals(content, actual);    
     };
     
     Assert.assertIn = function(values, actual) {
-        const assert = Assert.create(arguments, 2);
+        var assert = Assert.create(arguments, 2);
         if (assert.values[0].includes(assert.values[1]))
             return;
         assert.values[0] = "[" + assert.values[0].join(", ") + "]";

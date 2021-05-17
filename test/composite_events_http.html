@@ -15,13 +15,13 @@
         Test.activate();
         
         Test.create({test() {
-            let result = document.body.innerHTML.replace(/[\r\n]+/g," ").trim();
-            result = result.replace(/(onReceive ){2,}/g, "onReceive ");
-            const pattern1 = "Test in progress..."
+            var result = document.body.innerHTML.replace(/[\r\n]+/g," ").trim();
+            result = result.replace(/(onReceive ){2,}/g, "onReceive "); 
+            var pattern1 = "Test in progress..."
                     + " onReceive onStart onReceive onError onEnd"
                     + " ---"
                     + " onReceive onStart onReceive onProgress onReceive onSuccess onEnd";
-            const pattern2 = "Test in progress..."
+            var pattern2 = "Test in progress..."
                     + " onReceive onStart onReceive onProgress onError onEnd"
                     + " ---"
                     + " onReceive onStart onReceive onProgress onReceive onSuccess onEnd";
@@ -37,29 +37,29 @@
         window.addEventListener("load", () => {
             
             document.body.innerHTML = "Test in progress...\r\n\r\n";
-
-            const onStart = function() {
+    
+            var onStart = function() {
                 document.body.innerHTML += "onStart\r\n";
             };
-            const onProgress = function() {
+            var onProgress = function() {
                 document.body.innerHTML += "onProgress\r\n";
             };
-            const onReceive = function() {
+            var onReceive = function() {
                 document.body.innerHTML += "onReceive\r\n";
             };
-            const onSuccess = function() {
+            var onSuccess = function() {
                 document.body.innerHTML += "onSuccess\r\n";
             };
-            const onAbort = function() {
+            var onAbort = function() {
                 document.body.innerHTML += "onAbort\r\n";
             };
-            const onTimeout = function() {
+            var onTimeout = function() {
                 document.body.innerHTML += "onTimeout\r\n";
             };
-            const onError = function() {
+            var onError = function() {
                 document.body.innerHTML += "onError\r\n";
             };
-            const onEnd = function() {
+            var onEnd = function() {
                 document.body.innerHTML += "onEnd\r\n";
             };
         
@@ -72,13 +72,13 @@
             Composite.listen(Composite.EVENT_HTTP_ERROR, onError);
             Composite.listen(Composite.EVENT_HTTP_END, onEnd);
             
-            const request = new XMLHttpRequest();
+            var request = new XMLHttpRequest();
             request.open("GET", "https://github.com/seanox");
             request.send();
             
             window.setTimeout(function() {
                 document.body.innerHTML += "---\r\n";
-                const request = new XMLHttpRequest();
+                var request = new XMLHttpRequest();
                 request.open("GET", document.location.href);
                 request.send();
                 

@@ -5,61 +5,61 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript"> 
     
-        Test.activate()
+        Test.activate();
 
         Test.create({test() {
-            Assert.assertEquals("a1:0 a2:1 a3:2 b1:3 b2:4 b3:6", snapshots.shift())
-        }})
+            Assert.assertEquals("a1:0 a2:1 a3:2 b1:3 b2:4 b3:6", snapshots.shift());  
+        }});
         Test.create({test() {
-            Assert.assertEquals("a1:7 a2:8 a3:9 b1:3 b2:4 b3:6", snapshots.shift())
-        }})
+            Assert.assertEquals("a1:7 a2:8 a3:9 b1:3 b2:4 b3:6", snapshots.shift());
+        }});
         Test.create({test() {
-            Assert.assertEquals("a1:7 a2:8 a3:9 b1:7 b2:8 b3:6", snapshots.shift())
-        }})
+            Assert.assertEquals("a1:7 a2:8 a3:9 b1:7 b2:8 b3:6", snapshots.shift());
+        }});
         Test.create({test() {
-            Assert.assertEquals("a1:7 a2:8 a3:9 b1:7 b2:7 b3:9", snapshots.shift())
-        }})
+            Assert.assertEquals("a1:7 a2:8 a3:9 b1:7 b2:7 b3:9", snapshots.shift());
+        }});
         Test.create({test() {
-            Assert.assertEquals("a1:7 a2:8 a3:9 b1:10 b2:7 b3:7", snapshots.shift())
-        }})
+            Assert.assertEquals("a1:7 a2:8 a3:9 b1:10 b2:7 b3:7", snapshots.shift());
+        }});
         
-        var snapshots = []
-        var timeout = null
+        var snapshots = [];
+        var timeout = null;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (timeout)
-                window.clearInterval(timeout)
+                window.clearInterval(timeout);
             timeout = window.setTimeout(() => {
-                Test.start()
-            }, 250)
+                Test.start();
+            }, 250);
             var snapshot = "a1:" + a1.value
                     + " a2:" + a2.value
                     + " a3:" + a3.value
                     + " b1:" + b1.value
                     + " b2:" + b2.value
-                    + " b3:" + b3.value
-            snapshots.push(snapshot)
+                    + " b3:" + b3.value;
+            snapshots.push(snapshot);
             switch (snapshots.length) {
                 case 1:
-                    a1.typeValue("7")
-                    return
+                    a1.typeValue("7");
+                    return;
                 case 2:
-                    b1.typeValue("7")
-                    return
+                    b1.typeValue("7");
+                    return;
                 case 3:
-                    b2.typeValue("7")
-                    return
+                    b2.typeValue("7");
+                    return;
                 case 4:
-                    b3.typeValue("7")
-                    return
+                    b3.typeValue("7");
+                    return;                    
             }
-        })
+        });
     </script>
   </head>
   <body>

@@ -34,14 +34,14 @@
     <div>
       10
       <x-script type="composite/javax-script">
-        outputA.textContent += " " + tempB.index + ":" + tempA
+        outputA.textContent += " " + tempB.index + ":" + tempA;
       </x-script>
       12
       <x-script type="composite/javax-script">
-        outputA.textContent += " " + tempB.index + ":" + tempA
+        outputA.textContent += " " + tempB.index + ":" + tempA;
       </x-script>
       15
       <x-script type="composite/javax-script">
-        outputA.textContent += " " + tempB.index + ":" + tempA
+        outputA.textContent += " " + tempB.index + ":" + tempA;
       </x-script>
     </div>

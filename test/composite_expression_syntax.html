@@ -17,7 +17,7 @@
 
         Test.create({test() {
             document.body.textContent = normalizeOutput(document.body.innerHTML);
-            const pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
+            var pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.textContent);
         }});
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -28,7 +28,7 @@
                 return 122;
             },
             xb() {
-                const element = document.createElement("i");
+                var element = document.createElement("i");
                 element.innerHTML = "Hallo";
                 return element;
             }

@@ -15,7 +15,7 @@
     
         Test.activate();
     
-        const ModelA = {
+        var ModelA = {
             a: "ma",
             getB() {
                 return "mb";
@@ -26,7 +26,7 @@
         };
 
         Test.create({test() {
-            let content = Output.textContent;
+            var content = Output.textContent;
             content = content.replace(/undefined/, "");
             content = content.replace(/\s+/g, " ").trim();
             Assert.assertEquals("ma mb true EA EA mercedes", content);

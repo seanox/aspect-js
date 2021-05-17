@@ -5,112 +5,112 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        overflow:hidden;
+        font-family: monospace;
+        overflow: hidden;
       }
       
       body > table {
-        border-collapse:collapse;
-        height:100%;
-        left:0px;
-        overflow:hidden;
-        position:absolute;
-        top:0px;
-        width:100%;
+        border-collapse: collapse;
+        height: 100%;
+        left: 0px;
+        overflow: hidden;
+        position: absolute;
+        top: 0px;
+        width: 100%;
       }
       body > table td {
-        border:0px solid;
-        margin:0px;
-        padding:0px;
-        position:relative;
-        vertical-align:top;
-        width:40%;
+        border: 0px solid;
+        margin: 0px;
+        padding: 0px;
+        position: relative;
+        vertical-align: top;
+        width: 40%;
       }
       body > table td:first-child {
-        width:20%;
+        width: 20%;
       }
       body > table th {
-        background:#F0F0F0;
-        height:3em;
+        background: #F0F0F0;
+        height: 3em;
       }
       body > table th + th,
       body > table td + td {
-        border-left:3px solid #FFFFFF;
+        border-left: 3px solid #FFFFFF;
       }      
       body > table th {
-        border-bottom:3px solid #FFFFFF;
+        border-bottom: 3px solid #FFFFFF;
       }      
       body > table td > * {
-        overflow:auto;
+        overflow: auto;
       }
       
       body > table td iframe {
-        border:0px solid;
-        height:100%;
-        position:absolute;
-        top:0px; left:0px;
-        width:100%;
+        border: 0px solid;
+        height: 100%;
+        position: absolute;
+        top: 0px; left:0px;
+        width: 100%;
       }
       
       #progress {
-        height:100%;
-        position:absolute;
-        top:0em;
-        left:0em;
-        width:100%;
+        height: 100%;
+        position: absolute;
+        top: 0em;
+        left: 0em;
+        width: 100%;
       }      
       #progress > div {
-        border-left:0.5em solid;
-        border-left-color:#C0C0C0;
-        cursor:pointer;
-        margin:0em;
-        padding:0.75em;
+        border-left: 0.5em solid;
+        border-left-color: #C0C0C0;
+        cursor: pointer;
+        margin: 0em;
+        padding: 0.75em;
       }
       #progress > div.progress {
-        border-left-color:#00A0F0;
+        border-left-color: #00A0F0;
       }
       #progress > div.successful {
-        border-left-color:#70A040;
+        border-left-color: #70A040;
       }
       #progress > div.failed {
-        border-left-color:#FF0000;
+        border-left-color: #FF0000;
       }
       #progress > div + div {
-        border-top:1px dotted #909090;
-        margin-top:1px;
+        border-top: 1px dotted #909090;
+        margin-top: 1px;
       }      
       #progress > div span ~ span {
-        color:#C0C0C0;
+        color: #C0C0C0;
       } 
       #progress > div.failed span ~ span {
-        color:#FF0000;
+        color: #FF0000;
       } 
             
       #output {
-        height:100%;
+        height: 100%;
         position:absolute;
-        top:0em;
-        left:0em;
-        width:100%;
+        top: 0em;
+        left: 0em;
+        width: 100%;
       }
       #output pre {
-        border-left:0.5em solid;
-        border-left-color:#C0C0C0;
-        margin:0em;
-        padding:0.75em;
+        border-left: 0.5em solid;
+        border-left-color: #C0C0C0;
+        margin: 0em;
+        padding: 0.75em;
       }
       #output pre + pre {
-        margin-top:1px;
-        border-top:1px dotted #909090;
+        margin-top: 1px;
+        border-top: 1px dotted #909090;
       }
       #output pre.error {
-        border-left-color:#FF0000;
+        border-left-color: #FF0000;
       }
       #output pre.info {
-        border-left-color:#00A0F0;
+        border-left-color: #00A0F0;
       }
       #output pre.warn {
-        border-left-color:#FFA000;
+        border-left-color: #FFA000;
       }
     </style>
     <script type="text/test-cases">
@@ -171,133 +171,133 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-      var queue
-      var faults
-      var lock
+      var queue;
+      var faults;
+      var lock;
     
       window.addEventListener("load", (event) => {
-          queue = document.querySelector("script[type='text/test-cases']")
-          queue = queue.textContent.trim().split(/\s+/)
-          queue = queue.filter(entry => !entry.match(/^\*/))
-          var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>"
+          queue = document.querySelector("script[type='text/test-cases']");
+          queue = queue.textContent.trim().split(/\s+/);
+          queue = queue.filter(entry => !entry.match(/^\*/));
+          var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
           queue.forEach((entry) => {
-              var text = content
-              text = text.replace(/%1/g, entry.hashCode())
-              text = text.replace(/%2/g, entry)
-              document.querySelector("#progress").innerHTML += text
-          })
-          lock = true
-          var tests = document.querySelectorAll("#progress div[id]")
+              var text = content;
+              text = text.replace(/%1/g, entry.hashCode());
+              text = text.replace(/%2/g, entry);
+              document.querySelector("#progress").innerHTML += text;
+          });
+          lock = true;
+          var tests = document.querySelectorAll("#progress div[id]");
           tests.forEach((test) => {
               test.addEventListener("click", (event) => {
                   if (lock)
-                      return
-                  var test = event.currentTarget.textContent.match(/^[\S]+/)
+                      return;
+                  var test = event.currentTarget.textContent.match(/^[\S]+/);
                   if (event.ctrlKey
                           || event.shiftKey) {
-                      var target = location.href.replace(/[^\/]+$/, test)
-                      target = window.open(target, "_extern_test")
+                      var target = location.href.replace(/[^\/]+$/, test);
+                      target = window.open(target, "_extern_test");
                       if (target)
-                          target.focus()
-                      return
+                          target.focus();
+                      return;
                   } 
-                  faults = false
-                  document.querySelector("#output").innerHTML = ""
-                  loadTest(test)
-              })
-          })
-          loadTest(queue.shift())
-      })
+                  faults = false;
+                  document.querySelector("#output").innerHTML = "";
+                  loadTest(test);
+              });
+          });
+          loadTest(queue.shift());
+      });
       
       var locateTest = function() {
-          return String(document.querySelector("iframe").getAttribute("src").match(/^[^\?]+/))
-      }
+          return String(document.querySelector("iframe").getAttribute("src").match(/^[^\?]+/));
+      };
       
       var loadTest = function(test) {
-          outputMessage("info", "Loading " + test)
-          document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + new Date().getTime())
-      }
+          outputMessage("info", "Loading " + test);
+          document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + new Date().getTime());
+      };
       
       var performTest = function(event, status) {
-          var test = locateTest()
-          test = document.querySelector("#" + test.hashCode())
-          test.scrollIntoView(false)
+          var test = locateTest();
+          test = document.querySelector("#" + test.hashCode());
+          test.scrollIntoView(false);
           
-          var meter = test.querySelector("meter")
-          meter.max = status.queue.size
-          meter.value = status.queue.progress
-          test.querySelector("span").textContent = status.queue.progress
-          test.querySelector("span + span").textContent = status.queue.faults
-          test.className = status.queue.faults ? "failed" : "successful"
+          var meter = test.querySelector("meter");
+          meter.max = status.queue.size;
+          meter.value = status.queue.progress;
+          test.querySelector("span").textContent = status.queue.progress;
+          test.querySelector("span + span").textContent = status.queue.faults;
+          test.className = status.queue.faults ? "failed" : "successful";
           if (status.queue.faults)
-              faults = true
-      }
+              faults = true;  
+      }; 
       
       var outputMessage = function(event, message) {
-          var output = document.querySelector("#output")
-          var content = document.createElement("pre")
-          content.className = event
-          content.textContent = String(message || "").trim()
+          var output = document.querySelector("#output");
+          var content = document.createElement("pre");
+          content.className = event;
+          content.textContent = String(message || "").trim();
           if (content.textContent)
-              output.appendChild(content)
-          output.innerHTML = output.innerHTML.trim()
-          output.scrollTop = output.scrollHeight
-      }
+              output.appendChild(content);
+          output.innerHTML = output.innerHTML.trim();
+          output.scrollTop = output.scrollHeight;          
+      };
       
-      Test.activate()
+      Test.activate();
       
       Test.listen(Test.EVENT_START, (event, status) => {
           outputMessage("info", "Start of " + locateTest()
-                  + "\r\n\t" + status.queue.size + " tests found")
-      })
+                  + "\r\n\t" + status.queue.size + " tests found");
+      });    
       
       Test.listen(Test.EVENT_PERFORM, (event, status) => {
-          performTest(event, status)
-      })
+          performTest(event, status);
+      });      
       
       Test.listen(Test.EVENT_FINISH, (event, status) => {
-          performTest(event, status)
+          performTest(event, status);
           if (queue.length > 0) {
-              loadTest(queue.shift())
+              loadTest(queue.shift());
           } else {
               if (typeof faults !== "undefined"
                       && faults)
-                  outputMessage("error", "Some of the tests failed.")
-              else outputMessage("info", "All tests were successful.")
+                  outputMessage("error", "Some of the tests failed.");
+              else outputMessage("info", "All tests were successful.");
           }
-          lock = false
+          lock = false;   
           
-          window.focus()
-          document.body.focus()
+          window.focus();
+          document.body.focus();
 
-          var test = locateTest()
-          test = document.querySelector("#" + test.hashCode())
+          var test = locateTest();
+          test = document.querySelector("#" + test.hashCode());
           if (test && !test.className) {
-              test.scrollIntoView(false)
-              test.className = "progress"
+              test.scrollIntoView(false);
+              test.className = "progress";
           }
-      })
+      });
       
       Test.listen(Test.EVENT_INTERRUPT, (event, status) => {
-          outputMessage("warn", "Interrupt of " + locateTest())
-          performTest(event, status)
+          outputMessage("warn", "Interrupt of " + locateTest());
+          performTest(event, status);
           if (queue.length > 0)
-              loadTest(queue.shift())
-      })
+              loadTest(queue.shift());
+      });
       
       console.listen(function(event, variants) {
           
           if (arguments.length <= 0)
-              return
+              return;
           
-          var message = Array.from(arguments).slice(1).join(", ")
-          event = (event || "").trim()
+          var message = Array.from(arguments).slice(1).join(", ");
+          event = (event || "").trim();
           if (event.match(/^error$/i))
               if (!String(message).match(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+Test/i))
-                  event = "warn"
-          message = message.replace(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+/i, "")
-          outputMessage(event, message)
-      })
+                  event = "warn";
+          message = message.replace(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+/i, "");
+          outputMessage(event, message);
+      });
     </script>
   </head>
   <body>

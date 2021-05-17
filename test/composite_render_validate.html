@@ -5,29 +5,29 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       form {
-        white-space:pre;
+        white-space: pre;
       }
       form * + * {
-        margin-top:1em;
+        margin-top: 1em;
       }
       iframe {
-        height:4em;
+        height: 4em;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
         
-        Composite.customize("@ATTRIBUTES-STATICS", "href name pattern placeholder target type required")
+        Composite.customize("@ATTRIBUTES-STATICS", "href name pattern placeholder target type required");
 
-        var EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$"
+        var EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$";
         var EMAIL_MESSAGE = "Mandatory with a valid e-mail address."
        
-        var PASSWORD_PATTERN = "\\w{6,}"
-        var PASSWORD_MESSAGE = "Mandatory with at least 6 characters."
+        var PASSWORD_PATTERN = "\\w{6,}";
+        var PASSWORD_MESSAGE = "Mandatory with at least 6 characters.";
         
-        var validateValues = []
+        var validateValues = [];
 
         var model = {
             email: "",
@@ -44,60 +44,60 @@
             validates: [],
             validate(element, value) {
                 if (typeof value !== "undefined")
-                    validateValues.push(value)
+                    validateValues.push(value);
                 if (!model.validates.includes(element.id))
-                    model.validates.push(element.id)
+                    model.validates.push(element.id);
                 if (element == document.querySelector("#model #submit")
                         || element == document.querySelector("#model #button")
                         || element == document.querySelector("#model #link")) {
-                    return Composite.validate("#model #email, #model #password")
+                    return Composite.validate("#model #email, #model #password");
                 }
-                return Composite.validate(element)
+                return Composite.validate(element);
             },
             submitClicks: 0,
             submit: {
                 onClick(event) {
-                    model.submitClicks++
+                    model.submitClicks++;
                 }
             },
             buttonClicks: 0,
             button: {
                 onClick(event) {
-                    model.buttonClicks++
+                    model.buttonClicks++;
                 }
             },
             unsafeClicks: 0,
             unsafe: {
                 onClick(event) {
-                    model.unsafeClicks++
+                    model.unsafeClicks++;
                 }
             },
             linkClicks: 0,
             link: {
                 onClick(event) {
-                    model.linkClicks++
+                    model.linkClicks++;
                 }
             }
-        }
+        };
         
-        var snapshots = []
+        var snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             var snapshot = function() {
                 var signatue = function(selector) {
-                    var element = document.querySelector(selector)
-                    var result = ""
+                    var element = document.querySelector(selector);
+                    var result = "";
                     if (element.validationMessage)
-                        result += "M"
+                        result += "M";
                     if (element.customError)
-                        result += "C"
+                        result += "C";
                     if (element.validity.valueMissing)
-                        result += "R"
+                        result += "R";
                     if (element.validity.patternMismatch)
-                        result += "P"
+                        result += "P";
                     if (element.validity.valid)
-                        result += "V"
-                    return result
-                }
+                        result += "V";
+                    return result;
+                };
 
                 var snapshot = "E:" + signatue("#model #email") + "|" + model.email
                      + "\r\n" + "P:" + signatue("#model #password") + "|" + model.password
@@ -105,109 +105,109 @@
                      + "\r\n" + "S:" + "|S:" + model.submitClicks
                          + "|B:" + model.buttonClicks
                          + "|L:" + model.linkClicks
-                         + "|U:" + model.unsafeClicks
+                         + "|U:" + model.unsafeClicks;
 
-                snapshot += "\r\n" + "I:"
+                snapshot += "\r\n" + "I:";
                 document.querySelectorAll("#model *[id^='input_']").forEach(element => {
-                    let message = element.validationMessage
+                    let message = element.validationMessage;
                     if (message.includes(" "))
-                        message = "default"
-                    snapshot += "|" + message
-                })
+                        message = "default";
+                    snapshot += "|" + message;
+                });
 
-                var iframe
-                iframe = document.querySelector("iframe[name='targetA']")
-                iframe = iframe.contentDocument || iframe.contentWindow.document
-                snapshot += "\r\n" + "A:" + iframe.body.textContent.trim()
+                var iframe;
+                iframe = document.querySelector("iframe[name='targetA']");
+                iframe = iframe.contentDocument || iframe.contentWindow.document;
+                snapshot += "\r\n" + "A:" + iframe.body.textContent.trim();
                 
-                iframe = document.querySelector("iframe[name='targetB']")
-                iframe = iframe.contentDocument || iframe.contentWindow.document
-                snapshot += "\r\n" + "B:" + iframe.body.textContent.trim()
+                iframe = document.querySelector("iframe[name='targetB']");
+                iframe = iframe.contentDocument || iframe.contentWindow.document;
+                snapshot += "\r\n" + "B:" + iframe.body.textContent.trim();
                 
-                snapshots.push(snapshot)
-            }
+                snapshots.push(snapshot);
+            };
         
-            snapshot()
+            snapshot();
 
             for (let index = 1; index <= 9; index++) {
-                document.querySelector("#model #input_" + index).typeValue("input_" + index, true)
-                document.querySelector("#model #input_" + index).typeValue("", true)
-                snapshot()
+                document.querySelector("#model #input_" + index).typeValue("input_" + index, true);
+                document.querySelector("#model #input_" + index).typeValue("", true);
+                snapshot();
                 // Final must be set a value, otherwise the submit will be blocked
                 // and the test for the IFrames will not work, because TargetA waits for a submit.
-                document.querySelector("#model #input_" + index).typeValue("input_" + index + "_fill", true)
+                document.querySelector("#model #input_" + index).typeValue("input_" + index + "_fill", true);
             }
 
-            document.querySelector("#model #submit").click()
-            snapshot()
-            document.querySelector("#model #button").click()
-            snapshot()
-            document.querySelector("#model #unsafe").click()
-            snapshot()
-            document.querySelector("#model #link").click()
-            snapshot()
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();
             
-            document.querySelector("#model #email").typeValue("xxx", true)
-            snapshot()
+            document.querySelector("#model #email").typeValue("xxx", true);
+            snapshot();
 
-            document.querySelector("#model #submit").click()
-            snapshot()
-            document.querySelector("#model #button").click()
-            snapshot()
-            document.querySelector("#model #unsafe").click()
-            snapshot()
-            document.querySelector("#model #link").click()
-            snapshot()
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();
 
-            document.querySelector("#model #email").typeValue("xxx@xxx", true)
-            snapshot()
+            document.querySelector("#model #email").typeValue("xxx@xxx", true);
+            snapshot();
 
-            document.querySelector("#model #submit").click()
-            snapshot()
-            document.querySelector("#model #button").click()
-            snapshot()
-            document.querySelector("#model #unsafe").click()
-            snapshot()
-            document.querySelector("#model #link").click()
-            snapshot()
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            snapshot();
             
-            document.querySelector("#model #password").typeValue("xxx", true)
-            snapshot()
+            document.querySelector("#model #password").typeValue("xxx", true);
+            snapshot();
 
-            document.querySelector("#model #submit").click()
-            snapshot()
-            document.querySelector("#model #button").click()
-            snapshot()
-            document.querySelector("#model #unsafe").click()
-            snapshot()
-            document.querySelector("#model #link").click()
-            snapshot()
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();            
+            document.querySelector("#model #link").click();
+            snapshot();
 
-            document.querySelector("#model #password").typeValue("xxxxxx", true)
-            snapshot()
+            document.querySelector("#model #password").typeValue("xxxxxx", true);
+            snapshot();
 
-            document.querySelector("#model #submit").click()
-            snapshot()
-            document.querySelector("#model #button").click()
-            snapshot()
-            document.querySelector("#model #unsafe").click()
-            snapshot()
-            document.querySelector("#model #link").click()
-
+            document.querySelector("#model #submit").click();
+            snapshot();
+            document.querySelector("#model #button").click();
+            snapshot();
+            document.querySelector("#model #unsafe").click();
+            snapshot();
+            document.querySelector("#model #link").click();
+            
             window.setTimeout(() => {
-                snapshot()
-                Test.start()
-            }, 1000)
-        })
+                snapshot();
+                Test.start();
+            }, 1000);
+        });
         
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"))
-        }})
+            Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
+        }});     
         Test.create({test() {
             Assert.assertEquals("input_1|input_1_fill|input_2|input_2_fill|input_3|input_3_fill|input_4|input_4_fill"
                     + "|input_5|input_5_fill|input_6|input_6_fill|input_7|input_7_fill|input_8|input_8_fill|input_9|input_9_fill"
-                    + "|Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"))
-        }})
+                    + "|Submit|Button|Submit|Button|xxx@xxx|Submit|Button|Submit|Button|xxxxxx|Submit|Button", validateValues.join("|"));
+        }});
     </script>
     <!-- RegEx to convert the test output: search \x20(\w:) and replace \r\n$1 -->
     <script type="text/test">

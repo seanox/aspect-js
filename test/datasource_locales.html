@@ -5,47 +5,47 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
 
-        Test.activate()
+        Test.activate();
 
         Test.create({test() {
-            Assert.assertEquals("xx", DataSource.locale)
-        }})
+            Assert.assertEquals("xx", DataSource.locale);
+        }});
 
         Test.create({test() {
-            DataSource.localize("xx")
-            Assert.assertEquals("xx", DataSource.locale)
-            DataSource.localize("xde")
-            Assert.assertEquals("xde", DataSource.locale)
-            DataSource.localize("xen")
-            Assert.assertEquals("xen", DataSource.locale)
-            DataSource.localize("xx")
-            Assert.assertEquals("xx", DataSource.locale)
-        }})
+            DataSource.localize("xx");
+            Assert.assertEquals("xx", DataSource.locale);
+            DataSource.localize("xde");
+            Assert.assertEquals("xde", DataSource.locale);
+            DataSource.localize("xen");
+            Assert.assertEquals("xen", DataSource.locale);
+            DataSource.localize("xx");
+            Assert.assertEquals("xx", DataSource.locale);
+        }});
         
         Test.create({expected:/\bLocale not available/i, test() {
-            DataSource.localize("xxx")
-        }})
+            DataSource.localize("xxx");
+        }});
         Test.create({expected:/\bLocale not available/i, test() {
-            DataSource.localize("")
-        }})
+            DataSource.localize("");
+        }});         
         Test.create({expected:/\bLocale not available/i, test() {
-            DataSource.localize(" ")
-        }})
+            DataSource.localize(" ");
+        }});         
         Test.create({expected:/\bInvalid locale: undefined/i, test() {
-            DataSource.localize()
-        }})
+            DataSource.localize();
+        }});         
         Test.create({expected:/\bInvalid locale: object/i, test() {
-            DataSource.localize(null)
-        }})
+            DataSource.localize(null);
+        }});         
         
-        Test.start({auto:true})
+        Test.start({auto:true});
     </script>
   </head>
   <body>

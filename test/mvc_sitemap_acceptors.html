@@ -5,14 +5,14 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
-        white-space:pre;
+        font-family: monospace;
+        white-space: pre;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-        Test.activate()
+        Test.activate();
       
         SiteMap.customize({
             "#": ["news", "projects", "seanox", "contact", "contact#about"],
@@ -25,93 +25,93 @@
             "#projects#wotexx": ["description", "features", "licence", "requirement", "download"],
             "#legal": ["terms", "privacy"],
             "#error": null
-        })
+        });
         
         SiteMap.customize(/es|ea/, (path) => {
-            logging("1: " + path)
-            return true
-        })
+            logging("1: " + path);
+            return true;
+        });
         SiteMap.customize(/w#d/, (path) => {
-            logging("2: " + path)
-            return false
-        })
+            logging("2: " + path);
+            return false;
+        });
         SiteMap.customize(/w#l/, (path) => {
-            logging("3: " + path)
-            return "#legal#terms#aaa#bbb#ccc"
-        })
+            logging("3: " + path);
+            return "#legal#terms#aaa#bbb#ccc";
+        });      
         SiteMap.customize(/#d/, (path) => {
-            logging("4: " + path)
-            return true
-        })
+            logging("4: " + path);
+            return true;
+        });      
         
         var logging = function(message) {
-            document.body.innerHTML += "\r\n" + message
-            document.body.innerHTML = document.body.innerHTML.trim()
-        }
+            document.body.innerHTML += "\r\n" + message;
+            document.body.innerHTML = document.body.innerHTML.trim();
+        };
         
-        var targets
+        var targets;
         window.addEventListener("load", (event) => {
-            targets = []
-            targets.push("#")
-            targets.push("#project")
-            targets.push("#projects")
-            targets.push("#projects#xyz")
-            targets.push("#projects#devwex")
-            targets.push("#projects#devwexx")
-            targets.push("#projects#devwex#xyz")
-            targets.push("#projects#devwex#description")
-            targets.push("#projects#devwex#description#features")
-            targets.push("#projects#devwex#description#features#licence")
-            targets.push("#projects#devwex#features")
-            targets.push("#projects#devwex#licence")
-            targets.push("#projects#review")
-            targets.push("#projects#review#description")
-            targets.push("#projects#review#features")
-            targets.push("#projects#review#licence")
-            targets.push("#projects#wotexx")
-            targets.push("#projects#wotexx#description")
-            targets.push("#projects#wotexx#features")
-            targets.push("#projects#wotexx#licence")
-            targets.push("#")
+            targets = [];
+            targets.push("#");
+            targets.push("#project");
+            targets.push("#projects");
+            targets.push("#projects#xyz");
+            targets.push("#projects#devwex");
+            targets.push("#projects#devwexx");
+            targets.push("#projects#devwex#xyz");
+            targets.push("#projects#devwex#description");      
+            targets.push("#projects#devwex#description#features");
+            targets.push("#projects#devwex#description#features#licence");
+            targets.push("#projects#devwex#features");
+            targets.push("#projects#devwex#licence");     
+            targets.push("#projects#review");      
+            targets.push("#projects#review#description");      
+            targets.push("#projects#review#features");      
+            targets.push("#projects#review#licence");         
+            targets.push("#projects#wotexx");      
+            targets.push("#projects#wotexx#description");      
+            targets.push("#projects#wotexx#features");      
+            targets.push("#projects#wotexx#licence");
+            targets.push("#");
             
             Composite.asynchron(() => {
-                document.body.innerHTML = ""
-                var target = targets.shift()
-                logging("\r\n" + target)
-                window.location.href = target
-            })
-        })
+                document.body.innerHTML = "";
+                var target = targets.shift();
+                logging("\r\n" + target);
+                window.location.href = target;
+            });
+        });
   
-        var timeout
+        var timeout;
         window.addEventListener("hashchange", (event) => {
             if (timeout)
-                window.clearTimeout(timeout)
-            logging("T: " + event.newURL)
+                window.clearTimeout(timeout);
+            logging("T: " + event.newURL);
             timeout = window.setTimeout(() => {
                 if (targets.length > 0) {
-                    var target = targets.shift()
-                    logging("\r\n" + target)
-                    window.location.href = target
-                } else Test.start()
-            }, 50)
-        })
+                    var target = targets.shift();
+                    logging("\r\n" + target);
+                    window.location.href = target;
+                } else Test.start();
+            }, 50);
+        });
         
         Test.create({test() {
-            var content = document.body.innerHTML
-            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../")
-            content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2")
-            document.body.textContent = content
-            Assert.assertSameTo("script[type='text/test']", content)
-        }})
+            var content = document.body.innerHTML;
+            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
+            content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");   
+            document.body.textContent = content;
+            Assert.assertSameTo("script[type='text/test']", content);                  
+        }});    
         
-        var errors = ""
+        var errors = "";
         Composite.listen(Composite.EVENT_ERROR, function(event, error) {
-            errors += "\r\n" + error.message
-            errors = errors.trim()
-        })
+            errors += "\r\n" + error.message;
+            errors = errors.trim();          
+        });
         Test.create({test() {
-            Assert.assertEquals("", errors)
-        }})
+            Assert.assertEquals("", errors);
+        }});       
     </script>
     <script type="text/test">
 #

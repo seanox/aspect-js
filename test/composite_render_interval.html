@@ -5,138 +5,140 @@
     <title>Seanox aspect-js test environment</title>
     <style type="text/css">
       body {
-        font-family:monospace;
+        font-family: monospace;
       }
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript"> 
     
-        Test.activate()
-
-        var conditionA = false
-
+        Test.activate();
+        
+        var conditionA = false; 
+        
         var snapshots = {A:"", B:"", C:"", S1:"", S2:"",
                 xA:"", xB:"", xC:"", xBC:"", xS1:"", xS2:"", xS12:"",
-                vA:0, vB:0, vC:0, vS1:0, vS2:0}
+                vA:0, vB:0, vC:0, vS1:0, vS2:0};
         snapshots.snap = function() {
-            var snapshot = document.body.textContent.trim()
-            snapshot = snapshot.replace(/^\s+/mg, "")
-            snapshot = snapshot.replace(/(:)\s+/g, "$1 ")
-            snapshot = snapshot.replace(/\sout.*?;/g, "")
-            snapshot = snapshot.replace(/\sPlease.*$/im, "")
-            snapshot = snapshot.replace(/:\s+(\S+)/g, ":$1")
-            snapshot = snapshot.replace(/[\r\n]+/g, ",")
-            snapshot = snapshot.replace(/(\w+)/g, "\"$1\"")
+            var snapshot = document.body.textContent.trim();
+            snapshot = snapshot.replace(/^\s+/mg, "");
+            snapshot = snapshot.replace(/(:)\s+/g, "$1 ");
+            snapshot = snapshot.replace(/\sout.*?;/g, "");
+            snapshot = snapshot.replace(/\sPlease.*$/im, "");
+            snapshot = snapshot.replace(/:\s+(\S+)/g, ":$1");
+            snapshot = snapshot.replace(/[\r\n]+/g, ",");
+            snapshot = snapshot.replace(/(\w+)/g, "\"$1\"");
 
             if (!snapshot.match(/^"\w+\":\"\w+\"(,\"\w+\":\"\w+\")+$/))
-                return
-            snapshot = JSON.parse("{" + snapshot + "}")
-
-            var value
-
-            value = typeof snapshot.A === "undefined" ? "0" : "1"
+                return;
+            snapshot = JSON.parse("{" + snapshot + "}");
+            
+            var value;
+            
+            value = typeof snapshot.A === "undefined" ? "0" : "1";
             if (snapshots.A.slice(-1) !== value)
-                snapshots.A += value
-            value = typeof snapshot.B === "undefined" ? "0" : "1"
+                snapshots.A += value;
+            value = typeof snapshot.B === "undefined" ? "0" : "1";
             if (snapshots.B.slice(-1) !== value)
-                snapshots.B += value
-            value = typeof snapshot.C === "undefined" ? "0" : "1"
+                snapshots.B += value;
+            value = typeof snapshot.C === "undefined" ? "0" : "1";
             if (snapshots.C.slice(-1) !== value)
-                snapshots.C += value
-            value = typeof snapshot.S1 === "undefined" ? "0" : "1"
+                snapshots.C += value;
+            value = typeof snapshot.S1 === "undefined" ? "0" : "1";
             if (snapshots.S1.slice(-1) !== value)
-                snapshots.S1 += value
-            value = typeof snapshot.S2 === "undefined" ? "0" : "1"
+                snapshots.S1 += value;
+            value = typeof snapshot.S2 === "undefined" ? "0" : "1";
             if (snapshots.S2.slice(-1) !== value)
-                snapshots.S2 += value
+                snapshots.S2 += value;
 
             //Assumption that A becomes higher and higher, the timer ends in the
             //meantime and the counter starts again.
             //    -> 101
-            snapshot.A = typeof snapshot.A === "undefined" ? 0 : snapshot.A
-            value = parseInt(snapshots.vA) <= parseInt(snapshot.A) ? "1" : "0"
+            snapshot.A = typeof snapshot.A === "undefined" ? 0 : snapshot.A;
+            value = parseInt(snapshots.vA) <= parseInt(snapshot.A) ? "1" : "0";
             if (snapshots.xA.slice(-1) !== value)
-                snapshots.xA += value
-            snapshots.vA = parseInt(snapshot.A)
+                snapshots.xA += value;
+            snapshots.vA = parseInt(snapshot.A);
 
             //Assume that all variables count up and are reset with the refresh
             //from the body to the initial value in the markup.
-            //    -> 10101 / 101
-            value = parseInt(snapshots.vB) <= parseInt(snapshot.B) ? "1" : "0"
+            //    -> 10101 / 101 
+            value = parseInt(snapshots.vB) <= parseInt(snapshot.B) ? "1" : "0";
             if (snapshots.xB.slice(-1) !== value)
-                snapshots.xB += value
-            snapshots.vB = parseInt(snapshot.B)
+                snapshots.xB += value;
+            snapshots.vB = parseInt(snapshot.B);
 
-            value = parseInt(snapshots.vC) <= parseInt(snapshot.C) ? "1" : "0"
+            value = parseInt(snapshots.vC) <= parseInt(snapshot.C) ? "1" : "0";
             if (snapshots.xC.slice(-1) !== value)
-                snapshots.xC += value
-            snapshots.vC = parseInt(snapshot.C)
-
-            value = parseInt(snapshots.vS1) <= parseInt(snapshot.S1) ? "1" : "0"
+                snapshots.xC += value;
+            snapshots.vC = parseInt(snapshot.C);
+            
+            value = parseInt(snapshots.vS1) <= parseInt(snapshot.S1) ? "1" : "0";
             if (snapshots.xS1.slice(-1) !== value)
-                snapshots.xS1 += value
-            snapshots.vS1 = parseInt(snapshot.S1)
-
-            value = parseInt(snapshots.vS2) <= parseInt(snapshot.S2) ? "1" : "0"
+                snapshots.xS1 += value;
+            snapshots.vS1 = parseInt(snapshot.S1);            
+            
+            value = parseInt(snapshots.vS2) <= parseInt(snapshot.S2) ? "1" : "0";
             if (snapshots.xS2.slice(-1) !== value)
-                snapshots.xS2 += value
-            snapshots.vS2 = parseInt(snapshot.S2)
-
+                snapshots.xS2 += value;
+            snapshots.vS2 = parseInt(snapshot.S2);   
+            
             //Assuming that the counter of B runs faster, B must always be
             //greater than C.
-            value = parseInt(snapshot.B) < parseInt(snapshot.C) ? "0" : "1"
+            value = parseInt(snapshot.B) < parseInt(snapshot.C) ? "0" : "1";
             if (snapshots.xBC.slice(-1) !== value)
-                snapshots.xBC += value
+                snapshots.xBC += value;
 
             //Assuming that the counter of S2 runs faster, S1 must always be
             //greater than S1. Since both timers run very slowly, the reset of
             //the setie will result in the initial values S2 not being greater
             //than S1 after the reset.
-            value = parseInt(snapshot.S2) < parseInt(snapshot.S1) ? "0" : "1"
+            value = parseInt(snapshot.S2) < parseInt(snapshot.S1) ? "0" : "1";
             if (snapshots.xS12.slice(-1) !== value)
-                snapshots.xS12 += value
-        }
-
-        var count = 0
+                snapshots.xS12 += value;
+        };        
+        
+        var count = 0;
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (typeof Test.started !== "undefined")
-                return
-            Test.started = true
-            {(new MutationObserver(function(records) {
+                return;
+            Test.started = true;
+            
+            (new MutationObserver(function(records) {
                 records.forEach(function(record) {
-                    snapshots.snap()
-                    count++
+                    snapshots.snap();
+                    count++;
                     if (count == 25) {
-                        conditionA = true
-                        Composite.asynchron(Composite.render, document.body)
+                        conditionA = true; 
+                        Composite.asynchron(Composite.render, document.body);
                     }
                     if (count == 50) {
-                        conditionA = false
-                        Composite.render("#TestA")
+                        conditionA = false; 
+                        Composite.render("#TestA");                       
                     }
                     if (count == 75) {
-                        conditionA = true
-                        Composite.asynchron(Composite.render, document.body)
+                        conditionA = true; 
+                        Composite.asynchron(Composite.render, document.body);
                     }
+                    
                     if (count == 100)
                         Composite.asynchron(() => {
-                            document.body.textContent = "Please wait, test in progress..."
-                            Test.start()
-                        })
-                })
-            })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true})}
-        })
-
+                            document.body.textContent = "Please wait, test in progress...";
+                            Test.start();
+                        });
+                });
+            })).observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
+        });
+        
         Test.create({test() {
-            Assert.assertEquals("0101 1 1 1 1", snapshots.A + " " + snapshots.B + " " + snapshots.C + " " + snapshots.S1 + " " + snapshots.S2)
-        }})
+            Assert.assertEquals("0101 1 1 1 1", snapshots.A + " " + snapshots.B + " " + snapshots.C + " " + snapshots.S1 + " " + snapshots.S2);
+        }}); 
         Test.create({test() {
-            Assert.assertEquals("101 10101 10101 101 10101", snapshots.xA + " " + snapshots.xB + " " + snapshots.xC + " " + snapshots.xS1 + " " + snapshots.xS2)
-        }})
+            Assert.assertEquals("101 10101 10101 101 10101", snapshots.xA + " " + snapshots.xB + " " + snapshots.xC + " " + snapshots.xS1 + " " + snapshots.xS2);
+        }}); 
         Test.create({test() {
-            var test = snapshots.xBC + " " + snapshots.xS12
-            Assert.assertTrue("101 101" == test || "1 101" == test)
-        }})
+            var test = snapshots.xBC + " " + snapshots.xS12;
+            Assert.assertTrue("101 101" == test || "1 101" == test);
+        }});         
     </script>
   </head>
   <body>

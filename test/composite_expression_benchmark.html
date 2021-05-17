@@ -12,10 +12,10 @@
     <script src="aspect-js.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
-
+    
         Test.activate();
-
-        const TestModel_1 = {};
+    
+        var TestModel_1 = {};
         TestModel_1.field_1 = "f1";
         TestModel_1.field_2 = "f2";
         TestModel_1.method_1 = function() {
@@ -33,19 +33,19 @@
         TestModel_1.getField_12 = function(value_1) {
             return [{x:[{y:"f12[0]->x->y"}]}];
         };
-
-        const timing = new Date().getTime();
+        
+        var timing = new Date().getTime();
         Test.create({test() {
             Assert.assertTrue((new Date().getTime() -timing) < 2500);
         }});
         Test.create({timeout:500, test() {
-            let expression = document.querySelector("script[type='text/expression']");
+            var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (var loop = 0; loop < 1750; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }});
         Test.create({timeout:500, test() {
-            let expression = document.querySelector("script[type='text/expression']");
+            var expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (var loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
