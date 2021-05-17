@@ -522,9 +522,9 @@ if (typeof Composite === "undefined") {
      * also supported in the namespace. The effect is the same. Qualifiers are
      * optional namespace elements at the end that use the colon as a separator.
      * The method has the following various signatures:
-     *     Object.using();
-     *     Object.using(namespace);
-     *     Object.using(object, namespace);
+     *     Object.locate();
+     *     Object.locate(namespace);
+     *     Object.locate(object, namespace);
      * @param  object
      * @param  namespace
      * @return the created or already existing object(-level)
