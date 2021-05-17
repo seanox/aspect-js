@@ -20,7 +20,7 @@
             var pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.textContent);
         }});
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();
         });
         Example = {
@@ -46,7 +46,7 @@
     normal use:
     ----
     {{true and true}} {{true && true}}
-    {{true eq true}} {{true == true}} 
+    {{true eq true}} {{true == true}}
     {{1 le 2}} {{1 <= 2}}
     {{1 ne 2}} {{1 != 2}}
     
@@ -82,7 +82,7 @@
     lower / upper case:
     ----
     {{true AND true}} {{true && true}}
-    {{true EQ true}} {{true == true}} 
+    {{true EQ true}} {{true == true}}
     {{1 LE 2}} {{1 <= 2}}
     {{1 NE 2}} {{1 != 2}}
     

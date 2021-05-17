@@ -14,8 +14,8 @@
     <script type="text/javascript">
     
         Test.activate();
-    
-        var ModelA = {
+
+        Namespace.create("ModelA", {
             a: "ma",
             getB() {
                 return "mb";
@@ -23,15 +23,15 @@
             isC() {
                 return true;
             }  
-        };
+        });
 
         Test.create({test() {
-            var content = Output.textContent;
+            let content = Output.textContent;
             content = content.replace(/undefined/, "");
             content = content.replace(/\s+/g, " ").trim();
             Assert.assertEquals("ma mb true EA EA mercedes", content);
         }});
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();
         });
     </script>

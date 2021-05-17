@@ -136,7 +136,7 @@
         
         let count = 0;
         const snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             let snapshot = document.body.textContent;
             snapshot = snapshot.replace(/Model\-/ig, "");
             snapshot = snapshot.replace(/\w+:\w+\s+\d+/ig, "");

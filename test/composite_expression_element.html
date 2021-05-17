@@ -20,7 +20,7 @@
             Assert.assertSameText(pattern, document.body.innerHTML);
         }});
         
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (Test.status().queue !== undefined)
                 return;
             const element = document.querySelector("#InputTextA");

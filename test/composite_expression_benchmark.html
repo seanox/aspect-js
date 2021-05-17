@@ -15,22 +15,22 @@
     
         Test.activate();
 
-        Namespace.create("TestModel_1", {});
+        const TestModel_1 = Namespace.create("TestModel_1", {});
         TestModel_1.field_1 = "f1";
         TestModel_1.field_2 = "f2";
-        TestModel_1.method_1 = function() {
+        TestModel_1.method_1 = () => {
             return "m1";
         };
-        TestModel_1.method_2 = function(value_1) {
+        TestModel_1.method_2 = (value_1) => {
             return "m2" + value_1;
         };
-        TestModel_1.getField_3 = function(value_1) {
+        TestModel_1.getField_3 = (value_1) => {
             return "f3";
         };
-        TestModel_1.getField_11 = function(value_1) {
+        TestModel_1.getField_11 = (value_1) => {
             return [{x:{y:"f11[0]->x->y"}}];
         };
-        TestModel_1.getField_12 = function(value_1) {
+        TestModel_1.getField_12 = (value_1) => {
             return [{x:[{y:"f12[0]->x->y"}]}];
         };
         
@@ -50,7 +50,7 @@
             for (let loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (Test.status().queue !== null)
                 return;
             Test.start();

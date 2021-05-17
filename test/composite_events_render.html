@@ -14,14 +14,14 @@
     
         Test.activate();
 
-        Namespace.create("TestModel", {});
+        const TestModel = Namespace.create("TestModel", {});
         TestModel.ticks = 0;
-        TestModel.ping = function() {
+        TestModel.ping = () => {
             return ++TestModel.ticks;
         };
 
         TestModel.events = [];
-        TestModel.onEvent = function(event, variants) {
+        TestModel.onEvent = (event, variants) => {
             if (TestModel.events[event] === undefined)
                 TestModel.events[event] = 0;
             TestModel.events[event]++;
@@ -45,7 +45,7 @@
             Assert.assertTrue(events !== undefined);
             Assert.assertEquals(1, events);
         }});
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();
         });
     </script>

@@ -14,31 +14,31 @@
     <script type="text/javascript">
     
         Test.activate();
-    
-        var TestModel_1 = {};
+
+        const TestModel_1 = Namespace.create("TestModel_1", {});
         TestModel_1.field_1 = "f1";
         TestModel_1.field_2 = "f2";
-        TestModel_1.method_1 = function() {
+        TestModel_1.method_1 = () => {
             return "m1";
         };
-        TestModel_1.method_2 = function(value_1) {
+        TestModel_1.method_2 = (value_1) => {
             return "m2" + value_1;
         };
-        TestModel_1.getField_3 = function(value_1) {
+        TestModel_1.getField_3 = () => {
             return "f3";
         };
-        TestModel_1.getField_11 = function(value_1) {
+        TestModel_1.getField_11 = () => {
             return [{x:{y:"f11[0]->x->y"}}];
         };
-        TestModel_1.getField_12 = function(value_1) {
+        TestModel_1.getField_12 = () => {
             return [{x:[{y:"f12[0]->x->y"}]}];
         };
         
         Test.create({test() {
-            var pattern = Test.read("composite_expression_parse_" + navigator.engine + ".txt");
+            const pattern = Test.read("composite_expression_parse_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.innerHTML);
         }});
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();
         });
     </script>

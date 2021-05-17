@@ -76,7 +76,7 @@
             request.open("GET", "https://github.com/seanox");
             request.send();
             
-            window.setTimeout(function() {
+            window.setTimeout(() => {
                 document.body.innerHTML += "---\r\n";
                 const request = new XMLHttpRequest();
                 request.open("GET", document.location.href);

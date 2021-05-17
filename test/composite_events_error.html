@@ -28,7 +28,7 @@
         
         // must be var because it is used in a frame via parent
         var count = 0;
-        let interval = window.setInterval(function() {
+        let interval = window.setInterval(() => {
             if (count < 3)
                 return;
             window.clearInterval(interval);

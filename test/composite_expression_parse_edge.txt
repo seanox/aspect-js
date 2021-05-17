@@ -17,7 +17,7 @@
     Value EL 01: f1
     Value EL 02: f2
     Value EL 03: f3
-    Value EL 04: function () {
+    Value EL 04: () =&gt; {
             return "m1";
         }
 
