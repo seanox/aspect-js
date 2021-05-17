@@ -21,10 +21,12 @@
     <script type="text/javascript">
     
         Test.activate();
-        
-        var countClick = 0;
-        var countRender = 0;
-        var about = {
+
+        // must be used as global, because the expression language uses its own scope,
+        // alternatively var can be used.
+        Namespace.create("countClick", 0);
+        Namespace.create("countRender", 0);
+        const about = Namespace.create("about", {
             contact: {
                 onClick() {
                     countClick++;
@@ -35,14 +37,14 @@
                     Composite.render(document.body);
                 }    
             }
-        }
+        });
         
         Test.create({test() {
             while (countRender < 9) {
                 document.querySelector("#contact").click();
                 document.querySelector("#refresh").click();
             }
-            var result = document.body.textContent.replace(/\s+/g, " ").trim();
+            const result = document.body.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("Render:9, Click:4 refresh contact", result);
         }});
         
