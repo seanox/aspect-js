@@ -20,8 +20,8 @@
             Assert.assertTrue(String(timing) + "ms", timing < 2500);
         }});
     
-        var timing = new Date().getTime();
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        let timing = new Date().getTime();
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             timing = new Date().getTime() -timing;
             Test.start();
         });       

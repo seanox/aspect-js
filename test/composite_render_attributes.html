@@ -13,26 +13,26 @@
     <script type="text/javascript">
     
         Test.activate();
-        
-        var eC = false;
-        var eT = false;
-        var eS = false;
+
+        Namespace.create("eC", false);
+        Namespace.create("eT", false);
+        Namespace.create("eS", false);
     
         Test.create({test() {
-            var text = snapshots.join("\r\n");
+            const text = snapshots.join("\r\n");
             Assert.assertEquals(5, (text.match(/checked/g) || []).length);
             Assert.assertEquals(4, (text.match(/disabled/g) || []).length);
             Assert.assertEquals(3, (text.match(/xxx/g) || []).length);
         }});
-        
-        var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (snapshots.length == 0) {
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            if (snapshots.length === 0) {
                 document.querySelector("input[type='checkbox']").checked = false;
                 document.querySelector("input[type='text']").disabled = false;
                 document.querySelector("span").removeAttribute("xxx");
             }
-            var snapshot = document.body.innerHTML;
+            let snapshot = document.body.innerHTML;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshot = snapshot.replace(/<\!--([\s\.r\n].*?)*-->/g, "");
             

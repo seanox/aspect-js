@@ -13,50 +13,50 @@
     <script type="text/javascript">
     
         Test.activate();
-        
-        var exampleA = {
-            a:null,
-            b:"",
-            c:123,
-            d:new Date(),
-            e:{},
+
+        Namespace.create("exampleA", {
+            a: null,
+            b: "",
+            c: 123,
+            d: new Date(),
+            e: {},
             f() {},
-            g:{
-                g_a:null,
-                g_b:"",
-                g_c:123,
-                g_d:new Date(),
-                g_e:{},
+            g: {
+                g_a: null,
+                g_b: "",
+                g_c: 123,
+                g_d: new Date(),
+                g_e: {},
                 g_f() {},
-                g_g:{
-                    g_g_a:null,
-                    g_g_b:"",
-                    g_g_c:123,
-                    g_g_d:new Date(),
-                    g_g_e:{},
+                g_g: {
+                    g_g_a: null,
+                    g_g_b: "",
+                    g_g_c: 123,
+                    g_g_d: new Date(),
+                    g_g_e: {},
                     g_g_f() {},
-                    g_g_g:{
-                        g_g_g_a:null,
-                        g_g_g_b:"",
-                        g_g_g_c:123,
-                        g_g_g_d:new Date(),
-                        g_g_g_e:{},
+                    g_g_g: {
+                        g_g_g_a: null,
+                        g_g_g_b: "",
+                        g_g_g_c: 123,
+                        g_g_g_d: new Date(),
+                        g_g_g_e: {},
                         g_g_g_f() {}
                     }
                 }
             },
-            h:{
-                h_a:[],
-                h_b:['h_ba', 'h_bb', 'h_bc'],
-                h_c:[100, 200, 300],
-                h_d:[
-                    {value:"A"},
-                    {value:"B"},
-                    {value:"C"},
-                    {value:"D"}
+            h: {
+                h_a: [],
+                h_b: ['h_ba', 'h_bb', 'h_bc'],
+                h_c: [100, 200, 300],
+                h_d: [
+                    {value: "A"},
+                    {value: "B"},
+                    {value: "C"},
+                    {value: "D"}
                 ]
             }
-        };
+        });
         
         Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA"));
