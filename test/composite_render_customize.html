@@ -30,26 +30,26 @@
             Composite.customize("", null);
         }});
         Test.create({expected:/\bInvalid scope: object/i, test() {
-            Composite.customize(new Object(), function() {});
+            Composite.customize(new Object(), () => {});
         }});
         Test.create({expected:/\bInvalid scope: function/i, test() {
-            Composite.customize(function() {}, "");
+            Composite.customize(() => {}, "");
         }});
         Test.create({expected:/\bInvalid scope: function/i, test() {
-            Composite.customize(function() {}, null);
+            Composite.customize(() => {}, null);
         }});
         Test.create({expected:/\bInvalid scope/i, test() {
-            Composite.customize("", function() {});
+            Composite.customize("", () => {});
         }});
         
         Test.create({test() {
-            Composite.customize(function() {});
+            Composite.customize(() => {});
         }});
         Test.create({test() {
-            Composite.customize("abc", function() {});
+            Composite.customize("abc", () => {});
         }});
         Test.create({test() {
-            Composite.customize("abc > def", function() {});
+            Composite.customize("abc > def", () => {});
         }});
         
         Test.start({auto:true});

@@ -13,65 +13,65 @@
     
         Test.activate();
         
-        var urlCount = new Map();
+        const urlCount = new Map();
         Composite.listen(Composite.EVENT_HTTP_END, (ignore, event) => {
-            var filter = new RegExp("^.*?" + RegExp.quote(window.location.pathcontext));
-            var key = event.target.responseURL.replace(filter, "")
+            const filter = new RegExp("^.*?" + RegExp.quote(window.location.pathcontext));
+            const key = event.target.responseURL.replace(filter, "")
                     + " " + event.target.status;
             if (!urlCount.has(key)
                     || !Array.isArray(urlCount.get(key)))
                 urlCount.set(key, []);
             urlCount.get(key).push("X");
         });
-      
-        var aModel = {
+
+        const aModel = {
             publishForm() {
-                var form = document.createElement("form");
-                var label = document.createElement("label");
+                const form = document.createElement("form");
+                const label = document.createElement("label");
                 label.textContent = "Input";
                 form.appendChild(label);
-                var input = document.createElement("input");
+                const input = document.createElement("input");
                 input.value = "123";
                 input.type = "text";
                 form.appendChild(input);
-                var submit = document.createElement("input");
+                const submit = document.createElement("input");
                 submit.type = "submit";
                 form.appendChild(submit);
                 return form;
             },
             publishImg() {
-                var img = document.createElement("img");
+                const img = document.createElement("img");
                 img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
                 return img;
             }
-        };    
-      
-        var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            var snapshot = document.body.textContent;
+        };
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            let snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
-            if (snapshots.length == 9)
+            if (snapshots.length === 9)
                 Composite.render(document.body);
-            if (snapshots.length == 10)
+            if (snapshots.length === 10)
                 Composite.render(document.body);
         });
-        
-        var timeout = window.setInterval(function() {
-            if (snapshots.length != snapshots.ticks) {
+
+        const timeout = window.setInterval(() => {
+            if (snapshots.length !== snapshots.ticks) {
                 snapshots.ticks = snapshots.length;
                 return;
             } else window.clearInterval(timeout);
             Test.start();
         }, 250);
       
-        var xA = 5;
-        var xB = 5;
-        var xC = 5;
-        var xX = 5;
+        let xA = 5;
+        let xB = 5;
+        let xC = 5;
+        let xX = 5;
         
         Test.create({test() {
-            var text = document.body.textContent.replace(/^\s+/mg, "");
+            const text = document.body.textContent.replace(/^\s+/mg, "");
             Assert.assertTrue(text.indexOf("Summer-A") >= 0);
             Assert.assertTrue(text.indexOf("Summer-C") >= 0);
             Assert.assertTrue(text.indexOf("Summer-X") >= 0);
@@ -96,15 +96,15 @@
             Assert.assertEquals(1, modulX$count);
         }});
         Test.create({test() {
-            var styles = document.querySelectorAll("html > head > style[type='text/css']");
+            let styles = document.querySelectorAll("html > head > style[type='text/css']");
             styles = Array.from(styles);
-            var stylesA = styles.filter(entry => entry.textContent.includes("modulA"));
+            let stylesA = styles.filter(entry => entry.textContent.includes("modulA"));
             Assert.assertEquals(1, stylesA.length);
-            var stylesB = styles.filter(entry => entry.textContent.includes("modulB"));
+            let stylesB = styles.filter(entry => entry.textContent.includes("modulB"));
             Assert.assertEquals(1, stylesB.length);
-            var stylesC = styles.filter(entry => entry.textContent.includes("modulC"));
+            let stylesC = styles.filter(entry => entry.textContent.includes("modulC"));
             Assert.assertEquals(1, stylesC.length);
-            var stylesX = styles.filter(entry => entry.textContent.includes("modulX"));
+            let stylesX = styles.filter(entry => entry.textContent.includes("modulX"));
             Assert.assertEquals(1, stylesX.length);
         }});
         
@@ -117,7 +117,7 @@
         Test.create({test() {
             // To control the events, a resource is manually loaded multiple times.
             // Modules should be loaded once.
-            var request = new XMLHttpRequest();
+            const request = new XMLHttpRequest();
             request.open("GET", "nix.xxx", false);
             request.send();
             request.open("GET", "nix.xxx", false);
@@ -125,7 +125,7 @@
             request.open("GET", "nix.xxx", false);
             request.send();
 
-            var result = "";
+            let result = "";
             for (const [key, value] of urlCount)
                 result += "\r\n" + key + " " + value.join("");
             Assert.assertSameTo("script[type='text/test']", result);

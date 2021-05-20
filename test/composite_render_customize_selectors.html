@@ -14,10 +14,10 @@
     
         Test.activate();
         
-        var insertTestValue = function(element, value) {
+        const insertTestValue = (element, value) => {
             if (element.textContent.match(new RegExp(value)))
                 return;
-            var text = document.createElement("span");
+            const text = document.createElement("span");
             text.textContent = value;
             element.appendChild(text);
         };
@@ -42,9 +42,9 @@
             Assert.assertSameTo("script[type='text/test']", document.body.textContent);
         }});
         
-        var count = 0;
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            if (++count == 3)
+        let count = 0;
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            if (++count === 3)
                 Test.start();
         });
     </script>

@@ -19,16 +19,16 @@
     <script type="text/javascript">
     
         Test.activate();
-        
-        var model = {
+
+        Namespace.create("model", {
             _count: 100,
             get count() {
                 return ++this._count;
             }
-        }
+        });
 
-        var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (snapshots.length > 0)
                 return;
             
@@ -111,8 +111,8 @@
         });
         
         Test.create({test() {
-            
-            var temp = document.createElement("div");
+
+            const temp = document.createElement("div");
             temp.innerHTML = snapshots[0];
             
             Assert.assertEquals("GET", temp.querySelector("#loginA").getAttribute("method"));
@@ -154,8 +154,8 @@
         }});   
 
         Test.create({test() {
-            
-            var temp = document.createElement("div");
+
+            const temp = document.createElement("div");
             temp.innerHTML = snapshots[1];
   
             Assert.assertEquals("POST_A", temp.querySelector("#loginA").getAttribute("method"));
@@ -189,8 +189,8 @@
         }});   
 
         Test.create({test() {
-            
-            var temp = document.createElement("div");
+
+            const temp = document.createElement("div");
             temp.innerHTML = snapshots[2];
   
             Assert.assertEquals("POST_A", temp.querySelector("#loginA").getAttribute("method"));
@@ -224,8 +224,8 @@
         }}); 
         
         Test.create({test() {
-            
-            var temp = document.createElement("div");
+
+            const temp = document.createElement("div");
             temp.innerHTML = snapshots[3];
   
             Assert.assertEquals("POST_A", temp.querySelector("#loginA").getAttribute("method"));

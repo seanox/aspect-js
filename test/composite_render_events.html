@@ -13,8 +13,8 @@
     <script type="text/javascript">
     
         Test.activate();
-        
-        var model = {
+
+        Namespace.create("model", {
             _textA:[""],    
             set textA(text) {
                 this._textA[0] = text;
@@ -63,10 +63,10 @@
             get textF() {
                 return this._textF.join(" ").trim().replace(/\s+/g, " ");
             }
-        };
+        });
         
-        var count = 0;
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        let count = 0;
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             switch (++count) {
                 case 1:
                     textA.value = "";
