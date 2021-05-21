@@ -13,12 +13,12 @@
     
         Test.activate();
         
-        var raw_x = false;
-        var raw_a = "S";
+        let raw_x = false;
+        let raw_a = "S";
         
-        var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            var snapshot = document.body.textContent;
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            let snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
             switch (snapshots.length) {
@@ -29,7 +29,7 @@
             };
             if (snapshots.length < 7)
                 Composite.asynchron(Composite.render, document.body);
-            if (snapshots.length == 7)
+            if (snapshots.length === 7)
                 Composite.asynchron(Test.start);                
         }); 
         
