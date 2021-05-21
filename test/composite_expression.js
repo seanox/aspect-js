@@ -1,4 +1,4 @@
-normalizeOutput = (output) => {
+const normalizeOutput = (output) => {
     output = output || "";
     output = output.replace(/illegal character/ig, "~~~Error_1~");
     output = output.replace(/fields are not currently supported/ig, "~~~Error_1~");

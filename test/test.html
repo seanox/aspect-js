@@ -171,31 +171,31 @@
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
     
-      var queue;
-      var faults;
-      var lock;
+      let queue;
+      let faults;
+      let lock;
     
-      window.addEventListener("load", (event) => {
+      window.addEventListener("load", () => {
           queue = document.querySelector("script[type='text/test-cases']");
           queue = queue.textContent.trim().split(/\s+/);
           queue = queue.filter(entry => !entry.match(/^\*/));
-          var content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
+          const content = "<div id=\"%1\">%2<br><meter></meter> <span>-</span>/<span>-</span></div>";
           queue.forEach((entry) => {
-              var text = content;
+              let text = content;
               text = text.replace(/%1/g, entry.hashCode());
               text = text.replace(/%2/g, entry);
               document.querySelector("#progress").innerHTML += text;
           });
           lock = true;
-          var tests = document.querySelectorAll("#progress div[id]");
+          const tests = document.querySelectorAll("#progress div[id]");
           tests.forEach((test) => {
               test.addEventListener("click", (event) => {
                   if (lock)
                       return;
-                  var test = event.currentTarget.textContent.match(/^[\S]+/);
+                  const test = event.currentTarget.textContent.match(/^[\S]+/);
                   if (event.ctrlKey
                           || event.shiftKey) {
-                      var target = location.href.replace(/[^\/]+$/, test);
+                      let target = location.href.replace(/[^\/]+$/, test);
                       target = window.open(target, "_extern_test");
                       if (target)
                           target.focus();
@@ -208,22 +208,22 @@
           });
           loadTest(queue.shift());
       });
-      
-      var locateTest = function() {
+
+      const locateTest = function() {
           return String(document.querySelector("iframe").getAttribute("src").match(/^[^\?]+/));
       };
-      
-      var loadTest = function(test) {
+
+      const loadTest = function(test) {
           outputMessage("info", "Loading " + test);
           document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + new Date().getTime());
       };
-      
-      var performTest = function(event, status) {
-          var test = locateTest();
+
+      const performTest = function(event, status) {
+          let test = locateTest();
           test = document.querySelector("#" + test.hashCode());
           test.scrollIntoView(false);
-          
-          var meter = test.querySelector("meter");
+
+          const meter = test.querySelector("meter");
           meter.max = status.queue.size;
           meter.value = status.queue.progress;
           test.querySelector("span").textContent = status.queue.progress;
@@ -231,11 +231,11 @@
           test.className = status.queue.faults ? "failed" : "successful";
           if (status.queue.faults)
               faults = true;  
-      }; 
-      
-      var outputMessage = function(event, message) {
-          var output = document.querySelector("#output");
-          var content = document.createElement("pre");
+      };
+
+      const outputMessage = function(event, message) {
+          const output = document.querySelector("#output");
+          const content = document.createElement("pre");
           content.className = event;
           content.textContent = String(message || "").trim();
           if (content.textContent)
@@ -270,7 +270,7 @@
           window.focus();
           document.body.focus();
 
-          var test = locateTest();
+          let test = locateTest();
           test = document.querySelector("#" + test.hashCode());
           if (test && !test.className) {
               test.scrollIntoView(false);
@@ -289,8 +289,8 @@
           
           if (arguments.length <= 0)
               return;
-          
-          var message = Array.from(arguments).slice(1).join(", ");
+
+          let message = Array.from(arguments).slice(1).join(", ");
           event = (event || "").trim();
           if (event.match(/^error$/i))
               if (!String(message).match(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+Test/i))

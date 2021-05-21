@@ -12,10 +12,10 @@
     <script src="aspect-js.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
-    
+
         Test.activate();
 
-        const TestModel_1 = Namespace.create("TestModel_1", {});
+        const TestModel_1 = {};
         TestModel_1.field_1 = "f1";
         TestModel_1.field_2 = "f2";
         TestModel_1.method_1 = () => {
@@ -24,16 +24,16 @@
         TestModel_1.method_2 = (value_1) => {
             return "m2" + value_1;
         };
-        TestModel_1.getField_3 = (value_1) => {
+        TestModel_1.getField_3 = () => {
             return "f3";
         };
-        TestModel_1.getField_11 = (value_1) => {
+        TestModel_1.getField_11 = () => {
             return [{x:{y:"f11[0]->x->y"}}];
         };
-        TestModel_1.getField_12 = (value_1) => {
+        TestModel_1.getField_12 = () => {
             return [{x:[{y:"f12[0]->x->y"}]}];
         };
-        
+
         const timing = new Date().getTime();
         Test.create({test() {
             Assert.assertTrue((new Date().getTime() -timing) < 2500);
@@ -45,13 +45,13 @@
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }});
         Test.create({timeout:500, test() {
-            let expression = document.querySelector("script[type='text/expression']");
+                let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (let loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
         }});
-        Composite.listen(Composite.EVENT_RENDER_END, () => {
-            if (Test.status().queue !== null)
+        Composite.listen(Composite.EVENT_RENDER_END, function() {
+            if (Test.status().queue !== undefined)
                 return;
             Test.start();
         });
@@ -126,7 +126,7 @@
       + ' C:' + (TestModel_1.field_11[0].x.y).length /3
       + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);
     }}
-    
+
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
@@ -137,7 +137,7 @@
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
-    
+
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
@@ -148,7 +148,7 @@
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
-    
+
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
@@ -159,7 +159,7 @@
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
-    
+
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
@@ -170,7 +170,7 @@
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
-    
+
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
@@ -181,7 +181,7 @@
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
-    
+
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
     {{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}{{' A:' + TestModel_1.field_11[0].x.y + ' B:' + (TestModel_1.field_11[0].x.y).length + ' C:' + (TestModel_1.field_11[0].x.y).length /3 + ' D:' + String((TestModel_1.field_11[0].x.y)).substring(2, 6);}}
