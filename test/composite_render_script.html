@@ -12,28 +12,28 @@
     <script type="text/javascript">
     
         Test.activate();
-        
-        var importAv = 1;
-        var importAx = 2;
-        var importBv = 3;
-        var importBx = 4;
-        var importCv = 5;
-        var importCx = 6;
+
+        let importAv = 1;
+        let importAx = 2;
+        let importBv = 3;
+        let importBx = 4;
+        let importCv = 5;
+        let importCx = 6;
     
         Test.create({test() {
-            var content = OutputA.textContent.replace(/\s+/g, " ").trim();
+            const content = OutputA.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("A:A0", content);
         }});
         Test.create({test() {
-            var content = OutputB.textContent.replace(/\s+/g, " ").trim();
+            const content = OutputB.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("B:B4B5B6B7B8B9", content);
         }});
         Test.create({test() {
-            var content = OutputC.textContent.replace(/\s+/g, " ").trim();
+            const content = OutputC.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("C:C0C1C2", content);
         }});
         Test.create({test() {
-            var content = OutputD.textContent.replace(/\s+/g, " ").trim();
+            const content = OutputD.textContent.replace(/\s+/g, " ").trim();
             Assert.assertEquals("D:D0D2D4D6D8", content);
         }});
         
@@ -50,7 +50,7 @@
             Assert.assertEquals(16, importCx);
         }});
         Test.create({test() {
-            var content = document.querySelector("#OutputE ~ div").innerHTML.replace(/\s+/g, " ").trim();
+            const content = document.querySelector("#OutputE ~ div").innerHTML.replace(/\s+/g, " ").trim();
             Assert.assertEquals("importAv = 100; importAx++; <script type=\"text/javascript\"> importBv = 200; importBx++; <\/script> <script type=\"composite/javascript\"> importCv = 300; importCx++; <\/script>", content);
         }}); 
         Test.create({test() {
@@ -60,29 +60,29 @@
             Assert.assertEquals(2, targets["SCRIPT"]);
         }});        
         
-        var count = 0;
-        var targets = {};
-        Composite.listen(Composite.EVENT_RENDER_END, function(event, target) {
+        let count = 0;
+        let targets = {};
+        Composite.listen(Composite.EVENT_RENDER_END, (event, target) => {
             if (typeof targets[target.nodeName] === "undefined")
                 targets[target.nodeName] = 0;
             targets[target.nodeName]++;
             //10 render calls are initiated directly.
             //Two other events occur during the import of scripts (test case e)
             //This is why the (re)rendering is done with care that it is only triggered by the BODY.
-            if (target.nodeName == "BODY") {
+            if (target.nodeName === "BODY") {
                 ++count;
                 if (count <= 9)
                     Composite.render(document.body);
-                if (count == 10)
+                if (count === 10)
                     Test.start();
                 if (count > 10)
                     throw new Error("More render calls than expected");
             }
-        }); 
-    
-        var ModelA = {
+        });
+
+        const ModelA = {
             isVisibleA() {
-                return count % 2 == 0;
+                return count % 2 === 0;
             },
             isVisibleB() {
                 return count > 3;
@@ -91,7 +91,7 @@
                 return count < 3;
             },
             isVisibleD() {
-                return count % 2 == 0;
+                return count % 2 === 0;
             }
         };
     </script>

@@ -13,21 +13,21 @@
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
-    
-        var x = false;
 
         Test.activate();
-        
-        var snapshots = [];
-        var snapshot = function() {
-            var snapshot = document.body.innerHTML;
+
+        let x = false;
+
+        const snapshots = [];
+        const snapshot = () => {
+            let snapshot = document.body.innerHTML;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
-            if (snapshots.length == 2) {
+            if (snapshots.length === 2) {
                 x = true;
                 Composite.asynchron(Composite.render, document.body);
             }
-            if (snapshots.length == 4)
+            if (snapshots.length === 4)
                 Composite.asynchron(Test.start);
         };
 
@@ -58,7 +58,7 @@
     <span>{{'B1'}}</span>
     <span>{{'B2'}}</span>
     <span condition="{{x}}">
-      {{'B3'}} 
+      {{'B3'}}
       <span>{{'B4'}}</span>
     </span>    
   </body>
