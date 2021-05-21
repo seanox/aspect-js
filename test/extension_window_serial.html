@@ -19,18 +19,18 @@
         Test.activate();
       
         Test.create({test() {
-            var filter = "";
-            for (var loop = 0; loop < 9; loop++) {
-                var frame = document.querySelector("#Test" + loop);
+            let filter = "";
+            for (let loop = 0; loop < 9; loop++) {
+                let frame = document.querySelector("#Test" + loop);
                 frame = frame.contentDocument || frame.contentWindow.document;
-                var serial = " " + frame.body.textContent + " ";
+                const serial = " " + frame.body.textContent + " ";
                 Assert.assertFalse(filter.includes(serial));
                 filter += serial;
             }
         }});
-        
-        var count = 0;
-        var interval = window.setInterval(function() {
+
+        let count = 0;
+        const interval = window.setInterval(() => {
             if (count < 10)
                 return;
             window.clearInterval(interval);

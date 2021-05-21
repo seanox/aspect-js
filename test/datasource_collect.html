@@ -15,7 +15,7 @@
         Test.activate();
 
         Test.create({test() {
-            var collection = DataSource.collect();
+            DataSource.collect();
         }});
         Test.create({expected:/\bInvalid collection/i, test() {
             DataSource.collect(null);
@@ -25,23 +25,23 @@
         }});
 
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a");
+            const collection = DataSource.collect("xml://datasource_collect_a");
             Assert.assertEquals(1, collection.querySelectorAll("collection > test").length);
             Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_a']").length);
         }});
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a");
+            const collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a");
             Assert.assertEquals(2, collection.querySelectorAll("collection > test").length);
             Assert.assertEquals(2, collection.querySelectorAll("collection > test[id='collect_a']").length);
         }});
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a", "xml://datasource_collect_b");
+            const collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_a", "xml://datasource_collect_b");
             Assert.assertEquals(3, collection.querySelectorAll("collection > test").length);
             Assert.assertEquals(2, collection.querySelectorAll("collection > test[id='collect_a']").length);
             Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length);
         }});
         Test.create({test() {
-            var collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c");
+            const collection = DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c");
             Assert.assertEquals(3, collection.querySelectorAll("collection > test").length);
             Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_a']").length);
             Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length);
@@ -49,7 +49,7 @@
         }});
         
         Test.create({test() {
-            var collection = DataSource.collect("xxx", ["xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c"]);
+            const collection = DataSource.collect("xxx", ["xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c"]);
             Assert.assertEquals(3, collection.querySelectorAll("xxx > test").length);
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_a']").length);
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_b']").length);

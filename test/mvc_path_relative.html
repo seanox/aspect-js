@@ -29,15 +29,13 @@
             "#xxx#y#z": null
         });
         
-        var logging = function(message) {
+        const logging = (message) => {
             document.body.innerHTML += "\r\n" + message;
             document.body.innerHTML = document.body.innerHTML.trim();
         };
-        
-        var targets;
-        window.addEventListener("load", (event) => {
-            targets = [];
-            
+
+        const targets = [];
+        window.addEventListener("load", () => {
             targets.push("D #");
   
             targets.push("A #a#b#c#d");
@@ -79,22 +77,22 @@
             
             Composite.asynchron(() => {
                 document.body.innerHTML = "";
-                var target = targets.shift();
-                var mode = String(target.match(/^[A-Z]/));
+                let target = targets.shift();
+                const mode = String(target.match(/^[A-Z]/));
                 target = target.substring(2);
                 logging(mode + ": " + target);
-                if (mode == "A")
+                if (mode === "A")
                     SiteMap.navigate(target);
-                else if (mode == "B")
+                else if (mode === "B")
                     window.location.href = target;
-                else if (mode == "C")
+                else if (mode === "C")
                     window.location.hash = target;
-                else if (mode == "D")
+                else if (mode === "D")
                     window.location.hash = target;
             });
         });
   
-        var timeout;
+        let timeout;
         window.addEventListener("hashchange", (event) => {
             if (timeout)
                 window.clearTimeout(timeout);
@@ -102,24 +100,24 @@
             logging("H: " + SiteMap.history.toPlainString());            
             timeout = window.setTimeout(() => {
                 if (targets.length > 0) {
-                    var target = targets.shift();
-                    var mode = String(target.match(/^[A-Z]/));
+                    let target = targets.shift();
+                    const mode = String(target.match(/^[A-Z]/));
                     target = target.substring(2);
                     logging(mode + ": " + target);
-                    if (mode == "A")
+                    if (mode === "A")
                         SiteMap.navigate(target);
-                    else if (mode == "B")
+                    else if (mode === "B")
                         window.location.href = target;
-                    else if (mode == "C")
+                    else if (mode === "C")
                         window.location.hash = target;
-                    else if (mode == "D")
+                    else if (mode === "D")
                         window.location.hash = target;
                 } else Test.start();
             }, 50);
         });        
         
         Test.create({test() {
-            var content = document.body.innerHTML;
+            let content = document.body.innerHTML;
             content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
             content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
             content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");   
@@ -127,8 +125,8 @@
             Assert.assertSameTo("script[type='text/test']", content);            
         }});
         
-        var errors = "";
-        Composite.listen(Composite.EVENT_ERROR, function(event, error) {
+        let errors = "";
+        Composite.listen(Composite.EVENT_ERROR, (event, error) => {
             errors += "\r\n" + error.message;
             errors = errors.trim();          
         });

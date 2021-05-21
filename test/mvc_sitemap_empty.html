@@ -20,7 +20,7 @@
         Test.activate();
         
         Test.create({test() {
-            var match = document.body.innerHTML.match(/(id=\S+)/g);
+            const match = document.body.innerHTML.match(/(id=\S+)/g);
             Assert.assertTrue(!!match);
             Assert.assertEquals("id=\"a\" id=\"a1\" id=\"c\" id=\"c1\"", match.join(" "));
         }});        

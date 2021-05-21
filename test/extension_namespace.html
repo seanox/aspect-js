@@ -124,15 +124,15 @@
         Test.create({expected:/\bInvalid namespace: \.\.x0005\.a/i, test() {
             Namespace.using("..x0005.a");
         }}); 
-        
-        var object1 = {
-            a:null,
-            b:"",
-            c:123,
-            d:new Date(),
-            e:{},
+
+        Namespace.create("object1", {
+            a: null,
+            b: "",
+            c: 123,
+            d: new Date(),
+            e: {},
             f() {}
-        };
+        });
         Test.create({test() {
             Namespace.using("object1");
             Namespace.using("object1.a");
