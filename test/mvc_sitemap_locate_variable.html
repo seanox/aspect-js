@@ -23,7 +23,7 @@
             "#team#x": ["..."]                    
         });
 
-        var tests = [
+        const tests = [
             "#",
             "#a",
             "#a#b",
@@ -48,7 +48,7 @@
         Test.create({test() {
             document.location.href = "#";
             document.body.innerHTML = "";
-            tests.forEach((test, index, array) => {
+            tests.forEach((test) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
                 if (document.body.innerHTML)
                     document.body.innerHTML += "\r\n";
@@ -61,8 +61,8 @@
         Test.create({test() {
             SiteMap.forward("#project");
             document.body.innerHTML = "";
-            var filter = /^#project#/;
-            tests.forEach((test, index, array) => {
+            const filter = /^#project#/;
+            tests.forEach((test) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
                 if (document.body.innerHTML)
                     document.body.innerHTML += "\r\n";

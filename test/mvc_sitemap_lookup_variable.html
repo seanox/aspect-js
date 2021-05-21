@@ -23,7 +23,7 @@
             "#team#x": ["..."]                    
         });
 
-        var tests = [
+        const tests = [
             "#",
             "#a",
             "#a#b",
@@ -47,11 +47,11 @@
         
         Test.create({test() {
             document.body.innerHTML = "";
-            tests.forEach((test, index, array) => {
+            tests.forEach((test) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
                 if (document.body.innerHTML)
                     document.body.innerHTML += "\r\n";
-                var lookup = SiteMap.lookup(test);
+                let lookup = SiteMap.lookup(test);
                 if (typeof lookup === "object")
                     lookup = lookup === null ? "null" : lookup.toPlainString();
                 document.body.innerHTML += "I: " + test

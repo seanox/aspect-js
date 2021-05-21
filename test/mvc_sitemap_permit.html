@@ -31,14 +31,13 @@
             return false;
         });
       
-        var logging = function(message) {
+        const logging = (message) => {
             document.body.innerHTML += "\r\n" + message;
             document.body.innerHTML = document.body.innerHTML.trim();
         };
-        
-        var targets;
-        window.addEventListener("load", (event) => {
-            targets = [];
+
+        const targets = []
+        window.addEventListener("load", () => {
             targets.push("#");
             targets.push("#project");
             targets.push("#projects");
@@ -64,20 +63,20 @@
 
             Composite.asynchron(() => {
                 document.body.innerHTML = "";
-                var target = targets.shift();
+                const target = targets.shift();
                 logging("\r\n" + target);
                 window.location.href = target;
             });       
         });
   
-        var timeout;
+        let timeout;
         window.addEventListener("hashchange", (event) => {
             if (timeout)
                 window.clearTimeout(timeout);
             logging("T: " + event.newURL);
             timeout = window.setTimeout(() => {
                 if (targets.length > 0) {
-                    var target = targets.shift();
+                    const target = targets.shift();
                     logging("\r\n" + target);
                     window.location.href = target;
                 } else Test.start();
@@ -85,15 +84,15 @@
         });        
         
         Test.create({test() {
-            var content = document.body.innerHTML;
+            let content = document.body.innerHTML;
             content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
             content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");            
             document.body.textContent = content;
             Assert.assertSameTo("script[type='text/test']", content);                   
         }});
         
-        var errors = "";
-        Composite.listen(Composite.EVENT_ERROR, function(event, error) {
+        let errors = "";
+        Composite.listen(Composite.EVENT_ERROR, (event, error) => {
             errors += "\r\n" + error.message;
             errors = errors.trim();          
         });

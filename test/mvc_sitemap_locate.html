@@ -27,7 +27,7 @@
             "#error": null
         });
         
-        var tests = [
+        const tests = [
             "#",
             "#project",
             "#projects",
@@ -75,7 +75,7 @@
         Test.create({test() {
             document.location.href = "#";
             document.body.innerHTML = "";
-            tests.forEach((test, index, array) => {
+            tests.forEach((test) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
                 if (document.body.innerHTML)
                     document.body.innerHTML += "\r\n";
@@ -88,8 +88,8 @@
         Test.create({test() {
             SiteMap.forward("#projects");
             document.body.innerHTML = "";
-            var filter = /^#projects#/;
-            tests.forEach((test, index, array) => {
+                const filter = /^#projects#/;
+            tests.forEach((test) => {
                 document.body.innerHTML = document.body.innerHTML.trim();
                 if (document.body.innerHTML)
                     document.body.innerHTML += "\r\n";
