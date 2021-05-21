@@ -13,13 +13,13 @@
     
         Test.activate();
         
-        var conditionA = false; 
+        let conditionA = false;
         
-        var snapshots = {A:"", B:"", C:"", S1:"", S2:"",
+        const snapshots = {A:"", B:"", C:"", S1:"", S2:"",
                 xA:"", xB:"", xC:"", xBC:"", xS1:"", xS2:"", xS12:"",
                 vA:0, vB:0, vC:0, vS1:0, vS2:0};
-        snapshots.snap = function() {
-            var snapshot = document.body.textContent.trim();
+        snapshots.snap = () => {
+            let snapshot = document.body.textContent.trim();
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshot = snapshot.replace(/(:)\s+/g, "$1 ");
             snapshot = snapshot.replace(/\sout.*?;/g, "");
@@ -31,9 +31,9 @@
             if (!snapshot.match(/^"\w+\":\"\w+\"(,\"\w+\":\"\w+\")+$/))
                 return;
             snapshot = JSON.parse("{" + snapshot + "}");
-            
-            var value;
-            
+
+            let value;
+
             value = typeof snapshot.A === "undefined" ? "0" : "1";
             if (snapshots.A.slice(-1) !== value)
                 snapshots.A += value;
@@ -97,30 +97,30 @@
                 snapshots.xS12 += value;
         };        
         
-        var count = 0;
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        let count = 0;
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (typeof Test.started !== "undefined")
                 return;
             Test.started = true;
             
-            (new MutationObserver(function(records) {
-                records.forEach(function(record) {
+            (new MutationObserver((records) => {
+                records.forEach(() => {
                     snapshots.snap();
                     count++;
-                    if (count == 25) {
+                    if (count === 25) {
                         conditionA = true; 
                         Composite.asynchron(Composite.render, document.body);
                     }
-                    if (count == 50) {
+                    if (count === 50) {
                         conditionA = false; 
                         Composite.render("#TestA");                       
                     }
-                    if (count == 75) {
+                    if (count === 75) {
                         conditionA = true; 
                         Composite.asynchron(Composite.render, document.body);
                     }
                     
-                    if (count == 100)
+                    if (count === 100)
                         Composite.asynchron(() => {
                             document.body.textContent = "Please wait, test in progress...";
                             Test.start();
@@ -136,8 +136,8 @@
             Assert.assertEquals("101 10101 10101 101 10101", snapshots.xA + " " + snapshots.xB + " " + snapshots.xC + " " + snapshots.xS1 + " " + snapshots.xS2);
         }}); 
         Test.create({test() {
-            var test = snapshots.xBC + " " + snapshots.xS12;
-            Assert.assertTrue("101 101" == test || "1 101" == test);
+            const test = snapshots.xBC + " " + snapshots.xS12;
+            Assert.assertTrue("101 101" === test || "1 101" === test);
         }});         
     </script>
   </head>

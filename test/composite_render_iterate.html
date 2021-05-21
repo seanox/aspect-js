@@ -15,22 +15,22 @@
     <script type="text/javascript"> 
     
         Test.activate();
-        
-        var TestModel = {
+
+        const TestModel = {
             listA: ["a", "b", "c"],
             listB: ["d", "e", "f"],
             listC: ["-", "A", "B", "C", "D", "E", "F"]
         };
-        
-        var tempB = function() {
-            return "123";
-        };
-        
-        var testS = function(text) {
-            var span = document.createElement("span");
+
+        const testS = (text) => {
+            const span = document.createElement("span");
             span.textContent = text + "{{s1}}";
             return span;
         };
+
+        Namespace.create("tempB", () => {
+            return "123";
+        });
 
         Test.create({test() {
             Assert.assertEquals("", OutputA1.textContent);            
@@ -114,22 +114,22 @@
             Assert.assertEquals("SpringSummerAutumnWinter", OutputK.textContent.replace(/\s+/g, ""));
         }});
         Test.create({test() {
-            var error = String(console.output.error);
+                const error = String(console.output.error);
             Assert.assertTrue(error.includes("Invalid iterate: x {{tempX2:[1,2,3]}}"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX3:[1,2,3]}} x"));
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"));
         }});
         
         var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (snapshots.length < 5) {
-                var snapshot = document.body.textContent;
+                let snapshot = document.body.textContent;
                 snapshot = snapshot.replace(/^\s+/mg, "");
                 snapshots.push(snapshot);
                 window.setTimeout(() => {
                     Composite.render(document.body);
                 }, 250);
-                if (snapshots.length == 5)
+                if (snapshots.length === 5)
                     Test.start();
             }
         });         

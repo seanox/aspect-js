@@ -14,7 +14,7 @@
     
         Test.activate();
     
-        var TestModel = {
+        const TestModel = {
             isVisibleA: true,
             outputA() {
                 return "A1<span>A2<span>A3</span></span>";
@@ -32,7 +32,7 @@
             }
         };
 
-        var results = [];
+        const results = [];
         
         Test.create({test() {
             Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());            
@@ -46,10 +46,10 @@
         Test.create({test() {
             Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
         }});
-        
-        var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            var snapshot = document.body.textContent;
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            let snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
             switch (snapshots.length) {
