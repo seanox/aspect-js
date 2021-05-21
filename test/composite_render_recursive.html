@@ -14,9 +14,9 @@
     
         Test.activate();
     
-        var TestModel = {};
+        const TestModel = {};
         TestModel.ticks = 0;
-        TestModel.ping = function() {
+        TestModel.ping = () => {
             return ++TestModel.ticks + "-" + "{{TestModel.ping()}}";
         };
         
@@ -29,7 +29,7 @@
                 }
             }
         }}); 
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();
         }); 
     </script>
