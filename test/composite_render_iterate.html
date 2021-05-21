@@ -82,7 +82,7 @@
             Assert.assertEquals("123", OutputB2.textContent);            
         }});
         Test.create({test() {
-            var content = document.querySelector("table").outerHTML;
+            const content = document.querySelector("table").outerHTML;
             Assert.assertEquals("B202EWU5NG1620L", content.hashCode());
         }});
         Test.create({test() {
@@ -120,7 +120,7 @@
             Assert.assertTrue(error.includes("Invalid iterate: {{tempX4:[1,2,3]}}{{}}"));
         }});
         
-        var snapshots = [];
+        const snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (snapshots.length < 5) {
                 let snapshot = document.body.textContent;

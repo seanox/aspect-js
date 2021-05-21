@@ -14,19 +14,19 @@
     
         Test.activate();
     
-        var ModelA = {
+        const ModelA = {
             list: ["a", "b", "c"]
         }; 
     
         Test.create({test() {
-            var pattern = Test.read("composite_render_param_" + navigator.engine + ".txt");
+                const pattern = Test.read("composite_render_param_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.innerHTML);           
         }});
         
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (Test.status().queue != null)
                 return;    
-            var content = document.body.innerHTML;
+            let content = document.body.innerHTML;
             content = content.replace(/([\r\n]+)\s*(?=\1)/g, "");
             content = content.replace(/script/g, "x-script");
             document.body.innerHTML = content;
