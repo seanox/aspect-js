@@ -26,7 +26,7 @@
         let elementCount2 = 0;
         let elementCount3 = 0;
         
-        Composite.customize((element) => {
+        Composite.customize(() => {
             elementCount1++;
         });
         Composite.customize((element) => {
@@ -36,7 +36,7 @@
                     && element.getAttribute("value") === "xx3")
                 insertTestValue(element, 3);
         });
-        Composite.customize((element) => {
+        Composite.customize(() => {
             elementCount3++;
         });
         

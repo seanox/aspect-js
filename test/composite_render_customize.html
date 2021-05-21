@@ -32,6 +32,9 @@
         Test.create({expected:/\bInvalid scope: object/i, test() {
             Composite.customize(new Object(), () => {});
         }});
+        Test.create({expected:/\bInvalid scope: object/i, test() {
+            Composite.customize({}, () => {});
+        }});
         Test.create({expected:/\bInvalid scope: function/i, test() {
             Composite.customize(() => {}, "");
         }});

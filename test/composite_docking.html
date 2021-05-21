@@ -102,7 +102,7 @@
             //Test with indirect/secondary assignment via the qualifier.
             buttonB: {
                 onClick(event) {
-                    var target = String(event.target.id.match(/[^:]+$/));
+                    let target = String(event.target.id.match(/[^:]+$/));
                     if (target)
                         target = Object.lookup(target + ":button:onClick");
                     if (target)

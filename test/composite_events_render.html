@@ -21,7 +21,7 @@
         };
 
         TestModel.events = [];
-        TestModel.onEvent = (event, variants) => {
+        TestModel.onEvent = (event) => {
             if (TestModel.events[event] === undefined)
                 TestModel.events[event] = 0;
             TestModel.events[event]++;
