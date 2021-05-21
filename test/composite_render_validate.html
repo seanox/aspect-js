@@ -21,15 +21,15 @@
         
         Composite.customize("@ATTRIBUTES-STATICS", "href name pattern placeholder target type required");
 
-        var EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$";
-        var EMAIL_MESSAGE = "Mandatory with a valid e-mail address."
-       
-        var PASSWORD_PATTERN = "\\w{6,}";
-        var PASSWORD_MESSAGE = "Mandatory with at least 6 characters.";
-        
-        var validateValues = [];
+        const EMAIL_PATTERN = "^[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*@[a-z0-9]+([\\w\\.\\-]*[a-z0-9])*$";
+        const EMAIL_MESSAGE = "Mandatory with a valid e-mail address."
 
-        var model = {
+        const PASSWORD_PATTERN = "\\w{6,}";
+        const PASSWORD_MESSAGE = "Mandatory with at least 6 characters.";
+
+        const validateValues = [];
+
+        Namespace.create("model", {
             email: "",
             password: "",
             input_1: null,
@@ -47,9 +47,9 @@
                     validateValues.push(value);
                 if (!model.validates.includes(element.id))
                     model.validates.push(element.id);
-                if (element == document.querySelector("#model #submit")
-                        || element == document.querySelector("#model #button")
-                        || element == document.querySelector("#model #link")) {
+                if (element === document.querySelector("#model #submit")
+                        || element === document.querySelector("#model #button")
+                        || element === document.querySelector("#model #link")) {
                     return Composite.validate("#model #email, #model #password");
                 }
                 return Composite.validate(element);
@@ -78,14 +78,14 @@
                     model.linkClicks++;
                 }
             }
-        };
+        });
         
-        var snapshots = [];
-        Composite.listen(Composite.EVENT_RENDER_END, function() {
-            var snapshot = function() {
-                var signatue = function(selector) {
-                    var element = document.querySelector(selector);
-                    var result = "";
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            let snapshot = () => {
+                const signatue = (selector) => {
+                    const element = document.querySelector(selector);
+                    let result = "";
                     if (element.validationMessage)
                         result += "M";
                     if (element.customError)
@@ -99,7 +99,7 @@
                     return result;
                 };
 
-                var snapshot = "E:" + signatue("#model #email") + "|" + model.email
+                let snapshot = "E:" + signatue("#model #email") + "|" + model.email
                      + "\r\n" + "P:" + signatue("#model #password") + "|" + model.password
                      + "\r\n" + "V:" + model.validates.join("|")
                      + "\r\n" + "S:" + "|S:" + model.submitClicks
@@ -115,7 +115,7 @@
                     snapshot += "|" + message;
                 });
 
-                var iframe;
+                let iframe;
                 iframe = document.querySelector("iframe[name='targetA']");
                 iframe = iframe.contentDocument || iframe.contentWindow.document;
                 snapshot += "\r\n" + "A:" + iframe.body.textContent.trim();
