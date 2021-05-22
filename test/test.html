@@ -174,7 +174,7 @@
       let queue;
       let faults;
       let lock;
-    
+
       window.addEventListener("load", () => {
           queue = document.querySelector("script[type='text/test-cases']");
           queue = queue.textContent.trim().split(/\s+/);
@@ -260,8 +260,7 @@
           if (queue.length > 0) {
               loadTest(queue.shift());
           } else {
-              if (typeof faults !== "undefined"
-                      && faults)
+              if (!!faults)
                   outputMessage("error", "Some of the tests failed.");
               else outputMessage("info", "All tests were successful.");
           }
@@ -287,7 +286,8 @@
       
       console.listen((event, ...variants) => {
           
-          if (event == undefined)
+          if (event === undefined
+                  || event === null)
               return;
           let message = variants.join(", ");
           event = (event || "").trim();

@@ -19,8 +19,8 @@
             Assert.assertEquals("xxA", Messages["all.a"]);
             Assert.assertEquals("xxB", Messages["all.b"]);
             Assert.assertEquals("xxX", Messages["xx"]);
-            Assert.assertTrue(typeof Messages["xde"] === "undefined");
-            Assert.assertTrue(typeof Messages["xen"] === "undefined");
+            Assert.assertEquals(undefined, Messages["xde"]);
+            Assert.assertEquals(undefined, Messages["xen"]);
         }});
         
         Test.create({test() {
@@ -28,8 +28,8 @@
             Assert.assertEquals("xdeA", Messages["all.a"]);
             Assert.assertEquals("xdeB", Messages["all.b"]);
             Assert.assertEquals("xdeX", Messages["xde"]);
-            Assert.assertTrue(typeof Messages["xx"] === "undefined");
-            Assert.assertTrue(typeof Messages["xen"] === "undefined");
+            Assert.assertEquals(undefined, Messages["xx"]);
+            Assert.assertEquals(undefined, Messages["xen"]);
         }});
         
         Test.create({test() {
@@ -37,8 +37,8 @@
             Assert.assertEquals("xenA", Messages["all.a"]);
             Assert.assertEquals("xenB", Messages["all.b"]);
             Assert.assertEquals("xenX", Messages["xen"]);
-            Assert.assertTrue(typeof Messages["xx"] === "undefined");
-            Assert.assertTrue(typeof Messages["xde"] === "undefined");            
+            Assert.assertEquals(undefined, Messages["xx"]);
+            Assert.assertEquals(undefined, Messages["xde"]);
         }});
         
         Test.create({test() {
