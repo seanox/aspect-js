@@ -101,12 +101,12 @@
  * is taken over by the Composite API in this implementation. SiteMap is an
  * extension and is based on the Composite API.
  * 
- * MVC 1.2.0 20210615
+ * MVC 1.2.1 20210622
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.0 20210615
+ * @version 1.2.1 20210622
  */
 if (typeof Path === "undefined") {
     
@@ -200,17 +200,17 @@ if (typeof Path === "undefined") {
         if (arguments.length <= 0)
             return null;
         if (arguments.length > 0
-                && arguments[0] == null)
+                && arguments[0] === null)
             return null;
         if (arguments.length > 1
-                && arguments[1] == null)
+                && arguments[1] === null)
             return null;        
 
         if (arguments.length > 1
-                && arguments[0] != null
+                && arguments[0] !== null
                 && typeof arguments[0] !== "string")
             throw new TypeError("Invalid root: " + typeof arguments[0]);
-        var root = "#";
+        let root = "#";
         if (arguments.length > 1) {
             root = arguments[0];
             try {root = Path.normalize(root);
@@ -221,17 +221,17 @@ if (typeof Path === "undefined") {
         }
         
         if (arguments.length > 1
-                && arguments[1] != null
+                && arguments[1] !== null
                 && typeof arguments[1] !== "string")
             throw new TypeError("Invalid path: " + typeof arguments[1]);
         if (arguments.length > 0
-                && arguments[0] != null
+                && arguments[0] !== null
                 && typeof arguments[0] !== "string")
             throw new TypeError("Invalid path: " + typeof arguments[0]);
-        var path = "";
-        if (arguments.length == 1)
+        let path = "";
+        if (arguments.length === 1)
             path = arguments[0];
-        if (arguments.length == 1
+        if (arguments.length === 1
                 && path.match(Path.PATTERN_URL))
             path = path.replace(Path.PATTERN_URL, "$1");
         else if (arguments.length > 1)
@@ -252,14 +252,14 @@ if (typeof Path === "undefined") {
         path = path.toLowerCase();
         
         // Path will be balanced
-        var pattern = /#[^#]+#{2}/;
+        const pattern = /#[^#]+#{2}/;
         while (path.match(pattern))
             path = path.replace(pattern, "#");
         path = "#" + path.replace(/(^#+)|(#+)$/g, "");
         
         return path;
     };
-};
+}
 
 if (typeof SiteMap === "undefined") {
     
@@ -343,17 +343,17 @@ if (typeof SiteMap === "undefined") {
         get location() {
             if (SiteMap.history.size <= 0)
                 return window.location.hash || "#";
-            var history = Array.from(SiteMap.history);
+            const history = Array.from(SiteMap.history);
             return history[history.length -1];
         },
                 
         set location(path) {
             if (SiteMap.history.has(path)) {
-                var values = Array.from(SiteMap.history.values());
+                const values = Array.from(SiteMap.history.values());
                 while (SiteMap.history.has(path)
                         && values.includes(path)) {
-                    var entry = values.pop();
-                    if (entry == path)
+                    const entry = values.pop();
+                    if (entry === path)
                         return;
                     SiteMap.history.delete(entry);
                 }
@@ -419,7 +419,7 @@ if (typeof SiteMap === "undefined") {
     /**
      * Determines the real existing path according to the SiteMap.
      * The methods distinguish between absolute, relative and functional paths.
-     * Functionals remain unchanged.
+     * The functionalities remain unchanged.
      * Absolute and relative paths are balanced.
      * Relative paths are balanced on the basis of the current location.
      * All paths are checked against the SiteMap. Invalid paths are searched
@@ -439,10 +439,10 @@ if (typeof SiteMap === "undefined") {
         // Invalid paths are shortened when searching for a valid partial path.
         // Theoretically, the shortening must end automatically with the root or
         // the current path.
-        
-        var locate = (path) => {
-            var variants = [SiteMap.location, path];
-            if (path.match(/(^#[^\#].*$)|(^#$)/))
+
+        const locate = (path) => {
+            const variants = [SiteMap.location, path];
+            if (path.match(/(^#[^#].*$)|(^#$)/))
                 variants.shift();
             return variants;
         };
@@ -462,7 +462,7 @@ if (typeof SiteMap === "undefined") {
         if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
             return path;
 
-        var paths = Array.from(SiteMap.paths.keys());
+        let paths = Array.from(SiteMap.paths.keys());
         paths = paths.concat(Array.from(SiteMap.facets.keys()));
         while (paths && path.length > 1) {
             for (let variable of SiteMap.variables)
@@ -509,8 +509,8 @@ if (typeof SiteMap === "undefined") {
      *     URL itself is ignored)
      */  
     SiteMap.forward = function(path) {
-        
-        var event = document.createEvent("HTMLEvents");
+
+        const event = document.createEvent("HTMLEvents");
         event.initEvent("hashchange", false, true);
         event.newURL = path;
         window.dispatchEvent(event);
@@ -536,7 +536,7 @@ if (typeof SiteMap === "undefined") {
         if (arguments.length <= 0)
             path = SiteMap.location;
 
-        var canonical = (meta) => {
+        const canonical = (meta) => {
             if (!meta.facet)
                 return meta.path;
             if (meta.path.endsWith("#"))
@@ -552,7 +552,7 @@ if (typeof SiteMap === "undefined") {
                     return path.substring(variable.length) || null;
                 }};
             } else if (SiteMap.facets.has(variable)) {
-                var facet = SiteMap.facets.get(variable);
+                const facet = SiteMap.facets.get(variable);
                 return {path, face:facet.path, facet:facet.facet, get data() {
                     return path.substring(facet.path.length +facet.facet.length) || null;
                 }};
@@ -563,7 +563,7 @@ if (typeof SiteMap === "undefined") {
         if (SiteMap.paths.has(path)) {
             return {path, face:path, facet:null};
         } else if (SiteMap.facets.has(path)) {
-            var facet = SiteMap.facets.get(path);
+            const facet = SiteMap.facets.get(path);
             return {path:canonical(facet), face:facet.path, facet:facet.facet};
         }
         return null;
@@ -586,32 +586,32 @@ if (typeof SiteMap === "undefined") {
         // The current path is determined and it is determined whether it is a
         // face or a facet. In both cases, a meta object is created:
         //     {path:#path, facet:...}
-        var location = SiteMap.lookup(Path.normalize(SiteMap.location));
+        const location = SiteMap.lookup(Path.normalize(SiteMap.location));
         if (!location)
             return false;
         
         // Determines whether the passed path is a face, partial face or facet.
         // (Partial)faces always have the higher priority for facets.
         // If nothing can be determined, there cannot be a valid path.
-        var lookup = SiteMap.lookup(path);
+        const lookup = SiteMap.lookup(path);
         if (!lookup)
             return false;
-        
-        var partial = lookup.path;
+
+        let partial = lookup.path;
         if (!partial.endsWith("#"))
             partial += "#";
         
         // Facets are only displayed if the paths match and the path does not
         // refer to a partial face.
         if (lookup.facet
-                && location.face != lookup.face
+                && location.face !== lookup.face
                 && !location.path.startsWith(partial))
             return false;
 
         // Faces and partial faces are only displayed if the paths match or the
         // path starts with the passed path as a partial path.
         if (!location.path.startsWith(partial)
-                && location.face != lookup.face)
+                && location.face !== lookup.face)
             return false;
 
         // Invalid paths and facets are excluded at this place, because they
@@ -745,33 +745,33 @@ if (typeof SiteMap === "undefined") {
         if (arguments.length < 1
                 || typeof arguments[0] !== "object")
             throw new TypeError("Invalid map: " + typeof arguments[0]);
-        var map = arguments[0];
+        const map = arguments[0];
 
-        var acceptors = new Set(SiteMap.acceptors);
+        const acceptors = new Set(SiteMap.acceptors);
         if (arguments.length > 1) {
             if (typeof arguments[1] !== "function")
                 throw new TypeError("Invalid permit: " + typeof arguments[1]);
             acceptors.add({pattern:null, action:arguments[1]});
         }
-        
-        var paths = new Map();
-        SiteMap.paths.forEach((value, key, map) => {
+
+        const paths = new Map();
+        SiteMap.paths.forEach((value, key) => {
             if (typeof key === "string"
                     && key.match(SiteMap.PATTERN_PATH_FACE))
             paths.set(key, value);
         });
 
-        var facets = new Map();
-        SiteMap.facets.forEach((value, key, map) => {
+        const facets = new Map();
+        SiteMap.facets.forEach((value, key) => {
             if (typeof key === "string"
                     && key.match(SiteMap.PATTERN_PATH_FACET))
                 facets.set(key, value);
         });
-        
-        var variables = new Set();
+
+        let variables = new Set();
         SiteMap.variables.forEach((variable) => {
             if (typeof variable === "string"
-                    && key.match(SiteMap.PATTERN_PATH_FACE))
+                    && variable.match(SiteMap.PATTERN_PATH_FACE))
                 variables.add(variable);
         });
 
@@ -782,8 +782,8 @@ if (typeof SiteMap === "undefined") {
             if (typeof key !== "string"
                     || !key.match(SiteMap.PATTERN_PATH_FACE))
                 return;
-            var value = map[key];
-            if (value != null
+            let value = map[key];
+            if (value !== null
                     && !Array.isArray(value))
                 return;
             
@@ -819,7 +819,7 @@ if (typeof SiteMap === "undefined") {
                     // If the facet is only "...", it is registered as a variable
                     // face, otherwise as a variable facet.
                     facet = facet.replace(/\.+$/, "");
-                    var variable = facet ? key.replace(/#+$/, "") + "#" + facet : key;
+                    const variable = facet ? key.replace(/#+$/, "") + "#" + facet : key;
                     if (!variables.has(variable))
                         variables.add(variable);
                     // If the face is only "...", it is registered as a face.
@@ -837,17 +837,17 @@ if (typeof SiteMap === "undefined") {
         });
         
         SiteMap.acceptors.clear();
-        acceptors.forEach((value, key, map) => {
+        acceptors.forEach((value) => {
             SiteMap.acceptors.add(value);
         });
         
         SiteMap.paths.clear();
-        paths.forEach((value, key, map) => {
+        paths.forEach((value, key) => {
             SiteMap.paths.set(key, value);
         });
         
         SiteMap.facets.clear();
-        facets.forEach((value, key, map) => {
+        facets.forEach((value, key) => {
             SiteMap.facets.set(key, value);
         });
         
@@ -878,22 +878,22 @@ if (typeof SiteMap === "undefined") {
         if (element.hasAttribute("static"))
             return;
         
-        var path = "";
-        for (var scope = element; scope; scope = scope.parentNode) {
+        let path = "";
+        for (let scope = element; scope; scope = scope.parentNode) {
             if (!(scope instanceof Element)
                     || !scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
                 continue;
-            var serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
             path = "#" + serial + path;
         }
 
-        var script = null;
+        let script = null;
         if (element.hasAttribute(Composite.ATTRIBUTE_CONDITION)) {
             script = element.getAttribute(Composite.ATTRIBUTE_CONDITION).trim();
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match, offset, content) => {
+                script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                     match = match.substring(2, match.length -2).trim();
                     return "{{SiteMap.accept(\"" + path + "\") and (" + match + ")}}";
                 });
@@ -913,7 +913,7 @@ if (typeof SiteMap === "undefined") {
      * Established a listener that listens when the page loads.
      * The method initiates the initial usage of the path.
      */
-    window.addEventListener("load", (event) => {
+    window.addEventListener("load", () => {
         
         // When clicking on a link with the current path, the focus must be set
         // back to face/facet, as the user may have scrolled on the page.
@@ -923,11 +923,11 @@ if (typeof SiteMap === "undefined") {
             if (event.target
                     && event.target instanceof Element
                     && event.target.hasAttribute("href")) {
-                var target = SiteMap.lookup(event.target.getAttribute("href"));
-                var source = SiteMap.lookup(Path.normalize(SiteMap.location));
+                const target = SiteMap.lookup(event.target.getAttribute("href"));
+                const source = SiteMap.lookup(Path.normalize(SiteMap.location));
                 if (source && target
-                        && source.face == target.face
-                        && source.facet == target.facet
+                        && source.face === target.face
+                        && source.facet === target.facet
                         && typeof target.focus === "function")
                     target.focus();
             }
@@ -952,7 +952,7 @@ if (typeof SiteMap === "undefined") {
         //     - SiteMap.location must be set finally
         //     - window.location.hash must be set finally
         //     - Body must be rendered
-        var initial = SiteMap.history.size <= 0;
+        const initial = SiteMap.history.size <= 0;
         
         // Without a SiteMap no partially rendering can be initiated.
         if (SiteMap.paths.size <= 0) {
@@ -960,10 +960,10 @@ if (typeof SiteMap === "undefined") {
                 Composite.render(document.body);
             return;
         }
-        
-        var source = Path.normalize(SiteMap.location);
-        var locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
-        var target = SiteMap.locate(locate);
+
+        let source = Path.normalize(SiteMap.location);
+        let locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
+        let target = SiteMap.locate(locate);
 
         // Initially, no function path is useful, and so in this case will be
         // forwarded to the root.
@@ -981,8 +981,8 @@ if (typeof SiteMap === "undefined") {
 
         // If window.location.hash, SiteMap.location and new URL match, no update
         // or rendering is required.
-        if (target == window.location.hash
-                && target == SiteMap.location
+        if (target === window.location.hash
+                && target === SiteMap.location
                 && !initial)
             return;
         
@@ -990,11 +990,11 @@ if (typeof SiteMap === "undefined") {
         // higher known/permitted path, based on the requested path.
         // Alternatively, the permit methods can also supply a new target, which
         // is then jumped to.
-        var forward = SiteMap.permit(target);
+        const forward = SiteMap.permit(target);
         if (forward !== true) {
             if (typeof forward === "string")
                 SiteMap.forward(forward);
-            else SiteMap.forward(target != "#" ? target + "##" : "#");
+            else SiteMap.forward(target !== "#" ? target + "##" : "#");
             return;
         }
         
@@ -1024,7 +1024,7 @@ if (typeof SiteMap === "undefined") {
         //   old: #a#b#c#d      new: #a#b#c#d#e#f  -> render #d
         //   old: #a#b#c#d      new: #e#f          -> render # (body)
         // Initially always the body is rendered.
-        var render = "#";
+        let render = "#";
         if (source.startsWith(target))
             render = target;
         else if (target.startsWith(source))
