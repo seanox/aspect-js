@@ -66,12 +66,12 @@
  *     
  * <h1 output="{{Messages['contact.title']}}"/>
  * 
- * Messages 1.2.1 20210615
+ * Messages 1.2.1 20210622
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.1 20210615
+ * @version 1.2.1 20210622
  */
 if (typeof Messages === "undefined") {
     
@@ -87,18 +87,18 @@ if (typeof Messages === "undefined") {
         // Messages are based on DataSources.
         // To initialize, the DataSource.localize method must be overwritten and
         // loading of the key-value pairs is embedded.
-        var localize = DataSource.localize;
+        const localize = DataSource.localize;
         DataSource.localize = (locale) => {
             DataSource.localize$origin(locale);
 
             window["Messages"] = {};
-            var xpath = "/locales/" + DataSource.locale + "/label";
-            var label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-            for (var node = label.iterateNext(); node; node = label.iterateNext()) {
-                var key = (node.getAttribute("key") || "").trim();
-                if (key == "")
+            const xpath = "/locales/" + DataSource.locale + "/label";
+            const label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+            for (let node = label.iterateNext(); node; node = label.iterateNext()) {
+                const key = (node.getAttribute("key") || "").trim();
+                if (key === "")
                     continue;
-                var value = ((node.getAttribute("value") || "").trim()
+                let value = ((node.getAttribute("value") || "").trim()
                         + " " + (node.textContent).trim()).trim();
                 value = value.unescape();
                 if (!Messages.hasOwnProperty(key))
