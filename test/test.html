@@ -285,12 +285,11 @@
               loadTest(queue.shift());
       });
       
-      console.listen(function(event, variants) {
+      console.listen((event, ...variants) => {
           
-          if (arguments.length <= 0)
+          if (event == undefined)
               return;
-
-          let message = Array.from(arguments).slice(1).join(", ");
+          let message = variants.join(", ");
           event = (event || "").trim();
           if (event.match(/^error$/i))
               if (!String(message).match(/^[a-z]+,[\w\s]+\d{4}\s\d{2}:\d{2}:\d{2}\s[a-z]+\s+Test/i))
