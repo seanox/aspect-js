@@ -40,12 +40,12 @@
  * The data is queried with XPath, the result can be concatenated and
  * aggregated and the result can be transformed with XSLT. 
  * 
- * DataSource 1.3.1 20210615
+ * DataSource 1.3.2 20210622
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.1 20210615
+ * @version 1.3.2 20210622
  */
 if (typeof DataSource === "undefined") {
     
@@ -77,16 +77,15 @@ if (typeof DataSource === "undefined") {
         /** The currently used language. */
         get locale() {return DataSource.locales ? DataSource.locales.selection : null;}
     };
-    
+
     /**
      * Enhancement of the JavaScript API
      * Adds a method for cloning a XMLDocument.
      */    
     if (XMLDocument.prototype.clone === undefined) {
         XMLDocument.prototype.clone = function() {
-            var clone = this.implementation.createDocument(this.namespaceURI, null, null);
-            var node = clone.importNode(this.documentElement, true);
-            clone.appendChild(node);
+            const clone = this.implementation.createDocument(null, null);
+            clone.appendChild(clone.importNode(this.documentElement, true));
             return clone; 
         };     
     }
@@ -106,7 +105,7 @@ if (typeof DataSource === "undefined") {
             enumerable: true
         });        
         
-        var locale = [];
+        let locale = [];
         locale = locale.concat(navigator.language);
         if (typeof navigator.languages !== "undefined")
             locale = locale.concat(navigator.languages);
@@ -117,17 +116,17 @@ if (typeof DataSource === "undefined") {
         });
         locale = locale.map(language => language.trim().toLowerCase());
         locale = locale.filter(function(item, index) {
-            return locale.indexOf(item) == index;
+            return locale.indexOf(item) === index;
         });
 
         if (locale.length <= 0)
             throw new Error("Locale not available");
         
-        var request = new XMLHttpRequest();
+        const request = new XMLHttpRequest();
         request.overrideMimeType("application/xslt+xml");
         request.open("HEAD", DataSource.DATA + "/locales.xml", false);
         request.send();
-        if (request.status == 404)
+        if (request.status === 404)
             return;
         request.open("GET", DataSource.DATA + "/locales.xml", false);
         request.send();
@@ -135,25 +134,25 @@ if (typeof DataSource === "undefined") {
         // DataSource.data
         //     Internal cache of locales.xml
         Object.defineProperty(DataSource, "data", {
-            value: request.status == 200 ? request.responseXML : null
+            value: request.status === 200 ? request.responseXML : null
         });
         if (!DataSource.data
-                && request.status != 404)
+                && request.status !== 404)
             throw new Error("Locale not available");
 
         if (!DataSource.data)
             return;
-        
-        var xml = DataSource.data;
-        var nodes = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-        for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
-            var name = node.nodeName.toLowerCase();
+
+        let xml = DataSource.data;
+        let nodes = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+        for (let node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
+            let name = node.nodeName.toLowerCase();
             if (!DataSource.locales.includes(name))
                 DataSource.locales.push(name);
         }
-        var nodes = xml.evaluate("/locales/*", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-        for (var node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
-            var name = node.nodeName.toLowerCase();
+        nodes = xml.evaluate("/locales/*", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+        for (let node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
+            const name = node.nodeName.toLowerCase();
             if (!DataSource.locales.includes(name))
                 DataSource.locales.push(name);
         }
@@ -217,12 +216,12 @@ if (typeof DataSource === "undefined") {
         if (!(xml instanceof XMLDocument))
             throw new TypeError("Invalid xml document");   
         if (!(style instanceof XMLDocument))
-            throw new TypeError("Invalid xml stylesheet");   
+            throw new TypeError("Invalid xml stylesheet");
 
-        var processor = new XSLTProcessor();
+        const processor = new XSLTProcessor();
         processor.importStylesheet(style);
         if (meta && typeof meta === "object") {
-            var set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
+            const set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
             for (const [key, value] of set)
                 if (typeof meta[key] !== "function")
                     processor.setParameter(null, key, value);
@@ -231,17 +230,17 @@ if (typeof DataSource === "undefined") {
         // The escape attribute converts text to HTML.
         // Without the escape attribute, the HTML tag symbols < and > are masked
         // and output as text.
-        var escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
+        let escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
         escape = !!escape.match(/^yes|on|true|1$/i);
 
         // Workaround for some browsers, e.g. MS Edge, if they have problems with
         // !DOCTYPE + !ENTITY. Therefore the document is copied so that the
         // DOCTYPE declaration is omitted.
-        var result = processor.transformToDocument(xml.clone());
-        var nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
+        let result = processor.transformToDocument(xml.clone());
+        let nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
         nodes.forEach((node) => {
             if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
-                var content = node.innerHTML;
+                const content = node.innerHTML;
                 if (content.indexOf("<") < 0
                         && content.indexOf(">") < 0)
                     node.innerHTML = node.textContent;
@@ -253,22 +252,22 @@ if (typeof DataSource === "undefined") {
         // during import. Therefore imported scripts are not executed directly,
         // but only by the renderer. This is important in combination with the
         // condition attribute.
-        var nodes = result.querySelectorAll("script[type],script:not([type])");
+        nodes = result.querySelectorAll("script[type],script:not([type])");
         nodes.forEach((node) => {
             if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
                     || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
                 node.setAttribute("type", "composite/javascript");
         });
         
-        var nodes = result.childNodes;
+        nodes = result.childNodes;
         if (result.body)
             nodes = result.body.childNodes;
         else if (result.firstChild
                 && result.firstChild.nodeName.match(/^transformiix\b/i))
             nodes = result.firstChild.childNodes;
-        var fragment = document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
         nodes = Array.from(nodes);
-        for (var loop = 0; loop < nodes.length; loop++)
+        for (let loop = 0; loop < nodes.length; loop++)
             fragment.appendChild(nodes[loop]);
         return fragment;
     }; 
@@ -292,26 +291,26 @@ if (typeof DataSource === "undefined") {
         
         if (typeof locator !== "string"
                 || !locator.match(DataSource.PATTERN_LOCATOR))
-            throw new Error("Invalid locator: " + String(locator));        
+            throw new Error("Invalid locator: " + String(locator));
 
-        var type = locator.match(DataSource.PATTERN_LOCATOR)[1];
-        var path = locator.match(DataSource.PATTERN_LOCATOR)[2];
+        const type = locator.match(DataSource.PATTERN_LOCATOR)[1];
+        const path = locator.match(DataSource.PATTERN_LOCATOR)[2];
         
-        if (arguments.length == 1) {
+        if (arguments.length === 1) {
 
             DataSource.cache = DataSource.cache || {};
             
-            var data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
+            let data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
             data = data.replace(/\/+/g, "/");
-            hash = data.hashCode();
+            const hash = data.hashCode();
             if (DataSource.cache.hasOwnProperty(hash))
                 return DataSource.cache[hash];
             
-            var request = new XMLHttpRequest();
+            const request = new XMLHttpRequest();
             request.overrideMimeType("application/xslt+xml");
             request.open("GET", data, false);
             request.send();
-            if (request.status != 200)
+            if (request.status !== 200)
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
             data = request.responseXML;
             DataSource.cache[hash] = data;
@@ -321,13 +320,13 @@ if (typeof DataSource === "undefined") {
         
         if (!type.match(/^xml$/)
                 && transform)
-            throw new Error("Transformation is not supported for this locator");  
+            throw new Error("Transformation is not supported for this locator");
 
-        var data = DataSource.fetch(locator);
+        const data = DataSource.fetch(locator);
         if (!transform)
             return data.clone();
         
-        var style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
+        let style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
         if (typeof transform !== "boolean") {
             style = transform;
             if (typeof style !== "string"
@@ -352,31 +351,31 @@ if (typeof DataSource === "undefined") {
         
         if (arguments.length <= 0)
             return null;
-        
-        var collection = [];
 
-        var collector = "collection";
-        if (arguments.length == 2
+        let collection = [];
+
+        let collector = "collection";
+        if (arguments.length === 2
                 && typeof arguments[0] === "string"
                 && Array.isArray(arguments[1])) {
             if (!arguments[0].match(DataSource.PATTERN_WORD))
                 throw new TypeError("Invalid collector");
             collector = arguments[0];
             collection = Array.from(arguments[1]);
-        } else if (arguments.length == 1
+        } else if (arguments.length === 1
                 && Array.isArray(arguments[0])) {
             collection = collection.concat(arguments[0]);
         } else collection = Array.from(arguments);
         
         DataSource.cache = DataSource.cache || {};
-        var hash = collector.hashCode() + ":" + collection.join().hashCode();
+        let hash = collector.hashCode() + ":" + collection.join().hashCode();
         collection.forEach((entry) => {
             hash += ":" + String(entry).hashCode();
         });
         if (DataSource.cache.hasOwnProperty(hash))
             return DataSource.cache[hash].clone();  
 
-        var root = document.implementation.createDocument(null, collector, null, null);
+        const root = document.implementation.createDocument(null, collector, null);
         collection.forEach((entry) => {
             if (typeof entry !== "string")
                 throw new TypeError("Invalid collection entry");
