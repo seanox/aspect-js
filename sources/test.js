@@ -83,15 +83,15 @@
  * assertion was not true, a error is thrown -- see as an example the
  * implementation here. 
  * 
- * Test 1.1.1 20210516
+ * Test 1.1.2 20210522
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.1.1 20210516
+ * @version 1.1.2 20210522
  */
 if (typeof Test === "undefined") {
-    
+
     /**
      * Static component for creating and executing tests.
      * The component provides static functions and objects for implementing
@@ -128,7 +128,7 @@ if (typeof Test === "undefined") {
      */
     Test.activate = function() {
         
-        if (typeof Test.activate.lock !== "undefined")
+        if (Test.activate.lock !== undefined)
             return;
 
         /** 
@@ -195,9 +195,9 @@ if (typeof Test === "undefined") {
         Test.fire = function(event, status) {
             
             if (typeof Test.worker === "object")
-                Test.worker.status = event; 
-            
-            var invoke = (context, event, status) => {
+                Test.worker.status = event;
+
+            const invoke = (context, event, status) => {
                 if (typeof context.Test.worker === "object"
                         && typeof context.Test.worker.monitor === "object"
                         && typeof context.Test.worker.monitor[event] === "function")
@@ -210,7 +210,7 @@ if (typeof Test === "undefined") {
                 if (context.Test.listeners.size <= 0
                         || !event)
                     return;
-                var listeners = context.Test.listeners.get(event.toLowerCase());
+                const listeners = context.Test.listeners.get(event.toLowerCase());
                 if (!Array.isArray(listeners))
                     return;
                 listeners.forEach((callback) => {
@@ -273,7 +273,7 @@ if (typeof Test === "undefined") {
                     || typeof meta.test !== "function")
                 return;
             
-            if (typeof meta.ignore !== "undefined"
+            if (meta.ignore !== undefined
                     && meta.ignore === true)
                 return;
             
@@ -281,7 +281,7 @@ if (typeof Test === "undefined") {
                 return;
             
             Test.stack.add(meta);
-            var stack = Array.from(Test.stack);
+            const stack = Array.from(Test.stack);
             Object.defineProperty(meta, "serial", {
                 value: Math.max(stack.length, stack.length > 1 ? stack[stack.length -2].serial +1: 1)
             });       
@@ -397,13 +397,13 @@ if (typeof Test === "undefined") {
          */
         Test.start = function(meta) {
             
-            if (typeof Test.worker !== "undefined")
+            if (Test.worker !== undefined)
                 return;
 
             if (meta && meta.auto
-                    && (document.readyState == "loading"
-                        || document.readyState == "interactive")) {
-                if (typeof Test.start.auto === "undefined") {
+                    && (document.readyState === "loading"
+                        || document.readyState === "interactive")) {
+                if (Test.start.auto === undefined) {
                     Object.defineProperty(Test.start, "auto", {
                         value: true
                     });  
@@ -413,9 +413,9 @@ if (typeof Test === "undefined") {
                 }
                 return;
             }
-            
-            var numerical = (number, text) => {
-                return number + " " + text + (number != 1 ? "s" : "");
+
+            const numerical = (number, text) => {
+                return number + " " + text + (number !== 1 ? "s" : "");
             };
 
             Test.worker = {};
@@ -450,7 +450,7 @@ if (typeof Test === "undefined") {
                 perform(status) {
                 },
                 response(status) {
-                    var timing = new Date().getTime() -status.task.timing;
+                    const timing = new Date().getTime() -status.task.timing;
                     if (status.task.error)
                         Test.worker.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
                     else Test.worker.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
@@ -466,7 +466,7 @@ if (typeof Test === "undefined") {
             // Test.worker.queue
             //     Queue of currently running test tasks
             Test.worker.queue = Test.worker.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
-            if (Test.worker.queue.stack.length == 0) {
+            if (Test.worker.queue.stack.length === 0) {
                 Test.worker.queue.stack = Array.from(Test.stack);
                 Test.worker.queue.size = Test.worker.queue.stack.length;
                 Test.worker.queue.timing = new Date().getTime();
@@ -476,15 +476,15 @@ if (typeof Test === "undefined") {
             //     Timer for controlling test tasks with timeout
             Test.worker.timeout = window.setInterval(() => {
             
-                if (Test.worker.status == Test.EVENT_SUSPEND)
+                if (Test.worker.status === Test.EVENT_SUSPEND)
                     return;
                 
-                if (typeof Test.worker.task === "undefined"
+                if (Test.worker.task === undefined
                         || !Test.worker.task.running
                         || !Test.worker.queue.lock)
                     return;
-                
-                var task = Test.worker.task;
+
+                const task = Test.worker.task;
                 if (!task.timeout
                         || task.timeout > new Date().getTime())
                     return;
@@ -500,7 +500,7 @@ if (typeof Test === "undefined") {
             //     Timer for processing the queue
             Test.worker.interval = window.setInterval(() => {
 
-                if (Test.worker.status == Test.EVENT_SUSPEND)
+                if (Test.worker.status === Test.EVENT_SUSPEND)
                     return;
                 
                 if (!Test.worker.queue.lock
@@ -513,12 +513,11 @@ if (typeof Test === "undefined") {
                 if (Test.worker.queue.stack.length > 0) {
                     Test.worker.queue.lock = true;
                     Test.worker.queue.progress++;
-                    var meta = Test.worker.queue.stack.shift();
-                    var timeout = false;
+                    const meta = Test.worker.queue.stack.shift();
+                    let timeout = false;
                     if ((meta.timeout || 0) > 0)
                         timeout = new Date().getTime() +meta.timeout;
-                    // Test.worker.task
-                    //     Currently performed test task
+
                     Test.worker.task = {title:null, meta, running:true, timing:new Date().getTime(), timeout, duration:false, error:null};
                     Test.worker.task.title = "#" + meta.serial;
                     if (typeof meta.name === "string"
@@ -526,7 +525,7 @@ if (typeof Test === "undefined") {
                         Test.worker.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                     Test.fire(Test.EVENT_PERFORM, Test.status());
                     Composite.asynchron(() => {
-                        var task = Test.worker.task;
+                        const task = Test.worker.task;
                         try {task.meta.test();
                         } catch (error) {
                             task.error = error;
@@ -581,7 +580,7 @@ if (typeof Test === "undefined") {
          */
         Test.suspend = function() {
 
-            if (typeof Test.worker === "undefined")
+            if (Test.worker === undefined)
                 throw new Error("Suspend is not available"); 
             Test.fire(Test.EVENT_SUSPEND, Test.status());
         };
@@ -593,7 +592,7 @@ if (typeof Test === "undefined") {
          */
         Test.resume = function() {
             
-            if (typeof Test.worker === "undefined"
+            if (Test.worker === undefined
                     || Test.worker.status !== Test.EVENT_SUSPEND)
                 throw new Error("Resume is not available"); 
             Test.fire(Test.EVENT_RESUME, Test.status());
@@ -607,7 +606,7 @@ if (typeof Test === "undefined") {
          */
         Test.interrupt = function() {
             
-            if (typeof Test.worker === "undefined")
+            if (Test.worker === undefined)
                 throw new Error("Interrupt is not available"); 
             window.clearTimeout(Test.worker.interval);
             window.clearTimeout(Test.worker.timeout);
@@ -646,8 +645,8 @@ if (typeof Test === "undefined") {
          * @return an object with detailed status information, otherwise false
          */
         Test.status = function() {
-            
-            var status = {};
+
+            const status = {};
             if (typeof Test.worker === "object"
                     && typeof Test.worker.task === "object") {
                 status.task = {};
@@ -710,8 +709,8 @@ if (typeof Test === "undefined") {
                 });
             }
             
-            if (typeof status.task === "undefined"
-                    && typeof status.queue === "undefined")
+            if (status.task === undefined
+                    && status.queue === undefined)
                 return false;
             return status;
         };    
@@ -734,9 +733,9 @@ if (typeof Test === "undefined") {
              * @param size
              */
             Assert.create = function(arguments, size) {
-    
-                var assert = {message:null, values:[], error() {
-                    var words = Array.from(arguments);
+
+                const assert = {message:null, values:[], error() {
+                    const words = Array.from(arguments);
                     words.forEach((argument, index, array) => {
                         array[index] = String(argument).replace(/\{(\d+)\}/g, (match, index) => {
                             if (index > assert.values.length)
@@ -747,7 +746,7 @@ if (typeof Test === "undefined") {
                         });
                     });
                     
-                    var message = "expected {1} but was {2}";
+                    let message = "expected {1} but was {2}";
                     if (assert.message != null) {
                         assert.message = assert.message.trim();
                         if (assert.message)
@@ -782,9 +781,9 @@ if (typeof Test === "undefined") {
              * @param message
              * @param value
              */       
-            Assert.assertTrue = function(variants) {
-                
-                var assert = Assert.create(arguments, 1);
+            Assert.assertTrue = function(...variants) {
+
+                const assert = Assert.create(variants, 1);
                 if (assert.values[0] === true)
                     return;
                 throw assert.error("Assert.assertTrue", "true", "{0}");
@@ -799,9 +798,9 @@ if (typeof Test === "undefined") {
              * @param message
              * @param value
              */      
-            Assert.assertFalse = function(variants) {
-                
-                var assert = Assert.create(arguments, 1);
+            Assert.assertFalse = function(...variants) {
+
+                const assert = Assert.create(variants, 1);
                 if (assert.values[0] === false)
                     return;
                 throw assert.error("Assert.assertFalse", "false", "{0}");
@@ -818,14 +817,14 @@ if (typeof Test === "undefined") {
              * @param expected
              * @param actual
              */     
-            Assert.assertEquals = function(variants) {
-                
-                var assert = Assert.create(arguments, 2);
+            Assert.assertEquals = function(...variants) {
+
+                const assert = Assert.create(variants, 2);
                 if (assert.values[0] === assert.values[1])
                     return;
                 throw assert.error("Assert.assertEquals", "{0}", "{1}");
             };
-            
+
             /**
              * Asserts that two values are not equals.
              * Difference between equals and same: === / == or !== / !=
@@ -837,9 +836,9 @@ if (typeof Test === "undefined") {
              * @param unexpected
              * @param actual
              */      
-            Assert.assertNotEquals = function(variants) {
-                
-                var assert = Assert.create(arguments, 2);
+            Assert.assertNotEquals = function(...variants) {
+
+                const assert = Assert.create(variants, 2);
                 if (assert.values[0] !== assert.values[1])
                     return;
                 throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
@@ -856,10 +855,10 @@ if (typeof Test === "undefined") {
              * @param expected
              * @param actual
              */      
-            Assert.assertSame = function(variants) {
-                
-                var assert = Assert.create([], arguments, 2);
-                if (assert.values[0] == assert.values[1])
+            Assert.assertSame = function(...variants) {
+
+                const assert = Assert.create([], variants, 2);
+                if (assert.values[0] === assert.values[1])
                     return;
                 throw assert.error("Assert.assertSame", "{0}", "{1}");
             };
@@ -875,10 +874,10 @@ if (typeof Test === "undefined") {
              * @param unexpected
              * @param actual
              */      
-            Assert.assertNotSame = function(variants) {
-                
-                var assert = Assert.create(arguments, 2);
-                if (assert.values[0] != assert.values[1])
+            Assert.assertNotSame = function(...variants) {
+
+                const assert = Assert.create(variants, 2);
+                if (assert.values[0] !== assert.values[1])
                     return;
                 throw assert.error("Assert.assertNotSame", "not {0}", "{1}");
             };
@@ -892,9 +891,9 @@ if (typeof Test === "undefined") {
              * @param message
              * @param value
              */    
-            Assert.assertNull = function(variants) {
-                
-                var assert = Assert.create(arguments, 1);
+            Assert.assertNull = function(...variants) {
+
+                const assert = Assert.create(variants, 1);
                 if (assert.values[0] === null)
                     return;
                 throw assert.error("Assert.assertNull", "null", "{0}");
@@ -909,9 +908,9 @@ if (typeof Test === "undefined") {
              * @param message
              * @param value
              */
-            Assert.assertNotNull = function(variants) {
-                
-                var assert = Assert.create(arguments, 1);
+            Assert.assertNotNull = function(...variants) {
+
+                const assert = Assert.create(variants, 1);
                 if (assert.values[0] !== null)
                     return;
                 throw assert.error("Assert.assertNotNull", "not null", "{0}");
@@ -932,7 +931,7 @@ if (typeof Test === "undefined") {
                 message = "Assert.fail" + (message ? ", " + message : "");
                 throw new Error(message);
             }
-        };
+        }
         
         /**
          * Redirection of the console level INFO, ERROR, WARN, LOG when using
@@ -984,7 +983,7 @@ if (typeof Test === "undefined") {
             if (output)
                 output(...variants);
             
-            var values = [level, ...variants];
+            const values = [level, ...variants];
             
             console.listeners.forEach((callback) => {
                 callback(...values);
@@ -1001,33 +1000,33 @@ if (typeof Test === "undefined") {
         
         /** Redirect for the level: LOG */
         console.log$origin = console.log;
-        console.log = function(message) {
-            console.forward("log", arguments, console.log$origin);
+        console.log = function(...variants) {
+            console.forward("log", variants, console.log$origin);
         };
         
         /** Redirect for the level: WARN */
         console.warn$origin = console.warn;
-        console.warn = function(message) {
-            console.forward("warn", arguments, console.warn$origin);
+        console.warn = function(...variants) {
+            console.forward("warn", variants, console.warn$origin);
         };
         
         /** Redirect for the level: ERROR */
         console.error$origin = console.error;
-        console.error = function(message) {
-            console.forward("error", arguments, console.error$origin);
+        console.error = function(...variants) {
+            console.forward("error", variants, console.error$origin);
         };
         
         /** Redirect for the level: INFO */
         console.info$origin = console.info;
-        console.info = function(message) {
-            console.forward("info", arguments, console.info$origin);
+        console.info = function(...variants) {
+            console.forward("info", variants, console.info$origin);
         };
         
         /** In the case of an error, the errors are forwarded to the console. */
         window.addEventListener("error", function(event) {
             if (parent && parent !== window)
-                console.forward("error", (function() {
-                    return arguments;
+                console.forward("error", ((...variants) => {
+                    return variants;
                 })(event.message), null);
         });        
     
@@ -1044,7 +1043,7 @@ if (typeof Test === "undefined") {
                 this.focus();
                 if (clear !== false)
                     this.value = "";
-                var element = this;
+                const element = this;
                 value = (value || "").split("");
                 value.forEach((digit) => {
                     element.trigger("keydown");
@@ -1095,7 +1094,7 @@ if (typeof Test === "undefined") {
          */         
         if (Element.prototype.trigger === undefined)
             Element.prototype.trigger = function(event, bubbles, cancel) {
-                var trigger = document.createEvent("Event");
+                const trigger = document.createEvent("Event");
                 if (arguments.length < 2)
                     bubbles = false;
                 if (arguments.length < 3)
