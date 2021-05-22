@@ -34,26 +34,26 @@
 
             let value;
 
-            value = typeof snapshot.A === "undefined" ? "0" : "1";
+            value = snapshot.A === undefined ? "0" : "1";
             if (snapshots.A.slice(-1) !== value)
                 snapshots.A += value;
-            value = typeof snapshot.B === "undefined" ? "0" : "1";
+            value = snapshot.B === undefined ? "0" : "1";
             if (snapshots.B.slice(-1) !== value)
                 snapshots.B += value;
-            value = typeof snapshot.C === "undefined" ? "0" : "1";
+            value = snapshot.C === undefined ? "0" : "1";
             if (snapshots.C.slice(-1) !== value)
                 snapshots.C += value;
-            value = typeof snapshot.S1 === "undefined" ? "0" : "1";
+            value = snapshot.S1 === undefined ? "0" : "1";
             if (snapshots.S1.slice(-1) !== value)
                 snapshots.S1 += value;
-            value = typeof snapshot.S2 === "undefined" ? "0" : "1";
+            value = snapshot.S2 === undefined ? "0" : "1";
             if (snapshots.S2.slice(-1) !== value)
                 snapshots.S2 += value;
 
             //Assumption that A becomes higher and higher, the timer ends in the
             //meantime and the counter starts again.
             //    -> 101
-            snapshot.A = typeof snapshot.A === "undefined" ? 0 : snapshot.A;
+            snapshot.A = snapshot.A === undefined ? 0 : snapshot.A;
             value = parseInt(snapshots.vA) <= parseInt(snapshot.A) ? "1" : "0";
             if (snapshots.xA.slice(-1) !== value)
                 snapshots.xA += value;
@@ -99,7 +99,7 @@
         
         let count = 0;
         Composite.listen(Composite.EVENT_RENDER_END, () => {
-            if (typeof Test.started !== "undefined")
+            if (Test.started !== undefined)
                 return;
             Test.started = true;
             

@@ -43,7 +43,7 @@
             input_9: null,
             validates: [],
             validate(element, value) {
-                if (typeof value !== "undefined")
+                if (value !== undefined)
                     validateValues.push(value);
                 if (!model.validates.includes(element.id))
                     model.validates.push(element.id);

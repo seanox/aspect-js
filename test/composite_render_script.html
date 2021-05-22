@@ -63,7 +63,7 @@
         let count = 0;
         let targets = {};
         Composite.listen(Composite.EVENT_RENDER_END, (event, target) => {
-            if (typeof targets[target.nodeName] === "undefined")
+            if (targets[target.nodeName] === undefined)
                 targets[target.nodeName] = 0;
             targets[target.nodeName]++;
             //10 render calls are initiated directly.
