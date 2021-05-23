@@ -3302,15 +3302,15 @@ if (typeof Expression === "undefined") {
         
         // Step 4:
         // Detection of value- and method-expressions
-        //     method expression: (^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*)(?=\()
+        //     method expression: (^|[^\w\.])(#?[a-zA-Z](?:[\w\.]*[\w])*)(?=\()
         // The expression is followed by a round bracket.
-        //     value expression: (^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
+        //     value expression: (^|[^\w\.])(#?[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
         // The expression is followed by a non-word character or the end.
         
         cascade.other.forEach((entry) => {
             let text = entry.data;
-            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]{0,}[\w]){0,1}(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
-            text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]{0,}\w){0,1})(?=\()/g, "$1\n\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#?[a-zA-Z](?:[\w\.]{0,}[\w])?(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#?[a-zA-Z](?:[\w\.]{0,}\w)?)(?=\()/g, "$1\n\r$2\n");
             const words = [];
             text.split(/\n/).forEach((entry) => {
                 const object = {type:Expression.TYPE_LOGIC, data:entry};

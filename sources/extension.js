@@ -314,10 +314,9 @@ if (String.prototype.uncapitalize === undefined) {
  */      
 if (String.prototype.encodeHex === undefined) {
     String.prototype.encodeHex = function() {
-        let text = this;
         let result = "";
-        for (let loop = 0; loop < text.length; loop++) {
-            let digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
+        for (let loop = 0; loop < this.length; loop++) {
+            let digit = Number(this.charCodeAt(loop)).toString(16).toUpperCase();
             while (digit.length < 2)
                 digit = "0" + digit;            
             result += digit;
