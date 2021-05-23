@@ -579,7 +579,7 @@ if (typeof Composite === "undefined") {
     if (Object.using === undefined)
         Object.using = function(...variants) {
             const meta = Object.locate(...variants);
-            if (typeof meta.namespace === "undefined")
+            if (meta.namespace === undefined)
                 return meta.scope; 
             return Namespace.using.call(null, meta.scope, meta.namespace);
         };
@@ -603,7 +603,7 @@ if (typeof Composite === "undefined") {
     if (Object.lookup === undefined)
         Object.lookup = function(...variants) {
             const meta = Object.locate(...variants);
-            if (typeof meta.namespace === "undefined")
+            if (meta.namespace === undefined)
                 return meta.scope; 
             return Namespace.lookup.call(null, meta.scope, meta.namespace);       
         };
@@ -670,7 +670,7 @@ if (typeof Composite === "undefined") {
             Composite.fire(...event); 
         };
         
-        if (typeof this.open$init === "undefined") {
+        if (this.open$init === undefined) {
             this.open$init = true;
             this.addEventListener("loadstart", callback);
             this.addEventListener("progress", callback);
@@ -805,7 +805,7 @@ if (typeof Composite === "undefined") {
             let  validate = Array.from(document.querySelectorAll(selector));
             validate.forEach((node, index) => {
                 validate[index] = Composite.validate(node, lock);
-                if (typeof validate[index] === "undefined")
+                if (validate[index] === undefined)
                     validate[index] = 0;
                 else validate[index] = validate[index] === true ? 1 : 2; 
             });
@@ -872,7 +872,7 @@ if (typeof Composite === "undefined") {
                 && lock !== true
                 && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
             const validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
-            if (typeof value !== "undefined")
+            if (value !== undefined)
                 valid = validate.call(meta.model, selector, value);
             else valid = validate.call(meta.model, selector);
         }
@@ -906,7 +906,7 @@ if (typeof Composite === "undefined") {
             }
         }     
         
-        if (typeof valid === "undefined")
+        if (valid === undefined)
             return;
         return valid; 
     };
@@ -1106,7 +1106,7 @@ if (typeof Composite === "undefined") {
                 // this alignment and no scope can be determined.
 
                 let model = meta.model;
-                if (typeof meta.property !== "undefined")
+                if (meta.property !== undefined)
                     if (typeof meta.property === "object")
                         model = meta.property;
                     else model = null;
@@ -1186,7 +1186,7 @@ if (typeof Composite === "undefined") {
                             // otherwise it will not be executed.
                             const accept = (property) => {
                                 const type = typeof property;
-                                if (typeof property === "undefined")
+                                if (property === undefined)
                                     return false;
                                 if (type === "object"
                                         && property === null)
@@ -1206,7 +1206,7 @@ if (typeof Composite === "undefined") {
                             } else if (typeof meta.property === "object") {
                                 if (accept(meta.property["value"]))
                                     meta.property["value"] = value;                                
-                            } else if (typeof meta.property === "undefined") {
+                            } else if (meta.property === undefined) {
                                 if (accept(meta.model["value"]))
                                     meta.model["value"] = value;                                
                             }
@@ -1228,7 +1228,7 @@ if (typeof Composite === "undefined") {
                             // can be determined.
                             
                             let model = meta.model;
-                            if (typeof meta.property !== "undefined")
+                            if (meta.property !== undefined)
                                 if (meta.property 
                                         && typeof meta.property === "object")
                                     model = meta.property;
@@ -1264,10 +1264,10 @@ if (typeof Composite === "undefined") {
                     }
                     
                     if (meta instanceof Object) {
-                        if ((typeof result !== "undefined" && !result)
-                                || (typeof valid !== "undefined" && valid !== true))
+                        if ((result !== undefined && !result)
+                                || (valid !== undefined && valid !== true))
                             event.preventDefault();
-                        if (typeof result !== "undefined")
+                        if (result !== undefined)
                             return result;
                     }
                 });
@@ -1407,7 +1407,7 @@ if (typeof Composite === "undefined") {
                 || !lookup.model)
             return null;
         
-        if (typeof meta.property === "undefined")
+        if (meta.property === undefined)
             return lookup;
         
         if (meta.name) {
@@ -1438,7 +1438,7 @@ if (typeof Composite === "undefined") {
 
         if (!lookup.composite
                 || !lookup.model
-                || typeof lookup.property === "undefined")
+                || lookup.property === undefined)
             return null;
         return lookup;
     };
@@ -1513,7 +1513,7 @@ if (typeof Composite === "undefined") {
      */
     Composite.customize = function(variants) {
         
-        var scope = arguments.length > 0 ? arguments[0] : undefined;        
+        let scope = arguments.length > 0 ? arguments[0] : undefined;
 
         // Statics are used for hardening the attributes in the markup.
         // Hardening makes it more difficult to manipulate the attributes. 
@@ -1528,8 +1528,8 @@ if (typeof Composite === "undefined") {
                 && arguments.length > 1 
                 && typeof arguments[1] === "string"
                 && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
-            var changes = [];
-            var statics = (arguments[1] || "").trim().split(/\s+/);
+            const changes = [];
+            const statics = (arguments[1] || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
                 if (!Composite.statics.has(entry)
@@ -1538,17 +1538,17 @@ if (typeof Composite === "undefined") {
                     changes.push(entry); 
                 }
             });
-            var scanning = (element) => {
+            const scanning = (element) => {
                 if (!(element instanceof Element))
                     return;
-                var serial = element.ordinal();
-                var object = Composite.render.meta[serial];
+                const serial = element.ordinal();
+                const object = Composite.render.meta[serial];
                 if (!object)
                     return;
                 changes.forEach((attribute) => {
                     object.statics = object.statics || {};
                     if (object.statics.hasOwnProperty[attribute]
-                            && typeof object.statics[attribute] !== "undefined")
+                            && object.statics[attribute] !== undefined)
                         return;
                     if (element.hasAttribute(attribute))
                         object.statics[attribute] = element.getAttribute(attribute);
@@ -1576,7 +1576,7 @@ if (typeof Composite === "undefined") {
         // created so that the custom tags can be found faster.
         if (typeof scope !== "string")
             throw new TypeError("Invalid scope: " + typeof scope);
-        var callback = arguments.length > 1 ? arguments[1] : null;
+        const callback = arguments.length > 1 ? arguments[1] : null;
         if (typeof callback !== "function"
                 && callback !== null
                 && callback !== undefined)
@@ -1590,7 +1590,7 @@ if (typeof Composite === "undefined") {
                 Composite.macros.delete(scope.toLowerCase());
             else Composite.macros.set(scope.toLowerCase(), callback);
         } else {
-            var hash = scope.toLowerCase().hashCode();
+            const hash = scope.toLowerCase().hashCode();
             if (callback === null)
                 Composite.selectors.delete(hash);
             else Composite.selectors.set(hash, {selector:scope, callback});
@@ -2396,7 +2396,7 @@ if (typeof Composite === "undefined") {
                     var object = Composite.render.meta[serial];
                     delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
                 
-                } else if (typeof Composite.render.cache[value] !== "undefined") {
+                } else if (Composite.render.cache[value] !== undefined) {
                     selector.innerHTML = Composite.render.cache[value];
                     var serial = selector.ordinal();
                     var object = Composite.render.meta[serial];
@@ -2614,7 +2614,7 @@ if (typeof Composite === "undefined") {
                     // removal is only temporary and is checked again at the next
                     // render cycle and possibly inserted again if the expression
                     // returns a return value.
-                    if (typeof value !== "undefined") {
+                    if (value !== undefined) {
                         value = String(value).encodeHtml();
                         value = value.replace(/"/g, "&quot;");
                         // Special case attribute value, here primarily the value
@@ -2714,8 +2714,8 @@ if (typeof Composite === "undefined") {
         // If the module has already been loaded, it is only necessary to check
         // whether the markup must be inserted. CSS should already exist in the
         // head and the JavaScript will only be executed once.
-        if (typeof Composite.render.cache[context + ".composite"] !== "undefined") {
-            if (typeof Composite.render.cache[context + ".html"] !== "undefined") {
+        if (Composite.render.cache[context + ".composite"] !== undefined) {
+            if (Composite.render.cache[context + ".html"] !== undefined) {
                 if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                         && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                         && !composite.innerHTML.trim()) {
