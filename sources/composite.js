@@ -2841,7 +2841,7 @@ if (typeof Composite === "undefined") {
         while (script && script.length > 0) {
             if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
                 break;
-            var line = script.shift().replace(/^\s*#import(\s+|$)/, "");
+            const line = script.shift().replace(/^\s*#import(\s+|$)/, "");
             line.split(/\s+/).forEach((include) => {
                 if (include)
                     Composite.render.include(include);
@@ -2872,7 +2872,7 @@ if (typeof Composite === "undefined") {
         if (document.querySelector("html")) {
             if (!document.querySelector("html head"))
                 document.querySelector("html").appendChild(document.createElement("head"));
-            var style = document.createElement("style");
+            const style = document.createElement("style");
             style.setAttribute("type", "text/css");
             style.innerHTML = "*[release] {display:none!important;}";
             document.querySelector("html head").appendChild(style);
@@ -2893,9 +2893,9 @@ if (typeof Composite === "undefined") {
                 // renderer has run initially.
                 if (!Composite.render.meta)
                     return;
-                
-                var serial = record.target.ordinal();
-                var object = Composite.render.meta[serial];
+
+                const serial = record.target.ordinal();
+                const object = Composite.render.meta[serial];
                 
                 // Text changes are only monitored at text nodes with expression.
                 // Manipulations are corrected/restored.
@@ -2910,7 +2910,7 @@ if (typeof Composite === "undefined") {
                 // Changes at the renderer-specific and static attributes are
                 // monitored. Manipulations are corrected/restored.
                 if (object && record.type === "attributes") {
-                    var attribute = (record.attributeName || "").toLowerCase().trim();
+                    const attribute = (record.attributeName || "").toLowerCase().trim();
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
                         // Composite internal non-static attributes are managed
@@ -2979,7 +2979,7 @@ if (typeof Composite === "undefined") {
                 // method is called if an object binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
-                        var cleanup = (node) => {
+                        const cleanup = (node) => {
                             // Clean up all the child elements first.
                             if (node.childNodes) {
                                 Array.from(node.childNodes).forEach((node) => {
@@ -3003,10 +3003,10 @@ if (typeof Composite === "undefined") {
                             // removed in the DOM, but undocking is not performed
                             // without the matching meta object.
 
-                            var serial = node.ordinal();
-                            var object = Composite.render.meta[serial];
+                            const serial = node.ordinal();
+                            const object = Composite.render.meta[serial];
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                                var meta = Composite.mount.lookup(node);
+                                const meta = Composite.mount.lookup(node);
                                 if (meta && meta.meta && meta.meta.model && meta.model
                                         && Composite.models.has(meta.meta.model)) {
                                     Composite.models.delete(meta.meta.model);
