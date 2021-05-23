@@ -249,7 +249,7 @@ if (typeof Composite === "undefined") {
          *     group 1: name
          *     group 2: qualifier(s) (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:(((((\w+\-+(?=\w))+)\w*)|(\w+))))*)$/;},
+        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:((((\w+\-+(?=\w))+)\w*)|(\w+)))*)$/;},
         
         /** Pattern for a scope (custom tag, based on a word) */
         get PATTERN_CUSTOMIZE_SCOPE() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
