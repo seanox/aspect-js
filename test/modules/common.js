@@ -37,10 +37,12 @@ if (typeof Assert !== "undefined") {
     Assert.assertSameText = function(expected, actual) {
         expected = (expected || "").trim().replace(/\t/g, "    ");
         expected = expected.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        expected = expected.replace(/(\s*\n\s*)+/gm, "\n");
         expected = expected.replace(/(^\s+)|(\s+$)/gm, "");
-        actual = actual.trim();
+        actual = (actual || "").trim().replace(/\t/g, "    ");
         actual = actual.replace(/\t/g, "    ");
         actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        actual = actual.replace(/(\s*\n\s*)+/gm, "\n");
         actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
         Assert.assertEquals(expected, actual);    
     };
@@ -49,10 +51,11 @@ if (typeof Assert !== "undefined") {
         const element = document.querySelector(selector);
         let content = element.innerHTML.trim().replace(/\t/g, "    ");
         content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        content = content.replace(/(\s*\n\s*)+/gm, "\n");
         content = content.replace(/(^\s+)|(\s+$)/gm, "");
-        actual = actual.trim();
-        actual = actual.replace(/\t/g, "    ");
+        actual = (actual || "").trim().replace(/\t/g, "    ");
         actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
+        actual = actual.replace(/(\s*\n\s*)+/gm, "\n");
         actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
         Assert.assertEquals(content, actual);    
     };
