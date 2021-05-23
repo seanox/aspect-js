@@ -1837,7 +1837,7 @@ if (typeof Composite === "undefined") {
             // loop and the rendering for the selector without using the standard
             // functions.
             if (selector.parentNode) {
-                for (let [key, macro] of Composite.selectors) {
+                for (const [key, macro] of Composite.selectors) {
                     const nodes = selector.parentNode.querySelectorAll(macro.selector);
                     if (Array.from(nodes).includes(selector)) {
                         if (macro.callback(selector) === false)
@@ -2592,7 +2592,7 @@ if (typeof Composite === "undefined") {
             // Elements of type: script + style are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                 const attributes = [];
-                for (var key in object.attributes)
+                for (const key in object.attributes)
                     if (object.attributes.hasOwnProperty(key))
                         attributes.push(key);
                 if (Composite.ATTRIBUTE_VALUE in selector
@@ -3111,7 +3111,7 @@ if (typeof Expression === "undefined") {
             if (expression.indexOf(".") < 0)
                 expression = [null, expression];
             else expression = expression.match(/^(.*?)\.(.*)$/);
-            var method = "get" + expression[1].capitalize();
+            let method = "get" + expression[1].capitalize();
             if (typeof context[method] !== "function")
                 method = "is" + expression[1].capitalize();
             if (typeof context[method] === "function") {
@@ -3173,7 +3173,7 @@ if (typeof Expression === "undefined") {
         if (expression === "")
             return "";
         
-        var cascade = {words:[], text:[], expression:[], literal:[], script:[], keyword:[], other:[], value:[], method:[], logic:[]};
+        const cascade = {words:[], text:[], expression:[], literal:[], script:[], keyword:[], other:[], value:[], method:[], logic:[]};
         
         // Step 1:
         // Separation of text and expression as words.
@@ -3196,7 +3196,7 @@ if (typeof Expression === "undefined") {
         
         expression = expression.replace(/(^\n+)|(\n+$)/g, "");
 
-        var collate = (word) => {
+        const assemble = (word) => {
             if (word.type === Expression.TYPE_TEXT)
                 cascade.text.push(word);
             else if (word.type === Expression.TYPE_EXPRESSION)
@@ -3218,12 +3218,12 @@ if (typeof Expression === "undefined") {
         };
         
         expression.split(/\n/).forEach((entry) => {
-            var object = {type:Expression.TYPE_TEXT, data:entry};
+            const object = {type:Expression.TYPE_TEXT, data:entry};
             if (entry.match(/^\{\{.*\}\}$/)) {
                 object.data = object.data.substring(2, object.data.length -2);
                 object.type = Expression.TYPE_EXPRESSION;
             } else object.data = "\"" + object.data.replace(/\\/, "\\\\").replace(/"/, "\\\"") + "\"";
-            collate(object);
+            assemble(object);
             cascade.words.push(object);
         });
         
@@ -3236,25 +3236,25 @@ if (typeof Expression === "undefined") {
         // All other attempts used wild masking and unmasking.
 
         cascade.expression.forEach((entry) => {
-            var text = entry.data;
+            let text = entry.data;
             text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\'])/g, "$1$2\\u0027");
             text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\"])/g, "$1$2\\u0022");
-            var words = [];
-            var pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
+            const words = [];
+            const pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
                 text = text.replace(pattern, (match, script, literal) => {
                     script = {type:Expression.TYPE_SCRIPT, data:script};
-                    collate(script);
+                    assemble(script);
                     words.push(script);
                     literal = {type:Expression.TYPE_LITERAL, data:literal};
-                    collate(literal);
+                    assemble(literal);
                     words.push(literal);
                     return "";
                 });
             }
             if (text.length > 0) {
                 text = {type:Expression.TYPE_SCRIPT, data:text};
-                collate(text);
+                assemble(text);
                 words.push(text);
             }
             entry.data = words;
@@ -3272,27 +3272,27 @@ if (typeof Expression === "undefined") {
         //     true, false, null, instanceof, typeof, undefined, new
         // Separation of script in keyword and other as partial words.
         // IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
-        
-        var keywords = ["and", "&&", "or", "||", "not", "!",
+
+        const keywords = ["and", "&&", "or", "||", "not", "!",
                 "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
                 "div", "/", "mod", "%"];
         cascade.script.forEach((entry) => {
-            var text = entry.data;
-            for (var loop = 0; loop < keywords.length; loop += 2) {
-                var pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
+            let text = entry.data;
+            for (let loop = 0; loop < keywords.length; loop += 2) {
+                const pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
                 text = text.replace(pattern, "$1\n\r" + keywords[loop +1] + "\n");
             }
             text = text.replace(/(^|[^\w\.])(true|false|null|instanceof|typeof|undefined|new)(?=[^\w\.]|$)/ig, (match, script, keyword) => {
                 return script + "\n\r" + keyword.toLowerCase() + "\n";
             });
-            var words = [];
+            const words = [];
             text.split(/\n/).forEach((entry) => {
-                var object = {type:Expression.TYPE_OTHER, data:entry};
+                const object = {type:Expression.TYPE_OTHER, data:entry};
                 if (entry.match(/^\r/)) {
                     object.data = entry.substring(1);
                     object.type = Expression.TYPE_KEYWORD;
                 }
-                collate(object);
+                assemble(object);
                 words.push(object);
             });
             entry.data = words;
@@ -3306,12 +3306,12 @@ if (typeof Expression === "undefined") {
         // The expression is followed by a non-word character or the end.
         
         cascade.other.forEach((entry) => {
-            var text = entry.data;
+            let text = entry.data;
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]{0,}[\w]){0,1}(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#{0,1}[a-zA-Z](?:[\w\.]{0,}\w){0,1})(?=\()/g, "$1\n\r$2\n");
-            var words = [];
+            const words = [];
             text.split(/\n/).forEach((entry) => {
-                var object = {type:Expression.TYPE_LOGIC, data:entry};
+                const object = {type:Expression.TYPE_LOGIC, data:entry};
                 if (entry.match(/^\r\r/)) {
                     object.data = "Expression.lookup(\"" + entry.substring(2) + "\")";
                     object.type = Expression.TYPE_VALUE;
@@ -3321,7 +3321,7 @@ if (typeof Expression === "undefined") {
                         object.data = "Expression.lookup(\"" + object.data + "\")";
                     object.type = Expression.TYPE_METHOD;
                 }
-                collate(object);
+                assemble(object);
                 words.push(object);
             });
             entry.data = words;
@@ -3329,9 +3329,9 @@ if (typeof Expression === "undefined") {
         
         // Step 5:
         // Create a flat sequence from the cascade.
-        
-        var words = [];
-        var merge = (word) => {
+
+        const words = [];
+        const merge = (word) => {
             if (Array.isArray(word))
                 word.forEach((entry) => {
                     merge(entry);    
@@ -3357,7 +3357,7 @@ if (typeof Expression === "undefined") {
         // The line break characters are misused for marking the transitions from
         // text to expression.
         
-        var script = "";
+        let script = "";
         words.forEach((word) => {
             if (word.type === Expression.TYPE_TEXT)
                 script += "\n" + word.data + "\r";
@@ -3397,18 +3397,18 @@ if (typeof Expression === "undefined") {
      */
     Expression.eval = function(...variants) {
         
-        var expression;
+        let expression;
         if (variants.length > 1)
             expression = String(variants[1]);
         else if (variants.length > 0)
             expression = String(variants[0]);
 
-        var serial;
+        let serial;
         if (variants.length > 1
                 && variants[0])
             serial = String(variants[0]);
 
-        var script = serial ? Expression.cache.get(serial) : null;
+        let script = serial ? Expression.cache.get(serial) : null;
         if (!script)
             script = Expression.parse(expression);
         if (serial)

@@ -465,7 +465,7 @@ if (typeof SiteMap === "undefined") {
         let paths = Array.from(SiteMap.paths.keys());
         paths = paths.concat(Array.from(SiteMap.facets.keys()));
         while (paths && path.length > 1) {
-            for (let variable of SiteMap.variables)
+            for (const variable of SiteMap.variables)
                 if ((path + "#").startsWith(variable + "#"))
                     return path;
             if (paths.includes(path))
@@ -544,7 +544,7 @@ if (typeof SiteMap === "undefined") {
             return meta.path + "#" + meta.facet;
         };
 
-        for (let variable of SiteMap.variables) {
+        for (const variable of SiteMap.variables) {
             if (!(path + "#").startsWith(variable + "#"))
                 continue;
             if (SiteMap.paths.has(variable)) {
