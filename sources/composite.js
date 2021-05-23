@@ -802,7 +802,7 @@ if (typeof Composite === "undefined") {
             selector = selector.trim();
             if (!selector)
                 return;
-            var validate = Array.from(document.querySelectorAll(selector));
+            let  validate = Array.from(document.querySelectorAll(selector));
             validate.forEach((node, index, array) => {
                 validate[index] = Composite.validate(node, lock);
                 if (typeof validate[index] === "undefined")
@@ -820,14 +820,14 @@ if (typeof Composite === "undefined") {
         if (!(selector instanceof Element))
             return;
         
-        var serial = selector.ordinal();
-        var object = Composite.render.meta[serial];
+        const serial = selector.ordinal();
+        const object = Composite.render.meta[serial];
         
-        var valid = true;
+        let  valid = true;
 
         // There must be a corresponding model class.
         // Elements are not supported.
-        var meta = Composite.mount.lookup(selector);
+        const meta = Composite.mount.lookup(selector);
         if (!(meta instanceof Object))
             return;
         
@@ -850,7 +850,7 @@ if (typeof Composite === "undefined") {
         // are primarily a property and the validation is located in the
         // surrounding model and not in the property object itself.
         
-        var value;
+        let value;
         if (selector instanceof Element) {
             if (selector.tagName.match(/^input$/i)
                     && selector.type.match(/^radio|checkbox/i))
@@ -871,7 +871,7 @@ if (typeof Composite === "undefined") {
                 && valid === true
                 && lock !== true
                 && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
-            var validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
+            const validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
             if (typeof value !== "undefined")
                 valid = validate.call(meta.model, selector, value);
             else valid = validate.call(meta.model, selector);
@@ -887,7 +887,7 @@ if (typeof Composite === "undefined") {
         // If the attribute NOTIFICATION is also used, a value is not expected,
         // the message is also displayed as an overlay/notification/report.
         if (valid !== true) {
-            var message;
+            let message;
             if (typeof valid === "string"
                     && valid.trim())
                 message = valid.trim();
