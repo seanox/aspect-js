@@ -979,23 +979,21 @@ if (typeof Test === "undefined") {
         console.forward = function(level, variants, output) {
             
             console.output[level] += Array.from(variants).join(", ");
-            
+
             if (output)
                 output(...variants);
-            
-            const values = [level, ...variants];
-            
+
             console.listeners.forEach((callback) => {
-                callback(...values);
-            }); 
-            
-            arguments = Array.from(arguments);
-            if (arguments.length > 2)
-                arguments[2] = null;
-            if (parent && parent !== window
-                    && parent.console
-                    && typeof parent.console.forward === "function")
-                parent.console.forward(...arguments);
+                callback(...([level, ...variants]));
+            });
+
+            if (!parent
+                    || parent === window
+                    || !parent.console
+                    || typeof parent.console.forward !== "function")
+                return;
+
+            parent.console.forward(...(Array.from(arguments).slice(0, 2)));
         };
         
         /** Redirect for the level: LOG */
@@ -1093,12 +1091,8 @@ if (typeof Test === "undefined") {
          * @param cancel  defining whether the event can be canceled
          */         
         if (Element.prototype.trigger === undefined)
-            Element.prototype.trigger = function(event, bubbles, cancel) {
+            Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
                 const trigger = document.createEvent("Event");
-                if (arguments.length < 2)
-                    bubbles = false;
-                if (arguments.length < 3)
-                    cancel = true;
                 trigger.initEvent(event, bubbles, cancel);
                 this.dispatchEvent(trigger);
             }; 
