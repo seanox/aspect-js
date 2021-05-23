@@ -2265,9 +2265,9 @@ if (typeof Composite === "undefined") {
                             // and expects meta objects in the meta cache. These
                             // meta-objects do not exist for templates, so it
                             // must be created temporarily and then removed again.
-                            var serial = placeholder.template.ordinal();
-                            var object = {serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
-                            Composite.render.meta[serial] = object; 
+                            const serial = placeholder.template.ordinal();
+                            const object = {serial: serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
+                            Composite.render.meta[serial] = object;
                             Composite.render.include(placeholder.template);
                             delete Composite.render.meta[serial];
                         }
@@ -2305,15 +2305,15 @@ if (typeof Composite === "undefined") {
                         // The meta object is prepared and registered so that
                         // the attributes of the placeholder are available for
                         // rendering.
-                        var serial = template.ordinal();
-                        var object = {serial, element:template, attributes:object.attributes};
-                        Composite.render.meta[serial] = object;
+                        const serial = template.ordinal();
+                        const output = {serial: serial, element:template, attributes:object.attributes};
+                        Composite.render.meta[serial] = output;
                         
                         // The placeholder output is rendered recursively and
                         // finally and inserted in the iterate container.
                         // Therefore, rendering can be stopped afterwards.
                         Composite.render(template, lock.share());
-                        object.placeholder = placeholder;
+                        output.placeholder = placeholder;
                         selector.parentNode.insertBefore(template, selector);
                         return;
                     }
