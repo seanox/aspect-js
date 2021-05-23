@@ -104,9 +104,10 @@ JavaScript-Syntax für die Expression Language um folgende Keywords erweitert:
 
 ```
 and &&        empty !         div /
-eq  ==        ge    >=        gt  >
-le  <=        lt    <         mod %
-ne  !=        not   !         or  ||
+eq  ==        eeq   ===       ge  >=
+gt  >         le    <=        lt  <
+mod %         ne    !=        nee !==
+not !         or    ||
 ```
 
 
