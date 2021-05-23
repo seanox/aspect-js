@@ -315,11 +315,10 @@ if (typeof Composite === "undefined") {
         
         /** Patterns with the supported events */
         get PATTERN_EVENT_FUNCTIONS() {return (function() {
-            var pattern = Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+            const pattern = Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                return letter.toUpperCase();
             });
-            pattern = new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
-            return pattern;
+            return new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
         })();},
         
         /** Patterns with the supported events as plain array */
@@ -448,13 +447,13 @@ if (typeof Composite === "undefined") {
                             // relationship in the DOM. Therefore they are all
                             // considered and mounted separately. 
                             
-                            var nodes = [];
+                            let nodes = [];
                             if (typeof this.selector === "string") {
-                                var scope = document.querySelectorAll(this.selector);
+                                const scope = document.querySelectorAll(this.selector);
                                 Array.from(scope).forEach((node) => {
                                     if (!nodes.includes(node))
                                         nodes.push(node);
-                                    var scope = node.querySelectorAll("*");
+                                    const scope = node.querySelectorAll("*");
                                     Array.from(scope).forEach((node) => {
                                         if (!nodes.includes(node))
                                             nodes.push(node);
@@ -474,7 +473,7 @@ if (typeof Composite === "undefined") {
                         } else if (context === Composite.mount) {
                             Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
                         } else throw new Error("Invalid context: " + context);
-                        var selector = context.queue.shift();
+                        const selector = context.queue.shift();
                         if (selector)
                             Composite.asynchron(context, selector);
                         context.lock = false;
