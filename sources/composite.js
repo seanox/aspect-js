@@ -1858,8 +1858,8 @@ if (typeof Composite === "undefined") {
             // get-function. During the analysis, the attributes of a element
             // (not node) containing an expression or all allowed attributes are
             // cached in the memory (Composite.render.meta).
-            var serial = selector.ordinal();
-            var object = Composite.render.meta[serial];
+            let serial = selector.ordinal();
+            let object = Composite.render.meta[serial];
             if (!object) {
                 
                 // Acceptors are a very special way to customize. Unlike the
@@ -2096,8 +2096,8 @@ if (typeof Composite === "undefined") {
                         if (!match.substring(2, match.length -2).trim())
                             return "";
                         const node = document.createTextNode("");
-                        var serial = node.ordinal();
-                        var object = {serial, element:node, attributes:{}, value:null,
+                        const serial = node.ordinal();
+                        const object = {serial: serial, element:node, attributes:{}, value:null,
                             render() {
                                 let word = "";
                                 if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
@@ -2115,8 +2115,8 @@ if (typeof Composite === "undefined") {
                             if (param) {
                                 object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
                                 object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
-                            } else object.attributes[Composite.ATTRIBUTE_VALUE] = match; 
-                        Composite.render.meta[serial] = object; 
+                            } else object.attributes[Composite.ATTRIBUTE_VALUE] = match;
+                        Composite.render.meta[serial] = object;
                         return "{{" + serial + "}}";
                     });
                     
@@ -2131,18 +2131,19 @@ if (typeof Composite === "undefined") {
                         const words = content.split(/(\{\{\d+\}\})/);
                         words.forEach((word, index, array) => {
                             if (word.match(/^\{\{\d+\}\}$/)) {
-                                var serial = parseInt(word.substring(2, word.length -2).trim());
-                                var object = Composite.render.meta[serial];
+                                const serial = parseInt(word.substring(2, word.length -2).trim());
+                                const object = Composite.render.meta[serial];
                                 object.render();
+                                array[index] = object.element;
                             } else {
                                 const node = document.createTextNode(word);
-                                var serial = node.ordinal();
-                                var object = {serial, element:node, attributes:{}};
+                                const serial = node.ordinal();
+                                const object = {serial, element:node, attributes:{}};
                                 object.element.textContent = word;
                                 object.attributes[Composite.ATTRIBUTE_TEXT] = word;
-                                Composite.render.meta[serial] = object; 
+                                Composite.render.meta[serial] = object;
+                                array[index] = object.element;
                             }
-                            array[index] = object.element;
                         });
                         
                         // Step 5:
