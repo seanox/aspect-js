@@ -1795,7 +1795,7 @@ if (typeof Composite === "undefined") {
             return;
         }
 
-        var lock = Composite.lock(Composite.render, selector);
+        lock = Composite.lock(Composite.render, selector);
         
         try {
 
@@ -1803,7 +1803,7 @@ if (typeof Composite === "undefined") {
                 selector = selector.trim();
                 if (!selector)
                     return;
-                var nodes = document.querySelectorAll(selector);
+                const nodes = document.querySelectorAll(selector);
                 nodes.forEach((node) => {
                     Composite.render(node, lock.share());
                 });
@@ -1819,7 +1819,7 @@ if (typeof Composite === "undefined") {
             // used or not. Only the return value false (not void, not empty)
             // terminates the rendering for the macro without using the standard
             // functions.
-            var macro = Composite.macros.get(selector.nodeName.toLowerCase());
+            const macro = Composite.macros.get(selector.nodeName.toLowerCase());
             if (macro && macro(selector) === false)
                 return;
             
@@ -1838,7 +1838,7 @@ if (typeof Composite === "undefined") {
             // functions.
             if (selector.parentNode) {
                 for (let [key, macro] of Composite.selectors) {
-                    var nodes = selector.parentNode.querySelectorAll(macro.selector);
+                    const nodes = selector.parentNode.querySelectorAll(macro.selector);
                     if (Array.from(nodes).includes(selector)) {
                         if (macro.callback(selector) === false)
                             return;
@@ -1947,7 +1947,7 @@ if (typeof Composite === "undefined") {
                     // element in the DOM is replaced by the placeholder (text
                     // node). The original selector is switched to the text node
                     // and the rendering is continued with the text node.
-                    var condition = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                    const condition = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
                             ? object.attributes[Composite.ATTRIBUTE_CONDITION] : null;
                     delete object.attributes[Composite.ATTRIBUTE_CONDITION];        
                     if (condition) {
@@ -1964,7 +1964,7 @@ if (typeof Composite === "undefined") {
                         // This indirectly prevents the MutationObserver from
                         // rendering the placeholder, since the placeholder is
                         // already known.
-                        var placeholder = document.createTextNode("");
+                        const placeholder = document.createTextNode("");
                         object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
                                 condition, template:selector.cloneNode(true), output:null, complete:false, share:null
                         };
@@ -2109,7 +2109,7 @@ if (typeof Composite === "undefined") {
                                 this.value = word;
                                 this.element.textContent = word;
                             }};
-                            var param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                            const param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                             if (param) {
                                 object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
                                 object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
@@ -2126,7 +2126,7 @@ if (typeof Composite === "undefined") {
                     // dynamic content.
                     
                     if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                        var words = content.split(/(\{\{\d+\}\})/);
+                        const words = content.split(/(\{\{\d+\}\})/);
                         words.forEach((word, index, array) => {
                             if (word.match(/^\{\{\d+\}\}$/)) {
                                 var serial = parseInt(word.substring(2, word.length -2).trim());
@@ -2181,7 +2181,7 @@ if (typeof Composite === "undefined") {
             // require the complete composite hierarchy to determine the
             // namespace of the models. The return value is a DIV structure that
             // corresponds to the composite hierarchy.
-            var imitate = (element) => {
+            const imitate = (element) => {
                 if (!(element instanceof Element))
                     return null;
                 var container = document.createElement("div");
@@ -2642,7 +2642,7 @@ if (typeof Composite === "undefined") {
             // execution of the script element can also be combined with the
             // attribute condition.
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
-                var type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
+                const type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
                     try {Composite.render.include.eval(selector.textContent);
                     } catch (exception) {
