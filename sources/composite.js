@@ -803,7 +803,7 @@ if (typeof Composite === "undefined") {
             if (!selector)
                 return;
             let  validate = Array.from(document.querySelectorAll(selector));
-            validate.forEach((node, index, array) => {
+            validate.forEach((node, index) => {
                 validate[index] = Composite.validate(node, lock);
                 if (typeof validate[index] === "undefined")
                     validate[index] = 0;
@@ -1311,7 +1311,7 @@ if (typeof Composite === "undefined") {
         if (!(element instanceof Element))
             return null;
         
-        var serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+        let serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
 
         // Composites have only a meta object with composite and model.
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
@@ -1319,7 +1319,7 @@ if (typeof Composite === "undefined") {
                 throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
             else return {composite:serial, model:serial};
 
-        var meta = {composite:null, model:null, property:null, name:null};
+        const meta = {composite:null, model:null, property:null, name:null};
 
         serial = serial.match(Composite.PATTERN_ELEMENT_ID);
         if (serial) {
@@ -1329,13 +1329,13 @@ if (typeof Composite === "undefined") {
                 meta.name = serial[2].replace(/(^:+)|(:+$)/g , "");
         }
 
-        for (var scope = element.parentNode; scope; scope = scope.parentNode) {
+        for (let scope = element.parentNode; scope; scope = scope.parentNode) {
             
             if (!(scope instanceof Element)
                     || !scope.hasAttribute(Composite.ATTRIBUTE_ID))
                 continue;
             
-            var serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            let serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_ELEMENT_ID))
                 throw new Error("Invalid element id" + (serial ? ": " + serial : ""));
             if (meta.model)
@@ -1393,11 +1393,11 @@ if (typeof Composite === "undefined") {
         if (!(element instanceof Element))
             return null;
         
-        var meta = Composite.mount.locate(element);
+        const meta = Composite.mount.locate(element);
         if (!meta)
             return null;
         
-        var lookup = {
+        let lookup = {
             meta,
             composite: Object.lookup(meta.composite),
             model: Object.lookup(meta.model)
@@ -1411,18 +1411,18 @@ if (typeof Composite === "undefined") {
             return lookup;
         
         if (meta.name) {
-            var target = (meta.property + "." + meta.name.replace(/\:/g, ".")).match(/^(.*)\.(\w+)$/);
+            const target = (meta.property + "." + meta.name.replace(/\:/g, ".")).match(/^(.*)\.(\w+)$/);
             meta.property = target[1];
             meta.name = target[2];
         } 
         
-        var lookup = {
+        lookup = {
             meta,
             composite: Object.lookup(meta.composite),
             model: Object.lookup(meta.model),
             get property() {
                 if (this.meta.name) {
-                    var property = Object.lookup(this.model, this.meta.property);
+                    const property = Object.lookup(this.model, this.meta.property);
                     if (property === null)
                         return;
                     return property[this.meta.name];
@@ -2090,7 +2090,7 @@ if (typeof Composite === "undefined") {
                     // start with the name of the parameter and are interpreted
                     // later, but do not generate any output.
                     
-                    content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match, offset, content) => {
+                    content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                         if (!match.substring(2, match.length -2).trim())
                             return "";
                         var node = document.createTextNode("");
@@ -2863,7 +2863,7 @@ if (typeof Composite === "undefined") {
     //     protected by the MutationObserver and cannot be manipulated.
     //   - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
     //     are protected by the MutationObserver and cannot be manipulated.
-    window.addEventListener("load", (event) => {
+    window.addEventListener("load", () => {
     
         // The inverse indicator release shows when an element has been rendered
         // because the renderer removes this attribute. This effect is used for
