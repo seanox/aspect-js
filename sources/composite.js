@@ -2070,7 +2070,7 @@ if (typeof Composite === "undefined") {
                 // is static. Static text nodes are marked with the attribute
                 // Composite.ATTRIBUTE_TEXT.
                 
-                var content = selector.textContent;
+                let content = selector.textContent;
                 if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     
                     // Step 2:
@@ -2093,13 +2093,13 @@ if (typeof Composite === "undefined") {
                     content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                         if (!match.substring(2, match.length -2).trim())
                             return "";
-                        var node = document.createTextNode("");
+                        const node = document.createTextNode("");
                         var serial = node.ordinal();
                         var object = {serial, element:node, attributes:{}, value:null,
                             render() {
                                 if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
-                                    var name = String(this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                                    var value = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                                    const name = String(this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                                    const value = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
                                     window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
                                     word = "";
                                 } else {
@@ -2133,7 +2133,7 @@ if (typeof Composite === "undefined") {
                                 var object = Composite.render.meta[serial];
                                 object.render();
                             } else {
-                                var node = document.createTextNode(word);
+                                const node = document.createTextNode(word);
                                 var serial = node.ordinal();
                                 var object = {serial, element:node, attributes:{}};
                                 object.element.textContent = word;
@@ -2184,13 +2184,13 @@ if (typeof Composite === "undefined") {
             const imitate = (element) => {
                 if (!(element instanceof Element))
                     return null;
-                var container = document.createElement("div");
-                var construct = container; 
+                let container = document.createElement("div");
+                let construct = container;
                 for (; element; element = element.parentNode) {
                     if (!(element instanceof Element)
                             || !element.hasAttribute(Composite.ATTRIBUTE_ID))
                         continue;
-                    var temp = document.createElement("div");
+                    const temp = document.createElement("div");
                     temp.setAttribute(Composite.ATTRIBUTE_ID, element.getAttribute(Composite.ATTRIBUTE_ID));
                     if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
                         temp.setAttribute(Composite.ATTRIBUTE_COMPOSITE, "");
@@ -2203,7 +2203,7 @@ if (typeof Composite === "undefined") {
             // Internal method for docking models.
             // Only composites are mounted based on their model.
             // This excludes the placeholders (are text nodes) of conditions.
-            var dock = (model) => {
+            const dock = (model) => {
                 if (typeof model !== "string"
                         || Composite.models.has(model))
                     return;
@@ -2217,7 +2217,7 @@ if (typeof Composite === "undefined") {
             // This excludes the placeholders (are text nodes) of conditions.
             if (selector instanceof Element
                     && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                var model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                const model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                 if (!model.match(Composite.PATTERN_COMPOSITE_ID))
                     throw new Error("Invalid composite id" + (model ? ": " + model : ""));
                 dock(model);
@@ -2234,7 +2234,7 @@ if (typeof Composite === "undefined") {
             // placeholder according to the condition.
             if (selector.nodeType === Node.TEXT_NODE
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                var placeholder = object;
+                const placeholder = object;
                 
                 // If the share from the placeholder corresponds to the current
                 // lock, the rendering for placeholder and output has already
@@ -2275,7 +2275,7 @@ if (typeof Composite === "undefined") {
                     // Only composites are mounted based on their model.
                     // This excludes the placeholders (are text nodes) of conditions.
                     if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                        var model = String(placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                        const model = String(placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                         if (!model.match(Composite.PATTERN_COMPOSITE_ID))
                             throw new Error("Invalid composite id" + (model ? ": " + model : ""));
                         dock(model);
@@ -2286,12 +2286,12 @@ if (typeof Composite === "undefined") {
                         // The placeholder output is rendered recursively and
                         // finally and inserted before the placeholder.
                         // Therefore, rendering can be stopped afterwards.
-                        var template = placeholder.template.cloneNode(true);
+                        const template = placeholder.template.cloneNode(true);
 
                         // Rendering templates should have the same effects as
                         // rendering markups in the current DOM. This requires
                         // the real composite hierarchy, which is simulated here.
-                        var container = imitate(selector.parentNode);
+                        const container = imitate(selector.parentNode);
                         container.appendChild(template);
                                                 
                         // The placeholder output is rendered recursively and
@@ -2326,8 +2326,8 @@ if (typeof Composite === "undefined") {
                     object = Composite.render.meta[serial];
                     
                 } else {
-                    
-                    var condition = (placeholder.condition || "").trim();
+
+                    const condition = (placeholder.condition || "").trim();
                     if (!condition.match(Composite.PATTERN_EXPRESSION_CONDITION))
                         console.error("Invalid condition" + (condition ? ": " + condition : ""));
                     
@@ -2372,7 +2372,7 @@ if (typeof Composite === "undefined") {
             // attribute is removed.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 selector.innerHTML = "";
-                var value = object.attributes[Composite.ATTRIBUTE_IMPORT];
+                let value = object.attributes[Composite.ATTRIBUTE_IMPORT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, String(value));
 
@@ -2387,7 +2387,7 @@ if (typeof Composite === "undefined") {
                     delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
 
                 } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
+                    let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
                     data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
                     data[1] = DataSource.fetch("xml://" + data[1]);
                     data = DataSource.transform(data[1], data[2]);
@@ -2405,13 +2405,13 @@ if (typeof Composite === "undefined") {
                 } else {
                     Composite.asynchron((selector, lock, url) => {
                         try {
-                            var request = new XMLHttpRequest();
+                            const request = new XMLHttpRequest();
                             request.overrideMimeType("text/plain");
                             request.open("GET", url, false);
                             request.send();
                             if (request.status !== 200)
                                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
-                            var content = request.responseText.trim();
+                            const content = request.responseText.trim();
                             Composite.render.cache[request.responseURL] = content;
                             selector.innerHTML = content;
                             var serial = selector.ordinal();
@@ -2438,11 +2438,11 @@ if (typeof Composite === "undefined") {
             // The recursive (re)rendering is initiated via the MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
                 selector.innerHTML = "";
-                var value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
+                let value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
                 if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                     value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
                 if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    var data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
+                    let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
                     data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
                     data[1] = DataSource.fetch("xml://" + data[1]);
                     data = DataSource.transform(data[1], data[2]);
@@ -2468,9 +2468,9 @@ if (typeof Composite === "undefined") {
             // declared HTML element and is terminated and removed when:
             //   - the element no longer exists in the DOM
             //   - the condition attribute is false
-            var interval = String(object.attributes[Composite.ATTRIBUTE_INTERVAL] || "").trim();
+            let interval = String(object.attributes[Composite.ATTRIBUTE_INTERVAL] || "").trim();
             if (interval && !object.interval) {
-                var context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
+                const context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
                 interval = String(Expression.eval(context, interval));
                 if (interval.match(/^\d+$/)) {
                     if (object.hasOwnProperty("placeholder")) {
@@ -2484,7 +2484,7 @@ if (typeof Composite === "undefined") {
                         task(interval) {
                             var serial = interval.selector.ordinal();
                             var object = Composite.render.meta[serial];
-                            var interrupt = !document.body.contains(interval.selector);
+                            let interrupt = !document.body.contains(interval.selector);
                             if (!object)
                                 interrupt = true;
                             if (object
@@ -2523,8 +2523,8 @@ if (typeof Composite === "undefined") {
             //      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}   
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
-                    var iterate = String(object.attributes[Composite.ATTRIBUTE_ITERATE] || "").trim();
-                    var content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                    const iterate = String(object.attributes[Composite.ATTRIBUTE_ITERATE] || "").trim();
+                    const content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                     if (content) {
                         object.iterate = {name:content[1].trim(),
                             expression:"{{" + content[2].trim() + "}}"
@@ -2536,20 +2536,20 @@ if (typeof Composite === "undefined") {
                     // A temporary global variable is required for the iteration.
                     // If this variable already exists, the existing method is
                     // cached and restored at the end of the iteration.
-                    var variable = window[object.iterate.name];
+                    const variable = window[object.iterate.name];
                     try {
-                        var context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
+                        const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
                         selector.innerHTML = "";
                         iterate = Expression.eval(context, object.iterate.expression);
                         if (iterate) {
                             if (iterate instanceof XPathResult) {
-                                var meta = {entry:null, array:[], iterate:iterate};
+                                const meta = {entry:null, array:[], iterate:iterate};
                                 while (meta.entry = meta.iterate.iterateNext())
                                     meta.array.push(meta.entry);
                                 iterate = meta.array;
                             } else iterate = Array.from(iterate);
                             iterate.forEach((item, index, array) => {
-                                var meta = {}; 
+                                const meta = {};
                                 Object.defineProperty(meta, "item", {
                                     value: item,
                                     enumerable: true
@@ -2563,8 +2563,8 @@ if (typeof Composite === "undefined") {
                                     enumerable: true
                                 });
                                 window[object.iterate.name] = meta;
-                                var template = document.createElement("div");
-                                var container = imitate(selector.parentNode);
+                                const template = document.createElement("div");
+                                const container = imitate(selector.parentNode);
                                 container.appendChild(template);
                                 template.appendChild(object.template.cloneNode(true).childNodes);
                                 Composite.render(template, lock.share());
@@ -2591,7 +2591,7 @@ if (typeof Composite === "undefined") {
             // is the text element. The result is output here as textContent.
             // Elements of type: script + style are ignored.
             if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                var attributes = [];
+                const attributes = [];
                 for (var key in object.attributes)
                     if (object.attributes.hasOwnProperty(key))
                         attributes.push(key);
@@ -2603,11 +2603,11 @@ if (typeof Composite === "undefined") {
                     // Ignore all internal attributes
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
-                        return;                    
-                    var value = String(object.attributes[attribute] || "");
+                        return;
+                    let value = String(object.attributes[attribute] || "");
                     if (!value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         return;
-                    var context = serial + ":" + attribute;
+                    const context = serial + ":" + attribute;
                     value = Expression.eval(context, value);
                     // If the type value is 'undefined', the attribute is
                     // removed. Since the attribute contains an expression, the
