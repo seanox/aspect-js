@@ -101,12 +101,12 @@
  * is taken over by the Composite API in this implementation. SiteMap is an
  * extension and is based on the Composite API.
  * 
- * MVC 1.2.1 20210622
+ * MVC 1.2.1 20210623
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.1 20210622
+ * @version 1.2.1 20210623
  */
 if (typeof Path === "undefined") {
     
@@ -732,26 +732,26 @@ if (typeof SiteMap === "undefined") {
      *     - if the data type of map and/or permit is invalid
      *     - if the syntax and/or the format of facets are invalid
      */
-    SiteMap.customize = function(variants) {
+    SiteMap.customize = function(...variants) {
         
-        if (arguments.length > 1
-                && arguments[0] instanceof RegExp) {
-            if (typeof arguments[1] !== "function")
-                throw new TypeError("Invalid acceptor: " + typeof arguments[1]);
-            SiteMap.acceptors.add({pattern:arguments[0], action:arguments[1]});
+        if (variants.length > 1
+                && variants[0] instanceof RegExp) {
+            if (typeof variants[1] !== "function")
+                throw new TypeError("Invalid acceptor: " + typeof variants[1]);
+            SiteMap.acceptors.add({pattern:variants[0], action:variants[1]});
             return;
         }
 
-        if (arguments.length < 1
-                || typeof arguments[0] !== "object")
-            throw new TypeError("Invalid map: " + typeof arguments[0]);
-        const map = arguments[0];
+        if (variants.length < 1
+                || typeof variants[0] !== "object")
+            throw new TypeError("Invalid map: " + typeof variants[0]);
+        const map = variants[0];
 
         const acceptors = new Set(SiteMap.acceptors);
-        if (arguments.length > 1) {
-            if (typeof arguments[1] !== "function")
-                throw new TypeError("Invalid permit: " + typeof arguments[1]);
-            acceptors.add({pattern:null, action:arguments[1]});
+        if (variants.length > 1) {
+            if (typeof variants[1] !== "function")
+                throw new TypeError("Invalid permit: " + typeof variants[1]);
+            acceptors.add({pattern:null, action:variants[1]});
         }
 
         const paths = new Map();
