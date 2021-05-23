@@ -2307,7 +2307,7 @@ if (typeof Composite === "undefined") {
                         // rendering.
                         var serial = template.ordinal();
                         var object = {serial, element:template, attributes:object.attributes};
-                        Composite.render.meta[serial] = object; 
+                        Composite.render.meta[serial] = object;
                         
                         // The placeholder output is rendered recursively and
                         // finally and inserted in the iterate container.
@@ -2394,15 +2394,15 @@ if (typeof Composite === "undefined") {
                     data[1] = DataSource.fetch("xml://" + data[1]);
                     data = DataSource.transform(data[1], data[2]);
                     selector.appendChild(data, true);
-                    var serial = selector.ordinal();
-                    var object = Composite.render.meta[serial];
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    const serial = selector.ordinal();
+                    const object = Composite.render.meta[serial];
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                 
                 } else if (Composite.render.cache[value] !== undefined) {
                     selector.innerHTML = Composite.render.cache[value];
-                    var serial = selector.ordinal();
-                    var object = Composite.render.meta[serial];
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    const serial = selector.ordinal();
+                    const object = Composite.render.meta[serial];
+                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                 
                 } else {
                     Composite.asynchron((selector, lock, url) => {
@@ -2416,8 +2416,8 @@ if (typeof Composite === "undefined") {
                             const content = request.responseText.trim();
                             Composite.render.cache[request.responseURL] = content;
                             selector.innerHTML = content;
-                            var serial = selector.ordinal();
-                            var object = Composite.render.meta[serial];
+                            const serial = selector.ordinal();
+                            const object = Composite.render.meta[serial];
                             delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                         } catch (error) {
                             Composite.fire(Composite.EVENT_HTTP_ERROR, error);
@@ -2484,8 +2484,8 @@ if (typeof Composite === "undefined") {
                         object,
                         selector,
                         task(interval) {
-                            var serial = interval.selector.ordinal();
-                            var object = Composite.render.meta[serial];
+                            const serial = interval.selector.ordinal();
+                            const object = Composite.render.meta[serial];
                             let interrupt = !document.body.contains(interval.selector);
                             if (!object)
                                 interrupt = true;
