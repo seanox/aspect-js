@@ -116,12 +116,12 @@
  * Thus virtual paths, object structure in JavaScript (namespace) and the
  * nesting of the DOM must match.
  *
- * Composite 1.3.2 20210615
+ * Composite 1.4.0 20210623
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.2 20210615
+ * @version 1.4.0 20210623
  */
 if (typeof Composite === "undefined") {
     
@@ -441,7 +441,7 @@ if (typeof Composite === "undefined") {
                         this.ticks--;
                         if (this.ticks > 0)
                             return;
-                        if (context == Composite.render) {
+                        if (context === Composite.render) {
                             
                             // If the selector is a string, several elements must
                             // be assumed. These can, but do not have to, have a
@@ -471,7 +471,7 @@ if (typeof Composite === "undefined") {
                             });
                             
                             Composite.fire(Composite.EVENT_RENDER_END, this.selector);
-                        } else if (context == Composite.mount) {
+                        } else if (context === Composite.mount) {
                             Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
                         } else throw new Error("Invalid context: " + context);
                         var selector = context.queue.shift();
@@ -480,15 +480,15 @@ if (typeof Composite === "undefined") {
                         context.lock = false;
                 }};
             
-            if (context == Composite.render)
+            if (context === Composite.render)
                 Composite.fire(Composite.EVENT_RENDER_START, this.selector);
-            else if (context == Composite.mount)
+            else if (context === Composite.mount)
                 Composite.fire(Composite.EVENT_MOUNT_START, this.selector);
             else throw new Error("Invalid context: " + context);            
         } else {
-            if (context == Composite.render)
+            if (context === Composite.render)
                 Composite.fire(Composite.EVENT_RENDER_NEXT, this.selector);
-            else if (context == Composite.mount)
+            else if (context === Composite.mount)
                 Composite.fire(Composite.EVENT_MOUNT_NEXT, this.selector);
             else throw new Error("Invalid context: " + context);            
         }
@@ -536,7 +536,7 @@ if (typeof Composite === "undefined") {
             var scope;
             var namespace;
             
-            if (arguments.length == 0)
+            if (arguments.length === 0)
                 return {scope:window};
             
             if (arguments.length > 1) {
@@ -553,7 +553,7 @@ if (typeof Composite === "undefined") {
                 throw new TypeError("Invalid namespace: " + typeof namespace);
     
             if (!namespace.match(Composite.PATTERN_NAMESPACE)
-                    || (scope == window && namespace.match(/^\d/)))
+                    || (scope === window && namespace.match(/^\d/)))
                 throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
             
             namespace = namespace.replace(Composite.PATTERN_NAMESPACE_SEPARATOR, ".");
@@ -626,7 +626,7 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.exists === undefined)
         Object.exists = function(...variants) {
-            return Object.lookup(...variants) != null;   
+            return Object.lookup(...variants) !== null;   
         };
 
     /**
@@ -651,21 +651,21 @@ if (typeof Composite === "undefined") {
         var callback = (event = null) => {
             if (!event)
                 return;
-            if (event.type == "loadstart")
+            if (event.type === "loadstart")
                 event = [Composite.EVENT_HTTP_START, event];
-            else if (event.type == "progress")
+            else if (event.type === "progress")
                 event = [Composite.EVENT_HTTP_PROGRESS, event]; 
-            else if (event.type == "readystatechange")
+            else if (event.type === "readystatechange")
                 event = [Composite.EVENT_HTTP_RECEIVE, event]; 
-            else if (event.type == "load")
+            else if (event.type === "load")
                 event = [Composite.EVENT_HTTP_LOAD, event]; 
-            else if (event.type == "abort")
+            else if (event.type === "abort")
                 event = [Composite.EVENT_HTTP_ABORT, event]; 
-            else if (event.type == "error")
+            else if (event.type === "error")
                 event = [Composite.EVENT_HTTP_ERROR, event];   
-            else if (event.type == "timeout")
+            else if (event.type === "timeout")
                 event = [Composite.EVENT_HTTP_TIMEOUT, event];   
-            else if (event.type == "loadend")
+            else if (event.type === "loadend")
                 event = [Composite.EVENT_HTTP_END, event]; 
             else return;
             Composite.fire(...event); 
@@ -1031,7 +1031,7 @@ if (typeof Composite === "undefined") {
         // The lock locks concurrent mount requests.
         // Concurrent mounting causes unexpected effects.
         if (Composite.mount.lock
-                && Composite.mount.lock != lock) {
+                && Composite.mount.lock !== lock) {
             if (!Composite.mount.queue.includes(selector))
                 Composite.mount.queue.push(selector);
             return;
@@ -1083,7 +1083,7 @@ if (typeof Composite === "undefined") {
             events = String(events || "");
             events = events.toLowerCase().split(/\s+/);
             events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
-                    && array.indexOf(event) == index);
+                    && array.indexOf(event) === index);
             
             // There must be a corresponding model class.
             // Elements are not supported.
@@ -1190,7 +1190,7 @@ if (typeof Composite === "undefined") {
                                 if (typeof property === "undefined")
                                     return false;
                                 if (type === "object"
-                                        && property == null)
+                                        && property === null)
                                     return true;
                                 return type === "boolean"
                                     || type === "number"
@@ -1424,7 +1424,7 @@ if (typeof Composite === "undefined") {
             get property() {
                 if (this.meta.name) {
                     var property = Object.lookup(this.model, this.meta.property);
-                    if (property == null)
+                    if (property === null)
                         return;
                     return property[this.meta.name];
                 }
@@ -1566,7 +1566,7 @@ if (typeof Composite === "undefined") {
         // If only one argument of type function is passed, the method is
         // registered as a acceptor.
         if (typeof scope === "function"
-                && arguments.length == 1) {
+                && arguments.length === 1) {
             Composite.acceptors.add(scope);
             return;
         }
@@ -1587,12 +1587,12 @@ if (typeof Composite === "undefined") {
             throw new Error("Invalid scope");
             
         if (scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE)) {
-            if (callback == null)
+            if (callback === null)
                 Composite.macros.delete(scope.toLowerCase());
             else Composite.macros.set(scope.toLowerCase(), callback);
         } else {
             var hash = scope.toLowerCase().hashCode();
-            if (callback == null)
+            if (callback === null)
                 Composite.selectors.delete(hash);
             else Composite.selectors.set(hash, {selector:scope, callback});
         } 
@@ -1790,7 +1790,7 @@ if (typeof Composite === "undefined") {
         // be omitted or replaced from the DOM. Access to parent and child
         // elements may then no longer be possible.
         if (Composite.render.lock
-                && Composite.render.lock != lock) {
+                && Composite.render.lock !== lock) {
             if (!Composite.render.queue.includes(selector))
                 Composite.render.queue.push(selector);
             return;
@@ -1890,7 +1890,7 @@ if (typeof Composite === "undefined") {
                             if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                                     && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
                                     && !Composite.statics.has(attribute.name)
-                                    && attribute.name != Composite.ATTRIBUTE_RELEASE)
+                                    && attribute.name !== Composite.ATTRIBUTE_RELEASE)
                                 selector.removeAttribute(attribute.name);
                             
                             object.attributes[attribute.name] = attribute.value;
@@ -1909,8 +1909,8 @@ if (typeof Composite === "undefined") {
                             
                             if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
                                     && (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                            || attribute.name == Composite.ATTRIBUTE_ID
-                                            || attribute.name == Composite.ATTRIBUTE_EVENTS
+                                            || attribute.name === Composite.ATTRIBUTE_ID
+                                            || attribute.name === Composite.ATTRIBUTE_EVENTS
                                             || Composite.statics.has(attribute.name)))
                                 attribute.value = Expression.eval(selector.ordinal() + ":" + attribute.name, attribute.value);
                             
@@ -1918,8 +1918,8 @@ if (typeof Composite === "undefined") {
                             // registered for the restore. This is a part of the
                             // markup hardening of the MutationObserver.                            
                             if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    || attribute.name == Composite.ATTRIBUTE_ID
-                                    || attribute.name == Composite.ATTRIBUTE_EVENTS)
+                                    || attribute.name === Composite.ATTRIBUTE_ID
+                                    || attribute.name === Composite.ATTRIBUTE_EVENTS)
                                 object.attributes[attribute.name] = attribute.value;
 
                             // The initial value of the static attribute is
@@ -1932,8 +1932,8 @@ if (typeof Composite === "undefined") {
                             // The result of the expression must be written back
                             // to the static attributes.   
                             if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    || attribute.name == Composite.ATTRIBUTE_ID
-                                    || attribute.name == Composite.ATTRIBUTE_EVENTS
+                                    || attribute.name === Composite.ATTRIBUTE_ID
+                                    || attribute.name === Composite.ATTRIBUTE_EVENTS
                                     || Composite.statics.has(attribute.name))
                                 selector.setAttribute(attribute.name, attribute.value);
                         }
@@ -2043,7 +2043,7 @@ if (typeof Composite === "undefined") {
             // The meta objects for dynamic content also have their own rendering
             // method for generating output. Static content is ignored later
             // during rendering because it is unchangeable.
-            if (selector.nodeType == Node.TEXT_NODE
+            if (selector.nodeType === Node.TEXT_NODE
                     && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 
                 // Elements of type: script + style are ignored.
@@ -2151,7 +2151,7 @@ if (typeof Composite === "undefined") {
                         // newly created text nodes.
                         
                         // For internal and temporary calls, no parent can exist.
-                        if (selector.parentNode == null)
+                        if (selector.parentNode === null)
                             return;
                         
                         // The new text nodes are inserted before the current
@@ -2233,14 +2233,14 @@ if (typeof Composite === "undefined") {
             // The placeholder is the cached markup of the element.
             // Thus the renderer can insert or remove the markup before the
             // placeholder according to the condition.
-            if (selector.nodeType == Node.TEXT_NODE
+            if (selector.nodeType === Node.TEXT_NODE
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
                 var placeholder = object;
                 
                 // If the share from the placeholder corresponds to the current
                 // lock, the rendering for placeholder and output has already
                 // been done and nothing more needs to be done.
-                if (placeholder.share == lock.ordinal())
+                if (placeholder.share === lock.ordinal())
                     return;
                 placeholder.share = lock.ordinal();
                 
@@ -2410,7 +2410,7 @@ if (typeof Composite === "undefined") {
                             request.overrideMimeType("text/plain");
                             request.open("GET", url, false);
                             request.send();
-                            if (request.status != "200")
+                            if (request.status !== 200)
                                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
                             var content = request.responseText.trim();
                             Composite.render.cache[request.responseURL] = content;
@@ -2452,7 +2452,7 @@ if (typeof Composite === "undefined") {
                     selector.appendChild(value.cloneNode(true), true);
                 else if (value instanceof NodeList)
                     Array.from(value).forEach(function(node, index) {
-                        selector.appendChild(node.cloneNode(true), index == 0);
+                        selector.appendChild(node.cloneNode(true), index === 0);
                     });
                 else selector.innerHTML = String(value);
             }
@@ -2622,7 +2622,7 @@ if (typeof Composite === "undefined") {
                         // of the property must be set, the value of the
                         // attribute is optional. Changing the value does not
                         // trigger an event, so no unwanted recursions occur.
-                        if (attribute.toLowerCase() == Composite.ATTRIBUTE_VALUE
+                        if (attribute.toLowerCase() === Composite.ATTRIBUTE_VALUE
                                 && Composite.ATTRIBUTE_VALUE in selector)
                             selector.value = value;
                         selector.setAttribute(attribute, value);
@@ -2742,9 +2742,9 @@ if (typeof Composite === "undefined") {
             // cause an error.
             request.open("HEAD", resource, false);
             request.send();
-            if (request.status == 404)
+            if (request.status === 404)
                 return;
-            if (request.status != "200")
+            if (request.status !== 200)
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
 
             // If the resource exists it will be loaded.
@@ -2752,9 +2752,9 @@ if (typeof Composite === "undefined") {
             // cause an error.
             request.open("GET", resource, false);
             request.send();
-            if (request.status == 404)
+            if (request.status === 404)
                 return;
-            if (request.status != "200")
+            if (request.status !== 200)
                 throw new Error("HTTP status " + request.status + " for " + request.responseURL);
 
             // CSS is inserted into the HEad element as a style element.
@@ -2900,17 +2900,17 @@ if (typeof Composite === "undefined") {
                 
                 // Text changes are only monitored at text nodes with expression.
                 // Manipulations are corrected/restored.
-                if (record.type == "characterData"
-                        && record.target.nodeType == Node.TEXT_NODE) {
+                if (record.type === "characterData"
+                        && record.target.nodeType === Node.TEXT_NODE) {
                     if (object && object.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
-                            && String(object.value || "") != record.target.textContent)
+                            && String(object.value || "") !== record.target.textContent)
                         record.target.textContent = object.value || "";
                     return;
                 }
                 
                 // Changes at the renderer-specific and static attributes are
                 // monitored. Manipulations are corrected/restored.
-                if (object && record.type == "attributes") {
+                if (object && record.type === "attributes") {
                     var attribute = (record.attributeName || "").toLowerCase().trim();
                     if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
                             && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC)) {
@@ -2969,7 +2969,7 @@ if (typeof Composite === "undefined") {
                     record.addedNodes.forEach((node) => {
                         if ((node instanceof Element
                                 || (node instanceof Node
-                                        && node.nodeType == Node.TEXT_NODE))
+                                        && node.nodeType === Node.TEXT_NODE))
                                 && !Composite.render.meta[node.ordinal()]
                                 && document.body.contains(node))
                             Composite.render(node);
@@ -3198,23 +3198,23 @@ if (typeof Expression === "undefined") {
         expression = expression.replace(/(^\n+)|(\n+$)/g, "");
 
         var collate = (word) => {
-            if (word.type == Expression.TYPE_TEXT)
+            if (word.type === Expression.TYPE_TEXT)
                 cascade.text.push(word);
-            else if (word.type == Expression.TYPE_EXPRESSION)
+            else if (word.type === Expression.TYPE_EXPRESSION)
                 cascade.expression.push(word);
-            else if (word.type == Expression.TYPE_SCRIPT)
+            else if (word.type === Expression.TYPE_SCRIPT)
                 cascade.script.push(word);
-            else if (word.type == Expression.TYPE_LITERAL)
+            else if (word.type === Expression.TYPE_LITERAL)
                 cascade.literal.push(word);
-            else if (word.type == Expression.TYPE_KEYWORD)
+            else if (word.type === Expression.TYPE_KEYWORD)
                 cascade.keyword.push(word);
-            else if (word.type == Expression.TYPE_OTHER)
+            else if (word.type === Expression.TYPE_OTHER)
                 cascade.other.push(word);
-            else if (word.type == Expression.TYPE_VALUE)
+            else if (word.type === Expression.TYPE_VALUE)
                 cascade.value.push(word);
-            else if (word.type == Expression.TYPE_METHOD)
+            else if (word.type === Expression.TYPE_METHOD)
                 cascade.method.push(word);
-            else if (word.type == Expression.TYPE_LOGIC)
+            else if (word.type === Expression.TYPE_LOGIC)
                 cascade.logic.push(word);
         };
         
@@ -3260,21 +3260,22 @@ if (typeof Expression === "undefined") {
             }
             entry.data = words;
         });
-        
+
         // Step 3:
         // Converting reserved word (keywords) into operators. 
         // supported keywords a nd mapping:
         //     and &&        empty !         div /
-        //     eq  ==        ge    >=        gt  >
-        //     le  <=        lt    <         mod %
-        //     ne  !=        not   !         or  ||
+        //     eq  ==        eeq   ===       ge  >=
+        //     gt  >         le    <=        lt  <
+        //     mod %         ne    !=        nee !==
+        //     not !         or    ||
         // additional keywords without mapping:
         //     true, false, null, instanceof, typeof, undefined, new
         // Separation of script in keyword and other as partial words.
         // IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
         
-        var keywords = ["and", "&&", "or", "||", "not", "!", "eq", "==",
-                "ne", "!=", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
+        var keywords = ["and", "&&", "or", "||", "not", "!",
+                "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
                 "div", "/", "mod", "%"];
         cascade.script.forEach((entry) => {
             var text = entry.data;
@@ -3359,14 +3360,14 @@ if (typeof Expression === "undefined") {
         
         var script = "";
         words.forEach((word) => {
-            if (word.type == Expression.TYPE_TEXT)
+            if (word.type === Expression.TYPE_TEXT)
                 script += "\n" + word.data + "\r";
-            else if (word.type == Expression.TYPE_KEYWORD)
+            else if (word.type === Expression.TYPE_KEYWORD)
                 script += " " + word.data + " ";
-            else if (word.type == Expression.TYPE_LITERAL
-                    || word.type == Expression.TYPE_VALUE
-                    || word.type == Expression.TYPE_METHOD
-                    || word.type == Expression.TYPE_LOGIC)
+            else if (word.type === Expression.TYPE_LITERAL
+                    || word.type === Expression.TYPE_VALUE
+                    || word.type === Expression.TYPE_METHOD
+                    || word.type === Expression.TYPE_LOGIC)
                 script += word.data;
         });
         script = script.replace(/(^\n)|(\r$)/g, "");
