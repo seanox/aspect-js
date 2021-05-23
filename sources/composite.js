@@ -532,8 +532,8 @@ if (typeof Composite === "undefined") {
     if (Object.locate === undefined)
         Object.locate = function(variants) {
         
-            var scope;
-            var namespace;
+            let scope;
+            let namespace;
             
             if (arguments.length === 0)
                 return {scope:window};
@@ -1036,7 +1036,7 @@ if (typeof Composite === "undefined") {
             return;
         }
 
-        var lock = Composite.lock(Composite.mount, selector);
+        lock = Composite.lock(Composite.mount, selector);
             
         try {
             
@@ -1044,7 +1044,7 @@ if (typeof Composite === "undefined") {
                 selector = selector.trim();
                 if (!selector)
                     return;
-                var nodes = document.querySelectorAll(selector);
+                const nodes = document.querySelectorAll(selector);
                 nodes.forEach((node) => {
                     Composite.mount(node, lock.share());
                 });
@@ -1063,9 +1063,9 @@ if (typeof Composite === "undefined") {
             Composite.mount.stack = Composite.mount.stack || [];
             if (Composite.mount.stack.includes(selector))
                 return;
-            
-            var serial = selector.ordinal();
-            var object = Composite.render.meta[serial];
+
+            const serial = selector.ordinal();
+            const object = Composite.render.meta[serial];
             
             // Objects that were not rendered should not be mounted.
             // This can happen if new DOM elements are created during rendering
@@ -1077,7 +1077,7 @@ if (typeof Composite === "undefined") {
             // The model can, but does not have to, implement the corresponding
             // method. Explicit events are mainly used to synchronize view and
             // model and to trigger targets of the attribute: render.
-            var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+            let events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                     ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
             events = String(events || "");
             events = events.toLowerCase().split(/\s+/);
@@ -1086,7 +1086,7 @@ if (typeof Composite === "undefined") {
             
             // There must be a corresponding model class.
             // Elements are not supported.
-            var meta = Composite.mount.lookup(selector);
+            const meta = Composite.mount.lookup(selector);
             if (meta instanceof Object) {
                 
                 // The implicit assignment is based on the on-event-methods
@@ -1105,13 +1105,13 @@ if (typeof Composite === "undefined") {
                 // ID is required. Anonymous interaction elements do not have
                 // this alignment and no scope can be determined.
 
-                var model = meta.model;
+                let model = meta.model;
                 if (typeof meta.property !== "undefined")
                     if (typeof meta.property === "object")
                         model = meta.property;
                     else model = null;
 
-                for (var entry in model)
+                for (let entry in model)
                     if (typeof model[entry] === "function"
                             && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
                         entry = entry.substring(2).toLowerCase();
@@ -1119,7 +1119,7 @@ if (typeof Composite === "undefined") {
                             events.push(entry);
                     }
 
-                var prototype = model ? Object.getPrototypeOf(model) : null;
+                let prototype = model ? Object.getPrototypeOf(model) : null;
                 while (prototype) {
                     Object.getOwnPropertyNames(prototype).forEach(entry => {
                         if (typeof model[entry] === "function"
@@ -1138,26 +1138,26 @@ if (typeof Composite === "undefined") {
             events.forEach((event) => {
                 selector.addEventListener(event.toLowerCase(), (event) => {
 
-                    var target = event.currentTarget;
-                    var serial = target.ordinal();
-                    var object = Composite.render.meta[serial];
+                    const target = event.currentTarget;
+                    const serial = target.ordinal();
+                    const object = Composite.render.meta[serial];
 
-                    var action = event.type.toLowerCase();
+                    let action = event.type.toLowerCase();
                     if (!Composite.PATTERN_EVENT_FILTER.includes(action))
                         return;
                     action = Composite.PATTERN_EVENT_FILTER.indexOf(action);
                     action = Composite.PATTERN_EVENT_NAMES[action];
                     
-                    var result;
+                    let result;
                     
-                    var valid = true;
+                    let valid = true;
 
                     // There must be a corresponding model class.
                     // Elements are not supported.
-                    var meta = Composite.mount.lookup(target);
+                    const meta = Composite.mount.lookup(target);
                     if (meta instanceof Object) {
                         
-                        var value;
+                        let value;
                         if (target instanceof Element) {
                             if (target.tagName.match(/^input$/i)
                                     && target.type.match(/^radio|checkbox/i))
@@ -1184,8 +1184,8 @@ if (typeof Composite === "undefined") {
                             // property value. Other targets are ignored.
                             // The synchronization expects a positive validation,
                             // otherwise it will not be executed.
-                            var accept = (property) => {
-                                var type = typeof property;
+                            const accept = (property) => {
+                                const type = typeof property;
                                 if (typeof property === "undefined")
                                     return false;
                                 if (type === "object"
@@ -1227,7 +1227,7 @@ if (typeof Composite === "undefined") {
                             // elements do not have this alignment and no scope
                             // can be determined.
                             
-                            var model = meta.model;
+                            let model = meta.model;
                             if (typeof meta.property !== "undefined")
                                 if (meta.property 
                                         && typeof meta.property === "object")
@@ -1250,12 +1250,12 @@ if (typeof Composite === "undefined") {
                     // Rendering is performed in all cases.
                     // When an event occurs, all elements that correspond to the
                     // query selector rendering are updated. 
-                    var events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+                    let events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
                             ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
                     events = String(events || "");
                     events = events.toLowerCase().split(/\s+/);
                     if (events.includes(action.toLowerCase())) {
-                        var render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
+                        let render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
                                 ? object.attributes[Composite.ATTRIBUTE_RENDER] : "";
                         render = String(render || "");
                         if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
