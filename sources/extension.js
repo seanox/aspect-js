@@ -65,20 +65,20 @@ if (typeof Namespace === "undefined") {
      * @return the created meta object
      * @throws An error occurs in case of invalid data types or syntax 
      */
-    Namespace.locate = function(variants) {
+    Namespace.locate = function(...variants) {
         
         let scope;
         let namespace;
         
-        if (arguments.length == 0)
+        if (variants.length == 0)
             return {scope:window};
         
-        if (arguments.length > 1) {
-            scope = arguments[0];
-            namespace = arguments[1];
-        } else if (arguments.length > 0) {
+        if (variants.length > 1) {
+            scope = variants[0];
+            namespace = variants[1];
+        } else if (variants.length > 0) {
             scope = window;
-            namespace = arguments[0];
+            namespace = variants[0];
         } else throw new TypeError("Invalid namespace");
         
         if (typeof scope !== "object")
@@ -107,7 +107,7 @@ if (typeof Namespace === "undefined") {
      */
     Namespace.using = function(...variants) {
         
-        if (arguments.length == 0)
+        if (variants.length == 0)
             return window;
         
         const meta = Namespace.locate(...variants);
@@ -166,10 +166,10 @@ if (typeof Namespace === "undefined") {
      */
     Namespace.lookup = function(...variants) {
         
-        if (arguments.length == 0)
+        if (variants.length == 0)
             return window;        
         
-        const meta = Namespace.locate(...arguments);
+        const meta = Namespace.locate(...variants);
         if (typeof meta.namespace === "undefined")
             return meta.scope;         
         meta.namespace = meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
