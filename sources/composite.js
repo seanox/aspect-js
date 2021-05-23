@@ -530,20 +530,20 @@ if (typeof Composite === "undefined") {
      * @throws An error occurs in case of invalid data types or syntax 
      */     
     if (Object.locate === undefined)
-        Object.locate = function(variants) {
+        Object.locate = function(...variants) {
         
             let scope;
             let namespace;
             
-            if (arguments.length === 0)
+            if (variants.length === 0)
                 return {scope:window};
             
-            if (arguments.length > 1) {
-                scope = arguments[0];
-                namespace = arguments[1];
-            } else if (arguments.length > 0) {
+            if (variants.length > 1) {
+                scope = variants[0];
+                namespace = variants[1];
+            } else if (variants.length > 0) {
                 scope = window;
-                namespace = arguments[0];
+                namespace = variants[0];
             } else throw new TypeError("Invalid namespace");
             
             if (typeof scope !== "object")
@@ -1511,9 +1511,11 @@ if (typeof Composite === "undefined") {
      *     - namespace is not valid or is not supported
      *     - callback function is not implemented correctly
      */
-    Composite.customize = function(variants) {
+    Composite.customize = function(...variants) {
         
-        let scope = arguments.length > 0 ? arguments[0] : undefined;
+        let scope;
+        if (variants.length > 0)
+            scope = variants[0];
 
         // Statics are used for hardening the attributes in the markup.
         // Hardening makes it more difficult to manipulate the attributes. 
@@ -1525,11 +1527,11 @@ if (typeof Composite === "undefined") {
         // are excluded from this function because they are already actively
         // monitored by the MutationObserver.
         if (typeof scope === "string"
-                && arguments.length > 1 
-                && typeof arguments[1] === "string"
+                && variants.length > 1
+                && typeof variants[1] === "string"
                 && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
             const changes = [];
-            const statics = (arguments[1] || "").trim().split(/\s+/);
+            const statics = (variants[1] || "").trim().split(/\s+/);
             statics.forEach((entry) => {
                 entry = entry.toLowerCase();
                 if (!Composite.statics.has(entry)
@@ -1565,7 +1567,7 @@ if (typeof Composite === "undefined") {
         // If only one argument of type function is passed, the method is
         // registered as a acceptor.
         if (typeof scope === "function"
-                && arguments.length === 1) {
+                && variants.length === 1) {
             Composite.acceptors.add(scope);
             return;
         }
@@ -1576,7 +1578,7 @@ if (typeof Composite === "undefined") {
         // created so that the custom tags can be found faster.
         if (typeof scope !== "string")
             throw new TypeError("Invalid scope: " + typeof scope);
-        const callback = arguments.length > 1 ? arguments[1] : null;
+        const callback = variants.length > 1 ? variants[1] : null;
         if (typeof callback !== "function"
                 && callback !== null
                 && callback !== undefined)
