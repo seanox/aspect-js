@@ -1,10 +1,10 @@
     mapping:
     ----
     and &amp;&amp;        empty !         div /
-    eq  ==        ge    &gt;=        gt  &gt;
-    le  &lt;=        lt    &lt;         mod %
-    ne  !=        not   !         or  ||
-    eeq ===       nee   !==
+    eq  ==        eeq   ===       ge  &gt;=
+    gt  &gt;         le    &lt;=        lt  &lt;
+    mod %         ne    !=        nee !==
+    not !         or    ||
 
     normal use:
     ----
