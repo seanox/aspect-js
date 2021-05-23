@@ -24,12 +24,12 @@
  *     ----
  * General extension of the JavaScript API.
  * 
- * Extension 1.1.1 20210615
+ * Extension 1.2.0 20210623
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.1.1 20210615
+ * @version 1.2.0 20210623
  */
 if (typeof Namespace === "undefined") {
 
@@ -67,8 +67,8 @@ if (typeof Namespace === "undefined") {
      */
     Namespace.locate = function(variants) {
         
-        var scope;
-        var namespace;
+        let scope;
+        let namespace;
         
         if (arguments.length == 0)
             return {scope:window};
@@ -110,7 +110,7 @@ if (typeof Namespace === "undefined") {
         if (arguments.length == 0)
             return window;
         
-        var meta = Namespace.locate(...variants);
+        const meta = Namespace.locate(...variants);
         if (typeof meta.namespace === "undefined")
             return meta.scope;         
         meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((entry, index, array) => {
@@ -125,6 +125,30 @@ if (typeof Namespace === "undefined") {
             meta.scope = meta.scope[entry];
         });
         return meta.scope; 
+    };
+
+    /**
+     * Creates a namespace to pass string with a initial value.
+     * The method has the following various signatures:
+     *     Namespace.create(namespace);
+     *     Namespace.create(namespace, value);
+     *     Namespace.create(object, namespace, value);
+     * @param  object
+     * @param  namespace
+     * @param  value
+     * @return the created or already existing object(-level)
+     * @throws An error occurs in case of invalid data types or syntax
+     */
+    Namespace.create = function(...variants) {
+        if (variants.length < 1)
+            throw new Error("Invalid namespace for creation: Namespace is missing");
+        if (variants.length < 2)
+            return Namespace.using(...variants);
+        const value = variants.pop();
+        const parent = variants.pop();
+        const space = Namespace.using(...variants);
+        space[parent] = value;
+        return space[parent];
     };
 
     /** 
@@ -145,14 +169,14 @@ if (typeof Namespace === "undefined") {
         if (arguments.length == 0)
             return window;        
         
-        var meta = Namespace.locate(...arguments);
+        const meta = Namespace.locate(...arguments);
         if (typeof meta.namespace === "undefined")
             return meta.scope;         
         meta.namespace = meta.namespace.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
         if (!meta.namespace
                 || meta.namespace.length <= 0)
             return null;
-        for (var index = 0; meta.scope && index < meta.namespace.length; index++) {
+        for (let index = 0; meta.scope && index < meta.namespace.length; index++) {
             if (meta.namespace[index] in meta.scope
                     && (meta.scope[meta.namespace[index]] instanceof Object
                             || meta.scope[meta.namespace[index]] === null))
@@ -211,10 +235,10 @@ if (Math.uniqueId === undefined) {
     Math.uniqueId = function(size) {
         size = size || 16;
         if (size < 0)
-            sitze = 16;
-        var unique = "";
+            size = 16;
+        let unique = "";
         for (var loop = 0; loop < size; loop++) {
-            var random = Math.floor(Math.random() * Math.floor(26));
+            const random = Math.floor(Math.random() * Math.floor(26));
             if ((Math.floor(Math.random() * Math.floor(26))) % 2 == 0)
                 unique += String(random % 10);
             else unique += String.fromCharCode(65 +random); 
@@ -235,7 +259,7 @@ if (Math.uniqueSerialId === undefined) {
         size = size || 16;
         if (size < 0)
             size = 16;
-        var serial = "";
+        let serial = "";
         serial = (new Date().getTime() -946684800000).toString(36);
         serial = (serial.length.toString(36) + serial).toUpperCase();
         serial = Math.uniqueId() + serial;
@@ -291,10 +315,10 @@ if (String.prototype.uncapitalize === undefined) {
  */      
 if (String.prototype.encodeHex === undefined) {
     String.prototype.encodeHex = function() {
-        var text = this;
-        var result = "";
-        for (var loop = 0; loop < text.length; loop++) {
-            var digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
+        let text = this;
+        let result = "";
+        for (let loop = 0; loop < text.length; loop++) {
+            let digit = Number(text.charCodeAt(loop)).toString(16).toUpperCase();
             while (digit.length < 2)
                 digit = "0" + digit;            
             result += digit;
@@ -309,11 +333,11 @@ if (String.prototype.encodeHex === undefined) {
  */     
 if (String.prototype.decodeHex === undefined) {
     String.prototype.decodeHex = function() {
-        var text = this;
+        let text = this;
         if (text.match(/^0x/))
             text = text.substring(2);
-        var result = "";
-        for (var loop = 0; loop < text.length; loop += 2)
+        let result = "";
+        for (let loop = 0; loop < text.length; loop += 2)
             result += String.fromCharCode(parseInt(text.substr(loop, 2), 16));
         return result;
     };
@@ -357,7 +381,7 @@ if (String.prototype.decodeBase64 === undefined) {
  */ 
 if (String.prototype.encodeHtml === undefined) {
     String.prototype.encodeHtml = function() {
-        var element = document.createElement("div");
+        const element = document.createElement("div");
         element.textContent = this;
         return element.innerHTML;
     };
@@ -374,7 +398,7 @@ if (String.prototype.hashCode === undefined) {
         if (this.hash != 0)
             return this.hash;
         for (var loop = 0, hops = 0; loop < this.length; loop++) {
-            var temp = 31 *this.hash +this.charCodeAt(loop);
+            const temp = 31 *this.hash +this.charCodeAt(loop);
             if (!Number.isSafeInteger(temp)) {
                 hops++;
                 this.hash = Number.MAX_SAFE_INTEGER -this.hash +this.charCodeAt(loop);
@@ -395,7 +419,7 @@ if (String.prototype.hashCode === undefined) {
  */ 
 if (String.prototype.unescape === undefined) {
     String.prototype.unescape = function() {
-        var text = this;
+        let text = this;
         text = text.replace(/\r/g, "\\r");
         text = text.replace(/\n/g, "\\n");
         text = text.replace(/^(["'])/, "\$1");
