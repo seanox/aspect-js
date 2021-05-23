@@ -83,12 +83,12 @@
  * assertion was not true, a error is thrown -- see as an example the
  * implementation here. 
  * 
- * Test 1.1.2 20210522
+ * Test 1.1.2 20210523
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.1.2 20210522
+ * @version 1.1.2 20210523
  */
 if (typeof Test === "undefined") {
 
