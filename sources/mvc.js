@@ -195,24 +195,23 @@ if (typeof Path === "undefined") {
      * @throws An error occurs in the following cases:
      *     - if the root and/or the path is invalid
      */
-    Path.normalize = function(variants) {
+    Path.normalize = function(...variants) {
         
-        if (arguments.length <= 0)
+        if (variants.length <= 0)
             return null;
-        if (arguments.length > 0
-                && arguments[0] === null)
+        if (variants.length > 0
+                && !Object.usable(variants[0]))
             return null;
-        if (arguments.length > 1
-                && arguments[1] === null)
+        if (variants.length > 1
+                && !Object.usable(variants[1]))
             return null;        
 
-        if (arguments.length > 1
-                && arguments[0] !== null
-                && typeof arguments[0] !== "string")
-            throw new TypeError("Invalid root: " + typeof arguments[0]);
+        if (variants.length > 1
+                && typeof variants[0] !== "string")
+            throw new TypeError("Invalid root: " + typeof variants[0]);
         let root = "#";
-        if (arguments.length > 1) {
-            root = arguments[0];
+        if (variants.length > 1) {
+            root = variants[0];
             try {root = Path.normalize(root);
             } catch (exception) {
                 root = (root || "").trim();
@@ -220,22 +219,20 @@ if (typeof Path === "undefined") {
             }        
         }
         
-        if (arguments.length > 1
-                && arguments[1] !== null
-                && typeof arguments[1] !== "string")
-            throw new TypeError("Invalid path: " + typeof arguments[1]);
-        if (arguments.length > 0
-                && arguments[0] !== null
-                && typeof arguments[0] !== "string")
-            throw new TypeError("Invalid path: " + typeof arguments[0]);
+        if (variants.length > 1
+                && typeof variants[1] !== "string")
+            throw new TypeError("Invalid path: " + typeof variants[1]);
+        if (variants.length > 0
+                && typeof variants[0] !== "string")
+            throw new TypeError("Invalid path: " + typeof variants[0]);
         let path = "";
-        if (arguments.length === 1)
-            path = arguments[0];
-        if (arguments.length === 1
+        if (variants.length === 1)
+            path = variants[0];
+        if (variants.length === 1
                 && path.match(Path.PATTERN_URL))
             path = path.replace(Path.PATTERN_URL, "$1");
-        else if (arguments.length > 1)
-            path = arguments[1];
+        else if (variants.length > 1)
+            path = variants[1];
         path = (path || "").trim();
         
         if (!path.match(Path.PATTERN_PATH))
