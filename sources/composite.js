@@ -578,7 +578,7 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.using === undefined)
         Object.using = function(...variants) {
-            var meta = Object.locate(...variants);
+            const meta = Object.locate(...variants);
             if (typeof meta.namespace === "undefined")
                 return meta.scope; 
             return Namespace.using.call(null, meta.scope, meta.namespace);
@@ -602,7 +602,7 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.lookup === undefined)
         Object.lookup = function(...variants) {
-            var meta = Object.locate(...variants);
+            const meta = Object.locate(...variants);
             if (typeof meta.namespace === "undefined")
                 return meta.scope; 
             return Namespace.lookup.call(null, meta.scope, meta.namespace);       
@@ -647,7 +647,7 @@ if (typeof Composite === "undefined") {
     XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(...variants) {
 
-        var callback = (event = null) => {
+        const callback = (event = null) => {
             if (!event)
                 return;
             if (event.type === "loadstart")
@@ -724,7 +724,7 @@ if (typeof Composite === "undefined") {
         if (Composite.listeners.size <= 0
                 || !event)
             return;
-        var listeners = Composite.listeners.get(event.toLowerCase());
+        const listeners = Composite.listeners.get(event.toLowerCase());
         if (!Array.isArray(listeners))
             return;
         variants = [event, ...variants];
