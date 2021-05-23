@@ -70,7 +70,7 @@ if (typeof Namespace === "undefined") {
         let scope;
         let namespace;
         
-        if (variants.length == 0)
+        if (variants.length <= 0)
             return {scope:window};
         
         if (variants.length > 1) {
@@ -87,7 +87,7 @@ if (typeof Namespace === "undefined") {
             throw new TypeError("Invalid namespace: " + typeof namespace);
 
         if (!namespace.match(Namespace.PATTERN_NAMESPACE)
-                || (scope == window && namespace.match(/^\d/)))
+                || (scope === window && namespace.match(/^\d/)))
             throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
         
         return {scope, namespace};
@@ -107,7 +107,7 @@ if (typeof Namespace === "undefined") {
      */
     Namespace.using = function(...variants) {
         
-        if (variants.length == 0)
+        if (variants.length <= 0)
             return window;
         
         const meta = Namespace.locate(...variants);
@@ -166,7 +166,7 @@ if (typeof Namespace === "undefined") {
      */
     Namespace.lookup = function(...variants) {
         
-        if (variants.length == 0)
+        if (variants.length <= 0)
             return window;        
         
         const meta = Namespace.locate(...variants);
@@ -198,7 +198,7 @@ if (typeof Namespace === "undefined") {
      * @throws An error occurs in case of invalid data types or syntax
      */
     Namespace.exists = function(...variants) {
-        return Namespace.lookup(...variants) != null;     
+        return Object.usable(Namespace.lookup(...variants));
     };
 }
 
@@ -220,7 +220,7 @@ Element.prototype.appendChild = function(node, exclusive) {
             || (Symbol && Symbol.iterator
                     && node && typeof node[Symbol.iterator])) {
         node = Array.from(node);
-        for (var loop = 0; loop < node.length; loop++)
+        for (let loop = 0; loop < node.length; loop++)
             this.appendChild$origin(node[loop]);
     } else this.appendChild$origin(node);
 };
@@ -237,9 +237,9 @@ if (Math.uniqueId === undefined) {
         if (size < 0)
             size = 16;
         let unique = "";
-        for (var loop = 0; loop < size; loop++) {
+        for (let loop = 0; loop < size; loop++) {
             const random = Math.floor(Math.random() * Math.floor(26));
-            if ((Math.floor(Math.random() * Math.floor(26))) % 2 == 0)
+            if ((Math.floor(Math.random() *Math.floor(26))) % 2 === 0)
                 unique += String(random % 10);
             else unique += String.fromCharCode(65 +random); 
         }
@@ -278,8 +278,7 @@ if (Math.uniqueSerialId === undefined) {
  */
 if (RegExp.quote === undefined) {
     RegExp.quote = function(text) {
-        if (text == undefined
-                || text == null)
+        if (!Object.usable(text))
             return null;
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
@@ -393,11 +392,12 @@ if (String.prototype.encodeHtml === undefined) {
  */ 
 if (String.prototype.hashCode === undefined) {
     String.prototype.hashCode = function() {
-        if (this.hash == undefined)
+        if (this.hash === undefined)
             this.hash = 0;
-        if (this.hash != 0)
+        if (this.hash !== 0)
             return this.hash;
-        for (var loop = 0, hops = 0; loop < this.length; loop++) {
+        let hops = 0;
+        for (let loop = 0; loop < this.length; loop++) {
             const temp = 31 *this.hash +this.charCodeAt(loop);
             if (!Number.isSafeInteger(temp)) {
                 hops++;

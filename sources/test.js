@@ -466,7 +466,7 @@ if (typeof Test === "undefined") {
             // Test.worker.queue
             //     Queue of currently running test tasks
             Test.worker.queue = Test.worker.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
-            if (Test.worker.queue.stack.length === 0) {
+            if (Test.worker.queue.stack.length <= 0) {
                 Test.worker.queue.stack = Array.from(Test.stack);
                 Test.worker.queue.size = Test.worker.queue.stack.length;
                 Test.worker.queue.timing = new Date().getTime();
@@ -747,7 +747,7 @@ if (typeof Test === "undefined") {
                     });
                     
                     let message = "expected {1} but was {2}";
-                    if (assert.message != null) {
+                    if (assert.message !== null) {
                         assert.message = assert.message.trim();
                         if (assert.message)
                             message = assert.message;
@@ -1076,7 +1076,7 @@ if (typeof Test === "undefined") {
          */      
         if (Object.prototype.toPlainString === undefined)
             Object.prototype.toPlainString = function() {
-                if (this != null
+                if (this !== null
                         && typeof this[Symbol.iterator] === 'function')
                     return JSON.stringify([...this]);
                 return JSON.stringify(this);
