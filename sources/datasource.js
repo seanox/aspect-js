@@ -40,12 +40,12 @@
  * The data is queried with XPath, the result can be concatenated and
  * aggregated and the result can be transformed with XSLT. 
  * 
- * DataSource 1.3.2 20210622
+ * DataSource 1.3.2 20210623
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.2 20210622
+ * @version 1.3.2 20210623
  */
 if (typeof DataSource === "undefined") {
     
@@ -347,25 +347,25 @@ if (typeof DataSource === "undefined") {
      * @return the created XMLDocument, otherwise null
      * @throws Error in the case of invalid arguments
      */
-    DataSource.collect = function(locators) {
+    DataSource.collect = function(...variants) {
         
-        if (arguments.length <= 0)
+        if (variants.length <= 0)
             return null;
 
         let collection = [];
 
         let collector = "collection";
-        if (arguments.length === 2
-                && typeof arguments[0] === "string"
-                && Array.isArray(arguments[1])) {
-            if (!arguments[0].match(DataSource.PATTERN_WORD))
+        if (variants.length === 2
+                && typeof variants[0] === "string"
+                && Array.isArray(variants[1])) {
+            if (!variants[0].match(DataSource.PATTERN_WORD))
                 throw new TypeError("Invalid collector");
-            collector = arguments[0];
-            collection = Array.from(arguments[1]);
-        } else if (arguments.length === 1
-                && Array.isArray(arguments[0])) {
-            collection = collection.concat(arguments[0]);
-        } else collection = Array.from(arguments);
+            collector = variants[0];
+            collection = Array.from(variants[1]);
+        } else if (variants.length === 1
+                && Array.isArray(variants[0])) {
+            collection = collection.concat(variants[0]);
+        } else collection = Array.from(variants);
         
         DataSource.cache = DataSource.cache || {};
         let hash = collector.hashCode() + ":" + collection.join().hashCode();

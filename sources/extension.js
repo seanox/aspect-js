@@ -259,7 +259,7 @@ if (Math.uniqueSerialId === undefined) {
         size = size || 16;
         if (size < 0)
             size = 16;
-        let serial = "";
+        let serial;
         serial = (new Date().getTime() -946684800000).toString(36);
         serial = (serial.length.toString(36) + serial).toUpperCase();
         serial = Math.uniqueId() + serial;
