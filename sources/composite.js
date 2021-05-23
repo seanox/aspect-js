@@ -2697,7 +2697,7 @@ if (typeof Composite === "undefined") {
                 || composite instanceof Element))
             throw new TypeError("Invalid composite: " + typeof composite);
         
-        var object = null;
+        let object;
         if (composite instanceof Element) {
             if (!composite.hasAttribute(Composite.ATTRIBUTE_ID))
                 throw new Error("Unknown composite without id");
@@ -2709,7 +2709,7 @@ if (typeof Composite === "undefined") {
         // For module/composites only resources of the current domain are used,
         // therefore only the URI and not the URL is used as key in the cache.
         Composite.render.cache = Composite.render.cache || {};
-        var context = Composite.MODULES + "/" + (composite instanceof Element ? composite.id : composite);        
+        const context = Composite.MODULES + "/" + (composite instanceof Element ? composite.id : composite);
         
         // If the module has already been loaded, it is only necessary to check
         // whether the markup must be inserted. CSS should already exist in the
@@ -2730,8 +2730,8 @@ if (typeof Composite === "undefined") {
 
         // Internal method for loading a composite resource.
         // Supports CSS, JS and HTML.
-        var loading = (resource) => {
-            var request = new XMLHttpRequest();
+        const loading = (resource) => {
+            const request = new XMLHttpRequest();
             request.overrideMimeType("text/plain"); 
 
             // At first, HEAD is used to check if the resource exists.
@@ -2769,17 +2769,17 @@ if (typeof Composite === "undefined") {
             // URL is added to the item. Inserting then takes over the import
             // implementation, which then also accesses the render cache.
 
-            var content = request.responseText.trim();
+            const content = request.responseText.trim();
             if (!content)
                 return;
-            var url = document.createElement("a");
+            const url = document.createElement("a");
             url.href = request.responseURL;
             Composite.render.cache[url.pathname] = content;
             if (request.responseURL.match(/\.css$/)) {
-                var head = document.querySelector("html head");
+                const head = document.querySelector("html head");
                 if (!head)
                     throw new Error("No head element found");
-                var style = document.createElement("style");
+                const style = document.createElement("style");
                 style.setAttribute("type", "text/css");
                 style.textContent = content;
                 head.appendChild(style);
