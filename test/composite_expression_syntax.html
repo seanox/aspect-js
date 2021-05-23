@@ -42,6 +42,7 @@
     eq  ==        ge    >=        gt  >
     le  <=        lt    <         mod %
     ne  !=        not   !         or  ||
+    eeq ===       nee   !==
     
     normal use:
     ----
@@ -49,6 +50,46 @@
     {{true eq true}} {{true == true}}
     {{1 le 2}} {{1 <= 2}}
     {{1 ne 2}} {{1 != 2}}
+    
+    {{1 eq true}} {{1 == true}}
+    {{2 eq true}} {{2 == true}}
+    {{0 eq true}} {{0 == true}}
+    {{-1 eq true}} {{-1 == true}}
+
+    {{1 eq false}} {{1 == false}}
+    {{2 eq false}} {{2 == false}}
+    {{0 eq false}} {{0 == false}}
+    {{-1 eq false}} {{-1 == false}}
+    {{true eq true}} {{false == false}}
+    {{true eq false}} {{true == false}}
+
+    {{1 eeq false}} {{1 === false}}
+    {{2 eeq false}} {{2 === false}}
+    {{0 eeq false}} {{0 === false}}
+    {{-1 eeq false}} {{-1 === false}}
+    {{true eeq true}} {{false === false}}
+    {{true eeq false}} {{true === false}}
+
+    {{1 eq false}} {{1 == false}}
+    {{2 eq false}} {{2 == false}}
+    {{0 eq false}} {{0 == false}}
+    {{-1 eq false}} {{-1 == false}}
+    {{true eq true}} {{false == false}}
+    {{true eq false}} {{true == false}}
+
+    {{1 ne false}} {{1 != false}}
+    {{2 ne false}} {{2 != false}}
+    {{0 ne false}} {{0 != false}}
+    {{-1 ne false}} {{-1 != false}}
+    {{true ne true}} {{false != false}}
+    {{true ne false}} {{true != false}}
+
+    {{1 nee false}} {{1 !== false}}
+    {{2 nee false}} {{2 !== false}}
+    {{0 nee false}} {{0 !== false}}
+    {{-1 nee false}} {{-1 !== false}}
+    {{true nee true}} {{false !== false}}
+    {{true nee false}} {{true !== false}}
     
     {{empty ''}} {{!''}}
     {{2 ge 1}} {{2 >= 1}} 
