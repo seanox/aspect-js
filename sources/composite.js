@@ -2099,11 +2099,11 @@ if (typeof Composite === "undefined") {
                         var serial = node.ordinal();
                         var object = {serial, element:node, attributes:{}, value:null,
                             render() {
+                                let word = "";
                                 if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
                                     const name = String(this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
                                     const value = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
                                     window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
-                                    word = "";
                                 } else {
                                     word = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "");
                                     word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
@@ -2542,7 +2542,7 @@ if (typeof Composite === "undefined") {
                     try {
                         const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
                         selector.innerHTML = "";
-                        iterate = Expression.eval(context, object.iterate.expression);
+                        let iterate = Expression.eval(context, object.iterate.expression);
                         if (iterate) {
                             if (iterate instanceof XPathResult) {
                                 const meta = {entry:null, array:[], iterate:iterate};
