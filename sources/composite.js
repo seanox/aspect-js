@@ -59,7 +59,7 @@
  * The model (model component / component) is a static JavaScript object in any
  * namespace and provides the logic for the user interface (UI component) and
  * the transition from user interface to business logic and/or the backend.
- * The linking and/or binding of markup and JavaSchript model is done by the
+ * The linking and/or binding of markup and JavaScript model is done by the
  * Composite-API. For this purpose, an HTML element must have a valid and
  * unique ID. The ID must meet the requirements of the namespace.
  *
@@ -1628,7 +1628,7 @@ if (typeof Composite === "undefined") {
      * Dynamic contents and parameters are formulated as expressions, but only
      * the dynamic contents are output. Parameters are interpreted, but do
      * not generate any output. During initial processing, a text node is
-     * analyzed and, if necessary, splitted into static content, dynamic
+     * analyzed and, if necessary, splited into static content, dynamic
      * content and parameters. To do this, the original text node is replaced
      * by new separate text nodes:
      *     e.g. "text {{expr}} + {{var:expr}}"
@@ -2028,7 +2028,7 @@ if (typeof Composite === "undefined") {
             // parameters. Dynamic contents and parameters are formulated as
             // expressions, but only the dynamic contents are output. Parameters
             // are interpreted, but do not generate any output. During initial
-            // processing, a text node is analyzed and, if necessary, splitted
+            // processing, a text node is analyzed and, if necessary, splited
             // into static content, dynamic content and parameters. To do this,
             // the original text node is replaced by new separate text nodes:
             //     e.g. "text {{expr}} + {{var:expr}}" ->  ["text ", {{expr}}, " + ", {{var:expr}}]
