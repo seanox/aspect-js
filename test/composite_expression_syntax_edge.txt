@@ -197,3 +197,5 @@
     R6: abc"d"ef
     R7: abc'd"ef
     R8: abc'd"ef
+
+    S1: <span>6</span>

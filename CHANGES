@@ -3,6 +3,8 @@
       If numbers are used as value could cause errors during rendering.
   BF: Review: Correction/optimization JavaScript (no functional change)
   BF: MVC SiteMap: Correction of the method customize when using variable paths
+  BF: Composite Expression Language: Line breaks in the expressions are supported
+      Multiline expressions are now possible.
   CR: Composite Expression Language: Added keywords eeq (===), nee (!==)
   CR: Extension Namespace: Added method create
       Creates a namespace to pass string with a initial value.

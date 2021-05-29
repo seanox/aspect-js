@@ -207,7 +207,7 @@ if (typeof Composite === "undefined") {
          * Pattern to detect if a string contains an expression.
          * Escaping characters via slash is supported.
          */
-        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{.*?\}\}/g;}, 
+        get PATTERN_EXPRESSION_CONTAINS() {return /\{\{(.|\r|\n)*?\}\}/g;},
 
         /**
          * Patterns for condition expressions.
