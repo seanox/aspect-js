@@ -58,7 +58,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2020 Seanox Software Solutions
+Copyright (C) 2021 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -108,35 +108,13 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.3.1 20200202 (summary of the current version)  
-BF: Composite Expression Parse: Correction in the detection/processing of escape sequences  
-BF: DataSource Collect: Correction of the cache usage with a collector  
-BF: DataSource Fetch: Correction of the pattern of schema switching  
-BF: DataSource Fetch: Optimization of the language determination  
-BF: MVC SiteMap: Optimization to focus from the current target after changing the path  
-BF: Modules: Optimization of JavaScript processing to support import and export  
-BF: Composite Render: Optimization of JavaScript processing to support import and export  
-BF: Composite Events: Correction of the callback of HTTP events  
-BF: Composite Mount: Correction to find event methods also in prototypes  
-BF: Composite Modules: Correction of the script processing of the #import meta-directive  
-BF: Composite MutationObserver: Correction for recognition of expressions in text nodes  
-CR: MVC Path: Simplification of the syntax restrictions  
-CR: DataSource Locator: Simplification of the syntax restrictions  
-CR: Composite Render Condition: Added console error output for faulty expression  
-CR: Composite Render Condition: Added console error output for faulty expression  
-CR: Composite Render: Optimization in the detection and validation of expressions  
-CR: Composite Render: Simplification of the syntax restrictions for variable expressions  
-CR: Composite Render: Simplification of the syntax restrictions for composite IDs  
-CR: Composite Render: Simplification of the syntax restrictions for element IDs  
-CR: Composite Render: Simplification of the syntax restrictions for custom tags  
-CR: Composite Modules: Change so that the common composite is now loaded before the first rendering  
-CR: Composite Modules: Added the meta directive #import to import additional composites/modules  
-CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...  
-CR: DataSource Fetch: Omission of the parameter raw  
-CR: DataSource Fetch: Added optional parameters for the transformation  
-CR: DataSource Transform: Omission of the parameter raw  
-CR: DataSource Transform: Added optional parameters for the transformation  
-CR: DataSource Transform: Change of return value from NodeList to DocumentFragment  
+## 1.4.0 2021xxxx (summary of the next version)  
+BF: Composite: Correction in the use of attributes  
+BF: Review: Correction/optimization JavaScript (no functional change)  
+BF: MVC SiteMap: Correction of the method customize when using variable paths  
+BF: Composite Expression Language: Line breaks in the expressions are supported  
+CR: Composite Expression Language: Added keywords eeq (===), nee (!==)  
+CR: Extension Namespace: Added method create  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
