@@ -59,6 +59,7 @@ test environment and much more.
   * [iterate](#iterate)
   * [id](#id)
   * [composite](#composite)
+  * [strict](#strict)
   * [events](#events)
   * [validate](#validate)
   * [message](#message)
@@ -393,6 +394,17 @@ Details about using composites / modular components are described in
 [Learn more](markup.md#composite)
 
 
+### strict
+
+The attribute is used in combination with the attribute [composite](#composite)
+and specifies that when loading the resources (CSS, JS, HTML) for a component,
+the file name is used in its original notation. The default behavior without
+the [strict](#strict) attribute uses the composite id with lower case at the
+beginning.
+
+[Learn more](markup.md#strict)
+
+
 ### events
 
 This declaration binds one or more events
@@ -695,13 +707,11 @@ The default directory `./modules` can be changed with the property
 `Composite.MODULES`.
 
 ```
-+- modules
-|  |
-|  +- example.css
-|  +- example.js
-|  +- example.html
-|
-+- index.html
++ modules
+  - example.css
+  - example.js
+  - example.html
+- index.html
 ```
 
 The loading of resources and the object/model binding are partial if the

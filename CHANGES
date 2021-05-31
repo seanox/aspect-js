@@ -9,6 +9,13 @@
   CR: Extension Namespace: Added method create
       Creates a namespace to pass string with a initial value.
       It is a small extension to the method using.
+  CR: Composite: Added attribute strict for loading of modules/composites
+      New default behavior without attribute:
+      The names of the resources to be loaded always start with lower case.
+      With the attribute strict, the actual spelling of the composite ID is used.
+          Example:
+      <div id="SmallExample" composite> loads smallExample.css/smallExample.js/smallExample.html
+      <div id="SmallExample" composite strict> loads SmallExample.css/SmallExample.js/SmallExample.html
 
 1.3.1 20200202
   BF: DataSource: Correction for loading and caching

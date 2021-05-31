@@ -83,21 +83,24 @@ HTML-Element mit einer eindeutigen Id.
 
 Das innere Markup, CSS und JavaScript von Composites lassen sich auslagern.  
 Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
-`Composite.MODULES` geändert werden.  
-Der Dateiname der ausgelagerten Ressourcen leitet sich von der ID des als
-Composite gekennzeichneten HTML-Elements ab. Welche Ressourcen bzw. Teile der
-Komponente ausgelagert werden kann für jede Komponente individuell entschieden
-werden. 
+`Composite.MODULES` geändert werden. Der Dateiname der ausgelagerten Ressourcen
+leitet sich von der ID des als Composite gekennzeichneten HTML-Elements ab.
+Welche Ressourcen bzw. Teile der Komponente ausgelagert werden, kann für jede
+Komponente individuell entschieden werden. 
 
 ```
-+- modules
-|  |
-|  +- example.css
-|  +- example.js
-|  +- example.html
-|
-+- index.html
++ modules
+  - example.css
+  - example.js
+  - example.html
+- index.html
 ```
+
+Beim Standardverhalten wird der Name der Ressourcen von der Composite-ID
+abgeleitet und nutzt diese dann als Kleinschreibung am Anfang. Dieses Verhalten
+kann mit dem Attribute [strict](markup.md#strict) geändert werden, so dass die
+Composite-ID unverändert für die Ressourcen verwendet werden.
+
 
 
 ## Laden
@@ -159,13 +162,11 @@ bestehen kann. Beide Dateien sind zur Ablage initialer und anwendungsweiter
 Logik bzw. Styles gedacht.
 
 ```
-+- modules
-|  |
-|  +- common.css
-|  +- common.js
-|  +- ...
-|
-+- index.html
++ modules
+  - common.css
+  - common.js
+  - ...
+- index.html
 ```
 
 

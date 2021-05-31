@@ -25,6 +25,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [notification](#notification)
   * [output](#output)
   * [release](#release)
+  * [strict](#strict)  
   * [render](#render)  
   * [validate](#validate)  
 * [Expression Language](#expression-language)
@@ -567,6 +568,39 @@ Events: MouseUp KeyUp
 Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen
 (`events`) und Zielen (`render`), die jeweils sich hochzählende Textausgaben
 darstellen und auf entsprechende Ereignisse reagieren.
+
+
+### strict
+
+Das Attribut wird in Kombination mit dem Attribut [composite](#composite)
+verwendent und legt fest, dass beim Laden der Ressourcen (CSS, JS, HTML) zu
+einer Komponente der Dateiname in der originalen Schreibweise verwendet wird.
+Das Standardverhalten ohne das Attribut [strict](#strict) verwendet die
+Composite-Id mit einem Kleinbuchstaben am Anfang.
+
+Bespiel zum Standardverhalten:
+```html
+<div id="SmallExample" composite>
+```
+```
++ modules
+  - smallExample.css
+  - smallExample.js
+  - smallExample.html
+- index.html
+```
+
+Bespiel mit dem Attribut [strict](#strict):
+```html
+<div id="SmallExample" composite strict>
+```
+```
++ modules
+  - SmallExample.css
+  - SmallExample.js
+  - SmallExample.html
+- index.html
+```
 
 
 ### validate

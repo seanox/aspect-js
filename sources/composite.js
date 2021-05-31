@@ -116,12 +116,12 @@
  * Thus virtual paths, object structure in JavaScript (namespace) and the
  * nesting of the DOM must match.
  *
- * Composite 1.4.0 20210623
+ * Composite 1.4.0 20210531
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.0 20210623
+ * @version 1.4.0 20210531
  */
 if (typeof Composite === "undefined") {
     
@@ -173,7 +173,10 @@ if (typeof Composite === "undefined") {
         
         /** Constant for attribute release */
         get ATTRIBUTE_RELEASE() {return "release";},
-        
+
+        /** Constant for attribute strict */
+        get ATTRIBUTE_STRICT() {return "strict";},
+
         /** Constant for attribute text */
         get ATTRIBUTE_TEXT() {return "text";},
 
@@ -192,7 +195,7 @@ if (typeof Composite === "undefined") {
          * that is cached in the meta object. Other attributes are only cached
          * if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|validate)$/i;},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|strict|validate)$/i;},
         
         /**
          * Pattern for all static attributes.
@@ -2712,7 +2715,11 @@ if (typeof Composite === "undefined") {
         // For module/composites only resources of the current domain are used,
         // therefore only the URI and not the URL is used as key in the cache.
         Composite.render.cache = Composite.render.cache || {};
-        const context = Composite.MODULES + "/" + (composite instanceof Element ? composite.id : composite);
+
+        let resource = composite instanceof Element ? composite.id : composite;
+        if (!object || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
+            resource = resource.uncapitalize();
+        const context = Composite.MODULES + "/" + resource;
         
         // If the module has already been loaded, it is only necessary to check
         // whether the markup must be inserted. CSS should already exist in the
@@ -2797,7 +2804,7 @@ if (typeof Composite === "undefined") {
                     composite.innerHTML = content;
             }
         }
-        
+
         // The sequence of loading is strictly defined.
         //     sequence: CSS, JS, HTML
         loading(context + ".css");

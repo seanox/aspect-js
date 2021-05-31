@@ -60,6 +60,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   * [iterate](#iterate)
   * [id](#id)
   * [composite](#composite)
+  * [strict](#strict)
   * [events](#events)
   * [validate](#validate)
   * [message](#message)
@@ -403,6 +404,17 @@ beschrieben.
 [Mehr erfahren](markup.md#composite)
 
 
+### strict
+
+Das Attribut wird in Kombination mit dem Attribut [composite](#composite)
+verwendent und legt fest, dass beim Laden der Ressourcen (CSS, JS, HTML) zu
+einer Komponente der Dateiname in der originalen Schreibweise verwendet wird.
+Das Standardverhalten ohne das Attribut [strict](#strict) verwendet die
+Composite-Id mit einem Kleinbuchstaben am Anfang.
+
+[Mehr erfahren](markup.md#strict)
+
+
 ### events
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
@@ -710,13 +722,11 @@ Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
 `Composite.MODULES` geändert werden.
 
 ```
-+- modules
-|  |
-|  +- example.css
-|  +- example.js
-|  +- example.html
-|
-+- index.html
++ modules
+  - example.css
+  - example.js
+  - example.html
+- index.html
 ```
 
 Das Laden der Ressourcen und die Object/Model-Binding erfolgt partiell, wenn die

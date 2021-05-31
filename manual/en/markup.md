@@ -559,6 +559,39 @@ targets (`render`), each of which represents an incremental text output and
 reacts to corresponding events.
 
 
+### strict
+
+The attribute is used in combination with the attribute [composite](#composite)
+and specifies that when loading the resources (CSS, JS, HTML) for a component,
+the file name is used in its original notation. The default behavior without
+the [strict](#strict) attribute uses the composite id with lower case at the
+beginning.
+
+Example of standard behavior:
+```html
+<div id="SmallExample" composite>
+```
+```
++ modules
+  - smallExample.css
+  - smallExample.js
+  - smallExample.html
+- index.html
+```
+
+Example with the attribute [strict](#strict):
+```html
+<div id="SmallExample" composite strict>
+```
+```
++ modules
+  - SmallExample.css
+  - SmallExample.js
+  - SmallExample.html
+- index.html
+```
+
+
 ### validate
 
 The attribute `validate` requires the combination with the attribute `events`.

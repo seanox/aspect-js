@@ -80,20 +80,22 @@ that is marked as composite.
 
 The inner markup, CSS and JavaScript of composites can be outsourced.  
 The default directory `./modules` can be changed with the property
-`Composite.MODULES`.  
-The file name of the outsourced resources is derived from the ID of the as
-composite marked HTML element. Which resources or parts of the component are
-swapped out can be decided individually for each component. 
+`Composite.MODULES`. The file name of the outsourced resources is derived from
+the ID of the as composite marked HTML element. Which resources or parts of the
+component are swapped out can be decided individually for each component. 
 
 ```
-+- modules
-|  |
-|  +- example.css
-|  +- example.js
-|  +- example.html
-|
-+- index.html
++ modules
+  - example.css
+  - example.js
+  - example.html
+- index.html
 ```
+
+The default behavior derives the name of the resources from the Composite ID
+and then uses it as the lower case at the beginning. This behavior can be
+changed with the attribute [strict](markup.md#strict) so that the Composite ID
+is used unchanged for the resources.
 
 
 ## Loading
@@ -154,13 +156,11 @@ consist of the JavaScript file `common.js` and/or the CSS stylesheet
 logic or styles.
 
 ```
-+- modules
-|  |
-|  +- common.css
-|  +- common.js
-|  +- ...
-|
-+- index.html
++ modules
+  - common.css
+  - common.js
+  - ...
+- index.html
 ```
 
 
