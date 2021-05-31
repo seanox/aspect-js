@@ -11,15 +11,13 @@ von Label-Elementen, die in der Datei `locales.xml` im DataSource-Verzeichnis
 definiert werden.
 
 ```
-+- data
-|  |
-|  +- de...
-|  +- en...
-|  +- locales.xml
-|
-+- modules
-+- resources
-+- index.html
++ data
+  + de...
+  + en...
+  - locales.xml
++ modules
++ resources
+- index.html
 ```
 
 Die Elemente für die unterstützten Sprachen, Gebietsschematas und/oder Mandanten

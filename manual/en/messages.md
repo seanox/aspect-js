@@ -9,15 +9,13 @@ The implementation is based on a set of key-value or label-value data which is
 stored in the `locales.xml` in the DataSource directory.
 
 ```
-+- data
-|  |
-|  +- de...
-|  +- en...
-|  +- locales.xml
-|
-+- modules
-+- resources
-+- index.html
++ data
+  + de...
+  + en...
+  - locales.xml
++ modules
++ resources
+- index.html
 ```
 
 The elements for the supported languages, locales and/or clients are organized

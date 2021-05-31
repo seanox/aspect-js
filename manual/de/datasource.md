@@ -44,25 +44,21 @@ DataSource verwendet hauptsächlich XML-Dateien. Optional ist die Transformation
 mit XSLT möglich.
 
 ```
-+- data
-|  |
-|  +- de
-|  |  |
-|  |  +- fileA.xml
-|  |  +- fileA.xslt
-|  |  +- directory...
-|  |  ...
-|  +- en
-|  |  |
-|  |  +- fileA.xml
-|  |  +- fileA.xslt
-|  |  +- directory...
-|  |  ...
-|  +- locales.xml
-|
-+- modules
-+- resources
-+- index.html
++ data
+  + de
+    - fileA.xml
+    - fileA.xslt
+    + directory...
+    ...
+  + en
+    - fileA.xml
+    - fileA.xslt
+    + directory...
+    ...
+  + locales.xml
++ modules
++ resources
++ index.html
 ```
 
 Der Datenspeicher kann über `DataSource.DATA` geändert werden.

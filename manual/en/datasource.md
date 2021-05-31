@@ -42,25 +42,21 @@ subdirectories corresponds to the concept. The DataSource primarily uses XML
 files. Optionally, a transformation with XSLT is possible.
 
 ```
-+- data
-|  |
-|  +- de
-|  |  |
-|  |  +- fileA.xml
-|  |  +- fileA.xslt
-|  |  +- directory...
-|  |  ...
-|  +- en
-|  |  |
-|  |  +- fileA.xml
-|  |  +- fileA.xslt
-|  |  +- directory...
-|  |  ...
-|  +- locales.xml
-|
-+- modules
-+- resources
-+- index.html
++ data
+  + de
+    - fileA.xml
+    - fileA.xslt
+    + directory...
+    ...
+  + en
+    - fileA.xml
+    - fileA.xslt
+    + directory...
+    ...
+  + locales.xml
++ modules
++ resources
++ index.html
 ```
 
 The data storage can be changed via `DataSource.DATA`. 
