@@ -129,7 +129,7 @@ Array. Wenn die Option `exclusive` verwendet wird, werden bestehende Kinder
 zuerst entfernt.
 
 ```javascript
-var nodes = [];
+const nodes = [];
 nodes.push(document.createElement("a"));
 nodes.push(document.createElement("a"));
 nodes.push(document.createElement("a"));
@@ -180,13 +180,13 @@ Die ID wird kontinuierlich erstellt und soll helfen, wenn zur Laufzeit eine
 eindeutige ID benötigt wird.
 
 ```javascript
-var object1 = {};
-var object2 = {};
+const object1 = {};
+const object2 = {};
 
 object1.ordinal() != object2.ordinal();
 
-var element1 = document.createElement("a");
-var element2 = element1.cloneNode(true);
+const element1 = document.createElement("a");
+const element2 = element1.cloneNode(true);
 
 element1.ordinal() != element2.ordinal();
 ```
@@ -197,7 +197,7 @@ element1.ordinal() != element2.ordinal();
 Statische Funktion zum Bestimmen eines Objekts über den Namensraum.
 
 ```javascript
-var earth = {
+const earth = {
     europe: {
         germany: {
             countPopulation() {
@@ -226,7 +226,7 @@ Object.lookup("foo");
 Statische Funktion, um zu prüfen, ob ein Objekt in einem Namensraum existiert.
 
 ```javascript
-var earth = {
+const earth = {
     europe: {
         germany: {
             countPopulation() {

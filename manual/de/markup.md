@@ -141,7 +141,7 @@ Ereignissen _Input_ oder _Change_ beim HTML-Element _text1_. In dem Beispiel
 wird der Eingabewert von _text1_ synchron mit _output1_ ausgegebem.
 
 ```javascript
-var Model = {
+const Model = {
     validate(element, value) {
         return true;
     },
@@ -197,23 +197,23 @@ Das Verhalten ist vergleichbar mit dem Attribut `output`, im Unterschied wird
 der Import für das Element nur einmalig ausgeführt.
 
 ```javascript
-var Model = {
+const Model = {
     publishForm() {
-        var form = document.createElement("form");
-        var label = document.createElement("label");
+        const form = document.createElement("form");
+        const label = document.createElement("label");
         label.textContent = "Input";
         form.appendChild(label);
-        var input = document.createElement("input");
+        const input = document.createElement("input");
         input.value = "123";
         input.type = "text";
         form.appendChild(input);
-        var submit = document.createElement("input");
+        const submit = document.createElement("input");
         submit.type = "submit";
         form.appendChild(submit);
         return form;
     },
     publishImg() {
-        var img = document.createElement("img");
+        const img = document.createElement("img");
         img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
         return img;
     }
@@ -358,7 +358,7 @@ So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
 das Meta-Objekt `tempA = {item, index, data}`. 
 
 ```javascript
-var Model = {
+const Model = {
     months: ["Spring", "Summer", "Autumn", "Winter"]
 };
 ```
@@ -436,23 +436,23 @@ Das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
 der Output für das Element mit jedem zutreffenden Render-Zyklus ausgeführt.
 
 ```javascript
-var Model = {
+const Model = {
     publishForm() {
-        var form = document.createElement("form");
-        var label = document.createElement("label");
+        const form = document.createElement("form");
+        const label = document.createElement("label");
         label.textContent = "Input";
         form.appendChild(label);
-        var input = document.createElement("input");
+        const input = document.createElement("input");
         input.value = "123";
         input.type = "text";
         form.appendChild(input);
-        var submit = document.createElement("input");
+        const submit = document.createElement("input");
         submit.type = "submit";
         form.appendChild(submit);
         return form;
     },
     publishImg() {
-        var img = document.createElement("img");
+        const img = document.createElement("img");
         img.src = "https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/smile.png";
         return img;
     }
@@ -525,7 +525,7 @@ Als Wert erwartet das `render` Attribut einen CSS-Selector bzw. Query-Selector
 welche die Ziele festlegen.
 
 ```javascript
-var Model = {
+const Model = {
     _status1: 0,
     getStatus1() {
         return ++Model._status1;
@@ -674,10 +674,10 @@ input[type='text'][title]:not([title='']) {
 ```
 
 ```javascript
-var Model = {
+const Model = {
     validate(element, value) {
-        var PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
-        var test = PATTER_EMAIL_SIMPLE.test(value);
+        const PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
+        const test = PATTER_EMAIL_SIMPLE.test(value);
         return test || ("Invalid " + element.getAttribute("placeholder"));
     },
     text1: ""

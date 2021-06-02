@@ -131,7 +131,7 @@ Die Daten werden mit einem Locator über die fetch-Methode abgerufen.
 Der Rückgabewert ist ein XMLDocument, das dann mit XPath verwendet werden kann.
 
 ```javascript
-var xml = DataSource.fetch("xml://paper");
+const xml = DataSource.fetch("xml://paper");
 xml.evaluate(...);
 ```
 

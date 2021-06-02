@@ -496,10 +496,10 @@ Buffer output erweitert. Der Buffer enthält Zwischenspeicher für die Level: LOG,
 WARN, ERROR und INFO sowie eine Methode zum Leeren.
 
 ```javascript
-var log   = console.output.log;
-var warn  = console.output.warn;
-var error = console.output.error;
-var info  = console.output.info;
+const log   = console.output.log;
+const warn  = console.output.warn;
+const error = console.output.error;
+const info  = console.output.info;
 
 console.output.clear();
 ```
@@ -736,19 +736,19 @@ Methode, die eine einfache Zeichenkette für ein Knoten-Objekt erzeugt.
 Die Zeichenkette bassiert auf `XMLSerializer.serializeToString(node)`.
 
 ```javascript
-var text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+const text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
          + "<note>"
          + "  <to>Tove</to>"
          + "  <from>Jani</from>"
          + "  <heading>Reminder</heading>"
          + "  <body>Don't forget me this weekend!</body>"
          + "</note>";
-  
-var parser = new DOMParser();
-var xml = parser.parseFromString(text, "text/xml");
 
-var nodes = xml.evaluate("/note", xml, null, XPathResult.ANY_TYPE, null);
-var result = nodes.iterateNext();
+const parser = new DOMParser();
+const xml = parser.parseFromString(text, "text/xml");
+
+const nodes = xml.evaluate("/note", xml, null, XPathResult.ANY_TYPE, null);
+const result = nodes.iterateNext();
 console.log(result.toPlainString());
 ```
 
@@ -767,7 +767,7 @@ Methode, die eine einfache Zeichenkette für ein Objekt erzeugt.
 Die Zeichenkette bassiert auf `JSON.stringify(object)`.
 
 ```javascript
-var example = {a:1, b:2, c() {return;}};
+const example = {a:1, b:2, c() {return;}};
 console.log(example.toPlainString());
 ```
 

@@ -348,7 +348,7 @@ So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
 das Meta-Objekt `tempA = {item, index, data}`.
 
 ```javascript
-var Model = {
+const Model = {
     months: ["Spring", "Summer", "Autumn", "Winter"]
 };
 ```
@@ -578,7 +578,7 @@ Interaktion, Daten und Darstellung.
 |                                          |  Path        |                       |
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|  <form id="model" composite>             |  aspect-js   |  const model = {      |
 |    <input id="message" events="input"/>  |              |      message: "",     | 
 |    <button id="submit"/>                 |              |      submit: {        |
 |  </form>                                 |              |          onClick() {  |

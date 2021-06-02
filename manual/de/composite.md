@@ -239,7 +239,7 @@ auf dem vom Composite und erweitert sich um ggf. weitere übergeordnete Element
 mit IDs.
 
 ```javascript
-var model = {
+const model = {
     foo: {
         fieldA: null
     }
@@ -267,10 +267,9 @@ Ereignisse über das gleichnamige Attribut definiert.
 
 In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
 Eigenschaften Arrays sind oder im Markup eine Iteration verwendet wird. In
-diesen Fällen kann der Bezeichner durch einen zusätzlichen eindeutigen
-Qualifier, getrennt durch einen Doppelpunkt, erweitert werden.  
-Qualifier wirken beim Object/Model-Binding wie Properties und verlängern den
-Namensraum.
+diesen Fällen kann der Bezeichner, getrennt durch einen Doppelpunkt, um einen
+zusätzlichen eindeutigen Qualifier erweitert werden. Qualifier wirken beim
+Object/Model-Binding wie Properties und verlängern den Namensraum.
 
 ```html
 <input type="text" id="identifier">
@@ -304,7 +303,7 @@ DOM hinzugefügt bzw. aus diesem entfernt wird.
 Die Implementierung beider Methoden ist optional.
 
 ```javascript
-var model = {
+const model = {
     dock() {
     },
     undock() {
@@ -337,15 +336,39 @@ Aufruf der Methoden vom Ergebnis der Bedingung ab.
 
 TODO:
 
+```javascript
+TODO:
+```
+
+```html
+TODO:
+```
+
 
 ### Synchronization
 
 TODO:
 
+```javascript
+TODO:
+```
+
+```html
+TODO:
+```
+
 
 ### Validation
 
 TODO:
+
+```javascript
+TODO:
+```
+
+```html
+TODO:
+```
 
 
 - - -

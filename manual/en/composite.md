@@ -325,15 +325,39 @@ result of the condition.
 
 TODO:
 
+```javascript
+TODO:
+```
+
+```html
+TODO:
+```
+
 
 ### Synchronization
 
 TODO:
 
+```javascript
+TODO:
+```
+
+```html
+TODO:
+```
+
 
 ### Validation
 
 TODO:
+
+```javascript
+TODO:
+```
+
+```html
+TODO:
+```
 
 
 - - -

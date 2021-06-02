@@ -14,7 +14,7 @@ Interaktion, Daten und Darstellung.
 |                                          |  Path        |                       |
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|  <form id="model" composite>             |  aspect-js   |  const model = {      |
 |    <input id="message" events="input"/>  |              |      message: "",     | 
 |    <button id="submit"/>                 |              |      submit: {        |
 |  </form>                                 |              |          onClick() {  |
@@ -213,7 +213,7 @@ SiteMap.customize({...});
 ```
 
 ```javascript
-var map = {
+const map = {
     "#": ["news", "products", "about", "contact", "legal"],
     "#products#papers": ["paperA4", "paperA5", "paperA6"],
     "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
@@ -597,7 +597,7 @@ finalisieren lässt.
 Die Implementierung beider Methoden ist optional.
 
 ```javascript
-var model = {
+const model = {
     dock() {
     },
     undock() {
@@ -614,7 +614,7 @@ einen relativen Bezeichner (ID). Der Namensraum basiert auf dem vom Composite
 und erweitert sich um ggf. weitere übergeordnete Elemente mit IDs im DOM.
 
 ```javascript
-var model = {
+const model = {
     foo: {
         fieldA: null
     }
@@ -712,7 +712,7 @@ Ereignissen sowie die Synchronisation und Interaktion zwischen UI und
 Anwendungslogik erforderlich ist.
 
 ```javascript
-var model = {
+const model = {
     message: "Hello", 
     dock() {
         ...
@@ -760,7 +760,7 @@ ausgeführt, nachdem das Composite aus dem DOM entfernt wurde und kann zur
 Nachbereitung bzw. Bereiningung der Darstellung verwendet werden.  
 
 ```javascript
-var model = {
+const model = {
     dock() {
         ...
     },
@@ -824,10 +824,10 @@ und so wird beim Binding das Model nach entsprechenden Methoden durchsucht, die
 dann als Event-Listener registriert werden.
 
 ```javascript
-var contact= {
+const contact= {
     mail: {
         onClick(event) {
-            var mail = "mailto:mail@local?subject=Test&body=Greetings";
+            const mail = "mailto:mail@local?subject=Test&body=Greetings";
             document.location.href = mail;
             return false;
         }
