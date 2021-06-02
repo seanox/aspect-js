@@ -15,13 +15,13 @@
 # Description
 Influenced by the good experiences from JSF (Java Server Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
-fullstack solution.  
+fullstack solution.
+
 Seanox aspect-js focuses on a minimalist approach to implementing
-Single-Page Applications (SPAs). 
-This framework takes the declarative approach of HTML and extends this with
-expression language, rendering with additional attributes, object/model binding,
-Model View Controller, Resource Bundle, NoSQL datasource, test environment and
-much more.
+Single-Page Applications (SPAs). This framework takes the declarative approach
+of HTML and extends this with expression language, rendering with additional
+attributes, object/model binding, Model View Controller, Resource Bundle, NoSQL
+datasource, test environment and much more.
 
 
 # Features
@@ -76,7 +76,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 # System Requirement
 - ECMAScript 6 support or higher (normally the current browsers)  
   Engines (tested): Blink, Edge, Gecko, Goanna, WebKit, ...
-- Web server for hosting  
+- Web server for hosting
 
 
 # Downloads
@@ -86,11 +86,11 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # Release Channels
 
-## latest release
+## Latest Release
 [https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js)  
 [https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js)
 
-## latest release of major version 1.x
+## Latest Release of Major Version 1.x
 [https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x.js)  
 [https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x-min.js](https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-1.x-min.js)
 
