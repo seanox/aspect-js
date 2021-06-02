@@ -126,7 +126,7 @@ Modifies the original method to support node and nodes as NodeList and Array.
 If the option `exclusive` is used, existing children will be removed first.
 
 ```javascript
-var nodes = [];
+const nodes = [];
 nodes.push(document.createElement("a"));
 nodes.push(document.createElement("a"));
 nodes.push(document.createElement("a"));
@@ -175,13 +175,13 @@ Function for getting the serial ID to the objects.
 The ID is created continuously and should help if a unique ID is needed at runtime.
 
 ```javascript
-var object1 = {};
-var object2 = {};
+const object1 = {};
+const object2 = {};
 
 object1.ordinal() != object2.ordinal();
 
-var element1 = document.createElement("a");
-var element2 = element1.cloneNode(true);
+const element1 = document.createElement("a");
+const element2 = element1.cloneNode(true);
 
 element1.ordinal() != element2.ordinal();
 ```
@@ -192,7 +192,7 @@ element1.ordinal() != element2.ordinal();
 Static function to determine an object via the namespace.
 
 ```javascript
-var earth = {
+const earth = {
     europe: {
         germany: {
             countPopulation() {
@@ -221,7 +221,7 @@ Object.lookup("foo");
 Static function to check whether an object exists in a namespace.
 
 ```javascript
-var earth = {
+const earth = {
     europe: {
         germany: {
             countPopulation() {

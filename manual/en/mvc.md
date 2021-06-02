@@ -14,7 +14,7 @@ data, and presentation.
 |                                          |  Path        |                       |
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|  <form id="model" composite>             |  aspect-js   |  const model = {      |
 |    <input id="message" events="input"/>  |              |      message: "",     | 
 |    <button id="submit"/>                 |              |      submit: {        |
 |  </form>                                 |              |          onClick() {  |
@@ -208,7 +208,7 @@ SiteMap.customize({...});
 ```
 
 ```javascript
-var map = {
+const map = {
     "#": ["news", "products", "about", "contact", "legal"],
     "#products#papers": ["paperA4", "paperA5", "paperA6"],
     "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
@@ -562,7 +562,7 @@ which the model component can be prepared or finalized.
 The implementation of both methods is optional.
 
 ```javascript
-var model = {
+const model = {
     dock() {
     },
     undock() {
@@ -591,7 +591,7 @@ can be relative or use an absolute namespace. If the ID is relative, the
 namespace is defined by the parent composite element.
 
 ```javascript
-var model = {
+const model = {
     foo: {
         fieldA: null
     }
@@ -684,7 +684,7 @@ This avoids a manual implementation and declaration of events as well as
 synchronization and interaction between UI and application logic.
 
 ```javascript
-var model = {
+const model = {
     message: "Hello", 
     dock() {
         ...
@@ -730,7 +730,7 @@ used to prepare the view. The undock-method is executed after the composite is
 removed from the DOM and can be used to postprocess/clean the view.  
 
 ```javascript
-var model = {
+const model = {
     dock() {
         ...
     },
@@ -794,10 +794,10 @@ the model is searched for corresponding methods that will be registered as event
 listeners.
 
 ```javascript
-var contact= {
+const contact= {
     mail: {
         onClick(event) {
-            var mail = "mailto:mail@local?subject=Test&body=Greetings";
+          const mail = "mailto:mail@local?subject=Test&body=Greetings";
             document.location.href = mail;
             return false;
         }

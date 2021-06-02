@@ -230,7 +230,7 @@ based on the namespace of the composite and can be extended by additional parent
 elements with IDs.
 
 ```javascript
-var model = {
+const model = {
     foo: {
         fieldA: null
     }
@@ -293,7 +293,7 @@ component.
 The implementation of both methods is optional.
 
 ```javascript
-var model = {
+const model = {
     dock() {
     },
     undock() {

@@ -340,7 +340,7 @@ So the variable expression `iterate={tempA:Model.list}}` creates the
 meta-object `tempA = {item, index, data}`.
 
 ```javascript
-var Model = {
+const Model = {
     months: ["Spring", "Summer", "Autumn", "Winter"]
 };
 ```
@@ -563,7 +563,7 @@ data, and presentation.
 |                                          |  Path        |                       |
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  var model = {        |
+|  <form id="model" composite>             |  aspect-js   |  const model = {      |
 |    <input id="message" events="input"/>  |              |      message: "",     | 
 |    <button id="submit"/>                 |              |      submit: {        |
 |  </form>                                 |              |          onClick() {  |

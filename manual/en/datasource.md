@@ -126,7 +126,7 @@ The data is fetched with a locator through the fetch method.
 The return value is an XMLDocument that can then be used in detail with XPath.
 
 ```javascript
-var xml = DataSource.fetch("xml://paper");
+const xml = DataSource.fetch("xml://paper");
 xml.evaluate(...);
 ```
 
