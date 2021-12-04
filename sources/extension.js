@@ -24,12 +24,12 @@
  *     ----
  * General extension of the JavaScript API.
  * 
- * Extension 1.2.0 20210623
+ * Extension 1.2.0 20211204
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.0 20210623
+ * @version 1.2.0 20211204
  */
 if (typeof Namespace === "undefined") {
 
@@ -447,4 +447,17 @@ if (window.location.pathcontext === undefined) {
     Object.defineProperty(window.location, "pathcontext", {
         value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
     });
+}
+
+/**
+ * Enhancement of the JavaScript API
+ * Adds a method to combine paths to a new one.
+ * The result will always start with a slash but end without any other slashes.
+ */
+if (window.location.combine === undefined) {
+    window.location.combine = function(...paths) {
+        return "/" + paths.join("/")
+            .replace(/[\/\\]+/g, "/")
+            .replace(/(^\/+)|(\/+$)/g, "");
+    }
 }

@@ -40,12 +40,12 @@
  * The data is queried with XPath, the result can be concatenated and
  * aggregated and the result can be transformed with XSLT. 
  * 
- * DataSource 1.3.2 20210623
+ * DataSource 1.3.2 20211204
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.2 20210623
+ * @version 1.3.2 20211204
  */
 if (typeof DataSource === "undefined") {
     
@@ -53,7 +53,7 @@ if (typeof DataSource === "undefined") {
     window["DataSource"] = {
             
         /** Path of the DataSource for: data (sub-directory of work path) */
-        get DATA() {return window.location.pathcontext + "/data";},
+        get DATA() {return window.location.combine(window.location.pathcontext, "/data");},
 
         /** 
          * Pattern for a DataSource locator
