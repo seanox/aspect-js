@@ -1,19 +1,16 @@
 1.4.0 2021xxxx
   BF: Composite: Correction in the use of attributes
       If numbers are used as value could cause errors during rendering.
-  BF: Review: Correction/optimization JavaScript (no functional change)
-  BF: MVC SiteMap: Correction of the method customize when using variable paths
   BF: Composite Expression Language: Line breaks in the expressions are supported
       Multiline expressions are now possible.
   BF: Composite: Correction for a URL without a file
       The paths of the modules were composed incorrectly.
+  BF: Review: Correction/optimization JavaScript (no functional change)
+  BF: MVC SiteMap: Correction of the method customize when using variable paths
   BF: DataSource: Correction for a URL without a file
       The paths of the data files were composed incorrectly.
   CR: Test: Integration of a web server
   CR: Composite Expression Language: Added keywords eeq (===), nee (!==)
-  CR: Extension Namespace: Added method create
-      Creates a namespace to pass string with a initial value.
-      It is a small extension to the method using.
   CR: Composite: Added attribute strict for loading of modules/composites
       New default behavior without attribute:
       The names of the resources to be loaded always start with lower case.
@@ -21,6 +18,10 @@
           Example:
       <div id="SmallExample" composite> loads smallExample.css/smallExample.js/smallExample.html
       <div id="SmallExample" composite strict> loads SmallExample.css/SmallExample.js/SmallExample.html
+  CR: Extension Namespace: Added method create
+      Creates a namespace to pass string with a initial value.
+      It is a small extension to the method using.
+  CR: Extension: Added method window.location.combine to combine paths
 
 1.3.1 20200202
   BF: DataSource: Correction for loading and caching
