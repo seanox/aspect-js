@@ -385,6 +385,18 @@ window.serial
 ```
 
 
+### window.location.combine
+
+Combines paths to a new one.  
+The method has an optimizing effect in the use of slash and backslash.  
+The result will always start with a slash but ends without it.
+
+```javascript
+window.location.combine("a", "b", "c")
+    returns "/a/b/c"
+```
+
+
 ### window.location.pathcontext
 
 Property to get the context path.  

@@ -452,7 +452,7 @@ if (window.location.pathcontext === undefined) {
 /**
  * Enhancement of the JavaScript API
  * Adds a method to combine paths to a new one.
- * The result will always start with a slash but end without any other slashes.
+ * The result will always start with a slash but ends without it.
  */
 if (window.location.combine === undefined) {
     window.location.combine = function(...paths) {

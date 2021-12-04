@@ -390,6 +390,18 @@ window.serial
 ```
 
 
+### window.location.combine
+
+Kombiniert Pfade zu einem neuen Pfad.  
+Die Methode hat eine optimierende Wirkung auf die Verwendung von Slash und
+Backslash. Das Ergebnis beginnt immer mit einem Slash, endet aber ohne diesen.
+
+```javascript
+window.location.combine("a", "b", "c")
+    returns "/a/b/c"
+```
+
+
 ### window.location.pathcontext
 
 Eigenschaft mit dem Kontextpfad.  
