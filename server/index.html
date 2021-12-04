@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox Devwex</title>
+    <style type="text/css">
+      body {padding:0px; margin:0px; color:#CCCCCC; background:#494744; font:12pt sans-serif; cursor:default;}
+      a[href] {color:#FFAA44;}
+      a[href]:hover {color:#FFFFFF;}
+      a[href]:active {color:#999999;}
+      select, button, input {height:35px; min-width:35px; cursor:pointer; font:1em sans-serif; color:#FFAA44; border:1px solid #FFAA44!important; border-radius:4px; background:none;}
+      input[type='text'] {padding-left:0.5em; padding-right:0.5em; background:#595755; cursor:default;}
+      button:hover, input[type='button']:hover, input[type='reset']:hover, input[type='submit']:hover, button:focus, input[type='button']:focus, input[type='reset']:focus, input[type='submit']:focus {color:#FFFFFF; border-color:#FFFFFF!important;}
+      button:active, input[type='button']:active, input[type='reset']:active, input[type='submit']:active {color:#999999; border-color:#999999!important;}
+      *.hidden {display:none;}
+      * {box-sizing:border-box;}
+      main {padding:5% 10% 0% 10%;}
+      main > h1 + h2 {margin-top:-0.75em;}
+      footer {padding:0em 10% 6em 10%;}
+      footer > section {display:inline-block; position:relative; bottom:0px; left:0px; margin-top:3em;}
+      footer > section p {line-height:13px; margin:0px; white-space:nowrap; font-size:18px;}
+      footer > section p + p {margin-top:8px;}
+      footer > section p:first-child:before {position:absolute; left:0px; top:1px; width:38px; height:38px; background:url('data:image/png;base64,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') no-repeat; background-size:38px 38px; content:'';}
+      footer > section p:first-child {padding-left:46px;}
+      footer > section p:first-child + p {padding-left:46px; color:#999999;}
+      footer > section p:first-child + p + p:before {display:block; height:2px; background:#FFAA44; content:''; position:relative; top:-8px;}
+      footer > section p:first-child + p + p {padding-top:12px;}
+      @media screen and (min-width:1400px) {
+        body {overflow:hidden;}
+        body > * {position:absolute; height:100%; overflow:auto;}
+        main {left:25%; width:75%; background:linear-gradient(to right, #393733 0px, #494744 3px) ; border-left:1px solid #393733;}
+        main:after {display:block; height:7.5em; content:'';}
+        footer {left:0%; width:25%; background:#595755; border-right:1px solid #696766;}
+        footer > section {position:absolute; bottom:0px; left:0px; margin:3em 3em;}
+      }
+      a {text-decoration:none;}
+      a {color:#CCCCCC;}
+      a:hover {color:#FFFFFF;}
+      main > h1 + h2 a:before {display:inline-block; margin:0em 0.5em; border:0.4em solid transparent; border-left-color:#FFAA44; border-right:none; content:'';}
+      main > h1 + h2 a:first-child:before {margin-left:0em;}
+      table {width:100%; border-spacing:0px; border-collapse:collapse; border-bottom:2px solid #FFAA44;}
+      table thead th {position:relative; text-align:right; border-bottom:2px solid #FFAA44;}
+      table thead th:nth-child(-n+2) {text-align:left;}
+      table thead th  {padding-left:0.5em; padding-right:0.5em;}
+      table thead th:first-child {padding-left:0em;}
+      table thead th:last-child {padding-right:0em;}
+      table thead h3 {margin-top:0px; padding-top:0px;}
+      table thead a[href='?n']:before, table thead a[href='?N']:before {content:'Name';}
+      table thead a[href='?t']:before, table thead a[href='?T']:before {content:'Type';}
+      table thead a[href='?s']:after, table thead a[href='?S']:after {content:'Size';}
+      table thead a[href='?d']:after, table thead a[href='?D']:after {content:'Modified';}
+      table thead a[href='?N'], table thead a[href='?T'], table thead a[href='?S'], table thead a[href='?D'], table.na thead a[href='?n'], table.ta thead a[href='?t'], table.sa thead a[href='?s'], table.da thead a[href='?d'] {display:none;}
+      table.na thead a[href='?N'], table.ta thead a[href='?T'], table.sa thead a[href='?S'], table.da thead a[href='?D'] {display:inline;}
+      table thead a[href='?n']:after, table thead a[href='?N']:after, table thead a[href='?t']:after, table thead a[href='?T']:after, table thead a[href='?s']:before, table thead a[href='?S']:before, table thead a[href='?d']:before, table thead a[href='?D']:before {position:relative; display:inline-block; margin:0em 0.5em; border:0.4em solid transparent; content:' ';}
+      table.na thead a[href='?N']:after, table.ta thead a[href='?T']:after, table.sa thead a[href='?S']:before, table.da thead a[href='?D']:before {top:0.325em; border-top-color:#FFAA44;}
+      table.nd thead a[href='?n']:after, table.td thead a[href='?t']:after, table.sd thead a[href='?s']:before, table.dd thead a[href='?d']:before {top:-0.08em; border-bottom-color:#FFAA44;}
+      table.na tbody tr td:nth-child(1) , table.nd tbody tr td:nth-child(1) , table.ta tbody tr td:nth-child(2) , table.td tbody tr td:nth-child(2) , table.sa tbody tr td:nth-child(3) , table.sd tbody tr td:nth-child(3) , table.da tbody tr td:nth-child(4) , table.dd tbody tr td:nth-child(4) {background:#4F4C4A;}
+      table thead + thead {display:none; color:#999999;}
+      table.x {border-bottom:none;}
+      table.x thead {display:none;}
+      table.x thead th {border-bottom:none;}
+      table.x thead + thead {display:table-header-group;}
+      table.x tbody {display:none;}
+      table tbody tr td {vertical-align:top; padding:1em 0.5em;}
+      table tbody tr td:first-child {vertical-align:top; padding-left:0em;}
+      table tbody tr td:last-child {vertical-align:top; padding-right:0em;}
+      table tbody tr td:nth-child(n+3) {text-align:right;}
+      table tbody tr + tr td {border-top:1px solid;}
+      table tbody tr td:first-child div {padding-left:48px;}
+      table tbody tr.directory div + div:before, table tbody tr.file div + div:before {position:absolute; height:35px; width:35px; margin-left:-48px; margin-top:3px; display:inline-block; content:'';}
+      table tbody tr.directory td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAzElEQVRYhe3XsQ2DMBAF0BshI2SEjGDFPz0jZARGyAaMQAmcC4/ACB6BERjhpyAFDQIkHCjuS79z8eTTSbaIZSHU14MBFdUPK63/gEGkIjGgYofPYhWkIubGjGxRrp5rUVJBdr5gdLcjO8dwC0ZEhAH974aObmIDtwsjIsLOF4c3oKf6YTcmR6jPNxW8IEYxbljtjEWaY9ZXO2cn0BXHZBjDGMYwhjGMYQxjGMPkxvia6ofTHuPTPz5REYWNu08gjKc1oGfj7mdO59r5Ata4S2GsIePsAAAAAElFTkSuQmCC) no-repeat center center;}
+      table tbody tr.file td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAr0lEQVRYhe3Tuw3DMAxFUY/gETxCRiCilz4jZJRskBFcGqYKjaARPEJGeSlcBvlYomAXJHABlocFu+7ow4hHVXO42kCS9FSQiqUwrp1vdpjC66hIZiATTESmhrEaZIVZ90qQJaYaZI2pArXAFIOMvmmhXk5vReRNINvX/lKSvj1mkoET5GMz7lSQkwzNMb+xEMc4xjGOcYxjHOMYxzjmkBgNT0bkJm3DhLF5/2D2nBc1H+E0hK/P7wAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file.bin td div + div:before, table tbody tr.file.com td div + div:before, table tbody tr.file.cpl td div + div:before, table tbody tr.file.exe td div + div:before, table tbody tr.file.scr td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABPElEQVRYhe2X3Q2CMBSFOwIjOAIjNHJ5dwRHYAQ3cAQfwctDR2AER3CEjnB8aFOriT/QC8XEm5CQJpAPzj3ntkr969cLRhe5GUKBCeioyc2hlPIw7rrgXO1WAFOdwHQJ963e5IPxMqGjBlxdwQT0dMwKE9Z6OgbpeLvPCuPW69LL56CWkO6Tm8Db/WLSfWtt108EMNnZpBuTM2j15kE6rstsMPdn6jKWTizFUxI4kk4mxVNfBKOLB+lSUlzqq5x0iSkuPSjBZILrxgIJ/xnjm3qY5DSRnnHjw2btmSidLTpqki0+KWda0qFZexrE5taoBI4l6WkQ34x9AwOjCx9wVkySKTCRJBZcnWbdwL/cz8RDcapVU2GerDqfJJ9gnCTeqmc6LH6mik4HaekpB7Oec9OyffEWJteB7V9rrhtEKrCyzQLF8AAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file.dll td div + div:before, table tbody tr.file.drv td div + div:before, table tbody tr.file.inf td div + div:before, table tbody tr.file.lib td div + div:before, table tbody tr.file.so td div + div:before, table tbody tr.file.sys td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAACBUlEQVRYhd2X362rMAzGGcE4C3QERugIjMAIHYEN+lgpcZUROgIjMAIjWBC/cx9IenqPWv5cEs7RjZQHRER+cT5/NlkWYbAFEA0FW4AY3/unIRoKR/nDEbIjHP1sB1LlD4Agh81FQzGQKj3ceCiQo7xxhO27qwnR4huckoP4qHw8PVsARzj2Bi/JYQatKkc4zp3cEbZyx2tyGGfgPAfDFkAIu0MiEzZzlD/eve8N1o6QRUORHCbLPl+V1wtHvaJgZHNrhLATQvsXJKly8Qq3GGRv8PLNyMZwLUJoe4N1b7Ceg+kN1nLHqxDaYAPfv7lKU47yRgjtQKoctKrC5pN/5M0Ehuwob95FwEN0fl3rKH/IHa+9wcugVeUMnOWOV0fIsyDBI1I7aPAqZ+C8b9FRMEseciiMF++YEmQTjBB2vwJmSkVswzNbAGfg3Bu8DKTKWA3UOs349M2yp35a7wtPj4jhrhtgpoo7bZ43r44ZNPWpLkWFCQ46V3XDmj1etNpC+AanJW142Do5zJrxqq1kMGurqhB2e4S81mfqpax5inhHiLek9uMra7AdtKr4BifRUIRquze9N5jepAXRUHgTHF8mx+ht18G86TPYAoQftUMdODTTMTbcDbPUwx4K8+z0tKpSwqw+tG+8u9D7xp5el60Qdosa5BucfEfP6eZUgCMG+z8efwB8VMHEgLzHiAAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file.azw td div + div:before, table tbody tr.file.tr2 td div + div:before, table tbody tr.file.tr3 td div + div:before, table tbody tr.file.cb7 td div + div:before, table tbody tr.file.cba td div + div:before, table tbody tr.file.cbr td div + div:before, table tbody tr.file.cbt td div + div:before, table tbody tr.file.cbz td div + div:before, table tbody tr.file.chm td div + div:before, table tbody tr.file.djvu td div + div:before, table tbody tr.file.epub td div + div:before, table tbody tr.file.fb2 td div + div:before, table tbody tr.file.hlp td div + div:before, table tbody tr.file.lit td div + div:before, table tbody tr.file.markdown td div + div:before, table tbody tr.file.md td div + div:before, table tbody tr.file.mobi td div + div:before, table tbody tr.file.oxps td div + div:before, table tbody tr.file.pdb td div + div:before, table tbody tr.file.pdf td div + div:before, table tbody tr.file.prc td div + div:before, table tbody tr.file.rtf td div + div:before, table tbody tr.file.smil td div + div:before, table tbody tr.file.xps td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABTUlEQVRYhe2XwY2DMBBFXQIlUAIlWOvhnhK2hJSQDighR4fh4BJSAiVQQkr4e7BhETaB3R2vIhRL74LlnydnxhilXn2goyY7ThfbIk4XYAKY+jyYAUyA1eV+mdacBDY5zrekjycDS3pXSG4ZWF2C6QEmoKPmFWTgMdfk2lF2SUd3WRmuq22Zj0/c6Bwxy5KrGSbng0hvBq3li8l01IDpsXZg+V2gS4zgzoS/qF/UQROvM0OomyVOTuZGZ7C5RvyizY956L1lXloGrTmlWzZmWsN1lam1ya20bEw4EH0HZmhtyXEsGXBd+bvMOsmcaf77hwVkwr31GYvw8B4b53sxGR+iy2cks8b52Yv1YDXjdLGHKCf1/F9qZqKulFIKLV1mN8NBUKau/Cm8gSU97gSsLqfnQVBERnK8ZQ4sw2ZAR/cs/EwmcfmW5o/f7NnHFwnaYyqdQs+0AAAAAElFTkSuQmCC) no-repeat center center;}
+      table tbody tr.file.bat td div + div:before, table tbody tr.file.cmd td div + div:before, table tbody tr.file.hta td div + div:before, table tbody tr.file.ps1 td div + div:before, table tbody tr.file.sh td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA5klEQVRYhe3XzQ2DMAwFYI/QEToCIyBi7h2BERihG3SEHgFz8AiMkBEYgRHcQ9K/Q0sbJXIOsfSOoE88ZAhAmQ8j1FYy40XIrHpBlqE+ghCykFllwrNaCK0QWhBCkRF73XaaTgilYL5jMskdwzJirxZCzrSmgimYBBgh3ISaLhOMubo1EB8UVNMDNJmTOuYNNGCtjnEXu40ZCxT+ZLg+eMwWq66wdyYBJAiTCvI3xkOs2zVt9byJ/3/ey846CMHwKwQAwH/+7Q/haJjUUzAFUzBpMISsfNb2R5UZF7dZlTPjotlO3nMDnwa6QgWIcHwAAAAASUVORK5CYII=) no-repeat center center;}
+      table tbody tr.file.atom td div + div:before, table tbody tr.file.rss td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAACBElEQVRYhe2Yy3WDMBBFKYESXIJK0LFGe0pwCZSQDlxCloJhoRIogRIogRJeFhJgbIREYswmnKMV+lzN581ABtYCDbVgGsCEk4aFIZmByYKpQ0XlacMZo8vABFRUZic+4OsNTPiH2Q0D1gKGJGpVgK83GJIw8vJxmPHlxhjQ0B2G5OEwboIWYC1gZQ4rcxh5mazU0H0hBQ3dD4VJ2sSQRE1fs8Wut9Ngps2szMHq20N1e2PrkGxyrqUOTMOeeDostWFl7hU12W2H68zktgQLfUT05gKsxZ9hXGB68fuF4Ln11IFV/2sYH4ihlsLuSWEYeYlZfxvGyhwVlW6SFpPgzeXep3Baxvj4GWBlvhsmvrkWYNWnrvXuAlh9vx1m3mQUurjbxhJyGMwCKOKy2Tqv4O+DcaWgD936Cbxfc9V7a5MhmeKukKvSdIa1QEWlq8wx4SILJrs5p1YFmPCcVfF+pqLSa82sNzV9hWF8QxZI3yx7tODyYnGdcRB2VF5vYqBWxTqMFmsHrez7EuzbMKM5HxZNgRqwTuig1TmBNncnjOt9Vw8aLROw3DzvNdAT3KR6NNSORXKS9MDNp3jYKKhTnXoCjgew2/yxWA6bxc4HfOj9AmZPzCwmjl8EsdS2Mk9qpGpV7E7tTz7/MHGYhlrXMF1v5w2yaKjNHv5cnfXXCmioRa2KH/uXp5mDEd9qAAAAAElFTkSuQmCC) no-repeat center center;}
+      table tbody tr.file[mime^='font/'] div + div:before, table tbody tr.file[mime*='font'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABQklEQVRYhe2X0RGDIAyGO4IjOIIjcCW+d4SO4Ahu4iOSPjBCR+gIjuAI6UMUHyrY5qr0ruQuL3okH/wEwumUbcPIqYKwroLuVCGKa1QZi7s+COuKECjoFloRjIU2GteACsP00JAB9eqqFMEYVa7G66HZhln7uYNF82WYDPMxjFMFWWg/rRoyqhSNE+aLB/XniO6+FlQMg3oghJEQxsQgi+58SutLOhiW6MFgekgqFaEe5juL8HxNJhVZfWGJuBr41gciPF+Ph0HdzRIt38AdLhWvwiLRApNAKi+RhZYBJp/bgiOlYjkiDROCOwaEN+oYmv0kFX31mA/CsERjKJmvqh6a/WFYoqgMhLqjG9zlSd68fXmTBrp6D1NXWw18NN9v9TMZJsNIYaZq2f2t7W/9GMwvvLV5Fmtv7J3e2rMLV/y/7AllAGOhab1D4gAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file[mime^='image/'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABj0lEQVRYhe2X0dGCMAzHOwIjOIIj9Gh8ZwRGcAQ3YAQfkfahIzACIzgCI/y/h8YqQiv6CfVOc5cHrzH50SZNKsRPAgK9236KCmjCp6iDMVShJplMDVVXmBPt06ZKXo5g0KgCmux6mpcRGDrwsbWLqyagocMjmH6do1Hn74OBlZnLv7xELTeLwLh1l3RRkEtOeN1t3wqDE+1jzu/setQkYWUGrc7QZN8G40Hc5dRBq3MQxtn0w99j+5dgXN+gHoYqIYRALTe8Q6OvdT5U4cHZH7Q6/huGA/cw1MLKbBSwUUVkdzD135dg3HlTB03dtDOyLjemq+XiI7g2F4ZBXLBAsvrkNNSGAsZkPgwnYegYvMOaZKjRwsqM1+3k+kwYLt/4feKd+vxwO3gD0bGv7uqTLGqSz8Fw5cwVDtgPIAy1A8AT7fnOgbdfoh3clPsAYtK2UQW0Oi7atf0cO9v+G7v2D2YVmPcN3FF9UNo6L1cZxv1QHnkdpJIhjKEq6TubhzcxnFVTv7VTvrHvNGWqfLb8AY6MHY1FvavzAAAAAElFTkSuQmCC) no-repeat center center;}
+      table tbody tr.file.htm td div + div:before, table tbody tr.file.sgm td div + div:before, table tbody tr.file[mime^='application/'][mime$='tex'] div + div:before, table tbody tr.file[mime^='application/'][mime$='xml']:not([class$='smil']) :not([class$='atom']) div + div:before, table tbody tr.file[mime^='text/'][mime$='ml'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABhklEQVRYhe1WwbXCIBDcEizBElICTzZ3S7AES7ADS/AYsx4owRIsISWkhPkHCPn+CAG+z3jIXsNOZplhgGittdYaC0Zt0PJpaR5ERIRW7yEMSF0tzYUgbCD8WJqHlUi4f7tMkLrK3WrI7gBhoFHbd2G6CXWXu91OIhP8fuM7hPsQ2QARNllNRIRGbSEMXPkYx84YEqIvVne9TyVCRIQrH1MGsFIxcON7CiAgu0MOESIvQVCip7UNK0foHGDszBdaEAMfps3YTdz4/HJwB9ZD9AVGbbLJtHyCcJ/b67w5BqQ1njVVCRELqrtUiV4QenivOcMWx3eJRE/99hT2EDZjahZGeKlERH9iZJTKuzt+3F4Biu5KTE/kTTyNEX/bRkJrAjb0NKyyiQwxEvqf90+i/qU3tIuRfnZHJ8cttK7whh5jhM2sz9xPHnOmLHlE/cJOjxE/dcTQJRJNTk56Y12FvPMviQrzKAIaf0R9tOYeUZ8jMjyiCp4Z7ydj1AZXPn6FRGut9U31A43IpTEdqKaXAAAAAElFTkSuQmCC) no-repeat center center;}
+      table tbody tr.file.msg td div + div:before, table tbody tr.file.rtx td div + div:before, table tbody tr.file[mime^='message/'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABoklEQVRYhe2WzbGDIBRGKcESUoIlMOG6t4SUkBLSgSVkScQFJViCJaQES/jeAkQx4M97MfpmcmfuDuUI30EY+9a3VhY0T47SDIpwlLYw4o5S5Lt1RUUP86DrrlFR58tgZaiB5skuIJonUKSHMICiFipLPwqishRKPP3MlHSDogaKWkjiHwGRxM0CUGPn7zMDzRNUVBvK82VTEJORFhXVZpuGmRkEuEv2VqHGg64WpOhyGoVhjLFu2VBR8TYIs/JF6L2TMAZI5PbB+i0gxpg2FIFZGMZcyP6kvgdSijw4ZgmMGej0W62+9+yEpYthGHNft0p9T13JT9PQa2BGh9Oc+s4Y19MrunybehVrSH5yRpR0mxgPVFTY8fV8FOZsGqk4DLBTX1EDlaXQPLHbooPqRpReBOMZEDPtZessXMyY7qgIZCh+AkviZhLxjL34dZLzBZL4nP4xu4Iw43zMgfymvH9gN68HU9INStxD+diqBr+ceny5amNH9aZA/Qnf+je9D1+sHJDKUnugHvEOXFEBSXy39m56B2kGyU9H6T2j8q3/WT9GAVdDO8D9qQAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file[mime^='audio/'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAwklEQVRYhe2UsQ3DMAwEPYJH8AgagYip3iNkhIzgDTyGIqnwCBkhI32KxK1EFRQEhAd86ccLxnGaDMMwlEGgBZF3ZD6KCUz6Y5J3yPxC4ncxPcYMB06aa+kzJDAhMeq53fsMiutWTGBCoKXLmGHQVvtna7k78o6TZnW1Edet2j3s6dBWW9ytrTae/JD1e/f9QFltUX+vwyqmVW2RqpmP66WqaiN516Lqf6ndegbU1Barev0mbbVbVTW1TW1VTO3R1f4AyCZlO/wRtz4AAAAASUVORK5CYII=) no-repeat center center;}
+      table tbody tr.file[mime^='video/'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA4klEQVRYhe2VzQ2CUBCEKYFSLOFFh7slWAKdUMbDfQdKoARKGg/yo8IDDStBs5vMgUB2v7A7mSSxWihWLqVkh601DSPZgQJuLg8XhymR08PRw1FABhT98xoFFN1wejiWyJdhHl52cCpnIMcLBZybN4YJqCmoWqnD9L3vcxZgBA0D6v5jbZihd/NjayqRD9b7xpra3tfT+Z01PUv/ZlZYWxvGrB2BMWvHYObmjWFerR1QqCR0d7CrrG2pvcubMWvHYHa1JkvtGIyldgzGrB2D2dWaLLWnfqVGOn+qyqUaZ/DfdQM3M2T80GZlkAAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file[mime^='application/vnd']:not([mime*='font']) :not([mime*='help']) :not([mime*='cab']) td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAACwElEQVRYhb1YwbWDIBC0hJSQElICTzb3lGAJKSEdWIJH43qghJRgCZZACfsPC4giyeL/+Xkvh6hshmF2BqyqqqrIqBMN8CCEiRAsIRjC66U68CGsm3WdupEPNuoUBo/QMig9EwLRoG9lQMAwCN25yRlCIHrCXVaAB9ktE6GwUScZkLrZm4CrT9Srs6CInmmENrnOjBH1oGRgdEcjvPbvgRWxk3swgBGuOaHuCMFk7u1OOH1whBchTMn1Qd/KmKkbQrDJ9V6dxfqjHhQzoDvq1ZmMOrlrdg9ktg4zabkZrpeljp4JYZJqb2Fh/Z2KOqEKLNhVnRFeIvHugnrC3XdW6IQSQMyE8XXEjMgAygGV6uxPAVGvzgubdZNrhq8CIrxegrsmXz0f0shhQL5rYn15lg5GSTkY7xmou3fCdAZIR8NWBgZ1R6jnTx3CnsP+8h0ggRVpPLjg/IZ+lraVFQ/Ztu1AvF5ohNaZqhFlVlL8CXdCoKIxCJYGeITfwaE5OKOOLFvOw8wgTDTAg3pQzodMrDlnE1TEUPGWwoNnAFFepR3mWEoS//0fIBhCPYuAj/CKN1t+mfc60d2Tg3Ht6vxjfxO1ec7GGfWOWacdmW6c8EzYtAct6JufabQPcieD7J9a786OwXbXsbngWqDLBknPoQiLblrlUZxPUQelrK0yzSbb3ij4IqHVjV9LGuG1u9ZGnWjQNxrgwYJd6rxl2o+Jsi1egiX4OOy6AGqEtmSDFLSRYef94EzehIQ+sFPzrcoTqxtxYP7VuWld0xnZdk/9yTBZmPDIgik94nqPQT2HUwIb4PTRS/wyJde9eAtTN6T19ricCc50JrFvcIa03lNKgDAY3eUMzGfThwLXi3tw6f8n3H8j3gxQ2TF3BewXZ51wQt2+jci8pfj6J7jsCC1rz2UV6u5fgQRA3AD+DdYkWfYfiE31Z8GsISQAAAAASUVORK5CYII=) no-repeat center center;}
+      table tbody tr.file.bcpio td div + div:before, table tbody tr.file.boz td div + div:before, table tbody tr.file.bz td div + div:before, table tbody tr.file.bz2 td div + div:before, table tbody tr.file.cab td div + div:before, table tbody tr.file.cdf td div + div:before, table tbody tr.file.cpio td div + div:before, table tbody tr.file.cue td div + div:before, table tbody tr.file.deb td div + div:before, table tbody tr.file.dmg td div + div:before, table tbody tr.file.gpg td div + div:before, table tbody tr.file.gtar td div + div:before, table tbody tr.file.hqx td div + div:before, table tbody tr.file.iso td div + div:before, table tbody tr.file.lha td div + div:before, table tbody tr.file.lhz td div + div:before, table tbody tr.file.lzh td div + div:before, table tbody tr.file.msm td div + div:before, table tbody tr.file.nc td div + div:before, table tbody tr.file.pgp td div + div:before, table tbody tr.file.pkg td div + div:before, table tbody tr.file.rar td div + div:before, table tbody tr.file.rpm td div + div:before, table tbody tr.file.sea td div + div:before, table tbody tr.file.shar td div + div:before, table tbody tr.file.sit td div + div:before, table tbody tr.file.sv4cpio td div + div:before, table tbody tr.file.sv4crc td div + div:before, table tbody tr.file.tar td div + div:before, table tbody tr.file.uif td div + div:before, table tbody tr.file.ustar td div + div:before, table tbody tr.file.xpi td div + div:before, table tbody tr.file.zip td div + div:before, table tbody tr.file[mime='application/x-7z'] td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA90lEQVRYhe2Xyw3CMBBEKSElUEJKsPDkTgmUkg4ogWPk9cElpARKSAkuYTg4gBA/B6JYoF3pnaJYz97MylmttJ4UOxiKHYrTwYwyID32dGiLICCd3V5lOrMu0plgKpVRme9lBLFctC8yZj3GK9KjXzTSHn0SQUtp6utxiR3o0C7aovEQ7h/8kgyDqcaXQzZvNve5TOpvpOBIjz4LASl2mFWG0tSXL35C0dntq7Hxmcx5FghCGgVNnYc9UBBnlbnZ5TQiZbN7vuaXaWIHk00w1cu1/iLaKqMyKqMyKqMyRWTEDtm3uDlIvykPZBzadBlaGI/9El2YXCfOePeJaxyCWgAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr.file.css td div + div:before, table tbody tr.file.xsl td div + div:before, table tbody tr.file.xslt td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABrUlEQVRYhe2XzbGCMBSFKSElWIIlZMx1bwmWQAl0YAkugZtFSqAESrAESjhvkfiMECTG4HOcl5mzYAbIR+65PxTFpy9oOq2uhsplECMFmACmfkUNYOrjYVp1yHHKwT00nb4LBjVJ1HLz5zCo5cbFGtB0+gQYWKlz8FlWl9s9njR1eWF4v12G2R3RUDnR+F1ZPMNkLMx+u/iiR3s8CTMEYVqqwDTASBF8tqESLVVTJZ5MUbiQ1CTvrm2x8n1wZ2IYKaCpcyYfy6TDjL4cDZVgdZ4qLVzPh+lFX+SEwZpVOAXGeqSl6m0w1pyeapLXU3HZMylaK8IEKqYXol84pt43NowU86mcmNrXNLVN0NetIbrUHnxje70qRnGpDSbETF02vfOEbClMvSv1ntwJGClsTXEnOFN988Bo6ia6GthmlrFHvTtOP8QZflbh2SehUVLlRoJwn7rr4rMKbphW9Jj6R5MdjBSo5WZWcw31aRhNXQ5/vA4TaVQYKWKUDBO7vNqz5BuA1SUZJlQ1w/epQ5RGE8D3/Tf9w3weDKtLsFXkkK3ssTCh4TuzXvxFXn39AFK8W1PI+nirAAAAAElFTkSuQmCC) no-repeat center center;}
+      table tbody tr.file[mime='application/x-trash'] td div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABJUlEQVRYhe3X0Q2CMBAG4BvBERzBERr53cMRGMENGMFHsH1wBEZgBEdwhPMBRCSFFnrng6HJnxDSNF9K7wCibrA9HdiCV6eEIanRYxwKrpBHx6EQB/WYhQt+djR7iIGSMSUMO9QiIAkMEZEISAojApLEJIOkMUkgDcxqUDKmQt5e+4Jm0drpfSYuqhgiIi5hguk6tTombv3jecNsmA2zYf4SwxYNV8i/7pVmzza7eudXyNmi0cHccHm/PINzWwizQ6GCISLq/xpmQF6IBiYEmoRoYaZAsxBNzBgUhGhjvkAhyE8w7x2JqTLVxzR4NDFVpneAPWckCFIp7ZnDOgsafOU37FAvzqjVx1TNJIjvZsc2u67Okj7iA9njOTR31eh2KwgZgZ4ve4VCbmCi+ekAAAAASUVORK5CYII=) no-repeat center center;}
+      table tbody tr.file[mime^='text/'] div + div:before {background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA9ElEQVRYhe3Vyw2DMAwGYEZgBEboCBZx74zACB2BDToCxzTOgREYgRE6intAlfrgmdh9ICz9Ejc+kJM/SX592OM5Ks4UMpAGUiZkJuwCw33yUg4T+HVM2IiBRDAeWyZTR4OkMP1zJEgSEw2SxkSBNDDBIKHT1DEdD2/x2K4CyR7tiTSQ6mMsZGwRRuOwYkJmC5k6Zh6LsGPUMOxMEdTgFkEeQ3kZ1OIXPIljpGZ7mP4WzctFedkTecz9slqSgW4SxUjN9jBsIRts4rm8FOLnd+YxDiudPzPVxqN5fun2dmbH7Jj/wpC5ssdWJeswplbPEsw35wbJJNZG20FFQQAAAABJRU5ErkJggg==) no-repeat center center;}
+      table tbody tr td:first-child div:after {margin-top:0.25 rem;}
+      table tbody tr td + td div:after {content:attr(text) ;}
+      table tbody tr td + td span:after{content:attr(type) ' File';}
+      table tbody tr td div + div:after {display:block; color:#999999;}
+      table tbody tr.directory td div + div:after {content:'Directory';}
+      table tbody tr.file td div + div:after {content:'File';}
+      table tbody tr.file[mime^='application/'] div + div:after {content:'Application File';}
+      table tbody tr.file[mime='application/octet-stream'] td div + div:after {content:'Binary File';}
+      table tbody tr.file.bin td div + div:after, table tbody tr.file.com td div + div:after, table tbody tr.file.cpl td div + div:after, table tbody tr.file.exe td div + div:after, table tbody tr.file.scr td div + div:after {content:'Application Executable File';}
+      table tbody tr.file.dll td div + div:after, table tbody tr.file.drv td div + div:after, table tbody tr.file.inf td div + div:after, table tbody tr.file.lib td div + div:after, table tbody tr.file.so td div + div:after, table tbody tr.file.sys td div + div:after {content:'Application Extension File';}
+      table tbody tr.file.azw td div + div:after, table tbody tr.file.tr2 td div + div:after, table tbody tr.file.tr3 td div + div:after, table tbody tr.file.cb7 td div + div:after, table tbody tr.file.cba td div + div:after, table tbody tr.file.cbr td div + div:after, table tbody tr.file.cbt td div + div:after, table tbody tr.file.cbz td div + div:after, table tbody tr.file.chm td div + div:after, table tbody tr.file.djvu td div + div:after, table tbody tr.file.epub td div + div:after, table tbody tr.file.fb2 td div + div:after, table tbody tr.file.hlp td div + div:after, table tbody tr.file.lit td div + div:after, table tbody tr.file.markdown td div + div:after, table tbody tr.file.md td div + div:after, table tbody tr.file.mobi td div + div:after, table tbody tr.file.oxps td div + div:after, table tbody tr.file.pdb td div + div:after, table tbody tr.file.pdf td div + div:after, table tbody tr.file.prc td div + div:after, table tbody tr.file.rtf td div + div:after, table tbody tr.file.smil td div + div:after, table tbody tr.file.xps td div + div:after {content:'Document File';}
+      table tbody tr.file.bat td div + div:after, table tbody tr.file.cmd td div + div:after, table tbody tr.file.hta td div + div:after, table tbody tr.file.ps1 td div + div:after, table tbody tr.file.sh td div + div:after {content:'Executable Script File';}
+      table tbody tr.file.atom td div + div:after, table tbody tr.file.rss td div + div:after {content:'Feed File';}
+      table tbody tr.file[mime^='font/'] div + div:after, table tbody tr.file[mime*='font'] div + div:after {content:'Font File';}
+      table tbody tr.file[mime^='image/'] div + div:after {content:'Graphic File';}
+      table tbody tr.file.htm td div + div:after, table tbody tr.file.sgm td div + div:after, table tbody tr.file[mime^='application/'][mime$='tex'] div + div:after, table tbody tr.file[mime^='application/'][mime$='xml']:not([class$='smil']) :not([class$='atom']) div + div:after, table tbody tr.file[mime^='text/'][mime$='ml'] div + div:after {content:'Markup Language File';}
+      table tbody tr.file[mime^='message/'] div + div:after {content:'Message File';}
+      table tbody tr.file[mime^='audio/'] div + div:after, table tbody tr.file[mime^='video/'] div + div:after {content:'Multimedia File';}
+      table tbody tr.file[mime^='application/vnd']:not([mime*='font']) :not([mime*='help']) td div + div:after {content:'Office Document File';}
+      table tbody tr.file.bcpio td div + div:after, table tbody tr.file.boz td div + div:after, table tbody tr.file.bz td div + div:after, table tbody tr.file.bz2 td div + div:after, table tbody tr.file.cab td div + div:after, table tbody tr.file.cdf td div + div:after, table tbody tr.file.cpio td div + div:after, table tbody tr.file.cue td div + div:after, table tbody tr.file.deb td div + div:after, table tbody tr.file.dmg td div + div:after, table tbody tr.file.gpg td div + div:after, table tbody tr.file.gtar td div + div:after, table tbody tr.file.hqx td div + div:after, table tbody tr.file.iso td div + div:after, table tbody tr.file.lha td div + div:after, table tbody tr.file.lhz td div + div:after, table tbody tr.file.lzh td div + div:after, table tbody tr.file.msm td div + div:after, table tbody tr.file.nc td div + div:after, table tbody tr.file.pgp td div + div:after, table tbody tr.file.pkg td div + div:after, table tbody tr.file.rar td div + div:after, table tbody tr.file.rpm td div + div:after, table tbody tr.file.sea td div + div:after, table tbody tr.file.shar td div + div:after, table tbody tr.file.sit td div + div:after, table tbody tr.file.sv4cpio td div + div:after, table tbody tr.file.sv4crc td div + div:after, table tbody tr.file.tar td div + div:after, table tbody tr.file.uif td div + div:after, table tbody tr.file.ustar td div + div:after, table tbody tr.file.xpi td div + div:after, table tbody tr.file.zip td div + div:after, table tbody tr.file[mime='application/x-7z'] td div + div:after {content:'Packed Container File';}
+      table tbody tr.file.css td div + div:after, table tbody tr.file.xsl td div + div:after, table tbody tr.file.xslt td div + div:after {content:'Style Sheet File';}
+      table tbody tr.file[mime='application/x-trash'] td div + div:after {content:'Temporary File';}
+      table tbody tr.file[mime^='text/'] div + div:after {content:'Text File';}
+      table tbody tr.directory td:first-child + td div:after {content:'Directory';}
+      table tbody tr.file td:first-child + td div:after {text-transform:uppercase; content:attr(text) ;}
+      table tbody tr.directory td:first-child + td + td div:after {content:'-';}
+      table tbody tr td:nth-child(4) , table tbody tr td:nth-child(4) * {white-space:nowrap;}
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Index</h1>
+      <h2>
+        <a href="/">#[HTTP_HOST]</a>#[location[[<a href="#[path]">#[name]</a>]]]
+      </h2>
+      <table class="#[sort]">
+        <thead>
+          <tr>
+            <th>
+              <h3>
+                <a href="?n"></a>
+                <a href="?N"></a>
+              </h3>
+            </th>
+            <th>
+              <h3>
+                <a href="?t"></a>
+                <a href="?T"></a>
+              </h3>
+            </th>
+            <th>
+              <h3>
+                <a href="?s"></a>
+                <a href="?S"></a>
+              </h3>
+            </th>
+            <th>
+              <h3>
+                <a href="?d"></a>
+                <a href="?D"></a>
+              </h3>
+            </th>
+          </tr>
+        </thead>
+        <thead>
+          <tr>
+            <th colspan="4">
+              <h3>
+                No entries available
+              </h3>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          #[file[[
+          <tr class="#[case] #[type]" mime="#[mime]">
+            <td>
+              <div></div>
+              <div>
+                <a href="#[name]">#[name]</a>
+              </div>
+            </td>
+            <td>
+              <div text="#[type]"></div>
+            </td>
+            <td>
+              <div text="#[size] Bytes"></div>
+            </td>
+            <td>
+              <div text="#[date]"></div>
+            </td>
+          </tr>
+          ]]]
+        </tbody>
+      </table>
+    </main>
+    <footer>
+      <section>
+        <p>Seanox Devwex</p>
+        <p>Advanced Server Development</p>
+        <p>Seanox Software Solutions</p>
+       </section>
+    </footer>
+  </body>
+</html>
