@@ -113,8 +113,12 @@ BF: Composite: Correction in the use of attributes
 BF: Review: Correction/optimization JavaScript (no functional change)  
 BF: MVC SiteMap: Correction of the method customize when using variable paths  
 BF: Composite Expression Language: Line breaks in the expressions are supported  
+BF: Composite: Correction for a URL without a file  
+BF: DataSource: Correction for a URL without a file  
+CR: Test: Integration of a web server  
 CR: Composite Expression Language: Added keywords eeq (===), nee (!==)  
 CR: Extension Namespace: Added method create  
+CR: Composite: Added attribute strict for loading of modules/composites  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
