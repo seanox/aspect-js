@@ -1,3 +1,0 @@
-      A1-O: Hallo Berlin
-      A1-I: <input type="text" id="InputTextA" value="A1">
-      A1-O: Hallo Berlin
