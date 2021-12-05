@@ -1,13 +1,8 @@
 if (navigator.engine === undefined) {
-    navigator.engine = "webkit";
-    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) [\w\d\.\s\/]+ Chrome\/[\d\.]+ Safari\/[\d\.]+/i))
-        navigator.engine = "blink";
-    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Chrome\/[\d\.]+ Safari\/[\d\.]+/i))
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\).* Safari\/[\d\.]+/i))
         navigator.engine = "webkit";
-    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(iPad;.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) [\w\d\.\s\/]+ Safari\/[\d\.]+/i))
-        navigator.engine = "webkit-ios";
-    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(Macintosh;.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Version\/[\d\.]+ Safari\/[\d\.]+/i))
-        navigator.engine = "webkit-macos";
+    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\).* Chrome\/[\d\.]+/i))
+        navigator.engine = "blink";
     if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) Gecko\/[\d\.]+/i))
         navigator.engine = "gecko";
     if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) Gecko\/[\d\.]+ Goanna\/[\d\.]+/i))
