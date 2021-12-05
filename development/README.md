@@ -1,10 +1,6 @@
 # Development
 
-
-
 ## Testing
-
-
 
 ### Firewall
 
@@ -23,7 +19,7 @@ netsh advfirewall firewall delete rule name="%rule_name%"
 netsh advfirewall firewall add rule^
     name="%rule_name%"^
     dir=in protocol=tcp localport=3000,3100,3200 localip=any^
-    remoteip=localsubnet profile=domain action=allow
+    remoteip=localsubnet profile=any action=allow
 ```
 
 For more details see here:
@@ -32,13 +28,9 @@ For more details see here:
 netsh advfirewall firewall delete rule -?
 ```
 
-
-
 ### Engines overview
 
 https://en.wikipedia.org/wiki/Comparison_of_browser_engines
-
-
 
 ### Browsers for Testing
 
