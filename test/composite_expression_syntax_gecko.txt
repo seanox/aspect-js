@@ -1,3 +1,6 @@
+    gecko
+    ----
+
     mapping:
     ----
     and &amp;&amp;        empty !         div /
@@ -9,7 +12,7 @@
     normal use:
     ----
     true true
-    true true 
+    true true
     true true
     true true
 
@@ -54,109 +57,109 @@
     true true
 
     true true
-    true true 
     true true
     true true
-    true true    
-    
-    true true
-    true true 
     true true
     true true
-       
+
+    true true
+    true true
+    true true
+    true true
+
     invalid word boundaries:
     ----
      true
-     true 
+     true
     identifier starts immediately after numeric literal
-    1le2 true
+	1le2 true
     identifier starts immediately after numeric literal
-    1ne2 true
-    
+	1ne2 true
+
     true true
     identifier starts immediately after numeric literal
-    2ge1 true 
+	2ge1 true
     identifier starts immediately after numeric literal
-    1lt2 true
+	1lt2 true
     true true
     unexpected token: string literal
-    Expression.lookup("notempty")'x' true    
-    
+	Expression.lookup("notempty")'x' true
+
     identifier starts immediately after numeric literal
-    (25div5)Expression.lookup("eq5") unexpected token: identifier
-    (25 /5)Expression.lookup("eq5")
+	(25div5)Expression.lookup("eq5") unexpected token: identifier
+	(25 /5)Expression.lookup("eq5")
     identifier starts immediately after numeric literal
-    2gt1 true 
+	2gt1 true
     identifier starts immediately after numeric literal
-    (10mod3)Expression.lookup("eq1") unexpected token: identifier
-    (10%3)Expression.lookup("eq1")
+	(10mod3)Expression.lookup("eq1") unexpected token: identifier
+	(10%3)Expression.lookup("eq1")
      true
-    
+
     lower / upper case:
     ----
     true true
-    true true 
     true true
     true true
-    
     true true
-    true true 
-    true true
-    true true
-    true true    
-    
-    true true
-    true true 
+
     true true
     true true
-    
+    true true
+    true true
+    true true
+
+    true true
+    true true
+    true true
+    true true
+
     various
     ----
     -1
     1
     -12
-    
-    
+
+
     undefined123
-    
-    A1: 
-    A2: 
+
+    A1:
+    A2:
     A3: Peter is not defined
-    Peter.und.der()
-    
+	Peter.und.der()
+
     B1: [object HTMLInputElement]
     B2: Expression.lookup(...) is not a function
-    Expression.lookup("#HiddenField.value")()
-    B3: Test-HF    
-    
-    C1: private ~~~Error_1~
-    #Expression.lookup("#HiddenField")
-    C2: private ~~~Error_1~
-    #Expression.lookup("#HiddenField.value")()
-    C3: private ~~~Error_1~
-    #Expression.lookup("#HiddenField.value")()    
-    
-    D1: 
-    
-    E1: private ~~~Error_1~
-    #
-    E2: private ~~~Error_1~
-    # + #
-    
+	Expression.lookup("#HiddenField.value")()
+    B3: Test-HF
+
+    C1: private names aren't valid in this context
+	#Expression.lookup("#HiddenField")
+    C2: private names aren't valid in this context
+	#Expression.lookup("#HiddenField.value")()
+    C3: private names aren't valid in this context
+	#Expression.lookup("#HiddenField.value")()
+
+    D1:
+
+    E1: '#' not followed by identifier
+	#
+    E2: '#' not followed by identifier
+	# + #
+
     F1: Expression.lookup(...) is not a function
-    '123' + Expression.lookup("#HiddenField.value")() + 'abc'
+	'123' + Expression.lookup("#HiddenField.value")() + 'abc'
     F2: 123Test-HFabc
-    
+
     G1: [object HTMLInputElement]
-    G2: private ~~~Error_1~
-    #HiddenField_1.#Expression.lookup("HiddenField_1")
-    G3: private ~~~Error_1~
-    #HiddenField_1.#Expression.lookup("HiddenField_2")    
+    G2: private names aren't valid in this context
+	#HiddenField_1.#Expression.lookup("HiddenField_1")
+    G3: private names aren't valid in this context
+	#HiddenField_1.#Expression.lookup("HiddenField_2")
     G4: unexpected token: identifier
-    Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")    
-    G5: private ~~~Error_1~
-    Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
-        
+	Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")
+    G5: unexpected token: private identifier
+	Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
+
     X0: <input type="hidden" id="HiddenField" value="Test-HF">
     X1: <input type="hidden" id="HiddenField_1" value="Test-HF_A">
     X2: <input type="hidden" id="HiddenField_2" value="Test-HF_B">
@@ -164,31 +167,31 @@
 
     O1: <span>undefined</span>
     O2: <span>xa() {
-                return 122;        
+                return 122;
             }</span>
     O3: <span>122</span>
     O4: <span>xxxx</span>
     O5: <span>xxxx</span>
     O6: <span>xxxxx</span>
     O7: <span><i>Hallo</i></span>
-    
+
     P1: abcdef #
-    P2: abcdef #    
-    
+    P2: abcdef #
+
     Q1: abcdef
-    Q2: abcdef    
+    Q2: abcdef
     Q3: abcdef
-    Q4: abcdef    
+    Q4: abcdef
     Q5: abc' + 'def
     Q6: abc" + "def
 
     QA: abc\def\
-    QB: abc\def\    
+    QB: abc\def\
     QC: abc\def\
-    QD: abc\def\    
+    QD: abc\def\
     QE: abc\' + 'def\
     QF: abc\" + "def\
-    
+
     R1: abc'd'ef
     R2: abc"d"ef
     R3: abc'd"ef
