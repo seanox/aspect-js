@@ -1,19 +1,22 @@
-    Unexpected token :
-    :
-    Unexpected token :
-    :
-    Unexpected token :
-    :
-    Unexpected token :
-    : 
-    A:1: 
-    A:2: 
+    blink
+    ----
+
+    Unexpected token ':'
+	:
+    Unexpected token ':'
+	 :
+    Unexpected token ':'
+	 :
+    Unexpected token ':'
+	:
+    A:1:
+    A:2:
     A:3: Hallo
     <article id="AB">
       AA:1: Hallo
-      AB:1:    
+      AB:1:
       AA:2: Hallo
-      AB:2: 
+      AB:2:
       AA:3: Hallo
       AB:3: Welt
       AA:4: Hallo
