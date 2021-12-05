@@ -13,15 +13,19 @@
     
         Test.activate();
         
-        const urlCount = new Map();
+        const urlMap = new Map();
         Composite.listen(Composite.EVENT_HTTP_END, (ignore, event) => {
-            const filter = new RegExp("^.*?" + RegExp.quote(window.location.pathcontext));
-            const key = event.target.responseURL.replace(filter, "")
-                    + " " + event.target.status;
-            if (!urlCount.has(key)
-                    || !Array.isArray(urlCount.get(key)))
-                urlCount.set(key, []);
-            urlCount.get(key).push("X");
+            let responseURL = event.target.responseURL;
+            let sourceLocation = window.location.protocol + "//" + window.location.host + "/";
+            if (responseURL.startsWith(sourceLocation)) {
+                const filter = new RegExp("^.*?" + RegExp.quote(window.location.pathcontext));
+                responseURL = responseURL.replace(filter, "")
+            }
+            const key = responseURL + " " + event.target.status;
+            if (!urlMap.has(key)
+                    || !Array.isArray(urlMap.get(key)))
+                urlMap.set(key, []);
+            urlMap.get(key).push("X");
         });
 
         const aModel = {
@@ -126,7 +130,7 @@
             request.send();
 
             let result = "";
-            for (const [key, value] of urlCount)
+            for (const [key, value] of urlMap)
                 result += "\r\n" + key + " " + value.join("");
             Assert.assertSameTo("script[type='text/test']", result);
         }});
