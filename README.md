@@ -75,7 +75,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # System Requirement
 - ECMAScript 6 support or higher (normally the current browsers)  
-  Engines (tested): Blink, Edge, Gecko, Goanna, WebKit, ...
+  Engines (tested): Blink, Gecko, Goanna, WebKit, ...  
+  Browsers used for testing: Basilisk, Firefox, Microsoft Edge, Google Chrome, Safari (MaOS/iOS) 
 - Web server for hosting
 
 
