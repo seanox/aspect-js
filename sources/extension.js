@@ -24,12 +24,12 @@
  *     ----
  * General extension of the JavaScript API.
  * 
- * Extension 1.2.0 20211204
+ * Extension 1.2.0 20211205
  * Copyright (C) 2021 Seanox Software Solutions
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.0 20211204
+ * @version 1.2.0 20211205
  */
 if (typeof Namespace === "undefined") {
 
@@ -459,5 +459,5 @@ if (window.location.combine === undefined) {
         return "/" + paths.join("/")
             .replace(/[\/\\]+/g, "/")
             .replace(/(^\/+)|(\/+$)/g, "");
-    }
+    };
 }
