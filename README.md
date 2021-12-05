@@ -116,7 +116,10 @@ BF: Composite: Correction for a URL without a file
 BF: Review: Correction/optimization JavaScript (no functional change)  
 BF: MVC SiteMap: Correction of the method customize when using variable paths  
 BF: DataSource: Correction for a URL without a file  
+BF: Test: Correction in determining the browser engine for WebKit and Blink  
 CR: Test: Integration of a web server  
+CR: Test: Removal of the Edge engine after switching to Chromium  
+CR: Test: Removal of the distinction between macOS and iOS  
 CR: Composite Expression Language: Added keywords eeq (===), nee (!==)  
 CR: Composite: Added attribute strict for loading of modules/composites  
 CR: Extension Namespace: Added method create  
