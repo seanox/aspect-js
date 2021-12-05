@@ -44,7 +44,7 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 | Engine | Download                                                      |
 | ------ | ------------------------------------------------------------- | 
-| WebKit | not available, native integration required                    |
 | Blink  | https://portableapps.com/apps/internet/google_chrome_portable |
 | Gecko  | https://portableapps.com/apps/internet/firefox_portable       |
 | Goanna | https://www.palemoon.org/download.shtml                       |
+| WebKit | not available, native integration required                    |
