@@ -12,8 +12,6 @@ if (navigator.engine === undefined) {
         navigator.engine = "gecko";
     if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) Gecko\/[\d\.]+ Goanna\/[\d\.]+/i))
         navigator.engine = "goanna";
-    if (navigator.userAgent.match(/Mozilla\/[\d\.]+ \(.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Chrome\/[\d\.]+ Safari\/[\d\.]+ Edge\/[\d\.]+/i))
-        navigator.engine = "edge";
 }
 
 if (Test.read === undefined) {
