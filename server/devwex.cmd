@@ -26,7 +26,6 @@ rem With startup all batch scripts are loaded from path ../runtime/scripts.
 rem Please note, that scripts to extend of runtime environment are relative to
 rem working directory.
 
-color 8F
 cls
 
 set CLASSPATH=
