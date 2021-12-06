@@ -112,17 +112,18 @@ date when using the release channels.
 BF: Composite: Correction in the use of attributes  
 BF: Composite Expression Language: Line breaks in the expressions are supported  
 BF: Composite: Correction for a URL without a file  
-BF: Review: Correction/optimization JavaScript (no functional change)  
-BF: MVC SiteMap: Correction of the method customize when using variable paths  
 BF: DataSource: Correction for a URL without a file  
+BF: MVC SiteMap: Correction of the method customize when using variable paths  
+BF: Review: Correction/optimization JavaScript (no functional change)  
 BF: Test: Correction in determining the browser engine for WebKit and Blink  
-CR: Test: Integration of a web server  
-CR: Test: Removal of the Edge engine after switching to Chromium  
-CR: Test: Removal of the distinction between macOS and iOS  
 CR: Composite Expression Language: Added keywords eeq (===), nee (!==)  
 CR: Composite: Added attribute strict for loading of modules/composites  
 CR: Extension Namespace: Added method create  
 CR: Extension: Added method window.location.combine to combine paths  
+CR: License: Changed to Apache License Version 2.0  
+CR: Test: Integration of a web server  
+CR: Test: Removal of the Edge engine after switching to Chromium  
+CR: Test: Removal of the distinction between macOS and iOS  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
