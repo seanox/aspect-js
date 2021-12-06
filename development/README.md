@@ -40,3 +40,20 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 | Gecko  | https://portableapps.com/apps/internet/firefox_portable       |
 | Goanna | https://www.palemoon.org/download.shtml                       |
 | WebKit | not available, native integration required                    |
+
+### Scenarios
+
+There are __56 scenarios__, which are composed as follows:
+
+- Release scripts:  
+ `aspect-js.js` and `aspect-js-min.js`  
+  For this purpose the file in the release directory must be renamed:
+  `aspect-js-min.js` to `aspect-js.js`.
+- Server addresses with root directory, with root directory and file, with
+  context path and default file and context path and file:  
+  http://127.0.0.1:3100  
+  http://127.0.0.1:3100/index.html  
+  http://127.0.0.1:3200/test  
+  http://127.0.0.1:3200/test/index.html  
+- To all representatives of the different browser/render engines:  
+  MS Edge, Google Chrome, Firefox, Palemoon, Safari iOS, Safari MacOS
