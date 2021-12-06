@@ -43,7 +43,7 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 ### Scenarios
 
-There are __56 scenarios__, which are composed as follows:
+There are __48 scenarios__, which are composed as follows:
 
 - Release scripts:  
  `aspect-js.js` and `aspect-js-min.js`  
