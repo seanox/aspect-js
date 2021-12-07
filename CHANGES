@@ -1,4 +1,4 @@
-1.4.0 2021xxxx
+1.4.0 20211210
   BF: Composite: Correction in the use of attributes
       If numbers are used as value could cause errors during rendering.
   BF: Composite Expression Language: Line breaks in the expressions are supported
@@ -25,7 +25,7 @@
   CR: License: Changed to Apache License Version 2.0
   CR: Test: Integration of a web server
   CR: Test: Removal of the Edge engine after switching to Chromium
-  CR: Test: Removal of the distinction between macOS and iOS
+  CR: Test: Removal of the distinction between MacOS and iOS
 
 1.3.1 20200202
   BF: DataSource: Correction for loading and caching
