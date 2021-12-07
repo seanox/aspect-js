@@ -1,7 +1,0 @@
-## Open
-- General: Blocking/intercepting F5 (prevent reloading of the page)
-- General: Blocking/intercepting Tab (prevent return to previous page)
-- Extension Export:  
-  https://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/  
-  https://code-maven.com/create-and-download-csv-with-javascript
-
