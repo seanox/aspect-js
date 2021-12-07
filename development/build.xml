@@ -7,7 +7,7 @@
     <echo>   archive    builds the final scripts and creates  </echo>
     <echo>              the archives for the distribution.    </echo>
     <echo>                                                    </echo>
-    <echo>   changes    Synchronizes README.md with CHANGES.  </echo>
+    <echo>   changes    synchronizes README.md with CHANGES   </echo>
   </target>
   
   <property name="workspace" value="${basedir}"/>

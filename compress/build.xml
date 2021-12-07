@@ -8,11 +8,11 @@
       </fileset>
     </delete>
     <javac srcdir="${basedir}" destdir="${basedir}"
-      source="8" target="8" includeantruntime="false"
-      debug="on" optimize="on" deprecation="on">
+        source="8" target="8" includeantruntime="false"
+        debug="on" optimize="on" deprecation="on">
     </javac>  
     <jar file="compress.jar" basedir="${basedir}"
-      includes="*.class">
+        includes="*.class">
       <manifest>
         <attribute name="Main-Class" value="Compress"/>
       </manifest>
