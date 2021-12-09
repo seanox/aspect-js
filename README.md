@@ -80,8 +80,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.3.1](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.3.1.zip)  
-[Seanox aspect-js 1.3.1 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.3.1-src.zip)
+[Seanox aspect-js 1.4.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.4.0.zip)  
+[Seanox aspect-js 1.4.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.4.0-src.zip)
 
 
 # Release Channels
@@ -108,7 +108,7 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.4.0 2021xxxx (summary of the next version)  
+## 1.4.0 20211210 (summary of the current version)  
 BF: Composite: Correction in the use of attributes  
 BF: Composite Expression Language: Line breaks in the expressions are supported  
 BF: Composite: Correction for a URL without a file  
@@ -123,7 +123,7 @@ CR: Extension: Added method window.location.combine to combine paths
 CR: License: Changed to Apache License Version 2.0  
 CR: Test: Integration of a web server  
 CR: Test: Removal of the Edge engine after switching to Chromium  
-CR: Test: Removal of the distinction between macOS and iOS  
+CR: Test: Removal of the distinction between MacOS and iOS  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
