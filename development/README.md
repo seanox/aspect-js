@@ -6,9 +6,9 @@
   - [Browsers for Testing](#browsers-for-testing)
   - [Scenarios](#scenarios)
 - [Publish](#publish)
-- [GitHub](#github)
-- [npmjs.com](#npmjscom)
-- [cdn.jsdelivr.net](#cdnjsdelivrnet)
+  - [GitHub](#github)
+  - [npmjs.com](#npmjscom)
+  - [cdn.jsdelivr.net](#cdnjsdelivrnet)
 
 ## Testing
 
