@@ -1,5 +1,5 @@
 {
-  "name": "aspect-js",
+  "name": "@seanox/aspect-js",
   "version": "1.4.0",
   "description": "Fullstack JavaScript UI Framework for SPAs incl. rendering, markup hardening, mvc, models, expression language, datasource, virtual paths, unit test and some more",
   "main": "releases/aspect-js-min.js",
