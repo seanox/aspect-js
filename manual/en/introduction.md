@@ -109,14 +109,14 @@ release channel.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js.js"></script>
 ```
 
 or
 
 ```html
 <!-- production version, optimized in size but not obfuscated -->
-<script src="https://cdn.jsdelivr.net/npm/seanox/releases/aspect-js-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-min.js"></script>
 ```
 
 __The framework has been developed for the implementation of modular and__
@@ -850,7 +850,7 @@ integration test on different levels and with different complexity.
 
 The test cases are implemented with assertions. The Test API provides elementary
 assertions, you can implement more. The function is simple. If an assertion was
-not ´true´, a error is thrown.
+not ï¿½trueï¿½, a error is thrown.
 
 ```javascript
 Test.activate();

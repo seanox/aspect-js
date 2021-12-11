@@ -1,3 +1,7 @@
+1.4.1 2022xxxx
+  CR: NPM: Change to a package with scope (is also already in 1.4.0)
+      The change was made afterwards of the 1.4.0 release.
+
 1.4.0 20211210
   BF: Composite: Correction in the use of attributes
       If numbers are used as value could cause errors during rendering.
