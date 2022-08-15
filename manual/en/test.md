@@ -148,12 +148,12 @@ integration test on different levels and with different complexity.
 
 The test cases are implemented with assertions. The Test API provides elementary
 assertions, you can implement more. The function is simple. If an assertion was
-not ´true´, a error is thrown.
+not `true`, an error is thrown.
 
 
 ### assertTrue
 
-Asserts that an value is `true`.  
+Asserts that a value is `true`.  
 If the assertion is false, an error with optional message is thrown.  
 The method has different signatures.
 
@@ -173,7 +173,7 @@ Test.start();
 
 ### assertFalse
 
-Asserts that an value is `false`, as negation of `Assert.assertTrue(...)`.  
+Asserts that a value is `false`, as negation of `Assert.assertTrue(...)`.  
 If the assertion is false, an error with optional message is thrown.  
 The method has different signatures. 
 
@@ -277,7 +277,7 @@ Test.start();
 
 ### assertNull
 
-Asserts that an value is `null`.  
+Asserts that a value is `null`.  
 If the assertion is false, an error with optional message is thrown.  
 The method has different signatures. 
 
@@ -297,7 +297,7 @@ Test.start();
 
 ### assertNotNull
 
-Asserts that an value is not `null`, as negation of `Assert.assertNull(...)`.  
+Asserts that a value is not `null`, as negation of `Assert.assertNull(...)`.  
 If the assertion is false, an error with optional message is thrown.  
 The method has different signatures. 
 
