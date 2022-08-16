@@ -57,7 +57,7 @@
  * of the browser. If the language set there is not supported, the language
  * declared as 'default' is used.
  * 
- * After loading the application, Messages are available as an assosiative
+ * After loading the application, Messages are available as an associative
  * array and can be used directly in JavaScript and Markup via Expression
  * Language.
  * 
