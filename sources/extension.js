@@ -127,7 +127,7 @@ if (typeof Namespace === "undefined") {
     };
 
     /**
-     * Creates a namespace to pass string with a initial value.
+     * Creates a namespace to pass string with an initial value.
      * The method has the following various signatures:
      *     Namespace.create(namespace);
      *     Namespace.create(namespace, value);
@@ -297,7 +297,7 @@ if (String.prototype.capitalize === undefined) {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a uncapitalize function to the String objects.
+ * Adds an uncapitalize function to the String objects.
  */
 if (String.prototype.uncapitalize === undefined) {
     String.prototype.uncapitalize = function() {
@@ -374,7 +374,7 @@ if (String.prototype.decodeBase64 === undefined) {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a HTML encode function to the String objects.
+ * Adds an HTML encode function to the String objects.
  */ 
 if (String.prototype.encodeHtml === undefined) {
     String.prototype.encodeHtml = function() {
@@ -413,7 +413,7 @@ if (String.prototype.hashCode === undefined) {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a decode of slash sequences (control characters).
+ * Adds a decoding of slash sequences (control characters).
  */ 
 if (String.prototype.unescape === undefined) {
     String.prototype.unescape = function() {
