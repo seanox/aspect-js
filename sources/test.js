@@ -79,7 +79,7 @@
  *     ----
  * The test cases are implemented with assertions. The test module provides
  * elementary assertions, you can implement more. The function is simple. If an
- * assertion was not true, a error is thrown -- see as an example the
+ * assertion was not true, an error is thrown -- see as an example the
  * implementation here. 
  * 
  * Test 1.1.2 20210523
@@ -772,7 +772,7 @@ if (typeof Test === "undefined") {
             };
             
             /**
-             * Asserts that an value is true.
+             * Asserts that a value is true.
              * If the assertion is incorrect, an error with a message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
@@ -789,7 +789,7 @@ if (typeof Test === "undefined") {
             };
             
             /**
-             * Asserts that an value is false.
+             * Asserts that a value is false.
              * If the assertion is incorrect, an error with a message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
@@ -882,7 +882,7 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             * Asserts that an value is null.
+             * Asserts that a value is null.
              * If the assertion is incorrect, an error with a message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
@@ -899,7 +899,7 @@ if (typeof Test === "undefined") {
             };
     
             /**
-             * Asserts that an value is not null.
+             * Asserts that a value is not null.
              * If the assertion is incorrect, an error with a message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
@@ -917,7 +917,7 @@ if (typeof Test === "undefined") {
     
             /**
              * Fails a test with an optional message.
-             * This assertion will be thrown a error with an optional message.
+             * This assertion will be thrown an error with an optional message.
              * The method has the following various signatures:
              *     function(message) 
              *     function() 
@@ -1062,7 +1062,7 @@ if (typeof Test === "undefined") {
     
         /**
          * Enhancement of the JavaScript API
-         * Adds a method that creates a plain string for a Element.
+         * Adds a method that creates a plain string for an Element.
          */     
         if (Element.prototype.toPlainString === undefined)
             Element.prototype.toPlainString = function() {
@@ -1071,7 +1071,7 @@ if (typeof Test === "undefined") {
         
         /**
          * Enhancement of the JavaScript API
-         * Adds a method that creates a plain string for a Object.
+         * Adds a method that creates a plain string for an Object.
          */      
         if (Object.prototype.toPlainString === undefined)
             Object.prototype.toPlainString = function() {
@@ -1091,8 +1091,7 @@ if (typeof Test === "undefined") {
          */         
         if (Element.prototype.trigger === undefined)
             Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
-                const trigger = document.createEvent("Event");
-                trigger.initEvent(event, bubbles, cancel);
+                const trigger = new Event(event, {"bubbles":bubbles, "cancelable":cancel});
                 this.dispatchEvent(trigger);
             }; 
     };
