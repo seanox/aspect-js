@@ -247,7 +247,7 @@ if (typeof Composite === "undefined") {
         get PATTERN_COMPOSITE_ID() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
 
         /** 
-         * Pattern for a element id (e.g. name:qualifier...)
+         * Pattern for an element id (e.g. name:qualifier...)
          *     group 1: name
          *     group 2: qualifier(s) (optional)
          */
@@ -1857,7 +1857,7 @@ if (typeof Composite === "undefined") {
             // Register each analyzed node/element and minimizes multiple
             // analysis. For registration, the serial number of the node/element
             // is used. The node prototype has been enhanced with creation and a
-            // get-function. During the analysis, the attributes of a element
+            // get-function. During the analysis, the attributes of an element
             // (not node) containing an expression or all allowed attributes are
             // cached in the memory (Composite.render.meta).
             let serial = selector.ordinal();
