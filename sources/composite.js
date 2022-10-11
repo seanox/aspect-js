@@ -115,10 +115,6 @@
  * Thus virtual paths, object structure in JavaScript (namespace) and the
  * nesting of the DOM must match.
  *
- * Composite 1.4.0 20211204
- * Copyright (C) 2021 Seanox Software Solutions
- * Alle Rechte vorbehalten.
- *
  * @author  Seanox Software Solutions
  * @version 1.4.0 20211204
  */

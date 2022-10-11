@@ -99,10 +99,6 @@
  * The object/model-binding part also belongs to the Model View Controller and
  * is taken over by the Composite API in this implementation. SiteMap is an
  * extension and is based on the Composite API.
- * 
- * MVC 1.2.1 20210623
- * Copyright (C) 2021 Seanox Software Solutions
- * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
  * @version 1.2.1 20210623

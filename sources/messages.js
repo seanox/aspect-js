@@ -65,10 +65,6 @@
  *     
  * <h1 output="{{Messages['contact.title']}}"/>
  * 
- * Messages 1.2.1 20210622
- * Copyright (C) 2021 Seanox Software Solutions
- * Alle Rechte vorbehalten.
- *
  * @author  Seanox Software Solutions
  * @version 1.2.1 20210622
  */
