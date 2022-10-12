@@ -1,13 +1,17 @@
 <?xml version="1.0" ?>
 <project name="aspect-js" default="usage" basedir="..">
   <target name="usage">
-    <echo>                                                    </echo>
-    <echo> the following targets are available ...            </echo>
-    <echo>                                                    </echo>
-    <echo>   archive    builds the final scripts and creates  </echo>
-    <echo>              the archives for the distribution.    </echo>
-    <echo>                                                    </echo>
-    <echo>   changes    synchronizes README.md with CHANGES   </echo>
+    <echo>                                                         </echo>
+    <echo> the following targets are available ...                 </echo>
+    <echo>                                                         </echo>
+    <echo>   release    builds the final scripts and creates       </echo>
+    <echo>              the archives for the distribution.         </echo>
+    <echo>                                                         </echo>
+    <echo>   changes    synchronizes README.md with CHANGES        </echo>
+    <echo>                                                         </echo>
+    <echo>   test       creates a release for testing              </echo>
+    <echo>                                                         </echo>
+    <echo>   debug      Creates a release for testing in debug mode</echo>
   </target>
   
   <property name="workspace" value="${basedir}"/>
@@ -96,8 +100,8 @@
     <replaceregexp file="${workspace}/CHANGES.tmp" match="^(\d[\.\d x]+)[^\r\n]*" replace="## \1" byline="false"/>
     <replaceregexp file="${workspace}/CHANGES.tmp" match="^ {0,4}([A-Z]+:.*)\s*$" replace="\1" byline="true"/>
     <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)[\r\n]+ [^\r\n]+" replace="" flags="g" byline="false"/>  
-    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(## \d[\.\d]+ \d+)(  )" replace="\1 (summary of the current version)\2" flags="g" byline="true"/>
-    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(## \d[\.\d]+ [\dx]+)(  )" replace="\1 (summary of the next version)\2" flags="g" byline="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(## \d[\.\d]+ \d+)(  )" replace="\1\2" flags="g" byline="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="^(## \d[\.\d]+ [\dx]+)(  )" replace="\1 (upcoming version)\2" flags="g" byline="true"/>
     <loadresource property="changes">
       <file file="${workspace}/CHANGES.tmp"/>
     </loadresource>
@@ -111,9 +115,23 @@
     <replaceregexp file="${workspace}/README.md"
         match="(?si)(?&lt;=\(C\)\s)\d{4}\b" flags="g" byline="true"
         replace="${now.year}"/>
-  </target>  
+
+    <copy file="${workspace}/CHANGES" tofile="${workspace}/CHANGES.tmp" overwrite="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)(?:^|^(?:.*?[\r\n]+))(\d(?:\.\d)+) \d+\s.*$" replace="release.version.current=\1" byline="false"/>
+    <loadproperties srcfile="${workspace}/CHANGES.tmp"/>
+    <delete file="${workspace}/CHANGES.tmp"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="(Seanox ${ant.project.name} )\d+(\.\d+)*" flags="g" byline="false"
+        replace="\1${release.version.current}"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="(seanox/${ant.project.name}/releases/download/)\d+(?:\.\d+)*(/${ant.project.name}-)\d+(?:\.\d+)*(\.zip)" flags="g" byline="false"
+        replace="\1${release.version.current}\2${release.version.current}\3"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="(seanox/${ant.project.name}/archive/refs/tags/)\d+(?:\.\d+)*(\.zip)" flags="g" byline="false"
+        replace="\1${release.version.current}\2"/>
+  </target>
   
-  <target name="archive">
+  <target name="release">
     <release-locate/>
 
     <delete dir="${workspace.releases}" excludes="*.zip"/>
@@ -188,12 +206,12 @@
     
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\1${release.version}\2" byline="false"/>  
   </target>
-  
-  <target name="test-min" depends="archive">
+
+  <target name="test" depends="release">
     <copy file="${release.min}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
   </target>
-  
-  <target name="test-dev" depends="archive">
+
+  <target name="debug" depends="release">
     <copy file="${release.dev}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
   </target>
 </project>

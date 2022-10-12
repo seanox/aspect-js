@@ -58,7 +58,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der Apache License.
 
-Copyright (C) 2022 Seanox Software Solutions
+Copyright (C) 2021 Seanox Software Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -80,8 +80,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.4.1](https://github.com/seanox/aspect-js/releases/download/1.4.1/aspect-js-1.4.1.zip)  
-[Seanox aspect-js 1.4.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.4.1.zip)
+[Seanox aspect-js 1.4.0](https://github.com/seanox/aspect-js/releases/download/1.4.0/aspect-js-1.4.0.zip)  
+[Seanox aspect-js 1.4.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.4.0.zip)
 
 
 # Release Channels
@@ -108,9 +108,22 @@ date when using the release channels.
 
 
 # Changes (Change Log)
-## 1.4.1 20220123 (upcoming version)  
-CR: NPM: Change to a package with scope (is also already in 1.4.0)  
-CR: Build: Releases are now only available on the release page  
+## 1.4.0 20211210 (summary of the current version)
+BF: Composite: Correction in the use of attributes  
+BF: Composite Expression Language: Line breaks in the expressions are supported  
+BF: Composite: Correction for a URL without a file  
+BF: DataSource: Correction for a URL without a file  
+BF: MVC SiteMap: Correction of the method customize when using variable paths  
+BF: Review: Correction/optimization JavaScript (no functional change)  
+BF: Test: Correction in determining the browser engine for WebKit and Blink  
+CR: Composite Expression Language: Added keywords eeq (===), nee (!==)  
+CR: Composite: Added attribute strict for loading of modules/composites  
+CR: Extension Namespace: Added method create  
+CR: Extension: Added method window.location.combine to combine paths  
+CR: License: Changed to Apache License Version 2.0  
+CR: Test: Integration of a web server  
+CR: Test: Removal of the Edge engine after switching to Chromium  
+CR: Test: Removal of the distinction between MacOS and iOS
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
