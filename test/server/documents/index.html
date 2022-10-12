@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox Devwex</title>
+    <style type="text/css">
+      body {padding:0px; margin:0px; color:#CCCCCC; background:#494744; font:12pt sans-serif; cursor:default;}
+      a[href] {color:#FFAA44;}
+      a[href]:hover {color:#FFFFFF;}
+      a[href]:active {color:#999999;}
+      select, button, input {height:35px; min-width:35px; cursor:pointer; font:1em sans-serif; color:#FFAA44; border:1px solid #FFAA44!important; border-radius:4px; background:none;}
+      input[type='text'] {padding-left:0.5em; padding-right:0.5em; background:#595755; cursor:default;}
+      button:hover, input[type='button']:hover, input[type='reset']:hover, input[type='submit']:hover, button:focus, input[type='button']:focus, input[type='reset']:focus, input[type='submit']:focus {color:#FFFFFF; border-color:#FFFFFF!important;}
+      button:active, input[type='button']:active, input[type='reset']:active, input[type='submit']:active {color:#999999; border-color:#999999!important;}
+      *.hidden {display:none;}
+      * {box-sizing:border-box;}
+      main {padding:5% 10% 0% 10%;}
+      main > h1 + h2 {margin-top:-0.75em;}
+      footer {padding:0em 10% 6em 10%;}
+      footer > section {display:inline-block; position:relative; bottom:0px; left:0px; margin-top:3em;}
+      footer > section p {line-height:13px; margin:0px; white-space:nowrap; font-size:18px;}
+      footer > section p + p {margin-top:8px;}
+      footer > section p:first-child:before {position:absolute; left:0px; top:1px; width:38px; height:38px; background:url('data:image/png;base64,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') no-repeat; background-size:38px 38px; content:'';}
+      footer > section p:first-child {padding-left:46px;}
+      footer > section p:first-child + p {padding-left:46px; color:#999999;}
+      footer > section p:first-child + p + p:before {display:block; height:2px; background:#FFAA44; content:''; position:relative; top:-8px;}
+      footer > section p:first-child + p + p {padding-top:12px;}
+      main {width:100%!important;}
+      main, main > section {margin:0px; padding:0px;}
+      main > section > table {position:absolute; top:0px; bottom:0px; width:100%; height:100%;}
+      main > section > table td {text-align:center;}
+      main > section > table td > div {display:inline-block;}
+      main > section > table td > div > div {white-space:nowrap; font-size:48px; font-weight:bold; text-transform:uppercase;}
+      main > section > table td > div > div + div {text-align:right; font-size:24px; font-weight:normal; text-transform:none;}
+      footer {position:absolute; padding:0px; left:3em; bottom:3em;}
+      footer > section {margin-top:0px;}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <table>
+          <tr>
+            <td>
+              <div>
+                <div>Seanox Devwex</div>
+                <div>Server is ready.</div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </section>
+    </main>
+    <footer>
+      <section>
+        <p>Seanox Devwex</p>
+        <p>Advanced Server Development</p>
+        <p>Seanox Software Solutions</p>
+       </section>
+    </footer>
+  </body>
+</html>

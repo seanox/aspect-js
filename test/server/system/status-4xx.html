@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox Devwex</title>
+    <style type="text/css">
+      body {padding:0px; margin:0px; color:#CCCCCC; background:#494744; font:12pt sans-serif; cursor:default;}
+      a[href] {color:#FFAA44;}
+      a[href]:hover {color:#FFFFFF;}
+      a[href]:active {color:#999999;}
+      select, button, input {height:35px; min-width:35px; cursor:pointer; font:1em sans-serif; color:#FFAA44; border:1px solid #FFAA44!important; border-radius:4px; background:none;}
+      input[type='text'] {padding-left:0.5em; padding-right:0.5em; background:#595755; cursor:default;}
+      button:hover, input[type='button']:hover, input[type='reset']:hover, input[type='submit']:hover, button:focus, input[type='button']:focus, input[type='reset']:focus, input[type='submit']:focus {color:#FFFFFF; border-color:#FFFFFF!important;}
+      button:active, input[type='button']:active, input[type='reset']:active, input[type='submit']:active {color:#999999; border-color:#999999!important;}
+      *.hidden {display:none;}
+      * {box-sizing:border-box;}
+      main {padding:5% 10% 0% 10%;}
+      main > h1 + h2 {margin-top:-0.75em;}
+      footer {padding:0em 10% 6em 10%;}
+      footer > section {display:inline-block; position:relative; bottom:0px; left:0px; margin-top:3em;}
+      footer > section p {line-height:13px; margin:0px; white-space:nowrap; font-size:18px;}
+      footer > section p + p {margin-top:8px;}
+      footer > section p:first-child:before {position:absolute; left:0px; top:1px; width:38px; height:38px; background:url('data:image/png;base64,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') no-repeat; background-size:38px 38px; content:'';}
+      footer > section p:first-child {padding-left:46px;}
+      footer > section p:first-child + p {padding-left:46px; color:#999999;}
+      footer > section p:first-child + p + p:before {display:block; height:2px; background:#FFAA44; content:''; position:relative; top:-8px;}
+      footer > section p:first-child + p + p {padding-top:12px;}
+      @media screen and (min-width:1400px) {
+        body {overflow:hidden;}
+        body > * {position:absolute; height:100%; overflow:auto;}
+        main {left:25%; width:75%; background:linear-gradient(to right, #393733 0px, #494744 3px) ; border-left:1px solid #393733;}
+        main:after {display:block; height:7.5em; content:'';}
+        footer {left:0%; width:25%; background:#595755; border-right:1px solid #696766;}
+        footer > section {position:absolute; bottom:0px; left:0px; margin:3em 3em;}
+      }
+      main > p {color:#999999;}
+      main > p + p {color:#CCCCCC; display:none;}
+      main > p + p[class~='#[http_status]'] {display:block;}
+      @media screen and (min-width:1400px) {
+        main > p {padding-bottom:5em;}
+        main > p + p {margin-top:-5em;}
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>#[http_status_text]</h1>
+      <h2>Status #[http_status]</h2>
+      <p>
+        The 4xx class of status code is intended for cases in which the client
+        seems to have erred. Except when responding to a HEAD request, the
+        server SHOULD include an entity containing an explanation of the error
+        situation, and whether it is a temporary or permanent condition. These
+        status codes are applicable to any request method. User agents SHOULD
+        display any included entity to the user.<br>
+        <br>
+        If the client is sending data, a server implementation using TCP SHOULD
+        be careful to ensure that the client acknowledges receipt of the
+        packet(s) containing the response, before the server closes the input
+        connection. If the client continues sending data to the server after the
+        close, the server's TCP stack will send a reset packet to the client,
+        which may erase the client's unacknowledged input buffers before they
+        can be read and interpreted by the HTTP application.
+      </p>
+      <p class="400">
+        The request could not be understood by the server due to malformed
+        syntax. The client SHOULD NOT repeat the request without modifications.
+      </p>
+      <p class="401">
+        The request requires user authentication. The response MUST include a
+        WWW-Authenticate header field containing a challenge applicable to the
+        requested resource. The client MAY repeat the request with a suitable
+        Authorization header field. If the request already included
+        Authorization credentials, then the 401 response indicates that
+        authorization has been refused for those credentials. If the 401
+        response contains the same challenge as the prior response, and the user
+        agent has already attempted authentication at least once, then the user
+        SHOULD be presented the entity that was given in the response, since
+        that entity might include relevant diagnostic information.
+      </p>
+      <p class="403">
+        The server understood the request, but is refusing to fulfill it.
+        Authorization will not help and the request SHOULD NOT be repeated. If
+        the request method was not HEAD and the server wishes to make public why
+        the request has not been fulfilled, it SHOULD describe the reason for
+        the refusal in the entity. If the server does not wish to make this
+        information available to the client, the status code 404 (Not Found) can
+        be used instead.
+      </p>
+      <p class="404">
+        The server has not found anything matching the Request-URI. No
+        indication is given of whether the condition is temporary or permanent.
+        The 410 (Gone) status code SHOULD be used if the server knows, through
+        some internally configurable mechanism, that an old resource is
+        permanently unavailable and has no forwarding address. This status code
+        is commonly used when the server does not wish to reveal exactly why the
+        request has been refused, or when no other response is applicable.
+      </p>
+      <p class="405">
+        The method specified in the Request-Line is not allowed for the resource
+        identified by the Request-URI. The response MUST include an Allow header
+        containing a list of valid methods for the requested resource.
+      </p>
+      <p class="406">
+        The resource identified by the request is only capable of generating
+        response entities which have content characteristics not acceptable
+        according to the accept headers sent in the request.<br>
+        <br>
+        Unless it was a HEAD request, the response SHOULD include an entity
+        containing a list of available entity characteristics and location(s)
+        from which the user or user agent can choose the one most appropriate.
+        The entity format is specified by the media type given in the
+        Content-Type header field. Depending upon the format and the
+        capabilities of the user agent, selection of the most appropriate choice
+        MAY be performed automatically. However, this specification does not
+        define any standard for such automatic selection.<br>
+        <br>
+        If the response could be unacceptable, a user agent SHOULD temporarily
+        stop receipt of more data and query the user for a decision on further
+        actions.
+      </p>
+      <p class="408">
+        The client did not produce a request within the time that the server was
+        prepared to wait. The client MAY repeat the request without
+        modifications at any later time.
+      </p>
+      <p class="411">
+        The server refuses to accept the request without a defined
+        Content-Length. The client MAY repeat the request if it adds a valid
+        Content-Length header field containing the length of the message-body in
+        the request message.
+      </p>
+      <p class="413">
+        The server is refusing to process a request because the request entity
+        is larger than the server is willing or able to process. The server MAY
+        close the connection to prevent the client from continuing the
+        request.<br>
+        <br>
+        If the condition is temporary, the server SHOULD include a Retry- After
+        header field to indicate that it is temporary and after what time the
+        client MAY try again.
+      </p>
+      <p class="416">
+        A server SHOULD return a response with this status code if a request
+        included a Range request-header field, and none of the range-specifier
+        values in this field overlap the current extent of the selected
+        resource, and the request did not include an If-Range request-header
+        field. (For byte-ranges, this means that the first- byte-pos of all of
+        the byte-range-spec values were greater than the current length of the
+        selected resource.)<br>
+        <br>
+        When this status code is returned for a byte-range request, the response
+        SHOULD include a Content-Range entity-header field specifying the
+        current length of the selected resource (see section 14.16). This
+        response MUST NOT use the multipart/byteranges content- type.
+      </p>
+      <p class="424">
+        The method was not executed on a particular resource within its scope
+        because some part of the method's execution failed causing the entire
+        method to be aborted. For example, if a command in a PROPPATCH method
+        fails then, at minimum, the rest of the commands will also fail with 424
+        Method Failure.
+      </p>
+    </main>
+    <footer>
+      <section>
+        <p>Seanox Devwex</p>
+        <p>Advanced Server Development</p>
+        <p>Seanox Software Solutions</p>
+       </section>
+    </footer>
+  </body>
+</html>
