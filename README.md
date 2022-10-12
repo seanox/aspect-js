@@ -80,8 +80,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.4.0](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.4.0.zip)  
-[Seanox aspect-js 1.4.0 Sources](https://raw.githubusercontent.com/seanox/aspect-js/master/releases/aspect-js-1.4.0-src.zip)
+[Seanox aspect-js 1.4.0](https://github.com/seanox/aspect-js/releases/download/1.4.0/aspect-js-1.4.0.zip)  
+[Seanox aspect-js 1.4.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.4.0.zip)
 
 
 # Release Channels
