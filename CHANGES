@@ -1,8 +1,9 @@
 1.5.0 2022xxxx
-  BF: #0000 Review: Optimization and corrections
+  BF: Review: Optimization and corrections
   CR: NPM: Change to a package with scope (is also already in 1.4.0)
       The change was made afterwards of the 1.4.0 release.
   CR: Build: Releases are now only available on the release page
+  CR: Test: Update web server to version 5.5.x
 
 1.4.0 20211210
   BF: Composite: Correction in the use of attributes
