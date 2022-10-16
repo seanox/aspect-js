@@ -64,27 +64,7 @@
       <delete file="CHANGES.tmp"/>
     </sequential>
   </macrodef> 
-  
-  <macrodef name="compress-javascript">
-    <attribute name="file"/>
-    <sequential>
-      <echo>Compressing: @{file}</echo>
-      <replaceregexp file="@{file}" match="([^\s\\])(/\*)" flags="g" replace="\1\\\\\2" byline="false"/>
-      <replaceregexp file="@{file}" match="([^\s\\])(/)(/)" flags="g" replace="\1\\\\\2\\\\\2" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)\/\*.*?\*/" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s*//.*$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
-      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(\{)[\r\n]+\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?=\})" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?!\})" flags="g" replace=" " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ *(\})" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?i)[\r\n]+([a-z0-9_\.]+\s*[=;])" flags="g" replace=" \1" byline="false"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
-    </sequential>
-  </macrodef>
-  
+
   <target name="changes">
     <replaceregexp file="${workspace}/CHANGES" match="&#x00E4;" replace="ae" flags="g"/>
     <replaceregexp file="${workspace}/CHANGES" match="&#x00C4;" replace="Ae" flags="g"/>
@@ -136,8 +116,10 @@
 
     <delete dir="${workspace.releases}" excludes="*.zip"/>
     
-    <property name="release.dev" value="${workspace.releases}/${ant.project.name}-${release.major}.x.js"/>
-    <concat destfile="${release.dev}" append="false">
+    <property name="release.file" value="${workspace.releases}/${ant.project.name}.js"/>
+    <property name="release.file.min" value="${workspace.releases}/${ant.project.name}-min.js"/>
+
+    <concat destfile="${release.file}" append="false">
       <filelist dir="${workspace.sources}">
         <file name="extension.js"/>
         <file name="datasource.js"/>
@@ -147,18 +129,22 @@
         <file name="test.js"/>
       </filelist>   
     </concat>
-    <replaceregexp file="${release.dev}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
-    <replaceregexp file="${release.dev}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" flags="g" replace="\1" byline="false"/>
-    <copy file="${release.dev}" tofile="${workspace.releases}/${ant.project.name}.js" overwrite="true"/>
-    
-    <property name="release.min" value="${workspace.releases}/${ant.project.name}-${release.major}.x-min.js"/>
-    <copy file="${release.dev}" tofile="${release.min}" overwrite="true"/>
-    <replaceregexp file="${release.min}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
-    <java classname="Compress" classpath="${workspace}/compress/compress.jar" fork="yes">
-      <arg value="${release.min}"/>    
-    </java>    
-    <copy file="${release.min}" tofile="${workspace.releases}/${ant.project.name}-min.js" overwrite="true"/>
-    
+
+    <replaceregexp file="${release.file}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
+    <replaceregexp file="${release.file}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" flags="g" replace="\1" byline="false"/>
+    <copy file="${release.file}" tofile="${workspace.releases}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
+
+    <exec executable="cmd.exe" dir="compress">
+      <arg value="/c npm link ."/>
+    </exec>
+    <exec executable="cmd.exe" dir="compress">
+      <arg value="/c uglifyjs ..\releases\aspect-js.js  -c -m -o ..\releases\aspect-js-min.js"/>
+    </exec>
+    <exec executable="cmd.exe" dir="compress">
+      <arg value="/c npm uninstall -g uglify-js"/>
+    </exec>
+    <copy file="${release.file.min}" tofile="${workspace.releases}/${ant.project.name}-${release.major}.x-min.js" overwrite="true"/>
+
     <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
     <copy file="LICENSE" tofile="${workspace.releases}/license.txt"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
@@ -208,10 +194,10 @@
   </target>
 
   <target name="test" depends="release">
-    <copy file="${release.min}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+    <copy file="${release.file.min}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
   </target>
 
   <target name="debug" depends="release">
-    <copy file="${release.dev}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+    <copy file="${release.file}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
   </target>
 </project>
