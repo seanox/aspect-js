@@ -34,6 +34,6 @@ The following call is an example and is included in the build script.
 
 ```BATCH
 npm link .
-uglifyjs ..\releases\aspect-js.js  -c -m -o ..\releases\aspect-js-min.js
+uglifyjs ..\releases\aspect-js.js -c -m -o ..\releases\aspect-js-min.js
 npm uninstall -g uglify-js
 ```
