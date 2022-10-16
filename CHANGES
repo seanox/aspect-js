@@ -1,5 +1,6 @@
 1.5.0 2022xxxx
   BF: Review: Optimization and corrections
+  BF: Documentation: Correction of encoding
   CR: NPM: Change to a package with scope (is also already in 1.4.0)
       The change was made afterwards of the 1.4.0 release.
   CR: Build: Releases are now only available on the release page
