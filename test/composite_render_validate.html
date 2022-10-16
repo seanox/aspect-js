@@ -83,7 +83,7 @@
         const snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             let snapshot = () => {
-                const signatue = (selector) => {
+                const signature = (selector) => {
                     const element = document.querySelector(selector);
                     let result = "";
                     if (element.validationMessage)
@@ -99,8 +99,8 @@
                     return result;
                 };
 
-                let snapshot = "E:" + signatue("#model #email") + "|" + model.email
-                     + "\r\n" + "P:" + signatue("#model #password") + "|" + model.password
+                let snapshot = "E:" + signature("#model #email") + "|" + model.email
+                     + "\r\n" + "P:" + signature("#model #password") + "|" + model.password
                      + "\r\n" + "V:" + model.validates.join("|")
                      + "\r\n" + "S:" + "|S:" + model.submitClicks
                          + "|B:" + model.buttonClicks

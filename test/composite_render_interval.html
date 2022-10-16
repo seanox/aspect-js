@@ -90,7 +90,7 @@
 
             //Assuming that the counter of S2 runs faster, S1 must always be
             //greater than S1. Since both timers run very slowly, the reset of
-            //the setie will result in the initial values S2 not being greater
+            //setTimeout will result in the initial values S2 not being greater
             //than S1 after the reset.
             value = parseInt(snapshot.S2) < parseInt(snapshot.S1) ? "0" : "1";
             if (snapshots.xS12.slice(-1) !== value)
