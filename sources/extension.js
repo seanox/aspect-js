@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2021 Seanox Software Solutions
+ * Copyright (C) 2022 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.0 20211205
+ * @version 1.2.1 20221016
  */
 if (typeof Namespace === "undefined") {
 
@@ -259,7 +259,7 @@ if (Math.uniqueSerialId === undefined) {
         serial = (serial.length.toString(36) + serial).toUpperCase();
         serial = Math.uniqueId() + serial;
         if (serial.length > size)
-            serial = serial.substr(serial.length -size);
+            serial = serial.substring(serial.length -size);
         return serial;
     };
 }
@@ -331,7 +331,7 @@ if (String.prototype.decodeHex === undefined) {
             text = text.substring(2);
         let result = "";
         for (let loop = 0; loop < text.length; loop += 2)
-            result += String.fromCharCode(parseInt(text.substr(loop, 2), 16));
+            result += String.fromCharCode(parseInt(text.substring(loop, 2), 16));
         return result;
     };
 }

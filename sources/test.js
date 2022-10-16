@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2021 Seanox Software Solutions
+ * Copyright (C) 2022 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -83,7 +83,7 @@
  * implementation here. 
  *
  * @author  Seanox Software Solutions
- * @version 1.1.2 20210523
+ * @version 1.1.3 20221016
  */
 if (typeof Test === "undefined") {
 
@@ -724,15 +724,15 @@ if (typeof Test === "undefined") {
              * Creates a new assertion based on an array of variant parameters.
              * Size defines the number of test values.
              * If more parameters are passed, the first must be the message.
-             * @param arguments
+             * @param parameters
              * @param size
              */
-            Assert.create = function(arguments, size) {
+            Assert.create = function(parameters, size) {
 
                 const assert = {message:null, values:[], error() {
-                    const words = Array.from(arguments);
-                    words.forEach((argument, index, array) => {
-                        array[index] = String(argument).replace(/\{(\d+)\}/g, (match, index) => {
+                    const words = Array.from(parameters);
+                    words.forEach((parameter, index, array) => {
+                        array[index] = String(parameter).replace(/\{(\d+)\}/g, (match, index) => {
                             if (index > assert.values.length)
                                 return "[null]";
                             match = String(assert.values[index]);
@@ -757,12 +757,12 @@ if (typeof Test === "undefined") {
                     });
                     return new Error(message);
                 }};
-                
-                arguments = Array.from(arguments);
-                if (arguments.length > size)
-                    assert.message = arguments.shift();
-                while (arguments.length > 0)
-                    assert.values.push(arguments.shift());
+
+                parameters = Array.from(parameters);
+                if (parameters.length > size)
+                    assert.message = parameters.shift();
+                while (parameters.length > 0)
+                    assert.values.push(parameters.shift());
     
                 return assert;
             };
@@ -1087,8 +1087,7 @@ if (typeof Test === "undefined") {
          */         
         if (Element.prototype.trigger === undefined)
             Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
-                const trigger = new Event(event, {"bubbles":bubbles, "cancelable":cancel});
-                this.dispatchEvent(trigger);
+                this.dispatchEvent(new Event(event, {"bubbles":bubbles, "cancelable":cancel}));
             }; 
     };
 }

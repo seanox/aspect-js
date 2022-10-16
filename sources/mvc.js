@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2021 Seanox Software Solutions
+ * Copyright (C) 2022 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -101,7 +101,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.1 20210623
+ * @version 1.2.2 20221016
  */
 if (typeof Path === "undefined") {
     
@@ -122,7 +122,7 @@ if (typeof Path === "undefined") {
          */
         get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/;},
     
-        /** Pattern for a url path. */
+        /** Pattern for an url path. */
         get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i;},
     
         /** Pattern for a functional path. */
@@ -361,7 +361,7 @@ if (typeof SiteMap === "undefined") {
 
     // SiteMap.facets
     //     Map with all paths with facet paths {path:key, facet:facet}
-    //     The sum of all paths and assigned facets)
+    //     The sum of all paths and assigned facets
     Object.defineProperty(SiteMap, "facets", {
         value: new Map()
     });
@@ -501,9 +501,7 @@ if (typeof SiteMap === "undefined") {
      *     URL itself is ignored)
      */  
     SiteMap.forward = function(path) {
-
-        const event = document.createEvent("HTMLEvents");
-        event.initEvent("hashchange", false, true);
+        const event = new Event("hashchange",{"bubbles":false, "cancelable":true})
         event.newURL = path;
         window.dispatchEvent(event);
     };
