@@ -14,20 +14,20 @@
 
 ### Firewall
 - Windows Defender Firewall (add a rule)
-- Name: Seanox Development TCP 3000, 3100, 3200
+- Name: Seanox Development TCP 3000
 - Protocol Type: TCP
-- Local Port: 3000, 3100, 3200
+- Local Port: 3000
 - Remote Port: all
 - Remote IP Adress: subnet
 
 Creation of the rule via command line:
 
 ```
-set rule_name=Seanox Development TCP 3000, 3100, 3200
+set rule_name=Seanox Development TCP 3000
 netsh advfirewall firewall delete rule name="%rule_name%"
 netsh advfirewall firewall add rule^
     name="%rule_name%"^
-    dir=in protocol=tcp localport=3000,3100,3200 localip=any^
+    dir=in protocol=tcp localport=3000 localip=any^
     remoteip=localsubnet profile=any action=allow
 ```
 
@@ -57,10 +57,11 @@ There are __48 scenarios__, which are composed as follows:
   `aspect-js-min.js` to `aspect-js.js`.
 - Server addresses with root directory, with root directory and file, with
   context path and default file and context path and file:  
-  http://127.0.0.1:3100  
-  http://127.0.0.1:3100/index.html  
-  http://127.0.0.1:3200/test  
-  http://127.0.0.1:3200/test/index.html  
+  http://127.0.0.1:3000  
+  http://127.0.0.1:3000/index.html  
+  http://127.0.0.1:3000/test  
+  http://127.0.0.1:3000/test/index.html
+  http://127.0.0.1:3000/tutorial
 - To all representatives of the different browser/render engines:  
   MS Edge, Google Chrome, Firefox, Palemoon, Safari iOS, Safari MacOS
 
