@@ -1,5 +1,15 @@
+# IDE specific
 /.idea/
+/*.iml
+
+# IDE specific
 /.settings/
 /.project
-/releases
-/*.iml
+
+# Node.js specific
+/node_modules/
+/package-lock.json
+
+# Build specific
+/releases/
+/test/aspect-js.js
