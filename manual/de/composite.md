@@ -4,7 +4,7 @@
 # Komponenten
 
 Die Implementierung von Seanox aspect-js ist auf eine modulare und auf
-Komponenten basierte Architektur ausgerichtet. Das Framework unterstützt dazu
+Komponenten basierte Architektur ausgerichtet. Das Framework unterst&uuml;tzt dazu
 eine deklarative Kennzeichnung von Komponenten im Markup, die Auslagerung und
 das automatische Laden von Ressourcen, sowie ein automatisches
 Object/Model-Binding.
@@ -42,14 +42,14 @@ als Programmbibliothek bereitgestellt wird.
 
 ## Komponente
 
-Eine Komponente bezeichnet einen funktional und/oder technisch eigenständigen
+Eine Komponente bezeichnet einen funktional und/oder technisch eigenst&auml;ndigen
 Bestandteil, der aus einem oder mehreren Modulen bestehen kann oder ein Modul
 kann eine oder mehrere Komponenten bereitstellen.
 
 
 ## Composite
 
-Ein Composite bezeichnet eine funktional eigenständige Komponente die sich aus
+Ein Composite bezeichnet eine funktional eigenst&auml;ndige Komponente die sich aus
 Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
 zusammensetzen kann.  
 Im Hinblick auf den Model-View-Controller-Ansatz, lassen sich mit einem Composite
@@ -57,7 +57,7 @@ Model und View bereitstellen.
 
 __Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,__
 __was aber ebenfalls verwendet werden kann. Ein anderer wichtiger Unterschied__
-__besteht beim Laden und Ausführen von JavaScript, was bei Composites in__
+__besteht beim Laden und Ausf&uuml;hren von JavaScript, was bei Composites in__
 __einem Render-Zyklus linear/sequenziell und somit synchron erfolgt.__
 
 
@@ -82,10 +82,10 @@ HTML-Element mit einer eindeutigen Id.
 ## Auslagerung
 
 Das innere Markup, CSS und JavaScript von Composites lassen sich auslagern.  
-Das Standard-Verzeichnis `./modules` kann über die Eigenschaft
-`Composite.MODULES` geändert werden. Der Dateiname der ausgelagerten Ressourcen
+Das Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
+`Composite.MODULES` ge&auml;ndert werden. Der Dateiname der ausgelagerten Ressourcen
 leitet sich von der ID des als Composite gekennzeichneten HTML-Elements ab.
-Welche Ressourcen bzw. Teile der Komponente ausgelagert werden, kann für jede
+Welche Ressourcen bzw. Teile der Komponente ausgelagert werden, kann f&uuml;r jede
 Komponente individuell entschieden werden. 
 
 ```
@@ -98,38 +98,38 @@ Komponente individuell entschieden werden.
 
 Beim Standardverhalten wird der Name der Ressourcen von der Composite-ID
 abgeleitet und nutzt diese dann als Kleinschreibung am Anfang. Dieses Verhalten
-kann mit dem Attribute [strict](markup.md#strict) geändert werden, so dass die
-Composite-ID unverändert für die Ressourcen verwendet werden.
+kann mit dem Attribute [strict](markup.md#strict) ge&auml;ndert werden, so dass die
+Composite-ID unver&auml;ndert f&uuml;r die Ressourcen verwendet werden.
 
 
 
 ## Laden
 
 Das Laden der Ressourcen und das Object/Model-Binding erfolgt partiell, wenn das
-Composite im UI benötigt wird, was die [SiteMap](sitemap.md) als zentrales
+Composite im UI ben&ouml;tigt wird, was die [SiteMap](sitemap.md) als zentrales
 Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
-situationsabhängig vom UI nur die Ressourcen der aktiv verwendeten Composites
+situationsabh&auml;ngig vom UI nur die Ressourcen der aktiv verwendeten Composites
 geladen werden.  
-Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und lässt sich
+Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l&auml;sst sich
 komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
 eine feste Reihenfolge: CSS, JavaScript, HTML/Markup.  
 Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
 ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
 mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.  
 Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente für das UI ausgeführt und der Inhalt dann zwischengespeichert.
+Komponente f&uuml;r das UI ausgef&uuml;hrt und der Inhalt dann zwischengespeichert.
 
 
 ### CSS
 
-CSS wird als Style-Element in das HEAD-Element eingefügt. Ohne ein HEAD-Element
-verursacht das Einfügen einen Fehler.
+CSS wird als Style-Element in das HEAD-Element eingef&uuml;gt. Ohne ein HEAD-Element
+verursacht das Einf&uuml;gen einen Fehler.
 
 
 ### JavaScript
 
-JavaScript wird nicht als Element eingefügt, sondern direkt mit der eval-Methode 
-ausgeführt. Da die eval-Methode ggf. einen eigenen Namensraum für Variablen
+JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der eval-Methode 
+ausgef&uuml;hrt. Da die eval-Methode ggf. einen eigenen Namensraum f&uuml;r Variablen
 bilden kann, ist es wichtig, die globale Variable mit `window[...]` zu
 initialisieren.
 
@@ -147,8 +147,8 @@ window['login'] = {
 
 ### HTML
 
-HTML/Markup wird für ein Composite nur geladen, wenn das HTML-Element der
-Komponente selbst kein inneres HTML besitzt und für das Elemente auch nicht die
+HTML/Markup wird f&uuml;r ein Composite nur geladen, wenn das HTML-Element der
+Komponente selbst kein inneres HTML besitzt und f&uuml;r das Elemente auch nicht die
 Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
 von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
 
@@ -175,23 +175,23 @@ Logik bzw. Styles gedacht.
 
 ### Namespace
 
-Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
+Vergleichbar mit Paketen in anderen Programmiersprachen k&ouml;nnen Namensr&auml;ume zur
 Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
 Da es kein reales Element der Programmiersprache ist, wird dies durch das
 Verketten von Objekten zu einem Objektbaum abgebildet.  
-Jede Ebene in dieser Objektbaum repräsentiert einen Namensraum.  
-Wie für die Bezeichner von Objekten typisch, verwenden auch Namensräume
+Jede Ebene in dieser Objektbaum repr&auml;sentiert einen Namensraum.  
+Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namensr&auml;ume
 Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
-Besonderheit werden auch Arrays unterstützt. Wenn eine Ebene im Namensraum eine
+Besonderheit werden auch Arrays unterst&uuml;tzt. Wenn eine Ebene im Namensraum eine
 reine Zahl ist, wird ein Array angenommen.
 
 Das Object/Model-Binding basiert auf den IDs der Composites sowie deren Position
 und Reihenfolge im DOM.  
 Die Wurzel vom Namensraum bildet immer eine Composite-ID.  
 Der Namensraum kann dabei absolut sein, also der Namensraum entspricht einer
-Composite-ID, oder er basiert auf dem Namensraum eines im DOM übergeordneten
+Composite-ID, oder er basiert auf dem Namensraum eines im DOM &uuml;bergeordneten
 Composites.
 
 ```html
@@ -207,7 +207,7 @@ Composites.
 </html>  
 ```
 
-Beispiele möglicher Namesräume:
+Beispiele m&ouml;glicher Namesr&auml;ume:
 
 `a` + `a.b` + `a.b.c`  
 `b` + `b.c`  
@@ -223,9 +223,9 @@ der Objektebene ab.
 ### Model
 
 Ein Model ist ein JavaScript-Objekt in einem beliebigen Namensraum, dass die
-Zustände vom User-Interface/View speichert und eine Schnittstelle für den
-Übergang von der Benutzerschnittstelle (User-Interface/View) zur Geschäftslogik
-und/oder zum Backend zur Verfügung stellt.  
+Zust&auml;nde vom User-Interface/View speichert und eine Schnittstelle f&uuml;r den
+&Uuml;bergang von der Benutzerschnittstelle (User-Interface/View) zur Gesch&auml;ftslogik
+und/oder zum Backend zur Verf&uuml;gung stellt.  
 Konzeptionell ist die Implementierung der Entwurfsmuster Fassade und Delegation
 angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
 
@@ -235,7 +235,7 @@ angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
 Es ist eine Eigenschaft innerhalb eines Models, die HTML-Elements innerhalb
 eines Composites mit gleichnamiger ID referenziert.  
 Elemente der Properties nutzen relativen Bezeichner (ID). Der Namensraum basiert
-auf dem vom Composite und erweitert sich um ggf. weitere übergeordnete Element
+auf dem vom Composite und erweitert sich um ggf. weitere &uuml;bergeordnete Element
 mit IDs.
 
 ```javascript
@@ -259,17 +259,17 @@ const model = {
 ```
 
 Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
-dem Wert vom HTML-Element. Für ein HTML-Element werden die entsprechenden
-Ereignisse über das gleichnamige Attribut definiert.
+dem Wert vom HTML-Element. F&uuml;r ein HTML-Element werden die entsprechenden
+Ereignisse &uuml;ber das gleichnamige Attribut definiert.
 
 
 ### Qualifier
 
-In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
+In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
 Eigenschaften Arrays sind oder im Markup eine Iteration verwendet wird. In
-diesen Fällen kann der Bezeichner, getrennt durch einen Doppelpunkt, um einen
-zusätzlichen eindeutigen Qualifier erweitert werden. Qualifier wirken beim
-Object/Model-Binding wie Properties und verlängern den Namensraum.
+diesen F&auml;llen kann der Bezeichner, getrennt durch einen Doppelpunkt, um einen
+zus&auml;tzlichen eindeutigen Qualifier erweitert werden. Qualifier wirken beim
+Object/Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 
 ```html
 <input type="text" id="identifier">
@@ -290,15 +290,15 @@ Object/Model-Binding wie Properties und verlängern den Namensraum.
 
 ### Binding
 
-Die Verknüpfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt über die
+Die Verkn&uuml;pfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt &uuml;ber die
 Composite-API. Dazu muss ein HTML-Element das Attribut `composite` und eine
-gültige sowie eindeutige ID besitzen, die den Anforderungen des Namensraums
+g&uuml;ltige sowie eindeutige ID besitzen, die den Anforderungen des Namensraums
 entspricht.
 
-Die Composite-API erkennt und überwacht die Existenz von Markup der Composites
-im DOM. So kann das korrespondierende (JavaScript-)Model über die Methoden
+Die Composite-API erkennt und &uuml;berwacht die Existenz von Markup der Composites
+im DOM. So kann das korrespondierende (JavaScript-)Model &uuml;ber die Methoden
 `dock` und `undock` informiert werden, wenn das Composite als Komponente dem
-DOM hinzugefügt bzw. aus diesem entfernt wird.  
+DOM hinzugef&uuml;gt bzw. aus diesem entfernt wird.  
 
 Die Implementierung beider Methoden ist optional.
 
@@ -321,14 +321,14 @@ const model = {
 </html>
 ```
 
-Die dock-Methode wird vor dem Rendern, vor dem Einfügen des Composites in das
-DOM oder nach dem Laden der Seite beim ersten Rendern ausgeführt und kann das
+Die dock-Methode wird vor dem Rendern, vor dem Einf&uuml;gen des Composites in das
+DOM oder nach dem Laden der Seite beim ersten Rendern ausgef&uuml;hrt und kann das
 zur Vorbereitung von Model und Darstellung verwendet werden.  
-Die undock-Methode wird ausgeführt, nachdem das Composite aus dem DOM entfernt
-wurde und lässt für Nachbereitung, Bereiningung und Finalisierung des Models
+Die undock-Methode wird ausgef&uuml;hrt, nachdem das Composite aus dem DOM entfernt
+wurde und l&auml;sst f&uuml;r Nachbereitung, Bereiningung und Finalisierung des Models
 nutzen.
 
-Bei einem Composite in Kombination mit einer Bedingung (condition) hängt der
+Bei einem Composite in Kombination mit einer Bedingung (condition) h&auml;ngt der
 Aufruf der Methoden vom Ergebnis der Bedingung ab.
 
 

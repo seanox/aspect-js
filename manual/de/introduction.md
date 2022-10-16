@@ -1,49 +1,49 @@
 [Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Markup](markup.md)
 - - -
 
-# Einf�hrung
+# Einf&uuml;hrung
 
 
 ## Was ist Seanox aspect-js?
 
-Gepr�gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf
+Gepr&auml;gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf
 Funktion und einfache Integration ins Markup, entstand der Wunsch nach einer
-�hnlichen client-seitigen Full-Stack L�sung.
+&auml;hnlichen client-seitigen Full-Stack L&ouml;sung.
 Bei Seanox aspect-js steht ein minimalistischer Ansatz zur Implementierung von
 Single-Page Applications (SPAs) im Vordergrund.  
 
 Das Framework greift den deklarativen Ansatz von HTML auf und erweitert ihn um
-Expression Language, Rendering mit zus�tzlichen Attributen,
+Expression Language, Rendering mit zus&auml;tzlichen Attributen,
 Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
 NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
 # Merkmale
 * Einfache Integration in Markup und JavaScript (sauberer Code)
-* Leichtgewichtige Implementierung (erfordert keine zus�tzlichen Frameworks)
+* Leichtgewichtige Implementierung (erfordert keine zus&auml;tzlichen Frameworks)
 * Leicht zu integrieren und mit anderen JavaScript-Frameworks kombinierbar  
   wenn die Frameworks nicht das gleiche tun oder die gleiche Syntax verwenden
 * Komponentenbasierte Architektur
-* Modularisierung (unterst�tzt Importe zur Laufzeit)  
-  Komponentenkonzept f�r das intelligente/automatische Laden von Ressourcen
+* Modularisierung (unterst&uuml;tzt Importe zur Laufzeit)  
+  Komponentenkonzept f&uuml;r das intelligente/automatische Laden von Ressourcen
 * Event handling
 * Expression Language  
-  Meta-Sprach-Erweiterung mit voller JavaScript-Unterst�tzung
+  Meta-Sprach-Erweiterung mit voller JavaScript-Unterst&uuml;tzung
 * Markup-Rendering  
-  unterst�tzt: condition, custom tags, events, filter, interval, iterate,
+  unterst&uuml;tzt: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
-* Markup-H�rtung  
+* Markup-H&auml;rtung  
   erschwert die Manipulation der Attribute im Markup  
   Nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
   Verwendung eingesetzt  
 * Model View Controller    
-  unterst�tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept, ...
+  unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept, ...
 * Resource-Bundle / Resource-Messages   
   Lokalisierung, Internationalisierung (i18n) und Text-Auslagerung
 * NoSQL-DataSource auf Basis von XML  
-  leichtgewichtiges Datenmanagement f�r Aggregation / Projektion / Transformation
+  leichtgewichtiges Datenmanagement f&uuml;r Aggregation / Projektion / Transformation
 * Testumgebung  
-  f�r automatisierte Unit-Tests und Integrationatests
+  f&uuml;r automatisierte Unit-Tests und Integrationatests
 * ... 
 
 
@@ -95,18 +95,18 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 
 Das Framework besteht aus reinem JavaScript.
 
-Die Releases werden heruntergeladen oder �ber einen Release-Channel eingebunden.
+Die Releases werden heruntergeladen oder &uuml;ber einen Release-Channel eingebunden.
 Release-Channel stellen kontinuierlich die neuesten finalen Hauptversionen zur
-Verf�gung, diese sind abw�rtskompatibel zur Hauptversion. Seanox aspect-js ist
+Verf&uuml;gung, diese sind abw&auml;rtskompatibel zur Hauptversion. Seanox aspect-js ist
 somit immer auf dem neuesten Stand.
 
 Jedes Release besteht aus zwei Versionen.  
 Die Entwickler-Version beinhaltet umfangreiche Kommentare zu Konzeption,
 Funktion, Arbeitsweise und Verwendung.  
-Die Produktions-Version ist in der Gr�sse optimiert aber nicht verschleiert
+Die Produktions-Version ist in der Gr&ouml;sse optimiert aber nicht verschleiert
 (obfuscated).
 
-Erstelle eine HTML-Datei, z.B. _index.html_ und f�ge Seanox apect-js ein.
+Erstelle eine HTML-Datei, z.B. _index.html_ und f&uuml;ge Seanox apect-js ein.
 
 ```html
 <!-- development version, includes helpful comments -->
@@ -136,16 +136,16 @@ einbezogen wird.
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
-aspect-js. In den Expressions wird die komplette JavaScript-API unterst�tzt, die
-mit zus�tzliche Schl�sselw�rtern angereichert ist, womit auch die zahlreichen
-arithmetischen und logischen Operatoren verwendet werden k�nnen.
+aspect-js. In den Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die
+mit zus&auml;tzliche Schl&uuml;sselw&ouml;rtern angereichert ist, womit auch die zahlreichen
+arithmetischen und logischen Operatoren verwendet werden k&ouml;nnen.
 
 Die Expression-Language kann im Markup als Freitext und in den Attributen der
 HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
-Hier wird die Expression-Language nicht unterst�tzt.  
+Hier wird die Expression-Language nicht unterst&uuml;tzt.  
 Bei der Verwendung als Freitext wird als Ausgabe immer reiner Text (plain text)
-erzeugt. Das Hinzuf�gen von Markup, insbesondere HTML-Code, ist so nicht m�glich
-und wir nur mit den Attributen `output` und `import` unterst�tzt.
+erzeugt. Das Hinzuf&uuml;gen von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich
+und wir nur mit den Attributen `output` und `import` unterst&uuml;tzt.
 
 ```html
 <body lang="{{DataSource.locale}}">
@@ -157,7 +157,7 @@ und wir nur mit den Attributen `output` und `import` unterst�tzt.
 ```
 
 Die Expression Language ist zeitweise sichtbar, da der Renderer erst nach dem
-Laden der Page aktiv wird. Alternativ k�nnen die Attribute
+Laden der Page aktiv wird. Alternativ k&ouml;nnen die Attribute
 [output](markup.md#output) und [import](markup.md#import) verwendet werden,
 welche eine direkte Ausgabe in das innere HTML vom Element bewirken. 
 
@@ -177,7 +177,7 @@ Element und Ausgabe erst mit Abschluss vom Rendering sichtbar.
 </p>
 ```
 
-Expressions k�nnen zur Laufzeit globale Variablen erzeugen und nutzen.
+Expressions k&ouml;nnen zur Laufzeit globale Variablen erzeugen und nutzen.
 
 ```html
 {{now:new Date()}}
@@ -195,10 +195,10 @@ Expressions k�nnen zur Laufzeit globale Variablen erzeugen und nutzen.
 Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
 umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
 Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
-unterst�tzt wird, sowie `STYLE`, welches nicht unterst�tzt wird. Die Werte der
-Attribute k�nnen statisch oder mit Verwendung der Expression-Language dynamisch
-sein. Enth�lt ein Attribut eine Expression, werden das Attribut und der Wert
-unver�nderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
+unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die Werte der
+Attribute k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch
+sein. Enth&auml;lt ein Attribut eine Expression, werden das Attribut und der Wert
+unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 [Mehr erfahren](markup.md#attribute)
@@ -208,10 +208,10 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
 HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
-Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef�gt werden.
-Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterst�tzt,
+Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef&uuml;gt werden.
+Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-eingef�gt wird.
+eingef&uuml;gt wird.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -232,15 +232,15 @@ eingef�gt wird.
 
 ### import
 
-Diese Deklaration l�dt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
+Diese Deklaration l&auml;dt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Element oder mehre
-Elemente als NodeList bzw. Array, welche dann direkt eingef�gt werden. Auch die
+Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
-unterst�tzt, die per HTTP-Methode GET nachgeladen und eingef�gt wird. Zudem wird
-auch die [DataSource-URL (locator)](datasource.md#locator) unterst�tzt, womit
+unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen und eingef&uuml;gt wird. Zudem wird
+auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt, womit
 ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-eingef�gt wird.
+eingef&uuml;gt wird.
 
 ```html
 <p import="Today is {{new Date().toDateString()}}
@@ -266,11 +266,11 @@ eingef�gt wird.
 ### condition
 
 Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt.  
-Der mit dem Attribut angegebene Ausdruck muss explizit `true` zur�ckliefern,
-damit das Element im DOM erhalten bleibt. Bei abweichenden R�ckgabewerten wird
-das Element tempor�r aus dem DOM entfernt und l�sst sich sp�ter durch das
-Auffrischen des __Eltern-Elements__ wieder einf�gen, wenn der Ausdruck `true`
-zur�ckliefert.  
+Der mit dem Attribut angegebene Ausdruck muss explizit `true` zur&uuml;ckliefern,
+damit das Element im DOM erhalten bleibt. Bei abweichenden R&uuml;ckgabewerten wird
+das Element tempor&auml;r aus dem DOM entfernt und l&auml;sst sich sp&auml;ter durch das
+Auffrischen des __Eltern-Elements__ wieder einf&uuml;gen, wenn der Ausdruck `true`
+zur&uuml;ckliefert.  
 
 ```html
 <article condition="{{Model.visible}}">
@@ -279,7 +279,7 @@ zur�ckliefert.
 ```
 
 Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite-JavaScript m�glich.
+ist als Composite-JavaScript m&ouml;glich.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
@@ -295,12 +295,12 @@ ist als Composite-JavaScript m�glich.
 Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
 HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
 Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
-formuliert werden kann. Die Verarbeitung erfolgt nebenl�ufig bzw. asynchron aber
+formuliert werden kann. Die Verarbeitung erfolgt nebenl&auml;ufig bzw. asynchron aber
 nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
 Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
 JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
 aber als exakt zu verstehen.  
-Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ung�ltiger Wert
+Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ung&uuml;ltiger Wert
 verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
 Auffrischen vom deklarierten HTML-Element und bleibt so lange aktiv, wie das
 Element im DOM existiert.
@@ -312,7 +312,7 @@ Element im DOM existiert.
 ```
 
 Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
-eines permanenten Z�hlers sehr einfach.
+eines permanenten Z&auml;hlers sehr einfach.
 
 ```html
 {{counter:0}}
@@ -323,7 +323,7 @@ eines permanenten Z�hlers sehr einfach.
 ```
 
 Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite-JavaScript m�glich.
+ist als Composite-JavaScript m&ouml;glich.
 
 ```html
 <script type="composite/javascript" interval="1000">
@@ -336,14 +336,14 @@ ist als Composite-JavaScript m�glich.
 
 ### iterate
 
-Die iterative Ausgabe basiert auf Listen, Aufz�hlungen und Arrays.  
+Die iterative Ausgabe basiert auf Listen, Aufz&auml;hlungen und Arrays.  
 Wird ein HTML-Element als iterativ deklariert, wird der initiale innerer
-HTML-Code als Vorlage verwendet und w�hrend der Iteration der innere HTML-Code
-zun�chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
-Ergebnis dem inneren HTML-Code hinzugef�gt.  
+HTML-Code als Vorlage verwendet und w&auml;hrend der Iteration der innere HTML-Code
+zun&auml;chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
+Ergebnis dem inneren HTML-Code hinzugef&uuml;gt.  
 Das iterate-Attribut erwartet einen
 [Variablen-Ausdruck](expression.md#variable-expression), zu dem ein Meta-Objekt
-erstellt wird, dass den Zugriff auf die Iteration erm�glich.  
+erstellt wird, dass den Zugriff auf die Iteration erm&ouml;glich.  
 So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
 das Meta-Objekt `tempA = {item, index, data}`.
 
@@ -367,11 +367,11 @@ const Model = {
 ### id
 
 Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung.   
-Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziel f�r virtuelle
-Pfade im Face-Flow sowie f�r das Object/Model-Binding verwendet.
+Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziel f&uuml;r virtuelle
+Pfade im Face-Flow sowie f&uuml;r das Object/Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
-einer Besonderheit, da das Attribut nur initial verarbeitet wird. �nderungen zur
+einer Besonderheit, da das Attribut nur initial verarbeitet wird. &Auml;nderungen zur
 Laufzeit an einem existierenden Element haben wegen dem Object/Model-Binding
 keine Auswirkungen, solange es im DOM existiert.
 
@@ -382,13 +382,13 @@ keine Auswirkungen, solange es im DOM existiert.
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
 Composites sind modulare Komponente die in Seanox aspect-js eine elementare
-Bedeutung haben und die zwingend einen Bezeichner (ID) ben�tigen.  
-Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele f�r
+Bedeutung haben und die zwingend einen Bezeichner (ID) ben&ouml;tigen.  
+Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele f&uuml;r
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
-Der [Model View Controller](mvc.md#sitemap) unterst�tzt f�r Composites ein
+Der [Model View Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites ein
 automatisches [Object/Model-Binding](object-binding.md).  
-Die Ressourcen (CSS, JS, Markup) lassen sich f�r Composites in das
+Die Ressourcen (CSS, JS, Markup) lassen sich f&uuml;r Composites in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
@@ -419,7 +419,7 @@ Composite-Id mit einem Kleinbuchstaben am Anfang.
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-er�ffnen prim�re Funktionen zur ereignisgesteuerten Auffrischung von anderen
+er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
 und Synchronisation von HTML-Elementen und dem korrespondierenden
 JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).  
@@ -438,7 +438,7 @@ JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model, wo eine
-gleichnamige Eigenschaft als Ziel f�r die Synchronisation vorhanden sein muss.
+gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein muss.
 
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
@@ -462,7 +462,7 @@ validierende Element in einem Composite eingebettet ist.
 ### message
 
 Message ist ein optionaler Bestandteil der Validierung und wird zur
-Text-/Fehler-Ausgabe im Fall einer unbest�tigten Validierung verwendet.  
+Text-/Fehler-Ausgabe im Fall einer unbest&auml;tigten Validierung verwendet.  
 Das Attribut erfordert die Kombination mit den Attributen `validate` und
 `events`. 
 
@@ -528,11 +528,11 @@ welche die Ziele festlegen.
 
 ### release
 
-Inverser Indikator daf�r, dass ein Element gerendert wurde.  
+Inverser Indikator daf&uuml;r, dass ein Element gerendert wurde.  
 Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser
-Effekt kann f�r CSS verwendet werden, um Elemente nur im gerenderten Zustand
+Effekt kann f&uuml;r CSS verwendet werden, um Elemente nur im gerenderten Zustand
 anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem
-Laden der Seite hinzugef�gt. 
+Laden der Seite hinzugef&uuml;gt. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -545,7 +545,7 @@ Laden der Seite hinzugef�gt.
 
 DataSource ist ein NoSQL-Ansatz zur Datenspeicherung auf Basis von XML-Daten in
 Kombination mit mehrsprachiger Datentrennung, optionaler Aggregation und
-Transformation. Es ist eine Kombination von Ans�tzen einer read-only-Datenbank
+Transformation. Es ist eine Kombination von Ans&auml;tzen einer read-only-Datenbank
 und einem CMS.  
 Die DataSource basiert auf statischen Daten, die per XPath abgefragt werden und
 das Ergebnis verkettet, aggregiert und per XSLT transformiert werden kann.
@@ -556,9 +556,9 @@ das Ergebnis verkettet, aggregiert und per XSLT transformiert werden kann.
 ## Resource Bundle (Messages / i18n)
 
 (Resource)Messages ist eine statische Erweiterung der
-[DataSource](datasource.md) f�r Internationalisierung, Lokalisierung (i18n)
-sowie f�r Mandanten bezogene Texte.  
-Die Implementierung basiert auf einer Menge von Schl�ssel-Wert-Paaren in Form
+[DataSource](datasource.md) f&uuml;r Internationalisierung, Lokalisierung (i18n)
+sowie f&uuml;r Mandanten bezogene Texte.  
+Die Implementierung basiert auf einer Menge von Schl&uuml;ssel-Wert-Paaren in Form
 von Label-Elementen, die in der Datei `locales.xml` im DataSource-Verzeichnis
 definiert werden.
 
@@ -594,12 +594,12 @@ Interaktion, Daten und Darstellung.
 ### Controller
 
 Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
-werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur �bermittlung
+werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur &Uuml;bermittlung
 der Interaktionen. Da dieser durch Betriebssystem und Browser bereitgestellt
-wird, bezieht sich der Controller in Seanox aspect-js vordergr�ndig auf den
-Applikations-Controller, der Abl�ufe innerhalb einer Applikation (Face-Flow)
+wird, bezieht sich der Controller in Seanox aspect-js vordergr&uuml;ndig auf den
+Applikations-Controller, der Abl&auml;ufe innerhalb einer Applikation (Face-Flow)
 steuert und das Binding von Markup und JavaScript sowie die Steuerung vom
-Datenfluss zwischen View und Model �bernimmt.  
+Datenfluss zwischen View und Model &uuml;bernimmt.  
 In Seanox aspect-js ist der Controller die Zusammenarbeit von Composite, Paths
 und SiteMap.
 
@@ -607,36 +607,36 @@ und SiteMap.
 ### Model
 
 Das Modell ist ein darstellbares/projezierbares Objekt.  
-Es empf�ngt (Status)�nderungen und Interaktionen der View, die durch den 
-Controller �bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
+Es empf&auml;ngt (Status)&Auml;nderungen und Interaktionen der View, die durch den 
+Controller &uuml;bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
 sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
-View zur Darstellung und Verwaltung der Zust�nde, f�r fachliche Funktionalit�t
+View zur Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche Funktionalit&auml;t
 nimmt es weitere Komponenten in Anspruch.  
 In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
-repr�sentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
+repr&auml;sentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
 und Delegation angedacht, so dass die statischen Modelle intern weitere
 Komponenten und Abstraktion verwenden.
 
 
 ### View
 
-Die View ist ausschliesslich f�r die Darstellung bzw. Projektion eines Modells
+Die View ist ausschliesslich f&uuml;r die Darstellung bzw. Projektion eines Modells
 verantwortlich.  
 Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Modells
-nicht eingeschr�nkt ist.  
-In Seanox aspect-js werden die Views durch das Markup repr�sentiert.
+nicht eingeschr&auml;nkt ist.  
+In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 
 
 ## SiteMap
 
 Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten sind als
-Page, Faces und Facets organisiert, auf die �ber virtuelle Pfade zugegriffen
+Page, Faces und Facets organisiert, auf die &uuml;ber virtuelle Pfade zugegriffen
 wird. Zu diesem Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
-Verf�gung, die auf den virtuellen Pfaden f�r alle Ansichten basiert. Die SiteMap
+Verf&uuml;gung, die auf den virtuellen Pfaden f&uuml;r alle Ansichten basiert. Die SiteMap
 steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Ansichten,
 den sogenannten Face-Flow.  
 Face-Flow und Visualisierung funktionieren resolut und verwenden das DOM zum
-Einf�gen und Entfernen der Ansichten (Faces und Facets).
+Einf&uuml;gen und Entfernen der Ansichten (Faces und Facets).
 
 ```
 +-----------------------------------------------+
@@ -670,9 +670,9 @@ Weitere Bestandteile der SiteMap sind die Navigation und ein Permission Concept.
 
 ### Virtual Paths
 
-Virtuelle Pfade werden f�r die Navigation und Kontrolle vom Face-Flow verwendet.  
+Virtuelle Pfade werden f&uuml;r die Navigation und Kontrolle vom Face-Flow verwendet.  
 Das Ziel kann ein Face, ein Facet oder eine Funktion sein.  
-Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL f�r die Pfade
+Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL f&uuml;r die Pfade
 verwendet.
 
 ```
@@ -680,7 +680,7 @@ https://example.local/example/#path
 ```
 
 In Anlehnung an das Dateisystem werden auch hier absolute, relative und
-zus�tzlich funktionale Pfade unterst�tzt.  
+zus&auml;tzlich funktionale Pfade unterst&uuml;tzt.  
 Pfade bestehen ausschliesslich aus Wortzeichen, Unterstrichen und optional dem
 Minus-Zeichen (basierend auf zusammengesetzten IDs). Als Separator und Root wird
 das Hash-Zeichen verwendet.
@@ -698,7 +698,7 @@ TODO:
 TODO:
 
 Seanox aspect-js zielt auf eine modulare und auf Komponenten basierte
-Architektur. Das Framework unterst�tzt dazu eine deklarative Kennzeichnung von
+Architektur. Das Framework unterst&uuml;tzt dazu eine deklarative Kennzeichnung von
 Komponenten im Markup, die Auslagerung und das automatische Laden von
 Ressourcen, sowie ein automatisches Object/Model-Binding.
 
@@ -718,8 +718,8 @@ gekennzeichneten HTML-Element mit einer eindeutigen Id.
 ```
 
 Das innere Markup, CSS und JavaScript lassen sich ins Dateisystem auslagern.  
-Das Standard-Verzeichnis `./modules` kann �ber die Eigenschaft
-`Composite.MODULES` ge�ndert werden.
+Das Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
+`Composite.MODULES` ge&auml;ndert werden.
 
 ```
 + modules
@@ -730,20 +730,20 @@ Das Standard-Verzeichnis `./modules` kann �ber die Eigenschaft
 ```
 
 Das Laden der Ressourcen und die Object/Model-Binding erfolgt partiell, wenn die
-Komponente im UI ben�tigt wird -- also mit der ersten Anzeige, was �ber die
+Komponente im UI ben&ouml;tigt wird -- also mit der ersten Anzeige, was &uuml;ber die
 [SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert wird und so
-die Ladezeit stark minimiert, da punktuell jeweils nur f�r die aktiven
-UI-Komponenten ben�tigten Ressourcen geladen werden.  
-Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l�sst sich
+die Ladezeit stark minimiert, da punktuell jeweils nur f&uuml;r die aktiven
+UI-Komponenten ben&ouml;tigten Ressourcen geladen werden.  
+Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l&auml;sst sich
 komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
 eine feste Reihenfolge: CSS, JS, HTML/Markup.  
 Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
 ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
 mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.  
 Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente f�r das UI ausgef�hrt.
+Komponente f&uuml;r das UI ausgef&uuml;hrt.
 
-Konzeptionell sind f�r die Implementierung von Komponenten die Entwurfsmuster
+Konzeptionell sind f&uuml;r die Implementierung von Komponenten die Entwurfsmuster
 Fassade und Delegation angedacht, die intern weitere Komponenten und Abstraktion
 verwenden.
 
@@ -757,7 +757,7 @@ TODO:
 
 ## Erweiterung
 
-Die JavaScript-API wurde f�r Seanox aspect-js um einige allgemeine Funktionen
+Die JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine Funktionen
 erweitert.
 
 [Mehr erfahren](extension.md)
@@ -766,21 +766,21 @@ erweitert.
 ## Ereignisse
 
 Seanox aspect-js stellt verschiede Ereignisse bereit, die u.a. zur
-Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung �ber
-bestimmte Betriebszust�nde des Frameworks und der Laufzeitumgebung genutzt
-werden k�nnen.
+Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung &uuml;ber
+bestimmte Betriebszust&auml;nde des Frameworks und der Laufzeitumgebung genutzt
+werden k&ouml;nnen.
 
 [Mehr erfahren](events.md)
 
 
 ## Test
 
-Die Test-API unterst�tzt die Implementierung und Ausf�hrung von
-Integrationstests und kann f�r Suiten (suite), Szenarien (scenario) und einzelne
-Testf�lle (case) verwendet werden.
+Die Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
+Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und einzelne
+Testf&auml;lle (case) verwendet werden.
 
 Als modularer Bestandteil von Seanox aspect-js ist die Test-API in jedem Release
-enthalten, der sich ohne Probleme entfernen l�sst. Da die Test-API einige
+enthalten, der sich ohne Probleme entfernen l&auml;sst. Da die Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
 die Test-API zur Laufzeit bewusst aktiviert werden.
 
@@ -800,7 +800,7 @@ Test.start();
 ### Testfall
 
 Der kleinste Bestandteil in einem Integrationstest, der hier als "Task"
-verwendet wird, da "Case" ein Schl�sselwort im JavaScript ist. Es kann allein
+verwendet wird, da "Case" ein Schl&uuml;sselwort im JavaScript ist. Es kann allein
 implementiert werden, wird aber immer in einem Szenario verwendet.
 
 ```javascript
@@ -813,7 +813,7 @@ Test.create({test() {
 Test.start();
 ```
 
-Task ist prim�r ein Meta-Objekt.  
+Task ist prim&auml;r ein Meta-Objekt.  
 
 ```
 {name:..., test:..., timeout:..., expected:..., ignore:...}
@@ -824,7 +824,7 @@ Task ist prim�r ein Meta-Objekt.
 
 ### Szenario
 
-Ein Szenario ist eine Abfolge von vielen Testf�llen (Tasks).
+Ein Szenario ist eine Abfolge von vielen Testf&auml;llen (Tasks).
 
 ```javascript
 Test.activate();
@@ -853,20 +853,20 @@ Test.start();
 
 ### Suite 
 
-Eine Suite ist ein komplexes Paket aus verschiedenen Testf�llen, Szenarien und
+Eine Suite ist ein komplexes Paket aus verschiedenen Testf&auml;llen, Szenarien und
 anderen Suiten. In der Regel besteht eine Suite aus verschiedenen Dateien, die
-dann einen komplexen Test darstellen. Ein Beispiel f�r eine gute Suite ist eine
+dann einen komplexen Test darstellen. Ein Beispiel f&uuml;r eine gute Suite ist eine
 Kaskade von verschiedenen Dateien und wo der Test in jeder Datei und an jedem
-Stelle gestartet werden kann. Dies erm�glicht einen Integrationstest auf
-verschiedenen Ebenen und mit unterschiedlicher Komplexit�t.
+Stelle gestartet werden kann. Dies erm&ouml;glicht einen Integrationstest auf
+verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
 
 [Mehr erfahren](test.md#suite)
 
 
 ### Assert
 
-Die Testf�lle werden mit Behauptungen (Assertions) implementiert. Die Test-API
-bietet elementare Aussagen, die erweitert werden k�nnen. Die Funktion ist
+Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Die Test-API
+bietet elementare Aussagen, die erweitert werden k&ouml;nnen. Die Funktion ist
 einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
 
 ```javascript
@@ -912,7 +912,7 @@ Test.start();
 
 Optional kann die Test-API mit jedem Start konfiguriert werden.  
 Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
-wird partiell �bernommen und unbekanntes wird ignoriert.
+wird partiell &uuml;bernommen und unbekanntes wird ignoriert.
 
 ```javascript
 Test.start({auto: boolean, ouput: {...}, monitor: {...}});
@@ -923,7 +923,7 @@ Test.start({auto: boolean, ouput: {...}, monitor: {...}});
 
 ### Monitoring
 
-Das Monitoring �berwacht den Testablauf w�hrend der Ausf�hrung und wird �ber die
+Das Monitoring &uuml;berwacht den Testablauf w&auml;hrend der Ausf&uuml;hrung und wird &uuml;ber die
 verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
 diesen werden Informationen zum Testverlauf in der Konsole ausgegeben.
 
@@ -942,26 +942,26 @@ Test.start({auto: boolean});
 
 Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
 der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
-`auto` ignoriert und der Start sofort ausgef�hrt.
+`auto` ignoriert und der Start sofort ausgef&uuml;hrt.
 
 ```javascript
 Test.suspend();
 ```
 
-Unterbricht die aktuelle Testausf�hrung, die mit `Test.resume()` vom aktuellen
+Unterbricht die aktuelle Testausf&uuml;hrung, die mit `Test.resume()` vom aktuellen
 Test fortgesetzt werden kann.
 
 ```javascript
 Test.resume();
 ```
 
-Setzt die Testausf�hrung fort, wenn sie zuvor unterbrochen wurde.
+Setzt die Testausf&uuml;hrung fort, wenn sie zuvor unterbrochen wurde.
 
 ```javascript
 Test.interrupt();
 ```
 
-Unterbricht die aktuelle Testausf�hrung und verwirft alle ausstehenden Tests.
+Unterbricht die aktuelle Testausf&uuml;hrung und verwirft alle ausstehenden Tests.
 Der Testlauf kann mit `Test.start()` neu gestartet werden.
 
 ```javascript
@@ -969,7 +969,7 @@ Test.status();
 ```
 
 Macht eine Momentaufnahme des Status des aktuellen Tests.  
-Der Status enth�lt Details zum aktuellen Test und zur Warteschlange.
+Der Status enth&auml;lt Details zum aktuellen Test und zur Warteschlange.
 
 [Mehr erfahren](test.md#control)
 
@@ -977,8 +977,8 @@ Der Status enth�lt Details zum aktuellen Test und zur Warteschlange.
 ### Events
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
-�berwachung der Testausf�hrung. Die Callback-Methoden werden f�r entsprechende
-Ereignisse bei der Test-API registriert und funktionieren dann �hnlich dem
+&Uuml;berwachung der Testausf&uuml;hrung. Die Callback-Methoden werden f&uuml;r entsprechende
+Ereignisse bei der Test-API registriert und funktionieren dann &auml;hnlich dem
 Monitor.
 
 ```javascript
