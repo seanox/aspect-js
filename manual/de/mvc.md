@@ -28,12 +28,12 @@ Interaktion, Daten und Darstellung.
 ## Controller
 
 Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
-werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur Übermittlung
+werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur &Uuml;bermittlung
 der Interaktionen. Da dieser durch Betriebssystem und Browser bereitgestellt
-wird, bezieht sich der Controller in Seanox aspect-js vordergründig auf den
-Applikations-Controller, der Abläufe innerhalb einer Applikation (Face-Flow)
+wird, bezieht sich der Controller in Seanox aspect-js vordergr&uuml;ndig auf den
+Applikations-Controller, der Abl&auml;ufe innerhalb einer Applikation (Face-Flow)
 steuert und das Binding von Markup und JavaScript sowie die Steuerung vom
-Datenfluss zwischen View und Model übernimmt.  
+Datenfluss zwischen View und Model &uuml;bernimmt.  
 In Seanox aspect-js ist der Controller die Zusammenarbeit von Composite, Paths
 und SiteMap.
 
@@ -41,24 +41,24 @@ und SiteMap.
 ## Model
 
 Das Modell ist ein darstellbares/projezierbares Objekt.  
-Es empfängt (Status)Änderungen und Interaktionen der View, die durch den 
-Controller übermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
+Es empf&auml;ngt (Status)&Auml;nderungen und Interaktionen der View, die durch den 
+Controller &uuml;bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
 sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
-View zur Darstellung und Verwaltung der Zustände, für fachliche Funktionalität
+View zur Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche Funktionalit&auml;t
 nimmt es weitere Komponenten in Anspruch.  
 In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
-repräsentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
+repr&auml;sentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
 und Delegation angedacht, so dass die statischen Modelle intern weitere
 Komponenten und Abstraktion verwenden.
 
 
 ## View
 
-Die View ist ausschliesslich für die Darstellung bzw. Projektion eines Modells
+Die View ist ausschliesslich f&uuml;r die Darstellung bzw. Projektion eines Modells
 verantwortlich.  
 Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Modells
-nicht eingeschränkt ist.  
-In Seanox aspect-js werden die Views durch das Markup repräsentiert.
+nicht eingeschr&auml;nkt ist.  
+In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 
 
 ## Inhalt
@@ -105,13 +105,13 @@ In Seanox aspect-js werden die Views durch das Markup repräsentiert.
 ## SiteMap
 
 Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten sind als
-Page, Faces und Facets organisiert, auf die über virtuelle Pfade zugegriffen
+Page, Faces und Facets organisiert, auf die &uuml;ber virtuelle Pfade zugegriffen
 wird. Zu diesem Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
-Verfügung, die auf den virtuellen Pfaden für alle Ansichten basiert. Die SiteMap
+Verf&uuml;gung, die auf den virtuellen Pfaden f&uuml;r alle Ansichten basiert. Die SiteMap
 steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Ansichten,
 den sogenannten Face-Flow.  
 Face-Flow und Visualisierung funktionieren resolut und verwenden das DOM zum
-Einfügen und Entfernen der Ansichten (Faces und Facets).
+Einf&uuml;gen und Entfernen der Ansichten (Faces und Facets).
 
 ```
 +-----------------------------------------------+
@@ -150,62 +150,62 @@ Laufzeitumgebung der gesamten Anwendung.
 
 #### Face
 
-Ein Face ist die primäre Projektion von Modellen/Komponenten/Inhalten. Diese
-Projektion kann zusätzliche Unterstrukturen in Form von Facets und Sub-Faces
+Ein Face ist die prim&auml;re Projektion von Modellen/Komponenten/Inhalten. Diese
+Projektion kann zus&auml;tzliche Unterstrukturen in Form von Facets und Sub-Faces
 enthalten.  
-Faces sind Komponenten, die verschachtelt werden können.  
-So werden übergeordneten Faces zu partiellen Faces, wenn sich der Pfad auf ein
+Faces sind Komponenten, die verschachtelt werden k&ouml;nnen.  
+So werden &uuml;bergeordneten Faces zu partiellen Faces, wenn sich der Pfad auf ein
 Sub-Face bezieht.
-Ein Sub-Face wird mit allen seinen übergeordneten Faces angezeigt. Wenn die
-übergeordneten Faces zusätzliche Facets enthalten, werden diese Facets nicht
-angezeigt. Die übergeordneten Faces werden dann nur teilweise/partiell
+Ein Sub-Face wird mit allen seinen &uuml;bergeordneten Faces angezeigt. Wenn die
+&uuml;bergeordneten Faces zus&auml;tzliche Facets enthalten, werden diese Facets nicht
+angezeigt. Die &uuml;bergeordneten Faces werden dann nur teilweise/partiell
 dargestellt.
 
 
 #### Facets
 
 Facets sind Teile eines Faces (Projektion) und sind in der Regel keine
-eigenständige Ansicht. So können z.B. bei einem Such-Formular die Eingabemaske
+eigenst&auml;ndige Ansicht. So k&ouml;nnen z.B. bei einem Such-Formular die Eingabemaske
 und die Ergebnistabelle separate Facets eines Faces sein, ebenso wie Article 
-und/oder Section in einem Face. Sowohl Face als auch Facets sind über virtuelle
+und/oder Section in einem Face. Sowohl Face als auch Facets sind &uuml;ber virtuelle
 Pfade erreichbar. Der Pfad zu Facets bewirkt, dass das umschliessende Face mit
-allen seinen übergeordneten Faces angezeigt wird.
+allen seinen &uuml;bergeordneten Faces angezeigt wird.
 
 
 #### Face Flow
 
 Face-Flow beschreibt die Zugriffssteuerung und die Visualisierung von Ansichten.  
-Die SiteMap stellt dafür Schnittstellen für Berechtigungskonzepte und Akzeptoren
-zur Verfügung, mit denen der Face-Flow kontrolliert und beeinflusst werden kann.
+Die SiteMap stellt daf&uuml;r Schnittstellen f&uuml;r Berechtigungskonzepte und Akzeptoren
+zur Verf&uuml;gung, mit denen der Face-Flow kontrolliert und beeinflusst werden kann.
 Auf diese Weise kann der Zugriff auf Pfade/Ansichten mit eigener Logik gestoppt
 und/oder umgeleitet bzw. weitergeleitet werden.
 
 
 ### Konfiguration
 
-Für die Konfiguration der SiteMap wird die Methode `SiteMap.customize(....)`
-verwendet. Mit dieser Methode ist es möglich, den Face-Flow (Pfade, Faces,
+F&uuml;r die Konfiguration der SiteMap wird die Methode `SiteMap.customize(....)`
+verwendet. Mit dieser Methode ist es m&ouml;glich, den Face-Flow (Pfade, Faces,
 Facets) sowie die Berechtigungen zu definieren und Akzeptoren zu registrieren,
-wofür die die Methode unterschiedliche Signaturen bereitstellt.  
+wof&uuml;r die die Methode unterschiedliche Signaturen bereitstellt.  
 
 Die Konfiguration kann mehrfach aufgerufen werden, auch zur Laufzeit. Die
 SiteMap sammelt alle Konfigurationen kumulativ. Alle Pfade, Faces und Facets
 werden zusammengefasst, Akzeptoren und permit-Methoden in der Reihenfolge ihrer
 Registrierung gesammelt. Da die Konfiguration immer einen kumulativen Zustand
-verwendet, ist es später nicht nachvollziehbar, wie die Konfiguration erstellt
+verwendet, ist es sp&auml;ter nicht nachvollziehbar, wie die Konfiguration erstellt
 wurde.
 
 Die Konfiguration der SiteMap greift nur, wenn ein fehlerfreies Meta-Objekt
-übergeben wird und keine Fehler bei der Verarbeitung auftreten.
+&uuml;bergeben wird und keine Fehler bei der Verarbeitung auftreten.
 
 
 #### Face Flow
 
 Die Konfiguration basiert auf einem Meta-Objekt, das an die Methode
-`SiteMap.customize({meta})` übergeben wird.  
-Die Schlüssel (string) entsprechen den Pfaden und ein Pfad hat immer ein
+`SiteMap.customize({meta})` &uuml;bergeben wird.  
+Die Schl&uuml;ssel (string) entsprechen den Pfaden und ein Pfad hat immer ein
 existierendes Face als Ziel, Teilpfade ohne Face werden ignoriert. Die Werte
-sind Arrays mit den gültigen Facets für einen Pfad/Face. Facets benötigen keinen
+sind Arrays mit den g&uuml;ltigen Facets f&uuml;r einen Pfad/Face. Facets ben&ouml;tigen keinen
 eigenen Pfad, da diese automatisch abgeleitet/erstellt werden.
 
 ```javascript
@@ -225,7 +225,7 @@ const map = {
 SiteMap.customize(map);
 ```
 
-Oder etwas kürzer als direkter Aufruf der Customize-Methode:
+Oder etwas k&uuml;rzer als direkter Aufruf der Customize-Methode:
 
 ```javascript
 SiteMap.customize({
@@ -239,11 +239,11 @@ SiteMap.customize({
 ```
 
 __Die Navigation akzeptiert nur Pfade, die im Face-Flow definiert sind.__
-__Ungültige Pfade werden basierend auf dem angeforderten Pfad zum nächst__
-__höheren bekannten/berechtigten Pfad weitergeleitet.__
+__Ung&uuml;ltige Pfade werden basierend auf dem angeforderten Pfad zum n&auml;chst__
+__h&ouml;heren bekannten/berechtigten Pfad weitergeleitet.__
 
-__Ohne Face-Flow gibt es keine gültigen Pfade. Werden eine Benutzeroberfläche__
-__oder Komponenten ohne Face-Flow verwendet, müssen diese als statisch__
+__Ohne Face-Flow gibt es keine g&uuml;ltigen Pfade. Werden eine Benutzeroberfl&auml;che__
+__oder Komponenten ohne Face-Flow verwendet, m&uuml;ssen diese als statisch__
 __gekennzeichnet werden, da die Komponenten sonst ausgeblendet (aus dem DOM__
 __entfernt) werden.__
 
@@ -261,7 +261,7 @@ __entfernt) werden.__
 #### Permissions
 
 Das Berechtigungskonzept basiert auf einer oder mehreren permit-Methoden, die
-zusammen mit dem Face-Flow-Meta-Objekt übergeben werden.
+zusammen mit dem Face-Flow-Meta-Objekt &uuml;bergeben werden.
 
 ```javascript
 SiteMap.customize({...}, function(path) {...});
@@ -283,26 +283,26 @@ SiteMap.customize({
 
 Alle angeforderten Pfade durchlaufen die registrierten permit-Methoden. Diese
 entscheiden, was mit dem Pfad passiert. Von jeder permit-Methode werden folgende
-Rückgabewerte erwartet:
+R&uuml;ckgabewerte erwartet:
 
-__True__ Die Validierung ist erfolgreich und die Iteration über weitere
+__True__ Die Validierung ist erfolgreich und die Iteration &uuml;ber weitere
 permit-Methoden wird fortgesetzt. Wenn alle permit-Methoden wahr sind und damit
-den Pfad bestätigen, wird er verwendet.
+den Pfad best&auml;tigen, wird er verwendet.
 
-__String__ Die Validierung (Iteration über weitere permit-Merhoden) wird
-abgebrochen und es folgt einen Weiterleitung an die zurückgegebene Zeichenkette. 
+__String__ Die Validierung (Iteration &uuml;ber weitere permit-Merhoden) wird
+abgebrochen und es folgt einen Weiterleitung an die zur&uuml;ckgegebene Zeichenkette. 
 
-__Otherwise__ Der Pfad gilt als ungültig/unautorisiert, die Validierung
-(Iteration über weitere permit-Merhoden) wird abgebrochen und an den
-ursprünglichen Pfad weitergeleitet.
+__Otherwise__ Der Pfad gilt als ung&uuml;ltig/unautorisiert, die Validierung
+(Iteration &uuml;ber weitere permit-Merhoden) wird abgebrochen und an den
+urspr&uuml;nglichen Pfad weitergeleitet.
 
 
 #### Acceptors
 
-Akzeptoren arbeiten ähnlich wie die permit-Methoden.  
+Akzeptoren arbeiten &auml;hnlich wie die permit-Methoden.  
 Im Unterschied dazu werden die Methoden der Akzeptoren nur bei den Pfaden
 aufgerufen, deren RegExp-Muster dem angefragten Pfad entsprechen. Auch von den
-Methoden der Akzeptoren werden die gleiche Arten von Rückgabewerte wie bei den
+Methoden der Akzeptoren werden die gleiche Arten von R&uuml;ckgabewerte wie bei den
 [Permissions](#permissions) erwartet.
 
 ```javascript
@@ -321,7 +321,7 @@ SiteMap.customize(/^mail.*$/i, function(path) {
 
 ### Navigation
 
-Die Navigation kann durch Änderung des URL-Hash im Browser (direkte Eingabe),
+Die Navigation kann durch &Auml;nderung des URL-Hash im Browser (direkte Eingabe),
 durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
 `window.location.href`, `SiteMap.navigate(path)` und
 `SiteMap.forward(path)` erfolgen.
@@ -344,11 +344,11 @@ SiteMap.forward("##");
 SiteMap.forward("##x");
 ```
 
-Im Unterschied zur navigate-Methode wird die Weiterleitung direkt ausgeführt,
-anstatt eine asynchrone Weiterleitung durch Änderung des Location-Hashes
-auszulösen.
+Im Unterschied zur navigate-Methode wird die Weiterleitung direkt ausgef&uuml;hrt,
+anstatt eine asynchrone Weiterleitung durch &Auml;nderung des Location-Hashes
+auszul&ouml;sen.
 
-Relative Pfade ohne Hash am Anfang sind möglich, funktionieren aber nur mit
+Relative Pfade ohne Hash am Anfang sind m&ouml;glich, funktionieren aber nur mit
 `SiteMap.navigate(path)`.
 
 ```javascript
@@ -359,10 +359,10 @@ SiteMap.navigate("x#y#z");
 ### Permission Concept
 
 Das Berechtigungskonzept basiert auf permit-Methoden, die als Callback-Methoden
-mit der Konfiguration des Face-Flows definiert werden. Es können mehrere
-permit-Methoden definiert werden, die mit jedem angeforderten Pfad überprüft
+mit der Konfiguration des Face-Flows definiert werden. Es k&ouml;nnen mehrere
+permit-Methoden definiert werden, die mit jedem angeforderten Pfad &uuml;berpr&uuml;ft
 werden. Nur wenn alle permit-Methoden den angeforderten Pfad mit "wahr"
-bestätigen, wird er verwendet und der Renderer macht die abhängigen Faces und
+best&auml;tigen, wird er verwendet und der Renderer macht die abh&auml;ngigen Faces und
 Facets sichtbar.
  
 Details werden im Abschnitt [Permissions](#permissions) beschrieben.
@@ -370,19 +370,19 @@ Details werden im Abschnitt [Permissions](#permissions) beschrieben.
 
 ### Acceptors
 
-Akzeptoren werden zusammen mit dem Berechtigungskonzept ausgeführt.  
-Sie haben die gleiche Wirkung, betreffen aber nur Pfade, die einem regulären
-Ausdruck entsprechen. Akzeptoren können zur Bestätigung von Berechtigungen
-und/oder für versteckte Hintergrundaktivitäten verwendet werden.  
+Akzeptoren werden zusammen mit dem Berechtigungskonzept ausgef&uuml;hrt.  
+Sie haben die gleiche Wirkung, betreffen aber nur Pfade, die einem regul&auml;ren
+Ausdruck entsprechen. Akzeptoren k&ouml;nnen zur Best&auml;tigung von Berechtigungen
+und/oder f&uuml;r versteckte Hintergrundaktivit&auml;ten verwendet werden.  
 
 Details werden im Abschnitt [Acceptors](#acceptors) beschrieben.
 
 
 ## Virtual Paths
 
-Virtuelle Pfade werden für die Navigation und Kontrolle vom Face-Flow verwendet.  
+Virtuelle Pfade werden f&uuml;r die Navigation und Kontrolle vom Face-Flow verwendet.  
 Das Ziel kann ein Face, ein Facet oder eine Funktion sein.  
-Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL für die Pfade
+Bei SPAs (Single-Page-Applikationen) wird der Ankerteil der URL f&uuml;r die Pfade
 verwendet.
 
 ```
@@ -390,10 +390,10 @@ https://example.local/example/#path
 ```
 
 In Anlehnung an das Dateisystem werden auch hier absolute, relative und
-zusätzlich funktionale Pfade unterstützt.  
+zus&auml;tzlich funktionale Pfade unterst&uuml;tzt.  
 Pfade bestehen ausschliesslich aus Wortzeichen, Unterstrichen und optional dem
 Minus-Zeichen (basierend auf zusammengesetzten IDs). Als Separator und Root wird
-das Hash-Zeichen verwendet. Leerzeichen werden nicht unterstützt.
+das Hash-Zeichen verwendet. Leerzeichen werden nicht unterst&uuml;tzt.
 
 ```
 #a#b#c#d
@@ -406,9 +406,9 @@ automatisch durch Kleinbuchstaben ersetzt.
 #a#b#c#d == #A#b#C#d
 ```
 
-Zwischen den Pfadsegmenten kann das Hash-Zeichen (`#`) auch als Rück- /
-Eltern-Sprunganweisung verwendet werden. Die Weite vom Rücksprung entspricht
-dann der Anzahl der zusätzlichen Hash-Zeichen.
+Zwischen den Pfadsegmenten kann das Hash-Zeichen (`#`) auch als R&uuml;ck- /
+Eltern-Sprunganweisung verwendet werden. Die Weite vom R&uuml;cksprung entspricht
+dann der Anzahl der zus&auml;tzlichen Hash-Zeichen.
 
 ```
 #a#b#c#d##x   -> #a#b#c#x
@@ -416,12 +416,12 @@ dann der Anzahl der zusätzlichen Hash-Zeichen.
 #a#b#c#d####x -> #a#x
 ```
 
-Die Navigation kann durch Änderung des URL-Hash im Browser (direkte Eingabe),
+Die Navigation kann durch &Auml;nderung des URL-Hash im Browser (direkte Eingabe),
 durch Verwendung von Hash-Links und in JavaScript mit `window.location.hash`,
 `window.location.href`, `SiteMap.navigate(path)` und
 `SiteMap.forward(path)`. erfolgen.
 
-Es gibt verschiedene Arten von Pfaden, die im Folgenden erläutert werden.
+Es gibt verschiedene Arten von Pfaden, die im Folgenden erl&auml;utert werden.
 
 
 ### Root Path
@@ -443,7 +443,7 @@ und sind relativ zum aktuellen Pfad.
 <a href="##x">Back to the parent + x</a>
 ```
 
-Relative Pfade ohne Hash am Anfang sind möglich, funktionieren aber nur mit
+Relative Pfade ohne Hash am Anfang sind m&ouml;glich, funktionieren aber nur mit
 `SiteMap.navigate(path)`.
 
 ```javascript
@@ -455,7 +455,7 @@ SiteMap.navigate("x#y#z");
 
 Diese Pfade beginnen mit einem Hash-Zeichen.
 Alle Pfade werden ausgeglichen, d.h. die Direktiven mit mehreren Hash-Zeichen
-werden aufgelöst.
+werden aufgel&ouml;st.
 
 ```html
 <a href="#">Back to the root</a>
@@ -466,12 +466,12 @@ werden aufgelöst.
 ### Variable Path
 
 Variable Pfade sind eine Abbildung (Mapping) von virtuellen auf physische Pfade.  
-Die Erklärung klingt im Kontext der SiteMap und derer virtueller Pfade etwas
-verwirrend und meint hier eine weitere zusätzliche virtuelle Abbildung von
+Die Erkl&auml;rung klingt im Kontext der SiteMap und derer virtueller Pfade etwas
+verwirrend und meint hier eine weitere zus&auml;tzliche virtuelle Abbildung von
 Pfaden innerhalb der SiteMap.  
 Dabei bildet ein Pfad der SiteMap ein festes Ziel, welches Face und Facet sein
-können. Der Pfad kann nun beliebig erweitert werden ohne dass sich das Ziel
-ändert. Das Ziel kann den erweiterten Pfad dann z.B. zur Parameterübergabe
+k&ouml;nnen. Der Pfad kann nun beliebig erweitert werden ohne dass sich das Ziel
+&auml;ndert. Das Ziel kann den erweiterten Pfad dann z.B. zur Parameter&uuml;bergabe
 nutzen, was vergleichbar mit PATH_TRANSLATED und PATH_INFO im CGI ist. 
 
 Zur Konfiguration variabler Pfade wird die Zeichenfolge `...` verwendet, die
@@ -486,10 +486,10 @@ SiteMap.customize({
 ```
 
 Die Pfade `#contact` und `#project` sind in diesem Beispiel variabel und 
-können somit beliebig erweitert werden. Das Ziel ist in beiden Fällen fest und
+k&ouml;nnen somit beliebig erweitert werden. Das Ziel ist in beiden F&auml;llen fest und
 die Anfragen werden von `#contact` bzw. `#project` verarbeitet.  
 Die Erweitertung vom Pfad kann mit der Methode `SiteMap.lookup(path)`
-ermittelt werden. Das zurückgegebene Meta-Objekt enthält bei variablen Pfaden
+ermittelt werden. Das zur&uuml;ckgegebene Meta-Objekt enth&auml;lt bei variablen Pfaden
 mit erweiterten Pfaden diesen im data-Property. 
 
 ```
@@ -504,9 +504,9 @@ SiteMap.lookup("#project#a#b#c");
 ### Functional Path
 
 Der Pfad besteht aus drei oder mehr Hash-Zeichen (`###+`) und ist nur
-temporär, er dient einem Funktionsaufruf, ohne den aktuellen Pfad (URL-Hash) zu
-ändern.  
-Dies ist nützlich für funktionale Links, z.B. um ein Popup zu öffnen oder eine
+tempor&auml;r, er dient einem Funktionsaufruf, ohne den aktuellen Pfad (URL-Hash) zu
+&auml;ndern.  
+Dies ist n&uuml;tzlich f&uuml;r funktionale Links, z.B. um ein Popup zu &ouml;ffnen oder eine
 Mail im Hintergrund zu senden.
 
 ```html
@@ -517,12 +517,12 @@ Mail im Hintergrund zu senden.
 ## Object/Model-Binding
 
 Bei der Objekt-Bindung geht es darum, HTML-Elemente mit entsprechenden
-Modell-Objekten zu verknüpfen, die im JavaScript existieren.
+Modell-Objekten zu verkn&uuml;pfen, die im JavaScript existieren.
 
-Das Object/Model-Binding gehört ebenfalls zum Model View Controller und ist in
+Das Object/Model-Binding geh&ouml;rt ebenfalls zum Model View Controller und ist in
 Seanox aspect-js in der Composite-API implementiert, auf der SiteMap als
 Erweiterung und basiert.  
-Zum besseren Verständnis ist die Funktionalität hier im Model View Controller
+Zum besseren Verst&auml;ndnis ist die Funktionalit&auml;t hier im Model View Controller
 beschrieben.
 
 
@@ -531,23 +531,23 @@ beschrieben.
 
 #### namespace
 
-Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
+Vergleichbar mit Paketen in anderen Programmiersprachen k&ouml;nnen Namensr&auml;ume zur
 Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
 Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
 durch das Verketten statischer Objekte abgebildet.  
-Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
-Wie für die Bezeichner von Objekten typisch, verwenden auch Namensräume
+Jede Ebene in dieser Objektkette repr&auml;sentiert einen Namensraum.  
+Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namensr&auml;ume
 Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
-Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
+Besonderheit werden auch Arrays unterst&uuml;tzt. Wenn eine Objektebene im Namensraum
 eine reine Zahl ist, wird ein Array angenommen.
 
 Das Object/Model-Binding basiert auf den IDs der Composites und deren Position
 und Reihenfolge im DOM.  
 Die Wurzel vom Namensraum bildet immer eine Composite-ID.  
 Der Namensraum kann dabei absolut sein, also der Namensraum entspricht einer
-Composite-ID, oder er basiert auf dem Namensraum einer im DOM übergeordneten
+Composite-ID, oder er basiert auf dem Namensraum einer im DOM &uuml;bergeordneten
 Composite-ID.
 
 ```html
@@ -563,7 +563,7 @@ Composite-ID.
 </html>  
 ```
 
-Beispiele möglicher Namesräume:
+Beispiele m&ouml;glicher Namesr&auml;ume:
 
 `a` + `a.b` + `a.b.c`  
 `b` + `b.c`  
@@ -574,26 +574,26 @@ Beispiele möglicher Namesräume:
 
 Der Scope basiert auf dem Namensraum und stellt diesen auf der Objektebene dar.  
 Das heisst, der Namensraum ist der Beschreibungstext, der Scope ist das Objekt,
-wenn der Namensraum im Objektbaum aufgelöst wurde.
+wenn der Namensraum im Objektbaum aufgel&ouml;st wurde.
 
 
 #### model
 
 Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
-in einem beliebigen Namensraum und stellt die Logik für die
-Benutzerschnittstelle (UI-Komponente) und den Übergang von der
-Benutzerschnittstelle zur Geschäftslogik und/oder zum Backend zur Verfügung.  
-Die Verknüpfung bzw. Bindung von Markup und JavaScript-Model erfolgt über die
-Composite-API. Dazu muss ein HTML-Element eine gültige und eindeutige ID haben.
-Die ID muss die Anforderungen des Namensraums erfüllen.
+in einem beliebigen Namensraum und stellt die Logik f&uuml;r die
+Benutzerschnittstelle (UI-Komponente) und den &Uuml;bergang von der
+Benutzerschnittstelle zur Gesch&auml;ftslogik und/oder zum Backend zur Verf&uuml;gung.  
+Die Verkn&uuml;pfung bzw. Bindung von Markup und JavaScript-Model erfolgt &uuml;ber die
+Composite-API. Dazu muss ein HTML-Element eine g&uuml;ltige und eindeutige ID haben.
+Die ID muss die Anforderungen des Namensraums erf&uuml;llen.
 
 Details werden im Abschnitt [Binding](#binding) beschrieben.
 
 Die Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
-Abwesenheit. So kann das Modell der Komponente über die statischen Methoden
-`dock` und `undock` informiert werden, wenn die Komponente dem DOM hinzugefügt
+Abwesenheit. So kann das Modell der Komponente &uuml;ber die statischen Methoden
+`dock` und `undock` informiert werden, wenn die Komponente dem DOM hinzugef&uuml;gt
 bzw. aus diesem entfernt wird, womit sich das Modell vorbereiten bzw.
-finalisieren lässt.  
+finalisieren l&auml;sst.  
 Die Implementierung beider Methoden ist optional.
 
 ```javascript
@@ -611,7 +611,7 @@ const model = {
 Referenziert ein Element mit einer ID innerhalb vom DOM eines Composites und die
 korrespondierende Eigenschaft im Modell. Die Elemente der Properties nutzen
 einen relativen Bezeichner (ID). Der Namensraum basiert auf dem vom Composite
-und erweitert sich um ggf. weitere übergeordnete Elemente mit IDs im DOM.
+und erweitert sich um ggf. weitere &uuml;bergeordnete Elemente mit IDs im DOM.
 
 ```javascript
 const model = {
@@ -634,17 +634,17 @@ const model = {
 ```
 
 Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
-dem Wert vom HTML-Element. Für ein HTML-Element werden die entsprechenden
-Ereignisse über das gleichnamige Attribut definiert.
+dem Wert vom HTML-Element. F&uuml;r ein HTML-Element werden die entsprechenden
+Ereignisse &uuml;ber das gleichnamige Attribut definiert.
 
 
 #### qualifier
 
-In einigen Fällen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
-Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen Fällen
-kann der Bezeichner durch einen zusätzlichen eindeutigen Qualifier, getrennt
+In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
+Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen F&auml;llen
+kann der Bezeichner durch einen zus&auml;tzlichen eindeutigen Qualifier, getrennt
 durch einen Doppelpunkt, erweitert werden.  
-Qualifier wirken beim Object/Model-Binding wie Properties und verlängern den
+Qualifier wirken beim Object/Model-Binding wie Properties und verl&auml;ngern den
 Namensraum.
 
 ```html
@@ -675,7 +675,7 @@ die Darstellung.
 
 Die Composite-ID ist ein anwendungsweit eindeutiger Bezeichner.  
 Sie ist eine Zeichenfolge, die aus Buchstaben, Zahlen und Unterstrichen besteht
-und optional auch das Minus-Zeichen unterstützt, wenn es nicht am Anfang oder am
+und optional auch das Minus-Zeichen unterst&uuml;tzt, wenn es nicht am Anfang oder am
 Ende benutzt wird.  
 Eine Composite-ID ist mindestens ein Zeichen lang und wird durch die Kombination
 der Attribute `ID` und `Composite` gebildet.
@@ -691,8 +691,8 @@ der Attribute `ID` und `Composite` gebildet.
 ```
 
 Die Composite-ID wird beim MVC, Object/Model-Binding sowie zur Synchronisation
-und Validierung benötigt und muss daher eine gültige und eindeutige Zeichenfolge
-innerhalb des JavaScript-Namensraums sein. Der Bezeichner wird auch für den
+und Validierung ben&ouml;tigt und muss daher eine g&uuml;ltige und eindeutige Zeichenfolge
+innerhalb des JavaScript-Namensraums sein. Der Bezeichner wird auch f&uuml;r den
 Face-Flow verwendet, um Faces und Facets sowie allgemein Modelle/Komponenten zu
 identifizieren und zu kontrollieren.
 
@@ -705,9 +705,9 @@ bestehen.
 
 Beim Object/Model-Binding geht es um die Verbindung von View/Markup/HTML mit dem
 entsprechenden JavaScript-Model.  
-Das Binding leitet Interaktionen und Statusänderungen der View an das Model
-weiter und stellt eine Schnittstelle für Middleware-Funktionen und Services
-für die View bereit. Womit keine manuelle Implementierung und Deklaration von
+Das Binding leitet Interaktionen und Status&auml;nderungen der View an das Model
+weiter und stellt eine Schnittstelle f&uuml;r Middleware-Funktionen und Services
+f&uuml;r die View bereit. Womit keine manuelle Implementierung und Deklaration von
 Ereignissen sowie die Synchronisation und Interaktion zwischen UI und
 Anwendungslogik erforderlich ist.
 
@@ -741,22 +741,22 @@ const model = {
 ```
 
 Die Bindung basiert auf den IDs der HTML-Elemente im Markup (View). Diese IDs
-definieren den Namensraum und das zu verwendende JavaScript-Model. IDs können
-relative und absolute Namensräume verwenden, basieren aber primär auf der
+definieren den Namensraum und das zu verwendende JavaScript-Model. IDs k&ouml;nnen
+relative und absolute Namensr&auml;ume verwenden, basieren aber prim&auml;r auf der
 Position eines Elements im DOM und einer korrespondierenden Objektstruktur als
 JavaScript-Model.
 
 
 ### Dock
 
-Wenn ein Composite im DOM verwendet/eingefügt wird, wird das entsprechende
-JavaScript-Model angedockt/verknüpft und beim Entfernen aus dem DOM
-abgedockt/entknüpft.  
-In beiden Fällen kann das Modell optional geeignete Methoden implementieren.  
-Die Dock-Methode wird vor dem Rendern, vor dem Einfügen des Composites in das
-DOM oder nach dem Laden der Seite beim ersten Rendern ausgeführt und kann zur
+Wenn ein Composite im DOM verwendet/eingef&uuml;gt wird, wird das entsprechende
+JavaScript-Model angedockt/verkn&uuml;pft und beim Entfernen aus dem DOM
+abgedockt/entkn&uuml;pft.  
+In beiden F&auml;llen kann das Modell optional geeignete Methoden implementieren.  
+Die Dock-Methode wird vor dem Rendern, vor dem Einf&uuml;gen des Composites in das
+DOM oder nach dem Laden der Seite beim ersten Rendern ausgef&uuml;hrt und kann zur
 Vorbereitung der Darstellung verwendet werden. Die Undock-Methode wird
-ausgeführt, nachdem das Composite aus dem DOM entfernt wurde und kann zur
+ausgef&uuml;hrt, nachdem das Composite aus dem DOM entfernt wurde und kann zur
 Nachbereitung bzw. Bereiningung der Darstellung verwendet werden.  
 
 ```javascript
@@ -780,7 +780,7 @@ const model = {
 </html>
 ```
 
-Bei einem Composite in Kombination mit einer Bedingung (condition) hängt der
+Bei einem Composite in Kombination mit einer Bedingung (condition) h&auml;ngt der
 Aufruf der Methoden vom Ergebnis der Bedingung ab.
 
 
@@ -791,11 +791,11 @@ Details werden im Abschnitt [Dock](#undock) beschrieben.
 
 ### Synchronization
 
-Die Objekt-Bindung umfasst neben der statischen Verknüpfung und Zuordnung von
+Die Objekt-Bindung umfasst neben der statischen Verkn&uuml;pfung und Zuordnung von
 HTML-Elementen (View) zum JavaScript-Model auch die Synchronisation von Werten
 zwischen den HTML-Elementen und den Feldern im JavaScript-Model.  
-Die Synchronisation hängt von Ereignissen ab, die für das HTML-Element mit dem
-Attribut `events` deklariert sind und wird nur ausgeführt, wenn eines der
+Die Synchronisation h&auml;ngt von Ereignissen ab, die f&uuml;r das HTML-Element mit dem
+Attribut `events` deklariert sind und wird nur ausgef&uuml;hrt, wenn eines der
 definierten Ereignisse eintritt.
 
 Details zur Funktionsweise werden im Abschnitt [events](markup.md#events)
@@ -805,7 +805,7 @@ beschrieben.
 ### Validation
 
 Die Synchronisation der Werte zwischen den HTML-Elementen (View) und den Feldern
-vom JavaScript-Model kann durch Validierung überwacht und gesteuert werden.  
+vom JavaScript-Model kann durch Validierung &uuml;berwacht und gesteuert werden.  
 Die Validierung wird in HTML durch die Kombination der Attribute `validate` und
 `events` deklariert und erfordert eine entsprechende Validierungsmethode im
 JavaScript-Model.  
@@ -817,9 +817,9 @@ beschrieben.
 ### Events
 
 Ereignisse, genauer gesagt die Interaktion zwischen View und Modell, werden bei
-der Object/Model-Binding ebenfalls berücksichtigt. Die Methoden zur Interaktion
+der Object/Model-Binding ebenfalls ber&uuml;cksichtigt. Die Methoden zur Interaktion
 werden nur im Model implementiert. Im Markup selbst ist keine Deklaration
-erforderlich. Das Object/Model-Binding kennt die verfügbaren Ereignisse im HTML
+erforderlich. Das Object/Model-Binding kennt die verf&uuml;gbaren Ereignisse im HTML
 und so wird beim Binding das Model nach entsprechenden Methoden durchsucht, die
 dann als Event-Listener registriert werden.
 

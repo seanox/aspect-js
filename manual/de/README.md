@@ -3,7 +3,7 @@
 ## Inhalt
 
 * [Motivation](#motivation)
-* [Einführung](#einführung)
+* [Einf&uuml;hrung](#einf&uuml;hrung)
 * [Expression Language](#expression-language)
 * [Markup](#markup)
 * [DataSource](#datasource)
@@ -20,9 +20,9 @@
 * [Motivation](motivation.md#motivation)
 
 
-### Einführung
+### Einf&uuml;hrung
 
-* [Einführung](introduction.md#introduction)
+* [Einf&uuml;hrung](introduction.md#introduction)
 
 
 ### Expression Language
@@ -41,7 +41,7 @@
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
     * [Kombination](expression.md#kombination)  
-  * [Ergänzung](expression.md#erg-nzung)
+  * [Erg&auml;nzung](expression.md#erg-nzung)
 
 
 ### Markup
@@ -69,7 +69,7 @@
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
     * [Parameter](markup.md#parameter)
-  * [Härtung](markup.md#h-rtung)
+  * [H&auml;rtung](markup.md#h-rtung)
 
 
 ### DataSource
@@ -82,7 +82,7 @@
   * [fetch](datasource.md#fetch)
   * [transform](datasource.md#transform)
   * [collect](datasource.md#collect)
-  * [Ergänzung](datasource.md#erg-nzung)
+  * [Erg&auml;nzung](datasource.md#erg-nzung)
   
   
 ### Resource Bundle (i18n)

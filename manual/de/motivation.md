@@ -1,4 +1,4 @@
-[Inhalt](README.md#motivation) | [Einführung](introduction.md)
+[Inhalt](README.md#motivation) | [Einf&uuml;hrung](introduction.md)
 - - -
 
 # Motivation
@@ -6,20 +6,20 @@
 Die Trennung von Web-Anwendungen in Frontend und Backend sowie die Nutzung von
 browserbasierter Rich-Clients und Microservices ist mehr als eine
 Trenderscheinung. Neben der strikten Trennung der Komponenten, sind
-Skalierbarkeit und Modularisierung gute Argumente für diese Art der
+Skalierbarkeit und Modularisierung gute Argumente f&uuml;r diese Art der
 Anwendungsarchitektur.
 
-Die Vielzahl an Frameworks für browserbasierter Rich-Clients ist gross.
-Sie unterscheiden sich stark in Funktionalität, Komplexität, Grösse und
-benötigen teilweise eigene Compiler und Server.
+Die Vielzahl an Frameworks f&uuml;r browserbasierter Rich-Clients ist gross.
+Sie unterscheiden sich stark in Funktionalit&auml;t, Komplexit&auml;t, Gr&ouml;sse und
+ben&ouml;tigen teilweise eigene Compiler und Server.
 
-Bei Seanox aspect-js steht ein minimalistischer Ansatz im Vordergrund. Geprägt
+Bei Seanox aspect-js steht ein minimalistischer Ansatz im Vordergrund. Gepr&auml;gt
 durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf Funktion
-und einfache Integration ins Markup, entstand der Wunsch nach einer ähnlichen
-client-seitigen Lösung als sportliches Experiment um das Verständnis von
+und einfache Integration ins Markup, entstand der Wunsch nach einer &auml;hnlichen
+client-seitigen L&ouml;sung als sportliches Experiment um das Verst&auml;ndnis von
 Rendering, Expression Language und Performance.
 
 
 - - -
 
-[Inhalt](README.md#motivation) | [Einführung](introduction.md)
+[Inhalt](README.md#motivation) | [Einf&uuml;hrung](introduction.md)

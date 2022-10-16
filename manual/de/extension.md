@@ -3,7 +3,7 @@
 
 # Erweiterung
 
-Die JavaScript-API wurde für Seanox aspect-js um einige allgemeine Funktionen
+Die JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine Funktionen
 erweitert.
 
 
@@ -22,23 +22,23 @@ erweitert.
 ## Namespace
 
 Namespace zu deutsch Namensraum auf Objektebene.  
-Vergleichbar mit Paketen in anderen Programmiersprachen können Namensräume zur
+Vergleichbar mit Paketen in anderen Programmiersprachen k&ouml;nnen Namensr&auml;ume zur
 Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
 Komponenten und Ressourcen genutzt werden.  
 Die Implementierung erfolgt in JavaScript auf Objektebene.  
 Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
 durch das Verketten statischer Objekte abgebildet.  
-Jede Ebene in dieser Objektkette repräsentiert einen Namensraum.  
-Wie für die Bezeichner von Objekten typisch, verwenden auch Namensräume
+Jede Ebene in dieser Objektkette repr&auml;sentiert einen Namensraum.  
+Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namensr&auml;ume
 Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
-Besonderheit werden auch Arrays unterstützt. Wenn eine Objektebene im Namensraum
+Besonderheit werden auch Arrays unterst&uuml;tzt. Wenn eine Objektebene im Namensraum
 eine reine Zahl ist, wird ein Array angenommen
 
 
 ### Namespace.using
 
-Erstellt einen Namensraum aus der übergeben Zeichenkette.  
-Ohne Argumente gibt die Methode den globale Namensraum `window` zurück.  
+Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette.  
+Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
 Die Methode hat verschiedene Signaturen.
 
 ```javascript
@@ -79,9 +79,9 @@ Namespace.locate()
 
 ### Namespace.lookup
 
-Löst einen Namensraum auf und ermittelt das Objekt.  
-Wenn der Namensraum nicht existiert, wird `null` zurückgegeben.  
-Ohne Argumente gibt die Methode den globale Namensraum `window` zurück.  
+L&ouml;st einen Namensraum auf und ermittelt das Objekt.  
+Wenn der Namensraum nicht existiert, wird `null` zur&uuml;ckgegeben.  
+Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
 Die Methode hat verschiedene Signaturen.
 
 ```javascript
@@ -100,7 +100,7 @@ Namespace.lookup()
 
 ### Namespace.exists
 
-Prüft, ob ein Namensraum existiert.  
+Pr&uuml;ft, ob ein Namensraum existiert.  
 Die Methode hat verschiedene Signaturen.
 
 ```javascript
@@ -124,7 +124,7 @@ Namespace.exists()
 
 ### Element.prototype.appendChild
 
-Ändert die ursprüngliche Methode zur Unterstützung von Knoten als NodeList und
+&Auml;ndert die urspr&uuml;ngliche Methode zur Unterst&uuml;tzung von Knoten als NodeList und
 Array. Wenn die Option `exclusive` verwendet wird, werden bestehende Kinder
 zuerst entfernt.
 
@@ -144,8 +144,8 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge.  
-Die Qualität der (U)UID ist abhängig von ihrer Länge.
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester L&auml;nge.  
+Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
 
 ```javascript
 Math.uniqueId()
@@ -158,9 +158,9 @@ Math.uniqueId(32)
 
 ### Math.uniqueSerialId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester Länge
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester L&auml;nge
 und einem seriellen Bezug zur Zeit.  
-Die Qualität der (U)UID ist abhängig von ihrer Länge.
+Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
 
 ```javascript
 Math.uniqueSerialId()
@@ -177,7 +177,7 @@ Math.uniqueSerialId(32)
 
 Funktion zum Abrufen der ID eines Objekts.  
 Die ID wird kontinuierlich erstellt und soll helfen, wenn zur Laufzeit eine
-eindeutige ID benötigt wird.
+eindeutige ID ben&ouml;tigt wird.
 
 ```javascript
 const object1 = {};
@@ -194,7 +194,7 @@ element1.ordinal() != element2.ordinal();
 
 ### Object.lookup
 
-Statische Funktion zum Bestimmen eines Objekts über den Namensraum.
+Statische Funktion zum Bestimmen eines Objekts &uuml;ber den Namensraum.
 
 ```javascript
 const earth = {
@@ -223,7 +223,7 @@ Object.lookup("foo");
 
 ### Object.exists
 
-Statische Funktion, um zu prüfen, ob ein Objekt in einem Namensraum existiert.
+Statische Funktion, um zu pr&uuml;fen, ob ein Objekt in einem Namensraum existiert.
 
 ```javascript
 const earth = {
@@ -252,9 +252,9 @@ Object.exists("foo");
 
 ### Object.using
 
-Äquivalent zu [Namespace.using](#namespaceusing) als statische Object-Funktion.  
-Erstellt einen Namensraum aus der übergeben Zeichenkette.  
-Ohne Argumente gibt die Methode den globale Namensraum `window` zurück.  
+&Auml;quivalent zu [Namespace.using](#namespaceusing) als statische Object-Funktion.  
+Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette.  
+Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
 Die Methode hat verschiedene Signaturen.
 
 ```javascript
@@ -277,7 +277,7 @@ Object.using()
 
 ### RegExp.quote
 
-Erstellt ein literales Muster für den angegebenen Text.  
+Erstellt ein literales Muster f&uuml;r den angegebenen Text.  
 Metazeichen oder Escape-Sequenzen im Text verlieren dadurch ihre Bedeutung.
 
 ```javascript
@@ -360,7 +360,7 @@ Funktion zur Kodierung von HTML-Zeichen in String-Objekten.
 
 ### String.prototype.hashCode
 
-Funktion zur Berechnung eines alhpanumerischen Hash-Wertes für String-Objekte.
+Funktion zur Berechnung eines alhpanumerischen Hash-Wertes f&uuml;r String-Objekte.
 
 ```javascript
 ("hello world").hashCode();
@@ -382,7 +382,7 @@ Funktion zur Dekodierung von Slash-Sequences (Steuerzeichen) in String-Objekten.
 
 ### window.serial
 
-Eigenschaft mit der UID für Instanz vom window-Objekt.
+Eigenschaft mit der UID f&uuml;r Instanz vom window-Objekt.
 
 ```javascript
 window.serial

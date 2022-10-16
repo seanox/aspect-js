@@ -4,9 +4,9 @@
 # Ereignisse
 
 Seanox aspect-js stellt verschiede Ereignisse bereit, die u.a. zur
-Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung über
-bestimmte Betriebszustände des Frameworks und der Laufzeitumgebung genutzt
-werden können.
+Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung &uuml;ber
+bestimmte Betriebszust&auml;nde des Frameworks und der Laufzeitumgebung genutzt
+werden k&ouml;nnen.
 
 
 ## Inhalt
@@ -34,8 +34,8 @@ werden können.
 
 # Rendering
 
-Diese Ereignisse treten während dem Rendering auf.  
-Der Callback-Methode wird der aktuelle Selector übergeben. Sie kann diesen
+Diese Ereignisse treten w&auml;hrend dem Rendering auf.  
+Der Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
 und/oder das korrespondierende Element beeinflussen, nicht aber das Rendering.
 
 ```javascript
@@ -65,8 +65,8 @@ Die Verarbeitung selbst endet vor dem Ereignis.
 
 # Object/Model-Binding
 
-Diese Ereignisse treten während dem Object/Model-Binding auf. 
-Der Callback-Methode wird der aktuelle Selector übergeben. Sie kann diesen
+Diese Ereignisse treten w&auml;hrend dem Object/Model-Binding auf. 
+Der Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
 und/oder das korrespondierende Element beeinflussen, nicht aber das
 Object/Model-Binding.
 
@@ -97,8 +97,8 @@ Die Verarbeitung selbst endet vor dem Ereignis.
 
 # HTTP
 
-Die Composite-API unterstützt ein anwendungsweites Event-Management für den
-XMLHttpRequest zur Implementierung Request-bezogener Anwendungslogik, z.B. für
+Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management f&uuml;r den
+XMLHttpRequest zur Implementierung Request-bezogener Anwendungslogik, z.B. f&uuml;r
 Logging oder Spinner. 
 
 ```javascript
@@ -110,59 +110,59 @@ Composite.listen(Composite.EVENT_HTTP_***, function(XMLHttpRequest) {
 
 ## Composite.EVENT_HTTP_START
 
-Entspricht dem XMLHttpRequest-Event: `loadstart` und wird ausgelöst, wenn eine
+Entspricht dem XMLHttpRequest-Event: `loadstart` und wird ausgel&ouml;st, wenn eine
 Anforderung zum Laden von Daten gestartet wurde.
 
 
 ## Composite.EVENT_HTTP_PROGRESS
 
 Entspricht dem XMLHttpRequest-Event: `progress`.  
-Das Fortschrittsereignis wird periodisch ausgelöst, wenn eine Anforderung
-weitere Daten empfängt.
+Das Fortschrittsereignis wird periodisch ausgel&ouml;st, wenn eine Anforderung
+weitere Daten empf&auml;ngt.
 
 
 ## Composite.EVENT_HTTP_RECEIVE
 
-Entspricht dem XMLHttpRequest-Event: `readystatechange` und wird ausgelöst,
-wenn sich der Status vom Request/Response ändert.
+Entspricht dem XMLHttpRequest-Event: `readystatechange` und wird ausgel&ouml;st,
+wenn sich der Status vom Request/Response &auml;ndert.
 
 
 ## Composite.EVENT_HTTP_LOAD
 
-Entspricht dem XMLHttpRequest-Event: `load` und wird ausgelöst, wenn eine
+Entspricht dem XMLHttpRequest-Event: `load` und wird ausgel&ouml;st, wenn eine
 Ressource geladen wurde.
 
 
 ## Composite.EVENT_HTTP_ABORT
 
-Entspricht dem XMLHttpRequest-Event: `abort` und wird ausgelöst, wenn das Laden
+Entspricht dem XMLHttpRequest-Event: `abort` und wird ausgel&ouml;st, wenn das Laden
 einer Ressource abgebrochen wurde.
 
 
 ## Composite.EVENT_HTTP_TIMEOUT
 
-Entspricht dem XMLHttpRequest-Event: `timeout` und wird ausgelöst, wenn das
-Laden einer Ressource wegen Überschreitung der maximalen Ladezeit abgebrochen
+Entspricht dem XMLHttpRequest-Event: `timeout` und wird ausgel&ouml;st, wenn das
+Laden einer Ressource wegen &Uuml;berschreitung der maximalen Ladezeit abgebrochen
 wurde.
 
 
 ## Composite.EVENT_HTTP_ERROR
 
-Entspricht dem XMLHttpRequest-Event: `error` und wird ausgelöst, wenn ein
+Entspricht dem XMLHttpRequest-Event: `error` und wird ausgel&ouml;st, wenn ein
 Fehler aufgetreten ist.
 
 
 ## Composite.EVENT_HTTP_END
 
-Entspricht dem XMLHttpRequest-Event: `loadend` und wird ausgelöst, wenn der
-Request abgeschlossen ist, unabhängig von evlt. Fehlern oder erfolgreichem
+Entspricht dem XMLHttpRequest-Event: `loadend` und wird ausgel&ouml;st, wenn der
+Request abgeschlossen ist, unabh&auml;ngig von evlt. Fehlern oder erfolgreichem
 Verlauf.
 
 
 # Error
 
-Die Composite-API unterstützt ein anwendungsweites Event-Management für
-Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. für
+Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management f&uuml;r
+Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. f&uuml;r
 Logging oder Fehlerausgaben. 
 
 ```javascript
@@ -174,9 +174,9 @@ Composite.listen(Composite.EVENT_ERROR, function(Event) {
 
 ## Composite.EVENT_ERROR
 
-Das Fehlerereignis wird bei unbehandelten Laufzeitfehlern ausgelöst.  
-Syntaktische Fehler die eine generelle Ausführung von JavaScript verhindern,
-können das Fehlerereignis nicht auslösen.
+Das Fehlerereignis wird bei unbehandelten Laufzeitfehlern ausgel&ouml;st.  
+Syntaktische Fehler die eine generelle Ausf&uuml;hrung von JavaScript verhindern,
+k&ouml;nnen das Fehlerereignis nicht ausl&ouml;sen.
 
 
 - - -

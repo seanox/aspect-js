@@ -5,9 +5,9 @@
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
-aspect-js. In den Expressions wird die komplette JavaScript-API unterstützt, die
-mit zusätzliche Schlüsselwörtern angereichert ist, womit auch die zahlreichen
-arithmetischen und logischen Operatoren verwendet werden können.
+aspect-js. In den Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die
+mit zus&auml;tzliche Schl&uuml;sselw&ouml;rtern angereichert ist, womit auch die zahlreichen
+arithmetischen und logischen Operatoren verwendet werden k&ouml;nnen.
 
 ```
 {{'Hello World!'}}
@@ -15,10 +15,10 @@ arithmetischen und logischen Operatoren verwendet werden können.
 
 Die Expression Language kann ab dem BODY-Tag im kompletten Markup als Freitext
 sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
-SCRIPT, hier wird die Expression Language nicht unterstützt.
+SCRIPT, hier wird die Expression Language nicht unterst&uuml;tzt.
 
 Der Renderer interpretiert die Expression-Syntax `{{...}}` hart und daher
-müssen die Zeichenfolge `{{` sowie `}}` innerhalb der Expression per
+m&uuml;ssen die Zeichenfolge `{{` sowie `}}` innerhalb der Expression per
 Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
 
 
@@ -37,14 +37,14 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)  
   * [Kombination](#kombination)  
-* [Ergänzung](#erg-nzung)
+* [Erg&auml;nzung](#erg-nzung)
   
 
 ## Elemente
 
-Ein Ausdruck ist ein Reihe von Wörtern.  
-Ein Wort ist ein elementarer Satz oder ein Satzfragment mit mehreren Wörtern.
-Wörter werden nach ihren Eigenschaften klassifiziert.
+Ein Ausdruck ist ein Reihe von W&ouml;rtern.  
+Ein Wort ist ein elementarer Satz oder ein Satzfragment mit mehreren W&ouml;rtern.
+W&ouml;rter werden nach ihren Eigenschaften klassifiziert.
 
 ```
 +-------------------------------------------------------------+
@@ -63,7 +63,7 @@ Wörter werden nach ihren Eigenschaften klassifiziert.
 
 ### Text
 
-Text ist kein regulärer Bestandteil der Expression.  
+Text ist kein regul&auml;rer Bestandteil der Expression.  
 Dieser ergibt sich bei Attributen, wenn die Expression Language mit Text
 kombiniert wird.
 
@@ -75,8 +75,8 @@ kombiniert wird.
 ### Literal
 
 Literale sind in einem Ausdruck mittels einfacher oder doppelter
-Anführungszeichen eingebetteter Text, der die üblichen Steuerzeichen und
-Escape-Sequenzen unterstützt.
+Anf&uuml;hrungszeichen eingebetteter Text, der die &uuml;blichen Steuerzeichen und
+Escape-Sequenzen unterst&uuml;tzt.
 
 ```
 {{'Hello World!'}}
@@ -86,8 +86,8 @@ Escape-Sequenzen unterstützt.
 
 ### Keyword
 
-Folgende Schlüsselwörter der JavaScript-Syntax werden in der Expression Language
-unterstützt:
+Folgende Schl&uuml;sselw&ouml;rter der JavaScript-Syntax werden in der Expression Language
+unterst&uuml;tzt:
 
 ```
 true
@@ -100,7 +100,7 @@ new
 ```
 
 Als Vereinfachung und zur Formulierung von validem Markup wurden die
-JavaScript-Syntax für die Expression Language um folgende Keywords erweitert:
+JavaScript-Syntax f&uuml;r die Expression Language um folgende Keywords erweitert:
 
 ```
 and &&        empty !         div /
@@ -113,7 +113,7 @@ not !         or    ||
 
 ### Value
 
-Value repräsentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
+Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
 Alles was kein Literal und Keyword ist, ist potentiell ein Value.  
 Values verweisen auf Variablen oder Objekt-Eigenschaften.  
 Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
@@ -131,18 +131,18 @@ Kann keine Methode ermittelt werden, wird von sonstiger Logik ausgegangen.
 ### Logik
 
 Alles was kein Literal, Keyword, Value und Methode ist, ist potentiell Logik.  
-Sonstige Logik wird unverändert ausgeführt.
+Sonstige Logik wird unver&auml;ndert ausgef&uuml;hrt.
 
 
 ## Expressions
 
 Es gibt unterschiedliche Arten von Expressions die kombinierbar sind.  
-Nachfolgend werden diese mit ihren Unterschieden und Eigenheiten erklärt.
+Nachfolgend werden diese mit ihren Unterschieden und Eigenheiten erkl&auml;rt.
 
 
 ### Value-Expression
 
-Value repräsentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
+Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
 Alles was kein Literal und Keyword ist, ist potentiell ein Value.  
 Values verweisen auf Variablen oder Objekt-Eigenschaften.  
 Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
@@ -152,8 +152,8 @@ wenn vorhanden auf einen korrespondierenden Getter (get-Methode).
 {{Example.object.field}}
 ```
 
-Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht verfügbar
-sind, entspricht der Rückgabewert `undefined`.
+Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht verf&uuml;gbar
+sind, entspricht der R&uuml;ckgabewert `undefined`.
 
 
 ### Method-Expression
@@ -164,8 +164,8 @@ Alles was kein Literal, Keyword und Value ist, ist potentiell eine Methode.
 {{Example.getData()}}
 ```
 
-Die Method-Expression ist streng und führt zu einem Fehler, wenn ein Objekt
-nicht verfügbar ist.
+Die Method-Expression ist streng und f&uuml;hrt zu einem Fehler, wenn ein Objekt
+nicht verf&uuml;gbar ist.
 
 
 ### Element-Expression
@@ -206,10 +206,10 @@ Alle der gennannten Arten von Expressions lassen sich kombinieren.
 ```
 
 
-## Ergänzung
+## Erg&auml;nzung
 
 Expressions werden durch den Renderer interpretiert, der nach dem Laden der
-Seite startet. Somit können Expressions beim Laden der Seite sichtbar sein.  
+Seite startet. Somit k&ouml;nnen Expressions beim Laden der Seite sichtbar sein.  
 Hier empfiehlt sich die Verwendung vom Attribut [release](markup.md#release).
 
 ```html
@@ -218,7 +218,7 @@ Hier empfiehlt sich die Verwendung vom Attribut [release](markup.md#release).
 
 Alternativ ist die Auslagerung von Inhalten in die DataSource in Kombination mit
 den Attributen [output](markup.md#output) und [import](markup.md#import)
-möglich.
+m&ouml;glich.
 
 ```css
 h1:after {

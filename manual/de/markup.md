@@ -1,14 +1,14 @@
-[Einführung](introduction.md) | [Inhalt](README.md#markup) | [Expression Language](expression.md)
+[Einf&uuml;hrung](introduction.md) | [Inhalt](README.md#markup) | [Expression Language](expression.md)
 - - -
 
 # Markup
 
 Mit Seanox aspect-js wird der deklarative Ansatz von HTML aufgegriffen und
-erweitert. Neben der Expression-Language werden den HTML-Elementen zusätzliche
-Attribute für Funktionen und Objekt-Bindung bereitgestellt.  
+erweitert. Neben der Expression-Language werden den HTML-Elementen zus&auml;tzliche
+Attribute f&uuml;r Funktionen und Objekt-Bindung bereitgestellt.  
 Der entsprechende Renderer ist in der Composite-Implementierung enthalten und
-überwacht das DOM aktiv über den MutationObserver und funktioniert und reagiert
-somit rekursiv auf Veränderungen im DOM.
+&uuml;berwacht das DOM aktiv &uuml;ber den MutationObserver und funktioniert und reagiert
+somit rekursiv auf Ver&auml;nderungen im DOM.
 
 
 ## Inhalt
@@ -34,7 +34,7 @@ somit rekursiv auf Veränderungen im DOM.
   * [Tag](#tag)  
   * [Selector](#selector)
   * [Acceptor](#acceptor)
-* [Härtung](markup.md#h-rtung)  
+* [H&auml;rtung](markup.md#h-rtung)  
   
 
 ## Attribute
@@ -42,10 +42,10 @@ somit rekursiv auf Veränderungen im DOM.
 Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
 umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
 Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
-unterstützt wird, sowie `STYLE`, welches nicht unterstützt wird. Die Werte der
-Attribute können statisch oder mit Verwendung der Expression-Language dynamisch
-sein. Enthält ein Attribut eine Expression, werden das Attribut und der Wert
-unveränderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
+unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die Werte der
+Attribute k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch
+sein. Enth&auml;lt ein Attribut eine Expression, werden das Attribut und der Wert
+unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 
@@ -53,13 +53,13 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 Kennzeichnet im Markup ein Element als [Composite](composites.md).  
 Composites sind modulare Komponente die in Seanox aspect-js eine elementare
-Bedeutung haben und die zwingend einen Bezeichner (ID) benötigen.  
-Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele für
+Bedeutung haben und die zwingend einen Bezeichner (ID) ben&ouml;tigen.  
+Sie werden von der [SiteMap](mvc.md#sitemap) als Faces, also als Ziele f&uuml;r
 virtuelle Pfade im Face-Flow verwendet, was direkten Einfluss auf die
 Sichtbarkeit der Composites hat.
-Der [Model View Controller](mvc.md#sitemap) unterstützt für Composites ein
+Der [Model View Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites ein
 automatisches [Object/Model-Binding](object-binding.md).  
-Die Ressourcen (CSS, JS, Markup) lassen sich für Composites in das
+Die Ressourcen (CSS, JS, Markup) lassen sich f&uuml;r Composites in das
 Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
@@ -70,7 +70,7 @@ Modul-Verzeichnis auslagern und werden erst bei Bedarf automatisch nachgeladen.
 
 Das Attribut hat keinen Wert.  
 Es kann mit dem Attribut `static` kombiniert werden.
-Dann wird das Composite als Face unabhängig von virtuellen Pfaden permanent
+Dann wird das Composite als Face unabh&auml;ngig von virtuellen Pfaden permanent
 sichtbar.
 
 ```html
@@ -87,14 +87,14 @@ beschrieben.
 ### condition
 
 Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt.  
-Der mit dem Attribut angegebene Ausdruck muss explizit `true` zurückliefern,
-damit das Element im DOM erhalten bleibt. Bei abweichenden Rückgabewerten wird
-das Element temporär aus dem DOM entfernt und lässt sich später durch das
-Auffrischen des __Eltern-Elements__ wieder einfügen, wenn der Ausdruck `true`
-zurückliefert.  
+Der mit dem Attribut angegebene Ausdruck muss explizit `true` zur&uuml;ckliefern,
+damit das Element im DOM erhalten bleibt. Bei abweichenden R&uuml;ckgabewerten wird
+das Element tempor&auml;r aus dem DOM entfernt und l&auml;sst sich sp&auml;ter durch das
+Auffrischen des __Eltern-Elements__ wieder einf&uuml;gen, wenn der Ausdruck `true`
+zur&uuml;ckliefert.  
 Eine Besonderheit stellt die Kombination mit dem Attribut [interval](#interval)
-dar, da mit dem Entfernen des Elements aus dem DOM auch der zugehörige Timer
-beendet wird. Wird das Element mit einer späteren Auffrischung wieder in das DOM
+dar, da mit dem Entfernen des Elements aus dem DOM auch der zugeh&ouml;rige Timer
+beendet wird. Wird das Element mit einer sp&auml;teren Auffrischung wieder in das DOM
 aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
 
 ```html
@@ -104,7 +104,7 @@ aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
 ```
 
 Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite-JavaScript möglich.
+ist als Composite-JavaScript m&ouml;glich.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
@@ -120,13 +120,13 @@ Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 
 Diese Deklaration bindet ein oder mehre Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-eröffnen primäre Funktionen zur ereignisgesteuerten Auffrischung von anderen
+er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
 und Synchronisation von HTML-Elementen und dem korrespondierenden
 JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
-einer Besonderheit, da das Attribut nur initial verarbeitet wird. Änderungen zur
+einer Besonderheit, da das Attribut nur initial verarbeitet wird. &Auml;nderungen zur
 Laufzeit an einem existierenden Element haben wegen dem Object/Model-Binding
 keine Auswirkungen, solange es im DOM existiert.
 
@@ -161,40 +161,40 @@ const Model = {
 Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
 Zusammenspiel der Attribute `events` und `validate`.  
 In dem Beispiel wird der Eingabewert vom Composite-Feld text1 nur dann in das
-gleichnamige Feld im JavaScript-Model übernommen, wenn mindestens eines der
+gleichnamige Feld im JavaScript-Model &uuml;bernommen, wenn mindestens eines der
 Ereignisse: _Input_ oder _Change_ eintritt und die Validierung den Wert `true`
-zurückgibt.
+zur&uuml;ckgibt.
 
 
 ### id
 
 Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung.   
-Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziel für virtuelle
-Pfade im Face-Flow sowie für das Object/Model-Binding verwendet.
+Sie wird u.a. von der SiteMap als Faces und Facets, also als Ziel f&uuml;r virtuelle
+Pfade im Face-Flow sowie f&uuml;r das Object/Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
-einer Besonderheit, da das Attribut nur initial verarbeitet wird. Änderungen zur
+einer Besonderheit, da das Attribut nur initial verarbeitet wird. &Auml;nderungen zur
 Laufzeit an einem existierenden Element haben wegen dem Object/Model-Binding
 keine Auswirkungen, solange es im DOM existiert.
 
 
 ### import
 
-Diese Deklaration lädt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
+Diese Deklaration l&auml;dt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
 `import` entfernt. Das Attribut erwartet als Wert ein Element oder mehre
-Elemente als NodeList bzw. Array, welche dann direkt eingefügt werden. Auch die
+Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
-unterstützt, die per HTTP-Methode GET nachgeladen und eingefügt wird. Zudem wird
-auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt, womit
+unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen und eingef&uuml;gt wird. Zudem wird
+auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt, womit
 ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-eingefügt wird.
+eingef&uuml;gt wird.
 
-In allen Fällen lässt sich das import-Attribut mit dem condition-Attribut
-kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
+In allen F&auml;llen l&auml;sst sich das import-Attribut mit dem condition-Attribut
+kombinieren und wird dann erst ausgef&uuml;hrt, wenn die Bedingung `true` ist.
 
 Das Verhalten ist vergleichbar mit dem Attribut `output`, im Unterschied wird
-der Import für das Element nur einmalig ausgeführt.
+der Import f&uuml;r das Element nur einmalig ausgef&uuml;hrt.
 
 ```javascript
 const Model = {
@@ -229,7 +229,7 @@ const Model = {
 </article>
 ```
 
-Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
+Beispiel f&uuml;r den Import einer entfernten Ressource per HTTP-Methode GET.
 
 ```html
 <article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx'}}">
@@ -241,8 +241,8 @@ Beispiel für den Import einer entfernten Ressource per HTTP-Methode GET.
 </article>
 ```
 
-Beispiel für den Import per DataSource-URL.  
-Wird nur eine URL angegeben, wird die URL für Daten und Transformation daraus
+Beispiel f&uuml;r den Import per DataSource-URL.  
+Wird nur eine URL angegeben, wird die URL f&uuml;r Daten und Transformation daraus
 abgeleitet. 
 
 ```html
@@ -255,7 +255,7 @@ abgeleitet.
 </article>
 ```
 
-Beispiel für den Import per DataSource-URL mit spezifischer Daten- und
+Beispiel f&uuml;r den Import per DataSource-URL mit spezifischer Daten- und
 Transformation-URL.  
 Als Wert wird die Daten-URL (locator der XML-Datei) und nachfolgend getrennt
 durch ein Leerzeichen die Transformation-URL (locator vom XSLT Template)
@@ -271,10 +271,10 @@ erwartet.
 </article>
 ```
 
-Beim Einfügen von Inhalten aus der DataSource, werden JavaScript-Blöcke
-automatisch in composite/javascript geändert und erst durch den Renderer
-ausgeführt. So wird gewährleistet, dass das JavaScript ggf. erst abhängig vom
-umschliessenden condition-Attribut aufgeführt wird.
+Beim Einf&uuml;gen von Inhalten aus der DataSource, werden JavaScript-Bl&ouml;cke
+automatisch in composite/javascript ge&auml;ndert und erst durch den Renderer
+ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das JavaScript ggf. erst abh&auml;ngig vom
+umschliessenden condition-Attribut aufgef&uuml;hrt wird.
 
 
 ### interval
@@ -282,21 +282,21 @@ umschliessenden condition-Attribut aufgeführt wird.
 Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
 HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.  
 Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
-formuliert werden kann. Die Verarbeitung erfolgt nebenläufig bzw. asynchron aber
+formuliert werden kann. Die Verarbeitung erfolgt nebenl&auml;ufig bzw. asynchron aber
 nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
 Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
 JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
 aber als exakt zu verstehen.
-Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ungültiger Wert
+Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ung&uuml;ltiger Wert
 verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
 Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
 - das Element nicht mehr im DOM existiert
 - das condition-Attribut verwendet wird, dass nicht `true` ist
 
-Wird ein HTML-Element als Intervall deklariert, wird der ursprüngliche innerer
-HTML-Code als Vorlage verwendet und während der Intervalle zuerst der innere
+Wird ein HTML-Element als Intervall deklariert, wird der urspr&uuml;ngliche innerer
+HTML-Code als Vorlage verwendet und w&auml;hrend der Intervalle zuerst der innere
 HTML-Code entfernt, die Vorlage mit jedem Intervall-Zyklus einzeln generiert und
-das Ergebnis als innerer HTML-Code eingefügt.
+das Ergebnis als innerer HTML-Code eingef&uuml;gt.
 
 ```html
 <span interval="1000">
@@ -310,12 +310,12 @@ das Ergebnis als innerer HTML-Code eingefügt.
 
 Das SPAN-Element wird alle 1000ms aktualisiert.
 
-Das interval-Attribut kann für einfache HTML-Elemente, wie auch komplexe und
+Das interval-Attribut kann f&uuml;r einfache HTML-Elemente, wie auch komplexe und
 verschachtelte HTML-Konstrukte verwendet werden.
 
-Ein aktiver Intervall reagiert dynamisch auf Veränderungen im DOM, endet
+Ein aktiver Intervall reagiert dynamisch auf Ver&auml;nderungen im DOM, endet
 automatisch, wenn das HTML-Element aus dem DOM entfernt wurde und beginnt neu,
-wenn das HTML-Element dem DOM erneut hinzugefügt wird. Daher lässt sich das
+wenn das HTML-Element dem DOM erneut hinzugef&uuml;gt wird. Daher l&auml;sst sich das
 interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
 
 ```html
@@ -325,7 +325,7 @@ interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
 ```
 
 Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
-eines permanenten Zählers sehr einfach.
+eines permanenten Z&auml;hlers sehr einfach.
 
 ```html
 {{counter:0}}
@@ -336,7 +336,7 @@ eines permanenten Zählers sehr einfach.
 ```
 
 Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite-JavaScript möglich.
+ist als Composite-JavaScript m&ouml;glich.
 
 ```html
 <script type="composite/javascript" interval="1000">
@@ -346,14 +346,14 @@ ist als Composite-JavaScript möglich.
 
 ### iterate
 
-Die iterative Ausgabe basiert auf Listen, Aufzählungen und Arrays.  
+Die iterative Ausgabe basiert auf Listen, Aufz&auml;hlungen und Arrays.  
 Wird ein HTML-Element als iterativ deklariert, wird der initiale innerer
-HTML-Code als Vorlage verwendet und während der Iteration der innere HTML-Code
-zunächst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
-Ergebnis dem inneren HTML-Code hinzugefügt.  
+HTML-Code als Vorlage verwendet und w&auml;hrend der Iteration der innere HTML-Code
+zun&auml;chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
+Ergebnis dem inneren HTML-Code hinzugef&uuml;gt.  
 Das iterate-Attribut erwartet einen
 [Variablen-Ausdruck](expression.md#variable-expression), zu dem ein Meta-Objekt
-erstellt wird, dass den Zugriff auf die Iteration ermöglich.  
+erstellt wird, dass den Zugriff auf die Iteration erm&ouml;glich.  
 So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
 das Meta-Objekt `tempA = {item, index, data}`. 
 
@@ -375,7 +375,7 @@ const Model = {
 ### message
 
 Message ist ein optionaler Bestandteil der [Validierung](#validate) und wird zur
-Text-/Fehler-Ausgabe im Fall einer unbestätigten Validierung verwendet.  
+Text-/Fehler-Ausgabe im Fall einer unbest&auml;tigten Validierung verwendet.  
 Das Attribut erfordert die Kombination mit den Attributen `validate` und
 `events`. 
 
@@ -424,16 +424,16 @@ und `message`.
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
 HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
-Elemente als NodeList bzw. Array erwartet, welche dann direkt eingefügt werden.
-Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterstützt,
+Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef&uuml;gt werden.
+Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-eingefügt wird.
+eingef&uuml;gt wird.
 
-In allen Fällen lässt sich das output-Attribut mit dem condition-Attribut
-kombinieren und wird dann erst ausgeführt, wenn die Bedingung `true` ist.
+In allen F&auml;llen l&auml;sst sich das output-Attribut mit dem condition-Attribut
+kombinieren und wird dann erst ausgef&uuml;hrt, wenn die Bedingung `true` ist.
 
 Das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
-der Output für das Element mit jedem zutreffenden Render-Zyklus ausgeführt.
+der Output f&uuml;r das Element mit jedem zutreffenden Render-Zyklus ausgef&uuml;hrt.
 
 ```javascript
 const Model = {
@@ -468,8 +468,8 @@ const Model = {
 </article>
 ```
 
-Beispiel für den Output per DataSource-URL.  
-Wird nur eine URL angegeben, wird die URL für Daten und Transformation daraus
+Beispiel f&uuml;r den Output per DataSource-URL.  
+Wird nur eine URL angegeben, wird die URL f&uuml;r Daten und Transformation daraus
 abgeleitet. 
 
 ```html
@@ -482,9 +482,9 @@ abgeleitet.
 </article>
 ```
 
-Beispiel für den Output per DataSource-URL mit spezifischer Daten- und
+Beispiel f&uuml;r den Output per DataSource-URL mit spezifischer Daten- und
 Transformation-URL.  
-Das output-Attribut erwartet primär eine Daten-URL der optional, durch ein
+Das output-Attribut erwartet prim&auml;r eine Daten-URL der optional, durch ein
 Leerzeichen getrennt, eine URL zur Transformation folgen kann.
 
 ```html
@@ -497,19 +497,19 @@ Leerzeichen getrennt, eine URL zur Transformation folgen kann.
 </article>
 ```
 
-Beim Einfügen von Inhalten aus der DataSource, werden JavaScript-Blöcke
-automatisch in composite/javascript geändert und erst durch den Renderer
-ausgeführt. So wird gewährleistet, dass das JavaScript ggf. erst abhängig vom
-umschliessenden condition-Attribut aufgeführt wird.
+Beim Einf&uuml;gen von Inhalten aus der DataSource, werden JavaScript-Bl&ouml;cke
+automatisch in composite/javascript ge&auml;ndert und erst durch den Renderer
+ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das JavaScript ggf. erst abh&auml;ngig vom
+umschliessenden condition-Attribut aufgef&uuml;hrt wird.
 
 
 ### release
 
-Inverser Indikator dafür, dass ein Element gerendert wurde.  
+Inverser Indikator daf&uuml;r, dass ein Element gerendert wurde.  
 Der Renderer entfernt dieses Attribut, wenn ein Element gerendert wurde. Dieser
-Effekt kann für CSS verwendet werden, um Elemente nur im gerenderten Zustand
+Effekt kann f&uuml;r CSS verwendet werden, um Elemente nur im gerenderten Zustand
 anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem
-Laden der Seite hinzugefügt. 
+Laden der Seite hinzugef&uuml;gt. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -565,8 +565,8 @@ Events: MouseUp KeyUp
   
 ```
 
-Das Beispiel enthält 3 Eingabefelder mit unterschiedlichen Ereignissen
-(`events`) und Zielen (`render`), die jeweils sich hochzählende Textausgaben
+Das Beispiel enth&auml;lt 3 Eingabefelder mit unterschiedlichen Ereignissen
+(`events`) und Zielen (`render`), die jeweils sich hochz&auml;hlende Textausgaben
 darstellen und auf entsprechende Ereignisse reagieren.
 
 
@@ -608,7 +608,7 @@ Bespiel mit dem Attribut [strict](#strict):
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model, wo eine
-gleichnamige Eigenschaft als Ziel für die Synchronisation vorhanden sein muss.
+gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein muss.
 
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
@@ -618,8 +618,8 @@ validate-Methode `boolean validate(element, value)` bereitstellt und das zu
 validierende Element in einem Composite eingebettet ist.
 
 Die Synchronisation und das Standard-Verhalten (action) vom Browser werden durch
-die Validierung direkt beeinflusst. Diese kann dazu vier Zustände als
-Rückgabewert nutzen: `true`, `not true`, `text`, `undefined/void`.
+die Validierung direkt beeinflusst. Diese kann dazu vier Zust&auml;nde als
+R&uuml;ckgabewert nutzen: `true`, `not true`, `text`, `undefined/void`.
 
 
 #### true
@@ -627,15 +627,15 @@ Rückgabewert nutzen: `true`, `not true`, `text`, `undefined/void`.
 Die Validierung war erfolgreich.  
 Es wird kein Fehler angezeigt und das Standard-Verhalten (action) vom Browser
 wird verwendet.  
-Wenn möglich wird der Wert mit dem Modell synchronisiert.
+Wenn m&ouml;glich wird der Wert mit dem Modell synchronisiert.
 
 
 #### not true and not undefined/void
 
 Die Validierung ist fehlgeschlagen; es wird ein Fehler angezeigt.  
-Ein Rückgabewert gibt an, dass das Standard-Verhalten (action) vom Browser nicht
-ausgeführt werden soll und somit blockiert wird.  
-In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert.
+Ein R&uuml;ckgabewert gibt an, dass das Standard-Verhalten (action) vom Browser nicht
+ausgef&uuml;hrt werden soll und somit blockiert wird.  
+In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
 
 
 #### text
@@ -643,20 +643,20 @@ In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert.
 Text entspricht: Validierung ist fehlgeschlagen mit einer Fehlermeldung.  
 Wenn die Fehlermeldung leer ist, wird alternativ die Meldung vom
 message-Attribut verwendet.  
-In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert.
+In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
 
 
 #### undefined/void
 
 Die Validierung ist fehlgeschlagen; ein Fehler wird angezeigt.  
-Kein Rückgabewert zeigt an, dass das Standard-Verhalten (action) vom Browser
-trotzdem ausgeführt werden soll. Dieses Verhalten ist z.B. für die Validierung
-von Eingabefeldern wichtig, damit die Eingabe zur Benutzeroberfläche gelangt.  
-In diesem Fall wird ein möglicher Wert nicht mit dem Modell synchronisiert. 
+Kein R&uuml;ckgabewert zeigt an, dass das Standard-Verhalten (action) vom Browser
+trotzdem ausgef&uuml;hrt werden soll. Dieses Verhalten ist z.B. f&uuml;r die Validierung
+von Eingabefeldern wichtig, damit die Eingabe zur Benutzeroberfl&auml;che gelangt.  
+In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert. 
 
 Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
-bewusst nicht bereitgestellt, da diese in den meisten Fällen zu starr ist und
-kann mit geringem Aufwand als zentrale Lösung individuell implementiert werden.
+bewusst nicht bereitgestellt, da diese in den meisten F&auml;llen zu starr ist und
+kann mit geringem Aufwand als zentrale L&ouml;sung individuell implementiert werden.
 
 ```css
 input[type='text']:not([title]) {
@@ -694,22 +694,22 @@ const Model = {
 ```
 
 In dem Beispiel erwartet das Eingabefeld eine E-Mail-Adresse.  
-Der Wert wird fortlaufend bei der Eingabe überprüft und bei einem ungültigen
+Der Wert wird fortlaufend bei der Eingabe &uuml;berpr&uuml;ft und bei einem ung&uuml;ltigen
 Wert wird eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei
-einem gültigen Wert wird der Inhalt vom Attribut `title` gelöscht.  
+einem g&uuml;ltigen Wert wird der Inhalt vom Attribut `title` gel&ouml;scht.  
 Unterhalb vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
 JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode
-den Wert `true` zurückgibt.
+den Wert `true` zur&uuml;ckgibt.
 
 
 ## Expression Language
 
 Die Expression-Language kann im Markup als Freitext und in den Attributen der
 HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
-Hier wird die Expression-Language nicht unterstützt.  
+Hier wird die Expression-Language nicht unterst&uuml;tzt.  
 Bei der Verwendung als Freitext wird als Ausgabe immer reiner Text (plain text)
-erzeugt. Das Hinzufügen von Markup, insbesondere HTML-Code, ist so nicht möglich
-und wir nur mit den Attributen `output` und `import` unterstützt.
+erzeugt. Das Hinzuf&uuml;gen von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich
+und wir nur mit den Attributen `output` und `import` unterst&uuml;tzt.
 
 ```html
 <article title="{{Model.title}}">
@@ -725,13 +725,13 @@ Details zu Syntax und Verwendung werden im Abschnitt
 ## Scripting
 
 Eingebettetes Scripting bringt einige Besonderheiten mit sich.  
-Das Standard-Scripting wird vom Browser automatisch und unabhängig vom Rendering
-ausgeführt. Daher wurde das Markup für das Rendering um den zusätzlichen
+Das Standard-Scripting wird vom Browser automatisch und unabh&auml;ngig vom Rendering
+ausgef&uuml;hrt. Daher wurde das Markup f&uuml;r das Rendering um den zus&auml;tzlichen
 Skript-Typ `composite/javascript` erweitert, der das normale JavaScript
 verwendet, im Vergleich zum Typ `text/javascript` vom Browser aber nicht
-erkannt und somit nicht direkt ausgeführt wird. Der Renderer hingegen erkennt
-den JavaScript-Code und führt diesen mit jedem relevanten Renderzyklus aus. Auf
-diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem Attribut
+erkannt und somit nicht direkt ausgef&uuml;hrt wird. Der Renderer hingegen erkennt
+den JavaScript-Code und f&uuml;hrt diesen mit jedem relevanten Renderzyklus aus. Auf
+diese Weise kann die Ausf&uuml;hrung vom SCRIPT-Element auch mit dem Attribut
 `condition` kombiniert werden.  
 
 ```html
@@ -740,9 +740,9 @@ diese Weise kann die Ausführung vom SCRIPT-Element auch mit dem Attribut
 </script>
 ```
 
-Da das JavaScript nicht als Element eingefügt, sondern direkt in einem eigenen
-Namensraum ausgeführt wird, ist es für globale Variablen wichtig, dass diese als
-window-Property initialisiert werden, wenn diese später in der Anwendungslogik 
+Da das JavaScript nicht als Element eingef&uuml;gt, sondern direkt in einem eigenen
+Namensraum ausgef&uuml;hrt wird, ist es f&uuml;r globale Variablen wichtig, dass diese als
+window-Property initialisiert werden, wenn diese sp&auml;ter in der Anwendungslogik 
 verwendet werden sollen.
 
 ```html
@@ -759,10 +759,10 @@ verwendet werden sollen.
 
 ### Tag
 
-Benutzerdefinierte Tags übernehmen das komplette Rendering in eigener
-Verantwortung. Der Rückgabewert bestimmt, ob die Standardfunktionen des
-Renderers verwendet werden oder nicht. Nur der Rückgabewert `false` (nicht
-void, nicht leer) beendet das Rendering für ein benutzerdefiniertes Tag, ohne
+Benutzerdefinierte Tags &uuml;bernehmen das komplette Rendering in eigener
+Verantwortung. Der R&uuml;ckgabewert bestimmt, ob die Standardfunktionen des
+Renderers verwendet werden oder nicht. Nur der R&uuml;ckgabewert `false` (nicht
+void, nicht leer) beendet das Rendering f&uuml;r ein benutzerdefiniertes Tag, ohne
 die Standardfunktionen des Renderers zu verwenden.
 
 ```javascript
@@ -779,17 +779,17 @@ Composite.customize("foo", function(element) {
 
 ### Selector
 
-Selektoren funktionieren ähnlich wie benutzerdefinierte Tags.  
+Selektoren funktionieren &auml;hnlich wie benutzerdefinierte Tags.  
 Im Vergleich zu diesen, verwenden Selektoren einen CSS-Selektor um Elemente zu
-erkennen. Dieser Selektor muss das Element aus Sicht des übergeordneten
+erkennen. Dieser Selektor muss das Element aus Sicht des &uuml;bergeordneten
 Eltern-Elements ansprechen. Selektoren sind flexibler und multifunktionaler. Auf
-diese Art können verschiedene Selektoren mit unterschiedlichen Funktionen für
+diese Art k&ouml;nnen verschiedene Selektoren mit unterschiedlichen Funktionen f&uuml;r
 ein Element zutreffen.  
 Selectoren werden nach der Reihenfolge ihrer Registrierung iterative durchlaufen
-und deren Callback-Methoden ausgeführt. Der Rückgabewert der Callback-Methode
+und deren Callback-Methoden ausgef&uuml;hrt. Der R&uuml;ckgabewert der Callback-Methode
 bestimmt dabei, ob die Iteration abgebrochen wird oder nicht.  
-Nur der Rückgabewert `false` (nicht void, nicht leer) beendet die Iteration
-über andere Selektoren und das Rendering für den Selektor wird ohne Verwendung
+Nur der R&uuml;ckgabewert `false` (nicht void, nicht leer) beendet die Iteration
+&uuml;ber andere Selektoren und das Rendering f&uuml;r den Selektor wird ohne Verwendung
 der Standardfunktionen beendet.
 
 ```javascript
@@ -811,8 +811,8 @@ Composite.customize("a.foo", function(element) {
 ### Acceptor
 
 Acceptors sind eine besondere Art der Anpassung vom Rendering. Im Vergleich zu
-den anderen Möglichkeiten, geht es hier um die Manipulation von Elementen vor
-dem Rendering. Dies ermöglicht individuelle Änderungen an Attributen und/oder
+den anderen M&ouml;glichkeiten, geht es hier um die Manipulation von Elementen vor
+dem Rendering. Dies erm&ouml;glicht individuelle &Auml;nderungen an Attributen und/oder
 dem Markup, bevor der Renderer sie verarbeitet. Damit hat ein Acceptor keinen
 Einfluss auf die Implementierung vom Rendering.
 
@@ -822,22 +822,22 @@ Composite.customize(function(element) {
 });
 ```
 
-## Härtung
+## H&auml;rtung
 
-In Seanox aspect-js ist eine Härtung vom Markup vorgesehen, was die Manipulation
+In Seanox aspect-js ist eine H&auml;rtung vom Markup vorgesehen, was die Manipulation
 vom Markup zur Laufzeit erschwert. Zum einen wird mit einer Condition
-ausgeblendetes Markup physisch aus dem DOM entfernt und zum anderen überwacht
-der Renderer Manipulationen an Attributen zur Laufzeit. Diese Überwachung
+ausgeblendetes Markup physisch aus dem DOM entfernt und zum anderen &uuml;berwacht
+der Renderer Manipulationen an Attributen zur Laufzeit. Diese &Uuml;berwachung
 basiert auf einem Filter mit statischen Attributen. Statische Attribute werden
-mit dem Anlegen eines Elements im DOM gelesen und bei Manipulation (Löschen /
-Ändern) wieder hergestellt.
+mit dem Anlegen eines Elements im DOM gelesen und bei Manipulation (L&ouml;schen /
+&Auml;ndern) wieder hergestellt.
 
 Zur Konfiguration statischer Attribute wird die Methode
 `Composite.customize(...)` mit dem Parameter `@ATTRIBUTES-STATICS`
 verwendet.  
 Die Konfiguration kann mehrfach erfolgen. Die einzelnen statischen Attribute
 werden dann zusammengefasst.  
-Alle @-Parameter sind unabhängig von der Gross- und Kleinschreibung.
+Alle @-Parameter sind unabh&auml;ngig von der Gross- und Kleinschreibung.
 
 ```javascript
 Composite.customize("@ATTRIBUTES-STATICS", "action name src type");
@@ -857,4 +857,4 @@ Composite.customize("@attributes-statics", "method action");
 
 - - -
 
-[Einführung](introduction.md) | [Inhalt](README.md#markup) | [Expression Language](expression.md)
+[Einf&uuml;hrung](introduction.md) | [Inhalt](README.md#markup) | [Expression Language](expression.md)
