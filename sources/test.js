@@ -574,7 +574,6 @@ if (typeof Test === "undefined") {
          *     - No worker is present or cannot be suspended
          */
         Test.suspend = function() {
-
             if (Test.worker === undefined)
                 throw new Error("Suspend is not available"); 
             Test.fire(Test.EVENT_SUSPEND, Test.status());
@@ -586,7 +585,6 @@ if (typeof Test === "undefined") {
          *     - No worker is present or cannot be resumed
          */
         Test.resume = function() {
-            
             if (Test.worker === undefined
                     || Test.worker.status !== Test.EVENT_SUSPEND)
                 throw new Error("Resume is not available"); 
@@ -600,7 +598,6 @@ if (typeof Test === "undefined") {
          *     - No worker is present or cannot be interrupted
          */
         Test.interrupt = function() {
-            
             if (Test.worker === undefined)
                 throw new Error("Interrupt is not available"); 
             window.clearTimeout(Test.worker.interval);
@@ -777,7 +774,6 @@ if (typeof Test === "undefined") {
              * @param value
              */       
             Assert.assertTrue = function(...variants) {
-
                 const assert = Assert.create(variants, 1);
                 if (assert.values[0] === true)
                     return;
@@ -794,7 +790,6 @@ if (typeof Test === "undefined") {
              * @param value
              */      
             Assert.assertFalse = function(...variants) {
-
                 const assert = Assert.create(variants, 1);
                 if (assert.values[0] === false)
                     return;
@@ -813,7 +808,6 @@ if (typeof Test === "undefined") {
              * @param actual
              */     
             Assert.assertEquals = function(...variants) {
-
                 const assert = Assert.create(variants, 2);
                 if (assert.values[0] === assert.values[1])
                     return;
@@ -832,7 +826,6 @@ if (typeof Test === "undefined") {
              * @param actual
              */      
             Assert.assertNotEquals = function(...variants) {
-
                 const assert = Assert.create(variants, 2);
                 if (assert.values[0] !== assert.values[1])
                     return;
@@ -851,7 +844,6 @@ if (typeof Test === "undefined") {
              * @param actual
              */      
             Assert.assertSame = function(...variants) {
-
                 const assert = Assert.create([], variants, 2);
                 if (assert.values[0] === assert.values[1])
                     return;
@@ -870,7 +862,6 @@ if (typeof Test === "undefined") {
              * @param actual
              */      
             Assert.assertNotSame = function(...variants) {
-
                 const assert = Assert.create(variants, 2);
                 if (assert.values[0] !== assert.values[1])
                     return;
@@ -887,7 +878,6 @@ if (typeof Test === "undefined") {
              * @param value
              */    
             Assert.assertNull = function(...variants) {
-
                 const assert = Assert.create(variants, 1);
                 if (assert.values[0] === null)
                     return;
@@ -904,7 +894,6 @@ if (typeof Test === "undefined") {
              * @param value
              */
             Assert.assertNotNull = function(...variants) {
-
                 const assert = Assert.create(variants, 1);
                 if (assert.values[0] !== null)
                     return;
@@ -920,7 +909,6 @@ if (typeof Test === "undefined") {
              * @param message
              */
             Assert.fail = function(message) {
-    
                 if (message)
                     message = String(message).trim();
                 message = "Assert.fail" + (message ? ", " + message : "");
