@@ -17,7 +17,7 @@
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.test" value="${workspace}/test"/>
-  <property name="workspace.releases" value="${workspace}/releases"/>
+  <property name="workspace.release" value="${workspace}/release"/>
   
   <fileset id="fileset.sources" dir="${workspace.sources}">
     <include name="extension.js"/>
@@ -114,10 +114,10 @@
   <target name="release">
     <release-locate/>
 
-    <delete dir="${workspace.releases}" excludes="*.zip"/>
+    <delete dir="${workspace.release}" excludes="*.zip"/>
     
-    <property name="release.file" value="${workspace.releases}/${ant.project.name}.js"/>
-    <property name="release.file.min" value="${workspace.releases}/${ant.project.name}-min.js"/>
+    <property name="release.file" value="${workspace.release}/${ant.project.name}.js"/>
+    <property name="release.file.min" value="${workspace.release}/${ant.project.name}-min.js"/>
 
     <concat destfile="${release.file}" append="false">
       <filelist dir="${workspace.sources}">
@@ -132,62 +132,62 @@
 
     <replaceregexp file="${release.file}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
     <replaceregexp file="${release.file}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" flags="g" replace="\1" byline="false"/>
-    <copy file="${release.file}" tofile="${workspace.releases}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
+    <copy file="${release.file}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
 
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c npm link ."/>
     </exec>
     <exec executable="cmd.exe" dir="compress">
-      <arg value="/c uglifyjs ..\releases\aspect-js.js  -c -m -o ..\releases\aspect-js-min.js"/>
+      <arg value="/c uglifyjs ..\release\aspect-js.js  -c -m -o ..\release\aspect-js-min.js"/>
     </exec>
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c npm uninstall -g uglify-js"/>
     </exec>
-    <copy file="${release.file.min}" tofile="${workspace.releases}/${ant.project.name}-${release.major}.x-min.js" overwrite="true"/>
+    <copy file="${release.file.min}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-min.js" overwrite="true"/>
 
-    <copy file="CHANGES" tofile="${workspace.releases}/release.txt"/>
-    <copy file="LICENSE" tofile="${workspace.releases}/license.txt"/>
+    <copy file="CHANGES" tofile="${workspace.release}/release.txt"/>
+    <copy file="LICENSE" tofile="${workspace.release}/license.txt"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
-      <fileset dir="${workspace.releases}" includes="release.txt"/>
-      <fileset dir="${workspace.releases}" includes="license.txt"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-min.js"/>
+      <fileset dir="${workspace.release}" includes="release.txt"/>
+      <fileset dir="${workspace.release}" includes="license.txt"/>
     </touch>     
-    <delete file="${workspace.releases}/${ant.project.name}-${release.version}.zip"/>
-    <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}.zip">
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
-      <fileset dir="${workspace.releases}" includes="release.txt"/>
-      <fileset dir="${workspace.releases}" includes="license.txt"/>
+    <delete file="${workspace.release}/${ant.project.name}-${release.version}.zip"/>
+    <zip destfile="${workspace.release}/${ant.project.name}-${release.version}.zip">
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-min.js"/>
+      <fileset dir="${workspace.release}" includes="release.txt"/>
+      <fileset dir="${workspace.release}" includes="license.txt"/>
     </zip>   
     
     <delete>
-      <fileset dir="${workspace.releases}">
+      <fileset dir="${workspace.release}">
         <exclude name="*.js"/>
         <exclude name="*.zip"/>
       </fileset>
     </delete>
 
-    <delete dir="${workspace.releases}/temp"/>
-    <mkdir dir="${workspace.releases}/temp/${ant.project.name}-${release.version}"/>
-    <copy todir="${workspace.releases}/temp/${ant.project.name}-${release.version}">
+    <delete dir="${workspace.release}/temp"/>
+    <mkdir dir="${workspace.release}/temp/${ant.project.name}-${release.version}"/>
+    <copy todir="${workspace.release}/temp/${ant.project.name}-${release.version}">
       <fileset refid="fileset.project"/>
     </copy>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${workspace.releases}/temp"/>
+      <fileset dir="${workspace.release}/temp"/>
     </touch>
-    <delete file="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"/>
-    <zip destfile="${workspace.releases}/${ant.project.name}-${release.version}-src.zip"
-        basedir="${workspace.releases}/temp"/>
-    <delete dir="${workspace.releases}/temp"/>
+    <delete file="${workspace.release}/${ant.project.name}-${release.version}-src.zip"/>
+    <zip destfile="${workspace.release}/${ant.project.name}-${release.version}-src.zip"
+        basedir="${workspace.release}/temp"/>
+    <delete dir="${workspace.release}/temp"/>
 
     <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}.js"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-min.js"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x.js"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.major}.x-min.js"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}-src.zip"/>
-      <fileset dir="${workspace.releases}" includes="${ant.project.name}-${release.version}.zip"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-min.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-min.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.version}-src.zip"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.version}.zip"/>
     </touch>
     
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\1${release.version}\2" byline="false"/>  
