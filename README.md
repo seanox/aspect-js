@@ -107,8 +107,8 @@ date when using the release channels.
 - [EN Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 
-# Changes (Change Log)
-## 1.4.0 20211210 (summary of the current version)
+# Changes
+## 1.4.0 20211210
 BF: Composite: Correction in the use of attributes  
 BF: Composite Expression Language: Line breaks in the expressions are supported  
 BF: Composite: Correction for a URL without a file  
