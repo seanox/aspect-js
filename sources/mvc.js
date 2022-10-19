@@ -393,7 +393,6 @@ if (typeof SiteMap === "undefined") {
      * @return true if the path has been confirmed as permitted 
      */
     SiteMap.permit = function(path) {
-        
         for (let acceptor of SiteMap.acceptors) {
             if (acceptor.pattern
                     && !acceptor.pattern.test(path))
