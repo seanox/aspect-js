@@ -1,201 +1,202 @@
 1.5.0 2022xxxx
-  BF: Review: Optimization and corrections
-  BF: Documentation: Correction of encoding
-  CR: NPM: Change to a package with scope (is also already in 1.4.0)
-      The change was made afterwards of the 1.4.0 release.
-  CR: Build: Releases are now only available on the release page
-  CR: Build: Switch to UglifyJS
-  CR: Test: Update web server to version 5.5.x
+BF: Review: Optimization and corrections
+BF: Documentation: Correction of encoding
+BF: Build: Optimization / correction of the release info process
+CR: NPM: Change to a package with scope (is also already in 1.4.0)
+    The change was made afterwards of the 1.4.0 release.
+CR: Build: Releases are now only available on the release page
+CR: Build: Switch to UglifyJS
+CR: Test: Update web server to version 5.5.x
 
 1.4.0 20211210
-  BF: Composite: Correction in the use of attributes
-      If numbers are used as value could cause errors during rendering.
-  BF: Composite Expression Language: Line breaks in the expressions are supported
-      Multiline expressions are now possible.
-  BF: Composite: Correction for a URL without a file
-      The paths of the modules were composed incorrectly.
-  BF: DataSource: Correction for a URL without a file
-      The paths of the data files were composed incorrectly.
-  BF: MVC SiteMap: Correction of the method customize when using variable paths
-  BF: Review: Correction/optimization JavaScript (no functional change)
-  BF: Test: Correction in determining the browser engine for WebKit and Blink
-  CR: Composite Expression Language: Added keywords eeq (===), nee (!==)
-  CR: Composite: Added attribute strict for loading of modules/composites
-      New default behavior without attribute:
-      The names of the resources to be loaded always start with lower case.
-      With the attribute strict, the actual spelling of the composite ID is used.
-          Example:
-      <div id="SmallExample" composite> loads smallExample.css/smallExample.js/smallExample.html
-      <div id="SmallExample" composite strict> loads SmallExample.css/SmallExample.js/SmallExample.html
-  CR: Extension Namespace: Added method create
-      Creates a namespace to pass string with a initial value.
-      It is a small extension to the method using.
-  CR: Extension: Added method window.location.combine to combine paths
-  CR: License: Changed to Apache License Version 2.0
-  CR: Test: Integration of a web server
-  CR: Test: Removal of the Edge engine after switching to Chromium
-  CR: Test: Removal of the distinction between MacOS and iOS
+BF: Composite: Correction in the use of attributes
+    If numbers are used as value could cause errors during rendering.
+BF: Composite Expression Language: Line breaks in the expressions are supported
+    Multiline expressions are now possible.
+BF: Composite: Correction for a URL without a file
+    The paths of the modules were composed incorrectly.
+BF: DataSource: Correction for a URL without a file
+    The paths of the data files were composed incorrectly.
+BF: MVC SiteMap: Correction of the method customize when using variable paths
+BF: Review: Correction/optimization JavaScript (no functional change)
+BF: Test: Correction in determining the browser engine for WebKit and Blink
+CR: Composite Expression Language: Added keywords eeq (===), nee (!==)
+CR: Composite: Added attribute strict for loading of modules/composites
+    New default behavior without attribute:
+    The names of the resources to be loaded always start with lower case.
+    With the attribute strict, the actual spelling of the composite ID is used.
+        Example:
+    <div id="SmallExample" composite> loads smallExample.css/smallExample.js/smallExample.html
+    <div id="SmallExample" composite strict> loads SmallExample.css/SmallExample.js/SmallExample.html
+CR: Extension Namespace: Added method create
+    Creates a namespace to pass string with a initial value.
+    It is a small extension to the method using.
+CR: Extension: Added method window.location.combine to combine paths
+CR: License: Changed to Apache License Version 2.0
+CR: Test: Integration of a web server
+CR: Test: Removal of the Edge engine after switching to Chromium
+CR: Test: Removal of the distinction between MacOS and iOS
 
 1.3.1 20200202
-  BF: DataSource: Correction for loading and caching
-      Affects mainly MS Edge.
+BF: DataSource: Correction for loading and caching
+    Affects mainly MS Edge.
 
 1.3.0 20200202
-  BF: Composite Expression Parse: Correction in the detection/processing of escape sequences
-      Error example: {{'abc\'123'}}
-  BF: DataSource Collect: Correction of the cache usage with a collector
-      Error example: DataSource.collect("data", ["xml://a", "xml://b", "xml://c"]);
-  BF: DataSource Fetch: Correction of the pattern of schema switching
-  BF: DataSource Fetch: Optimization of the language determination
-  BF: MVC SiteMap: Optimization to focus from the current target after changing the path
-  BF: Modules: Optimization of JavaScript processing to support import and export
-  BF: Composite Render: Optimization of JavaScript processing to support import and export
-  BF: Composite Events: Correction of the callback of HTTP events  
-  BF: Composite Mount: Correction to find event methods also in prototypes
-  BF: Composite Modules: Correction of the script processing of the #import meta-directive
-  BF: Composite MutationObserver: Correction for recognition of expressions in text nodes
-  CR: MVC Path: Simplification of the syntax restrictions    
-      The syntax is more consistently based on XML entities (DOM).
-      A path can now begin with any word character (_ a-z A-Z 0-9).
-  CR: DataSource Locator: Simplification of the syntax restrictions    
-      The syntax is more consistently based on URL syntax.
-      A locator can use any word characters (_ a-z A-Z 0-9) and additionally the - character.
-      This means that the DataSource can also be used better for mandators and detailed locales (e.g. en_us).
-  CR: Composite Render Condition: Added console error output for faulty expression
-      The behaviour of the function remains unchanged.
-  CR: Composite Render Condition: Added console error output for faulty expression
-  CR: Composite Render: Optimization in the detection and validation of expressions
-  CR: Composite Render: Simplification of the syntax restrictions for variable expressions
-      The variable name is based on a word (_ a-z A-Z 0-9) and additionally - characters
-      and can now begin with any word character (_ a-z A-Z 0-9).
-  CR: Composite Render: Simplification of the syntax restrictions for composite IDs
-      The composite ID is based on a word (_ a-z A-Z 0-9) and additionally - characters
-      and can now begin with any word character (_ a-z A-Z 0-9).
-  CR: Composite Render: Simplification of the syntax restrictions for element IDs
-      The element ID is based on words (_ a-z A-Z 0-9) and additionally - characters
-      and can now begin with any word character (_ a-z A-Z 0-9).
-  CR: Composite Render: Simplification of the syntax restrictions for custom tags
-      The custom tag is based on a word (_ a-z A-Z 0-9) and additionally - characters
-      and can now begin with any word character (_ a-z A-Z 0-9).
-  CR: Composite Modules: Change so that the common composite is now loaded before the first rendering
-  CR: Composite Modules: Added the meta directive #import to import additional composites/modules
-      Meta directives can be used only at the beginning of the Composite JavaScript.
-      The meta-section ends with the first comment or JavaScript line.
-  CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
-  CR: DataSource Fetch: Omission of the parameter raw
-      When using the transformation a NodeList is always returned.
-  CR: DataSource Fetch: Added optional parameters for the transformation
-      The parameters are passed to the XSLTProcessor as meta-object or map.
-  CR: DataSource Transform: Omission of the parameter raw
-      When using the transformation a NodeList is always returned.
-  CR: DataSource Transform: Added optional parameters for the transformation
-      The parameters are passed to the XSLTProcessor as meta-object or map.
-  CR: DataSource Transform: Change of return value from NodeList to DocumentFragment
-      
+BF: Composite Expression Parse: Correction in the detection/processing of escape sequences
+    Error example: {{'abc\'123'}}
+BF: DataSource Collect: Correction of the cache usage with a collector
+    Error example: DataSource.collect("data", ["xml://a", "xml://b", "xml://c"]);
+BF: DataSource Fetch: Correction of the pattern of schema switching
+BF: DataSource Fetch: Optimization of the language determination
+BF: MVC SiteMap: Optimization to focus from the current target after changing the path
+BF: Modules: Optimization of JavaScript processing to support import and export
+BF: Composite Render: Optimization of JavaScript processing to support import and export
+BF: Composite Events: Correction of the callback of HTTP events  
+BF: Composite Mount: Correction to find event methods also in prototypes
+BF: Composite Modules: Correction of the script processing of the #import meta-directive
+BF: Composite MutationObserver: Correction for recognition of expressions in text nodes
+CR: MVC Path: Simplification of the syntax restrictions    
+    The syntax is more consistently based on XML entities (DOM).
+    A path can now begin with any word character (_ a-z A-Z 0-9).
+CR: DataSource Locator: Simplification of the syntax restrictions    
+    The syntax is more consistently based on URL syntax.
+    A locator can use any word characters (_ a-z A-Z 0-9) and additionally the - character.
+    This means that the DataSource can also be used better for mandators and detailed locales (e.g. en_us).
+CR: Composite Render Condition: Added console error output for faulty expression
+    The behaviour of the function remains unchanged.
+CR: Composite Render Condition: Added console error output for faulty expression
+CR: Composite Render: Optimization in the detection and validation of expressions
+CR: Composite Render: Simplification of the syntax restrictions for variable expressions
+    The variable name is based on a word (_ a-z A-Z 0-9) and additionally - characters
+    and can now begin with any word character (_ a-z A-Z 0-9).
+CR: Composite Render: Simplification of the syntax restrictions for composite IDs
+    The composite ID is based on a word (_ a-z A-Z 0-9) and additionally - characters
+    and can now begin with any word character (_ a-z A-Z 0-9).
+CR: Composite Render: Simplification of the syntax restrictions for element IDs
+    The element ID is based on words (_ a-z A-Z 0-9) and additionally - characters
+    and can now begin with any word character (_ a-z A-Z 0-9).
+CR: Composite Render: Simplification of the syntax restrictions for custom tags
+    The custom tag is based on a word (_ a-z A-Z 0-9) and additionally - characters
+    and can now begin with any word character (_ a-z A-Z 0-9).
+CR: Composite Modules: Change so that the common composite is now loaded before the first rendering
+CR: Composite Modules: Added the meta directive #import to import additional composites/modules
+    Meta directives can be used only at the beginning of the Composite JavaScript.
+    The meta-section ends with the first comment or JavaScript line.
+CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
+CR: DataSource Fetch: Omission of the parameter raw
+    When using the transformation a NodeList is always returned.
+CR: DataSource Fetch: Added optional parameters for the transformation
+    The parameters are passed to the XSLTProcessor as meta-object or map.
+CR: DataSource Transform: Omission of the parameter raw
+    When using the transformation a NodeList is always returned.
+CR: DataSource Transform: Added optional parameters for the transformation
+    The parameters are passed to the XSLTProcessor as meta-object or map.
+CR: DataSource Transform: Change of return value from NodeList to DocumentFragment
+    
 1.2.0 20191231
-  BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
-  BF: Composite Asynchron: Corection of passed arguments
-  BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models
-  BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox 
-  BF: Composite Render Condition: Exclusive use of the placeholder
-      Output now delegates consistently to the placeholder.
-  BF: Composite Render Include: Optimization/correction of the strategy
-      When importing modules in combination with conditions (placeholder/template)
-  BF: Composite Render Include: Loading and inserting HTML content for elements
-      Is now done directly and is no longer delegated to the renderer via the IMPORT attribute.
-  BF: Composite Expression Parse: Correction of the detection of value- and method-expressions
-  BF: Composite Lock Managment: Queue progress only after release functionality
-  BF: Extension Capitalize: Correction for use with empty strings
-  BF: MVC: Correction of the embedded use of SiteMap.accept(path)
-  BF: MVC: Correction of initial forwarding from / to /#
-  CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js
-  CR: Test: Enhancement of console output monitoring
-  CR: Test: Optimization of console forwarding
-  CR: Test: Extension of console forwarding by listeners
-  CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames 
-  CR: Test: Extension for central catching of errors with activated Test-AP
-  CR: Test: Optimization for using readonly meta objects for return values
-  CR: Test Suite: Optimization of error output
-  CR: Test: Omission of the method Test.configure(...), function is taken over by Test.start(...)
-  CR: Composite Object Lookup: Added support now for arrays (also associative)
-      In additional ':' is accepted as separator, so that the syntax is more understandable
-      e.g. model.array:1 / model.object:property
-  CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
-      Can be used to control visibility so that only final rendered output/content is visible.
-      CSS: *[release] {display:none;}      
-  CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)    
-  CR: Composite Render Iterate: Correction/Optimization in general
-  CR: Composite Render Iterate: Optimization for using readonly meta object
-  CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
-      The deletion is only temporary, the renderer still knows the attribute and checks it again in each render cycle.
-  CR: Composite Scan: Omission of the intermediate step between render and mount
-  CR: Composite Mount: Revision of the object/model binding
-  CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM
-  CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)
-  CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser
-      Everyone expects a valid validation if a validation exists.
-  CR: Composite Mount Validation: Enhancement with the attribute message for error output
-      The message can have pipe-separated directives to control output for title and report.
-      e.g. T|R:Mandatory in the numerical range from 1 to 100.
-  CR: Composite Mount Validation: Relocation to own method Composite.validate(selector)
-      Can be (re)used to implement own validation methods in the models.
-  CR: Composite Mount Synchronization: Optimization
-  CR: Composite Mount Action: The return value false can cancel the default action of the browser
-  CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM
-      The hierarchy of IDs in the DOM defines the model and sub-models.
-      Absolute and relative IDs in the markup are completely omitted.
-  CR: Composite Mount Locate: Stricter use of property and qualifier (name)
-  CR: Composite Mount Lookup: Stricter use of property and qualifier (name)
-  CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)
-  CR: Composite Release: Addition of the CSS rule when the page is loaded
-  CR: Composite Hardening: Added optional hardening from markup
-      Hardening makes it difficult to manipulate the attributes in the markup.
-  CR: Composite Include: Modules with a condition are only reloaded if the condition is true
-  CR: MVC Path: Support paths with beginning numbers
-      Any word character (alphanumeric character) and underscore can be used.
-  CR: MVC SiteMap: Omission of autofocus, since the use scrollIntoView can be too individual
-      The own implementation is very simple and much flexible.
-      window.addEventListener("hashchange", (event) => {
-          var path = Path.normalize(event.newURL || "#");
-          var target = SiteMap.lookup(path);
-          if (target) {
-              target = target.facet || target.face;
-              if (target) {
-                  target = target.replace(/(?!=#)#/, " #");
-                  target = document.querySelector(target);
-                  if (target) {
-                      target.scrollIntoView(true);
-                      target.focus();
-                  }
-              }
-          }
-      }); 
-  CR: MVC SiteMap: Added variable paths for faces and facets
-      The character sequence ... at the end of a facet in the SiteMap configuration defines a variable path for a face(t).
-      The path can be of any length and can be used to pass parameters and is comparable to PATH_INFO in CGI.
-  CR: MVC SiteMap: Added the forward method
-      In difference to navigate, forwarding is executed directly and without triggers.
-  CR: DataSource Locales: As standard marked are at the beginning
-  CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
-  CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs
-  CR: Extension: Optimization for using readonly meta objects for return values
-  CR: Extension Namespace: Optimization and extension
-      - new methods: Namespace.lookup(...), Namespace.exists(...)
-      - strict use of the dot, alternative slash is omitted
-      - additional support of arrays
-      - more tolerant use of word characters
-  CR: Messages: Update to use constant key/value pairs
-  CR: Build: Optimization of target 'changes'      
-  CR: Build: Additional compression via javascript-minifier.com
-      Less than 64kB are reached 
+BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
+BF: Composite Asynchron: Corection of passed arguments
+BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models
+BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox 
+BF: Composite Render Condition: Exclusive use of the placeholder
+    Output now delegates consistently to the placeholder.
+BF: Composite Render Include: Optimization/correction of the strategy
+    When importing modules in combination with conditions (placeholder/template)
+BF: Composite Render Include: Loading and inserting HTML content for elements
+    Is now done directly and is no longer delegated to the renderer via the IMPORT attribute.
+BF: Composite Expression Parse: Correction of the detection of value- and method-expressions
+BF: Composite Lock Managment: Queue progress only after release functionality
+BF: Extension Capitalize: Correction for use with empty strings
+BF: MVC: Correction of the embedded use of SiteMap.accept(path)
+BF: MVC: Correction of initial forwarding from / to /#
+CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modules/common.js
+CR: Test: Enhancement of console output monitoring
+CR: Test: Optimization of console forwarding
+CR: Test: Extension of console forwarding by listeners
+CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames 
+CR: Test: Extension for central catching of errors with activated Test-AP
+CR: Test: Optimization for using readonly meta objects for return values
+CR: Test Suite: Optimization of error output
+CR: Test: Omission of the method Test.configure(...), function is taken over by Test.start(...)
+CR: Composite Object Lookup: Added support now for arrays (also associative)
+    In additional ':' is accepted as separator, so that the syntax is more understandable
+    e.g. model.array:1 / model.object:property
+CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
+    Can be used to control visibility so that only final rendered output/content is visible.
+    CSS: *[release] {display:none;}      
+CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)    
+CR: Composite Render Iterate: Correction/Optimization in general
+CR: Composite Render Iterate: Optimization for using readonly meta object
+CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
+    The deletion is only temporary, the renderer still knows the attribute and checks it again in each render cycle.
+CR: Composite Scan: Omission of the intermediate step between render and mount
+CR: Composite Mount: Revision of the object/model binding
+CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM
+CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)
+CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser
+    Everyone expects a valid validation if a validation exists.
+CR: Composite Mount Validation: Enhancement with the attribute message for error output
+    The message can have pipe-separated directives to control output for title and report.
+    e.g. T|R:Mandatory in the numerical range from 1 to 100.
+CR: Composite Mount Validation: Relocation to own method Composite.validate(selector)
+    Can be (re)used to implement own validation methods in the models.
+CR: Composite Mount Synchronization: Optimization
+CR: Composite Mount Action: The return value false can cancel the default action of the browser
+CR: Composite Mount Locate: Stricter use of the hierarchy of IDs in the DOM
+    The hierarchy of IDs in the DOM defines the model and sub-models.
+    Absolute and relative IDs in the markup are completely omitted.
+CR: Composite Mount Locate: Stricter use of property and qualifier (name)
+CR: Composite Mount Lookup: Stricter use of property and qualifier (name)
+CR: Composite Mount Synchronization: Extension by the detection and use of setter (object accessors)
+CR: Composite Release: Addition of the CSS rule when the page is loaded
+CR: Composite Hardening: Added optional hardening from markup
+    Hardening makes it difficult to manipulate the attributes in the markup.
+CR: Composite Include: Modules with a condition are only reloaded if the condition is true
+CR: MVC Path: Support paths with beginning numbers
+    Any word character (alphanumeric character) and underscore can be used.
+CR: MVC SiteMap: Omission of autofocus, since the use scrollIntoView can be too individual
+    The own implementation is very simple and much flexible.
+    window.addEventListener("hashchange", (event) => {
+        var path = Path.normalize(event.newURL || "#");
+        var target = SiteMap.lookup(path);
+        if (target) {
+            target = target.facet || target.face;
+            if (target) {
+                target = target.replace(/(?!=#)#/, " #");
+                target = document.querySelector(target);
+                if (target) {
+                    target.scrollIntoView(true);
+                    target.focus();
+                }
+            }
+        }
+    }); 
+CR: MVC SiteMap: Added variable paths for faces and facets
+    The character sequence ... at the end of a facet in the SiteMap configuration defines a variable path for a face(t).
+    The path can be of any length and can be used to pass parameters and is comparable to PATH_INFO in CGI.
+CR: MVC SiteMap: Added the forward method
+    In difference to navigate, forwarding is executed directly and without triggers.
+CR: DataSource Locales: As standard marked are at the beginning
+CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
+CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs
+CR: Extension: Optimization for using readonly meta objects for return values
+CR: Extension Namespace: Optimization and extension
+    - new methods: Namespace.lookup(...), Namespace.exists(...)
+    - strict use of the dot, alternative slash is omitted
+    - additional support of arrays
+    - more tolerant use of word characters
+CR: Messages: Update to use constant key/value pairs
+CR: Build: Optimization of target 'changes'      
+CR: Build: Additional compression via javascript-minifier.com
+    Less than 64kB are reached 
 
 1.1.0 20190530
-  BF: Build: Optimization/correction when creating releases 
-  BF: DataSource: Correction if no DataSource exists
-  BF: Messages: Correction if no DataSource exists
-  CR: DataSource: Added the changing of localization via DataSource.localize(locale)
-  CR: Messages: Added the changing of localization via DataSource.localize(locale)
-  CR: Project: Added support for jsdelivr.com
-  
+BF: Build: Optimization/correction when creating releases 
+BF: DataSource: Correction if no DataSource exists
+BF: Messages: Correction if no DataSource exists
+CR: DataSource: Added the changing of localization via DataSource.localize(locale)
+CR: Messages: Added the changing of localization via DataSource.localize(locale)
+CR: Project: Added support for jsdelivr.com
+
 1.0.0 20190515
-  NT: Release is available 
+NT: Release is available 
