@@ -18,7 +18,7 @@
 - Protocol Type: TCP
 - Local Port: 8000
 - Remote Port: all
-- Remote IP Adress: subnet
+- Remote IP Address: subnet
 
 Creation of the rule via command line:
 
@@ -81,7 +81,7 @@ There are __48 scenarios__, which are composed as follows:
 - Update the file `package.json`
 - Log in with your credentials: `npm login`
 - Publish the version: `npm publish --access public`
-- In case the old versoin should be deprectated:  
+- In case the old version should be deprecated:  
   e.g. `npm deprecate seanox@1.3.1 "WARNING: This project has been renamed to aspect-js. Install using @seanox/aspect-js instead."`
 
 ### cdn.jsdelivr.net
