@@ -15,6 +15,10 @@
     <echo>  test       Creates a release for testing                     </echo>
     <echo>                                                               </echo>
     <echo>  debug      Creates a release for testing in debug mode       </echo>
+    <echo>                                                               </echo>
+    <echo>  start      Starts the included development server            </echo>
+    <echo>                                                               </echo>
+    <echo>  stop       Stops the included development server             </echo>
   </target>
   
   <property name="workspace" value="${basedir}"/>
@@ -185,5 +189,20 @@
 
   <target name="debug" depends="release">
     <copy file="${release.file}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+  </target>
+
+  <target name="start">
+    <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
+        dir="server" fork="true" spawn="false" failonerror="true">
+      <arg value="start"/>
+    </java>
+  </target>
+
+  <target name="stop">
+    <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
+        dir="server" fork="true" spawn="false" failonerror="true">
+      <arg value="stop"/>
+      <arg value="127.0.0.1:8001"/>
+    </java>
   </target>
 </project>

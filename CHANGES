@@ -7,6 +7,7 @@ CR: NPM: Change to a package with scope (is also already in 1.4.0)
 CR: Build: Releases are now only available on the release page
 CR: Build: Switch to UglifyJS
 CR: Test: Update web server to version 5.5.x
+CR: Server: Added Ant task to start and stop
 
 1.4.0 20211210
 BF: Composite: Correction in the use of attributes
