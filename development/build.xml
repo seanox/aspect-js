@@ -17,6 +17,7 @@
     <echo>  debug      Creates a release for testing in debug mode       </echo>
     <echo>                                                               </echo>
     <echo>  start      Starts the included development server            </echo>
+    <echo>             Console output of the access log                  </echo>
     <echo>                                                               </echo>
     <echo>  stop       Stops the included development server             </echo>
   </target>
@@ -193,14 +194,14 @@
 
   <target name="start">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
-        dir="server" fork="true" spawn="false" failonerror="true">
+        dir="server" fork="true" spawn="false">
       <arg value="start"/>
     </java>
   </target>
 
   <target name="stop">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
-        dir="server" fork="true" spawn="false" failonerror="true">
+        dir="server" fork="true" spawn="false">
       <arg value="stop"/>
       <arg value="127.0.0.1:8001"/>
     </java>
