@@ -12,6 +12,7 @@ CR: Test: Update web server to version 5.5.x
 CR: Server: Added Ant task to start and stop
 CR: Sketch: Added as a playground for development
     Develop with the current sources without build.
+CR: Reactive: Added as a reactive approach
 
 1.4.0 20211210
 BF: Composite: Correction in the use of attributes

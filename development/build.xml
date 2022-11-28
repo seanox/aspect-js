@@ -10,7 +10,7 @@
     <echo>                                                               </echo>
     <echo>  publish    Creates the release as archive for distribution   </echo>
     <echo>             Synchronizes README.md with CHANGES               </echo>
-    <echo>             Publishes the version to the Maven repository     </echo>
+    <echo>             Publishes the version to the npm repository       </echo>
     <echo>                                                               </echo>
     <echo>  test       Creates a release for testing                     </echo>
     <echo>                                                               </echo>
@@ -32,6 +32,7 @@
     <include name="datasource.js"/>
     <include name="messages.js"/>
     <include name="composite.js"/>
+    <include name="reactive.js"/>
     <include name="mvc.js"/>
     <include name="test.js"/>
   </fileset>   
@@ -120,6 +121,7 @@
         <file name="datasource.js"/>
         <file name="messages.js"/>
         <file name="composite.js"/>
+        <file name="reactive.js"/>
         <file name="mvc.js"/>
         <file name="test.js"/>
       </filelist>   
