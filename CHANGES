@@ -2,6 +2,8 @@
 BF: Review: Optimization and corrections
 BF: Documentation: Correction of encoding
 BF: Build: Optimization / correction of the release process
+BF: Composite Events: Correction of the missing selector for:
+    EVENT_RENDER_START, EVENT_MOUNT_START, EVENT_RENDER_NEXT, EVENT_MOUNT_NEXT
 CR: NPM: Change to a package with scope (is also already in 1.4.0)
     The change was made afterwards of the 1.4.0 release.
 CR: Build: Releases are now only available on the release page

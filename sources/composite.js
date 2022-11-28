@@ -116,7 +116,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.0 20211204
+ * @version 1.4.1 20221128
  */
 if (typeof Composite === "undefined") {
     
@@ -478,15 +478,15 @@ if (typeof Composite === "undefined") {
                 }};
             
             if (context === Composite.render)
-                Composite.fire(Composite.EVENT_RENDER_START, this.selector);
+                Composite.fire(Composite.EVENT_RENDER_START, selector);
             else if (context === Composite.mount)
-                Composite.fire(Composite.EVENT_MOUNT_START, this.selector);
+                Composite.fire(Composite.EVENT_MOUNT_START, selector);
             else throw new Error("Invalid context: " + context);            
         } else {
             if (context === Composite.render)
-                Composite.fire(Composite.EVENT_RENDER_NEXT, this.selector);
+                Composite.fire(Composite.EVENT_RENDER_NEXT, selector);
             else if (context === Composite.mount)
-                Composite.fire(Composite.EVENT_MOUNT_NEXT, this.selector);
+                Composite.fire(Composite.EVENT_MOUNT_NEXT, selector);
             else throw new Error("Invalid context: " + context);            
         }
         
