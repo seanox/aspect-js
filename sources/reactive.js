@@ -39,13 +39,41 @@ if (typeof ReactProxy === "undefined") {
             get(target, key) {
                 try {return target[key] ?? undefined;
                 } finally {
-                    if (ReactProxy.selector === null)
-                        return;
-                    // TODO:
-                    // - Get the recipient list from the map (by field/key)
-                    // - Return if parent already included
-                    // - Search for child elements in combination with the same field/key and delete the entries
-                    // - Register field/key and the element as recipient
+                    // Registration as an anonymous function, so that more
+                    // convenient return can be used.
+                    (() => {
+                        const selector = ReactProxy.selector;
+                        if (selector === null
+                                || !target.hasOwnProperty(key))
+                            return;
+                        let recipients = this.notifications.get(key) || new Map();
+                        // If the current element is already registered as a
+                        // recipient, the registration can be canceled.
+                        if (recipients.has(selector.ordinal()))
+                            return;
+                        for (const recipient of recipients.values()) {
+                            // If the parent is already contained by the current
+                            // element, the element can be ignored as a receiver
+                            // because the rendering is initiated at the parent and
+                            // the element is automatically rendered as a child.
+                            if (recipient.contains !== undefined
+                                    && recipient.contains(selector))
+                                return;
+                            // If the current element contains the recipient element
+                            // as parent, the recipient element can be removed,
+                            // because the current element will initiate rendering
+                            // as parent in the future and the element will be
+                            // rendered as child automatically.
+                            // Or the receiver element is no longer included in the
+                            // DOM, in which case it can be removed.
+                            if ((selector.contains !== undefined
+                                            && selector.contains(recipient))
+                                    || !document.body.contains(recipient))
+                                recipients.delete(recipient.ordinal());
+                        }
+                        recipients.set(selector.ordinal(), selector);
+                        this.notifications.set(key, recipients);
+                    })();
                 }
             },
             set(target, key, value) {
@@ -67,15 +95,15 @@ if (typeof ReactProxy === "undefined") {
         return proxy;
     };
 
-    Composite.listen(Composite.EVENT_RENDER_START, function(selector) {
+    Composite.listen(Composite.EVENT_RENDER_START, function(event, selector) {
         ReactProxy.selector = selector;
     });
 
-    Composite.listen(Composite.EVENT_RENDER_NEXT, function(selector) {
+    Composite.listen(Composite.EVENT_RENDER_NEXT, function(event, selector) {
         ReactProxy.selector = selector;
     });
 
-    Composite.listen(Composite.EVENT_RENDER_END, function(selector) {
+    Composite.listen(Composite.EVENT_RENDER_END, function(event, selector) {
         ReactProxy.selector = null;
     });
 
