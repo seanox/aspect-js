@@ -3117,10 +3117,11 @@ if (typeof Expression === "undefined") {
                 expression = [null, expression];
             else expression = expression.match(/^(.*?)\.(.*)$/);
             let method = "get" + expression[1].capitalize();
-            if (!Object.keys(context).includes(method)
+            const keys = Object.keys(context);
+            if (!keys.includes(method)
                     || typeof context[method] !== "function")
                 method = "is" + expression[1].capitalize();
-            if (Object.keys(context).includes(method)
+            if (keys.includes(method)
                     && typeof context[method] === "function") {
                 context = (context[method])();
                 if (expression.length > 2)
