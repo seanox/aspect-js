@@ -111,24 +111,29 @@ if (typeof ReactProxy === "undefined") {
                         return false;
                     try {return target[key] = value;
                     } finally {
-                        // An update of the recipients is only performed outside
-                        // the rendering and if the key exists in the object.
-                        if (ReactProxy.selector !== null
-                                || !target.hasOwnProperty(key))
-                            return;
-                        let recipients = this.notifications.get(key) || new Map();
-                        for (const recipient of recipients.values()) {
-                            // If the recipient is no longer included in the
-                            // DOM and so it can be removed this case.
-                            if (!document.body.contains(recipient))
-                                recipients.delete(recipient.ordinal());
-                            else Composite.render(recipient);
+                        // Update as an anonymous function, so that more
+                        // convenient return can be used.
+                        (() => {
+                            // An update of the recipients is only performed
+                            // outside the rendering and if the key exists in
+                            // the object.
+                            if (ReactProxy.selector !== null
+                                    || !target.hasOwnProperty(key))
+                                return;
+                            let recipients = this.notifications.get(key) || new Map();
+                            for (const recipient of recipients.values()) {
+                                // If the recipient is no longer included in the
+                                // DOM and so it can be removed this case.
+                                if (!document.body.contains(recipient))
+                                    recipients.delete(recipient.ordinal());
+                                else Composite.render(recipient);
 
-                            // TODO:
-                            // - Text nodes are not yet considered
-                            // - Registration should run asynchronously
-                            // - Update of the recipients should run asynchronously
-                        }
+                                // TODO:
+                                // - Text nodes are not yet considered
+                                // - Registration should run asynchronously
+                                // - Update of the recipients should run asynchronously
+                            }
+                        })();
                     }
                 }
             });
