@@ -23,6 +23,9 @@
  *     DESCRIPTION
  *     ----
  * TODO
+ * The Reactive approach is implemented as an optional module and uses the
+ * available API.
+ * TODO
  *
  * @author  Seanox Software Solutions
  * @version 0.0.0 2022xxxx
@@ -34,65 +37,7 @@ if (typeof ReactProxy === "undefined") {
     ReactProxy.selector = null;
 
     ReactProxy.create = function(target) {
-        const proxy = new Proxy(target, {
-            notifications: new Map(),
-            get(target, key) {
-                try {return target[key] ?? undefined;
-                } finally {
-                    // Registration as an anonymous function, so that more
-                    // convenient return can be used.
-                    (() => {
-                        const selector = ReactProxy.selector;
-                        if (selector === null
-                                || !target.hasOwnProperty(key))
-                            return;
-                        let recipients = this.notifications.get(key) || new Map();
-                        // If the current element is already registered as a
-                        // recipient, the registration can be canceled.
-                        if (recipients.has(selector.ordinal()))
-                            return;
-                        for (const recipient of recipients.values()) {
-                            // If the parent is already contained by the current
-                            // element, the element can be ignored as a receiver
-                            // because the rendering is initiated at the parent and
-                            // the element is automatically rendered as a child.
-                            if (recipient.contains !== undefined
-                                    && recipient.contains(selector))
-                                return;
-                            // If the current element contains the recipient element
-                            // as parent, the recipient element can be removed,
-                            // because the current element will initiate rendering
-                            // as parent in the future and the element will be
-                            // rendered as child automatically.
-                            // Or the receiver element is no longer included in the
-                            // DOM, in which case it can be removed.
-                            if ((selector.contains !== undefined
-                                            && selector.contains(recipient))
-                                    || !document.body.contains(recipient))
-                                recipients.delete(recipient.ordinal());
-                        }
-                        recipients.set(selector.ordinal(), selector);
-                        this.notifications.set(key, recipients);
-                    })();
-                }
-            },
-            set(target, key, value) {
-                if (!(key in target))
-                    return false;
-                try {return target[key] = value;
-                } finally {
-                    try {
-                        // TODO:
-                        // - Get the recipient list from the map (by field/key)
-                        // - Remove recipients, when the element is no longer in the DOM
-                        // - Initiate rerender (composite)
-                    } catch (error) {
-                        // Reactive behavior is optional and ignores errors
-                    }
-                }
-            }
-        });
-        return proxy;
+        return target.toReactProxy();
     };
 
     Composite.listen(Composite.EVENT_RENDER_START, function(event, selector) {
@@ -114,7 +59,89 @@ if (typeof ReactProxy === "undefined") {
      */
     if (Object.prototype.toReactProxy === undefined) {
         Object.prototype.toReactProxy = function() {
-            return ReactProxy.create(this);
+            const proxy = new Proxy(this, {
+                notifications: new Map(),
+                get(target, key) {
+                    try {return target[key] ?? undefined;
+                    } finally {
+                        // Registration as an anonymous function, so that more
+                        // convenient return can be used.
+                        (() => {
+                            // Registration is performed only during rendering
+                            // and if the key exists in the object.
+                            const selector = ReactProxy.selector;
+                            if (selector === null
+                                    || !target.hasOwnProperty(key))
+                                return;
+                            let recipients = this.notifications.get(key) || new Map();
+                            // If the selector as the current rendered element
+                            // is already registered as a recipient, then the
+                            // registration can be canceled.
+                            if (recipients.has(selector.ordinal()))
+                                return;
+                            for (const recipient of recipients.values()) {
+                                // If the selector as the current rendered
+                                // element is already contained in a recipient
+                                // as the parent, the selector as a recipient
+                                // because the rendering is initiated by the
+                                // parent and includes the selector as a child.
+                                if (recipient.contains !== undefined
+                                        && recipient.contains(selector))
+                                    return;
+                                // If the selector as current rendered element
+                                // contains a recipient as parent, the recipient
+                                // can be removed, because the selector element
+                                // will initiate rendering as parent in the
+                                // future and the existing recipient will be
+                                // rendered as child automatically.
+                                // Or the recipient is no longer included in the
+                                // DOM and so it can be removed this case
+                                if ((selector.contains !== undefined
+                                                && selector.contains(recipient))
+                                        || !document.body.contains(recipient))
+                                    recipients.delete(recipient.ordinal());
+                            }
+                            recipients.set(selector.ordinal(), selector);
+                            this.notifications.set(key, recipients);
+                        })();
+                    }
+                },
+                set(target, key, value) {
+                    if (!(key in target))
+                        return false;
+                    try {return target[key] = value;
+                    } finally {
+                        // An update of the recipients is only performed outside
+                        // the rendering and if the key exists in the object.
+                        if (ReactProxy.selector !== null
+                                || !target.hasOwnProperty(key))
+                            return;
+                        let recipients = this.notifications.get(key) || new Map();
+                        for (const recipient of recipients.values()) {
+                            // If the recipient is no longer included in the
+                            // DOM and so it can be removed this case.
+                            if (!document.body.contains(recipient))
+                                recipients.delete(recipient.ordinal());
+                            else Composite.render(recipient);
+
+                            // TODO:
+                            // - Text nodes are not yet considered
+                            // - Registration should run asynchronously
+                            // - Update of the recipients should run asynchronously
+                        }
+                    }
+                }
+            });
+
+            // Prevents a new ReactProxy from being created by a ReactProxy.
+            // This is possible, but the impact is not considered so far. So
+            // the creation is done here and not in ReactProxy.create(Object).
+            // This way both places are caught.
+            proxy.toReactProxy = () => {
+                return proxy;
+            };
+
+            return proxy;
         }
     }
 }
