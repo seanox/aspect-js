@@ -116,7 +116,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.1 20221128
+ * @version 1.4.1 20221129
  */
 if (typeof Composite === "undefined") {
     
@@ -3117,9 +3117,11 @@ if (typeof Expression === "undefined") {
                 expression = [null, expression];
             else expression = expression.match(/^(.*?)\.(.*)$/);
             let method = "get" + expression[1].capitalize();
-            if (typeof context[method] !== "function")
+            if (!Object.keys(context).includes(method)
+                    || typeof context[method] !== "function")
                 method = "is" + expression[1].capitalize();
-            if (typeof context[method] === "function") {
+            if (Object.keys(context).includes(method)
+                    && typeof context[method] === "function") {
                 context = (context[method])();
                 if (expression.length > 2)
                     return Expression.lookup(context, expression[2]);
