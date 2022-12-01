@@ -116,7 +116,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.1 20221129
+ * @version 1.4.1 20221201
  */
 if (typeof Composite === "undefined") {
     
@@ -2131,12 +2131,14 @@ if (typeof Composite === "undefined") {
                             if (word.match(/^\{\{\d+\}\}$/)) {
                                 const serial = parseInt(word.substring(2, word.length -2).trim());
                                 const object = Composite.render.meta[serial];
+                                Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
                                 object.render();
                                 array[index] = object.element;
                             } else {
                                 const node = document.createTextNode(word);
                                 const serial = node.ordinal();
                                 const object = {serial, element:node, attributes:{}};
+                                Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
                                 object.element.textContent = word;
                                 object.attributes[Composite.ATTRIBUTE_TEXT] = word;
                                 Composite.render.meta[serial] = object;
