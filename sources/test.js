@@ -83,7 +83,7 @@
  * implementation here. 
  *
  * @author  Seanox Software Solutions
- * @version 1.1.3 20221016
+ * @version 1.1.4 20221201
  */
 if (typeof Test === "undefined") {
 
@@ -726,9 +726,8 @@ if (typeof Test === "undefined") {
              */
             Assert.create = function(parameters, size) {
 
-                const assert = {message:null, values:[], error() {
-                    const words = Array.from(parameters);
-                    words.forEach((parameter, index, array) => {
+                const assert = {message:null, values:[], error(...variants) {
+                    variants.forEach((parameter, index, array) => {
                         array[index] = String(parameter).replace(/\{(\d+)\}/g, (match, index) => {
                             if (index > assert.values.length)
                                 return "[null]";
@@ -746,9 +745,9 @@ if (typeof Test === "undefined") {
                     }
                     message = "{0} failed, " + message;
                     message = message.replace(/\{(\d+)\}/g, (match, index) => {
-                        if (index > words.length)
+                        if (index > variants.length)
                             return "[null]";
-                        match = String(words[index]);
+                        match = String(variants[index]);
                         match = match.replace(/\s*[\r\n]+\s*/g, " "); 
                         return match;                
                     });
