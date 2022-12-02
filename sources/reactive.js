@@ -67,18 +67,17 @@ if (typeof ReactProxy === "undefined") {
                     try {return target[key] ?? undefined;
                     } finally {
 
-                        // Registration as an anonymous function, so that more
-                        // convenient return can be used.
-                        (() => {
+                        // The registration is delayed so that the getting of
+                        // values does not block unnecessarily.
+                        Composite.asynchron((selector, target, key, notifications) => {
 
                             // Registration is performed only during rendering
                             // and if the key exists in the object.
-                            const selector = ReactProxy.selector;
                             if (selector === null
                                     || !target.hasOwnProperty(key))
                                 return;
 
-                            let recipients = this.notifications.get(key) || new Map();
+                            let recipients = notifications.get(key) || new Map();
 
                             // If the selector as the current rendered element
                             // is already registered as a recipient, then the
@@ -109,8 +108,9 @@ if (typeof ReactProxy === "undefined") {
                             }
 
                             recipients.set(selector.ordinal(), selector);
-                            this.notifications.set(key, recipients);
-                        })();
+                            notifications.set(key, recipients);
+
+                        }, ReactProxy.selector, target, key, this.notifications)
                     }
                 },
 
@@ -122,9 +122,9 @@ if (typeof ReactProxy === "undefined") {
                     try {return target[key] = value;
                     } finally {
 
-                        // Update as an anonymous function, so that more
-                        // convenient return can be used.
-                        (() => {
+                        // The registration is delayed so that the setting of
+                        // values does not block unnecessarily.
+                        Composite.asynchron((selector, target, key, notifications) => {
 
                             // An update of the recipients is only performed
                             // outside the rendering and if the key exists in
@@ -140,12 +140,9 @@ if (typeof ReactProxy === "undefined") {
                                 if (!document.body.contains(recipient))
                                     recipients.delete(recipient.ordinal());
                                 else Composite.render(recipient);
-
-                                // TODO:
-                                // - Registration should run asynchronously
-                                // - Update of the recipients should run asynchronously
                             }
-                        })();
+
+                        }, ReactProxy.selector, target, key, this.notifications);
                     }
                 }
             });
