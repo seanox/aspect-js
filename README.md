@@ -35,6 +35,9 @@ datasource, test environment and much more.
 - Event handling
 - Expression Language  
   meta-language extension with full JavaScript support
+- Reactive approach
+  Changes to the values of data objects are passed directly to the interface and
+  initiate a partial rendering of the parts where the changed values are used.
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
@@ -58,7 +61,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der Apache License.
 
-Copyright (C) 2021 Seanox Software Solutions
+Copyright (C) 2022 Seanox Software Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
