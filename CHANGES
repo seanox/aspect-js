@@ -11,13 +11,13 @@ CR: Build: Releases are now only available on the release page
 CR: Build: Switch to UglifyJS
 CR: Test: Update web server to version 5.5.x
 CR: Server: Added Ant task to start and stop
-CR: Sketch: Added as a playground for development
+CR: Playground: Added as a playground for development
     Develop with the current sources without build.
 CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
     If text nodes contain expressions, they are split and reassembled from a
     sequence of new static and dynamic text nodes. EVENT_RENDER_NEXT now also
     captures the and text nodes thus created during rendering.
-CR: Reactive: Added as a reactive approach
+CR: Reactive: Added as a reactivity rendering
 
 1.4.0 20211210
 BF: Composite: Correction in the use of attributes
