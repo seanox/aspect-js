@@ -38,7 +38,10 @@
         Test.create({test() {
             const events = TestModel.events[Composite.EVENT_RENDER_NEXT];
             Assert.assertTrue(events !== undefined);
-            Assert.assertEquals(73, events);
+            // 73 initial elements + text
+            // +63 text dynamic (added by renderer)
+            // +84 text static (added by renderer)
+            Assert.assertEquals(220, events);
         }});
         Test.create({test() {
             const events = TestModel.events[Composite.EVENT_RENDER_END];
