@@ -35,9 +35,9 @@ datasource, test environment and much more.
 - Event handling
 - Expression Language  
   meta-language extension with full JavaScript support
-- Reactive approach  
-  Changes to the values of data objects are passed directly to the interface and
-  initiate a partial rendering of the parts where the changed values are used.
+- Reactivity rendering  
+  Rendering can react to changes in the values of data objects and trigger a
+  partial rendering of the parts where the changed values are used.
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
