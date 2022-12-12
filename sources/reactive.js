@@ -64,7 +64,7 @@ if (typeof ReactProxy === "undefined") {
                 notifications: new Map(),
 
                 get(target, key) {
-                    try {return target[key] ?? undefined;
+                    try {return target[key];
                     } finally {
 
                         // The registration is delayed so that the getting of
