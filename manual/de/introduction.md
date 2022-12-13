@@ -13,7 +13,7 @@ Bei Seanox aspect-js steht ein minimalistischer Ansatz zur Implementierung von
 Single-Page Applications (SPAs) im Vordergrund.  
 
 Das Framework greift den deklarativen Ansatz von HTML auf und erweitert ihn um
-Expression Language, Rendering mit zus&auml;tzlichen Attributen,
+Expression Language, reaktives Rendering mit zus&auml;tzlichen Attributen,
 Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
 NoSQL-Datasource, Testumgebung und vieles mehr.
 
@@ -29,6 +29,9 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 * Event handling
 * Expression Language  
   Meta-Sprach-Erweiterung mit voller JavaScript-Unterst&uuml;tzung
+* Reaktives Rendering  
+  Das Rendering kann auf &Auml;nderungen in Datenobjekten reagieren und ein
+  partielles Rendering bei den Konsumenten ausl&ouml;sen 
 * Markup-Rendering  
   unterst&uuml;tzt: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
