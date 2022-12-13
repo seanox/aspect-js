@@ -1975,7 +1975,9 @@ if (typeof Composite === "undefined") {
                         // The meta object for the HTML element is removed,
                         // because only the new placeholder is relevant.
                         delete Composite.render.meta[serial];
-                        
+
+                        Composite.fire(Composite.EVENT_RENDER_NEXT, placeholder);
+
                         selector.parentNode.replaceChild(placeholder, selector);
                         
                         // The placeholder now exists in the DOM.
@@ -2976,13 +2978,9 @@ if (typeof Composite === "undefined") {
                         if ((node instanceof Element
                                 || (node instanceof Node
                                         && node.nodeType === Node.TEXT_NODE))
-                                && document.body.contains(node)) {
-                            const meta = Composite.render.meta[node.ordinal()];
-                            if (!meta || meta.hasOwnProperty("condition")) {
-                                Composite.fire(Composite.EVENT_RENDER_NEXT, node);
-                                Composite.render(node);
-                            }
-                        }
+                                && !Composite.render.meta[node.ordinal()]
+                                && document.body.contains(node))
+                            Composite.render(node);
                     });
                 }
                 
