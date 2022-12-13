@@ -19,9 +19,9 @@ fullstack solution.
 
 Seanox aspect-js focuses on a minimalist approach to implementing
 Single-Page Applications (SPAs). This framework takes the declarative approach
-of HTML and extends this with expression language, rendering with additional
-attributes, object/model binding, Model View Controller, Resource Bundle, NoSQL
-datasource, test environment and much more.
+of HTML and extends this with expression language, reactivity rendering with
+additional attributes, object/model binding, Model View Controller, Resource
+Bundle, NoSQL datasource, test environment and much more.
 
 
 # Features
