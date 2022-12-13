@@ -22,13 +22,22 @@
  *
  *     DESCRIPTION
  *     ----
- * TODO
- * The Reactive approach is implemented as an optional module and uses the
+ * A reactivity system or here called reactivity rendering is a mechanism which
+ * automatically keeps in sync a data source (model) with a data representation
+ * (view) layer. Every time the model changes, the view is partially
+ * re-rendered to reflect the changes.
+ *
+ * The mechanism is based on notifications that arise from setting and getting
+ * from the model as a data source. Which is supported by the proxy object in
+ * JavaScript. These events can be used to determine which elements/nodes in the
+ * DOM consume which data from the model and need to be refreshed when changes
+ * occur.
+ *
+ * Reactivity rendering is implemented as an optional module and uses the
  * available API.
- * TODO
  *
  * @author  Seanox Software Solutions
- * @version 0.0.0 2022xxxx
+ * @version 1.0.0 20221213
  */
 if (typeof ReactProxy === "undefined") {
 
