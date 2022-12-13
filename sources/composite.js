@@ -116,7 +116,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.1 20221201
+ * @version 1.4.1 20221213
  */
 if (typeof Composite === "undefined") {
     
@@ -2976,9 +2976,13 @@ if (typeof Composite === "undefined") {
                         if ((node instanceof Element
                                 || (node instanceof Node
                                         && node.nodeType === Node.TEXT_NODE))
-                                && !Composite.render.meta[node.ordinal()]
-                                && document.body.contains(node))
-                            Composite.render(node);
+                                && document.body.contains(node)) {
+                            const meta = Composite.render.meta[node.ordinal()];
+                            if (!meta || meta.hasOwnProperty("condition")) {
+                                Composite.fire(Composite.EVENT_RENDER_NEXT, node);
+                                Composite.render(node);
+                            }
+                        }
                     });
                 }
                 
