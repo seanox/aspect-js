@@ -427,11 +427,11 @@ Composite.EVENT_HTTP_END
 These can be used to react centrally and application-wide at HTTP events.
 
 ```javascript
-Composite.listen(Composite.EVENT_HTTP_START, function(...varargs) {
+Composite.listen(Composite.EVENT_HTTP_START, function(event, ...varargs) {
     show spinner
 });
 
-Composite.listen(Composite.EVENT_HTTP_END, function(...varargs) {
+Composite.listen(Composite.EVENT_HTTP_END, function(event, ...varargs) {
     hide spinner
 });
 ```

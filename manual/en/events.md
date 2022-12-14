@@ -38,7 +38,7 @@ The callback method is passed the current selector. It can influence this and/or
 the corresponding element, but not the rendering.
 
 ```javascript
-Composite.listen(Composite.EVENT_RENDER_***, function(selector) {
+Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
     ...
 });
 ```
@@ -69,7 +69,7 @@ The callback method is passed the current selector. It can influence this and/or
 the corresponding element, but not the object/model binding.
 
 ```javascript
-Composite.listen(Composite.EVENT_MOUNT_***, function(selector) {
+Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
     ...
 });
 ```
@@ -99,7 +99,7 @@ The Composite API supports application-wide event management for the
 XMLHttpRequest to implement request-related application logic, e.g. for logging or spinners. 
 
 ```javascript
-Composite.listen(Composite.EVENT_HTTP_***, function(XMLHttpRequest) {
+Composite.listen(Composite.EVENT_HTTP_***, function(event, XMLHttpRequest) {
     ...
 });
 ```
@@ -162,7 +162,7 @@ to implement event-related application logic, for example, for logging or error
 output. 
 
 ```javascript
-Composite.listen(Composite.EVENT_ERROR, function(Event) {
+Composite.listen(Composite.EVENT_ERROR, function(event, Error) {
     ...
 });
 ```

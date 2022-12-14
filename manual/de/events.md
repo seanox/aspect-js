@@ -39,7 +39,7 @@ Der Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
 und/oder das korrespondierende Element beeinflussen, nicht aber das Rendering.
 
 ```javascript
-Composite.listen(Composite.EVENT_RENDER_***, function(selector) {
+Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
     ...
 });
 ```
@@ -71,7 +71,7 @@ und/oder das korrespondierende Element beeinflussen, nicht aber das
 Object/Model-Binding.
 
 ```javascript
-Composite.listen(Composite.EVENT_MOUNT_***, function(selector) {
+Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
     ...
 });
 ```
@@ -102,7 +102,7 @@ XMLHttpRequest zur Implementierung Request-bezogener Anwendungslogik, z.B. f&uum
 Logging oder Spinner. 
 
 ```javascript
-Composite.listen(Composite.EVENT_HTTP_***, function(XMLHttpRequest) {
+Composite.listen(Composite.EVENT_HTTP_***, function(event, XMLHttpRequest) {
     ...
 });
 ```
@@ -166,7 +166,7 @@ Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. f&uu
 Logging oder Fehlerausgaben. 
 
 ```javascript
-Composite.listen(Composite.EVENT_ERROR, function(Event) {
+Composite.listen(Composite.EVENT_ERROR, function(event, Error) {
     ...
 });
 ```
