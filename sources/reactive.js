@@ -37,7 +37,7 @@
  * available API.
  *
  * @author  Seanox Software Solutions
- * @version 1.0.0 20221213
+ * @version 1.0.0 20221215
  */
 if (typeof ReactProxy === "undefined") {
 
@@ -68,6 +68,14 @@ if (typeof ReactProxy === "undefined") {
      */
     if (Object.prototype.toReactProxy === undefined) {
         Object.prototype.toReactProxy = function() {
+
+            for (const key in this) {
+                const value = this[key];
+                if (typeof value === "object"
+                        && value !== null)
+                    this[key] = this[key].toReactProxy();
+            }
+
             const proxy = new Proxy(this, {
 
                 notifications: new Map(),
@@ -125,8 +133,9 @@ if (typeof ReactProxy === "undefined") {
 
                 set(target, key, value) {
 
-                    if (!(key in target))
-                        return false;
+                    if (typeof value === "object"
+                            && value !== null)
+                        value = value.toReactProxy();
 
                     try {return target[key] = value;
                     } finally {
@@ -161,7 +170,7 @@ if (typeof ReactProxy === "undefined") {
             // the creation is done here and not in ReactProxy.create(Object).
             // This way both places are caught.
             proxy.toReactProxy = () => {
-                return proxy;
+                return this;
             };
 
             return proxy;
