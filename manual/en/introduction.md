@@ -142,10 +142,10 @@ logical operators can be used.
 
 The expression language can be used in the markup as free text and in the
 attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here.  
-When used as free text, pure text (plain text) is always generated as output.
-The addition of markup, especially HTML code, is not possible and is only
-supported with the attributes `output` and `import`.
+expression language is not supported here. When used as free text, pure text
+(plain text) is always generated as output. The addition of markup, especially
+HTML code, is not possible and is only supported with the attributes `output`
+and `import`.
  
 ```html
 <body lang="{{DataSource.locale}}">
@@ -742,6 +742,33 @@ the implementation of components.
 ### Object/Model Binding
 
 TODO:
+
+
+## Reactivity Rendering
+
+In the reactive approach, rendering reacts on changes of data objects of models
+and triggers a partial rendering at consumers of the changes. Consumers are all
+expressions that have read access to the changed value of a data object. The
+expressions can be used in elements as well as in free text. Whether reactive
+rendering is used is dependent on the data object, which must use the ReactProxy
+for this purpose. The ReactProxy can be applied with the `toReactProxy` method
+provided by each object instance or via the constructor `new ReactProxy(...)`.
+
+```javascript
+let Model = {
+    value: ...
+}.toReactProxy();
+```
+
+In this example, the renderer will automatically update all elements in the DOM,
+which includes free-text that uses the property value from the model directly or
+indirectly in an expression when the value of the property `value` changes.
+
+The ReactProxy works permanently recursively on all objects, in all levels of a
+model and also on the objects that are added later as values, even if these
+objects do not explicitly use the ReactProxy.
+
+[Learn more](reactive.md)
 
 
 ## Extension

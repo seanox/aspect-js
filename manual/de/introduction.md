@@ -137,18 +137,19 @@ einbezogen wird.
 
 ## Expression Language
 
-Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
-clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
-aspect-js. In den Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die
-mit zus&auml;tzliche Schl&uuml;sselw&ouml;rtern angereichert ist, womit auch die zahlreichen
-arithmetischen und logischen Operatoren verwendet werden k&ouml;nnen.
+Expressions bzw. die Expression Language (EL) oder in der vorliegenden Dokumentation
+auch Ausdruck bzw. Ausdr&uml;cke genannt, ist ein einfacher Zugang zum clientseitigen
+JavaScript und damit zu den Modellen und Komponenten im Seanox aspect-js. In den
+Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die mit zus&auml;tzliche
+Schl&uuml;sselw&ouml;rtern angereichert ist, womit auch die zahlreichen arithmetischen
+und logischen Operatoren verwendet werden k&ouml;nnen.
 
 Die Expression-Language kann im Markup als Freitext und in den Attributen der
 HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
-Hier wird die Expression-Language nicht unterst&uuml;tzt.  
-Bei der Verwendung als Freitext wird als Ausgabe immer reiner Text (plain text)
-erzeugt. Das Hinzuf&uuml;gen von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich
-und wir nur mit den Attributen `output` und `import` unterst&uuml;tzt.
+Hier wird die Expression-Language nicht unterst&uuml;tzt. Bei der Verwendung als
+Freitext wird als Ausgabe immer reiner Text (plain text) erzeugt. Das Hinzuf&uuml;gen
+von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich und wir nur mit den
+Attributen `output` und `import` unterst&uuml;tzt.
 
 ```html
 <body lang="{{DataSource.locale}}">
@@ -344,11 +345,10 @@ Wird ein HTML-Element als iterativ deklariert, wird der initiale innerer
 HTML-Code als Vorlage verwendet und w&auml;hrend der Iteration der innere HTML-Code
 zun&auml;chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und das
 Ergebnis dem inneren HTML-Code hinzugef&uuml;gt.  
-Das iterate-Attribut erwartet einen
-[Variablen-Ausdruck](expression.md#variable-expression), zu dem ein Meta-Objekt
-erstellt wird, dass den Zugriff auf die Iteration erm&ouml;glich.  
-So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}`
-das Meta-Objekt `tempA = {item, index, data}`.
+Das iterate-Attribut erwartet einen [Variablen-Ausdruck](expression.md#variable-expression),
+zu dem ein Meta-Objekt erstellt wird, dass den Zugriff auf die Iteration erm&ouml;glich.  
+So erzeugt der Variablen-Ausdruck `iterate={{tempA:Model.list}}` das Meta-Objekt
+`tempA = {item, index, data}`.
 
 ```javascript
 const Model = {
@@ -756,6 +756,34 @@ verwenden.
 ### Object/Model-Binding
 
 TODO:
+
+
+## Reaktives Rendering
+
+Beim reaktiven Ansatz reagiert das Rendering auf &Auml;nderungen der Datenobjekte
+von Modellen und l&ouml;st ein partielles Rendern bei den Konsumenten der &Auml;nderungen
+aus. Konsumenten sind alle Ausdr&uuml;cke, die lesend auf den ge&auml;nderten Wert
+eines Datenobjekts zugreifen. Die Ausdr&uuml;cke k&ouml;nnen in Elementen, wie auch
+im Freitext verwendet werden. Ob dabei das reaktive Rendering verwendet wird, ist
+abh&auml;ngig vom Datenobjekt, was dazu den ReactProxy nutzen muss. Der ReactProxy
+kann mit der toReactProxy-Methode, die jede Objekt-Instanz bereitstellt, oder &uuml;ber
+den Konstruktor per `new ReactProxy(...)` angewendet werden.   
+
+```javascript
+let Model = {
+    value: ...
+}.toReactProxy();
+```
+
+In diesem Beispiel wird der Renderer automatisch alle Elemente im DOM aktualisieren,
+was Freitexte einschliesst, welche die Eigenschaft `value` vom Model direkt oder indirekt
+in einem Ausdruck verwenden, wenn sich der Wert der Eigenschaft `value` &auml;ndert.
+
+Der ReactProxy wirkt permanent rekursiv auf alle Objekte, in allen Ebenen eines Models
+und auch auf die Objekte die sp&auml;ter als Wert hinzugef&uuml;gt werden, auch wenn
+diese Objekte nicht explizit den ReactProxy nutzen.
+
+[Mehr erfahren](reactive.md)
 
 
 ## Erweiterung
