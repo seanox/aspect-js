@@ -80,6 +80,7 @@ datasource, test environment and much more.
   * [Object/Model Binding](#objectmodel-binding)
 * [Components](#components)
   * [Object/Model Binding](#objectmodel-binding-1)
+* [Reactivity Rendering](#reactivity-rendering)
 * [Extension](#extension)
 * [Events](#events-1)
 * [Test](#test)

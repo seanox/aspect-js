@@ -10,6 +10,7 @@
 * [Resource Bundle](#resource-bundle-i18n)
 * [Model View Controller](#model-view-controller)
 * [Komponenten](#komponenten)
+* [Reaktives Rendering](#reaktives-rendering)
 * [Erweiterung](#erweiterung)
 * [Ereignisse](#ereignisse)
 * [Test](#test)
@@ -155,6 +156,10 @@
     * [Events](composite.md#events)
     * [Synchronization](composite.md#synchronization)
     * [Validation](composite.md#validation)
+
+
+### Reaktives Rendering
+* [Reaktives Rendering](reactive.md#reaktives-rendering)
 
 
 ### Erweiterung

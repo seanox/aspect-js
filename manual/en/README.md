@@ -12,6 +12,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [Resource Bundle](#resource-bundle-i18n)
 * [Model View Controller](#model-view-controller)
 * [Composite](#composite)
+* [Reactivity Rendering](#reactivity-rendering)
 * [Extension](#extension)
 * [Events](#events)
 * [Test](#test)
@@ -157,6 +158,10 @@ Machine translation with [DeepL](https://deepl.com).
     * [Events](composite.md#events)
     * [Synchronization](composite.md#synchronization)
     * [Validation](composite.md#validation)
+
+
+### Reactivity Rendering
+* [Reactivity Rendering](reactive.md#reactivity-rendering)
 
 
 ### Extension

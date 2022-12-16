@@ -81,6 +81,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   * [Object/Model-Binding](#objectmodel-binding)
 * [Komponenten](#komponenten)
   * [Object/Model-Binding](#objectmodel-binding-1)
+* [Reaktives Rendering](#reaktives-rendering)
 * [Erweiterung](#erweiterung)
 * [Ereignisse](#ereignisse)
 * [Test](#test)
