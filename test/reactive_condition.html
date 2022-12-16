@@ -12,11 +12,17 @@
     <script src="aspect-js.js"></script>
     <script>
         Test.activate();
-        // TODO:
-    </script>
-  </head>
-  <body>
-    <script>
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            if (snapshots.length == 8)
+                Assert.assertSameTo("script[type='text/test-1']", snapshots.slice(-1)[0]);
+            if (snapshots.length >= 9)
+                Assert.assertSameTo("script[type='text/test-2']", snapshots.slice(-1)[0]);
+        });
+
         const modelA = {
             valueA: 123
         }.toReactProxy();
@@ -25,6 +31,20 @@
         window.setTimeout(() => {modelA.valueA = 456}, 1500);
         window.setTimeout(() => {modelA.valueA = 123}, 1750);
     </script>
+    <script type="text/test-1">
+      _A_123_
+      true:  _true
+      false: _
+      react: _A456B
+    </script>
+    <script type="text/test-2">
+      _A_123_
+      true:  _true
+      false: _
+      react: _
+    </script>
+  </head>
+  <body>
     _A_{{modelA.valueA}}_
     true:  _<span condition="{{true}}">true</span>
     false: _<span condition="{{false}}">false</span>

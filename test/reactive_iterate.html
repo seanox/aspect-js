@@ -12,16 +12,30 @@
     <script src="aspect-js.js"></script>
     <script>
         Test.activate();
-        // TODO:
-    </script>
-  </head>
-  <body>
-    <script>
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            if (snapshots.length >= 4)
+                Assert.assertSameTo("script[type='text/test-1']", snapshots.slice(-1)[0]);
+        });
+
         const modelA = {
             valueA: ["Spring", "Winter"]
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = ["Spring", "Summer", "Autumn", "Winter"];}, 1000)
     </script>
+    <script type="text/test-1">
+    _A_Spring,Summer,Autumn,Winter_
+    _B_Spring,Summer,Autumn,Winter_
+        Spring
+        Summer
+        Autumn
+        Winter
+    </script>
+  </head>
+  <body>
     _A_{{modelA.valueA}}_
     _B_{{modelA.valueA}}_
     <select iterate={{months:modelA.valueA}}>

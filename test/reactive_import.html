@@ -12,18 +12,30 @@
     <script src="aspect-js.js"></script>
     <script>
         Test.activate();
-        // TODO:
-    </script>
-  </head>
-  <body>
-    <script>
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            if (snapshots.length < 5)
+                return
+            Assert.assertSameTo("script[type='text/test-1']", snapshots.slice(-1)[0]);
+            Assert.assertSameText("a2b4c6d8e0", document.querySelector("#valueA").value);
+        });
+
         const modelA = {
             valueA: "hallo"
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
     </script>
+    <script type="text/test-1">
+  _A_a2b4c6d8e0_
+  Value of variable modelA.valueA: a2b4c6d8e0
+    </script>
+  </head>
+  <body>
     _A_{{modelA.valueA}}_
-    <div import="reactive_import.html">
+    <div import="reactive_import_x.html">
       Import must work
     </div>
   </body>

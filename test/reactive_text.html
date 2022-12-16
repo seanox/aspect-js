@@ -12,17 +12,27 @@
     <script src="aspect-js.js"></script>
     <script>
         Test.activate();
-        // TODO:
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            Assert.assertSameTo("script[type='text/test-1']", snapshot);
+        });
+
+        const modelA = {
+          valueA: "aaabbb"
+        }.toReactProxy();
+        const modelB = modelA.toReactProxy();
+        window.setTimeout(() => {modelB.valueA = "a2b4c6d8e0";}, 1000);
+    </script>
+    <script type="text/test-1">
+    _A_aaabbb_
+    _B_aaabbb_
+    _C_AAABBB_
+    _D_bb_
     </script>
   </head>
   <body>
-    <script>
-        const modelA = {
-            valueA: "aaabbb"
-        }.toReactProxy();
-        const modelB = modelA.toReactProxy();
-        window.setTimeout(() => {modelB.valueA = "a2b4c6d8e0";}, 1000)
-    </script>
     _A_{{modelA.valueA}}_
     _B_{{modelA.valueA}}_
     _C_{{modelA.valueA.toUpperCase()}}_
