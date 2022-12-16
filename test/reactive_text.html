@@ -18,16 +18,14 @@
   <body>
     <script>
         const modelA = {
-            valueA: 123
+            valueA: "aaabbb"
         }.toReactProxy();
-        window.setTimeout(() => {modelA.valueA = 456}, 1000);
-        window.setTimeout(() => {modelA.valueA = 123}, 1250);
-        window.setTimeout(() => {modelA.valueA = 456}, 1500);
-        window.setTimeout(() => {modelA.valueA = 123}, 1750);
+        const modelB = modelA.toReactProxy();
+        window.setTimeout(() => {modelB.valueA = "a2b4c6d8e0";}, 1000)
     </script>
     _A_{{modelA.valueA}}_
-    true:  _<span condition="{{true}}">true</span>
-    false: _<span condition="{{false}}">false</span>
-    react: _<span condition="{{modelA.valueA != 123}}">A{{modelA.valueA}}B</span>
+    _B_{{modelA.valueA}}_
+    _C_{{modelA.valueA.toUpperCase()}}_
+    _D_{{modelA.valueA.substring(4)}}_
   </body>
 </html>

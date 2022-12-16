@@ -22,8 +22,8 @@
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = ["Spring", "Summer", "Autumn", "Winter"];}, 1000)
     </script>
-    _A_{{modelA.valueA}}__<br>
-    _B_{{modelA.valueA}}__<br>
+    _A_{{modelA.valueA}}_
+    _B_{{modelA.valueA}}_
     <select iterate={{months:modelA.valueA}}>
       <option id="{{months.index}}">
         {{months.item}}

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script>
+        Test.activate();
+        // TODO:
+    </script>
+  </head>
+  <body>
+    <script>
+        const contact = {
+            name: "hallo"
+        }.toReactProxy();
+    </script>
+    _A_{{contact.name}}_
+    <p id="contact" composite static>
+      <input type="text" id="name" events="input" value="{{contact.name}}"/>
+      Value of variable contact.name: {{contact.name}}
+    </p>
+    <span condition="{{contact.name != '123'}}">
+      SPAN
+    </span>
+    _A_{{contact.name}}_
+    _B_{{contact.name.toUpperCase()}}_
+    _C_{{contact.name.substring(4)}}_
+  </body>
+</html>

@@ -22,14 +22,9 @@
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
     </script>
-    _A_{{modelA.valueA}}__<br>
-    _B_{{modelA.valueA}}__<br>
-
+    _A_{{modelA.valueA}}_
     <div import="reactive_import.html">
       Import must work
     </div>
-
-    _C_{{modelA.valueA.toUpperCase()}}__<br>
-    _D_{{modelA.valueA.substring(4)}}__<br>
   </body>
 </html>

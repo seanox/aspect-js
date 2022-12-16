@@ -18,16 +18,16 @@
   <body>
     <script>
         const modelA = {
-            valueA: 123
+            valueA: "hallo"
         }.toReactProxy();
-        window.setTimeout(() => {modelA.valueA = 456}, 1000);
-        window.setTimeout(() => {modelA.valueA = 123}, 1250);
-        window.setTimeout(() => {modelA.valueA = 456}, 1500);
-        window.setTimeout(() => {modelA.valueA = 123}, 1750);
+        let countX = 0;
+        window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 2000)
     </script>
     _A_{{modelA.valueA}}_
-    true:  _<span condition="{{true}}">true</span>
-    false: _<span condition="{{false}}">false</span>
-    react: _<span condition="{{modelA.valueA != 123}}">A{{modelA.valueA}}B</span>
+    <p id="modelA" composite static>
+      <input type="text" id="valueA" value="{{countX++}}"
+          events="input" foo="{{modelA.valueA}}"/>
+      Value of variable modelA.valueA: {{modelA.valueA}}
+    </p>
   </body>
 </html>

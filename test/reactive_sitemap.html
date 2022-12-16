@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script>
+        Test.activate();
+        // TODO:
+    </script>
+  </head>
+  <body>
+    <script>
+        SiteMap.customize({
+            "#": ["modelA"],
+            "#modelA": []
+        });
+        modelA = {
+            valueA: "hallo"
+        }.toReactProxy();
+        window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 2000)
+    </script>
+    _A_{{modelA.valueA}}_
+    _B_{{modelA.valueA}}_
+
+    <p id="modelA" composite>
+      TODO: Test: http://127.0.0.1:8000/playground
+            Eingabefeld nicht sichtbar
+      TODO: Test: http://127.0.0.1:8000/playground/#modela
+            Eingabefeld sichtbar und muss funktionieren
+            Wenn direkt aufgerufen, dann ist auch die Änderung durch den Timer sichtbar
+            Wenn verzögert aufgerufen, dann ist die Änderung nach dem Timer sichtbar
+      <input type="text" id="valueA" events="input" value="{{modelA.valueA}}">
+      Value of variable modelA.valueA: {{modelA.valueA}}
+    </p>
+    _C_{{modelA.valueA.toUpperCase()}}_
+    _D_{{modelA.valueA.substring(4)}}_
+  </body>
+</html>
