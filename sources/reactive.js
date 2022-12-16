@@ -36,6 +36,10 @@
  * Reactivity rendering is implemented as an optional module and uses the
  * available API.
  *
+ * The ReactProxy works permanently recursively on all objects, in all levels of a
+ * model and also on the objects that are added later as values, even if these
+ * objects do not explicitly use the ReactProxy.
+ *
  * @author  Seanox Software Solutions
  * @version 1.0.0 20221215
  */
