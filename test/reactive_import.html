@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script>
+        Test.activate();
+        // TODO:
+    </script>
+  </head>
+  <body>
+    <script>
+        const modelA = {
+            valueA: "hallo"
+        }.toReactProxy();
+        window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
+    </script>
+    _A_{{modelA.valueA}}__<br>
+    _B_{{modelA.valueA}}__<br>
+
+    <div import="reactive_import.html">
+      Import must work
+    </div>
+
+    _C_{{modelA.valueA.toUpperCase()}}__<br>
+    _D_{{modelA.valueA.substring(4)}}__<br>
+  </body>
+</html>

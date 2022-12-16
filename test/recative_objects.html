@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script>
+        Test.activate();
+        // TODO:
+    </script>
+  </head>
+  <body>
+    <script>
+        const modelX = {
+            valueA: 10000,
+            valueB: {
+                valueC: 20000,
+                valueE: {
+                  valueF: 30000,
+                  valueH: null,
+                }
+            },
+            valueG: null
+        };
+
+        modelX.valueX = modelX.valueB;
+        // The reference from the object is copied and so valueX and valueB use
+        // the same instance.
+        modelX.test1 = modelX.valueX === modelX.valueB;
+
+        const modelA = modelX.toReactProxy();
+        modelA.test2 = modelA === modelX;
+        // The ReactProxy works recursively and will be applied to all existing
+        // objects, therefore for valueB a new proxy instance is created, which
+        // cannot be the same as the original instance.
+        modelA.test3 = modelA.valueX === modelA.valueB;
+
+        modelA.a = "A";
+        modelX.a = "X";
+
+        valueH = {valueI: 40000};
+        modelX.valueB.valueE.valueH = valueH;
+        // The ReactProxy works recursively and will be applied to all added
+        // objects, therefore for valueH a new proxy instance is created on
+        // insertion, which cannot be the same as the original instance.
+        modelA.test4 = valueH === modelA.valueB.valueE.valueH;
+        // valueH is already a ReactProxy and so the toReactProxy provides a
+        // reference to the object itself
+        modelA.test5 = modelA.valueB.valueE.valueH === modelA.valueB.valueE.valueH.toReactProxy();
+        modelA.test6 = modelA.valueB.valueE.valueH === modelA.valueB.valueE.valueH.toReactProxy().toReactProxy().toReactProxy();
+
+        modelX.valueX = {};
+        modelA.valueY = {};
+
+        window.setTimeout(() => {modelA.valueA++;}, 1000);
+        window.setTimeout(() => {modelA.valueA++;}, 1250);
+        window.setTimeout(() => {modelA.valueA++;}, 1500);
+
+        window.setTimeout(() => {modelA.valueB.valueC += 10;}, 2000);
+        window.setTimeout(() => {modelA.valueB.valueC += 10;}, 2250);
+        window.setTimeout(() => {modelA.valueB.valueC += 10;}, 2500);
+
+        window.setTimeout(() => {modelA.valueB.valueE.valueF += 100}, 3000);
+        window.setTimeout(() => {modelA.valueB.valueE.valueF += 100}, 3250);
+        window.setTimeout(() => {modelA.valueB.valueE.valueF += 100}, 3500);
+
+        window.setTimeout(() => {modelA.valueB.valueE.valueH.valueI += 1000}, 4000);
+        window.setTimeout(() => {modelA.valueB.valueE.valueH.valueI += 1000}, 4250);
+        window.setTimeout(() => {modelA.valueB.valueE.valueH.valueI += 1000}, 4500);
+
+        window.setTimeout(() => {modelX.a = "B"}, 1000);
+        window.setTimeout(() => {modelA.a = "C"}, 3000);
+    </script>
+    <pre>
+      A: _{{modelA.valueA}}_
+      C: _{{modelA.valueB.valueC}}_
+      F: _{{modelA.valueB.valueE.valueF}}_
+      I: _{{modelA.valueB.valueE.valueH.valueI}}_
+
+      x: _{{typeof modelX.valueX}}_
+      Y: _{{typeof modelA.valueY}}_
+
+      A-a: {{modelA.a}}
+      X-a: {{modelX.a}}
+
+      Test 1: {{modelA.test1}}
+      Test 2: {{modelA.test2}}
+      Test 3: {{modelA.test3}}
+      Test 4: {{modelA.test4}}
+      Test 5: {{modelA.test5}}
+      Test 6: {{modelA.test6}}
+    </pre>
+  </body>
+</html>

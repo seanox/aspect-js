@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script>
+        Test.activate();
+        // TODO:
+    </script>
+  </head>
+  <body>
+    <script>
+        const modelA = {
+            valueA: ["Spring", "Winter"]
+        }.toReactProxy();
+        window.setTimeout(() => {modelA.valueA = ["Spring", "Summer", "Autumn", "Winter"];}, 1000)
+    </script>
+    _A_{{modelA.valueA}}__<br>
+    _B_{{modelA.valueA}}__<br>
+    <select iterate={{months:modelA.valueA}}>
+      <option id="{{months.index}}">
+        {{months.item}}
+      </option>
+    </select>
+  </body>
+</html>
