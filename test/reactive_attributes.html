@@ -12,16 +12,41 @@
     <script src="aspect-js.js"></script>
     <script>
         Test.activate();
-        // TODO:
-    </script>
-  </head>
-  <body>
-    <script>
+
+        const snapshots = [];
+        const values = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            values.push(document.querySelector("#valueA").value);
+            if (values.length == 4)
+                Assert.assertEquals(String(["hallo", "hallo", "a2b4c6d8e0", "a2b4c6d8e0"]), String(values));
+            Assert.assertSameTo("script[type='text/test-" + snapshots.length + "']", snapshot);
+        });
+
         const modelA = {
             valueA: "hallo"
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
     </script>
+    <script type="text/test-1">
+      _A_hallo_
+      Value of variable modelA.valueA: hallo
+    </script>
+    <script type="text/test-2">
+      _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: hallo
+    </script>
+    <script type="text/test-3">
+      _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: hallo
+    </script>
+    <script type="text/test-4">
+      _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: a2b4c6d8e0
+    </script>
+  </head>
+  <body>
     _A_{{modelA.valueA}}_
     <p id="modelA" composite static>
       <input type="text" id="valueA" events="input" value="{{modelA.valueA}}">
