@@ -174,7 +174,7 @@ if (typeof ReactProxy === "undefined") {
             // the creation is done here and not in ReactProxy.create(Object).
             // This way both places are caught.
             proxy.toReactProxy = () => {
-                return this;
+                return proxy;
             };
 
             return proxy;
