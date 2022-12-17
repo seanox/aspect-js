@@ -116,7 +116,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.1 20221213
+ * @version 1.4.1 20221217
  */
 if (typeof Composite === "undefined") {
     
@@ -240,17 +240,17 @@ if (typeof Composite === "undefined") {
         get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
         /** Pattern for a composite id (based on a word) */
-        get PATTERN_COMPOSITE_ID() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
+        get PATTERN_COMPOSITE_ID() {return /^[_a-zA-Z]\w*$/;},
 
         /** 
          * Pattern for an element id (e.g. name:qualifier...)
          *     group 1: name
          *     group 2: qualifier(s) (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^((?:(?:(?:\w+\-+(?=\w))+)\w*)|(?:\w+))((\:((((\w+\-+(?=\w))+)\w*)|(\w+)))*)$/;},
-        
+        get PATTERN_ELEMENT_ID() {return /^([_a-zA-Z]\w*)((\:\w*)*)$/;},
+
         /** Pattern for a scope (custom tag, based on a word) */
-        get PATTERN_CUSTOMIZE_SCOPE() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
+        get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-zA-Z]([\w-]*\w)?$/;},
         
         /** Pattern for the namespace separator */
         get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g;},

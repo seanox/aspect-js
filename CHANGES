@@ -17,6 +17,9 @@ CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
     If text nodes contain expressions, they are split and reassembled from a
     sequence of new static and dynamic text nodes. EVENT_RENDER_NEXT now also
     captures the and text nodes thus created during rendering.
+CR: Composite: Aligned to the syntax for: COMPOSITE_ID / ELEMENT_ID / CUSTOMIZE_SCOPE
+    COMPOSITE_ID / ELEMENT_ID character - is omitted, analogous to the syntax for variables in JavaScript
+    CUSTOMIZE_SCOPE must start with _ a-z A-Z according to the W3C standard
 CR: Reactive: Added for a reactivity rendering
     Rendering can be reactive to changes in data objects and trigger partial
     rendering at consumers
