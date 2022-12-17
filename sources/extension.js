@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.1 20221016
+ * @version 1.2.1 20221217
  */
 if (typeof Namespace === "undefined") {
 
@@ -418,7 +418,7 @@ if (String.prototype.unescape === undefined) {
         text = text.replace(/\n/g, "\\n");
         text = text.replace(/^(["'])/, "\$1");
         text = text.replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
-        return eval("\"" + text + "\"");
+        return new Function("return \"" + text + "\"")();
     };
 }
 

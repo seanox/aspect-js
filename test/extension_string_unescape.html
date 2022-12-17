@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+      
+        Test.create({test() {
+            Assert.assertEquals("a\tb", ("a\\tb").unescape());
+            Assert.assertEquals("\r\nxxx", ("\\r\\nxxx").unescape());
+            Assert.assertNotEquals("\n\rxxx", ("\\r\\nxxx").unescape());
+        }});
+
+        Test.start({auto:true});
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
