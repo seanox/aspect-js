@@ -12,18 +12,30 @@
     <script src="aspect-js.js"></script>
     <script>
         Test.activate();
-        // TODO:
-    </script>
-  </head>
-  <body>
-    <script>
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            if (snapshots.length == 14)
+                Test.start();
+            if (snapshots.length > 14)
+                Assert.fail("More steps than expected");
+        });
+
+        Test.create({test() {
+            snapshots.forEach((snapshot, index) => {
+              Assert.assertSameTo("script[type='text/test-" + (index + 1) + "']", snapshots[index]);
+            });
+        }});
+
         const modelX = {
             valueA: 10000,
             valueB: {
                 valueC: 20000,
                 valueE: {
-                  valueF: 30000,
-                  valueH: null,
+                    valueF: 30000,
+                    valueH: null,
                 }
             },
             valueG: null
@@ -77,6 +89,232 @@
         window.setTimeout(() => {modelX.a = "B"}, 1000);
         window.setTimeout(() => {modelA.a = "C"}, 3000);
     </script>
+    <script type="text/test-1">
+      A: _10000_
+      C: _20000_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-2">
+      A: _10001_
+      C: _20000_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-3">
+      A: _10002_
+      C: _20000_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-4">
+      A: _10003_
+      C: _20000_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-5">
+      A: _10003_
+      C: _20010_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-6">
+      A: _10003_
+      C: _20020_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-7">
+      A: _10003_
+      C: _20030_
+      F: _30000_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-8">
+      A: _10003_
+      C: _20030_
+      F: _30100_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-9">
+      A: _10003_
+      C: _20030_
+      F: _30100_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-10">
+      A: _10003_
+      C: _20030_
+      F: _30200_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-11">
+      A: _10003_
+      C: _20030_
+      F: _30300_
+      I: _40000_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-12">
+      A: _10003_
+      C: _20030_
+      F: _30300_
+      I: _41000_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-13">
+      A: _10003_
+      C: _20030_
+      F: _30300_
+      I: _42000_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+    <script type="text/test-14">
+      A: _10003_
+      C: _20030_
+      F: _30300_
+      I: _43000_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+      Test 1: true
+      Test 2: false
+      Test 3: true
+      Test 4: false
+      Test 5: true
+      Test 6: true
+    </script>
+  </head>
+  <body>
     <pre>
       A: _{{modelA.valueA}}_
       C: _{{modelA.valueB.valueC}}_
