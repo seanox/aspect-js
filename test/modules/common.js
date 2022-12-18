@@ -25,32 +25,25 @@ if (Test.read === undefined) {
     };
 }
 
+if (String.prototype.simplify === undefined) {
+    String.prototype.simplify = function () {
+        return this.trim().replace(/\t/g, "    ")
+            .replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n")
+            .replace(/(\s*\n\s*)+/gm, "\n")
+            .replace(/(^\s+)|(\s+$)/gm, "");
+    }
+}
+
 if (typeof Assert !== "undefined") {
 
     Assert.assertSameText = function(expected, actual) {
-        expected = (expected || "").trim().replace(/\t/g, "    ");
-        expected = expected.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-        expected = expected.replace(/(\s*\n\s*)+/gm, "\n");
-        expected = expected.replace(/(^\s+)|(\s+$)/gm, "");
-        actual = (actual || "").trim().replace(/\t/g, "    ");
-        actual = actual.replace(/\t/g, "    ");
-        actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-        actual = actual.replace(/(\s*\n\s*)+/gm, "\n");
-        actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-        Assert.assertEquals(expected, actual);    
+        Assert.assertEquals((expected || "").simplify(), (actual || "").simplify());
     };
     
     Assert.assertSameTo = function(selector, actual) {
         const element = document.querySelector(selector);
-        let content = element.innerHTML.trim().replace(/\t/g, "    ");
-        content = content.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-        content = content.replace(/(\s*\n\s*)+/gm, "\n");
-        content = content.replace(/(^\s+)|(\s+$)/gm, "");
-        actual = (actual || "").trim().replace(/\t/g, "    ");
-        actual = actual.replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n");
-        actual = actual.replace(/(\s*\n\s*)+/gm, "\n");
-        actual = actual.replace(/(^\s+)|(\s+$)/gm, "");
-        Assert.assertEquals(content, actual);    
+        const content = element.innerHTML;
+        Assert.assertEquals(content.simplify(), (actual || "").simplify());
     };
     
     Assert.assertIn = function(values, actual) {
