@@ -19,14 +19,33 @@
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
             values.push(document.querySelector("#valueA").value);
-            Assert.assertSameTo("script[type='text/test-" + snapshots.length + "']", snapshot);
-            if (values.length == 4) {
-                Assert.assertEquals(values[0], values[1]);
-                Assert.assertEquals(values[2], values[3]);
-                Assert.assertNotEquals(values[1], values[2]);
-                Assert.assertTrue(values[1] < values[2]);
-            }
+            if (snapshots.length == 4)
+                Test.start();
+            if (snapshots.length > 4)
+                Assert.fail("More steps than expected");
         });
+
+        Test.create({test() {
+            snapshots.forEach((snapshot, index) => {
+                Assert.assertSameTo("script[type='text/test-" + (index +1) + "']", snapshot);
+            });
+        }});
+
+        Test.create({test() {
+            Assert.assertEquals(values[0], values[1]);
+        }});
+
+        Test.create({test() {
+            Assert.assertEquals(values[2], values[3]);
+        }});
+
+        Test.create({test() {
+            Assert.assertNotEquals(values[1], values[2]);
+        }});
+
+        Test.create({test() {
+            Assert.assertTrue(values[1] < values[2]);
+        }});
 
         const modelA = {
             valueA: "hallo"
