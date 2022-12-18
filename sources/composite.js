@@ -1097,7 +1097,7 @@ if (typeof Composite === "undefined") {
                 // Interactive composite elements are a property object in the
                 // model that contains the interaction methods corresponding to
                 // the events.
-                // Therefore the scope of interactive composite elements shifts
+                // Therefore, the scope of interactive composite elements shifts
                 // from the model to the property object.
                 // In all cases, a name-based alignment in the model and thus an
                 // ID is required. Anonymous interaction elements do not have
@@ -1379,7 +1379,7 @@ if (typeof Composite === "undefined") {
      * The method always requires a corresponding JavaScript model and an
      * element with an valid element ID in a valid enclosing composite,
      * otherwise the method will return null.  
-
+     *
      * @param  element
      * @return determined meta object for the passed element, otherwise null
      * @throws An error occurs in the following cases:
