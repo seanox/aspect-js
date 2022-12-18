@@ -16,20 +16,55 @@
         const snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             const snapshot = document.body.textContent.trim();
-            Assert.assertSameTo("script[type='text/test-1']", snapshot);
+            snapshots.push(snapshot);
+            if (snapshots.length == 5)
+                Test.start()
+            if (snapshots.length > 5)
+                Assert.fail("More steps than expected");
         });
+
+        Test.create({test() {
+            snapshots.forEach((snapshot, index) => {
+                Assert.assertSameTo("script[type='text/test-" + (index + 1) + "']", snapshots[index]);
+            });
+        }});
 
         const modelA = {
           valueA: "aaabbb"
         }.toReactProxy();
         const modelB = modelA.toReactProxy();
+
         window.setTimeout(() => {modelB.valueA = "a2b4c6d8e0";}, 1000);
     </script>
     <script type="text/test-1">
-    _A_aaabbb_
-    _B_aaabbb_
-    _C_AAABBB_
-    _D_bb_
+      _A_aaabbb_
+      _B_aaabbb_
+      _C_AAABBB_
+      _D_bb_
+    </script>
+    <script type="text/test-2">
+      _A_a2b4c6d8e0_
+      _B_aaabbb_
+      _C_AAABBB_
+      _D_bb_
+    </script>
+    <script type="text/test-3">
+      _A_a2b4c6d8e0_
+      _B_a2b4c6d8e0_
+      _C_AAABBB_
+      _D_bb_
+    </script>
+    <script type="text/test-4">
+      _A_a2b4c6d8e0_
+      _B_a2b4c6d8e0_
+      _C_A2B4C6D8E0_
+      _D_bb_
+    </script>
+    <script type="text/test-5">
+      _A_a2b4c6d8e0_
+      _B_a2b4c6d8e0_
+      _C_A2B4C6D8E0_
+      _D_c6d8e0_
     </script>
   </head>
   <body>
