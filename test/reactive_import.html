@@ -17,11 +17,19 @@
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
-            if (snapshots.length < 5)
-                return
-            Assert.assertSameTo("script[type='text/test-1']", snapshots.slice(-1)[0]);
-            Assert.assertSameText("a2b4c6d8e0", document.querySelector("#valueA").value);
+            if (snapshots.length == 5)
+                Test.start();
+            if (snapshots.length > 5)
+                Assert.fail("More steps than expected");
         });
+
+        Test.create({test() {
+            Assert.assertSameTo("script[type='text/test-1']", snapshots[4])
+        }});
+
+        Test.create({test() {
+            Assert.assertSameText("a2b4c6d8e0", document.querySelector("#valueA").value);
+        }});
 
         const modelA = {
             valueA: "hallo"

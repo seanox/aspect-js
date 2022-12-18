@@ -17,9 +17,15 @@
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
-            if (snapshots.length >= 4)
-                Assert.assertSameTo("script[type='text/test-1']", snapshots.slice(-1)[0]);
+            if (snapshots.length == 4)
+                Test.start();
+            if (snapshots.length > 4)
+                Assert.fail("More steps than expected");
         });
+
+        Test.create({test() {
+            Assert.assertSameTo("script[type='text/test-1", snapshots[3]);
+        }});
 
         const modelA = {
             valueA: ["Spring", "Winter"]
