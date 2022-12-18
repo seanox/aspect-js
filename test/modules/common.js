@@ -26,7 +26,7 @@ if (Test.read === undefined) {
 }
 
 if (String.prototype.simplify === undefined) {
-    String.prototype.simplify = function () {
+    String.prototype.simplify = function() {
         return this.trim().replace(/\t/g, "    ")
             .replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n")
             .replace(/(\s*\n\s*)+/gm, "\n")
@@ -34,16 +34,24 @@ if (String.prototype.simplify === undefined) {
     }
 }
 
+if (console.test === undefined) {
+    console.test = function(content) {
+        console.test.count = (console.test.count || 0) +1;
+        console.log("script: #" + console.test.count);
+        console.log("<script type=\"text/test\">\n", String(content || "").simplify(), "\n<\/script>")
+    }
+}
+
 if (typeof Assert !== "undefined") {
 
     Assert.assertSameText = function(expected, actual) {
-        Assert.assertEquals((expected || "").simplify(), (actual || "").simplify());
+        Assert.assertEquals(String(expected || "").simplify(), String(actual || "").simplify());
     };
     
     Assert.assertSameTo = function(selector, actual) {
         const element = document.querySelector(selector);
         const content = element.innerHTML;
-        Assert.assertEquals(content.simplify(), (actual || "").simplify());
+        Assert.assertEquals(content.simplify(), String(actual || "").simplify());
     };
     
     Assert.assertIn = function(values, actual) {
