@@ -10,13 +10,34 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script>
+    <script type="text/javascript">
         Test.activate();
-        // TODO:
-    </script>
-  </head>
-  <body>
-    <script>
+
+        const snapshots = [];
+        const values = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            if (document.querySelector("input"))
+                values.push(document.querySelector("input").value);
+            const count = document.querySelectorAll("script[type=\"text/test\"]").length;
+            if (snapshots.length == count)
+                Test.start();
+            if (snapshots.length >= count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);
+        });
+
+        Test.create({test() {
+            snapshots.forEach((snapshot, index) => {
+                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
+            });
+        }});
+
+        Test.create({test() {
+            const pattern = ["a2b4c6d8e0", "a2b4c6d8e0", "a2b4c6d8e0", "b4c6d8e0a2", "b4c6d8e0a2", "b4c6d8e0a2"];
+            Assert.assertEquals(JSON.stringify(pattern), JSON.stringify(values.slice(1)));
+        }});
+
         SiteMap.customize({
             "#": ["modelA"],
             "#modelA": []
@@ -24,18 +45,90 @@
         modelA = {
             valueA: "hallo"
         }.toReactProxy();
-        window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 2000)
-    </script>
-    _A_{{modelA.valueA}}_
-    _B_{{modelA.valueA}}_
 
-    <p id="modelA" composite>
-      TODO: Test: http://127.0.0.1:8000/playground
+        window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
+        window.setTimeout(() => {window.location.href = "#modela";}, 2000)
+        window.setTimeout(() => {modelA.valueA = "b4c6d8e0a2";}, 3000)
+    </script>
+    <script type="text/test">
+       _A_hallo_
+      _C_HALLO_
+      _D_o_
+    </script>
+    <script type="text/test">
+       _A_hallo_
+      _C_HALLO_
+      _D_o_
+    </script>
+    <script type="text/test">
+       _A_a2b4c6d8e0_
+      _C_HALLO_
+      _D_o_
+    </script>
+    <script type="text/test">
+       _A_a2b4c6d8e0_
+      _C_A2B4C6D8E0_
+      _D_o_
+    </script>
+    <script type="text/test">
+       _A_a2b4c6d8e0_
+      _C_A2B4C6D8E0_
+      _D_c6d8e0_
+    </script>
+    <script type="text/test">
+       _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: a2b4c6d8e0
+      _C_A2B4C6D8E0_
+      _D_c6d8e0_
+    </script>
+    <script type="text/test">
+       _A_b4c6d8e0a2_
+      Value of variable modelA.valueA: a2b4c6d8e0
+      _C_A2B4C6D8E0_
+      _D_c6d8e0_
+    </script>
+    <script type="text/test">
+       _A_b4c6d8e0a2_
+      Value of variable modelA.valueA: a2b4c6d8e0
+      _C_B4C6D8E0A2_
+      _D_c6d8e0_
+    </script>
+    <script type="text/test">
+       _A_b4c6d8e0a2_
+      Value of variable modelA.valueA: a2b4c6d8e0
+      _C_B4C6D8E0A2_
+      _D_d8e0a2_
+    </script>
+    <script type="text/test">
+       _A_b4c6d8e0a2_
+      Value of variable modelA.valueA: a2b4c6d8e0
+      _C_B4C6D8E0A2_
+      _D_d8e0a2_
+    </script>
+    <script type="text/test">
+       _A_b4c6d8e0a2_
+      Value of variable modelA.valueA: b4c6d8e0a2
+      _C_B4C6D8E0A2_
+      _D_d8e0a2_
+    </script>
+    <script type="text/test">
+       _A_b4c6d8e0a2_
+      Value of variable modelA.valueA: b4c6d8e0a2
+      _C_B4C6D8E0A2_
+      _D_d8e0a2_
+    </script>
+  </head>
+  <!--
+        TODO: Test: http://127.0.0.1:8000/playground
             Eingabefeld nicht sichtbar
       TODO: Test: http://127.0.0.1:8000/playground/#modela
             Eingabefeld sichtbar und muss funktionieren
             Wenn direkt aufgerufen, dann ist auch die Änderung durch den Timer sichtbar
             Wenn verzögert aufgerufen, dann ist die Änderung nach dem Timer sichtbar
+-->
+  <body>
+    _A_{{modelA.valueA}}_
+    <p id="modelA" composite>
       <input type="text" id="valueA" events="input" value="{{modelA.valueA}}">
       Value of variable modelA.valueA: {{modelA.valueA}}
     </p>
