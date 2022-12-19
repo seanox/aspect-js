@@ -10,7 +10,7 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script>
+    <script type="text/javascript">
         Test.activate();
 
         const snapshots = [];
@@ -28,16 +28,15 @@
 
         Test.create({test() {
             snapshots.forEach((snapshot, index) => {
-                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent,
-                        snapshots[index]);
+                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
             });
         }});
 
         Test.create({test() {
-            const pattern = ("test 123 123 123 123 123 123 123 123 _123_"
-                    + " _123_ _123_ _123_ _123_ _123_ _123_ _123_ test test test"
-                    + " test test test test test").split(/\s+/);
-            Assert.assertEquals(JSON.stringify(pattern), JSON.stringify(values));
+            const pattern = ["test", "test", "test", "test", "test", "test", "test",
+                    "123", "123", "123", "123", "123", "123", "123",
+                    "_123_", "_123_", "_123_", "_123_", "_123_", "_123_", "_123_"];
+            Assert.assertEquals(JSON.stringify(pattern), JSON.stringify(values.slice(1)));
         }});
 
         // TODO: use const modelA
@@ -45,207 +44,184 @@
             value: "hallo"
         }.toReactProxy();
 
-        window.setTimeout(() => {document.querySelector("#value").typeValue("test");}, 10000);
+        window.setTimeout(() => {document.querySelector("#value").typeValue("test");}, 1000);
         window.setTimeout(() => {document.querySelector("#value").typeValue("123");}, 1500);
         window.setTimeout(() => {document.querySelector("#value").typeValue("_123_");}, 2000);
     </script>
     <script type="text/test">
-      _A_hallo_
+       _A_hallo_
       Value of variable modelA.value: hallo
       SPAN
       _A_hallo_
       _B_HALLO_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: hallo
-      SPAN
-      _A_hallo_
-      _B_HALLO_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: hallo
-      SPAN
-      _A_hallo_
-      _B_HALLO_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: 123
-      SPAN
-      _A_hallo_
-      _B_HALLO_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: 123
-      _A_hallo_
-      _B_HALLO_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: 123
-      _A_123_
-      _B_HALLO_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: 123
-      _A_123_
-      _B_123_
-      _C_o_
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: 123
-      _A_123_
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A_123_
-      Value of variable modelA.value: 123
-      _A_123_
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: 123
-      _A_123_
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: 123
-      _A_123_
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: _123_
-      _A_123_
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: _123_
-      SPAN
-      _A_123_
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: _123_
-      SPAN
-      _A__123__
-      _B_123_
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: _123_
-      SPAN
-      _A__123__
-      _B__123__
-      _C__
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: _123_
-      SPAN
-      _A__123__
-      _B__123__
-      _C___
-    </script>
-    <script type="text/test">
-      _A__123__
-      Value of variable modelA.value: _123_
-      SPAN
-      _A__123__
-      _B__123__
-      _C___
+      _C_o_ 
     </script>
     <script type="text/test">
        _A_test_
+      Value of variable modelA.value: hallo
+      SPAN
+      _A_hallo_
+      _B_HALLO_
+      _C_o_ 
+    </script>
+    <script type="text/test">
+       _A_test_
+      Value of variable modelA.value: test
+      SPAN
+      _A_hallo_
+      _B_HALLO_
+      _C_o_ 
+    </script>
+    <script type="text/test">
+       _A_test_
+      Value of variable modelA.value: test
+      SPAN
+      _A_hallo_
+      _B_HALLO_
+      _C_o_ 
+    </script>
+    <script type="text/test">
+       _A_test_
+      Value of variable modelA.value: test
+      SPAN
+      _A_test_
+      _B_HALLO_
+      _C_o_ 
+    </script>
+    <script type="text/test">
+       _A_test_
+      Value of variable modelA.value: test
+      SPAN
+      _A_test_
+      _B_TEST_
+      _C_o_ 
+    </script>
+    <script type="text/test">
+       _A_test_
+      Value of variable modelA.value: test
+      SPAN
+      _A_test_
+      _B_TEST_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_test_
+      Value of variable modelA.value: test
+      SPAN
+      _A_test_
+      _B_TEST_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: test
+      SPAN
+      _A_test_
+      _B_TEST_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: 123
+      SPAN
+      _A_test_
+      _B_TEST_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: 123
+      _A_test_
+      _B_TEST_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: 123
+      _A_123_
+      _B_TEST_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: 123
+      _A_123_
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: 123
+      _A_123_
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A_123_
+      Value of variable modelA.value: 123
+      _A_123_
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A__123__
+      Value of variable modelA.value: 123
+      _A_123_
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A__123__
+      Value of variable modelA.value: _123_
+      _A_123_
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A__123__
+      Value of variable modelA.value: _123_
+      SPAN
+      _A_123_
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A__123__
+      Value of variable modelA.value: _123_
+      SPAN
+      _A__123__
+      _B_123_
+      _C__ 
+    </script>
+    <script type="text/test">
+       _A__123__
       Value of variable modelA.value: _123_
       SPAN
       _A__123__
       _B__123__
-      _C___
+      _C__ 
     </script>
     <script type="text/test">
-      _A_test_
+       _A__123__
       Value of variable modelA.value: _123_
       SPAN
       _A__123__
       _B__123__
-      _C___
+      _C___ 
     </script>
     <script type="text/test">
-      _A_test_
-      Value of variable modelA.value: test
+       _A__123__
+      Value of variable modelA.value: _123_
       SPAN
       _A__123__
       _B__123__
-      _C___
-    </script>
-    <script type="text/test">
-      _A_test_
-      Value of variable modelA.value: test
-      SPAN
-      _A__123__
-      _B__123__
-      _C___
-    </script>
-    <script type="text/test">
-      _A_test_
-      Value of variable modelA.value: test
-      SPAN
-      _A_test_
-      _B__123__
-      _C___
-    </script>
-    <script type="text/test">
-      _A_test_
-      Value of variable modelA.value: test
-      SPAN
-      _A_test_
-      _B_TEST_
-      _C___
-    </script>
-    <script type="text/test">
-      _A_test_
-      Value of variable modelA.value: test
-      SPAN
-      _A_test_
-      _B_TEST_
-      _C__
-    </script>
-    <script type="text/test">
-      _A_test_
-      Value of variable modelA.value: test
-      SPAN
-      _A_test_
-      _B_TEST_
-      _C__
+      _C___ 
     </script>
   </head>
   <body>
     _A_{{modelA.value}}_
     <p id="modelA" composite static>
-      <input type="text" id="value" events="input" xvalue="{{modelA.value}}"/>
+      <input type="text" id="value" events="input"/>
       Value of variable modelA.value: {{modelA.value}}
     </p>
     <span condition="{{modelA.value != '123'}}">
