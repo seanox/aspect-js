@@ -10,7 +10,7 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script>
+    <script type="text/javascript">
         Test.activate();
 
         const snapshots = [];
@@ -20,11 +20,11 @@
             if (snapshots.length == 4)
                 Test.start();
             if (snapshots.length > 4)
-                Assert.fail("More steps than expected");
+                Assert.assertEquals("expected {1} steps but was {2}", 4, snapshots.length);
         });
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-1", snapshots[3]);
+            Assert.assertSameTo("script[type='text/test", snapshots[3]);
         }});
 
         const modelA = {
@@ -32,7 +32,7 @@
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = ["Spring", "Summer", "Autumn", "Winter"];}, 1000)
     </script>
-    <script type="text/test-1">
+    <script type="text/test">
     _A_Spring,Summer,Autumn,Winter_
     _B_Spring,Summer,Autumn,Winter_
         Spring

@@ -10,7 +10,7 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script>
+    <script type="text/javascript">
         Test.activate();
 
         const snapshots = [];
@@ -20,15 +20,17 @@
             if (snapshots.length == 9)
                 Test.start();
             if (snapshots.length > 9)
-                Assert.fail("More steps than expected");
+                Assert.assertEquals("expected {1} steps but was {2}", 9, snapshots.length);
         });
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-1']", snapshots[7]);
+            Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[0].textContent,
+                    snapshots[7]);
         }});
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-2']", snapshots[8]);
+            Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[1].textContent,
+                    snapshots[8]);
         }});
 
         const modelA = {
@@ -39,13 +41,13 @@
         window.setTimeout(() => {modelA.valueA = 456}, 1500);
         window.setTimeout(() => {modelA.valueA = 123}, 1750);
     </script>
-    <script type="text/test-1">
+    <script type="text/test">
       _A_123_
       true:  _true
       false: _
       react: _A456B
     </script>
-    <script type="text/test-2">
+    <script type="text/test">
       _A_123_
       true:  _true
       false: _

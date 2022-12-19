@@ -10,7 +10,7 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script>
+    <script type="text/javascript">
         Test.activate();
 
         const snapshots = [];
@@ -19,15 +19,16 @@
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
             values.push(document.querySelector("#valueA").value);
-            if (snapshots.length == 4)
+            const count = document.querySelectorAll("script[type=\"text/test\"]").length;
+            if (snapshots.length == count)
                 Test.start();
-            if (snapshots.length > 4)
-                Assert.fail("More steps than expected");
+            if (snapshots.length >= count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);
         });
 
         Test.create({test() {
             snapshots.forEach((snapshot, index) => {
-                Assert.assertSameTo("script[type='text/test-" + (index +1) + "']", snapshot);
+                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
             });
         }});
 
@@ -40,19 +41,19 @@
         }.toReactProxy();
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
     </script>
-    <script type="text/test-1">
+    <script type="text/test">
       _A_hallo_
       Value of variable modelA.valueA: hallo
     </script>
-    <script type="text/test-2">
+    <script type="text/test">
       _A_a2b4c6d8e0_
       Value of variable modelA.valueA: hallo
     </script>
-    <script type="text/test-3">
+    <script type="text/test">
       _A_a2b4c6d8e0_
       Value of variable modelA.valueA: hallo
     </script>
-    <script type="text/test-4">
+    <script type="text/test">
       _A_a2b4c6d8e0_
       Value of variable modelA.valueA: a2b4c6d8e0
     </script>

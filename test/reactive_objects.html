@@ -10,22 +10,23 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script>
+    <script type="text/javascript">
         Test.activate();
 
         const snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
-            if (snapshots.length == 14)
+            const count = document.querySelectorAll("script[type=\"text/test\"]").length;
+            if (snapshots.length == count)
                 Test.start();
-            if (snapshots.length > 14)
-                Assert.fail("More steps than expected");
+            if (snapshots.length >= count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);
         });
 
         Test.create({test() {
             snapshots.forEach((snapshot, index) => {
-              Assert.assertSameTo("script[type='text/test-" + (index + 1) + "']", snapshots[index]);
+                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
             });
         }});
 
@@ -89,7 +90,7 @@
         window.setTimeout(() => {modelX.a = "B"}, 1000);
         window.setTimeout(() => {modelA.a = "C"}, 3000);
     </script>
-    <script type="text/test-1">
+    <script type="text/test">
       A: _10000_
       C: _20000_
       F: _30000_
@@ -105,7 +106,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-2">
+    <script type="text/test">
       A: _10001_
       C: _20000_
       F: _30000_
@@ -121,7 +122,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-3">
+    <script type="text/test">
       A: _10002_
       C: _20000_
       F: _30000_
@@ -137,7 +138,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-4">
+    <script type="text/test">
       A: _10003_
       C: _20000_
       F: _30000_
@@ -153,7 +154,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-5">
+    <script type="text/test">
       A: _10003_
       C: _20010_
       F: _30000_
@@ -169,7 +170,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-6">
+    <script type="text/test">
       A: _10003_
       C: _20020_
       F: _30000_
@@ -185,7 +186,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-7">
+    <script type="text/test">
       A: _10003_
       C: _20030_
       F: _30000_
@@ -201,7 +202,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-8">
+    <script type="text/test">
       A: _10003_
       C: _20030_
       F: _30100_
@@ -217,7 +218,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-9">
+    <script type="text/test">
       A: _10003_
       C: _20030_
       F: _30100_
@@ -233,7 +234,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-10">
+    <script type="text/test0">
       A: _10003_
       C: _20030_
       F: _30200_
@@ -249,7 +250,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-11">
+    <script type="text/test1">
       A: _10003_
       C: _20030_
       F: _30300_
@@ -265,7 +266,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-12">
+    <script type="text/test2">
       A: _10003_
       C: _20030_
       F: _30300_
@@ -281,7 +282,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-13">
+    <script type="text/test3">
       A: _10003_
       C: _20030_
       F: _30300_
@@ -297,7 +298,7 @@
       Test 5: true
       Test 6: true
     </script>
-    <script type="text/test-14">
+    <script type="text/test4">
       A: _10003_
       C: _20030_
       F: _30300_
