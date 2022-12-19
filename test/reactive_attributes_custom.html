@@ -28,23 +28,15 @@
 
         Test.create({test() {
             snapshots.forEach((snapshot, index) => {
+                console.log(`Test based on script #${index +1}`);
                 Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
             });
         }});
 
         Test.create({test() {
             Assert.assertEquals(values[0], values[1]);
-        }});
-
-        Test.create({test() {
             Assert.assertEquals(values[2], values[3]);
-        }});
-
-        Test.create({test() {
             Assert.assertNotEquals(values[1], values[2]);
-        }});
-
-        Test.create({test() {
             Assert.assertTrue(values[1] < values[2]);
         }});
 

@@ -29,6 +29,7 @@
 
         Test.create({test() {
             snapshots.forEach((snapshot, index) => {
+                console.log(`Test based on script #${index +1}`);
                 Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
             });
         }});

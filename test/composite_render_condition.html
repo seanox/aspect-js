@@ -60,10 +60,13 @@
             let snapshot = document.body.textContent;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshots.push(snapshot);
-            if (snapshots.length < 5)
+            const count = document.querySelectorAll("script[type=\"text/test\"]").length;
+            if (snapshots.length < count)
                 Composite.asynchron(Composite.render, document.body);
-            else if (snapshots.length === 5)
+            if (snapshots.length == count)
                 Test.start();
+            if (snapshots.length > count)
+                Assert.assertEquals("expected {1} steps but was {2}", 5, snapshots.length);
         });
 
         Namespace.create("x1", 0);
@@ -77,20 +80,12 @@
         let z4 = "d";
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-1']", snapshots.shift());
+            snapshots.forEach((snapshot, index) => {
+                console.log(`Test based on script #${index +1}`);
+                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
+            });
         }});
-        Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-2']", snapshots.shift());
-        }});
-        Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-3']", snapshots.shift());
-        }});
-        Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-4']", snapshots.shift());
-        }});
-        Test.create({test() {
-            Assert.assertSameTo("script[type='text/test-5']", snapshots.shift());
-        }});
+
         Test.create({test() {
             const error = String(console.output.error);
             Assert.assertTrue(error.includes("Invalid condition: {{null"));
@@ -99,7 +94,7 @@
             Assert.assertTrue(error.includes("Invalid condition: true"));
         }});
     </script>
-    <script type="text/test-1">
+    <script type="text/test">
 A1AA
 B1B
 C1C
@@ -134,7 +129,7 @@ z2: b_
 z3: c
 z4: d
     </script>
-    <script type="text/test-2">
+    <script type="text/test">
 A1AA
 B1B
 C1C
@@ -165,7 +160,7 @@ z2: b__
 z3: c
 z4: d
     </script>
-    <script type="text/test-3">
+    <script type="text/test">
 A1AA
 B1B
 C1C
@@ -201,7 +196,7 @@ z2: b___
 z3: c
 z4: d
     </script>
-    <script type="text/test-4">
+    <script type="text/test">
 A1AA
 B1B
 C1C
@@ -232,7 +227,7 @@ z2: b____
 z3: c
 z4: d
     </script> 
-    <script type="text/test-5">
+    <script type="text/test">
 A1AA
 B1B
 C1C
