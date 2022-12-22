@@ -533,7 +533,7 @@ if (typeof Composite === "undefined") {
             levels.forEach(level => {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
-                            || parameters.colon && level.includes("."))
+                            || (parameters.colon && level.includes(".")))
                         throw new Error(`Invalid qualifier: '${level}'`);
                     if (level.includes(":"))
                         parameters.colon = true;
@@ -565,7 +565,7 @@ if (typeof Composite === "undefined") {
             levels.forEach(level => {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
-                            || parameters.colon && level.includes("."))
+                            || (parameters.colon && level.includes(".")))
                         throw new Error(`Invalid qualifier: '${level}'`);
                     if (level.includes(":"))
                         parameters.colon = true;
@@ -596,7 +596,7 @@ if (typeof Composite === "undefined") {
             levels.forEach(level => {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
-                            || parameters.colon && level.includes("."))
+                            || (parameters.colon && level.includes(".")))
                         throw new Error(`Invalid qualifier: '${level}'`);
                     if (level.includes(":"))
                         parameters.colon = true;
@@ -1401,7 +1401,8 @@ if (typeof Composite === "undefined") {
             get property() {
                 if (this.meta.name) {
                     const property = Object.lookup(this.model, this.meta.property);
-                    if (property === null)
+                    if (property === null
+                            || property === undefined)
                         return;
                     return property[this.meta.name];
                 }
