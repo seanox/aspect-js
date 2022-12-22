@@ -68,19 +68,19 @@
 
         Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA.a"));
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.b"));
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.c"));
+            Assert.assertEquals("string", typeof Object.lookup("exampleA.b"));
+            Assert.assertEquals("number", typeof Object.lookup("exampleA.c"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.d"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.e"));
             Assert.assertEquals("function", typeof Object.lookup("exampleA.f"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.h"));
-        }}); 
+        }});
 
         Test.create({test() {
             Assert.assertNull(Object.lookup("exampleA.a"));
-            Assert.assertNull(Object.lookup("exampleA.b"));
-            Assert.assertNull(Object.lookup("exampleA.c"));
+            Assert.assertNotNull(Object.lookup("exampleA.b"));
+            Assert.assertNotNull(Object.lookup("exampleA.c"));
             Assert.assertNotNull(Object.lookup("exampleA.d"));
             Assert.assertNotNull(Object.lookup("exampleA.e"));
             Assert.assertNotNull(Object.lookup("exampleA.f"));
@@ -92,37 +92,37 @@
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g"));
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"));
-            Assert.assertEquals("object", typeof Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }});
         
         Test.create({test() {
             Assert.assertNotNull(Object.lookup("exampleA:g"));
             Assert.assertNotNull(Object.lookup("exampleA:g:g_g"));
             Assert.assertNotNull(Object.lookup("exampleA:g:g_g:g_g_g"));
-            Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"));
-            Assert.assertNull(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA:g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }});
         
         Test.create({test() {
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g"));
             Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g"));
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
-            Assert.assertEquals("object", typeof Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
         }});
-        
-        Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g.g_g_g/i, test() {
+
+        Test.create({expected:/Invalid qualifier: 'exampleA\.g:g_g\.g_g_g'/, test() {
             Object.lookup("exampleA.g:g_g.g_g_g");
         }});         
         
         Test.create({test() {
             Assert.assertNotNull(Object.lookup("exampleA.g"));
             Assert.assertNotNull(Object.lookup("exampleA.g:g_g"));
-            Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
-            Assert.assertNull(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
-        }}); 
-        
-        Test.create({expected:/\bInvalid namespace: exampleA\.g:g_g\.g_g_g/i, test() {
+            Assert.assertUndefined(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g"));
+            Assert.assertUndefined(Object.lookup("exampleA.g:g_g:g_g_g:g_g_g_g:g_g_g_g_g"));
+        }});
+
+        Test.create({expected:/Invalid qualifier: 'exampleA\.g:g_g\.g_g_g'/, test() {
             Object.lookup("exampleA.g:g_g.g_g_g");
         }}); 
         
