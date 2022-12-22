@@ -116,7 +116,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.1 20221217
+ * @version 1.5.0 20221222
  */
 if (typeof Composite === "undefined") {
     
@@ -510,54 +510,7 @@ if (typeof Composite === "undefined") {
             return this.serial;
         };     
     }
-    
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static function to validate the namespace for an object.
-     * Without arguments, the method returns the global namespace window.
-     * In difference to the namespace function of the same name, qualifiers are
-     * also supported in the namespace. The effect is the same. Qualifiers are
-     * optional namespace elements at the end that use the colon as a separator.
-     * The method has the following various signatures:
-     *     Object.locate();
-     *     Object.locate(namespace);
-     *     Object.locate(object, namespace);
-     * @param  object
-     * @param  namespace
-     * @return the created or already existing object(-level)
-     * @throws An error occurs in case of invalid data types or syntax 
-     */     
-    if (Object.locate === undefined)
-        Object.locate = function(...variants) {
-        
-            let scope;
-            let namespace;
-            
-            if (variants.length === 0)
-                return {scope:window};
-            
-            if (variants.length > 1) {
-                scope = variants[0];
-                namespace = variants[1];
-            } else if (variants.length > 0) {
-                scope = window;
-                namespace = variants[0];
-            } else throw new TypeError("Invalid namespace");
-            
-            if (typeof scope !== "object")
-                throw new TypeError("Invalid scope: " + typeof scope);        
-            if (typeof namespace !== "string")
-                throw new TypeError("Invalid namespace: " + typeof namespace);
-    
-            if (!namespace.match(Composite.PATTERN_NAMESPACE)
-                    || (scope === window && namespace.match(/^\d/)))
-                throw new Error("Invalid namespace" + (namespace.trim() ? ": " + namespace : ""));
-            
-            namespace = namespace.replace(Composite.PATTERN_NAMESPACE_SEPARATOR, ".");
-            
-            return {scope, namespace};
-        };      
-        
+
     /**
      * Enhancement of the JavaScript API
      * Adds a static function to create a namespace for an object.
@@ -575,11 +528,19 @@ if (typeof Composite === "undefined") {
      * @throws An error occurs in case of invalid data types or syntax 
      */ 
     if (Object.using === undefined)
-        Object.using = function(...variants) {
-            const meta = Object.locate(...variants);
-            if (meta.namespace === undefined)
-                return meta.scope; 
-            return Namespace.using.call(null, meta.scope, meta.namespace);
+        Object.using = function(...levels) {
+            const parameters = [];
+            levels.forEach(level => {
+                if (typeof level === "string") {
+                    if (level.match(/.*:.*\..*/)
+                            || parameters.colon && level.includes("."))
+                        throw new Error(`Invalid qualifier: '${level}'`);
+                    if (level.includes(":"))
+                        parameters.colon = true;
+                    parameters.push(...level.split(/\:/));
+                } else parameters.push(level);
+            });
+            return Namespace.exists.using(null, parameters);
         };
     
     /**
@@ -599,11 +560,19 @@ if (typeof Composite === "undefined") {
      * @throws An error occurs in case of invalid data types or syntax
      */ 
     if (Object.lookup === undefined)
-        Object.lookup = function(...variants) {
-            const meta = Object.locate(...variants);
-            if (meta.namespace === undefined)
-                return meta.scope; 
-            return Namespace.lookup.call(null, meta.scope, meta.namespace);       
+        Object.lookup = function(...levels) {
+            const parameters = [];
+            levels.forEach(level => {
+                if (typeof level === "string") {
+                    if (level.match(/.*:.*\..*/)
+                            || parameters.colon && level.includes("."))
+                        throw new Error(`Invalid qualifier: '${level}'`);
+                    if (level.includes(":"))
+                        parameters.colon = true;
+                    parameters.push(...level.split(/\:/));
+                } else parameters.push(level);
+            });
+            return Namespace.lookup.apply(null, parameters);
         };
         
     /**
@@ -622,8 +591,19 @@ if (typeof Composite === "undefined") {
      * @throws An error occurs in case of invalid data types or syntax
      */ 
     if (Object.exists === undefined)
-        Object.exists = function(...variants) {
-            return Object.lookup(...variants) !== null;   
+        Object.exists = function(...levels) {
+            const parameters = [];
+            levels.forEach(level => {
+                if (typeof level === "string") {
+                    if (level.match(/.*:.*\..*/)
+                            || parameters.colon && level.includes("."))
+                        throw new Error(`Invalid qualifier: '${level}'`);
+                    if (level.includes(":"))
+                        parameters.colon = true;
+                    parameters.push(...level.split(/\:/));
+                } else parameters.push(level);
+            });
+            return Namespace.exists.apply(null, parameters);
         };
 
     /**
