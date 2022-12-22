@@ -37,8 +37,8 @@ if (String.prototype.simplify === undefined) {
 if (console.test === undefined) {
     console.test = function(content) {
         console.test.count = (console.test.count || 0) +1;
-        console.log("script: #" + console.test.count);
-        console.log("<script type=\"text/test\">\n", String(content || "").simplify(), "\n<\/script>")
+        console.log(`script: #${console.test.count}`);
+        console.log(`<script type="text/test">\n${String(content || "").simplify()}\n<\/script>`);
     }
 }
 
