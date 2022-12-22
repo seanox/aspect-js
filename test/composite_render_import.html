@@ -88,34 +88,34 @@
         }});
         
         Test.create({test() {
-            Assert.assertEquals(1, modulA$count);
+            Assert.assertEquals(1, moduleA$count);
         }});
         Test.create({test() {
-            Assert.assertEquals(1, modulB$count);
+            Assert.assertEquals(1, moduleB$count);
         }});
         Test.create({test() {
-            Assert.assertEquals(1, modulC$count);
+            Assert.assertEquals(1, moduleC$count);
         }});
         Test.create({test() {
-            Assert.assertEquals(1, modulX$count);
+            Assert.assertEquals(1, moduleX$count);
         }});
         Test.create({test() {
             let styles = document.querySelectorAll("html > head > style[type='text/css']");
             styles = Array.from(styles);
-            let stylesA = styles.filter(entry => entry.textContent.includes("modulA"));
+            let stylesA = styles.filter(entry => entry.textContent.includes("moduleA"));
             Assert.assertEquals(1, stylesA.length);
-            let stylesB = styles.filter(entry => entry.textContent.includes("modulB"));
+            let stylesB = styles.filter(entry => entry.textContent.includes("moduleB"));
             Assert.assertEquals(1, stylesB.length);
-            let stylesC = styles.filter(entry => entry.textContent.includes("modulC"));
+            let stylesC = styles.filter(entry => entry.textContent.includes("moduleC"));
             Assert.assertEquals(1, stylesC.length);
-            let stylesX = styles.filter(entry => entry.textContent.includes("modulX"));
+            let stylesX = styles.filter(entry => entry.textContent.includes("moduleX"));
             Assert.assertEquals(1, stylesX.length);
         }});
         
         Test.create({test() {
             // Invalid modules, no error expected
-            Composite.render.include("io/modulE");
-            Composite.render.include("io/modulY");
+            Composite.render.include("io/moduleE");
+            Composite.render.include("io/moduleY");
         }});
         
         Test.create({test() {
@@ -132,33 +132,36 @@
             let result = "";
             for (const [key, value] of urlMap)
                 result += "\r\n" + key + " " + value.join("");
+
+            console.test(result);
+
             Assert.assertSameTo("script[type='text/test']", result);
         }});
     </script>
     <script type="text/test">
 /modules/common.css 404 X
 /modules/common.js 200 XX
-/modules/modulA.css 200 XX
-/modules/modulA.js 200 XX
-/modules/modulB.css 200 XX
-/modules/modulB.js 200 XX
-/modules/modulC.css 200 XX
-/modules/modulC.js 200 XX
-/modules/io/modulX.css 200 XX
-/modules/io/modulX.js 200 XX
-/modules/io/modulY.css 404 X
-/modules/io/modulY.js 404 X
-/modules/modulA.html 404 X
-/modules/modulE.css 404 X
-/modules/modulE.js 404 X
-/modules/modulE.html 404 X
+/modules/moduleA.css 200 XX
+/modules/moduleA.js 200 XX
+/modules/moduleB.css 200 XX
+/modules/moduleB.js 200 XX
+/modules/moduleC.css 200 XX
+/modules/moduleC.js 200 XX
+/modules/io/moduleX.css 200 XX
+/modules/io/moduleX.js 200 XX
+/modules/io/moduleY.css 404 X
+/modules/io/moduleY.js 404 X
+/modules/moduleA.html 404 X
+/modules/moduleE.css 404 X
+/modules/moduleE.js 404 X
+/modules/moduleE.html 404 X
 /resources/import_a.htmlx 200 X
 /resources/import_b.htmlx 200 X
 /resources/import_o.htmlx 404 XXX
 https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_x.htmlx 200 X
 /resources/import_c.htmlx 200 X
-/modules/io/modulE.css 404 X
-/modules/io/modulE.js 404 X
+/modules/io/moduleE.css 404 X
+/modules/io/moduleE.js 404 X
 /nix.xxx 404 XXX
     </script>
   </head>
@@ -176,8 +179,8 @@ https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_
       loading resource...  
     </article>
     <section iterate="{{x:[1,2,3]}}">
-      <div id="modulA" composite static></div>
-      <div id="modulE" composite static></div>
+      <div id="moduleA" composite static></div>
+      <div id="moduleE" composite static></div>
     </section>
   </body>
 </html>
