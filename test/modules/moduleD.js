@@ -1,4 +1,25 @@
-alert(123);
-const moduleD = {
-    test: "202212221815"
+const moduleA = {
+    test: "A"
 };
+
+var moduleB = {
+    test: "B"
+};
+
+let moduleC = {
+    test: "C"
+};
+
+moduleE = {
+    test: "E"
+};
+
+window["moduleF"] = {
+    test: "F"
+};
+
+Namespace.create("moduleG", {
+    test: "G"
+});
+
+Namespace.using("moduleH");
