@@ -219,6 +219,8 @@
     * [assertNotSame](test.md#assertnotsame)
     * [assertNull](test.md#assertnull)
     * [assertNotNull](test.md#assertnotnull)
+    * [assertUndefined](test.md#assertundefined)
+    * [assertNotUndefined](test.md#assertnotundefined)
     * [fail](test.md#fail)
   * [Konfiguration](test.md#konfiguration)
     * [auto](test.md#auto)

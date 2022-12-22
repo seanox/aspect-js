@@ -221,6 +221,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [assertNotSame](test.md#assertnotsame)
     * [assertNull](test.md#assertnull)
     * [assertNotNull](test.md#assertnotnull)
+    * [assertUndefined](test.md#assertundefined)
+    * [assertNotUndefined](test.md#assertnotundefined)
     * [fail](test.md#fail)
   * [Configuration](test.md#configuration)
     * [auto](test.md#auto)

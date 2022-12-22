@@ -42,6 +42,8 @@ Test.start();
   * [assertNotSame](#assertnotsame)
   * [assertNull](#assertnull)
   * [assertNotNull](#assertnotnull)
+  * [assertUndefined](#assertundefined)
+  * [assertNotUndefined](#assertnotundefined)
   * [fail](#fail)
 * [Konfiguration](#konfiguration)
   * [auto](#auto)
@@ -314,6 +316,16 @@ Test.create({test() {
 
 Test.start();
 ```
+
+
+### assertUndefined
+
+TODO:
+
+
+### assertNotUndefined
+
+TODO:
 
 
 ### fail

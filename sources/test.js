@@ -83,7 +83,7 @@
  * implementation here. 
  *
  * @author  Seanox Software Solutions
- * @version 1.1.4 20221201
+ * @version 1.2.0 20221222
  */
 if (typeof Test === "undefined") {
 
@@ -165,7 +165,7 @@ if (typeof Test === "undefined") {
                 throw new TypeError("Invalid event: " + typeof event);
             if (typeof callback !== "function"
                     && callback !== null
-                    && callback !== undefined)
+                    && typeof callback !== "undefined")
                 throw new TypeError("Invalid callback: " + typeof callback);        
             if (!event.match(Test.PATTERN_EVENT))
                 throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
@@ -866,7 +866,39 @@ if (typeof Test === "undefined") {
                     return;
                 throw assert.error("Assert.assertNotSame", "not {0}", "{1}");
             };
-    
+
+            /**
+             * Asserts that a value is undefined.
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value)
+             *     function(value)
+             * @param message
+             * @param value
+             */
+            Assert.assertUndefined = function(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] === undefined)
+                    return;
+                throw assert.error("Assert.assertUndefined", "undefined", "{0}");
+            };
+
+            /**
+             * Asserts that a value is not undefined.
+             * If the assertion is incorrect, an error with a message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value)
+             *     function(value)
+             * @param message
+             * @param value
+             */
+            Assert.assertNotUndefined = function(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] !== undefined)
+                    return;
+                throw assert.error("Assert.assertNotUndefined", "not undefined", "{0}");
+            };
+
             /**
              * Asserts that a value is null.
              * If the assertion is incorrect, an error with a message is thrown.
