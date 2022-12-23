@@ -534,7 +534,7 @@ if (typeof Composite === "undefined") {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
                             || (parameters.colon && level.includes(".")))
-                        throw new Error(`Invalid qualifier: '${level}'`);
+                        throw new Error("Invalid qualifier: " + level);
                     if (level.includes(":"))
                         parameters.colon = true;
                     parameters.push(...level.split(/\:/));
@@ -566,7 +566,7 @@ if (typeof Composite === "undefined") {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
                             || (parameters.colon && level.includes(".")))
-                        throw new Error(`Invalid qualifier: '${level}'`);
+                        throw new Error("Invalid qualifier: " + level);
                     if (level.includes(":"))
                         parameters.colon = true;
                     parameters.push(...level.split(/\:/));
@@ -597,7 +597,7 @@ if (typeof Composite === "undefined") {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
                             || (parameters.colon && level.includes(".")))
-                        throw new Error(`Invalid qualifier: '${level}'`);
+                        throw new Error("Invalid qualifier: " + level);
                     if (level.includes(":"))
                         parameters.colon = true;
                     parameters.push(...level.split(/\:/));
@@ -680,7 +680,7 @@ if (typeof Composite === "undefined") {
                 && callback !== undefined)
             throw new TypeError("Invalid callback: " + typeof callback);        
         if (!event.match(Composite.PATTERN_EVENT))
-            throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
+            throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
         
         event = event.toLowerCase();
         if (!Composite.listeners.has(event)
@@ -1294,7 +1294,7 @@ if (typeof Composite === "undefined") {
         // Composites have only a meta object with composite and model.
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+                throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
             else return {composite:serial, model:serial};
 
         const meta = {composite:null, model:null, property:null, name:null};
@@ -1315,7 +1315,7 @@ if (typeof Composite === "undefined") {
             
             let serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_ELEMENT_ID))
-                throw new Error("Invalid element id" + (serial ? ": " + serial : ""));
+                throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
             if (meta.model)
                 meta.model = serial + "." + meta.model;
             else meta.model = serial;
@@ -1325,7 +1325,7 @@ if (typeof Composite === "undefined") {
             // with the first composite.
             if (scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
                 if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                    throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+                    throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
                 meta.composite = serial;
                 break;
             }            
@@ -2205,7 +2205,7 @@ if (typeof Composite === "undefined") {
                     && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                 const model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                 if (!model.match(Composite.PATTERN_COMPOSITE_ID))
-                    throw new Error("Invalid composite id" + (model ? ": " + model : ""));
+                    throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
                 dock(model);
             }
             
@@ -2263,7 +2263,7 @@ if (typeof Composite === "undefined") {
                     if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                         const model = String(placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
                         if (!model.match(Composite.PATTERN_COMPOSITE_ID))
-                            throw new Error("Invalid composite id" + (model ? ": " + model : ""));
+                            throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
                         dock(model);
                     }
                     
@@ -2315,7 +2315,7 @@ if (typeof Composite === "undefined") {
 
                     const condition = (placeholder.condition || "").trim();
                     if (!condition.match(Composite.PATTERN_EXPRESSION_CONDITION))
-                        console.error("Invalid condition" + (condition ? ": " + condition : ""));
+                        console.error(`Invalid condition${condition ? ": " + condition : ""}`);
                     
                     // The output is removed from the DOM because the condition
                     // is not explicitly true.
@@ -2396,7 +2396,7 @@ if (typeof Composite === "undefined") {
                             request.open("GET", url, false);
                             request.send();
                             if (request.status !== 200)
-                                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+                                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
                             const content = request.responseText.trim();
                             Composite.render.cache[request.responseURL] = content;
                             selector.innerHTML = content;
@@ -2516,7 +2516,7 @@ if (typeof Composite === "undefined") {
                             expression:"{{" + content[2].trim() + "}}"
                         };
                         object.template = selector.cloneNode(true);
-                    } else console.error("Invalid iterate" + (iterate ? ": " + iterate : ""));
+                    } else console.error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
                 }
                 if (object.iterate) {
                     // A temporary global variable is required for the iteration.
@@ -2734,7 +2734,7 @@ if (typeof Composite === "undefined") {
             if (request.status === 404)
                 return;
             if (request.status !== 200)
-                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
 
             // If the resource exists it will be loaded.
             // Only server states 200 and 404 are supported, all others will
@@ -2744,7 +2744,7 @@ if (typeof Composite === "undefined") {
             if (request.status === 404)
                 return;
             if (request.status !== 200)
-                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
 
             // CSS is inserted into the HEad element as a style element.
             // Without a head element, the inserting causes an error.
