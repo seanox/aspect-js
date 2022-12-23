@@ -101,7 +101,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.2 20221016
+ * @version 1.2.2 20221223
  */
 if (typeof Path === "undefined") {
     
@@ -120,7 +120,7 @@ if (typeof Path === "undefined") {
          * more word characters and additionally - can follow, but can not end
          * with the - character. Paths are separated by the # character.
          */
-        get PATTERN_PATH() {return /(?:^(?:\w(?:\-*\w)*)*(?:(?:#+\w(?:\-*\w)*)+)#*$)|(?:^\w(?:\-*\w)*$)|(?:^#+$)|(?:^$)/;},
+        get PATTERN_PATH() {return /(^(\w(\-*\w)*)*((#+\w(\-*\w)*)+)#*$)|(^\w(\-*\w)*$)|(^#+$)|(^$)/;},
     
         /** Pattern for an url path. */
         get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i;},
@@ -210,7 +210,7 @@ if (typeof Path === "undefined") {
             try {root = Path.normalize(root);
             } catch (exception) {
                 root = (root || "").trim();
-                throw new TypeError("Invalid root" + (root ? ": " + root : ""));
+                throw new TypeError(`Invalid root${root ? `: ${root}` : ""}`);
             }        
         }
         
@@ -231,7 +231,7 @@ if (typeof Path === "undefined") {
         path = (path || "").trim();
         
         if (!path.match(Path.PATTERN_PATH))
-            throw new TypeError("Invalid path" + (String(path).trim() ? ": " + path : ""));
+            throw new TypeError(`Invalid path${String(path).trim() ? `: ${path}` : ""}`);
         
         path = path.replace(/([^#])#$/, "$1");
         path = path.replace(/^([^#])/, "#$1");
@@ -500,7 +500,7 @@ if (typeof SiteMap === "undefined") {
      *     URL itself is ignored)
      */  
     SiteMap.forward = function(path) {
-        const event = new Event("hashchange",{"bubbles":false, "cancelable":true})
+        const event = new Event("hashchange",{bubbles:false, cancelable:true})
         event.newURL = path;
         window.dispatchEvent(event);
     };
@@ -779,7 +779,7 @@ if (typeof SiteMap === "undefined") {
             key = Path.normalize(key);
             
             // The entry is added to the path map, if necessary as empty array.
-            // Thus the following path map object will be created:
+            // Thus, the following path map object will be created:
             //     {#path:[facet, facet, ...], ...}
             if (!paths.has(key))
                 paths.set(key, []); 
@@ -798,7 +798,7 @@ if (typeof SiteMap === "undefined") {
                 facet = facet.toLowerCase().trim();
                 if (!facet.match(SiteMap.PATTERN_PATH_FACET)
                         && !facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE))
-                    throw new Error("Invalid facet" + (facet ? ": " + facet : ""));
+                    throw new Error(`Invalid facet${facet ? `: ${facet}` : ""}`);
                 
                 // Variable paths are collected additionally, so that later on
                 // when determining the path, the complete SiteMap does not have
@@ -874,7 +874,7 @@ if (typeof SiteMap === "undefined") {
                 continue;
             const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                throw new Error("Invalid composite id" + (serial ? ": " + serial : ""));
+                throw new Error(`Invalid composite id${serial ? `: ${serial}` : ""}`);
             path = "#" + serial + path;
         }
 
@@ -884,11 +884,11 @@ if (typeof SiteMap === "undefined") {
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                 script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                     match = match.substring(2, match.length -2).trim();
-                    return "{{SiteMap.accept(\"" + path + "\") and (" + match + ")}}";
+                    return `{{SiteMap.accept("${path}") and (${match})}}`;
                 });
         }
         if (!script)
-            script = (script || "") + "{{SiteMap.accept(\"" + path + "\")}}";
+            script = `${script || ""}{{SiteMap.accept("${path}")}}`;
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
     
@@ -1018,7 +1018,7 @@ if (typeof SiteMap === "undefined") {
             render = target;
         else if (target.startsWith(source))
             render = source;
-        render = render.match(/((?:#[^#]+)|(?:^))#*$/);
+        render = render.match(/((#[^#]+)|(^))#*$/);
         if (render && render[1] && !initial)
             Composite.render(render[1]);
         else Composite.render(document.body);

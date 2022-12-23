@@ -72,19 +72,7 @@ if (typeof Namespace === "undefined") {
         if (levels.length <= 0)
             return window;
 
-        levels.forEach((level, index) => {
-            if (index === 0
-                    && typeof level !== "object"
-                    && typeof level !== "string")
-                throw new TypeError(`Invalid namespace type at level ${index +1}: ${typeof level}`);
-            if (index === 0
-                    && level === null)
-                throw new TypeError(`Invalid namespace type at level ${index +1}: null`);
-            if (index > 0
-                    && typeof level !== "string"
-                    && typeof level !== "number")
-                throw new TypeError(`Invalid namespace type at level ${index +1}: ${typeof level}`);
-        });
+        Namespace.lookup.filter(...levels);
 
         let offset = levels.length;
         let namespace = null;
@@ -171,19 +159,7 @@ if (typeof Namespace === "undefined") {
         if (levels.length <= 0)
             return window;
 
-        levels.forEach((level, index) => {
-            if (index === 0
-                    && typeof level !== "object"
-                    && typeof level !== "string")
-                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
-            if (index === 0
-                    && level === null)
-                throw new TypeError(`Invalid namespace at level ${index +1}: null`);
-            if (index > 0
-                    && typeof level !== "string"
-                    && typeof level !== "number")
-                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
-        });
+        Namespace.lookup.filter(...levels);
 
         let offset = levels.length;
         let namespace = null;
@@ -218,6 +194,22 @@ if (typeof Namespace === "undefined") {
         }
 
         return namespace;
+    };
+
+    Namespace.lookup.filter = function(...levels) {
+        levels.forEach((level, index) => {
+            if (index === 0
+                    && typeof level !== "object"
+                    && typeof level !== "string")
+                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
+            if (index === 0
+                    && level === null)
+                throw new TypeError(`Invalid namespace at level ${index +1}: null`);
+            if (index > 0
+                    && typeof level !== "string"
+                    && typeof level !== "number")
+                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
+        });
     };
 
     /**
@@ -393,7 +385,7 @@ if (String.prototype.encodeBase64 === undefined) {
                 return String.fromCharCode("0x" + code);
             }));
         } catch (exception) {
-            throw new Error("malformed character sequence");
+            throw new Error("Malformed character sequence");
         }
     };
 }
@@ -409,7 +401,7 @@ if (String.prototype.decodeBase64 === undefined) {
                 return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
             }).join(""));
         } catch (exception) {
-            throw new Error("malformed character sequence");
+            throw new Error("Malformed character sequence");
         }
     };
 }

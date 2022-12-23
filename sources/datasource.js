@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.3.2 20211204
+ * @version 1.3.3 20221223
  */
 if (typeof DataSource === "undefined") {
     
@@ -306,7 +306,7 @@ if (typeof DataSource === "undefined") {
             request.open("GET", data, false);
             request.send();
             if (request.status !== 200)
-                throw new Error("HTTP status " + request.status + " for " + request.responseURL);
+                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
             data = request.responseXML;
             DataSource.cache[hash] = data;
             

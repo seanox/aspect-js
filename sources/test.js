@@ -113,7 +113,10 @@ if (typeof Test === "undefined") {
         get EVENT_RESPONSE() {return "response";},
         get EVENT_RESUME() {return "resume";},
         get EVENT_START() {return "start";},
-        get EVENT_SUSPEND() {return "suspend";}
+        get EVENT_SUSPEND() {return "suspend";},
+
+        /** Constants for a current timestamp */
+        get TIMESTAMP() {return new Date().toUTCString();}
     };
     
     /** 
@@ -162,13 +165,13 @@ if (typeof Test === "undefined") {
         Test.listen = function(event, callback) {
             
             if (typeof event !== "string")
-                throw new TypeError(`Invalid event: ${typeof event}`);
+                throw new TypeError("Invalid event: " + typeof event);
             if (typeof callback !== "function"
                     && callback !== null
                     && typeof callback !== "undefined")
-                throw new TypeError(`Invalid callback: ${typeof callback}`);
+                throw new TypeError("Invalid callback: " + typeof callback);
             if (!event.match(Test.PATTERN_EVENT))
-                throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
+                throw new Error(`Invalid event${event.trim() ? `: ${event}` : ""}`);
             
             event = event.toLowerCase();
             if (!Test.listeners.has(event)
@@ -425,19 +428,19 @@ if (typeof Test === "undefined") {
             Test.worker.monitor = meta ? meta.monitor : null;
             Test.worker.monitor = Test.worker.monitor || {
                 start(status) {
-                    Test.worker.output.log(`${new Date().toUTCString()} Test is started`
+                    Test.worker.output.log(Test.TIMESTAMP + " Test is started"
                             + `, ${numerical(status.queue.size, "task")} in the queue`);
                 },
                 suspend(status) {
-                    Test.worker.output.log(`${new Date().toUTCString()} Test is suspended`
+                    Test.worker.output.log(Test.TIMESTAMP + " Test is suspended"
                             + `, ${numerical(status.queue.length, "task")} still outstanding`);
                 },
                 resume(status) {
-                    Test.worker.output.log(`${new Date().toUTCString()} Test is continued`
+                    Test.worker.output.log(Test.TIMESTAMP + " Test is continued"
                             + `, ${numerical(status.queue.size, "task")} in the queue`);
                 },
                 interrupt(status) {
-                    Test.worker.output.log(`${new Date().toUTCString()} Test is interrupted`
+                    Test.worker.output.log(Test.TIMESTAMP + " Test is interrupted"
                             + `\n\t${numerical(status.queue.size -status.queue.progress, "task")} still outstanding`
                             + `\n\t${numerical(status.queue.faults, "fault")} were detected`
                             + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
@@ -447,11 +450,11 @@ if (typeof Test === "undefined") {
                 response(status) {
                     const timing = new Date().getTime() -status.task.timing;
                     if (status.task.error)
-                        Test.worker.output.error(`${new Date().toUTCString()} Test task ${status.task.title} ${status.task.error.message}`);
-                    else Test.worker.output.log(`${new Date().toUTCString()} Test task ${status.task.title} was successful (${timing} ms)`);
+                        Test.worker.output.error(`${Test.TIMESTAMP} Test task ${status.task.title} ${status.task.error.message}`);
+                    else Test.worker.output.log(`${Test.TIMESTAMP} Test task ${status.task.title} was successful (${timing} ms)`);
                 },
                 finish(status) {
-                    Test.worker.output.log(`${new Date().toUTCString()} Test is finished`
+                    Test.worker.output.log(Test.TIMESTAMP + "Test is finished"
                             + `\n\t${numerical(status.queue.size, "task")} were performed`
                             + `\n\t${numerical(status.queue.faults, "fault")} were detected`
                             + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
