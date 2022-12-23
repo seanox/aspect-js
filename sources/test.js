@@ -83,7 +83,7 @@
  * implementation here. 
  *
  * @author  Seanox Software Solutions
- * @version 1.2.0 20221222
+ * @version 1.2.0 20221223
  */
 if (typeof Test === "undefined") {
 
@@ -162,13 +162,13 @@ if (typeof Test === "undefined") {
         Test.listen = function(event, callback) {
             
             if (typeof event !== "string")
-                throw new TypeError("Invalid event: " + typeof event);
+                throw new TypeError(`Invalid event: ${typeof event}`);
             if (typeof callback !== "function"
                     && callback !== null
                     && typeof callback !== "undefined")
-                throw new TypeError("Invalid callback: " + typeof callback);        
+                throw new TypeError(`Invalid callback: ${typeof callback}`);
             if (!event.match(Test.PATTERN_EVENT))
-                throw new Error("Invalid event" + (event.trim() ? ": " + event : ""));
+                throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
             
             event = event.toLowerCase();
             if (!Test.listeners.has(event)
@@ -410,7 +410,7 @@ if (typeof Test === "undefined") {
             }
 
             const numerical = (number, text) => {
-                return number + " " + text + (number !== 1 ? "s" : "");
+                return `${number} ${text}${number !== 1 ? "s" : ""}`;
             };
 
             Test.worker = {};
@@ -425,36 +425,36 @@ if (typeof Test === "undefined") {
             Test.worker.monitor = meta ? meta.monitor : null;
             Test.worker.monitor = Test.worker.monitor || {
                 start(status) {
-                    Test.worker.output.log(new Date().toUTCString() + " Test is started"
-                            + ", " + numerical(status.queue.size, "task") + " in the queue");
+                    Test.worker.output.log(`${new Date().toUTCString()} Test is started`
+                            + `, ${numerical(status.queue.size, "task")} in the queue`);
                 },
                 suspend(status) {
-                    Test.worker.output.log(new Date().toUTCString() + " Test is suspended"
-                            + ", " + numerical(status.queue.length, "task") + " still outstanding");
+                    Test.worker.output.log(`${new Date().toUTCString()} Test is suspended`
+                            + `, ${numerical(status.queue.length, "task")} still outstanding`);
                 },
                 resume(status) {
-                    Test.worker.output.log(new Date().toUTCString() + " Test is continued "
-                            + ", " + numerical(status.queue.size, "task") + " in the queue");
+                    Test.worker.output.log(`${new Date().toUTCString()} Test is continued`
+                            + `, ${numerical(status.queue.size, "task")} in the queue`);
                 },
                 interrupt(status) {
-                    Test.worker.output.log(new Date().toUTCString() + " Test is interrupted"
-                            + "\n\t" + numerical(status.queue.size -status.queue.progress, "task") + " still outstanding"
-                            + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
-                            + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
+                    Test.worker.output.log(`${new Date().toUTCString()} Test is interrupted`
+                            + `\n\t${numerical(status.queue.size -status.queue.progress, "task")} still outstanding`
+                            + `\n\t${numerical(status.queue.faults, "fault")} were detected`
+                            + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
                 },
                 perform(status) {
                 },
                 response(status) {
                     const timing = new Date().getTime() -status.task.timing;
                     if (status.task.error)
-                        Test.worker.output.error(new Date().toUTCString() + " Test task " + status.task.title + " " + status.task.error.message);
-                    else Test.worker.output.log(new Date().toUTCString() + " Test task " + status.task.title + " was successful (" + timing + " ms)");
+                        Test.worker.output.error(`${new Date().toUTCString()} Test task ${status.task.title} ${status.task.error.message}`);
+                    else Test.worker.output.log(`${new Date().toUTCString()} Test task ${status.task.title} was successful (${timing} ms)`);
                 },
                 finish(status) {
-                    Test.worker.output.log(new Date().toUTCString() + " Test is finished"
-                            + "\n\t" + numerical(status.queue.size, "task") + " were performed"
-                            + "\n\t" + numerical(status.queue.faults, "fault") + " were detected"
-                            + "\n\ttotal time " + (new Date().getTime() -status.queue.timing) + " ms");
+                    Test.worker.output.log(`${new Date().toUTCString()} Test is finished`
+                            + `\n\t${numerical(status.queue.size, "task")} were performed`
+                            + `\n\t${numerical(status.queue.faults, "fault")} were detected`
+                            + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
                 }            
             };
 
@@ -485,7 +485,7 @@ if (typeof Test === "undefined") {
                     return;
                 
                 task.duration = new Date().getTime() -task.timing;
-                task.error = new Error("Timeout occurred, expected " + task.timeout + " ms but was " + task.duration + " ms");
+                task.error = new Error(`Timeout occurred, expected ${task.timeout} ms but was ${task.duration} ms`);
                 Test.fire(Test.EVENT_RESPONSE, Test.status());
                 Test.worker.queue.faults++;
                 Test.worker.queue.lock = false;
@@ -544,7 +544,7 @@ if (typeof Test === "undefined") {
                             if (task.timeout
                                     && task.timeout < new Date().getTime()
                                     && !task.error) {
-                                task.error = new Error("Timeout occurred, expected " + task.meta.timeout + " ms but was " + task.duration + " ms");                            
+                                task.error = new Error(`Timeout occurred, expected ${task.meta.timeout} ms but was ${task.duration} ms`);
                                 Test.fire(Test.EVENT_RESPONSE, Test.status());
                                 Test.worker.queue.faults++;
                             }
@@ -958,10 +958,10 @@ if (typeof Test === "undefined") {
         
         /** Clears the cache from the console output. */
         console.output.clear = function() {
-            console.output.log = "";
-            console.output.warn = "";
+            console.output.log   = "";
+            console.output.warn  = "";
             console.output.error = "";
-            console.output.info = "";
+            console.output.info  = "";
         };
         
         /** Set of registered listeners for occurring console outputs. */
@@ -1106,7 +1106,7 @@ if (typeof Test === "undefined") {
          */         
         if (Element.prototype.trigger === undefined)
             Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
-                this.dispatchEvent(new Event(event, {"bubbles":bubbles, "cancelable":cancel}));
+                this.dispatchEvent(new Event(event, {bubbles:bubbles, cancelable:cancel}));
             }; 
     };
 }
