@@ -210,7 +210,7 @@ if (typeof Path === "undefined") {
             try {root = Path.normalize(root);
             } catch (exception) {
                 root = (root || "").trim();
-                throw new TypeError(`Invalid root${root ? `: ${root}` : ""}`);
+                throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
             }        
         }
         
@@ -231,7 +231,7 @@ if (typeof Path === "undefined") {
         path = (path || "").trim();
         
         if (!path.match(Path.PATTERN_PATH))
-            throw new TypeError(`Invalid path${String(path).trim() ? `: ${path}` : ""}`);
+            throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
         
         path = path.replace(/([^#])#$/, "$1");
         path = path.replace(/^([^#])/, "#$1");
@@ -798,7 +798,7 @@ if (typeof SiteMap === "undefined") {
                 facet = facet.toLowerCase().trim();
                 if (!facet.match(SiteMap.PATTERN_PATH_FACET)
                         && !facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE))
-                    throw new Error(`Invalid facet${facet ? `: ${facet}` : ""}`);
+                    throw new Error(`Invalid facet${facet ? ": " + facet : ""}`);
                 
                 // Variable paths are collected additionally, so that later on
                 // when determining the path, the complete SiteMap does not have
@@ -874,7 +874,7 @@ if (typeof SiteMap === "undefined") {
                 continue;
             const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                throw new Error(`Invalid composite id${serial ? `: ${serial}` : ""}`);
+                throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
             path = "#" + serial + path;
         }
 

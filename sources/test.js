@@ -171,7 +171,7 @@ if (typeof Test === "undefined") {
                     && typeof callback !== "undefined")
                 throw new TypeError("Invalid callback: " + typeof callback);
             if (!event.match(Test.PATTERN_EVENT))
-                throw new Error(`Invalid event${event.trim() ? `: ${event}` : ""}`);
+                throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
             
             event = event.toLowerCase();
             if (!Test.listeners.has(event)
