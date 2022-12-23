@@ -281,7 +281,7 @@ if (typeof Test === "undefined") {
             Test.stack.add(meta);
             const stack = Array.from(Test.stack);
             Object.defineProperty(meta, "serial", {
-                value: Math.max(stack.length, stack.length > 1 ? stack[stack.length -2].serial +1: 1)
+                value: Math.max(stack.length, stack.length > 1 ? stack[stack.length -2].serial +1 : 1)
             });       
         };
 

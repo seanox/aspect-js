@@ -429,7 +429,7 @@ if (typeof Composite === "undefined") {
 
         if (context.lock === undefined
                 || context.lock === false) {
-            context.lock = {ticks:1, selector:selector, queue:[],
+            context.lock = {ticks:1, selector, queue:[],
                     share() {
                         this.ticks++;
                         return this;
@@ -2065,7 +2065,7 @@ if (typeof Composite === "undefined") {
                             return "";
                         const node = document.createTextNode("");
                         const serial = node.ordinal();
-                        const object = {serial: serial, element:node, attributes:{}, value:null,
+                        const object = {serial, element:node, attributes:{}, value:null,
                             render() {
                                 let word = "";
                                 if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
@@ -2237,7 +2237,7 @@ if (typeof Composite === "undefined") {
                             // meta-objects do not exist for templates, so it
                             // must be created temporarily and then removed again.
                             const serial = placeholder.template.ordinal();
-                            const object = {serial: serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
+                            const object = {serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
                             Composite.render.meta[serial] = object;
                             Composite.render.include(placeholder.template);
                             delete Composite.render.meta[serial];
@@ -2277,7 +2277,7 @@ if (typeof Composite === "undefined") {
                         // the attributes of the placeholder are available for
                         // rendering.
                         const serial = template.ordinal();
-                        const output = {serial: serial, element:template, attributes:object.attributes};
+                        const output = {serial, element:template, attributes:object.attributes};
                         Composite.render.meta[serial] = output;
                         
                         // The placeholder output is rendered recursively and
@@ -2516,7 +2516,7 @@ if (typeof Composite === "undefined") {
                         let iterate = Expression.eval(context, object.iterate.expression);
                         if (iterate) {
                             if (iterate instanceof XPathResult) {
-                                const meta = {entry:null, array:[], iterate:iterate};
+                                const meta = {entry:null, array:[], iterate};
                                 while (meta.entry = meta.iterate.iterateNext())
                                     meta.array.push(meta.entry);
                                 iterate = meta.array;
