@@ -520,29 +520,19 @@ if (typeof Composite === "undefined") {
      * optional namespace elements at the end that use the colon as a separator.
      * The method has the following various signatures:
      *     Object.using();
-     *     Object.using(namespace);
-     *     Object.using(object, namespace);
-     * @param  object
-     * @param  namespace
+     *     Object.using(string);
+     *     Object.using(string, ...string|number);
+     *     Object.using(object);
+     *     Object.using(object, ...string|number);
+     * @param  levels of the namespace
      * @return the created or already existing object(-level)
      * @throws An error occurs in case of invalid data types or syntax 
      */ 
     if (Object.using === undefined)
         Object.using = function(...levels) {
-            const parameters = [];
-            levels.forEach(level => {
-                if (typeof level === "string") {
-                    if (level.match(/.*:.*\..*/)
-                            || (parameters.colon && level.includes(".")))
-                        throw new Error("Invalid qualifier: " + level);
-                    if (level.includes(":"))
-                        parameters.colon = true;
-                    parameters.push(...level.split(/\:/));
-                } else parameters.push(level);
-            });
-            return Namespace.exists.using(null, parameters);
+            return Namespace.exists.using(null, Object.lookup.normalize(...levels));
         };
-    
+
     /**
      * Enhancement of the JavaScript API
      * Adds a static function to determine an object via the namespace.
@@ -552,29 +542,36 @@ if (typeof Composite === "undefined") {
      * optional namespace elements at the end that use the colon as a separator.
      * The method has the following various signatures:
      *     Object.lookup();
-     *     Object.lookup(namespace);
-     *     Object.lookup(object, namespace);
-     * @param  object
-     * @param  namespace
+     *     Object.lookup(string);
+     *     Object.lookup(string, ...string|number);
+     *     Object.lookup(object);
+     *     Object.lookup(object, ...string|number);
+     * @param  levels of the namespace
      * @return the determined object(-level)
      * @throws An error occurs in case of invalid data types or syntax
-     */ 
-    if (Object.lookup === undefined)
+     */
+    if (Object.lookup === undefined) {
+
         Object.lookup = function(...levels) {
+            return Namespace.lookup.apply(null, Object.lookup.normalize(...levels));
+        };
+
+        Object.lookup.normalize = function(...levels) {
             const parameters = [];
             levels.forEach(level => {
                 if (typeof level === "string") {
                     if (level.match(/.*:.*\..*/)
                             || (parameters.colon && level.includes(".")))
-                        throw new Error("Invalid qualifier: " + level);
+                        throw new Error(`Invalid qualifier: '${level}'`);
                     if (level.includes(":"))
                         parameters.colon = true;
                     parameters.push(...level.split(/\:/));
                 } else parameters.push(level);
             });
-            return Namespace.lookup.apply(null, parameters);
-        };
-        
+            return parameters;
+        }
+    }
+
     /**
      * Enhancement of the JavaScript API
      * Adds a static function to check whether an object exists in a namespace.
@@ -583,27 +580,17 @@ if (typeof Composite === "undefined") {
      * optional namespace elements at the end that use the colon as a separator.
      * The method has the following various signatures:
      *     Object.exists();
-     *     Object.exists(namespace);
-     *     Object.exists(object, namespace);
-     * @param  object
-     * @param  namespace
+     *     Object.exists(string);
+     *     Object.exists(string, ...string|number);
+     *     Object.exists(object);
+     *     Object.exists(object, ...string|number);
+     * @param  levels of the namespace
      * @return true if the namespace exists
      * @throws An error occurs in case of invalid data types or syntax
      */ 
     if (Object.exists === undefined)
         Object.exists = function(...levels) {
-            const parameters = [];
-            levels.forEach(level => {
-                if (typeof level === "string") {
-                    if (level.match(/.*:.*\..*/)
-                            || (parameters.colon && level.includes(".")))
-                        throw new Error("Invalid qualifier: " + level);
-                    if (level.includes(":"))
-                        parameters.colon = true;
-                    parameters.push(...level.split(/\:/));
-                } else parameters.push(level);
-            });
-            return Namespace.exists.apply(null, parameters);
+            return Namespace.exists.apply(null, Object.lookup.normalize(...levels));
         };
 
     /**
@@ -1421,7 +1408,7 @@ if (typeof Composite === "undefined") {
             return null;
         return lookup;
     };
-    
+
     /**
      * There are several ways to customize the renderer.
      * 
