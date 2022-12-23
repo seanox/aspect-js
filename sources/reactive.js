@@ -131,7 +131,7 @@ if (typeof ReactProxy === "undefined") {
                             recipients.set(selector.ordinal(), selector);
                             notifications.set(key, recipients);
 
-                        }, ReactProxy.selector, target, key, this.notifications)
+                        }, ReactProxy.selector, target, key, this.notifications);
                     }
                 },
 
@@ -178,6 +178,6 @@ if (typeof ReactProxy === "undefined") {
             };
 
             return proxy;
-        }
+        };
     }
 }
