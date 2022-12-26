@@ -210,7 +210,7 @@
               test.addEventListener("click", (event) => {
                   if (lock)
                       return;
-                  const test = event.currentTarget.textContent.match(/^[\S]+/);
+                  const test = event.currentTarget.textContent.match(/^\S+/);
                   if (event.ctrlKey
                           || event.shiftKey) {
                       let target = location.href.replace(/[^\/]+$/, test);
