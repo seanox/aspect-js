@@ -124,7 +124,7 @@
                 }
             }
         });
-        
+
         let timeout = null;
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             if (timeout)
@@ -132,6 +132,7 @@
             timeout = window.setTimeout(() => {
                 ("ABC".split(/(?=\w)/)).forEach((context) => {
                     let index = 0;
+
                     document.querySelector("#model" + context + " #textArray\\:0").typeValue(context + String.fromCharCode(65 + index++), true);
                     document.querySelector("#model" + context + " #textArray\\:1").typeValue(context + String.fromCharCode(65 + index++), true);
                     document.querySelector("#model" + context + " #textArray\\:2").typeValue(context + String.fromCharCode(65 + index++), true);
@@ -155,7 +156,7 @@
                     document.querySelector("#model" + context + " #objectNothing\\:b").typeValue(context + String.fromCharCode(65 + index++), true);
                     document.querySelector("#model" + context + " #objectNothing\\:c").typeValue(context + String.fromCharCode(65 + index++), true);
                     document.querySelector("#model" + context + " #objectNothing").typeValue(context + String.fromCharCode(65 + index++), true);
-                    
+
                     document.querySelector("#model" + context + " #buttonArray\\:0").click();
                     document.querySelector("#model" + context + " #buttonArray\\:1").click();
                     document.querySelector("#model" + context + " #buttonArray\\:2").click();
@@ -166,11 +167,11 @@
                     document.querySelector("#model" + context + " #buttonNothing\\:0").click();
                     document.querySelector("#model" + context + " #buttonNothing\\:1").click();
                     document.querySelector("#model" + context + " #buttonNothing\\:2").click();
-                    document.querySelector("#model" + context + " #buttonNothing").click();  
-                }); 
+                    document.querySelector("#model" + context + " #buttonNothing").click();
+                });
                 Test.start();
             }, 250);
-        });     
+        });
         
         Test.create({test() {
             const pattern = '{"textArray":["AA","AB"],"text":"AL","objectArray":[{"value":"AE"},{"value":"AF"}],"object":{"a":{"value":"AM"},"b":"AN"},"buttonArray":[{},{}],"button":{}}';
