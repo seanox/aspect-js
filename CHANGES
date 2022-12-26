@@ -18,11 +18,21 @@ CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
     sequence of new static and dynamic text nodes. EVENT_RENDER_NEXT now also
     captures the and text nodes thus created during rendering.
 CR: Composite: Aligned to the syntax for: COMPOSITE_ID / ELEMENT_ID / CUSTOMIZE_SCOPE
-    COMPOSITE_ID / ELEMENT_ID character - is omitted, analogous to the syntax for variables in JavaScript
+    ELEMENT_ID characters : and @ can only be used correctly
+    COMPOSITE_ID / ELEMENT_ID character - is omitted, analogous to the syntax for CSS and variables in JavaScript
     CUSTOMIZE_SCOPE must start with _ a-z A-Z according to the W3C standard
+CR: Composite: Extension of the element id for an optional reference
+    The reference to a module in the namespace is added at the end of the ID syntax,
+    after qualifiers and separated by the @ character:
+          e.g. buttonSend:...@Imprint:Contact
+    As with qualifiers, the : character can be used to separate object levels.
 CR: Reactive: Added for a reactivity rendering
     Rendering can be reactive to changes in data objects and trigger partial
     rendering at consumers
+CR: Composite: Added a domain concept based on namespaces
+    In the markup, the parent composite elements that use the attribute namespace
+    define the namespace to be used for the model and modules.
+CR: Test: Added Assert.assertUndefined(...) / Assert.assertNotUndefined(...)
 
 1.4.0 20211210
 BF: Composite: Correction in the use of attributes
