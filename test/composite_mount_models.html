@@ -1,0 +1,239 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      body div {
+        margin: 1em;
+      }
+      body * {
+        display: block;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        const snapshots = [];
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            const snapshot = document.body.textContent.trim();
+            snapshots.push(snapshot);
+            if (snapshots.length == 1)
+                Composite.asynchron(() => {
+                    document.querySelector("#button_1_C").click();
+                });
+            if (snapshots.length == 3)
+                Composite.asynchron(() => {
+                    document.querySelector("#model_2_B\\:model_2_C\\:button_2_C\\@model_2_A").click();
+                });
+            if (snapshots.length == 5)
+                Composite.asynchron(() => {
+                    document.querySelector("#button_2_C").click();
+                });
+            if (snapshots.length == 5)
+                Composite.asynchron(() => {
+                    document.querySelector("#button_1_C\\@model_1_C").click();
+                });
+            const count = document.querySelectorAll("script[type=\"text/test\"]").length;
+            if (snapshots.length == count)
+                Test.start();
+            if (snapshots.length > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);
+        });
+
+        Test.create({test() {
+            snapshots.forEach((snapshot, index) => {
+                console.log(`Test based on script #${index +1}`);
+                Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[index].textContent, snapshot);
+            });
+        }});
+
+        Namespace.create("model_1_A", ({
+            model_1_B: {
+              model_1_C: {
+              }
+            }
+        }).toReactProxy());
+        Namespace.create("model_1_B", ({
+        }).toReactProxy());
+        Namespace.create("model_1_C", ({
+            button_1_C: {
+                text: "1: must not change",
+                onClick() {
+                    this.text += " 1";
+                }
+            }
+        }).toReactProxy());
+
+        Namespace.create("model_2_A", ({
+            model_2_B: {
+                model_2_C: {
+                    button_2_C: {
+                        text: "2: must not change",
+                        onClick() {
+                            this.text += " 2";
+                        }
+                    }
+                }
+            }
+        }).toReactProxy());
+        Namespace.create("model_2_B", ({
+            model_2_C: {
+                button_2_C: {
+                    text: "2b: must not change",
+                    onClick() {
+                        this.text += "2b";
+                  }
+                }
+            }
+        }).toReactProxy());
+        Namespace.create("model_2_C", ({
+            button_2_C: {
+                text: "2c: must not change",
+                onClick() {
+                    this.text += "2c";
+                }
+            }
+        }).toReactProxy());
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change
+      button_2_C: 2: must not change
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1
+      button_2_C: 2: must not change
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1
+      button_2_C: 2: must not change
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1
+      button_2_C: 2: must not change 2
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1
+      button_2_C: 2: must not change 2
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1
+      button_2_C: 2: must not change 2 2
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1
+      button_2_C: 2: must not change 2 2
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1 1
+      button_2_C: 2: must not change 2 2
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+    <script type="text/test">
+      1: button_1_C
+      1: button_2_C
+      2: button_2_C
+      2: button_1_C
+      button_1_C: 1: must not change 1 1
+      button_2_C: 2: must not change 2 2
+      2_B 2_C: 2b: must not change
+      2_C:     2c: must not change
+    </script>
+  </head>
+  <body>
+    <!-- nested composites/models -->
+    <div id="model_1_A" composite static>
+      <div id="model_1_B" composite static>
+        <div id="model_1_C" composite static>
+          <button id="button_1_C" events="click" release>
+              1: button_1_C</button>
+          <!-- elements with a reference -->
+          <button id="model_2_B:model_2_C:button_2_C@model_2_A" events="click" release>
+              1: button_2_C</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- composite with a nested model object -->
+    <div id="model_2_A" composite static>
+      <div id="model_2_B">
+        <div id="model_2_C">
+          <button id="button_2_C" events="click" release>
+              2: button_2_C</button>
+          <!-- elements with a reference -->
+          <button id="button_1_C@model_1_C" events="click" release>
+              2: button_1_C</button>
+        </div>
+      </div>
+    </div>
+
+    <pre>
+      button_1_C: {{model_1_C.button_1_C.text}}
+      button_2_C: {{model_2_A.model_2_B.model_2_C.button_2_C.text}}
+
+      2_B 2_C: {{model_2_B.model_2_C.button_2_C.text}}
+      2_C:     {{model_2_C.button_2_C.text}}
+    </pre>
+
+    <!-- cases where models do not exist -->
+    <!-- TODO: -->
+
+    <!-- cases for namespaces -->
+    <!-- TODO: -->
+
+    <!-- cases for namespaces where models do not exist -->
+    <!-- TODO: -->
+  </body>
+</html>
