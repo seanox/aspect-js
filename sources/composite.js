@@ -2694,6 +2694,9 @@ if (typeof Composite === "undefined") {
         let resource = composite instanceof Element ? composite.id : composite;
         if (!object || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
             resource = resource.uncapitalize();
+        let meta = composite instanceof Element ? Composite.mount.locate(composite) : null;
+        if (meta && meta.namespace)
+            resource = meta.namespace.join("/") + "/" + resource;
         const context = Composite.MODULES + "/" + resource;
         
         // If the module has already been loaded, it is only necessary to check
@@ -2821,7 +2824,6 @@ if (typeof Composite === "undefined") {
      * line.
      */
     Composite.render.include.eval = function(script) {
-        
         script = script.split(/[\r\n]+/);
         while (script && script.length > 0) {
             if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
