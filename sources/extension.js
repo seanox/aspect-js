@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.0 20221221
+ * @version 1.3.0 20221227
  */
 if (typeof Namespace === "undefined") {
 
@@ -87,7 +87,7 @@ if (typeof Namespace === "undefined") {
             const pattern = index === 0 && namespace === null
                     ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
             if (!level.match(pattern))
-                throw new Error(`Invalid namespace at level ${index +1 +offset}: '${level}'`);
+                throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
 
             if (index === 0
                     && namespace === null) {
@@ -177,7 +177,7 @@ if (typeof Namespace === "undefined") {
             const pattern = index === 0
                     ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
             if (!level.match(pattern))
-                throw new Error(`Invalid namespace at level ${index +1}: '${level}'`);
+                throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
 
             if (index === 0
                     && namespace === null) {
