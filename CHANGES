@@ -5,14 +5,12 @@ BF: Build: Optimization / correction of the release process
 BF: Composite Events: Correction of the missing selector for:
     EVENT_RENDER_START, EVENT_MOUNT_START, EVENT_RENDER_NEXT, EVENT_MOUNT_NEXT
 BF: Test: Correction of the output of failed assertions
-CR: NPM: Change to a package with scope (is also already in 1.4.0)
-    The change was made afterwards of the 1.4.0 release.
-CR: Build: Releases are now only available on the release page
-CR: Build: Switch to UglifyJS
-CR: Test: Update web server to version 5.5.x
-CR: Server: Added Ant task to start and stop
-CR: Playground: Added as a playground for development
-    Develop with the current sources without build.
+CR: Reactive: Added for a reactivity rendering
+    Rendering can be reactive to changes in data objects and trigger partial
+    rendering at consumers
+CR: Composite: Added a domain concept based on namespaces
+    In the markup, the parent composite elements that use the attribute namespace
+    define the namespace to be used for the model and modules.
 CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
     If text nodes contain expressions, they are split and reassembled from a
     sequence of new static and dynamic text nodes. EVENT_RENDER_NEXT now also
@@ -26,12 +24,14 @@ CR: Composite: Extension of the element id for an optional reference
     after qualifiers and separated by the @ character:
           e.g. buttonSend:...@Imprint:Contact
     As with qualifiers, the : character can be used to separate object levels.
-CR: Reactive: Added for a reactivity rendering
-    Rendering can be reactive to changes in data objects and trigger partial
-    rendering at consumers
-CR: Composite: Added a domain concept based on namespaces
-    In the markup, the parent composite elements that use the attribute namespace
-    define the namespace to be used for the model and modules.
+CR: NPM: Change to a package with scope (is also already in 1.4.0)
+    The change was made afterwards of the 1.4.0 release.
+CR: Build: Releases are now only available on the release page
+CR: Build: Switch to UglifyJS
+CR: Server: Added Ant task to start and stop
+CR: Playground: Added as a playground for development
+    Develop with the current sources without build.
+CR: Test: Update web server to version 5.5.x
 CR: Test: Added Assert.assertUndefined(...) / Assert.assertNotUndefined(...)
 
 1.4.0 20211210
