@@ -46,7 +46,7 @@ if (typeof Namespace === "undefined") {
         get PATTERN_NAMESPACE_SEPARATOR() {return /\./;},
 
         /** Pattern for a valid namespace level at the beginning */
-        get PATTERN_NAMESPACE_LEVEL_START() {return /^[_a-zA-Z\$][\w\$]*$/;},
+        get PATTERN_NAMESPACE_LEVEL_START() {return /^[_a-z\$][\w\$]*$/i;},
 
         /** Pattern for a valid namespace level */
         get PATTERN_NAMESPACE_LEVEL() {return /(^[\w\$]+$)|(^\d+$)/;}
