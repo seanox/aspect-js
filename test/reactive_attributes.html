@@ -16,11 +16,10 @@
         Test.activate();
 
         const capture = new Capture();
-        const values = new Capture();
+        const values = [];
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             capture.snap();
-            values.snap(document.querySelector("#valueA").value);
-            console.log(capture.size());
+            values.push(document.querySelector("#valueA").value);
             const count = capture.patterns().length;
             if (capture.size() == count)
                 Test.start();
