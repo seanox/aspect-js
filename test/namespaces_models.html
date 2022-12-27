@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      body div {
+        margin: 1em;
+      }
+      body * {
+        display: block;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
+    <script type="text/javascript">
+        Test.activate();
+    </script>
+  </head>
+  <body>
+    <div id="moduleD" composite static/>
+
+    <div id="nsA1" composite namespace static>
+      <div id="nsA2" composite namespace static>
+        <div id="moduleA3" composite namespace static>
+        </div>
+      </div>
+    </div>
+
+    <div id="nsB1" composite namespace static>
+      <div id="nsB2" composite namespace static>
+        <div id="moduleB3" composite namespace static>
+          <div id="moduleB4" composite static>
+          </div>
+        </div>
+        <div id="moduleB5" composite static>
+          <div id="moduleB6" composite static>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
