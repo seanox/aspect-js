@@ -17,7 +17,7 @@ Bei Seanox aspect-js steht ein minimalistischer Ansatz im Vordergrund. Gepr&auml
 durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf Funktion
 und einfache Integration ins Markup, entstand der Wunsch nach einer &auml;hnlichen
 client-seitigen L&ouml;sung als sportliches Experiment um das Verst&auml;ndnis von
-Rendering, Expression Language und Performance.
+reaktives Rendering, Expression Language und Performance.
 
 
 - - -

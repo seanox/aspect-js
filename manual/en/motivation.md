@@ -15,7 +15,7 @@ compilers and servers.
 Seanox aspect-js focuses on a minimalist approach. Influenced by the good
 experiences with JSF (Java Server Faces) in regard to function and an easy
 integration into the markup, the desire arose for a similar client-side solution
-as a sporty experiment to understand rendering, expression language and
+as a sporty experiment to understand reactive rendering, expression language and
 performance.
 
 
