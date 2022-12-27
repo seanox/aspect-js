@@ -74,9 +74,8 @@
  * In some cases, the identifier (ID) may not be unique. For example, in cases
  * where properties are arrays or an iteration is used. In these cases the
  * identifier can be extended by an additional unique qualifier separated by a
- * colon.
- * Qualifiers behave like properties during object/model binding and extend the
- * namespace.
+ * colon. Qualifiers behave like properties during object/model binding and
+ * extend the namespace.
  *
  *         composite
  *         ----
@@ -116,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.5.0 20221222
+ * @version 1.5.0 20221227
  */
 if (typeof Composite === "undefined") {
     
@@ -1219,19 +1218,18 @@ if (typeof Composite === "undefined") {
     
     /**
      * Determines the meta data for an element based on its position in the DOM
-     * with the corresponding model, the referenced target, and with optional
-     * qualifier. The meta data is only determined as text information.
+     * with the corresponding model, the referenced route and target. The meta
+     * data is only determined as text information.
      * 
      * Composite:
      *     {namespace, model}
      * 
      * Composite Element:
-     *     {namespace, model, target}
-     *     {namespace, model, target, qualifier}
+     *     {namespace, model, route, target}
      *
-     * The target is determined fully qualified, starting with the module.
-     *
-     * The model corresponds to the enclosing composite.
+     * model:  corresponds to the enclosing composite
+     * route:  fully qualified determined route to the target, starting with the module
+     * target: final target in the object chain
      *
      * A validation at object or JavaScript model level does not take place
      * here. The fill levels of the meta object can be different, depending on
@@ -1267,8 +1265,10 @@ if (typeof Composite === "undefined") {
                     || !scope.hasAttribute(Composite.ATTRIBUTE_NAMESPACE))
                 continue;
             const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            if (!scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+                throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                    throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
+                throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
             if (namespace)
                 namespace = serial + "." + namespace;
             else namespace = serial;
@@ -1280,20 +1280,20 @@ if (typeof Composite === "undefined") {
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-            else return {namespace:namespace ? namespace : null, model:serial};
+            else return {namespace:namespace ? namespace.split(/\./) : null, model:serial};
 
-        const meta = {namespace:namespace ? namespace : null, model:null, target:null, qualifier:null};
+        const meta = {namespace, model:null, route:null};
 
         if (!serial.match(Composite.PATTERN_ELEMENT_ID))
             throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
         serial = serial.match(Composite.PATTERN_ELEMENT_ID);
-        meta.target = serial[1];
+        meta.route = serial[1];
         if (serial[2])
-            meta.qualifier = serial[2].substring(1).replace(/:/g, ".");
+            meta.route += "." + serial[2].substring(1).replace(/:/g, ".");
         if (!serial[3]) {
 
             // The model is determined by the parent composite (standard).
-            // The target contains the qualified path starting from the model.
+            // The route contains the qualified path starting from the model.
             for (let scope = element.parentNode; scope; scope = scope.parentNode) {
 
                 if (!(scope instanceof Element)
@@ -1306,8 +1306,8 @@ if (typeof Composite === "undefined") {
                 if (scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
                     if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                         throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-                    meta.target = serial + "." + meta.target;
-                    meta.model = meta.target.split(/\./)[0];
+                    meta.route = serial + "." + meta.route;
+                    meta.model = meta.route.split(/\./)[0];
                     break;
                 }
 
@@ -1316,16 +1316,16 @@ if (typeof Composite === "undefined") {
                 if (!serial)
                     throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
                 if (serial[2])
-                    meta.target = serial[2].substring(1).replace(/:/g, ".") + "." + meta.target
+                    meta.route = serial[2].substring(1).replace(/:/g, ".") + "." + meta.route
                 if (serial[1])
-                    meta.target = serial[1] + "." + meta.target;
+                    meta.route = serial[1] + "." + meta.route;
 
                 // If a parent element contains an ID with reference to a model,
                 // the child elements refer to this model.
                 if (serial[3]) {
                     const reference = serial[3].substring(1).split(/:+/);
                     meta.model = reference.pop();
-                    meta.target = meta.model + "." + meta.target;
+                    meta.route = meta.model + "." + meta.route;
                     if (reference.length > 0)
                         meta.namespace = reference.join(".");
                     break;
@@ -1339,43 +1339,39 @@ if (typeof Composite === "undefined") {
             // - reference refers exactly to the model in the current namespace
             // - namespace, If the reference contains more than one level,
             //   everything before the last level is the new namespace
-            // - target must be extended by the referenced model (prefixed)
-            // - qualifier remain unchanged
+            // - route must be extended by the referenced model (prefixed)
 
             const reference = serial[3].substring(1).split(/:+/);
             meta.model = reference.pop();
             if (reference.length > 0)
                 meta.namespace = reference.join(".");
-            meta.target = meta.model + "." + meta.target;
+            meta.route = meta.model + "." + meta.route;
         }
 
         // A model is always required.
         if (!meta.model)
             return null;
 
-        // Fields that are not used are removed.
-        // So later typeof can be used like an exists method.
-        // However, the target must remain null so that composites and anonymous
-        // composite elements can be distinguished in the meta object.
-        if (!meta.qualifier)
-            delete meta.qualifier;
-        
+        if (meta.namespace)
+            meta.namespace = meta.namespace.split(/\./);
+        if (meta.route)
+            meta.route = meta.route.split(/\./);
+        if (meta.route)
+            meta.target = meta.route.pop();
+
         return meta;
     };
     
     /**
      * Determines the meta object for an element based on its position in the
-     * DOM, so the surrounding composite and model, the referenced target in the
-     * model with an optional qualifier.
+     * DOM, so the surrounding composite and model, the referenced route and
+     * target in the model.
      * 
      * Composite:
      *     {meta:{namespace, model}, namespace, model}
      * 
      * Composite Element:
-     *     {meta:{namespace, model, target}, namespace, model, target}
-     *
-     * Composite Element:
-     *     {meta:{namespace, model, target, qualifier}, namespace, model, target}
+     *     {meta:{namespace, model, route, target}, namespace, model, route, target}
      *
      * The method always requires a corresponding JavaScript model and an
      * element with an valid element ID in a valid enclosing composite,
@@ -1405,17 +1401,13 @@ if (typeof Composite === "undefined") {
             namespace,
             model,
             get target() {
-                return Object.lookup(this.namespace, this.meta.target, ...(this.meta.qualifier
-                        ? this.meta.qualifier.split(/\.+/) : []));
+                return Object.lookup(this.namespace, ...this.meta.route, this.meta.target);
             },
             set target(value) {
-                let chain = this.meta.model.split(/\.+/);
-                if (this.meta.target)
-                    chain = this.meta.target.split(/\.+/);
-                if (this.meta.qualifier)
-                    chain = chain.concat(this.meta.qualifier.split(/\.+/));
-                let target = chain.pop();
-                Object.lookup(this.namespace, ...chain)[target] = value;
+                let chain = [this.meta.model];
+                if (this.meta.route)
+                    chain = this.meta.route;
+                Object.lookup(this.namespace, ...chain)[this.meta.target] = value;
             }
         };
 
