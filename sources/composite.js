@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2021 Seanox Software Solutions
+ * Copyright (C) 2022 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -153,7 +153,10 @@ if (typeof Composite === "undefined") {
 
         /** Constant for attribute message */
         get ATTRIBUTE_MESSAGE() {return "message";},
-        
+
+        /** Constant for attribute namespace */
+        get ATTRIBUTE_NAMESPACE() {return "namespace";},
+
         /** Constant for attribute notification */
         get ATTRIBUTE_NOTIFICATION() {return "notification";},
 
@@ -190,7 +193,7 @@ if (typeof Composite === "undefined") {
          * that is cached in the meta object. Other attributes are only cached
          * if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|strict|validate)$/i;},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|namespace|notification|output|release|render|strict|validate)$/i;},
         
         /**
          * Pattern for all static attributes.
@@ -240,24 +243,19 @@ if (typeof Composite === "undefined") {
         get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
         /** Pattern for a composite id (based on a word) */
-        get PATTERN_COMPOSITE_ID() {return /^[_a-zA-Z]\w*$/;},
+        get PATTERN_COMPOSITE_ID() {return /^[_a-z]\w*$/i;},
 
         /** 
-         * Pattern for an element id (e.g. name:qualifier...)
+         * Pattern for an element id (e.g. name:qualifier...@model...)
          *     group 1: name
          *     group 2: qualifier(s) (optional)
+         *     group 3: (namespace+)model (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^([_a-zA-Z]\w*)((\:\w*)*)$/;},
+        get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)((?::\w+)*)?(@[_a-z]\w*(?::[_a-z]\w*)*)?$/i;},
 
         /** Pattern for a scope (custom tag, based on a word) */
-        get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-zA-Z]([\w-]*\w)?$/;},
-        
-        /** Pattern for the namespace separator */
-        get PATTERN_NAMESPACE_SEPARATOR() {return /[\.:]/g;},
-        
-        /** Pattern for a valid namespace. */
-        get PATTERN_NAMESPACE() {return /^\w+(\.\w+)*(\:\w+)*$/i;},
-        
+        get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
+
         /** Pattern for a datasource url */
         get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i;},
 
@@ -515,9 +513,6 @@ if (typeof Composite === "undefined") {
      * Enhancement of the JavaScript API
      * Adds a static function to create a namespace for an object.
      * Without arguments, the method returns the global namespace window.
-     * In difference to the namespace function of the same name, qualifiers are
-     * also supported in the namespace. The effect is the same. Qualifiers are
-     * optional namespace elements at the end that use the colon as a separator.
      * The method has the following various signatures:
      *     Object.using();
      *     Object.using(string);
@@ -530,16 +525,13 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.using === undefined)
         Object.using = function(...levels) {
-            return Namespace.exists.using(null, Object.lookup.normalize(...levels));
+            return Namespace.exists.using(null, levels);
         };
 
     /**
      * Enhancement of the JavaScript API
      * Adds a static function to determine an object via the namespace.
      * Without arguments, the method returns the global namespace window.
-     * In difference to the namespace function of the same name, qualifiers are
-     * also supported in the namespace. The effect is the same. Qualifiers are
-     * optional namespace elements at the end that use the colon as a separator.
      * The method has the following various signatures:
      *     Object.lookup();
      *     Object.lookup(string);
@@ -550,27 +542,10 @@ if (typeof Composite === "undefined") {
      * @return the determined object(-level)
      * @throws An error occurs in case of invalid data types or syntax
      */
-    if (Object.lookup === undefined) {
-
+    if (Object.lookup === undefined)
         Object.lookup = function(...levels) {
-            return Namespace.lookup.apply(null, Object.lookup.normalize(...levels));
+            return Namespace.lookup.apply(null, levels);
         };
-
-        Object.lookup.normalize = function(...levels) {
-            const parameters = [];
-            levels.forEach(level => {
-                if (typeof level === "string") {
-                    if (level.match(/.*:.*\..*/)
-                            || (parameters.colon && level.includes(".")))
-                        throw new Error(`Invalid qualifier: '${level}'`);
-                    if (level.includes(":"))
-                        parameters.colon = true;
-                    parameters.push(...level.split(/\:/));
-                } else parameters.push(level);
-            });
-            return parameters;
-        }
-    }
 
     /**
      * Enhancement of the JavaScript API
@@ -590,7 +565,7 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.exists === undefined)
         Object.exists = function(...levels) {
-            return Namespace.exists.apply(null, Object.lookup.normalize(...levels));
+            return Namespace.exists.apply(null, levels);
         };
 
     /**
@@ -1071,9 +1046,9 @@ if (typeof Composite === "undefined") {
                 // this alignment and no scope can be determined.
 
                 let model = meta.model;
-                if (meta.property !== undefined)
-                    if (typeof meta.property === "object")
-                        model = meta.property;
+                if (meta.target !== undefined)
+                    if (typeof meta.target === "object")
+                        model = meta.target;
                     else model = null;
 
                 for (let entry in model)
@@ -1166,12 +1141,12 @@ if (typeof Composite === "undefined") {
                             // also be a composite and thus both model and input
                             // element / data field. In this case, a composite
                             // can assign a value to itself.
-                            if (accept(meta.property)) {
-                                meta.property = value;
-                            } else if (typeof meta.property === "object") {
-                                if (accept(meta.property["value"]))
-                                    meta.property["value"] = value;                                
-                            } else if (meta.property === undefined) {
+                            if (accept(meta.target)) {
+                                meta.target = value;
+                            } else if (typeof meta.target === "object") {
+                                if (accept(meta.target["value"]))
+                                    meta.target["value"] = value;
+                            } else if (meta.target === undefined) {
                                 if (accept(meta.model["value"]))
                                     meta.model["value"] = value;                                
                             }
@@ -1193,10 +1168,10 @@ if (typeof Composite === "undefined") {
                             // can be determined.
                             
                             let model = meta.model;
-                            if (meta.property !== undefined)
-                                if (meta.property 
-                                        && typeof meta.property === "object")
-                                    model = meta.property;
+                            if (meta.target !== undefined)
+                                if (meta.target
+                                        && typeof meta.target === "object")
+                                    model = meta.target;
                                 else model = null;
 
                             // For the event, a corresponding method is searched
@@ -1243,18 +1218,21 @@ if (typeof Composite === "undefined") {
     };
     
     /**
-     * Determines the meta data for an element based on its position in the
-     * DOM, so the surrounding composite and model, the referenced property in
-     * the model with an optional qualifier. The meta data is only determined
-     * as text information.
+     * Determines the meta data for an element based on its position in the DOM
+     * with the corresponding model, the referenced target, and with optional
+     * qualifier. The meta data is only determined as text information.
      * 
      * Composite:
-     *     {composite, model}
+     *     {namespace, model}
      * 
      * Composite Element:
-     *     {composite, model, property}
-     *     {composite, model, property, name:qualifier}
-     * 
+     *     {namespace, model, target}
+     *     {namespace, model, target, qualifier}
+     *
+     * The target is determined fully qualified, starting with the module.
+     *
+     * The model corresponds to the enclosing composite.
+     *
      * A validation at object or JavaScript model level does not take place
      * here. The fill levels of the meta object can be different, depending on
      * the collected data and the resulting derivation. Thus, it is possible to
@@ -1273,79 +1251,135 @@ if (typeof Composite === "undefined") {
      */
     Composite.mount.locate = function(element) {
         
-        if (!(element instanceof Element))
+        if (!(element instanceof Element)
+                || !element.hasAttribute(Composite.ATTRIBUTE_ID))
             return null;
-        
+
+        // Determine from namespace
+        // The namespace is defined by parent composite elements with ID and
+        // a namespace attribute. The prerequisite is that the direct composite
+        // from the model uses the attribute namespace. Without the attribute,
+        // the composites and thus the models are without namespace. Thus, there
+        // can also be decoupled composites and thus models in a nested markup.
+        let namespace = null;
+        for (let scope = element.parentNode; scope; scope = scope.parentNode) {
+            if (!(scope instanceof Element)
+                    || !scope.hasAttribute(Composite.ATTRIBUTE_NAMESPACE))
+                continue;
+            const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                    throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
+            if (namespace)
+                namespace = serial + "." + namespace;
+            else namespace = serial;
+        }
+
         let serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
 
-        // Composites have only a meta object with composite and model.
+        // Composites have only a meta object with namespace and model.
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-            else return {composite:serial, model:serial};
+            else return {namespace:namespace ? namespace : null, model:serial};
 
-        const meta = {composite:null, model:null, property:null, name:null};
+        const meta = {namespace:namespace ? namespace : null, model:null, target:null, qualifier:null};
 
+        if (!serial.match(Composite.PATTERN_ELEMENT_ID))
+            throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
         serial = serial.match(Composite.PATTERN_ELEMENT_ID);
-        if (serial) {
-            if (serial[1])
-                meta.property = serial[1];
-            if (serial[2])
-                meta.name = serial[2].replace(/(^:+)|(:+$)/g , "");
+        meta.target = serial[1];
+        if (serial[2])
+            meta.qualifier = serial[2].substring(1).replace(/:/g, ".");
+        if (!serial[3]) {
+
+            // The model is determined by the parent composite (standard).
+            // The target contains the qualified path starting from the model.
+            for (let scope = element.parentNode; scope; scope = scope.parentNode) {
+
+                if (!(scope instanceof Element)
+                        || !scope.hasAttribute(Composite.ATTRIBUTE_ID))
+                    continue;
+
+                serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+
+                // The model corresponds to the enclosing composite.
+                if (scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
+                    if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                        throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
+                    meta.target = serial + "." + meta.target;
+                    meta.model = meta.target.split(/\./)[0];
+                    break;
+                }
+
+                // Qualified parents inherit to their children.
+                serial = serial.match(Composite.PATTERN_ELEMENT_ID);
+                if (!serial)
+                    throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
+                if (serial[2])
+                    meta.target = serial[2].substring(1).replace(/:/g, ".") + "." + meta.target
+                if (serial[1])
+                    meta.target = serial[1] + "." + meta.target;
+
+                // If a parent element contains an ID with reference to a model,
+                // the child elements refer to this model.
+                if (serial[3]) {
+                    const reference = serial[3].substring(1).split(/:+/);
+                    meta.model = reference.pop();
+                    meta.target = meta.model + "." + meta.target;
+                    if (reference.length > 0)
+                        meta.namespace = reference.join(".");
+                    break;
+                }
+            }
+
+        } else {
+
+            // Alternatively, the element ID can also use an @-part at the end
+            // that refers to a model in the current namespace.
+            // - reference refers exactly to the model in the current namespace
+            // - namespace, If the reference contains more than one level,
+            //   everything before the last level is the new namespace
+            // - target must be extended by the referenced model (prefixed)
+            // - qualifier remain unchanged
+
+            const reference = serial[3].substring(1).split(/:+/);
+            meta.model = reference.pop();
+            if (reference.length > 0)
+                meta.namespace = reference.join(".");
+            meta.target = meta.model + "." + meta.target;
         }
 
-        for (let scope = element.parentNode; scope; scope = scope.parentNode) {
-            
-            if (!(scope instanceof Element)
-                    || !scope.hasAttribute(Composite.ATTRIBUTE_ID))
-                continue;
-            
-            let serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-            if (!serial.match(Composite.PATTERN_ELEMENT_ID))
-                throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
-            if (meta.model)
-                meta.model = serial + "." + meta.model;
-            else meta.model = serial;
-            
-            // Composites are static singleton containers. The corresponding
-            // JavaScript model is a root object. Therefore, the namespace ends
-            // with the first composite.
-            if (scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
-                if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                    throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-                meta.composite = serial;
-                break;
-            }            
-        }
-
-        // A composite is always required.
-        if (!meta.composite)
+        // A model is always required.
+        if (!meta.model)
             return null;
-        
+
         // Fields that are not used are removed.
         // So later typeof can be used like an exists method.
-        // However, the property must remain null so that composites and
-        // anonymous composite elements can be distinguished in the meta object.
-        if (!meta.name)
-            delete meta.name;
+        // However, the target must remain null so that composites and anonymous
+        // composite elements can be distinguished in the meta object.
+        if (!meta.qualifier)
+            delete meta.qualifier;
         
         return meta;
     };
     
     /**
      * Determines the meta object for an element based on its position in the
-     * DOM, so the surrounding composite and model, the referenced property in
-     * the model with an optional qualifier.
+     * DOM, so the surrounding composite and model, the referenced target in the
+     * model with an optional qualifier.
      * 
      * Composite:
-     *     {meta:{composite, model}, composite, model}
+     *     {meta:{namespace, model}, namespace, model}
      * 
      * Composite Element:
-     *     {meta:{composite, model, property}, composite, model, property}
-     *     
+     *     {meta:{namespace, model, target}, namespace, model, target}
+     *
+     * Composite Element:
+     *     {meta:{namespace, model, target, qualifier}, namespace, model, target}
+     *
      * The method always requires a corresponding JavaScript model and an
      * element with an valid element ID in a valid enclosing composite,
-     * otherwise the method will return null.  
+     * otherwise the method will return null.
      *
      * @param  element
      * @return determined meta object for the passed element, otherwise null
@@ -1354,57 +1388,39 @@ if (typeof Composite === "undefined") {
      *     - in the case of an invalid element ID
      */    
     Composite.mount.lookup = function(element) {
-        
-        if (!(element instanceof Element))
-            return null;
-        
+
         const meta = Composite.mount.locate(element);
         if (!meta)
             return null;
-        
-        let lookup = {
-            meta,
-            composite: Object.lookup(meta.composite),
-            model: Object.lookup(meta.model)
-        };
-        
-        if (!lookup.composite
-                || !lookup.model)
+
+        const namespace = meta.namespace ? Namespace.lookup(meta.namespace) : Namespace.lookup();
+        const model = Object.lookup(namespace, meta.model)
+        if (!model)
             return null;
-        
-        if (meta.property === undefined)
-            return lookup;
-        
-        if (meta.name) {
-            const target = (meta.property + "." + meta.name.replace(/\:/g, ".")).match(/^(.*)\.(\w+)$/);
-            meta.property = target[1];
-            meta.name = target[2];
-        } 
-        
-        lookup = {
+        if (meta.target === undefined)
+            return {meta, namespace, model};
+
+        const lookup = {
             meta,
-            composite: Object.lookup(meta.composite),
-            model: Object.lookup(meta.model),
-            get property() {
-                if (this.meta.name) {
-                    const property = Object.lookup(this.model, this.meta.property);
-                    if (property === null
-                            || property === undefined)
-                        return;
-                    return property[this.meta.name];
-                }
-                return this.model[this.meta.property];
+            namespace,
+            model,
+            get target() {
+                return Object.lookup(this.namespace, this.meta.target, ...(this.meta.qualifier
+                        ? this.meta.qualifier.split(/\.+/) : []));
             },
-            set property(value) {
-                if (this.meta.name)
-                    Object.lookup(this.model, this.meta.property)[this.meta.name] = value;
-                else this.model[this.meta.property] = value;
-            }               
+            set target(value) {
+                let chain = this.meta.model.split(/\.+/);
+                if (this.meta.target)
+                    chain = this.meta.target.split(/\.+/);
+                if (this.meta.qualifier)
+                    chain = chain.concat(this.meta.qualifier.split(/\.+/));
+                let target = chain.pop();
+                Object.lookup(this.namespace, ...chain)[target] = value;
+            }
         };
 
-        if (!lookup.composite
-                || !lookup.model
-                || lookup.property === undefined)
+        if (!lookup.model
+                || lookup.target === undefined)
             return null;
         return lookup;
     };
@@ -2965,20 +2981,18 @@ if (typeof Composite === "undefined") {
                             }
                             
                             // Composites/models must be undocked when they are
-                            // removed from the DOM. The following implementation
-                            // is based on the assumption that composites with
-                            // and without conditions are removed from the DOM.
-                            // For composites with condition, it must be noted
-                            // that the composite is initially replaced by a
-                            // placeholder. During replacement, the initial
-                            // composite is removed, which can cause an unwanted
-                            // undocking. Therefore, the logic is based on the
-                            // assumption that each composite has a meta object.
-                            // When replacing the original composite, the
-                            // corresponding meta object is also deleted, so that
-                            // the MutationObserver detects the composite to be
-                            // removed in the DOM, but undocking is not performed
-                            // without the matching meta object.
+                            // removed from the DOM independent of whether a
+                            // condition exists. For composites with condition,
+                            // it must be noted that the composite is initially
+                            // replaced by a placeholder. During replacement,
+                            // the initial composite is removed, which can cause
+                            // an unwanted undocking. Therefore, the logic is
+                            // based on the assumption that each composite has a
+                            // meta object. When replacing the original
+                            // composite, the corresponding meta object is also
+                            // deleted, so that the MutationObserver detects the
+                            // composite to be removed in the DOM, but undocking
+                            // is not performed without the matching meta object.
 
                             const serial = node.ordinal();
                             const object = Composite.render.meta[serial];
@@ -3073,10 +3087,10 @@ if (typeof Expression === "undefined") {
         try {
             if (typeof context === "string"
                     && expression === undefined) {
-                if (context.match(/^#[a-zA-Z]\w*$/))
+                if (context.match(/^#[a-z]\w*$/i))
                     return document.querySelector(context);
-                if (context.match(/^(#[a-zA-Z]\w*)\.(.*)*$/)) {
-                    expression = context.match(/^(#[a-zA-Z]\w*)\.(.*)*$/);
+                if (context.match(/^(#[a-z]\w*)\.(.*)*$/i)) {
+                    expression = context.match(/^(#[a-z]\w*)\.(.*)*$/i);
                     return Expression.lookup(document.querySelector(expression[1]), expression[2]);
                 }
                 if (context.indexOf(".") < 0)
@@ -3287,8 +3301,8 @@ if (typeof Expression === "undefined") {
         
         cascade.other.forEach((entry) => {
             let text = entry.data;
-            text = text.replace(/(^|[^\w\.])(#?[a-zA-Z](?:[\w\.]{0,}[\w])?(?=(?:[^\w\(\.]|$)))/g, "$1\n\r\r$2\n");
-            text = text.replace(/(^|[^\w\.])(#?[a-zA-Z](?:[\w\.]{0,}\w)?)(?=\()/g, "$1\n\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}[\w])?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
             const words = [];
             text.split(/\n/).forEach((entry) => {
                 const object = {type:Expression.TYPE_LOGIC, data:entry};
@@ -3297,7 +3311,7 @@ if (typeof Expression === "undefined") {
                     object.type = Expression.TYPE_VALUE;
                 } else if (entry.match(/^\r[^\r]/)) {
                     object.data = entry.substring(1);
-                    if (object.data.match(/^#[a-zA-Z]/))
+                    if (object.data.match(/^#[a-z]/i))
                         object.data = "Expression.lookup(\"" + object.data + "\")";
                     object.type = Expression.TYPE_METHOD;
                 }
