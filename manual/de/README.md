@@ -10,7 +10,6 @@
 * [Resource Bundle](#resource-bundle-i18n)
 * [Model View Controller](#model-view-controller)
 * [Komponenten](#komponenten)
-* [Namensräume / Domain-Konzept](#namensrume--domain-konzept)
 * [Reaktives Rendering](#reaktives-rendering)
 * [Erweiterung](#erweiterung)
 * [Ereignisse](#ereignisse)
@@ -149,6 +148,7 @@
   * [Common Standard-Komponente](composite.md##common-standard-komponente) 
   * [Object/Model-Binding](composite.md#objectmodel-binding)
     * [Namespace](composite.md#namespace)
+    * [Domain-Konzept](composite.md#domain-konzept)
     * [Scope](composite.md#scope)
     * [Model](composite.md#model)
     * [Property](composite.md#property)
@@ -157,10 +157,6 @@
     * [Events](composite.md#events)
     * [Synchronization](composite.md#synchronization)
     * [Validation](composite.md#validation)
-
-
-### Namensräume / Domain-Konzept
-* [Namensräume / Domain-Konzept](namespace.md#namensrume--domain-konzept)
 
 
 ### Reaktives Rendering

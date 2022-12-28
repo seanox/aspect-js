@@ -36,8 +36,8 @@ Bundle, NoSQL datasource, test environment and much more.
 - Expression Language  
   meta-language extension with full JavaScript support
 - Reactivity rendering  
-  rendering can be reactive to changes in data objects and trigger partial
-  rendering at consumers
+  Rendering reacts to changes in data objects and triggers partial rendering on
+  consumers
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...

@@ -12,7 +12,6 @@ Machine translation with [DeepL](https://deepl.com).
 * [Resource Bundle](#resource-bundle-i18n)
 * [Model View Controller](#model-view-controller)
 * [Composite](#composite)
-* [Namespaces / domain concept](#namespaces--domain-concept)
 * [Reactivity Rendering](#reactivity-rendering)
 * [Extension](#extension)
 * [Events](#events)
@@ -151,6 +150,7 @@ Machine translation with [DeepL](https://deepl.com).
   * [Common Standard Component](composite.md#common-standard-component) 
   * [Object/Model-Binding](composite.md#objectmodel-binding)
     * [Namespace](composite.md#namespace)
+    * [Domain concept](#composite.md#domain-concept)
     * [Scope](composite.md#scope)
     * [Model](composite.md#model)
     * [Property](composite.md#property)
@@ -159,10 +159,6 @@ Machine translation with [DeepL](https://deepl.com).
     * [Events](composite.md#events)
     * [Synchronization](composite.md#synchronization)
     * [Validation](composite.md#validation)
-
-
-### Namespaces / domain concept
-* [Namespaces / domain concept](namespace.md#namespaces--domain-concept)
 
 
 ### Reactivity Rendering
