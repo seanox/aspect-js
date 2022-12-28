@@ -98,16 +98,15 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 
 ## Erste Schritte
 
-Das Framework besteht aus reinem JavaScript.
+Das Framework besteht aus einer JavaScript-Datei und wird &uuml;ber die URL
+eines Release-Channel eingebunden oder als Releases heruntergeladen wird.
 
-Die Releases werden heruntergeladen oder &uuml;ber einen Release-Channel eingebunden.
 Release-Channel stellen kontinuierlich die neuesten finalen Hauptversionen zur
-Verf&uuml;gung, diese sind abw&auml;rtskompatibel zur Hauptversion. Seanox aspect-js ist
-somit immer auf dem neuesten Stand.
+Verf&uuml;gung, diese sind abw&auml;rtskompatibel zur Hauptversion. So ist
+Seanox aspect-js immer auf dem neuesten Stand.
 
-Jedes Release besteht aus zwei Versionen.  
-Die Entwickler-Version beinhaltet umfangreiche Kommentare zu Konzeption,
-Funktion, Arbeitsweise und Verwendung.  
+Jedes Release besteht aus zwei Versionen. Die Entwickler-Version beinhaltet
+umfangreiche Kommentare zu Konzeption, Funktion, Arbeitsweise und Verwendung.
 Die Produktions-Version ist in der Gr&ouml;sse optimiert aber nicht verschleiert
 (obfuscated).
 

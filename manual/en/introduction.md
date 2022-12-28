@@ -96,17 +96,16 @@ environment and much more.
 
 ## Getting Started
 
-The framework consists of pure JavaScript.
+The framework consists of one JavaScript file and is included via the URL of a
+release channel or downloaded as releases.
 
-The releases consist of one file that can be downloaded or integrated via a
-release channel.  
-The release channels continuously provide the newest final major versions, which
-are downward compatible to the major version. Seanox aspect-js is always up to
-date when using the release channels.
+Release channels continuously provide the latest final main versions, which are
+backward compatible to the main version. This way Seanox aspect-js is always up
+to date.
 
-Each release consists of two versions. The development version contains comments
-on conception, function and usage. The production version is optimized in size
-but not obfuscated.
+Each release consists of two versions. The developer version includes extensive
+comments on design, function, operation and usage. The production version is
+optimized in size but not obfuscated.
 
 Create an HTML file, such as _index.html_ and include Seanox apect-js via the
 release channel.
