@@ -323,10 +323,10 @@ a permanent counter is very simple.
 
 ```html
 {{counter:0}}
-<span interval="1000">
-  {{counter:parseInt(counter) +1}}^
+<p interval="1000">
+  {{counter:parseInt(counter) +1}}
   {{counter}}
-</span>
+</p>
 ```
 
 The interval attribute can be used in combination with embedded JavaScript as

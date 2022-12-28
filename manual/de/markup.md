@@ -329,10 +329,10 @@ eines permanenten Z&auml;hlers sehr einfach.
 
 ```html
 {{counter:0}}
-<span interval="1000">
-  {{counter:parseInt(counter) +1}}^
+<p interval="1000">
+  {{counter:parseInt(counter) +1}}
   {{counter}}
-</span>
+</p>
 ```
 
 Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript

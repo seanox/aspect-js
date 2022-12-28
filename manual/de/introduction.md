@@ -322,7 +322,7 @@ eines permanenten Z&auml;hlers sehr einfach.
 ```html
 {{counter:0}}
 <p interval="1000">
-  {{counter:parseInt(counter) +1}}^
+  {{counter:parseInt(counter) +1}}
   {{counter}}
 </p>
 ```

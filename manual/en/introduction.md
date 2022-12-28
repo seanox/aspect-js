@@ -311,7 +311,7 @@ a permanent counter is very simple.
 ```html
 {{counter:0}}
 <p interval="1000">
-  {{counter:parseInt(counter) +1}}^
+  {{counter:parseInt(counter) +1}}
   {{counter}}
 </p>
 ```
