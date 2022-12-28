@@ -3,6 +3,30 @@
 
 # Reaktives Rendering
 
+Beim reaktiven Ansatz l&ouml;sen &Auml;nderungen an den Datenobjekten von
+Modellen ein partielles Auffrischen der Konsumenten in der View aus. Konsumenten
+sind alle Ausdr&uuml;cke, die lesend auf den ge&auml;nderten Wert eines
+Datenobjekts zugreifen. Die Ausdr&uuml;cke k&ouml;nnen in Elementen und im
+Freitext verwendet werden. F&uuml;r das reaktive Rendering m&uuml;ssen die
+Datenobjekte den ReactProxy nutzen, wozu `ReactProxy.create(object)` oder
+`Object.prototype.toReactProxy()`, was jede Objekt-Instanz bereitstellt,
+verwendet werden.
+
+```javascript
+let Model = {
+    value: ...
+}.toReactProxy();
+```
+
+In diesem Beispiel wird der Renderer automatisch alle Elemente im DOM
+aktualisieren, was die Freitexte einschliesst, welche die Eigenschaft `value`
+vom Model direkt oder indirekt in einem Ausdruck verwenden, wenn sich der Wert
+der Eigenschaft `value` &auml;ndert.
+
+Der ReactProxy wirkt permanent rekursiv auf alle Objekte, in allen Ebenen eines
+Models und auch auf die Objekte die sp&auml;ter als Wert hinzugef&uuml;gt
+werden, auch wenn diese Objekte nicht explizit den ReactProxy nutzen.
+
 TODO:
 
 - basiert auf Daten-Objekten die den ReactProxy verwenden

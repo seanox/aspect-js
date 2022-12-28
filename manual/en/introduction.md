@@ -745,13 +745,13 @@ TODO:
 
 ## Reactivity Rendering
 
-In the reactive approach, rendering reacts on changes of data objects of models
-and triggers a partial rendering at consumers of the changes. Consumers are all
-expressions that have read access to the changed value of a data object. The
-expressions can be used in elements as well as in free text. Whether reactive
-rendering is used is dependent on the data object, which must use the ReactProxy
-for this purpose. The ReactProxy can be applied with the `toReactProxy` method
-provided by each object instance or via the constructor `new ReactProxy(...)`.
+In the reactive approach, changes to the data objects of models trigger a
+partial refresh of the consumers in the view. Consumers are all expressions that
+have read access to the changed value of a data object. The expressions can be
+used in elements and in free text. For reactive rendering, the data objects must
+use the ReactProxy, for which `ReactProxy.create(object)` or
+`Object.prototype.toReactProxy()`, which provides each object instance, are
+used.
 
 ```javascript
 let Model = {
