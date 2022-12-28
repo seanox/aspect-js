@@ -103,10 +103,10 @@ date when using the release channels.
 
 
 # Manuals
-- [DE Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md)
-- [DE Manual](https://github.com/seanox/aspect-js/blob/master/manual/de)
-- [EN Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md)
-- [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en)
+- [DE Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md#einführung)
+- [DE Manual](https://github.com/seanox/aspect-js/blob/master/manual/de#readme)
+- [EN Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md#introduction)
+- [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en#readme)
 - [EN Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 
