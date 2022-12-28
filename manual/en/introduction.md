@@ -30,14 +30,14 @@ datasource, test environment and much more.
 * Expression Language  
   meta-language extension with full JavaScript support
 * Reactivity rendering  
-  Rendering can be reactive to changes in data objects and trigger partial
-  rendering at consumers
+  Rendering reacts to changes in data objects and triggers partial rendering on
+  consumers
 * Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 * Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
-  Non-visible components are removed from the DOM and only reinserted when used  
+  non-visible components are removed from the DOM and only reinserted when used  
 * Model View Controller  
   supports: events, virtual paths, sitemap, permission concept, ...
 * Resource Bundle / Resource Messages  
