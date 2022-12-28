@@ -118,7 +118,7 @@ Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 
 ### events
 
-Diese Deklaration bindet ein oder mehre Ereignisse (siehe
+Diese Deklaration bindet ein oder mehrere Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung
@@ -182,7 +182,7 @@ keine Auswirkungen, solange es im DOM existiert.
 
 Diese Deklaration l&auml;dt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
-`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehre
+`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehrere
 Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
 unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen und eingef&uuml;gt wird. Zudem wird
@@ -423,7 +423,7 @@ und `message`.
 ### output
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
+HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehrere
 Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef&uuml;gt werden.
 Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert

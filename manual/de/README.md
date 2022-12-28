@@ -57,6 +57,7 @@
     * [interval](markup.md#interval)
     * [iterate](markup.md#iterate)
     * [message](markup.md#message)
+    * [namespace](markup.md#namespace)
     * [notification](markup.md#notification)
     * [output](markup.md#output)
     * [release](markup.md#release)

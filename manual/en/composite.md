@@ -23,6 +23,7 @@ automatic object/model binding.
 * [Common Standard Component](#common-standard-component) 
 * [Object/Model Binding](#objectmodel-binding)
   * [Namespace](#namespace)
+  * [Domain concept](#domain-concept)
   * [Scope](#scope)
   * [Model](#model)
   * [Property](#property)
@@ -204,6 +205,11 @@ Examples of possible namespaces:
 `a` + `a.b` + `a.b.c`  
 `b` + `b.c`  
 `c`
+
+
+### Domain concept
+
+TODO:
 
 
 #### Scope

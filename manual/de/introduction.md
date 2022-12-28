@@ -132,25 +132,25 @@ __erforderlich.__
 
 ## Arbeitsbereich
 
-Seanox aspect-js agiert ausschliesslich im BODY-Tag, welches selbt mit
+Seanox aspect-js agiert ausschliesslich im BODY-Tag, welches selbst mit
 einbezogen wird.
 
 
 ## Expression Language
 
-Expressions bzw. die Expression Language (EL) oder in der vorliegenden Dokumentation
-auch Ausdruck bzw. Ausdr&uml;cke genannt, ist ein einfacher Zugang zum clientseitigen
-JavaScript und damit zu den Modellen und Komponenten im Seanox aspect-js. In den
-Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die mit zus&auml;tzliche
-Schl&uuml;sselw&ouml;rtern angereichert ist, womit auch die zahlreichen arithmetischen
-und logischen Operatoren verwendet werden k&ouml;nnen.
+Expressions bzw. die Expression Language (EL) oder in der vorliegenden
+Dokumentation auch Ausdruck und Ausdr&uuml;cke genannt, sind ein einfacher
+Zugang zum client-seitigen JavaScript und damit zu den Modellen und Komponenten.
+In den Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die mit
+zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
+die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
 Die Expression-Language kann im Markup als Freitext und in den Attributen der
 HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
 Hier wird die Expression-Language nicht unterst&uuml;tzt. Bei der Verwendung als
-Freitext wird als Ausgabe immer reiner Text (plain text) erzeugt. Das Hinzuf&uuml;gen
-von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich und wir nur mit den
-Attributen `output` und `import` unterst&uuml;tzt.
+Freitext wird als Ausgabe immer reiner Text (plain text) erzeugt. Das
+Hinzuf&uuml;gen von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich
+und wird nur mit den Attributen `output` und `import` unterst&uuml;tzt.
 
 ```html
 <body lang="{{DataSource.locale}}">
@@ -173,7 +173,7 @@ welche eine direkte Ausgabe in das innere HTML vom Element bewirken.
 ```
 
 Oder mit der Verwendung vom Attribut [release](markup.md#release) werden
-Element und Ausgabe erst mit Abschluss vom Rendering sichtbar.
+Elemente und Ausgabe erst mit Abschluss vom Rendering sichtbar.
 
 ```html
 <p release>
@@ -212,7 +212,7 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 ### output
 
 Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehre
+HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehrere
 Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef&uuml;gt werden.
 Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt,
 womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
@@ -239,7 +239,7 @@ eingef&uuml;gt wird.
 
 Diese Deklaration l&auml;dt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
 eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
-`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehre
+`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehrere
 Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt werden. Auch die
 Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
 unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen und eingef&uuml;gt wird. Zudem wird
@@ -421,7 +421,7 @@ Composite-Id mit einem Kleinbuchstaben am Anfang.
 
 ### events
 
-Diese Deklaration bindet ein oder mehre Ereignisse (siehe
+Diese Deklaration bindet ein oder mehrere Ereignisse (siehe
 https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von anderen
 HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur Validierung

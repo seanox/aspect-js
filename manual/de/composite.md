@@ -24,6 +24,7 @@ Object/Model-Binding.
 * [Common Standard-Komponente](#common-standard-komponente)  
 * [Object/Model-Binding](#objectmodel-binding)
   * [Namespace](#namespace)
+  * [Domain Konzept](#domain-konzept)
   * [Scope](#scope)
   * [Model](#model)
   * [Property](#property)
@@ -212,6 +213,11 @@ Beispiele m&ouml;glicher Namesr&auml;ume:
 `a` + `a.b` + `a.b.c`  
 `b` + `b.c`  
 `c`
+
+
+### Domain Konzept
+
+TODO:
 
 
 ### Scope
