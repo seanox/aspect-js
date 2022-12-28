@@ -25,10 +25,10 @@ Bundle, NoSQL datasource, test environment and much more.
 
 
 # Features
-- Easy integration in markup and JavaScript (clean code)
+- Easy integration in markup and JavaScript (clean code)  
+  combinable with other JavaScript frameworks if they don't do the same thing do
+  and use a different syntax
 - Lightweight implementation (requires no additional frameworks)
-- Easy to integrate and combine with other JavaScript frameworks  
-  if the frameworks do not do the same or use the same syntax
 - Component based architecture
 - Modularization (supports imports at the runtime)  
   component concept for smart/automatic loading of composite resources
@@ -36,7 +36,7 @@ Bundle, NoSQL datasource, test environment and much more.
 - Expression Language  
   meta-language extension with full JavaScript support
 - Reactivity rendering  
-  Rendering reacts to changes in data objects and triggers partial rendering on
+  rendering reacts to changes in data objects and triggers partial rendering on
   consumers
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
@@ -45,7 +45,8 @@ Bundle, NoSQL datasource, test environment and much more.
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
 - Model View Controller (MVC) / Model View ViewModel (MVVM)  
-  supports: events, virtual paths, sitemap, permission concept, ...
+  supports: events, virtual paths, sitemap, permission concept, view
+  object/model binding, ...
 - Resource Bundle / Resource Messages  
   localization, internationalization (i18n) and text outsourcing 
 - NoSQL datasource based on XML  
@@ -103,10 +104,10 @@ date when using the release channels.
 
 
 # Manuals
-- [DE Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md#einführung)
-- [DE Manual](https://github.com/seanox/aspect-js/blob/master/manual/de#readme)
+- [DE Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md#einf&uuml;hrung)
+- [DE Manual](https://github.com/seanox/aspect-js/tree/master/manual/de#readme)
 - [EN Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md#introduction)
-- [EN Manual](https://github.com/seanox/aspect-js/blob/master/manual/en#readme)
+- [EN Manual](https://github.com/seanox/aspect-js/tree/master/manual/en#readme)
 - [EN Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 

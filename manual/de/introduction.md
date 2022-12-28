@@ -6,23 +6,23 @@
 
 ## Was ist Seanox aspect-js?
 
-Gepr&auml;gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug auf
-Funktion und einfache Integration ins Markup, entstand der Wunsch nach einer
-&auml;hnlichen client-seitigen Full-Stack L&ouml;sung.
-Bei Seanox aspect-js steht ein minimalistischer Ansatz zur Implementierung von
-Single-Page Applications (SPAs) im Vordergrund.  
+Gepr&auml;gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug
+auf Funktion und einfache Integration ins Markup, entstand die Idee f&uuml;r
+einen &auml;hnliche client-seitigen Full-Stack L&ouml;sung mit minimalistischem
+und leichtgewichtigem Ansatz zur Implementierung von Single-Page Applications
+(SPAs).  
 
-Das Framework greift den deklarativen Ansatz von HTML auf und erweitert ihn um
-Expression Language, reaktives Rendering mit zus&auml;tzlichen Attributen,
-Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
+Seanox aspect-js greift dazu den deklarativen Ansatz von HTML auf und erweitert
+ihn um Expression Language, reaktives Rendering mit zus&auml;tzlichen
+Attributen, Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
 NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
 # Merkmale
 * Einfache Integration in Markup und JavaScript (sauberer Code)
+  kombinierbar mit anderen JavaScript-Frameworks, wenn diese nicht das Gleiche
+  und eine andere Syntax verwenden
 * Leichtgewichtige Implementierung (erfordert keine zus&auml;tzlichen Frameworks)
-* Leicht zu integrieren und mit anderen JavaScript-Frameworks kombinierbar  
-  wenn die Frameworks nicht das gleiche tun oder die gleiche Syntax verwenden
 * Komponentenbasierte Architektur
 * Modularisierung (unterst&uuml;tzt Importe zur Laufzeit)  
   Komponentenkonzept f&uuml;r das intelligente/automatische Laden von Ressourcen
@@ -30,23 +30,24 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 * Expression Language  
   Meta-Sprach-Erweiterung mit voller JavaScript-Unterst&uuml;tzung
 * Reaktives Rendering  
-  Das Rendering kann auf &Auml;nderungen in Datenobjekten reagieren und ein
-  partielles Rendering bei den Konsumenten ausl&ouml;sen 
+  das Rendering reagiert auf &Auml;nderungen in Datenobjekten l&ouml;st ein
+  partielles Rendering der Konsumenten aus 
 * Markup-Rendering  
   unterst&uuml;tzt: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 * Markup-H&auml;rtung  
   erschwert die Manipulation der Attribute im Markup  
-  Nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
+  nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
   Verwendung eingesetzt  
 * Model View Controller    
-  unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept, ...
+  unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept,
+  View Object/Model Binding, ......
 * Resource-Bundle / Resource-Messages   
   Lokalisierung, Internationalisierung (i18n) und Text-Auslagerung
 * NoSQL-DataSource auf Basis von XML  
   leichtgewichtiges Datenmanagement f&uuml;r Aggregation / Projektion / Transformation
 * Testumgebung  
-  f&uuml;r automatisierte Unit-Tests und Integrationatests
+  f&uuml;r automatisierte Unit- und Integration-Tests
 * ... 
 
 

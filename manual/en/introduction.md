@@ -6,23 +6,22 @@
 
 ## What is Seanox aspect-js?
 
-Influenced by the good experiences with JSF (Java Server Faces) in regard to
-function and an easy integration into the markup, arose a similar client-side
-full stack solution.  
-Seanox aspect-js focuses on a minimalist approach to implementing
-Single-Page Applications (SPAs).  
+Inspired by the good experiences with JSF (Java Server Faces) in terms of
+functionality and easy integration into the markup, the idea for a similar
+client-side full-stack solution with a minimalistic and lightweight approach for
+the implementation of single-page applications (SPAs) was born.
 
-This framework takes the declarative approach of HTML and extends this with
-expression language, reactivity rendering with additional attributes,
-object/model binding, Model View Controller, Resource Bundle (i18n), NoSQL
-datasource, test environment and much more.
+Seanox aspect-js takes the declarative approach of HTML and extends it with
+expression language, reactive rendering with additional attributes, object/model
+binding, model view controller, resource bundle (i18n), NoSQL datasource, test
+environment and much more.
 
 
 # Features
-* Easy integration in markup and JavaScript (clean code)
+* Easy integration in markup and JavaScript (clean code)  
+  combinable with other JavaScript frameworks if they don't do the same thing do
+  and use a different syntax
 * Lightweight implementation (requires no additional frameworks)
-* Easy to integrate and combine with other JavaScript frameworks  
-  if the frameworks do not do the same or use the same syntax
 * Component based architecture
 * Modularization (supports imports at the runtime)  
   component concept for smart/automatic loading of composite resources
@@ -30,7 +29,7 @@ datasource, test environment and much more.
 * Expression Language  
   meta-language extension with full JavaScript support
 * Reactivity rendering  
-  Rendering reacts to changes in data objects and triggers partial rendering on
+  rendering reacts to changes in data objects and triggers partial rendering on
   consumers
 * Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
@@ -39,7 +38,8 @@ datasource, test environment and much more.
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
 * Model View Controller  
-  supports: events, virtual paths, sitemap, permission concept, ...
+  supports: events, virtual paths, sitemap, permission concept, view
+  object/model binding, ...
 * Resource Bundle / Resource Messages  
   localization, internationalization (i18n) and text outsourcing 
 * NoSQL datasource based on XML  
