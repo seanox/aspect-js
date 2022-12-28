@@ -36,15 +36,15 @@ Bundle, NoSQL datasource, test environment and much more.
 - Expression Language  
   meta-language extension with full JavaScript support
 - Reactivity rendering  
-  Rendering can be reactive to changes in data objects and trigger partial
+  rendering can be reactive to changes in data objects and trigger partial
   rendering at consumers
 - Markup rendering  
   supports: condition, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 - Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
-  Non-visible components are removed from the DOM and only reinserted when used  
-- Model View Controller  
+  non-visible components are removed from the DOM and only reinserted when used  
+- Model View Controller (MVC) / Model View ViewModel (MVVM)  
   supports: events, virtual paths, sitemap, permission concept, ...
 - Resource Bundle / Resource Messages  
   localization, internationalization (i18n) and text outsourcing 
