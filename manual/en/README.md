@@ -150,7 +150,7 @@ Machine translation with [DeepL](https://deepl.com).
   * [Common Standard Component](composite.md#common-standard-component) 
   * [Object/Model-Binding](composite.md#objectmodel-binding)
     * [Namespace](composite.md#namespace)
-    * [Domain concept](#composite.md#domain-concept)
+    * [Domain concept](composite.md#domain-concept)
     * [Scope](composite.md#scope)
     * [Model](composite.md#model)
     * [Property](composite.md#property)
