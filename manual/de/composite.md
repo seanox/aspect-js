@@ -1,4 +1,4 @@
-[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
+[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Namensräume / Domain-Konzept](namespace.md)
 - - -
 
 # Komponenten
@@ -373,4 +373,4 @@ TODO:
 
 - - -
 
-[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Erweiterung](extension.md)
+[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Namensräume / Domain-Konzept](namespace.md)
