@@ -47,7 +47,7 @@
     <include name="CHANGES"/>
     <include name="LICENSE"/>
     <include name="README.md"/>
-    <exclude name="**/aspect-js.js"/>
+    <exclude name="**/${ant.project.name}.js"/>
     <exclude name="**/*.zip"/>
   </fileset>   
     
@@ -126,14 +126,16 @@
         <file name="test.js"/>
       </filelist>   
     </concat>
-    <replaceregexp file="${release.file}" match="(?s)(?&lt;=\S)(/\*\*)" flags="g" replace="${line.separator}${line.separator}\1" byline="false"/>
-    <replaceregexp file="${release.file}" match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" flags="g" replace="\1" byline="false"/>
+    <replaceregexp file="${release.file}" flags="g" byline="false"
+        match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
+    <replaceregexp file="${release.file}" flags="g" byline="false"
+        match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
     <copy file="${release.file}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c npm link ."/>
     </exec>
     <exec executable="cmd.exe" dir="compress">
-      <arg value="/c uglifyjs ..\release\aspect-js.js -c -m -o ..\release\aspect-js-min.js"/>
+      <arg value="/c uglifyjs ${release.file} -c -m -o ${release.file.min}"/>
     </exec>
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c npm uninstall -g uglify-js"/>
