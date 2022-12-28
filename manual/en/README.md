@@ -12,7 +12,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [Resource Bundle](#resource-bundle-i18n)
 * [Model View Controller](#model-view-controller)
 * [Composite](#composite)
-* [Namespaces / Domain concept](#namespaces--domain-concept)
+* [Namespaces / domain concept](#namespaces--domain-concept)
 * [Reactivity Rendering](#reactivity-rendering)
 * [Extension](#extension)
 * [Events](#events)
@@ -161,8 +161,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [Validation](composite.md#validation)
 
 
-### Namespaces / Domain concept
-* [Namespaces / Domain concept](namespace.md#namespaces--domain-concept)
+### Namespaces / domain concept
+* [Namespaces / domain concept](namespace.md#namespaces--domain-concept)
 
 
 ### Reactivity Rendering
