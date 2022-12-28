@@ -1,4 +1,4 @@
-[Model View Controller](mvc.md) | [TOC](README.md#components) | [Namespaces / domain concept](namespace.md)
+[Model View Controller](mvc.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
 - - -
 
 # Components
@@ -362,4 +362,4 @@ TODO:
 
 - - -
 
-[Model View Controller](mvc.md) | [TOC](README.md#components) | [Namespaces / domain concept](namespace.md)
+[Model View Controller](mvc.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
