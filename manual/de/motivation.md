@@ -9,7 +9,7 @@ Trenderscheinung. Neben der strikten Trennung der Komponenten, sind
 Skalierbarkeit und Modularisierung gute Argumente f&uuml;r diese Art der
 Anwendungsarchitektur.
 
-Die Vielzahl an Frameworks f&uuml;r browserbasierter Rich-Clients ist gross.
+Die Vielzahl an Frameworks f&uuml;r browserbasierte Rich-Clients ist gross.
 Sie unterscheiden sich stark in Funktionalit&auml;t, Komplexit&auml;t,
 Gr&ouml;sse und ben&ouml;tigen teilweise eigene Compiler und Server.
 
