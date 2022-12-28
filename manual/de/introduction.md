@@ -19,7 +19,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
 # Merkmale
-* Einfache Integration in Markup und JavaScript (sauberer Code)
+* Einfache Integration in Markup und JavaScript (sauberer Code)  
   kombinierbar mit anderen JavaScript-Frameworks, wenn diese nicht das Gleiche
   und eine andere Syntax verwenden
 * Leichtgewichtige Implementierung (erfordert keine zus&auml;tzlichen Frameworks)
