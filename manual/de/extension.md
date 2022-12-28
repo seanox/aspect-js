@@ -1,4 +1,4 @@
-[Komponenten](composite.md) | [Inhalt](README.md#erweiterung) | [Ereignisse](events.md)
+[Reaktives Rendering](reactive.md) | [Inhalt](README.md#erweiterung) | [Ereignisse](events.md)
 - - -
 
 # Erweiterung
@@ -447,4 +447,4 @@ entsprechend der Reihenfolge bei der Registrierung aufgerufen werden.
 
 - - -
 
-[Komponenten](composite.md) | [Inhalt](README.md#erweiterung) | [Ereignisse](events.md)
+[Reaktives Rendering](reactive.md) | [Inhalt](README.md#erweiterung) | [Ereignisse](events.md)
