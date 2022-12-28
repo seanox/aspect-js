@@ -1,4 +1,4 @@
-[Components](composite.md) | [TOC](README.md#extension) | [Events](events.md)
+[Reactivity Rendering](reactive.md) | [TOC](README.md#extension) | [Events](events.md)
 - - -
 
 # Extension
@@ -442,4 +442,4 @@ according to the order in which they were registered.
 
 - - -
 
-[Components](composite.md) | [TOC](README.md#extension) | [Events](events.md)
+[Reactivity Rendering](reactive.md) | [TOC](README.md#extension) | [Events](events.md)
