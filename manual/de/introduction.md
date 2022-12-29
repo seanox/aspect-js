@@ -24,7 +24,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   und eine andere Syntax verwenden
 * Leichtgewichtige Implementierung (erfordert keine zus&auml;tzlichen Frameworks)
 * Komponentenbasierte Architektur
-* Namespaces und Domain-Konzept
+* Namespaces und Domain-Konzept  
   zur besseren Strukturierung von Komponenten, Modulen und Gesch&auml;ftslogik
 * Modularisierung (unterst&uuml;tzt Importe zur Laufzeit)  
   Komponentenkonzept f&uuml;r das intelligente/automatische Laden von Ressourcen
