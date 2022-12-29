@@ -779,11 +779,14 @@ let Model = {
 In diesem Beispiel wird der Renderer automatisch alle Elemente im DOM
 aktualisieren, was die Freitexte einschliesst, welche die Eigenschaft `value`
 vom Model direkt oder indirekt in einem Ausdruck verwenden, wenn sich der Wert
-der Eigenschaft `value` &auml;ndert.
+der Eigenschaft `value` &auml;ndert oder genauer, wenn der Wert im Datenobjekt
+final gesetzt wurde. Was bei der Verwendung von Getter und Setter relevant sein
+kann.
 
-Der ReactProxy wirkt permanent rekursiv auf alle Objekte, in allen Ebenen eines
-Models und auch auf die Objekte die sp&auml;ter als Wert hinzugef&uuml;gt
-werden, auch wenn diese Objekte nicht explizit den ReactProxy nutzen.
+Der ReactProxy wirkt permanent rekursiv auf alle Objektebenen und auch auf die
+Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden, auch wenn diese
+Objekte nicht explizit den ReactProxy nutzen, werden f&uuml;r die referenzierten
+Objekte neue Instanzen gebildet.
 
 [Mehr erfahren](reactive.md)
 

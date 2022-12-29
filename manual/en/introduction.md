@@ -761,11 +761,13 @@ let Model = {
 
 In this example, the renderer will automatically update all elements in the DOM,
 which includes free-text that uses the property value from the model directly or
-indirectly in an expression when the value of the property `value` changes.
+indirectly in an expression when the value of the property `value` changes or
+more exactly, if the value in the data object was set final, which can be
+relevant when using getters and setters.
 
-The ReactProxy works permanently recursively on all objects, in all levels of a
-model and also on the objects that are added later as values, even if these
-objects do not explicitly use the ReactProxy.
+The ReactProxy works permanently recursively on all object levels and also on
+objects that are added later as values, even if they do not explicitly use the
+ReactProxy, new instances are created for the referenced objects.
 
 [Learn more](reactive.md)
 
