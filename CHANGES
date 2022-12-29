@@ -2,8 +2,8 @@
 BF: Review: Optimization and corrections
 BF: Documentation: Correction of encoding
 BF: Build: Optimization / correction of the release process
-BF: Composite Events: Correction of the missing selector for:
-    EVENT_RENDER_START, EVENT_MOUNT_START, EVENT_RENDER_NEXT, EVENT_MOUNT_NEXT
+BF: Composite Events: Correction of the missing selector
+    for: EVENT_RENDER_START, EVENT_MOUNT_START, EVENT_RENDER_NEXT, EVENT_MOUNT_NEXT
 BF: Test: Correction of the output of failed assertions
 CR: Reactive: Added for a reactivity rendering
     Rendering can be reactive to changes in data objects and trigger partial
@@ -11,10 +11,6 @@ CR: Reactive: Added for a reactivity rendering
 CR: Composite: Added a domain concept based on namespaces
     In the markup, the parent composite elements that use the attribute namespace
     define the namespace to be used for the model and modules.
-CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
-    If text nodes contain expressions, they are split and reassembled from a
-    sequence of new static and dynamic text nodes. EVENT_RENDER_NEXT now also
-    captures the and text nodes thus created during rendering.
 CR: Composite: Aligned to the syntax for: COMPOSITE_ID / ELEMENT_ID / CUSTOMIZE_SCOPE
     ELEMENT_ID characters : and @ can only be used correctly
     COMPOSITE_ID / ELEMENT_ID character - is omitted, analogous to the syntax for CSS and variables in JavaScript
@@ -24,11 +20,15 @@ CR: Composite: Extension of the element id for an optional reference
     after qualifiers and separated by the @ character:
           e.g. buttonSend:...@Imprint:Contact
     As with qualifiers, the : character can be used to separate object levels.
+CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
+    If text nodes contain expressions, they are split and reassembled from a
+    sequence of new static and dynamic text nodes. EVENT_RENDER_NEXT now also
+    captures the and text nodes thus created during rendering.
 CR: NPM: Change to a package with scope (is also already in 1.4.0)
     The change was made afterwards of the 1.4.0 release.
 CR: Build: Releases are now only available on the release page
 CR: Build: Switch to UglifyJS
-CR: Server: Added Ant task to start and stop
+CR: Server: Added Ant task to start and stop (web server)
 CR: Playground: Added as a playground for development
     Develop with the current sources without build.
 CR: Test: Update web server to version 5.5.x
