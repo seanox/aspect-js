@@ -23,6 +23,8 @@ environment and much more.
   and use a different syntax
 * Lightweight implementation (requires no additional frameworks)
 * Component based architecture
+* Namespaces and domain concept
+  for better structuring of components, modules and business logic
 * Modularization (supports imports at the runtime)  
   component concept for smart/automatic loading of composite resources
 * Event handling

@@ -149,7 +149,6 @@
   * [Common Standard-Komponente](composite.md##common-standard-komponente) 
   * [Object/Model-Binding](composite.md#objectmodel-binding)
     * [Namespace](composite.md#namespace)
-    * [Domain-Konzept](composite.md#domain-konzept)
     * [Scope](composite.md#scope)
     * [Model](composite.md#model)
     * [Property](composite.md#property)

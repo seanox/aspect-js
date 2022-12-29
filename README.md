@@ -30,6 +30,8 @@ Bundle, NoSQL datasource, test environment and much more.
   and use a different syntax
 - Lightweight implementation (requires no additional frameworks)
 - Component based architecture
+- Namespaces and domain concept
+  for better structuring of components, modules and business logic
 - Modularization (supports imports at the runtime)  
   component concept for smart/automatic loading of composite resources
 - Event handling
@@ -84,8 +86,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.4.0](https://github.com/seanox/aspect-js/releases/download/1.4.0/aspect-js-1.4.0.zip)  
-[Seanox aspect-js 1.4.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.4.0.zip)
+[Seanox aspect-js 1.5.0](https://github.com/seanox/aspect-js/releases/download/1.5.0/aspect-js-1.5.0.zip)  
+[Seanox aspect-js 1.5.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.5.0.zip)
 
 
 # Release Channels
@@ -112,22 +114,24 @@ date when using the release channels.
 
 
 # Changes
-## 1.4.0 20211210
-BF: Composite: Correction in the use of attributes  
-BF: Composite Expression Language: Line breaks in the expressions are supported  
-BF: Composite: Correction for a URL without a file  
-BF: DataSource: Correction for a URL without a file  
-BF: MVC SiteMap: Correction of the method customize when using variable paths  
-BF: Review: Correction/optimization JavaScript (no functional change)  
-BF: Test: Correction in determining the browser engine for WebKit and Blink  
-CR: Composite Expression Language: Added keywords eeq (===), nee (!==)  
-CR: Composite: Added attribute strict for loading of modules/composites  
-CR: Extension Namespace: Added method create  
-CR: Extension: Added method window.location.combine to combine paths  
-CR: License: Changed to Apache License Version 2.0  
-CR: Test: Integration of a web server  
-CR: Test: Removal of the Edge engine after switching to Chromium  
-CR: Test: Removal of the distinction between MacOS and iOS
+## 1.5.0 2022xxxx (upcoming version)  
+BF: Review: Optimization and corrections  
+BF: Documentation: Correction of encoding  
+BF: Build: Optimization / correction of the release process  
+BF: Composite Events: Correction of the missing selector for:  
+BF: Test: Correction of the output of failed assertions  
+CR: Reactive: Added for a reactivity rendering  
+CR: Composite: Added a domain concept based on namespaces  
+CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes  
+CR: Composite: Aligned to the syntax for: COMPOSITE_ID / ELEMENT_ID / CUSTOMIZE_SCOPE  
+CR: Composite: Extension of the element id for an optional reference  
+CR: NPM: Change to a package with scope (is also already in 1.4.0)  
+CR: Build: Releases are now only available on the release page  
+CR: Build: Switch to UglifyJS  
+CR: Server: Added Ant task to start and stop  
+CR: Playground: Added as a playground for development  
+CR: Test: Update web server to version 5.5.x  
+CR: Test: Added Assert.assertUndefined(...) / Assert.assertNotUndefined(...)  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
