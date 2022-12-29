@@ -41,7 +41,7 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.0.0 20221215
+ * @version 1.0.0 20221229
  */
 if (typeof ReactProxy === "undefined") {
 
@@ -73,14 +73,16 @@ if (typeof ReactProxy === "undefined") {
     if (Object.prototype.toReactProxy === undefined) {
         Object.prototype.toReactProxy = function() {
 
-            for (const key in this) {
-                const value = this[key];
+            const target = Object.assign({}, this);
+
+            for (const key in target) {
+                const value = target[key];
                 if (typeof value === "object"
                         && value !== null)
-                    this[key] = this[key].toReactProxy();
+                    target[key] = target[key].toReactProxy();
             }
 
-            const proxy = new Proxy(this, {
+            const proxy = new Proxy(target, {
 
                 notifications: new Map(),
 
@@ -175,6 +177,11 @@ if (typeof ReactProxy === "undefined") {
             // This way both places are caught.
             proxy.toReactProxy = () => {
                 return proxy;
+            };
+
+            const origin = this;
+            proxy.toObject = () => {
+                return origin;
             };
 
             return proxy;
