@@ -64,7 +64,6 @@ to a DTO (Data Transfer Object), the ReactProxy instance is independent and has
 no direct references to the original data object.__
 
 ```javascript
-
 const objectA = {};
 const objectB = objectA.toReactProxy();
 objectB.value = "B";
@@ -98,8 +97,6 @@ const objectD = ({objectA}).toReactProxy();
 // Assertion
 objectD.objectA === objectA
 ```
-
-TODO:
 
 
 - - -
