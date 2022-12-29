@@ -21,11 +21,91 @@ let Model = {
 In diesem Beispiel wird der Renderer automatisch alle Elemente im DOM
 aktualisieren, was die Freitexte einschliesst, welche die Eigenschaft `value`
 vom Model direkt oder indirekt in einem Ausdruck verwenden, wenn sich der Wert
-der Eigenschaft `value` &auml;ndert.
+der Eigenschaft `value` &auml;ndert oder genauer, wenn der Wert im Datenobjekt
+final gesetzt wurde. Was bei der Verwendung von Getter und Setter relevant sein
+kann.
 
-Der ReactProxy wirkt permanent rekursiv auf alle Objekte, in allen Ebenen eines
-Models und auch auf die Objekte die sp&auml;ter als Wert hinzugef&uuml;gt
-werden, auch wenn diese Objekte nicht explizit den ReactProxy nutzen.
+__Das reaktive Verhalten basiert auf Notifications innerhalb vom ReactProxy mit
+denen das Rendering angesteuert wird. Damit die Notifications eingerichtet
+werden k&ouml;nnen, muss der ReactProxy die Konsumenten der Daten kennen, wozu
+er die erforderlichen Informationen beim Parsen und Rendern vom Markup sammelt,
+was auch für Markup funktioniert, welches erst zur Laufzeit eingef&uuml;gt wird.
+Somit muss der ReactProxy immer vor den Konsumenten existieren.__
+
+Beenden l&auml;sst sich das reaktive Rendering durch das gezielte L&ouml;schen
+von ReactProxy-Instanzen mit der `delete` Methode.
+
+Der ReactProxy wirkt permanent rekursiv auf alle Objektebenen und auch auf die
+Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden, auch wenn diese
+Objekte nicht explizit den ReactProxy nutzen, werden f&uuml;r die referenzierten
+Objekte neue Instanzen gebildet.
+
+```javascript
+const objectA = {}
+const objectB = {}
+objectA.objectB = objectB;
+
+// Assertions
+objectA.objectB === objectB
+
+const objectC = objectA.toReactProxy();
+
+// Assertions
+objectC.objectB === objectA.objectB
+objectC.objectB !== objectB
+objectA.objectB !== objectB
+
+const objectD = ({}).toReactProxy();
+objectD.objectB = objectB;
+
+// Assertions
+objectD.objectB !== objectB
+objectD.objectB === objectC.objectB
+```
+
+__Die ReactProxy-Instanz und das urspr&uuml;ngliche Datenobjekt sind entkoppelt.
+Vergleichbar mit einem DTO (Data Transfer Object) ist die ReactProxy-Instanz
+eigenst&auml;ndig und hat keine direkten Referenzen zum urspr&uuml;nglichen
+Datenobjekt.__
+
+```javascript
+
+const objectA = {};
+const objectB = objectA.toReactProxy();
+objectB.value = "B";
+
+// Assertions
+typeof objectA.value === "undefined"
+typeof objectB.value === "string"
+```
+
+Der Zugriff auf das urspr&uuml;ngliche Datenobjekt ist mit der Methode
+`ReactProxy.prototype.toObject()` m&ouml;glich. Hierzu nochmal der Hinweis, dass
+das Datenobjekt entkoppelt von der ReactProxy-Instanz existiert und nicht dem
+aktuellen Stand der ReactProxy-Instanz entsprechen wird.
+
+Von einer bestehenden ReactProxy-Instanz kann keine neue ReactProxy-Instanz
+erstellt werden. Die entsprechenden Methoden werden immer eine Referenz auf die
+urspr&uuml;ngliche ReactProxy-Instanz zur&uuml;ckgeben.
+
+```javascript
+const objectA = ({}).toReactProxy();
+const objectB = objectA.toReactProxy();
+const objectC = ReactProxy.create(objectA);
+
+// Assertions
+objectA === objectB
+objectA === objectC
+objectB === objectC
+
+const objectD = ({objectA}).toReactProxy();
+
+// Assertion
+objectD.objectA === objectA
+```
+
+
+
 
 TODO:
 
@@ -33,17 +113,18 @@ TODO:
 - ~~ReactProxy.create(object) oder Object.prototype.toReactProxy erzeugen eine entsprechende Instanz~~
 - ~~ReactProxy funktioniert fortlaufend rekursive, somit verwenden auch Unterobjekte den ReactProxy, auch wenn sie später
   erst dem objekt hinzugefügt werden~~
-- ReactProxy kann auf ein ReactProxy angewendet werden, hat aber keinen Effekt und die Methoden werden die initiale
-  Instanz vom ReactProxy-Objekt zurückgeben
+- ~~ReactProxy kann auf ein ReactProxy angewendet werden, hat aber keinen Effekt und die Methoden werden die initiale
+  Instanz vom ReactProxy-Objekt zurückgeben~~
 - ~~ändert sich ein Wert im ReactProxy-Objekt, werden die Konsumenten in der View aktualisiert (re-renderd)~~
 - die Aktualisierung erfolgt bei Elementen auch dann, wenn diese nicht sichtbar in Attributen einen Wert konsumieren,
   auch dann wird das komplette Element aktualisiert
-- die Nutzung vom ReactProxy für ein Objekt kann nur durch delete der Instanz wieder aufgehoben werden
-- die Aktualisierung der Konsumenten erfolgt nach der Änderung im Objekt und nicht direkt mit,
+- ~~die Nutzung vom ReactProxy für ein Objekt kann nur durch delete der Instanz wieder aufgehoben werden~~
+- ~~die Aktualisierung der Konsumenten erfolgt nach der Änderung im Objekt und nicht direkt mit,
   mit Beginn der Aktualisierung ist der Wert beim Objekt schon final gesetzt (evtl. wichtig bei Verwendung von Getter
-  und Setter)
+  und Setter)~~
 
 
 - - -
 
 [Komponenten](composite.md) | [Inhalt](README.md#reaktives-rendering) | [Erweiterung](extension.md)
+
