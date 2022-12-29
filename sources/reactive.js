@@ -78,7 +78,8 @@ if (typeof ReactProxy === "undefined") {
             for (const key in target) {
                 const value = target[key];
                 if (typeof value === "object"
-                        && value !== null)
+                        && value !== null
+                        && !Array.isArray(value))
                     target[key] = target[key].toReactProxy();
             }
 
@@ -140,7 +141,8 @@ if (typeof ReactProxy === "undefined") {
                 set(target, key, value) {
 
                     if (typeof value === "object"
-                            && value !== null)
+                            && value !== null
+                            && !Array.isArray(value))
                         value = value.toReactProxy();
 
                     try {return target[key] = value;
