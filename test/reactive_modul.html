@@ -28,60 +28,6 @@
         Test.create({test() {
             capture.validate();
         }});
-
-        Test.create({test() {
-            const objectA = {}
-            const objectB = {}
-            objectA.objectB = objectB;
-            Assert.assertEquals(objectA.objectB, objectB);
-
-            const objectC = objectA.toReactProxy();
-            Assert.assertNotEquals(objectC.objectB, objectB);
-            Assert.assertNotEquals(objectC.objectB, objectA.objectB);
-            Assert.assertEquals(objectA.objectB, objectB);
-
-            const objectD = ({}).toReactProxy();
-            objectD.objectB = objectB;
-            Assert.assertNotEquals(objectD.objectB, objectB);
-            Assert.assertNotEquals(objectD.objectB, objectC.objectB);
-        }});
-
-        Test.create({test() {
-            const objectA = ({}).toReactProxy();
-            const objectB = objectA.toReactProxy();
-            const objectC = ReactProxy.create(objectA);
-            Assert.assertEquals(objectA, objectB);
-            Assert.assertEquals(objectA, objectC);
-            Assert.assertEquals(objectB, objectC);
-
-            const objectD = ({objectA}).toReactProxy();
-            Assert.assertEquals(objectD.objectA, objectA);
-        }});
-
-        Test.create({test() {
-            const objectA = {};
-            const objectB = objectA.toReactProxy();
-            Assert.assertNotEquals(objectA, objectB);
-
-            const objectC = objectB.toObject();
-            Assert.assertNotEquals(objectC, objectB);
-            Assert.assertEquals(objectC, objectA);
-
-            const objectD = objectB.toObject().toReactProxy();
-            Assert.assertNotEquals(objectD, objectB);
-
-            const objectE = objectD.toObject()
-            Assert.assertEquals(objectE, objectA);
-        }});
-
-        Test.create({test() {
-            const objectA = {};
-            const objectB = objectA.toReactProxy();
-            objectB.value = "B";
-
-            Assert.assertEquals("undefined", typeof objectA.value);
-            Assert.assertEquals("string", typeof typeof objectB.value);
-        }});
     </script>
     <script type="text/test">
       A: _10000_
@@ -102,7 +48,34 @@
       X-a: X
     </script>
     <script type="text/test">
+      A: _10001_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: A
+      X-a: X
+    </script>
+    <script type="text/test">
       A: _10002_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: A
+      X-a: X
+    </script>
+    <script type="text/test">
+      A: _10002_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: A
+      X-a: X
+    </script>
+    <script type="text/test">
+      A: _10003_
       C: _20000_
       F: _30000_
       x: _object_
@@ -167,6 +140,15 @@
     <script type="text/test">
       A: _10003_
       C: _20030_
+      F: _30100_
+      x: _object_
+      Y: _object_
+      A-a: C
+      X-a: X
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20030_
       F: _30200_
       x: _object_
       Y: _object_
@@ -182,16 +164,8 @@
       A-a: C
       X-a: X
     </script>
-  </head>
+  <head>
   <body>
-    A: _{{modelA.valueA}}_
-    C: _{{modelA.valueB.valueC}}_
-    F: _{{modelA.valueB.valueE.valueF}}_
-
-    x: _{{typeof modelX.valueX}}_
-    Y: _{{typeof modelA.valueY}}_
-
-    A-a: {{modelA.a}}
-    X-a: {{modelX.a}}
+    <div id="reactiveA" composite static/>
   </body>
 </html>
