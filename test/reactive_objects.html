@@ -82,6 +82,41 @@
             Assert.assertEquals("undefined", typeof objectA.value);
             Assert.assertEquals("string", typeof typeof objectB.value);
         }});
+
+        const modelX = {
+            valueA: 10000,
+            valueB: {
+                valueC: 20000,
+                valueE: {
+                    valueF: 30000,
+                    valueH: null,
+                }
+            },
+            valueG: null
+        };
+
+        const modelA = modelX.toReactProxy();
+
+        modelA.a = "A";
+        modelX.a = "X";
+
+        modelX.valueX = {};
+        modelA.valueY = {};
+
+        window.setTimeout(() => {modelA.valueA++;}, 1000);
+        window.setTimeout(() => {modelA.valueA++;}, 1250);
+        window.setTimeout(() => {modelA.valueA++;}, 1500);
+
+        window.setTimeout(() => {modelA.valueB.valueC += 10;}, 2000);
+        window.setTimeout(() => {modelA.valueB.valueC += 10;}, 2250);
+        window.setTimeout(() => {modelA.valueB.valueC += 10;}, 2500);
+
+        window.setTimeout(() => {modelA.valueB.valueE.valueF += 100}, 3000);
+        window.setTimeout(() => {modelA.valueB.valueE.valueF += 100}, 3250);
+        window.setTimeout(() => {modelA.valueB.valueE.valueF += 100}, 3500);
+
+        window.setTimeout(() => {modelX.a = "B"}, 1000);
+        window.setTimeout(() => {modelA.a = "C"}, 3000);
     </script>
     <script type="text/test">
       A: _10000_
