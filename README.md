@@ -118,17 +118,17 @@ date when using the release channels.
 BF: Review: Optimization and corrections  
 BF: Documentation: Correction of encoding  
 BF: Build: Optimization / correction of the release process  
-BF: Composite Events: Correction of the missing selector for:  
+BF: Composite Events: Correction of the missing selector  
 BF: Test: Correction of the output of failed assertions  
 CR: Reactive: Added for a reactivity rendering  
 CR: Composite: Added a domain concept based on namespaces  
-CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes  
 CR: Composite: Aligned to the syntax for: COMPOSITE_ID / ELEMENT_ID / CUSTOMIZE_SCOPE  
 CR: Composite: Extension of the element id for an optional reference  
+CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes  
 CR: NPM: Change to a package with scope (is also already in 1.4.0)  
 CR: Build: Releases are now only available on the release page  
 CR: Build: Switch to UglifyJS  
-CR: Server: Added Ant task to start and stop  
+CR: Server: Added Ant task to start and stop (web server)  
 CR: Playground: Added as a playground for development  
 CR: Test: Update web server to version 5.5.x  
 CR: Test: Added Assert.assertUndefined(...) / Assert.assertNotUndefined(...)  
