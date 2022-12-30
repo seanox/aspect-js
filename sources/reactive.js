@@ -41,7 +41,7 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.0.0 20221229
+ * @version 1.0.0 20221230
  */
 if (typeof ReactProxy === "undefined") {
 
@@ -73,13 +73,18 @@ if (typeof ReactProxy === "undefined") {
     if (Object.prototype.toReactProxy === undefined) {
         Object.prototype.toReactProxy = function() {
 
-            const target = Object.assign({}, this);
+            if (typeof this !== "object")
+                throw new TypeError("Not supported data type: " + typeof this);
 
+            if (Array.isArray(this))
+                return this.map(entry => typeof entry === "object"
+                        && entry !== null ? entry.toReactProxy() : entry);
+
+            const target = Object.assign({}, this);
             for (const key in target) {
                 const value = target[key];
                 if (typeof value === "object"
-                        && value !== null
-                        && !Array.isArray(value))
+                        && value !== null)
                     target[key] = target[key].toReactProxy();
             }
 
@@ -141,8 +146,7 @@ if (typeof ReactProxy === "undefined") {
                 set(target, key, value) {
 
                     if (typeof value === "object"
-                            && value !== null
-                            && !Array.isArray(value))
+                            && value !== null)
                         value = value.toReactProxy();
 
                     try {return target[key] = value;
