@@ -28,7 +28,7 @@ CR: NPM: Change to a package with scope (is also already in 1.4.0)
     The change was made afterwards of the 1.4.0 release.
 CR: Build: Releases are now only available on the release page
 CR: Build: Switch to UglifyJS
-CR: Server: Added Ant task to start and stop (web server)
+CR: Server: Added Ant task to start and stop the web server
 CR: Playground: Added as a playground for development
     Develop with the current sources without build.
 CR: Test: Update web server to version 5.5.x
