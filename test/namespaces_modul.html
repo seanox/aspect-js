@@ -33,31 +33,38 @@
         Test.create({test() {
             capture.validate();
         }});
+
+        Test.create({test() {
+            Assert.assertFalse(Namespace.exists("ns_3"));
+            Assert.assertUndefined(Namespace.lookup("ns_3"));
+            Assert.assertFalse(Namespace.exists("ns_3.a"));
+            Assert.assertUndefined(Namespace.lookup("ns_3.a"));
+            Assert.assertFalse(Namespace.exists("ns_3.a.moduleA"));
+            Assert.assertUndefined(Namespace.lookup("ns_3.a.moduleA"));
+        }});
+
+        Test.create({test() {
+            Assert.assertTrue(Namespace.exists("ns_4"));
+            Assert.assertNotUndefined(Namespace.lookup("ns_4"));
+            Assert.assertEquals("object", typeof Namespace.lookup("ns_4"))
+            Assert.assertFalse(Namespace.lookup("ns_4") instanceof Element);
+            Assert.assertTrue(Namespace.exists("ns_4.a"));
+            Assert.assertNotUndefined(Namespace.lookup("ns_4.a"));
+            Assert.assertEquals("object", typeof Namespace.lookup("ns_4.a"))
+            Assert.assertFalse(Namespace.lookup("ns_4.a") instanceof Element);
+            Assert.assertTrue(Namespace.exists("ns_4.a.moduleA"));
+            Assert.assertNotUndefined(Namespace.lookup("ns_4.a.moduleA"));
+            Assert.assertEquals("object", typeof Namespace.lookup("ns_4.a.moduleA"));
+            Assert.assertFalse(Namespace.lookup("ns_4.a.moduleA") instanceof Element);
+        }});
     </script>
     <script type="text/test">
+      content of moduleA (ns_3.a)
+      content of moduleA (ns_4.a)
     </script>
   </head>
   <body>
-    <div id="moduleD" composite static/>
-
-    <div id="nsA1" composite namespace static>
-      <div id="nsA2" composite namespace static>
-        <div id="moduleA3" composite namespace static>
-        </div>
-      </div>
-    </div>
-
-    <div id="nsB1" composite namespace static>
-      <div id="nsB2" composite namespace static>
-        <div id="moduleB3" composite namespace static>
-          <div id="moduleB4" composite static>
-          </div>
-        </div>
-        <div id="moduleB5" composite static>
-          <div id="moduleB6" composite static>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="ns_3" composite namespace static></div>
+    <div id="ns_4" composite namespace static></div>
   </body>
 </html>
