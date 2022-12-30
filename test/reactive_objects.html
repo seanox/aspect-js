@@ -92,7 +92,9 @@
                     valueH: null,
                 }
             },
-            valueG: null
+            valueG: null,
+            arrayA: [{text: "A"},{text: "B"},{text: "C"}],
+            arrayB: [{text: "D"},{text: "E"},{text: "F"}]
         };
 
         const modelA = modelX.toReactProxy();
@@ -117,6 +119,11 @@
 
         window.setTimeout(() => {modelX.a = "B"}, 1000);
         window.setTimeout(() => {modelA.a = "C"}, 3000);
+
+        window.setTimeout(() => {modelX.arrayA[2].text += "Xb"}, 1000);
+        window.setTimeout(() => {modelX.arrayB[2].text += "Xe"}, 1500);
+        window.setTimeout(() => {modelA.arrayA[2].text += "Ab"}, 2000);
+        window.setTimeout(() => {modelA.arrayB[2].text += "Ae"}, 2500);
     </script>
     <script type="text/test">
       A: _10000_
@@ -126,6 +133,10 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10001_
@@ -135,6 +146,10 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10002_
@@ -144,6 +159,10 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -153,6 +172,10 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -162,6 +185,23 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20010_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: A
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -171,6 +211,10 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -180,6 +224,23 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20030_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: A
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: FAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -189,6 +250,10 @@
       Y: _object_
       A-a: A
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: FAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -198,6 +263,10 @@
       Y: _object_
       A-a: C
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: FAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -207,6 +276,10 @@
       Y: _object_
       A-a: C
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: FAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -216,6 +289,10 @@
       Y: _object_
       A-a: C
       X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
+      a-arrayB: FAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
   </head>
   <body>
@@ -228,5 +305,11 @@
 
     A-a: {{modelA.a}}
     X-a: {{modelX.a}}
+
+    a-arrayA: {{JSON.stringify(modelA.arrayA)}}
+    a-arrayB: {{modelA.arrayB[2].text}}
+
+    x-arrayA: {{JSON.stringify(modelX.arrayA)}}
+    x-arrayB: {{modelX.arrayB[2].text}}
   </body>
 </html>
