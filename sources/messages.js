@@ -84,6 +84,7 @@ if (typeof Messages === "undefined") {
         // loading of the key-value pairs is embedded.
         const localize = DataSource.localize;
         DataSource.localize = (locale) => {
+
             DataSource.localize$origin(locale);
 
             window["Messages"] = {};
