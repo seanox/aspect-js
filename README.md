@@ -114,7 +114,7 @@ date when using the release channels.
 
 
 # Changes
-## 1.5.0 2022xxxx (upcoming version)  
+## 1.5.0 2023xxxx (upcoming version)  
 BF: Review: Optimization and corrections  
 BF: Documentation: Correction of encoding  
 BF: Build: Optimization / correction of the release process  
@@ -128,7 +128,7 @@ CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes
 CR: NPM: Change to a package with scope (is also already in 1.4.0)  
 CR: Build: Releases are now only available on the release page  
 CR: Build: Switch to UglifyJS  
-CR: Server: Added Ant task to start and stop (web server)  
+CR: Server: Added Ant task to start and stop the web server  
 CR: Playground: Added as a playground for development  
 CR: Test: Update web server to version 5.5.x  
 CR: Test: Added Assert.assertUndefined(...) / Assert.assertNotUndefined(...)  
