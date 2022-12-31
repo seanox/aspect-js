@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.5.0 20221227
+ * @version 1.5.0 20221231
  */
 if (typeof Composite === "undefined") {
     
@@ -1264,9 +1264,12 @@ if (typeof Composite === "undefined") {
             if (!(scope instanceof Element))
                 continue;
             const object = Composite.render.meta[scope.ordinal()];
-            if (!object || !object.attributes
-                    || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
+            if (!object || !object.attributes)
                 continue;
+            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                    break;
+                else continue;
             const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
                 throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
