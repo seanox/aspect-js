@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      body div {
+        margin: 1em;
+      }
+      body * {
+        display: block;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        // The use of the attribute namespace for composites is always optional.
+        // Composites can be nested in the markup. Primarily, the IDs of the
+        // composites are concatenated and form a namespace that starts with the
+        // ID of the topmost composite. If there are composites in a chain
+        // without the attribute namespace, these have a decoupling effect. This
+        // means that the preceding namespace is terminated and subsequent
+        // composites with the namespace attribute start new namespaces.
+        //
+        // Why this approach?
+        //
+        // The idea is based on the notion of domain-related micro front-ends
+        // (micro-FEs). Here, the SPA forms a platform and uses the modules as
+        // micro-FEs. Since the world in aspect-js is static, micro-FEs may want
+        // to share components with corresponding domains. Without the described
+        // mechanism, the namespaces for each composite would have to be
+        // declared fully qualified. If the namespace attribute were used for
+        // this purpose, IDs of composites and namespaces would have to be
+        // validated, which can become very complex.
+
+        const capture = new Capture();
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            capture.snap();
+            const count = capture.patterns().length;
+            if (capture.size() == count)
+                Test.start();
+            if (capture.size() > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
+        });
+
+        Test.create({test() {
+            capture.validate();
+        }});
+    </script>
+    <script type="text/test">
+      a:
+      b: a
+      c: a,b
+      d: a,b,c
+      e:
+      f: e
+      g: e,f
+      h: e,f,g
+      i:
+      j: i
+    </script>
+  </head>
+  <body>
+    <div id="a" composite namespace static>
+      <div id="b" composite namespace static>
+        <div id="c" composite namespace static>
+          <div id="d" composite static>
+            <div id="e" composite namespace static>
+              <div id="f" composite namespace static>
+                <div id="g" composite namespace static>
+                  <div id="h" composite static>
+                    <div id="i" composite namespace static>
+                      <div id="j" composite namespace static>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre>
+      a: {{Composite.mount.locate(#a).namespace}}
+      b: {{Composite.mount.locate(#b).namespace}}
+      c: {{Composite.mount.locate(#c).namespace}}
+      d: {{Composite.mount.locate(#d).namespace}}
+      e: {{Composite.mount.locate(#e).namespace}}
+      f: {{Composite.mount.locate(#f).namespace}}
+      g: {{Composite.mount.locate(#g).namespace}}
+      h: {{Composite.mount.locate(#h).namespace}}
+      i: {{Composite.mount.locate(#i).namespace}}
+      j: {{Composite.mount.locate(#j).namespace}}
+    </pre>
+  </body>
+</html>
