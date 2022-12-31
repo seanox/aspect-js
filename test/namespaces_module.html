@@ -39,36 +39,36 @@
         // be used without namespaces on the object level.
 
         Test.create({test() {
-            Assert.assertFalse(Namespace.exists("ns_3"));
-            Assert.assertUndefined(Namespace.lookup("ns_3"));
-            Assert.assertFalse(Namespace.exists("ns_3.a"));
-            Assert.assertUndefined(Namespace.lookup("ns_3.a"));
-            Assert.assertFalse(Namespace.exists("ns_3.a.moduleA"));
-            Assert.assertUndefined(Namespace.lookup("ns_3.a.moduleA"));
+            Assert.assertFalse(Namespace.exists("ns3"));
+            Assert.assertUndefined(Namespace.lookup("ns3"));
+            Assert.assertFalse(Namespace.exists("ns3.a"));
+            Assert.assertUndefined(Namespace.lookup("ns3.a"));
+            Assert.assertFalse(Namespace.exists("ns3.a.moduleA"));
+            Assert.assertUndefined(Namespace.lookup("ns3.a.moduleA"));
         }});
 
         Test.create({test() {
-            Assert.assertTrue(Namespace.exists("ns_4"));
-            Assert.assertNotUndefined(Namespace.lookup("ns_4"));
-            Assert.assertEquals("object", typeof Namespace.lookup("ns_4"))
-            Assert.assertFalse(Namespace.lookup("ns_4") instanceof Element);
-            Assert.assertTrue(Namespace.exists("ns_4.a"));
-            Assert.assertNotUndefined(Namespace.lookup("ns_4.a"));
-            Assert.assertEquals("object", typeof Namespace.lookup("ns_4.a"))
-            Assert.assertFalse(Namespace.lookup("ns_4.a") instanceof Element);
-            Assert.assertTrue(Namespace.exists("ns_4.a.moduleA"));
-            Assert.assertNotUndefined(Namespace.lookup("ns_4.a.moduleA"));
-            Assert.assertEquals("object", typeof Namespace.lookup("ns_4.a.moduleA"));
-            Assert.assertFalse(Namespace.lookup("ns_4.a.moduleA") instanceof Element);
+            Assert.assertTrue(Namespace.exists("ns4"));
+            Assert.assertNotUndefined(Namespace.lookup("ns4"));
+            Assert.assertEquals("object", typeof Namespace.lookup("ns4"))
+            Assert.assertFalse(Namespace.lookup("ns4") instanceof Element);
+            Assert.assertTrue(Namespace.exists("ns4.a"));
+            Assert.assertNotUndefined(Namespace.lookup("ns4.a"));
+            Assert.assertEquals("object", typeof Namespace.lookup("ns4.a"))
+            Assert.assertFalse(Namespace.lookup("ns4.a") instanceof Element);
+            Assert.assertTrue(Namespace.exists("ns4.a.moduleA"));
+            Assert.assertNotUndefined(Namespace.lookup("ns4.a.moduleA"));
+            Assert.assertEquals("object", typeof Namespace.lookup("ns4.a.moduleA"));
+            Assert.assertFalse(Namespace.lookup("ns4.a.moduleA") instanceof Element);
         }});
     </script>
     <script type="text/test">
-      content of moduleA (ns_3.a)
-      content of moduleA (ns_4.a)
+      content of moduleA (ns3.a)
+      content of moduleA (ns4.a)
     </script>
   </head>
   <body>
-    <div id="ns_3" composite namespace static></div>
-    <div id="ns_4" composite namespace static></div>
+    <div id="ns3" composite namespace static></div>
+    <div id="ns4" composite namespace static></div>
   </body>
 </html>
