@@ -1026,8 +1026,9 @@ if (typeof SiteMap === "undefined") {
         // Focus only after rendering, so that the target is there.
         window.location.assign(SiteMap.location);
         
-        // Update of the hash and thus of the page focus, if the new focus (hash)
-        // was hidden before rendering or did not exist.
-        window.location.hash = window.location.hash; 
+        // Update of the hash and thus of the page focus, if the new focus
+        // (hash) was hidden before rendering or did not exist.
+        // For this purpose, the setter must be called in window.location.
+        window.location.hash = window.location.hash;
     });
 }
