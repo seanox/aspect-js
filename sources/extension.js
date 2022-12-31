@@ -89,20 +89,31 @@ if (typeof Namespace === "undefined") {
             if (!level.match(pattern))
                 throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
 
+            // Composites use IDs which causes corresponding DOM objects
+            // (Element) in the global namespace if there are no corresponding
+            // models or data objects. Because namespaces are based on models or
+            // data objects, if an element appears, we assume that a model or
+            // data object does not exist and the recursive search is aborted as
+            // unsuccessful.
+
             if (index === 0
                     && namespace === null) {
                 namespace = new Function(`return typeof ${level} === "undefined" ? undefined : ${level}`)();
-                if (namespace !== undefined)
+                if (namespace !== undefined
+                        && !(namespace instanceof Element))
                     return;
                 namespace = window;
             }
 
-            const type = typeof namespace[level];
-            if ((type !== "undefined"
-                    && type !== "object"))
+
+            const item = namespace[level]
+            const type = typeof item;
+            if (type !== "undefined"
+                    && type !== "object")
                 throw new TypeError(`Invalid namespace type at level ${index +1 +offset}: ${type}`);
-            if (namespace[level] === undefined
-                    || namespace[level] === null)
+            if (item === undefined
+                    || item === null
+                    || item instanceof Element)
                 if (index < array.length -1
                         && array[index +1].match(/^\d+$/))
                     namespace[level] = [];
@@ -166,7 +177,7 @@ if (typeof Namespace === "undefined") {
         if (levels.length > 0
                 && typeof levels[0] === "object")
             namespace = levels.shift();
-        offset = offset -levels.length;
+        offset -= levels.length;
 
         levels = levels.join(".");
         levels = levels.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
@@ -174,16 +185,25 @@ if (typeof Namespace === "undefined") {
 
             const level = levels[index];
 
-            const pattern = index === 0
+            const pattern = index +offset === 0
                     ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
             if (!level.match(pattern))
-                throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
+                throw new Error(`Invalid namespace at level ${index +1 +offset}${level && level.trim() ? ": " + level.trim() : ""}`);
+
+            // Composites use IDs which causes corresponding DOM objects
+            // (Element) in the global namespace if there are no corresponding
+            // models or data objects. Because namespaces are based on models or
+            // data objects, if an element appears, we assume that a model or
+            // data object does not exist and the recursive search is aborted as
+            // unsuccessful.
 
             if (index === 0
                     && namespace === null) {
                 namespace = new Function(`return typeof ${level} === "undefined" ? undefined : ${level}`)();
                 if (namespace !== undefined)
-                    continue;
+                    if (namespace instanceof Element)
+                        return undefined;
+                    else continue;
                 namespace = window;
             }
 
@@ -191,6 +211,9 @@ if (typeof Namespace === "undefined") {
             if (namespace === undefined
                     || namespace === null)
                 return namespace;
+
+            if (namespace instanceof Element)
+                return undefined;
         }
 
         return namespace;
