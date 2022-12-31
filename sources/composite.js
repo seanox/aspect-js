@@ -256,7 +256,7 @@ if (typeof Composite === "undefined") {
         get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
 
         /** Pattern for a datasource url */
-        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/[^\s]+)\s*(?:\s*(?:xslt|xsl):\s*(\/[^\s]+))*$/i;},
+        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/\S+)\s*(?:\s*(?:xslt|xsl):\s*(\/\S+))*$/i;},
 
         /** Pattern for all accepted events */
         get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/;},
@@ -439,7 +439,7 @@ if (typeof Composite === "undefined") {
                             
                             // If the selector is a string, several elements must
                             // be assumed. These can, but do not have to, have a
-                            // relationship in the DOM. Therefore they are all
+                            // relationship in the DOM. Therefore, they are all
                             // considered and mounted separately. 
                             
                             let nodes = [];
@@ -785,7 +785,7 @@ if (typeof Composite === "undefined") {
         // Validation is a function at the model level.
         // If a composite consists of several model levels, the validation may
         // have to be organized accordingly if necessary.
-        // Interactive composite elements are a property object. Therefore they
+        // Interactive composite elements are a property object. Therefore, they
         // are primarily a property and the validation is located in the
         // surrounding model and not in the property object itself.
         
@@ -1158,7 +1158,7 @@ if (typeof Composite === "undefined") {
                             // Interactive composite elements are a property
                             // object in the model that contains the interaction
                             // methods corresponding to the events.
-                            // Therefore the scope of interactive composite
+                            // Therefore, the scope of interactive composite
                             // elements shifts from the model to the property
                             // object.
                             // In all cases, a name-based alignment in the model
@@ -1261,8 +1261,11 @@ if (typeof Composite === "undefined") {
         // can also be decoupled composites and thus models in a nested markup.
         let namespace = null;
         for (let scope = element.parentNode; scope; scope = scope.parentNode) {
-            if (!(scope instanceof Element)
-                    || !scope.hasAttribute(Composite.ATTRIBUTE_NAMESPACE))
+            if (!(scope instanceof Element))
+                continue;
+            const object = Composite.render.meta[scope.ordinal()];
+            if (!object || !object.attributes
+                    || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
                 continue;
             const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
             if (!scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
@@ -1374,7 +1377,7 @@ if (typeof Composite === "undefined") {
      *     {meta:{namespace, model, route, target}, namespace, model, route, target}
      *
      * The method always requires a corresponding JavaScript model and an
-     * element with an valid element ID in a valid enclosing composite,
+     * element with a valid element ID in a valid enclosing composite,
      * otherwise the method will return null.
      *
      * @param  element
@@ -1389,8 +1392,8 @@ if (typeof Composite === "undefined") {
         if (!meta)
             return null;
 
-        const namespace = meta.namespace ? Namespace.lookup(meta.namespace) : Namespace.lookup();
-        const model = Object.lookup(namespace, meta.model)
+        const namespace = Namespace.lookup(...(meta.namespace ?? []));
+        const model = Object.lookup(namespace || window, meta.model)
         if (!model)
             return null;
         if (meta.target === undefined)
@@ -1435,7 +1438,7 @@ if (typeof Composite === "undefined") {
      * Selectors work similar to macros.
      * Unlike macros, selectors use a CSS selector to detect elements.
      * This selector must match the current element from the point of view of
-     * the parent. Selectors are more flexible and multifunctional. Therefore
+     * the parent. Selectors are more flexible and multifunctional. Therefore,
      * different selectors and thus different functions can match one element.
      * In this case, all implemented callback methods are performed.
      * The return value determines whether the loop is aborted or not.
@@ -1452,7 +1455,7 @@ if (typeof Composite === "undefined") {
      *     Custom Acceptor
      *     ---
      * Acceptors are a very special way to customize. Unlike the other ways,
-     * here the rendering is not shifted into own implementations. With a
+     * here the rendering is not shifted into own implementations. With an
      * acceptor, an element is manipulated before rendering and only if the
      * renderer processes the element initially. This makes it possible to make
      * individual changes to the attributes or the markup before the renderer
@@ -1539,7 +1542,7 @@ if (typeof Composite === "undefined") {
         }
         
         // If only one argument of type function is passed, the method is
-        // registered as a acceptor.
+        // registered as an acceptor.
         if (typeof scope === "function"
                 && variants.length === 1) {
             Composite.acceptors.add(scope);
@@ -1804,7 +1807,7 @@ if (typeof Composite === "undefined") {
             // Unlike macros, selectors use a CSS selector to detect elements.
             // This selector must match the current element from the point of
             // view of the parent.
-            // Selectors are more flexible and multifunctional. Therefore
+            // Selectors are more flexible and multifunctional. Therefore,
             // different selectors and thus different functions can match one
             // element. In this case, all implemented callback methods are
             // performed.
@@ -1843,7 +1846,7 @@ if (typeof Composite === "undefined") {
                 // element initially. This makes it possible to make individual
                 // changes to the attributes or the markup before the renderer
                 // processes them. This does not affect the implementation of the
-                // rendering. The method call with a acceptor:
+                // rendering. The method call with an acceptor:
                 //     Composite.customize(function(element) {...});
                 Composite.acceptors.forEach((acceptor) => {
                     acceptor.call(null, selector);
@@ -1981,7 +1984,7 @@ if (typeof Composite === "undefined") {
                 // The corresponding placeholder is determined for the output so
                 // that the rendering can be forwarded. 
                 // The placeholder uses the lock to exclude recursions.
-                // Therefore the passing of the lock is important here.
+                // Therefore, the passing of the lock is important here.
                 Composite.render(object.placeholder.element, lock.share());
                 
                 // The placeholder takes care of everything.
@@ -2005,7 +2008,7 @@ if (typeof Composite === "undefined") {
             // parameters. Dynamic contents and parameters are formulated as
             // expressions, but only the dynamic contents are output. Parameters
             // are interpreted, but do not generate any output. During initial
-            // processing, a text node is analyzed and, if necessary, splited
+            // processing, a text node is analyzed and, if necessary, split
             // into static content, dynamic content and parameters. To do this,
             // the original text node is replaced by new separate text nodes:
             //     e.g. "text {{expr}} + {{var:expr}}" ->  ["text ", {{expr}}, " + ", {{var:expr}}]
@@ -2211,7 +2214,7 @@ if (typeof Composite === "undefined") {
             // an element with a condition. The placeholder is a text node
             // without content and therefore invisible in the user interface.
             // The placeholder is the cached markup of the element.
-            // Thus the renderer can insert or remove the markup before the
+            // Thus, the renderer can insert or remove the markup before the
             // placeholder according to the condition.
             if (selector.nodeType === Node.TEXT_NODE
                     && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
@@ -2559,7 +2562,7 @@ if (typeof Composite === "undefined") {
                         if (variable !== undefined)
                             window[object.iterate.name] = variable;
                     }
-                    // The content is final rendered, the enclosing container
+                    // The content is finally rendered, the enclosing container
                     // element itself, or more precisely the attributes, still
                     // needs to be updated.
                 }
@@ -2636,7 +2639,7 @@ if (typeof Composite === "undefined") {
             // The following are ignored:
             //   - Elements of type: script + style and custom tags
             //   - Elements with functions that modify the inner markup
-            //   - Elements that are a iterates
+            //   - Elements that are iteration
             // These elements manipulate the inner markup.
             // This is intercepted by the MutationObserver.
             if (selector.childNodes
@@ -3013,7 +3016,7 @@ if (typeof Composite === "undefined") {
 if (typeof Expression === "undefined") {    
     
     /**
-     * Expressions or the Expression Language (EL) is a simple access to the
+     * Expressions or the Expression Language (EL) is an simple access to the
      * client-side JavaScript and thus to the models and components in the
      * aspect-js. The expressions support the complete JavaScript API, the is
      * enhanced with additional keywords, which also allows the numerous
@@ -3225,8 +3228,8 @@ if (typeof Expression === "undefined") {
 
         cascade.expression.forEach((entry) => {
             let text = entry.data;
-            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\'])/g, "$1$2\\u0027");
-            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\[\"])/g, "$1$2\\u0022");
+            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\\')/g, "$1$2\\u0027");
+            text = text.replace(/(^|[^\\])((?:\\{2})*)(\\\")/g, "$1$2\\u0022");
             const words = [];
             const pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
             while (text.match(pattern)) {
@@ -3295,7 +3298,7 @@ if (typeof Expression === "undefined") {
         
         cascade.other.forEach((entry) => {
             let text = entry.data;
-            text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}[\w])?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
+            text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
             text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
             const words = [];
             text.split(/\n/).forEach((entry) => {
@@ -3380,7 +3383,7 @@ if (typeof Expression === "undefined") {
      *     function(serial, expression)
      * @param  serial
      * @param  expression
-     * @return the return value of the interpreted expression or an error if a
+     * @return the return value of the interpreted expression or an error if an
      *     error or exception has occurred
      */
     Expression.eval = function(...variants) {
