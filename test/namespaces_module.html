@@ -34,6 +34,10 @@
             capture.validate();
         }});
 
+        // In markup, namespaces have a purely textual character and only the
+        // syntax is checked. Thus, resources from the module directory can also
+        // be used without namespaces on the object level.
+
         Test.create({test() {
             Assert.assertFalse(Namespace.exists("ns_3"));
             Assert.assertUndefined(Namespace.lookup("ns_3"));
