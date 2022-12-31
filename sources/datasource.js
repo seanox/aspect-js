@@ -244,7 +244,7 @@ if (typeof DataSource === "undefined") {
         });
         
         // JavaScript blocks are automatically changed to composite/javascript
-        // during import. Therefore imported scripts are not executed directly,
+        // during import. Therefore, imported scripts are not executed directly,
         // but only by the renderer. This is important in combination with the
         // condition attribute.
         nodes = result.querySelectorAll("script[type],script:not([type])");
