@@ -361,7 +361,7 @@ const Model = {
 
 ```html
 <select iterate={{months:Model.months}}>
-  <option id="{{months.index}}">
+  <option value="{{months.index}}">
     {{months.item}}
   </option>
 </select>
