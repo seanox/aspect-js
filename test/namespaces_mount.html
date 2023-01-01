@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      body div {
+        margin: 1em;
+      }
+      body * {
+        display: block;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        const capture = new Capture();
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            capture.snap();
+            const count = capture.patterns().length;
+            if (capture.size() == count)
+                Test.start();
+            if (capture.size() > count)
+               Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
+        });
+
+        Test.create({test() {
+            capture.validate();
+        }});
+
+        Namespace.create("modelA", {text: {value: "A1"}}.toReactProxy());
+        Namespace.create("a.modelA", {text: {value: "A2"}}.toReactProxy());
+        Namespace.create("b.modelA", {text: {value: "A3"}}.toReactProxy());
+
+        window.setTimeout(() => {document.querySelector("#modelA #text").typeValue("aaa")}, 1000);
+        window.setTimeout(() => {document.querySelector("#a #modelA #text").typeValue("bbb")}, 1500);
+        window.setTimeout(() => {document.querySelector("#b #modelA #text").typeValue("ccc")}, 2000);
+    </script>
+    <script type="text/test">
+      modelA.text.value: A1
+      a.modelA.text.value: A2
+      b.modelA.text.value: A3
+    </script>
+    <script type="text/test">
+      modelA.text.value: aaa
+      a.modelA.text.value: A2
+      b.modelA.text.value: A3
+    </script>
+    <script type="text/test">
+      modelA.text.value: aaa
+      a.modelA.text.value: A2
+      b.modelA.text.value: A3
+    </script>
+    <script type="text/test">
+      modelA.text.value: aaa
+      a.modelA.text.value: bbb
+      b.modelA.text.value: A3
+    </script>
+    <script type="text/test">
+      modelA.text.value: aaa
+      a.modelA.text.value: bbb
+      b.modelA.text.value: A3
+    </script>
+    <script type="text/test">
+      modelA.text.value: aaa
+      a.modelA.text.value: bbb
+      b.modelA.text.value: ccc
+    </script>
+    <script type="text/test">
+      modelA.text.value: aaa
+      a.modelA.text.value: bbb
+      b.modelA.text.value: ccc
+    </script>
+  </head>
+  <body>
+    <form id="modelA" composite static>
+      <input id="text" events="input change"/>
+    </form>
+    <div id="a" composite namespace static>
+      <form id="modelA" composite namespace static>
+        <input id="text" events="input change"/>
+      </form>
+    </div>
+    <div id="b" composite namespace static>
+      <form id="modelA" composite namespace static>
+        <input id="text" events="input change"/>
+      </form>
+    </div>
+    <pre>
+      modelA.text.value: {{modelA.text.value}}
+      a.modelA.text.value: {{a.modelA.text.value}}
+      b.modelA.text.value: {{b.modelA.text.value}}
+    </pre>
+  </body>
+</html>
