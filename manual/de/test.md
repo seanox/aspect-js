@@ -61,9 +61,9 @@ Test.start();
 
 ## Testfall
 
-Der kleinste Bestandteil in einem Integrationstest, der hier als "Task"
-verwendet wird, da "Case" ein Schl&uuml;sselwort im JavaScript ist. Es kann allein
-implementiert werden, wird aber immer in einem Szenario verwendet.
+Der kleinste Bestandteil in einem Integrationstest, der hier als _Task_
+verwendet wird, da _case_ ein Schl&uuml;sselwort im JavaScript ist. Es kann
+allein implementiert werden, wird aber immer in einem Szenario verwendet.
 
 ```javascript
 Test.activate();
@@ -75,7 +75,7 @@ Test.create({test() {
 Test.start();
 ```
 
-Task ist prim&auml;r ein Meta-Objekt.  
+Task ist prim&auml;r ein Meta-Objekt.
 
 ```
 {name:..., test:..., timeout:..., expected:..., ignore:...}
@@ -94,16 +94,17 @@ Die implementierte Methode, die als Testfall ausgef&uuml;hrt werden soll.
 
 ### timeout
 
-Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden.  
-Das &Uuml;berschreiten von diesem Wert f&uuml;hrt zum Ausfall des Tests.  
-Es wird ein Wert gr&ouml;sser als 0 erwartet, ansonsten wird der Timeout ignoriert.
+Optionale Angabe der maximalen Laufzeit des Testfalls in Millisekunden. Das
+&Uuml;berschreiten von diesem Wert f&uuml;hrt zum Ausfall des Tests. Es wird ein
+Wert gr&ouml;sser als 0 erwartet, ansonsten wird der Timeout ignoriert.
 
 
 ### expected
 
-Optional, um das Auftreten von definierten Fehlern zu testen.  
-Der Fehler muss auftreten, damit der Test erfolgreich ist.  
-Als Wert wird ein Fehlerobjekt oder ein RegExp erwartet.
+Optional, um das Auftreten von definierten Fehlern zu testen. Der Fehler muss
+auftreten, damit der Test erfolgreich ist. Als Wert wird ein Fehlerobjekt oder
+ein RegExp erwartet.
+
 
 ### ignore
 
@@ -139,26 +140,28 @@ Test.start();
 
 ## Suite 
 
-Eine Suite ist ein komplexes Paket aus verschiedenen Testf&auml;llen, Szenarien und
-anderen Suiten. In der Regel besteht eine Suite aus verschiedenen Dateien, die
-dann einen komplexen Test darstellen. Ein Beispiel f&uuml;r eine gute Suite ist eine
-Kaskade von verschiedenen Dateien und wo der Test in jeder Datei und an jedem
-Stelle gestartet werden kann. Dies erm&ouml;glicht einen Integrationstest auf
-verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
+Eine Suite ist ein komplexes Paket aus verschiedenen Testf&auml;llen, Szenarien
+und anderen Suiten. In der Regel besteht eine Suite aus verschiedenen Dateien,
+die dann einen komplexen Test darstellen. Ein Beispiel f&uuml;r eine gute Suite
+ist eine Kaskade von verschiedenen Dateien und wo der Test in jeder Datei und an
+jeder Stelle gestartet werden kann. Dies erm&ouml;glicht einen Integrationstest
+auf verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
 
 
 ## Assert
 
-Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Die Test-API
-bietet elementare Aussagen, die erweitert werden k&ouml;nnen. Die Funktion ist
-einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler auf.
+Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Die
+Test-API bietet elementare Aussagen, die erweitert werden k&ouml;nnen. Die
+Funktionsweise ist einfach: Wenn eine Behauptung nicht wahr ist, tritt ein
+Fehler auf, optional mit einer individuellen Fehlermeldung.
+
+__Die Methoden verwenden verschiedene Signaturen, die in den nachfolgenden
+Beispielen beschrieben werden.__
 
 
 ### assertTrue
 
-Behauptet, dass ein Wert `true` ist.  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass ein Wert `true` ist.
 
 ```javascript
 Test.activate();
@@ -176,9 +179,8 @@ Test.start();
 
 ### assertFalse
 
-Behauptet, dass ein Wert `false` ist, als Negation von `Assert.assertTrue(....)`.  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass ein Wert `false` ist, als Negation von
+`Assert.assertTrue(....)`.
 
 ```javascript
 Test.activate();
@@ -195,11 +197,10 @@ Test.start();
 
 
 ### assertEquals
-  
-Behauptet, dass zwei Werte identisch sind.  
-Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+
+Behauptet, dass zwei Werte identisch sind.
+
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`.
 
 ```javascript
 Test.activate();
@@ -216,11 +217,11 @@ Test.start();
 
 
 ### assertNotEquals
-  
-Behauptet, dass zwei Werte nicht identisch sind, als Negation von `Assert.assertEquals(....)`.  
-Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+
+Behauptet, dass zwei Werte nicht identisch sind, als Negation von
+`Assert.assertEquals(....)`.
+
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`
 
 ```javascript
 Test.activate();
@@ -238,10 +239,9 @@ Test.start();
 
 ### assertSame
 
-Behauptet, dass zwei Werte gleich sind.  
-Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass zwei Werte gleich sind.
+
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`
 
 ```javascript
 Test.activate();
@@ -257,12 +257,12 @@ Test.start();
 ```
 
 
-### assertNotSame  
-  
-Behauptet, dass zwei Werte nicht gleich sind, als Negation von `Assert.assertSame(....)`.  
-Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+### assertNotSame
+
+Behauptet, dass zwei Werte nicht gleich sind, als Negation von
+`Assert.assertSame(....)`.
+
+Unterschied zwischen identisch und gleich: `=== / ==` oder `!== / !=`
 
 ```javascript
 Test.activate();
@@ -280,9 +280,7 @@ Test.start();
 
 ### assertNull
 
-Behauptet, dass ein Wert `null` ist.  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass ein Wert `null` ist.
 
 ```javascript
 Test.activate();
@@ -300,9 +298,8 @@ Test.start();
 
 ### assertNotNull
 
-Behauptet, dass ein Wert nicht `null` ist, als Negation von `Assert.assertNull(....)`.  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass ein Wert nicht `null` ist, als Negation von
+`Assert.assertNull(....)`.
 
 ```javascript
 Test.activate();
@@ -320,9 +317,7 @@ Test.start();
 
 ### assertUndefined
 
-Behauptet, dass ein Wert `undefined` ist.  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass ein Wert `undefined` ist.
 
 ```javascript
 Test.activate();
@@ -340,9 +335,8 @@ Test.start();
 
 ### assertNotUndefined
 
-Behauptet, dass ein Wert nicht `undefined` ist, als Negation von `Assert.assertUndefined(....)`.  
-Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Behauptet, dass ein Wert nicht `undefined` ist, als Negation von
+`Assert.assertUndefined(....)`.
 
 ```javascript
 Test.activate();
@@ -360,8 +354,7 @@ Test.start();
 
 ### fail
 
-Verusacht das Scheitern eines Test mit einer optionaler Meldung.  
-Die Methode hat unterschiedliche Signaturen.
+Verursacht das Scheitern eines Test mit einer optionaler Meldung.
 
 ```javascript
 Test.activate();
@@ -379,9 +372,9 @@ Test.start();
 
 ## Konfiguration
 
-Optional kann die Test-API mit jedem Start konfiguriert werden.  
-Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
-wird partiell &uuml;bernommen und unbekanntes wird ignoriert.
+Optional kann die Test-API mit jedem Start konfiguriert werden. Als Parameter
+wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
+&uuml;bernommen und unbekanntes wird ignoriert.
 
 ```javascript
 Test.start({auto: boolean, ouput: {...}, monitor: {...}});
@@ -390,9 +383,9 @@ Test.start({auto: boolean, ouput: {...}, monitor: {...}});
 
 ### auto
 
-Option die den Start beim Laden der Seite ausl&ouml;st.  
-Wenn die Seite bereits geladen ist, wird der Parameter auto ignoriert und der
-Start sofort ausgef&uuml;hrt.
+Option die den Start beim Laden der Seite ausl&ouml;st. Wenn die Seite bereits
+geladen ist, wird der Parameter auto ignoriert und der Start sofort
+ausgef&uuml;hrt.
 
 ```javascript
 Test.start({auto: true});
@@ -401,8 +394,8 @@ Test.start({auto: true});
 
 ### output
 
-Funktion oder Objekt zur Ausgabe von Meldungen und Fehlern.  
-Wenn nicht angegeben, wird das console-Objekt verwendet.
+Funktion oder Objekt zur Ausgabe von Meldungen und Fehlern. Wenn nicht
+angegeben, wird das console-Objekt verwendet.
 
 ```javascript
 Test.start({output: {
@@ -418,11 +411,11 @@ Test.start({output: {
 
 ### monitor
 
-&Uuml;berwacht den Testablauf und wird w&auml;hrend der Ausf&uuml;hrung &uuml;ber die verschiedenen
-Schritte und Status informiert. Der Monitor kann auch f&uuml;r die Datenausgabe
-verwendet werden und z.B. die Ausgabe in ein DOM-Element umleiten.  
-Der Monitor ist optional. Ohne diesen werden Informationen zum Testverlauf in
-der Konsole ausgegeben.
+&Uuml;berwacht den Testablauf und wird w&auml;hrend der Ausf&uuml;hrung
+&uuml;ber die verschiedenen Schritte und Status informiert. Der Monitor kann
+auch f&uuml;r die Datenausgabe verwendet werden und z.B. die Ausgabe in ein
+DOM-Element umleiten. Der Monitor ist optional. Ohne diesen werden Informationen
+zum Testverlauf in der Konsole ausgegeben.
 
 ```javascript
 Test.start({monitor: {
@@ -430,39 +423,39 @@ Test.start({monitor: {
     start(status) {
         Aufruf der Methode beim Start.
     },
-  
+
     suspend(status) {
         Aufruf der Methode bei einer Unterbrechung.
     },
-  
+
     resume(status) {
         Aufruf der Methode beim Fortsetzen des Testverlaufs, wenn
         dieser zuvor unterbrochen wurde.
     },
-  
+
     interrupt(status) {
         Aufruf der Methode beim Abbruch vom Testlauf.
         Der Testlauf kann nicht fortgesetzt werden.
     },
-  
+
     perform(status) {
         Aufruf der Methode bevor eine Testaufgabe ausgef&uuml;hrt wird.
     },
-  
+
     response(status) {
         Aufruf der Methode nach der Ausf&uuml;hrung einer Testaufgabe.
         Hier ist das Ergebnis der Testaufgabe enthalten.
     },
-  
+
     finish(status) {
         Aufruf der Methode, wenn alle Testaufgaben abgeschlossen sind.
     }
 }});
 ```
 
-Allen Monitor-Methoden wird der aktuelle Status als Meta-Objekt &uuml;bergeben.  
-Der Status enth&auml;lt Details zum aktuellen Test und zur Warteschlange. Die Details
-sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
+Allen Monitor-Methoden wird der aktuelle Status als Meta-Objekt &uuml;bergeben.
+Der Status enth&auml;lt Details zum aktuellen Test und zur Warteschlange. Die
+Details sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
 
 ```javascript
 {
@@ -498,7 +491,7 @@ sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
         lock:
             Indikator, wenn die Queue zur Ausf&uuml;hrung eines Test wartet,
         faults:
-            Anzahl der erkannten Fehler  
+            Anzahl der erkannten Fehler
     }
 }
 ```
@@ -507,9 +500,9 @@ sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
 ## Output
 
 Als Entwicklungswerkzeug stellen Browser eine Konsolenausgabe bereit, die zur
-Protokollierung von Informationen verwendet werden kann.  
-Die Protokollierung unterst&uuml;tzt verschiedene Kan&auml;le bzw. Stufen (Level): LOG,
-WARN, ERROR und INFO.
+Protokollierung von Informationen verwendet werden kann, und dazu verschiedene
+Kan&auml;le bzw. Stufen (Level) unterst&uuml;tzt:
+    _LOG_, _WARN_, _ERROR_, _INFO_
 
 ```javascript
 console.log(message);
@@ -525,17 +518,18 @@ f&uuml;r die Konsolenausgabe.
 
 ### Forwarding
 
-Das Forwarding l&auml;uft komplett im Hintergrund und verteilt die Ausgaben an die
-Browser-Konsolenausgabe und an die Komponenten der Test-API. Bei (I)Frames wird
-die Ausgabe an umschliessende bzw. &uuml;bergeordnete Window-Objekte weitergeleitet
-und ist dort mit aktivierter Test-API per Buffer und Listener zug&auml;nglich.
+Das Forwarding l&auml;uft komplett im Hintergrund und verteilt die Ausgaben an
+die Browser-Konsolenausgabe und an die Komponenten der Test-API. Bei (I)Frames
+wird die Ausgabe an umschliessende bzw. &uuml;bergeordnete Window-Objekte
+weitergeleitet und ist dort mit aktivierter Test-API per Buffer und Listener
+zug&auml;nglich.
 
 
 ### Buffer
 
 Bei aktivierter Test-API wird die JavaScript-API vom console-Objekt um den
-Buffer output erweitert. Der Buffer enth&auml;lt Zwischenspeicher f&uuml;r die Level: LOG,
-WARN, ERROR und INFO sowie eine Methode zum Leeren.
+Buffer _output_ erweitert. Der Buffer enth&auml;lt Zwischenspeicher f&uuml;r die
+Level: _LOG_, _WARN_, _ERROR_ und _INFO_ sowie eine Methode zum Leeren.
 
 ```javascript
 const log   = console.output.log;
@@ -549,7 +543,8 @@ console.output.clear();
 
 ### Listener
 
-F&uuml;r die Konsolenausgabe k&ouml;nnen Callback-Methoden als Listener etabliert werden.
+F&uuml;r die Konsolenausgabe k&ouml;nnen Callback-Methoden als Listener
+etabliert werden.
 
 ```javascript
 console.listen(function(level, message) {
@@ -567,9 +562,10 @@ verwenden.
 
 ## Monitoring
 
-Das Monitoring &uuml;berwacht den Testablauf w&auml;hrend der Ausf&uuml;hrung und wird &uuml;ber die
-verschiedenen Schritte und Status informiert. Der Monitor ist optional. Ohne
-diesen werden Informationen zum Testverlauf in der Konsole ausgegeben.
+Das Monitoring &uuml;berwacht den Testablauf w&auml;hrend der Ausf&uuml;hrung
+und wird &uuml;ber die verschiedenen Schritte und Status informiert. Der Monitor
+ist optional. Ohne diesen werden Informationen zum Testverlauf in der Konsole
+ausgegeben.
 
 Details zur Konfiguration und und Verwendung werden im Abschnitt
 [Konfiguration - monitor](#monitor) beschrieben.
@@ -585,16 +581,16 @@ Test.start();
 Test.start({auto: boolean});
 ```
 
-Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
-der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
-`auto` ignoriert und der Start sofort ausgef&uuml;hrt.
+Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden der
+Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter `auto`
+ignoriert und der Start sofort ausgef&uuml;hrt.
 
 ```javascript
 Test.suspend();
 ```
 
-Unterbricht die aktuelle Testausf&uuml;hrung, die mit `Test.resume()` vom aktuellen
-Test fortgesetzt werden kann.
+Unterbricht die aktuelle Testausf&uuml;hrung, die mit `Test.resume()` vom
+aktuellen Test fortgesetzt werden kann.
 
 ```javascript
 Test.resume();
@@ -606,17 +602,18 @@ Setzt die Testausf&uuml;hrung fort, wenn sie zuvor unterbrochen wurde.
 Test.interrupt();
 ```
 
-Unterbricht die aktuelle Testausf&uuml;hrung und verwirft alle ausstehenden Tests.
-Der Testlauf kann mit `Test.start()` neu gestartet werden.
+Unterbricht die aktuelle Testausf&uuml;hrung und verwirft alle ausstehenden
+Tests. Der Testlauf kann mit `Test.start()` neu gestartet werden.
 
 ```javascript
 Test.status();
 ```
 
-Macht eine Momentaufnahme des Status des aktuellen Tests.  
-Der Status enth&auml;lt Details zum aktuellen Test und zur Warteschlange. Die Details
-sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden. Wenn kein Test
-ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
+Macht eine Momentaufnahme des Status des aktuellen Tests.
+
+Der Status enth&auml;lt Details zum aktuellen Test und zur Warteschlange. Die
+Details sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
+Wenn kein Test ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
 
 ```javascript
 {
@@ -652,7 +649,7 @@ ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
         lock:
             Indikator, wenn die Queue zur Ausf&uuml;hrung eines Test wartet,
         faults:
-            Anzahl der erkannten Fehler  
+            Anzahl der erkannten Fehler
     }
 }
 ```
@@ -661,9 +658,9 @@ ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
 ## Events
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
-&Uuml;berwachung der Testausf&uuml;hrung. Die Callback-Methoden werden f&uuml;r entsprechende
-Ereignisse bei der Test-API registriert und funktionieren dann &auml;hnlich dem
-Monitor.
+&Uuml;berwachung der Testausf&uuml;hrung. Die Callback-Methoden werden f&uuml;r
+entsprechende Ereignisse bei der Test-API registriert und funktionieren dann
+&auml;hnlich dem Monitor.
 
 Liste der verf&uuml;gbaren Ereignisse:
 
@@ -677,19 +674,19 @@ Test.EVENT_SUSPEND
 ```
 
 Beispiele zur Verwendung:
-  
+
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {
     ...
-});  
-  
+});
+
 Test.listen(Test.EVENT_PERFORM, function(event, status) {
     ...
-});  
-  
+});
+
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
-});  
+});
 ```
 
 
@@ -701,9 +698,9 @@ Mit der Test-API werden auch Erweiterungen des JavaScript-API aktiv.
 
 #### Element.prototype.typeValue
 
-Methode, die Tastatureingaben f&uuml;r Element-Objekte simuliert.
-Folgende Ereignisse werden w&auml;hrend der Simulation ausgel&ouml;st: 
-    focus, keydown, keyup, change
+Methode, die Tastatureingaben f&uuml;r Element-Objekte simuliert. Folgende
+Ereignisse werden w&auml;hrend der Simulation ausgel&ouml;st: 
+    _focus_, _keydown_, _keyup_, _change_
 
 ```html
 <form action="/api/example" methode="POST">
@@ -714,10 +711,10 @@ Folgende Ereignisse werden w&auml;hrend der Simulation ausgel&ouml;st:
 
 ```javascript
 document.querySelector("#inputText").typeValue("Hello World!");
-});  
+});
 ```
-  
-  
+
+
 #### Element.prototype.toPlainString
 
 Methode, die eine einfache Zeichenkette f&uuml;r ein Element-Objekt erzeugt.
@@ -728,7 +725,7 @@ Die Zeichenkette bassiert auf `Element.prototype.outerHTML`.
   <input type="text" id="inputText"/>
   <input type="submit"/> 
 </form>
-});  
+});
 ```
 
 ```javascript
@@ -743,8 +740,8 @@ Output:
   <input type="submit"/> 
 </form>
 ```
-  
-  
+
+
 #### Element.prototype.trigger
 
 Methode, um ein Ereignis f&uuml;r ein Element auszul&ouml;sen.
@@ -753,29 +750,31 @@ Methode, um ein Ereignis f&uuml;r ein Element auszul&ouml;sen.
 document.queryElement("#button").trigger("click");
 ```
 
-Aufruf der Methode mit der Option bubbles.  
-Entscheidet ob das Ereignis durch die Ereigniskette laufen soll oder nicht.
+Aufruf der Methode mit der Option bubbles. Entscheidet ob das Ereignis durch die
+Ereigniskette laufen soll oder nicht.
+
 Standardwert: false
 
 ```javascript
 document.queryElement("#button").trigger("click", true);
 ```
 
-Aufruf der Methode mit den Option bubbles und cancel.  
-Damit wird festgelegt, ob das Ereignis abgebrochen werden kann.  
+Aufruf der Methode mit den Option bubbles und cancel. Damit wird festgelegt, ob
+das Ereignis abgebrochen werden kann.
+
 Standardwert: true
 
 ```javascript
 document.queryElement("#button").trigger("click", true, false);
 ```
 
-  
+
 ### Node
 
-#### Node.prototype.toPlainString  
+#### Node.prototype.toPlainString
 
-Methode, die eine einfache Zeichenkette f&uuml;r ein Knoten-Objekt erzeugt.
-Die Zeichenkette bassiert auf `XMLSerializer.serializeToString(node)`.
+Methode, die eine einfache Zeichenkette f&uuml;r ein Knoten-Objekt erzeugt. Die
+Zeichenkette bassiert auf `XMLSerializer.serializeToString(node)`.
 
 ```javascript
 const text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -799,14 +798,14 @@ Output:
 ```
 <note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>
 ```
-  
+
 
 ### Object
 
 #### Object.prototype.toPlainString
 
-Methode, die eine einfache Zeichenkette f&uuml;r ein Objekt erzeugt.
-Die Zeichenkette bassiert auf `JSON.stringify(object)`.
+Methode, die eine einfache Zeichenkette f&uuml;r ein Objekt erzeugt. Die
+Zeichenkette bassiert auf `JSON.stringify(object)`.
 
 ```javascript
 const example = {a:1, b:2, c() {return;}};
