@@ -3,10 +3,10 @@
 
 # Ereignisse
 
-Seanox aspect-js stellt verschiede Ereignisse bereit, die u.a. zur
-Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung &uuml;ber
-bestimmte Betriebszust&auml;nde des Frameworks und der Laufzeitumgebung genutzt
-werden k&ouml;nnen.
+Seanox aspect-js stellt verschiedene Ereignisse bereit, die u.a. zur
+Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung
+&uuml;ber bestimmte Betriebszust&auml;nde des Frameworks und der
+Laufzeitumgebung genutzt werden k&ouml;nnen.
 
 
 ## Inhalt
@@ -34,9 +34,9 @@ werden k&ouml;nnen.
 
 # Rendering
 
-Diese Ereignisse treten w&auml;hrend dem Rendering auf.  
-Der Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
-und/oder das korrespondierende Element beeinflussen, nicht aber das Rendering.
+Diese Ereignisse treten w&auml;hrend dem Rendering auf. Der Callback-Methode
+wird der aktuelle Selector &uuml;bergeben. Sie kann diesen und/oder das
+korrespondierende Element beeinflussen, nicht aber das Rendering.
 
 ```javascript
 Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
@@ -47,26 +47,26 @@ Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
 
 ## Composite.EVENT_RENDER_START
 
-Das Ereignis tritt mit Start des Renderings auf.  
-Die Verarbeitung selbst beginnt erst nach dem Ereignis.
+Das Ereignis tritt mit Start des Renderings auf. Die Verarbeitung selbst beginnt
+erst nach dem Ereignis.
 
 
 ## Composite.EVENT_RENDER_NEXT
 
-Das Ereignis tritt bei rekursiver Iteration beim Renderings auf.  
-Die Verarbeitung selbst beginnt erst nach dem Ereignis.
+Das Ereignis tritt bei rekursiver Iteration beim Renderings auf. Die
+Verarbeitung selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_RENDER_END
 
-Das Ereignis tritt mit finalen Ende des Renderings auf.  
-Die Verarbeitung selbst endet vor dem Ereignis.
+Das Ereignis tritt mit finalen Ende des Renderings auf. Die Verarbeitung selbst
+endet vor dem Ereignis.
 
 
 # Object/Model-Binding
 
-Diese Ereignisse treten w&auml;hrend dem Object/Model-Binding auf. 
-Der Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
+Diese Ereignisse treten w&auml;hrend dem Object/Model-Binding auf. Der
+Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
 und/oder das korrespondierende Element beeinflussen, nicht aber das
 Object/Model-Binding.
 
@@ -79,27 +79,27 @@ Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
 
 ## Composite.EVENT_MOUNT_START
 
-Das Ereignis tritt mit Start vom Object/Model-Binding auf.  
-Die Verarbeitung selbst beginnt erst nach dem Ereignis.
+Das Ereignis tritt mit Start vom Object/Model-Binding auf. Die Verarbeitung
+selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_MOUNT_NEXT
 
-Das Ereignis tritt mit finalen Ende vom Object/Model-Binding auf.  
-Die Verarbeitung selbst endet vor dem Ereignis.
+Das Ereignis tritt mit finalen Ende vom Object/Model-Binding auf. Die
+Verarbeitung selbst endet vor dem Ereignis.
 
 
 ## Composite.EVENT_MOUNT_END
 
-Das Ereignis tritt mit finalen Ende vom Object/Model-Binding auf.  
-Die Verarbeitung selbst endet vor dem Ereignis.
+Das Ereignis tritt mit finalen Ende vom Object/Model-Binding auf. Die
+Verarbeitung selbst endet vor dem Ereignis.
 
 
 # HTTP
 
-Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management f&uuml;r den
-XMLHttpRequest zur Implementierung Request-bezogener Anwendungslogik, z.B. f&uuml;r
-Logging oder Spinner. 
+Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management
+f&uuml;r den XMLHttpRequest zur Implementierung Request-bezogener
+Anwendungslogik, z.B. f&uuml;r Logging oder Spinner. 
 
 ```javascript
 Composite.listen(Composite.EVENT_HTTP_***, function(event, XMLHttpRequest) {
@@ -110,15 +110,14 @@ Composite.listen(Composite.EVENT_HTTP_***, function(event, XMLHttpRequest) {
 
 ## Composite.EVENT_HTTP_START
 
-Entspricht dem XMLHttpRequest-Event: `loadstart` und wird ausgel&ouml;st, wenn eine
-Anforderung zum Laden von Daten gestartet wurde.
+Entspricht dem XMLHttpRequest-Event: `loadstart` und wird ausgel&ouml;st, wenn
+eine Anforderung zum Laden von Daten gestartet wurde.
 
 
 ## Composite.EVENT_HTTP_PROGRESS
 
-Entspricht dem XMLHttpRequest-Event: `progress`.  
-Das Fortschrittsereignis wird periodisch ausgel&ouml;st, wenn eine Anforderung
-weitere Daten empf&auml;ngt.
+Entspricht dem XMLHttpRequest-Event: `progress`. Das Fortschrittsereignis wird
+periodisch ausgel&ouml;st, wenn eine Anforderung weitere Daten empf&auml;ngt.
 
 
 ## Composite.EVENT_HTTP_RECEIVE
@@ -135,15 +134,15 @@ Ressource geladen wurde.
 
 ## Composite.EVENT_HTTP_ABORT
 
-Entspricht dem XMLHttpRequest-Event: `abort` und wird ausgel&ouml;st, wenn das Laden
-einer Ressource abgebrochen wurde.
+Entspricht dem XMLHttpRequest-Event: `abort` und wird ausgel&ouml;st, wenn das
+Laden einer Ressource abgebrochen wurde.
 
 
 ## Composite.EVENT_HTTP_TIMEOUT
 
 Entspricht dem XMLHttpRequest-Event: `timeout` und wird ausgel&ouml;st, wenn das
-Laden einer Ressource wegen &Uuml;berschreitung der maximalen Ladezeit abgebrochen
-wurde.
+Laden einer Ressource wegen &Uuml;berschreitung der maximalen Ladezeit
+abgebrochen wurde.
 
 
 ## Composite.EVENT_HTTP_ERROR
@@ -161,9 +160,9 @@ Verlauf.
 
 # Error
 
-Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management f&uuml;r
-Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik, z.B. f&uuml;r
-Logging oder Fehlerausgaben. 
+Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management
+f&uuml;r Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik,
+z.B. f&uuml;r Logging oder Fehlerausgaben. 
 
 ```javascript
 Composite.listen(Composite.EVENT_ERROR, function(event, Error) {
@@ -174,9 +173,9 @@ Composite.listen(Composite.EVENT_ERROR, function(event, Error) {
 
 ## Composite.EVENT_ERROR
 
-Das Fehlerereignis wird bei unbehandelten Laufzeitfehlern ausgel&ouml;st.  
-Syntaktische Fehler die eine generelle Ausf&uuml;hrung von JavaScript verhindern,
-k&ouml;nnen das Fehlerereignis nicht ausl&ouml;sen.
+Das Fehlerereignis wird bei unbehandelten Laufzeitfehlern ausgel&ouml;st.
+Syntaktische Fehler die eine generelle Ausf&uuml;hrung von JavaScript
+verhindern, k&ouml;nnen das Fehlerereignis nicht ausl&ouml;sen.
 
 
 - - -

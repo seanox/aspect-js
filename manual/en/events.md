@@ -33,9 +33,9 @@ framework and runtime environment.
 
 # Rendering
 
-These events occur during rendering.  
-The callback method is passed the current selector. It can influence this and/or
-the corresponding element, but not the rendering.
+These events occur during rendering. The callback method is passed the current
+selector. It can influence this and/or the corresponding element, but not the
+rendering.
 
 ```javascript
 Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
@@ -46,27 +46,27 @@ Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
 
 ## Composite.EVENT_RENDER_START
 
-The event occurs when the rendering is started.  
-The processing itself does not start until after the event.
+The event occurs when the rendering is started. The processing itself does not
+start until after the event.
 
 
 ## Composite.EVENT_RENDER_NEXT
 
-The event occurs during recursive iteration during rendering.  
-The processing itself does not start until after the event.
+The event occurs during recursive iteration during rendering. The processing
+itself does not start until after the event.
 
 
 ## Composite.EVENT_RENDER_END
 
-The event occurs at the final end of the rendering.  
-The processing itself ends before the event.
+The event occurs at the final end of the rendering. The processing itself ends
+before the event.
 
 
 # Object/Model Binding
 
-These events occur during the object/model binding. 
-The callback method is passed the current selector. It can influence this and/or
-the corresponding element, but not the object/model binding.
+These events occur during the object/model binding. The callback method is
+passed the current selector. It can influence this and/or the corresponding
+element, but not the object/model binding.
 
 ```javascript
 Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
@@ -77,26 +77,27 @@ Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
 
 ## Composite.EVENT_MOUNT_START
 
-The event occurs when the object/model binding is started.  
-Processing itself does not start until after the event.
+The event occurs when the object/model binding is started. Processing itself
+does not start until after the event.
 
 
 ## Composite.EVENT_MOUNT_NEXT
 
-The event occurs with the final end of the object/model binding.  
-The processing itself ends before the event.
+The event occurs with the final end of the object/model binding. The processing
+itself ends before the event.
 
 
 ## Composite.EVENT_MOUNT_END
 
-The event occurs with the final end of the object/model binding.  
-The processing itself ends before the event.
+The event occurs with the final end of the object/model binding. The processing
+itself ends before the event.
 
 
 # HTTP
 
 The Composite API supports application-wide event management for the
-XMLHttpRequest to implement request-related application logic, e.g. for logging or spinners. 
+XMLHttpRequest to implement request-related application logic, e.g. for logging
+or spinners. 
 
 ```javascript
 Composite.listen(Composite.EVENT_HTTP_***, function(event, XMLHttpRequest) {
@@ -113,9 +114,8 @@ request to load data is started.
 
 ## Composite.EVENT_HTTP_PROGRESS
 
-Corresponds to the XMLHttpRequest event: `progress`.  
-The progress event is triggered periodically when a request receives further
-data.
+Corresponds to the XMLHttpRequest event: `progress`. The progress event is
+triggered periodically when a request receives further data.
 
 
 ## Composite.EVENT_HTTP_RECEIVE
@@ -126,8 +126,8 @@ when the status of the request/response changes.
 
 ## Composite.EVENT_HTTP_LOAD
 
-Corresponds to the XMLHttpRequest event: `load` and is triggered when a
-resource is loaded.
+Corresponds to the XMLHttpRequest event: `load` and is triggered when a resource
+is loaded.
 
 
 ## Composite.EVENT_HTTP_ABORT
@@ -170,9 +170,8 @@ Composite.listen(Composite.EVENT_ERROR, function(event, Error) {
 
 ## Composite.EVENT_ERROR
 
-The error event is triggered for unhandled runtime errors.  
-Syntax errors that prevent JavaScript from being executed generally cannot
-trigger the error event.
+The error event is triggered for unhandled runtime errors. Syntax errors that
+prevent JavaScript from being executed generally cannot trigger the error event.
 
 
 - - -
