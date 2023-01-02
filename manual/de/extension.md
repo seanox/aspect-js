@@ -43,14 +43,12 @@ gibt die Methode den globale Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Namespace.using("app.example");
-app.example {
-    ...
-}
+    creates window["app", {example: {}}]
+    returns window["app"] / {example: {}}  
 
 Namespace.using("app.example", "more");
-app.example.more {
-    ...
-}
+    creates window["app", {example: {more: {}}}]
+    returns window["app"] / {example: {more: {}}}
 
 Namespace.using()
     returns window
@@ -59,21 +57,21 @@ Namespace.using()
 
 ### Namespace.lookup
 
-L&ouml;st einen Namensraum auf und ermittelt das Objekt.  
-Wenn der Namensraum nicht existiert, wird `null` zur&uuml;ckgegeben.  
-Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
+L&ouml;st einen Namensraum auf und ermittelt das Objekt. Wenn der Namensraum
+nicht existiert, wird `null` zur&uuml;ckgegeben. Ohne Argumente gibt die Methode
+den globale Namensraum `window` zur&uuml;ck.  
 
 ```javascript
 Namespace.using("app.example.more");
 
 Namespace.lookup("app.example.more")
-    returns app.example.more
+    returns object window["app"] / {example: {more: {}}}
 
 Namespace.lookup(app.example, "more")
-    returns app.example.more
+    returns object window["app"] / {example: {more: {}}}
 
 Namespace.lookup()
-    returns window
+    returns object window
 ```
 
 
@@ -85,16 +83,16 @@ Pr&uuml;ft, ob ein Namensraum existiert.
 Namespace.using("app.example.more");
 
 Namespace.exists("app.example.more")
-    returns true
+    returns boolean true
 
 Namespace.exists(app.example, "more")
-    returns true
+    returns boolean true
   
 Namespace.exists(app.example, "nothing")
-    returns false
+    returns boolean false
 
 Namespace.exists()
-    returns true
+    returns boolean true
 ```
 
 
@@ -103,7 +101,7 @@ Namespace.exists()
 ### Element.prototype.appendChild
 
 &Auml;ndert die urspr&uuml;ngliche Methode zur Unterst&uuml;tzung von Knoten als
-NodeList und Array. Wenn die Option `exclusive` verwendet wird, werden
+NodeList und Array. Wenn die Option `exclusive` verwendet wird, werden 
 bestehende Kinder zuerst entfernt.
 
 ```javascript
@@ -127,10 +125,10 @@ L&auml;nge. Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
 
 ```javascript
 Math.uniqueId()
-    returns e.g. "42X3IUW7622CKY02"
+    returns string e.g. "42X3IUW7622CKY02"
   
 Math.uniqueId(32)
-    returns e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
+    returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
 
@@ -142,10 +140,10 @@ abh&auml;ngig von ihrer L&auml;nge.
 
 ```javascript
 Math.uniqueSerialId()
-    returns e.g. "0GQ96VN87ZZ2JTYY"
+    returns string e.g. "0GQ96VN87ZZ2JTYY"
   
 Math.uniqueSerialId(32)
-    returns e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
+    returns string e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
 ```
 
 
@@ -185,13 +183,13 @@ const earth = {
 }
 
 Object.lookup("earth");
-    returns object earth
+    returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
   
 Object.lookup("earth.europe.germany");
-    returns object earth.europe.germany
+    returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
 
 Object.lookup("earth.europe.germany.countPopulation");
-    returns function earth.europe.germany.countPopulation
+    returns function window["earth.europe.germany.countPopulation"] / () => {return 83000000;}
 
 Object.lookup("foo");
     returns null
@@ -215,16 +213,16 @@ const earth = {
 }
 
 Object.exists("earth");
-    returns true
+    returns booelan true
   
 Object.exists("earth.europe.germany");
-    returns true
+    returns booelan true
 
 Object.exists("earth.europe.germany.countPopulation");
-    returns true
+    returns booelan true
 
 Object.exists("foo");
-    returns false
+    returns booelan false
 ```
 
 
@@ -236,17 +234,14 @@ Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Object.using("app.example");
-app.example {
-    ...
-}
+    returns object window["app.example"] / {}
 
 Object.using("app.example", "more");
-app.example.more {
-    ...
+    returns object window["app.example.more"] / {}
 }
 
 Object.using()
-    returns window
+    returns object window
 ```
 
 
@@ -259,7 +254,7 @@ Escape-Sequenzen im Text verlieren dadurch ihre Bedeutung.
 
 ```javascript
 RegExp.quote("only a text with a + b (as an example)");
-    returns "only a text with a \+ b \(as an example\)"
+    returns string "only a text with a \+ b \(as an example\)"
 ```
 
 
@@ -271,7 +266,7 @@ Funktion zur Kapitalisierung von String-Objekten.
 
 ```javascript
 ("hello world").capitalize();
-    returns "Hello world"
+    returns string "Hello world"
 ```
 
 
@@ -281,7 +276,7 @@ Funktion zur Dekapitalisierung von String-Objekten.
 
 ```javascript
 ("Hello World").capitalize();
-    returns "hello World"
+    returns string "hello World"
 ```
 
 
@@ -291,7 +286,7 @@ Funktion zur Kodierung von String-Objekten im Hexadezimalcode.
 
 ```javascript
 ("hello world").encodeHex();
-    returns "0x68656C6C6F20776F726C64"
+    returns string "0x68656C6C6F20776F726C64"
 ```
 
 
@@ -301,7 +296,7 @@ Funktion zur Dekodierung von Hexadezimalcode in String-Objekten.
 
 ```javascript
 ("0x68656C6C6F20776F726C64").decodeHex();
-    returns "hello world"
+    returns string "hello world"
 ```
 
 
@@ -311,7 +306,7 @@ Funktion zur Kodierung von String-Objekten als Base64.
 
 ```javascript
 ("hello world").encodeBase64();
-    returns "aGVsbG8gd29ybGQ="
+    returns string "aGVsbG8gd29ybGQ="
 ```
 
 
@@ -321,7 +316,7 @@ Funktion zur Dekodierung von Base64 in String-Objekten.
 
 ```javascript
 ("aGVsbG8gd29ybGQ=").decodeBase64();
-    returns "hello world"
+    returns string "hello world"
 ```
 
 
@@ -331,7 +326,7 @@ Funktion zur Kodierung von HTML-Zeichen in String-Objekten.
 
 ```javascript
 ("<hello world> & abc").encodeHtml();
-    returns "&lt;hello world&gt; &amp; abc"
+    returns string "&lt;hello world&gt; &amp; abc"
 ```
 
 
@@ -341,7 +336,7 @@ Funktion zur Berechnung eines alhpanumerischen Hash-Wertes f&uuml;r String-Objek
 
 ```javascript
 ("hello world").hashCode();
-    returns "B1OQGUCARUTF1"
+    returns string "B1OQGUCARUTF1"
 ```
 
 
@@ -351,7 +346,7 @@ Funktion zur Dekodierung von Slash-Sequences (Steuerzeichen) in String-Objekten.
 
 ```javascript
 ("a\\tb").unescape();
-    returns "a   b"
+    returns string "a   b"
 ```
 
 
@@ -363,7 +358,7 @@ Eigenschaft mit der UID f&uuml;r Instanz vom window-Objekt.
 
 ```javascript
 window.serial
-    returns e.g. "2YG490NMYY87TSF1I9R"
+    returns string e.g. "2YG490NMYY87TSF1I9R"
 ```
 
 
@@ -375,7 +370,7 @@ mit einem Slash, endet aber ohne diesen.
 
 ```javascript
 window.location.combine("a", "b", "c")
-    returns "/a/b/c"
+    returns string "/a/b/c"
 ```
 
 
@@ -386,7 +381,7 @@ kann mit dem aktuellen Arbeitsverzeichnis verglichen werden.
 
 ```javascript
 window.location.pathcontext
-    returns e.g. /apps/test for URL https://example.local/apps/test/index.html
+    returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
 
