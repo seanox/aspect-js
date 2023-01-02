@@ -36,12 +36,12 @@ eine Datenquelle, die funktional &auml;hnlich wie SQL verwendet werden kann.
 
 ## Data Storage
 
-Standardm&auml;ssig befindet sich der Datenspeicher in `./data` relativ zum
-Anwendungsverzeichnis. Der Datenspeicher enth&auml;lt die unterst&uuml;tzten
-Sprachen als Unterverzeichnisse. Jede Sprache enth&auml;lt ihren eigenen Inhalt.
-Redundante Daten/Felder und weitere Unterverzeichnisse entsprechen dem Konzept.
-Die DataSource verwendet haupts&auml;chlich XML-Dateien. Optional ist die
-Transformation mit XSLT m&ouml;glich.
+Standardm&auml;ssig befindet sich der Datenspeicher im Verzeichnis `./data`
+relativ zum Anwendungsverzeichnis. Der Datenspeicher enth&auml;lt die
+unterst&uuml;tzten Sprachen als Unterverzeichnisse. Jede Sprache enth&auml;lt
+ihren eigenen Inhalt. Redundante Daten/Felder und weitere Unterverzeichnisse
+entsprechen dem Konzept. Die DataSource verwendet haupts&auml;chlich
+XML-Dateien. Optional ist die Transformation mit XSLT m&ouml;glich.
 
 ```
 + data
@@ -82,7 +82,7 @@ Spracheinstellung des Browsers. Wenn die dort eingestellte Sprache nicht
 unterst&uuml;tzt wird, wird die als `default` deklarierte Sprache verwendet.
 
 Zur Laufzeit kann die Sprache per JavaScript &uuml;ber das Gebietsschema
-ge&auml;ndert werden. Akzeptiert werden nur Gebietsschemen, die mit der
+ge&auml;ndert werden. Akzeptiert werden aber nur Gebietsschemen, die mit der
 DataSource verf&uuml;gbar sind, andere Angaben f&uuml;hren beim Methoden-Aufruf
 zu einem Fehler.
 
@@ -99,7 +99,7 @@ beginnt.
 ## Locator
 
 Die Daten im Data Storage werden mit einem Locator adressiert. Ein Locator ist
-eine URL (`xml://...` oder `xslt://...`), die absolut und relativ zu
+eine URL (`xml://...` oder `xslt://...`), die absolut und relativ zum
 Datenspeicher der DataSource verwendet wird, aber kein Locale (Sprachangabe) und
 Dateiendung im Pfad enth&auml;lt. Die Sprache wird automatisch &uuml;ber das
 Gebietsschema des Browsers bestimmt, oder wenn dies nicht unterst&uuml;tzt wird,
@@ -159,7 +159,7 @@ Details zur Funktionsweise der Transformation werden im Abschnitt
 
 Die Transformation von XML-Daten mit XSLT (1.0) bietet eine zus&auml;tzliche
 M&ouml;glichkeit zur Generierung von dynamischen Daten sowie Inhalten und kann
-dirket mit per fetch-Methode und einem entsprechenden Locator durchgef&uuml;hrt
+direkt per fetch-Methode und einem entsprechenden Locator durchgef&uuml;hrt
 werden. Beide Methoden, fetch und transform akzeptieren als Parameter Locator
 und XMLDocument, auch im Mix. 
 

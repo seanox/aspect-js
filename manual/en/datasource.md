@@ -78,9 +78,9 @@ The language is selected automatically on the basis of the language setting of
 the browser. If the language set there is not supported, the language declared
 as `default` is used.
 
-At runtime, the language can be changed via JavaScript with the locale.  
-Only locales that are available with the DataSource are accepted. Other values
-cause an error when the method is called.
+At runtime, the language can be changed via JavaScript with the locale. But only
+locales that are available with the DataSource are accepted. Other values cause
+an error when the method is called.
 
 ```javascript
 DataSource.localize("de");
@@ -170,22 +170,22 @@ and XSLT processor, the structure of XMLDocument is different. Therefore, by
 default the root entity will be returned as a node. The behavior can be changed
 with option `raw`. If this is `true`, the XMLDocument is returned as original.
 
-Another feature concerns JavaScript elements.  
-These are automatically changed to composite/javascript so that they are not
-executed automatically when embedding, but are deliberately interpreted by the
-renderer. This is important when using [condition](markup.md#condition).
+Another feature concerns JavaScript elements. These are automatically changed to
+composite/javascript so that they are not executed automatically when embedding,
+but are deliberately interpreted by the renderer. This is important when using
+[condition](markup.md#condition).
 
-Another feature concerns JavaScript elements.  
-These are automatically changed to composite/javascript so that they are not
-executed automatically when embedding, but are deliberately interpreted by the
-renderer. This is important when using [condition](markup.md#condition).
+Another feature concerns JavaScript elements. These are automatically changed to
+composite/javascript so that they are not executed automatically when embedding,
+but are deliberately interpreted by the renderer. This is important when using
+[condition](markup.md#condition).
 
-Another feature concerns the creation/output of text during the transformation.  
+Another feature concerns the creation/output of text during the transformation.
 The XSLT Processor always generates XML valid text output. Any XML syntax in a
-text is automatically masked. This makes the generation of markup difficult.  
-The attribute `escape` was introduced for this purpose and can be used in XML
-and XSLT files. The attribute expects the values `yes`, `on`, `true` or `1`.  
-In this case the automatic escaping is cancelled or undone.
+text is automatically masked. This makes the generation of markup difficult. The
+attribute `escape` was introduced for this purpose and can be used in XML and
+XSLT files. The attribute expects the values `yes`, `on`, `true` or `1`. In this
+case the automatic escaping is cancelled or undone.
 
 ```xml
 <?xml version="1.0"?>
