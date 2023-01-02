@@ -1,4 +1,4 @@
-[Expression Language](expression.md) | [TOC](README.md#datasource) | [Resource Bundle](messages.md)
+[Expression Language](expression.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
 - - -
 
 # DataSource
@@ -332,4 +332,4 @@ The DataSource can also be used directly in the markup with the attributes
 
 - - -
 
-[Expression Language](expression.md) | [TOC](README.md#datasource) | [Resource Bundle](messages.md)
+[Expression Language](expression.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
