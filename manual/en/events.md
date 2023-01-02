@@ -52,8 +52,9 @@ start until after the event.
 
 ## Composite.EVENT_RENDER_NEXT
 
-The event occurs during recursive iteration during rendering. The processing
-itself does not start until after the event.
+The event occurs during recursive iteration during rendering, if during a render
+cycle, the rendering of another element starts. The processing itself does not
+start until after the event.
 
 
 ## Composite.EVENT_RENDER_END
@@ -83,8 +84,9 @@ does not start until after the event.
 
 ## Composite.EVENT_MOUNT_NEXT
 
-The event occurs with the final end of the object/model binding. The processing
-itself ends before the event.
+The event occurs during recursive iteration during object/model binding, if
+during a render cycle, the object/model binding of another element starts. The
+processing itself does not start until after the event.
 
 
 ## Composite.EVENT_MOUNT_END

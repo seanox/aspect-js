@@ -47,20 +47,21 @@ Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
 
 ## Composite.EVENT_RENDER_START
 
-Das Ereignis tritt mit Start des Renderings auf. Die Verarbeitung selbst beginnt
-erst nach dem Ereignis.
+Das Ereignis tritt mit dem Start des Renderings auf. Die Verarbeitung selbst
+beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_RENDER_NEXT
 
-Das Ereignis tritt bei rekursiver Iteration beim Renderings auf. Die
-Verarbeitung selbst beginnt erst nach dem Ereignis.
+Das Ereignis tritt bei rekursiver Iteration beim Rendering auf, wenn
+w&auml;hrend eines Render-Zyklus, das Rendering eines weiteren Elements startet.
+Die Verarbeitung selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_RENDER_END
 
-Das Ereignis tritt mit finalen Ende des Renderings auf. Die Verarbeitung selbst
-endet vor dem Ereignis.
+Das Ereignis tritt mit dem finalen Ende des Renderings auf. Die Verarbeitung
+selbst endet vor dem Ereignis.
 
 
 # Object/Model-Binding
@@ -79,19 +80,20 @@ Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
 
 ## Composite.EVENT_MOUNT_START
 
-Das Ereignis tritt mit Start vom Object/Model-Binding auf. Die Verarbeitung
+Das Ereignis tritt mit dem Start vom Object/Model-Binding auf. Die Verarbeitung
 selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_MOUNT_NEXT
 
-Das Ereignis tritt mit finalen Ende vom Object/Model-Binding auf. Die
-Verarbeitung selbst endet vor dem Ereignis.
+Das Ereignis tritt bei rekursiver Iteration beim Object/Model-Binding auf, wenn
+w&auml;hrend eines Render-Zyklus, das Object/Model-Binding eines weiteren
+Elements startet. Die Verarbeitung selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_MOUNT_END
 
-Das Ereignis tritt mit finalen Ende vom Object/Model-Binding auf. Die
+Das Ereignis tritt mit dem finalen Ende vom Object/Model-Binding auf. Die
 Verarbeitung selbst endet vor dem Ereignis.
 
 
@@ -154,7 +156,7 @@ Fehler aufgetreten ist.
 ## Composite.EVENT_HTTP_END
 
 Entspricht dem XMLHttpRequest-Event: `loadend` und wird ausgel&ouml;st, wenn der
-Request abgeschlossen ist, unabh&auml;ngig von evlt. Fehlern oder erfolgreichem
+Request abgeschlossen ist, unabh&auml;ngig von evtl. Fehlern oder erfolgreichem
 Verlauf.
 
 
