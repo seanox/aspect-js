@@ -1,4 +1,4 @@
-[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle-i18n--l19n) | [Model View Controller](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle-i18nl19n) | [Model View Controller](mvc.md)
 - - -
 
 # Resource Bundle (Messages / i18n / l10n)
