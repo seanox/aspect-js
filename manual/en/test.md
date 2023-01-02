@@ -375,7 +375,7 @@ Test.start({auto: boolean, ouput: {...}, monitor: {...}});
 ### auto
 
 Option that triggers the start when loading the page. If the page is already
-loaded, the auto parameter is ignored and the start is executed immediately.
+loaded, the parameter _auto_ is ignored and the start is executed immediately.
 
 ```javascript
 Test.start({auto: true});

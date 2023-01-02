@@ -5,7 +5,7 @@
 
 Die Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
 Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und einzelne
-Testf&auml;lle (case) verwendet werden.
+Testf&auml;lle (test case) verwendet werden.
 
 Als modularer Bestandteil von Seanox aspect-js ist die Test-API in jedem Release
 enthalten, der sich ohne Probleme entfernen l&auml;sst. Da die Test-API einige
@@ -62,8 +62,9 @@ Test.start();
 ## Testfall
 
 Der kleinste Bestandteil in einem Integrationstest, der hier als _Task_
-verwendet wird, da _case_ ein Schl&uuml;sselwort im JavaScript ist. Es kann
-allein implementiert werden, wird aber immer in einem Szenario verwendet.
+verwendet wird, da _case_ ein Schl&uuml;sselwort im JavaScript ist. Tasks
+k&aouml;nnen allein implementiert werden, werden aber meist in einem Szenario
+verwendet.
 
 ```javascript
 Test.activate();
@@ -354,7 +355,7 @@ Test.start();
 
 ### fail
 
-Verursacht das Scheitern eines Test mit einer optionaler Meldung.
+Verursacht das Scheitern eines Tests mit einer optionalen Meldung.
 
 ```javascript
 Test.activate();
@@ -384,7 +385,7 @@ Test.start({auto: boolean, ouput: {...}, monitor: {...}});
 ### auto
 
 Option die den Start beim Laden der Seite ausl&ouml;st. Wenn die Seite bereits
-geladen ist, wird der Parameter auto ignoriert und der Start sofort
+geladen ist, wird der Parameter _auto_ ignoriert und der Start sofort
 ausgef&uuml;hrt.
 
 ```javascript
@@ -439,11 +440,11 @@ Test.start({monitor: {
     },
 
     perform(status) {
-        Aufruf der Methode bevor eine Testaufgabe ausgef&uuml;hrt wird.
+        Aufruf der Methode bevor eine Testaufgabe ausgefuehrt wird.
     },
 
     response(status) {
-        Aufruf der Methode nach der Ausf&uuml;hrung einer Testaufgabe.
+        Aufruf der Methode nach der Ausfuehrung einer Testaufgabe.
         Hier ist das Ergebnis der Testaufgabe enthalten.
     },
 
@@ -466,14 +467,14 @@ Details sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
             Meta-Informationen zum Test (name, test, timeout, expected,
             serial),
         running:
-            Kennzeichen, wenn die Testaufgabe ausgef&uuml;hrt wird.
+            Kennzeichen, wenn die Testaufgabe ausgefuehrt wird.
         timing:
             Zeitpunkt vom Beginn der Testaufgabe in Millisekunden.
         timeout:
             Optionale Zeit in Millisekunden, zu der ein Timeout
             erwartet wird.
         duration:
-            Gesamtausf&uuml;hrungszeit der Testaufgabe in Millisekunden nach
+            Gesamtausfuehrungszeit der Testaufgabe in Millisekunden nach
             dem Ende der Testaufgabe.
         error:
             Optional, wenn ein unerwarteter Fehler (auch Assertion-Fehler)
@@ -483,13 +484,13 @@ Details sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
         timing:
             Zeitpunkt vom Beginn in Millisekunden,
         size:
-            urspr&uuml;ngliche Anzahl von Testf&auml;llen,
+            urspruengliche Anzahl von Testfaellen,
         length:
             Anzahl ausstehender Tests,
         progress:
-            Anzahl durchgef&uuml;hrter Tests,
+            Anzahl durchgefuehrter Tests,
         lock:
-            Indikator, wenn die Queue zur Ausf&uuml;hrung eines Test wartet,
+            Indikator, wenn die Queue zur Ausfuehrung eines Test wartet,
         faults:
             Anzahl der erkannten Fehler
     }
@@ -567,7 +568,7 @@ und wird &uuml;ber die verschiedenen Schritte und Status informiert. Der Monitor
 ist optional. Ohne diesen werden Informationen zum Testverlauf in der Konsole
 ausgegeben.
 
-Details zur Konfiguration und und Verwendung werden im Abschnitt
+Details zur Konfiguration und Verwendung werden im Abschnitt
 [Konfiguration - monitor](#monitor) beschrieben.
 
 
@@ -624,14 +625,14 @@ Wenn kein Test ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
             Meta-Informationen zum Test (name, test, timeout, expected,
             serial),
         running:
-            Kennzeichen, wenn die Testaufgabe ausgef&uuml;hrt wird.
+            Kennzeichen, wenn die Testaufgabe ausgefuehrt wird.
         timing:
             Zeitpunkt vom Beginn der Testaufgabe in Millisekunden.
         timeout:
             Optionale Zeit in Millisekunden, zu der ein Timeout
             erwartet wird.
         duration:
-            Gesamtausf&uuml;hrungszeit der Testaufgabe in Millisekunden nach
+            Gesamtausfuehrungszeit der Testaufgabe in Millisekunden nach
             dem Ende der Testaufgabe.
         error:
             Optional, wenn ein unerwarteter Fehler (auch Assertion-Fehler)
@@ -641,13 +642,13 @@ Wenn kein Test ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
         timing:
             Zeitpunkt vom Beginn in Millisekunden,
         size:
-            urspr&uuml;ngliche Anzahl von Testf&auml;llen,
+            urspruengliche Anzahl von Testfuellen,
         length:
             Anzahl ausstehender Tests,
         progress:
-            Anzahl durchgef&uuml;hrter Tests,
+            Anzahl durchgefuehrter Tests,
         lock:
-            Indikator, wenn die Queue zur Ausf&uuml;hrung eines Test wartet,
+            Indikator, wenn die Queue zur Ausfuehrung eines Test wartet,
         faults:
             Anzahl der erkannten Fehler
     }
@@ -718,7 +719,7 @@ document.querySelector("#inputText").typeValue("Hello World!");
 #### Element.prototype.toPlainString
 
 Methode, die eine einfache Zeichenkette f&uuml;r ein Element-Objekt erzeugt.
-Die Zeichenkette bassiert auf `Element.prototype.outerHTML`.
+Die Zeichenkette basiert auf `Element.prototype.outerHTML`.
 
 ```html
 <form action="/api/example" methode="POST">
@@ -774,7 +775,7 @@ document.queryElement("#button").trigger("click", true, false);
 #### Node.prototype.toPlainString
 
 Methode, die eine einfache Zeichenkette f&uuml;r ein Knoten-Objekt erzeugt. Die
-Zeichenkette bassiert auf `XMLSerializer.serializeToString(node)`.
+Zeichenkette basiert auf `XMLSerializer.serializeToString(node)`.
 
 ```javascript
 const text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -805,7 +806,7 @@ Output:
 #### Object.prototype.toPlainString
 
 Methode, die eine einfache Zeichenkette f&uuml;r ein Objekt erzeugt. Die
-Zeichenkette bassiert auf `JSON.stringify(object)`.
+Zeichenkette basiert auf `JSON.stringify(object)`.
 
 ```javascript
 const example = {a:1, b:2, c() {return;}};
