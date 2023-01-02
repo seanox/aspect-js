@@ -38,8 +38,9 @@ eine Ganzzahl, wird diese Ebene als Array verwendet.
 
 ### Namespace.using
 
-Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette. Ohne Argumente
-gibt die Methode den globale Namensraum `window` zur&uuml;ck.
+Erstellt einen Namensraum zur &uuml;bergebenen Zeichenkette und gibt diesen als
+Objekt zur&uml;ck. Ohne Argumente gibt die Methode den globalen Namensraum
+`window` zur&uuml;ck.
 
 ```javascript
 Namespace.using("app.example");
@@ -58,8 +59,8 @@ Namespace.using()
 ### Namespace.lookup
 
 L&ouml;st einen Namensraum auf und ermittelt das Objekt. Wenn der Namensraum
-nicht existiert, wird `null` zur&uuml;ckgegeben. Ohne Argumente gibt die Methode
-den globale Namensraum `window` zur&uuml;ck.  
+nicht existiert, wird `undefined` zur&uuml;ckgegeben. Ohne Argumente gibt die
+Methode den globale Namensraum `window` zur&uuml;ck.  
 
 ```javascript
 Namespace.using("app.example.more");
@@ -120,8 +121,8 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester
-L&auml;nge. Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
+Statische Funktion zur Erzeugung einer alphanumerischen (U)UID mit fester
+L&auml;nge, wobei die L&auml;nge Einfluss auf die Qualit&auml;t der (U)UID hat.
 
 ```javascript
 Math.uniqueId()
@@ -134,9 +135,9 @@ Math.uniqueId(32)
 
 ### Math.uniqueSerialId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester
-L&auml;nge und einem seriellen Bezug zur Zeit. Die Qualit&auml;t der (U)UID ist
-abh&auml;ngig von ihrer L&auml;nge.
+Statische Funktion zur Erzeugung einer alphanumerischen (U)UID mit fester
+L&auml;nge und einem seriellen Bezug zur Zeit, wobei die L&auml;nge Einfluss auf
+die Qualit&auml;t der (U)UID hat.
 
 ```javascript
 Math.uniqueSerialId()
@@ -169,7 +170,8 @@ element1.ordinal() != element2.ordinal();
 
 ### Object.lookup
 
-Statische Funktion zum Bestimmen eines Objekts &uuml;ber den Namensraum.
+&Auml;quivalent zu [Namespace.lookup](#namespacelookup). Ermittelt ein Objekt zu
+einem Namensraum.
 
 ```javascript
 const earth = {
@@ -198,8 +200,8 @@ Object.lookup("foo");
 
 ### Object.exists
 
-Statische Funktion, um zu pr&uuml;fen, ob ein Objekt in einem Namensraum
-existiert.
+&Auml;quivalent zu [Namespace.exists](#namespaceexists). Pr&uuml;ft, ob ein
+Objekt in einem Namensraum existiert.
 
 ```javascript
 const earth = {
@@ -228,9 +230,9 @@ Object.exists("foo");
 
 ### Object.using
 
-&Auml;quivalent zu [Namespace.using](#namespaceusing) als statische
-Object-Funktion. Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette.
-Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
+&Auml;quivalent zu [Namespace.using](#namespaceusing). Erstellt einen Namensraum
+zur &uuml;bergebenen Zeichenkette. Ohne Argumente gibt die Methode den globalen
+Namensraum `window` zur&uuml;ck.  
 
 ```javascript
 Object.using("app.example");
@@ -262,7 +264,7 @@ RegExp.quote("only a text with a + b (as an example)");
 
 ### String.prototype.capitalize
 
-Funktion zur Kapitalisierung von String-Objekten.
+Beginnt den String in Grossschreibung.
 
 ```javascript
 ("hello world").capitalize();
@@ -272,7 +274,7 @@ Funktion zur Kapitalisierung von String-Objekten.
 
 ### String.prototype.uncapitalize
 
-Funktion zur Dekapitalisierung von String-Objekten.
+Beginnt den String in Kleinschreibung.
 
 ```javascript
 ("Hello World").capitalize();
@@ -282,7 +284,7 @@ Funktion zur Dekapitalisierung von String-Objekten.
 
 ### String.prototype.encodeHex
 
-Funktion zur Kodierung von String-Objekten im Hexadezimalcode.
+Kodierung den String hexadezimal.
 
 ```javascript
 ("hello world").encodeHex();
@@ -292,7 +294,7 @@ Funktion zur Kodierung von String-Objekten im Hexadezimalcode.
 
 ### String.prototype.decodeHex
 
-Funktion zur Dekodierung von Hexadezimalcode in String-Objekten.
+Dekodiert den hexadezimalen String.
 
 ```javascript
 ("0x68656C6C6F20776F726C64").decodeHex();
@@ -302,7 +304,7 @@ Funktion zur Dekodierung von Hexadezimalcode in String-Objekten.
 
 ### String.prototype.encodeBase64
 
-Funktion zur Kodierung von String-Objekten als Base64.
+Kodiert den String in Base64.
 
 ```javascript
 ("hello world").encodeBase64();
@@ -312,7 +314,7 @@ Funktion zur Kodierung von String-Objekten als Base64.
 
 ### String.prototype.decodeBase64
 
-Funktion zur Dekodierung von Base64 in String-Objekten.
+Dekodiert den Base64 kodierten String.
 
 ```javascript
 ("aGVsbG8gd29ybGQ=").decodeBase64();
@@ -322,7 +324,7 @@ Funktion zur Dekodierung von Base64 in String-Objekten.
 
 ### String.prototype.encodeHtml
 
-Funktion zur Kodierung von HTML-Zeichen in String-Objekten.
+Kodiert HTML-Zeichen im String.
 
 ```javascript
 ("<hello world> & abc").encodeHtml();
@@ -332,7 +334,7 @@ Funktion zur Kodierung von HTML-Zeichen in String-Objekten.
 
 ### String.prototype.hashCode
 
-Funktion zur Berechnung eines alhpanumerischen Hash-Wertes f&uuml;r String-Objekte.
+Berechnet einen alphanumerischen Hash-Wert f&uuml;r den String.
 
 ```javascript
 ("hello world").hashCode();
@@ -342,7 +344,7 @@ Funktion zur Berechnung eines alhpanumerischen Hash-Wertes f&uuml;r String-Objek
 
 ### String.prototype.unescape
 
-Funktion zur Dekodierung von Slash-Sequences (Steuerzeichen) in String-Objekten.
+Dekodiert Slash-Sequences (Steuerzeichen) im String.
 
 ```javascript
 ("a\\tb").unescape();
@@ -354,7 +356,7 @@ Funktion zur Dekodierung von Slash-Sequences (Steuerzeichen) in String-Objekten.
 
 ### window.serial
 
-Eigenschaft mit der UID f&uuml;r Instanz vom window-Objekt.
+Eigenschaft mit der UID f&uuml;r die Instanz vom window-Objekt.
 
 ```javascript
 window.serial
@@ -412,7 +414,7 @@ Composite.listen(Composite.EVENT_HTTP_END, function(event, ...varargs) {
 });
 ```
 
-Zu jedem Events lassen sich mehrere Callback-Methoden registrieren, die dann
+Zu allen Events lassen sich mehrere Callback-Methoden registrieren, die dann
 entsprechend der Reihenfolge bei der Registrierung aufgerufen werden.
 
 
