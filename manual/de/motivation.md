@@ -16,7 +16,7 @@ Gr&ouml;sse und ben&ouml;tigen teilweise eigene Compiler und Server.
 Bei Seanox aspect-js steht ein minimalistischer Ansatz im Vordergrund.
 Gepr&auml;gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug
 auf Funktion und einfache Integration ins Markup, entstand die Idee f&uuml;r
-eine &auml;hnliche client-seitigen L&ouml;sung und als Experiment f&uuml;r das
+eine &auml;hnliche client-seitige L&ouml;sung und als Experiment f&uuml;r das
 Verst&auml;ndnis von reaktives Rendering, Expression Language und Performance.
 
 
