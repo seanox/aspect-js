@@ -98,7 +98,7 @@ if (typeof Namespace === "undefined") {
 
             if (index === 0
                     && namespace === null) {
-                namespace = new Function(`return typeof ${level} === "undefined" ? undefined : ${level}`)();
+                namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
                 if (namespace !== undefined
                         && !(namespace instanceof Element))
                     return;
@@ -199,7 +199,7 @@ if (typeof Namespace === "undefined") {
 
             if (index === 0
                     && namespace === null) {
-                namespace = new Function(`return typeof ${level} === "undefined" ? undefined : ${level}`)();
+                namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
                 if (namespace !== undefined)
                     if (namespace instanceof Element)
                         return undefined;
@@ -484,7 +484,7 @@ if (String.prototype.unescape === undefined) {
         text = text.replace(/\n/g, "\\n");
         text = text.replace(/^(["'])/, "\$1");
         text = text.replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
-        return new Function(`return "${text}"`)();
+        return eval(`"${text}"`);
     };
 }
 
