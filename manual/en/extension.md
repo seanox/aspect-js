@@ -21,66 +21,43 @@ functions.
 
 ## Namespace
 
-Namespace at object level.  
-Comparable to packages in other programming languages, namespaces can be used to
-map hierarchical structures and to group thematically related components and
-resources.  
-The implementation happens in JavaScript at object level.  
-This means that it is not a real element of the programming language, but is
-represented by chained static objects. Each level in this object chain
-represents a namespace.  
-As is typical for object identifiers, namespaces also use letters, numbers, and
-underscores separated by dots. As a special feature, arrays are also supported.
-If an object level in the namespace is a pure number, an array is assumed.
+Comparable to packages in other programming languages, namespaces can be used
+for hierarchical structuring of components, resources and business logic.
+
+Although packages are not a feature of JavaScript, they can be mapped at the
+object level by concatenating objects into an object tree. Here, each level of
+the object tree forms a namespace, which can also be considered a domain.
+
+As is typical for the identifiers of objects, namespaces also use letters,
+numbers and underscores separated by a dot. As a special feature, arrays are
+also supported. If a layer in the namespace uses an integer, this layer is used
+as an array.
 
 
 ### Namespace.using
 
-Creates a namespace to pass string.  
-Without arguments, the method returns the global namespace window.  
-The method has different signatures.
+Creates a namespace to pass string. Without arguments, the method returns the
+global namespace window.  
 
 ```javascript
 Namespace.using("app.example");
-app.example {
-    ...
-}
+    creates window["app", {example: {}}]
+    returns window["app"] / {example: {}}
 
 Namespace.using("app.example", "more");
-app.example.more {
-    ...
-}
+    creates window["app", {example: {more: {}}}]
+    returns window["app"] / {example: {more: {}}}
 
 Namespace.using()
-    returns window
-```
-  
-
-### Namespace.locate
-
-Validates a requested namespace and creates a corresponding meta object.  
-The method has different signatures.
-
-```javascript
-Namespace.using("app.example.more");
-
-Namespace.locate("app.example.more")
-    returns {scope:app.example.more, namespace:"app.example.more"}
-
-Namespace.locate(app.example, "more")
-    returns {scope:app.example.more, namespace:"app.example.more"}
-
-Namespace.locate()
     returns window
 ```
 
 
 ### Namespace.lookup
 
-Resolves a namespace and returns the determined object(-level).  
-If the namespace does not exist, `null` is returned.  
-Without arguments, the method returns the global namespace `window`.  
-The method has different signatures.
+Resolves a namespace and returns the determined object(-level). If the namespace
+does not exist, `undefined` is returned. Without arguments, the method returns
+the global namespace `window`.  
 
 ```javascript
 Namespace.using("app.example.more");
@@ -99,22 +76,21 @@ Namespace.lookup()
 ### Namespace.exists
 
 Checks whether a namespace exists.  
-The method has different signatures.
 
 ```javascript
 Namespace.using("app.example.more");
 
 Namespace.exists("app.example.more")
-    returns true
+    returns boolean true
 
 Namespace.exists(app.example, "more")
-    returns true
-  
+    returns boolean true
+
 Namespace.exists(app.example, "nothing")
-    returns false
+    returns boolean false
 
 Namespace.exists()
-    returns true
+    returns boolean true
 ```
 
 
@@ -141,29 +117,28 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Static function for creating an alphanumeric (U)UID with fixed size.  
-The quality of the ID is dependent of the length.
+Creates an alphanumeric (U)UID with fixed size, where the length influences the
+quality of the (U)UID. 
 
 ```javascript
 Math.uniqueId()
-    returns e.g. "42X3IUW7622CKY02"
-  
+    returns string e.g. "42X3IUW7622CKY02"
+
 Math.uniqueId(32)
-    returns e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
+    returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
 ### Math.uniqueSerialId
 
-Static function for creating an alphanumeric (U)UID with fixed size and a serial
-relation to time.  
-The quality of the ID is dependent of the length.
+Creates an alphanumeric (U)UID with fixed size and a serial relation to time,
+where the length influences the quality of the (U)UID.
 
 ```javascript
 Math.uniqueSerialId()
-    returns e.g. "0GQ96VN87ZZ2JTYY"
-  
+    returns string e.g. "0GQ96VN87ZZ2JTYY"
+
 Math.uniqueSerialId(32)
-    returns e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
+    returns string e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
 ```
 
 
@@ -171,8 +146,8 @@ Math.uniqueSerialId(32)
 
 ### Object.prototype.ordinal
 
-Function for getting the serial ID to the objects.  
-The ID is created continuously and should help if a unique ID is needed at runtime.
+Gets the serial ID to the objects. The ID is created continuously and should
+help if a unique ID is needed at runtime.
 
 ```javascript
 const object1 = {};
@@ -189,7 +164,8 @@ element1.ordinal() != element2.ordinal();
 
 ### Object.lookup
 
-Static function to determine an object via the namespace.
+Equivalent to [Namespace.lookup](#namespacelookup). Determines an object for a
+namespace.
 
 ```javascript
 const earth = {
@@ -198,18 +174,18 @@ const earth = {
             countPopulation() {
                 return 83000000;
             }
-        } 
-    }  
+        }
+    }
 }
 
 Object.lookup("earth");
-    returns object earth
-  
+    returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
+
 Object.lookup("earth.europe.germany");
-    returns object earth.europe.germany
+    returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
 
 Object.lookup("earth.europe.germany.countPopulation");
-    returns function earth.europe.germany.countPopulation
+    returns function window["earth.europe.germany.countPopulation"] / () => {return 83000000;}
 
 Object.lookup("foo");
     returns null
@@ -218,7 +194,8 @@ Object.lookup("foo");
 
 ### Object.exists
 
-Static function to check whether an object exists in a namespace.
+equivalent to [namespace.exists](#namespaceexists). Determines whether an object
+exists in a namespace. object exists in a namespace.
 
 ```javascript
 const earth = {
@@ -227,44 +204,40 @@ const earth = {
             countPopulation() {
                 return 83000000;
             }
-        } 
-    }  
+        }
+    }
 }
 
 Object.exists("earth");
-    returns true
-  
+    returns booelan true
+
 Object.exists("earth.europe.germany");
-    returns true
+    returns booelan true
 
 Object.exists("earth.europe.germany.countPopulation");
-    returns true
+    returns booelan true
 
 Object.exists("foo");
-    returns false
+    returns booelan false
 ```
 
 
 ### Object.using
 
-Equivalent to [Namespace.using](#namespaceusing) as a static object function.  
-Creates a namespace to pass string.  
-Without arguments, the method returns the global namespace window.  
-The method has different signatures.
+Equivalent to [Namespace.using](#namespaceusing). Creates a namespace to the
+passed string. Without arguments, the method returns the global namespace
+window.  
 
 ```javascript
 Object.using("app.example");
-app.example {
-    ...
-}
+    returns object window["app.example"] / {}
 
 Object.using("app.example", "more");
-app.example.more {
-    ...
+    returns object window["app.example.more"] / {}
 }
 
 Object.using()
-    returns window
+    returns object window
 ```
 
 
@@ -272,12 +245,12 @@ Object.using()
 
 ### RegExp.quote
 
-Creates a literal pattern for the specified text.  
-Metacharacters or escape sequences in the text thus lose their meaning.
+Creates a literal pattern for the specified text. Metacharacters or escape
+sequences in the text thus lose their meaning.
 
 ```javascript
 RegExp.quote("only a text with a + b (as an example)");
-    returns "only a text with a \+ b \(as an example\)"
+    returns string "only a text with a \+ b \(as an example\)"
 ```
 
 
@@ -285,91 +258,91 @@ RegExp.quote("only a text with a + b (as an example)");
 
 ### String.prototype.capitalize
 
-Function for capitalizing string objects.
+Capitalized the string.
 
 ```javascript
 ("hello world").capitalize();
-    returns "Hello world"
+    returns string "Hello world"
 ```
 
 
 ### String.prototype.uncapitalize
 
-Function for uncapitalize string objects.
+Uncapitalized the string.
 
 ```javascript
 ("Hello World").capitalize();
-    returns "hello World"
+    returns string "hello World"
 ```
 
 
 ### String.prototype.encodeHex
 
-Function for encoding string objects in hexadecimal code.
+Encodes the string hexadecimal.
 
 ```javascript
 ("hello world").encodeHex();
-    returns "0x68656C6C6F20776F726C64"
+    returns string "0x68656C6C6F20776F726C64"
 ```
 
 
 ### String.prototype.decodeHex
 
-Function for decoding hexadecimal code to string objects.
+Decodes the hexadecimal string.
 
 ```javascript
 ("0x68656C6C6F20776F726C64").decodeHex();
-    returns "hello world"
+    returns string "hello world"
 ```
 
 
 ### String.prototype.encodeBase64
 
-Function for encoding string objects as Base64.
+Encodes the string in Base64.
 
 ```javascript
 ("hello world").encodeBase64();
-    returns "aGVsbG8gd29ybGQ="
+    returns string "aGVsbG8gd29ybGQ="
 ```
 
 
 ### String.prototype.decodeBase64
 
-Function for decoding Base64 to string objects.
+Decodes the Base64 encoded string.
 
 ```javascript
 ("aGVsbG8gd29ybGQ=").decodeBase64();
-    returns "hello world"
+    returns string "hello world"
 ```
 
 
 ### String.prototype.encodeHtml
 
-Function for encoding HTML characters in string objects.
+Escapes HTML characters in the string.
 
 ```javascript
 ("<hello world> & abc").encodeHtml();
-    returns "&lt;hello world&gt; &amp; abc"
+    returns string "&lt;hello world&gt; &amp; abc"
 ```
 
 
 ### String.prototype.hashCode
 
-Function for calculating an alphanumeric hash value for string objects.
+Calculates an alphanumeric hash value for the string.
 
 ```javascript
 ("hello world").hashCode();
-    returns "B1OQGUCARUTF1"
+    returns string "B1OQGUCARUTF1"
 ```
 
 
 ### String.prototype.unescape
 
-Function for decoding of slash sequences (control characters) in string objects.
+Decodes slash sequences (control characters) in the string.
 
 ```javascript
 ("a\\tb").unescape();
-    returns "a   b"
+    returns string "a   b"
 ```
 
 
@@ -381,31 +354,30 @@ Property to get the UID for the window instance.
 
 ```javascript
 window.serial
-  returns e.g. "2YG490NMYY87TSF1I9R"
+    returns string e.g. "2YG490NMYY87TSF1I9R"
 ```
 
 
 ### window.location.combine
 
-Combines paths to a new one.  
-The method has an optimizing effect in the use of slash and backslash.  
-The result will always start with a slash but ends without it.
+Combines text elements to a path. The method has an optimizing effect in the use
+of slash and backslash. The result will always start with a slash but ends
+without it.
 
 ```javascript
 window.location.combine("a", "b", "c")
-    returns "/a/b/c"
+    returns string "/a/b/c"
 ```
 
 
 ### window.location.pathcontext
 
-Property to get the context path.  
-The context path is a part of the request URI and can be compared with the
-current working directory.
+Property to get the context path. The context path is a part of the request URI
+and can be compared with the current working directory.
 
 ```javascript
 window.location.pathcontext
-  returns e.g. /apps/test for URL https://example.local/apps/test/index.html
+    returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
 
@@ -436,8 +408,8 @@ Composite.listen(Composite.EVENT_HTTP_END, function(event, ...varargs) {
 });
 ```
 
-Several callback methods can be registered for each event, which are then called
-according to the order in which they were registered.
+For each event, multiple callback methods can be registered, which are then
+called according to the order in which they were registered.
 
 
 - - -
