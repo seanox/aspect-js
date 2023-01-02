@@ -10,7 +10,7 @@ combination of the approaches of a read only database and a CMS.
 DataSource is based on static data. Therefore, the implementation uses a cache
 to minimize network access.
  
-The data is queried via XPath, the result can be concatenated and aggregated and
+The data is queried via XPath. The result can be concatenated and aggregated and
 the result can be transformed with XSLT.
 
 _Why the term NoSQL is used?_
@@ -86,20 +86,19 @@ cause an error when the method is called.
 DataSource.localize("de");
 ```
 
-The currently used language can be retrieved via `DataSource.locale`.  
-All available languages are returned by `DataSource.locales` as an array that
-starts with the as default declared language.
+The currently used language can be retrieved via `DataSource.locale`. All
+available languages are returned by `DataSource.locales` as an array that starts
+with the as default declared language.
 
 
 ## Locator
 
-The data in the data storage is addressed with a locator.  
-A locator is a URL (`xml://...` or `xslt://...`) that is used absolute and
-relative to the DataSource data storage, but does not contain a locale (language
-specification) and file extension in the path. The locale is determined
-automatically for the language setting of the browser, or if this is not
-supported, the standard from the `locales.xml` in the DataSource data storage
-is used.
+The data in the data storage is addressed with a locator. A locator is a URL
+(`xml://...` or `xslt://...`) that is used absolute and relative to the
+DataSource data storage, but does not contain a locale (language specification)
+and file extension in the path. The locale is determined automatically for the
+language setting of the browser, or if this is not supported, the standard from
+the `locales.xml` in the DataSource data storage is used.
 
 Each locator starts with a protocol that corresponds to the file extension in
 the data storage. 
@@ -122,16 +121,16 @@ For more information please read:
 
 ## fetch
 
-The data is fetched with a locator through the fetch method.  
-The return value is an XMLDocument that can then be used in detail with XPath.
+The data is fetched with a locator through the fetch method. The return value
+is an XMLDocument that can then be used in detail with XPath.
 
 ```javascript
 const xml = DataSource.fetch("xml://paper");
 xml.evaluate(...);
 ```
 
-Optionally the result can be transformed via XSLT.  
-This requires a locator for a stylesheet.
+Optionally the result can be transformed via XSLT. This requires a locator for
+a stylesheet.
 
 ```javascript
 DataSource.fetch("xml://paper", "xslt://article");
@@ -209,12 +208,11 @@ In this case the automatic escaping is cancelled or undone.
 <article escape="on">
   <![CDATA[
   <p>
-    Seanox aspect-js is a JavasScript framework for implementing  
-    dynamic interfaces for web browsers.  
-    The framework takes the declarative approach of HTML and combines  
-    markup and JavaScript via the model view controller to components  
-    that are addressed directly or via virtual paths.  
-    The framework provides an expression language based on JavaScript.
+    Seanox aspect-js is a minimalist approach to implementing Single-Page
+    Applications (SPAs). This framework takes the declarative approach of HTML
+    and extends this with expression language, reactivity rendering with
+    additional attributes, object/model binding, Model View Controller, Resource
+    Bundle, NoSQL datasource, test environment and much more.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>
