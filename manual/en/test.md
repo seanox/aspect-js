@@ -319,12 +319,42 @@ Test.start();
 
 ### assertUndefined
 
-TODO:
+Asserts that a value is `undefined`.  
+If the assertion is false, an error with optional message is thrown.  
+The method has different signatures.
+
+```javascript
+Test.activate();
+
+Test.create({test() {
+    Assert.assertUndefined(undefined);
+}});
+Test.create({test() {
+    Assert.assertUndefined("message", undefined);
+}});
+
+Test.start();
+```
 
 
 ### assertNotUndefined
 
-TODO:
+Asserts that a value is not `undefined`, as negation of `Assert.assertUndefined(...)`.  
+If the assertion is false, an error with optional message is thrown.  
+The method has different signatures.
+
+```javascript
+Test.activate();
+
+Test.create({test() {
+    Assert.assertNotUndefined(undefined);
+}});
+Test.create({test() {
+    Assert.assertNotUndefined("message", undefined);
+}});
+
+Test.start();
+```
 
 
 ### fail

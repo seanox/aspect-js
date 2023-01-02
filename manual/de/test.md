@@ -320,12 +320,42 @@ Test.start();
 
 ### assertUndefined
 
-TODO:
+Behauptet, dass ein Wert `undefined` ist.  
+Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
+Die Methode hat unterschiedliche Signaturen.
+
+```javascript
+Test.activate();
+
+Test.create({test() {
+    Assert.assertUndefined(undefined);
+}});
+Test.create({test() {
+    Assert.assertUndefined("message", undefined);
+}});
+
+Test.start();
+```
 
 
 ### assertNotUndefined
 
-TODO:
+Behauptet, dass ein Wert nicht `undefined` ist, als Negation von `Assert.assertUndefined(....)`.  
+Ist die Behauptung unwahr, f&uuml;hrt dies zu einem Fehler mit optionaler Meldung.  
+Die Methode hat unterschiedliche Signaturen.
+
+```javascript
+Test.activate();
+
+Test.create({test() {
+    Assert.assertNotUndefined(undefined);
+}});
+Test.create({test() {
+    Assert.assertNotUndefined("message", undefined);
+}});
+
+Test.start();
+```
 
 
 ### fail
