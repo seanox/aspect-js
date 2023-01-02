@@ -71,7 +71,7 @@
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
     * [Parameter](markup.md#parameter)
-  * [H&auml;rtung](markup.md#h%C3%A4rtung)
+  * [H&auml;rtung](markup.md#h&auml;rtung)
 
 
 ### DataSource
