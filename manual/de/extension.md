@@ -3,8 +3,8 @@
 
 # Erweiterung
 
-Die JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine Funktionen
-erweitert.
+Die JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine
+Funktionen erweitert.
 
 
 ## Inhalt
@@ -21,25 +21,25 @@ erweitert.
 
 ## Namespace
 
-Namespace zu deutsch Namensraum auf Objektebene.  
-Vergleichbar mit Paketen in anderen Programmiersprachen k&ouml;nnen Namensr&auml;ume zur
-Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
-Komponenten und Ressourcen genutzt werden.  
-Die Implementierung erfolgt in JavaScript auf Objektebene.  
-Das heisst, es ist kein reales Element der Programmiersprache, sondern wird
-durch das Verketten statischer Objekte abgebildet.  
-Jede Ebene in dieser Objektkette repr&auml;sentiert einen Namensraum.  
-Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namensr&auml;ume
-Buchstaben, Zahlen und Unterstriche, die durch Punkte getrennt werden. Als
-Besonderheit werden auch Arrays unterst&uuml;tzt. Wenn eine Objektebene im Namensraum
-eine reine Zahl ist, wird ein Array angenommen
+Vergleichbar mit Packages in anderen Programmiersprachen, lassen sich Namespaces
+(Namensr&auml;ume) zur hierarchischen Strukturierung von Komponenten, Ressourcen
+und Gesch&auml;ftslogik nutzen.
+
+Auch wenn Packages kein Merkmal von JavaScript sind, lassen sich diese auf
+Objektebene durch das Verketten von Objekten zu einem Objektbaum abbilden. Dabei
+bildet jede Ebene des Objektbaums einen Namespace, was auch als Domain betrachtet
+werden kann.
+
+Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namespaces
+Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
+Besonderheit werden auch Arrays unterst&uuml;tzt. Nutzt eine Ebene im Namespace
+eine Ganzzahl, wird diese Ebene als Array verwendet.
 
 
 ### Namespace.using
 
-Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette.  
-Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
-Die Methode hat verschiedene Signaturen.
+Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette. Ohne Argumente
+gibt die Methode den globale Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Namespace.using("app.example");
@@ -55,26 +55,6 @@ app.example.more {
 Namespace.using()
     returns window
 ```
-  
-
-### Namespace.locate
-
-Validiert einen angeforderten Namensraum und erzeugt ein entsprechendes
-Meta-Objekt.  
-Die Methode hat verschiedene Signaturen.
-
-```javascript
-Namespace.using("app.example.more");
-
-Namespace.locate("app.example.more")
-    returns {scope:app.example.more, namespace:"app.example.more"}
-
-Namespace.locate(app.example, "more")
-    returns {scope:app.example.more, namespace:"app.example.more"}
-
-Namespace.locate()
-    returns window
-```
 
 
 ### Namespace.lookup
@@ -82,7 +62,6 @@ Namespace.locate()
 L&ouml;st einen Namensraum auf und ermittelt das Objekt.  
 Wenn der Namensraum nicht existiert, wird `null` zur&uuml;ckgegeben.  
 Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
-Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -101,7 +80,6 @@ Namespace.lookup()
 ### Namespace.exists
 
 Pr&uuml;ft, ob ein Namensraum existiert.  
-Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -124,9 +102,9 @@ Namespace.exists()
 
 ### Element.prototype.appendChild
 
-&Auml;ndert die urspr&uuml;ngliche Methode zur Unterst&uuml;tzung von Knoten als NodeList und
-Array. Wenn die Option `exclusive` verwendet wird, werden bestehende Kinder
-zuerst entfernt.
+&Auml;ndert die urspr&uuml;ngliche Methode zur Unterst&uuml;tzung von Knoten als
+NodeList und Array. Wenn die Option `exclusive` verwendet wird, werden
+bestehende Kinder zuerst entfernt.
 
 ```javascript
 const nodes = [];
@@ -144,8 +122,8 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester L&auml;nge.  
-Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester
+L&auml;nge. Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
 
 ```javascript
 Math.uniqueId()
@@ -158,9 +136,9 @@ Math.uniqueId(32)
 
 ### Math.uniqueSerialId
 
-Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester L&auml;nge
-und einem seriellen Bezug zur Zeit.  
-Die Qualit&auml;t der (U)UID ist abh&auml;ngig von ihrer L&auml;nge.
+Statische Funktion zur Erzeugung einer alhpanumerischen (U)UID mit fester
+L&auml;nge und einem seriellen Bezug zur Zeit. Die Qualit&auml;t der (U)UID ist
+abh&auml;ngig von ihrer L&auml;nge.
 
 ```javascript
 Math.uniqueSerialId()
@@ -175,9 +153,8 @@ Math.uniqueSerialId(32)
 
 ### Object.prototype.ordinal
 
-Funktion zum Abrufen der ID eines Objekts.  
-Die ID wird kontinuierlich erstellt und soll helfen, wenn zur Laufzeit eine
-eindeutige ID ben&ouml;tigt wird.
+Funktion zum Abrufen der ID eines Objekts. Die ID wird kontinuierlich erstellt
+und soll helfen, wenn zur Laufzeit eine eindeutige ID ben&ouml;tigt wird.
 
 ```javascript
 const object1 = {};
@@ -223,7 +200,8 @@ Object.lookup("foo");
 
 ### Object.exists
 
-Statische Funktion, um zu pr&uuml;fen, ob ein Objekt in einem Namensraum existiert.
+Statische Funktion, um zu pr&uuml;fen, ob ein Objekt in einem Namensraum
+existiert.
 
 ```javascript
 const earth = {
@@ -252,10 +230,9 @@ Object.exists("foo");
 
 ### Object.using
 
-&Auml;quivalent zu [Namespace.using](#namespaceusing) als statische Object-Funktion.  
-Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette.  
+&Auml;quivalent zu [Namespace.using](#namespaceusing) als statische
+Object-Funktion. Erstellt einen Namensraum aus der &uuml;bergeben Zeichenkette.
 Ohne Argumente gibt die Methode den globale Namensraum `window` zur&uuml;ck.  
-Die Methode hat verschiedene Signaturen.
 
 ```javascript
 Object.using("app.example");
@@ -277,8 +254,8 @@ Object.using()
 
 ### RegExp.quote
 
-Erstellt ein literales Muster f&uuml;r den angegebenen Text.  
-Metazeichen oder Escape-Sequenzen im Text verlieren dadurch ihre Bedeutung.
+Erstellt ein literales Muster f&uuml;r den angegebenen Text. Metazeichen oder
+Escape-Sequenzen im Text verlieren dadurch ihre Bedeutung.
 
 ```javascript
 RegExp.quote("only a text with a + b (as an example)");
@@ -386,15 +363,15 @@ Eigenschaft mit der UID f&uuml;r Instanz vom window-Objekt.
 
 ```javascript
 window.serial
-  returns e.g. "2YG490NMYY87TSF1I9R"
+    returns e.g. "2YG490NMYY87TSF1I9R"
 ```
 
 
 ### window.location.combine
 
-Kombiniert Pfade zu einem neuen Pfad.  
-Die Methode hat eine optimierende Wirkung auf die Verwendung von Slash und
-Backslash. Das Ergebnis beginnt immer mit einem Slash, endet aber ohne diesen.
+Kombiniert Pfad-Elemente zu einem neuen Pfad. Die Methode hat eine optimierende
+Wirkung auf die Verwendung von Slash und Backslash. Das Ergebnis beginnt immer
+mit einem Slash, endet aber ohne diesen.
 
 ```javascript
 window.location.combine("a", "b", "c")
@@ -404,19 +381,18 @@ window.location.combine("a", "b", "c")
 
 ### window.location.pathcontext
 
-Eigenschaft mit dem Kontextpfad.  
-Der Kontextpfad ist Teil der Request-URI und kann mit dem aktuellen
-Arbeitsverzeichnis verglichen werden.
+Eigenschaft mit dem Kontextpfad. Der Kontextpfad ist Teil der Request-URI und
+kann mit dem aktuellen Arbeitsverzeichnis verglichen werden.
 
 ```javascript
 window.location.pathcontext
-  returns e.g. /apps/test for URL https://example.local/apps/test/index.html
+    returns e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
 
 ## XMLHttpRequest
 
-XMLHttpRequest wurde indirekt um Composite-HTTP-Events erweitert.  
+XMLHttpRequest wurde indirekt um Composite-HTTP-Events erweitert.
 
 ```javascript
 Composite.EVENT_HTTP_START
