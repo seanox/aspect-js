@@ -39,7 +39,7 @@ eine Ganzzahl, wird diese Ebene als Array verwendet.
 ### Namespace.using
 
 Erstellt einen Namensraum zur &uuml;bergebenen Zeichenkette und gibt diesen als
-Objekt zur&uml;ck. Ohne Argumente gibt die Methode den globalen Namensraum
+Objekt zur&uuml;ck. Ohne Argumente gibt die Methode den globalen Namensraum
 `window` zur&uuml;ck.
 
 ```javascript
@@ -121,8 +121,8 @@ document.body.appendChild(nodes, true);
 
 ### Math.uniqueId
 
-Statische Funktion zur Erzeugung einer alphanumerischen (U)UID mit fester
-L&auml;nge, wobei die L&auml;nge Einfluss auf die Qualit&auml;t der (U)UID hat.
+Erzeugt eine alphanumerische (U)UID mit fester L&auml;nge, wobei die L&auml;nge
+Einfluss auf die Qualit&auml;t der (U)UID hat.
 
 ```javascript
 Math.uniqueId()
@@ -135,9 +135,9 @@ Math.uniqueId(32)
 
 ### Math.uniqueSerialId
 
-Statische Funktion zur Erzeugung einer alphanumerischen (U)UID mit fester
-L&auml;nge und einem seriellen Bezug zur Zeit, wobei die L&auml;nge Einfluss auf
-die Qualit&auml;t der (U)UID hat.
+Erzeugt eine alphanumerische (U)UID mit fester L&auml;nge und einem seriellen
+Bezug zur Zeit, wobei die L&auml;nge Einfluss auf die Qualit&auml;t der (U)UID
+hat.
 
 ```javascript
 Math.uniqueSerialId()
@@ -152,8 +152,8 @@ Math.uniqueSerialId(32)
 
 ### Object.prototype.ordinal
 
-Funktion zum Abrufen der ID eines Objekts. Die ID wird kontinuierlich erstellt
-und soll helfen, wenn zur Laufzeit eine eindeutige ID ben&ouml;tigt wird.
+Git die ID eines Objekts zur&uuml;ck. Die ID wird kontinuierlich erstellt und
+soll helfen, wenn zur Laufzeit eine eindeutige ID ben&ouml;tigt wird.
 
 ```javascript
 const object1 = {};
@@ -284,7 +284,7 @@ Beginnt den String in Kleinschreibung.
 
 ### String.prototype.encodeHex
 
-Kodierung den String hexadezimal.
+Kodiert den String hexadezimal.
 
 ```javascript
 ("hello world").encodeHex();
@@ -366,7 +366,7 @@ window.serial
 
 ### window.location.combine
 
-Kombiniert Pfad-Elemente zu einem neuen Pfad. Die Methode hat eine optimierende
+Kombiniert Text-Elemente zu einem Pfad. Die Methode hat eine optimierende
 Wirkung auf die Verwendung von Slash und Backslash. Das Ergebnis beginnt immer
 mit einem Slash, endet aber ohne diesen.
 
@@ -414,8 +414,8 @@ Composite.listen(Composite.EVENT_HTTP_END, function(event, ...varargs) {
 });
 ```
 
-Zu allen Events lassen sich mehrere Callback-Methoden registrieren, die dann
-entsprechend der Reihenfolge bei der Registrierung aufgerufen werden.
+Zu allen Ereignissen lassen sich mehrere Callback-Methoden registrieren, die
+dann entsprechend der Reihenfolge bei der Registrierung aufgerufen werden.
 
 
 - - -
