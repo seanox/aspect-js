@@ -9,7 +9,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [Expression Language](#expression-language)
 * [Markup](#markup)
 * [DataSource](#datasource)
-* [Resource Bundle](#resource-bundle-i18n)
+* [Resource Bundle](#resource-bundle-i18nl10n)
 * [Model View Controller](#model-view-controller)
 * [Composite](#composite)
 * [Reactivity Rendering](#reactivity-rendering)
@@ -89,9 +89,9 @@ Machine translation with [DeepL](https://deepl.com).
   * [Supplement](datasource.md#supplement)
   
   
-### Resource Bundle (i18n)
+### Resource Bundle (i18n/l10n)
 
-* [Resource Bundle (i18n)](messages.md#resource-bundle-messages-i18n)
+* [Resource Bundle (i18n/l10n)](messages.md#resource-bundle-messages-i18n--l10n)
 
 
 ### Model View Controller
