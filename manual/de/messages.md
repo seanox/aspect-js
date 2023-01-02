@@ -68,7 +68,7 @@ DataSource.localize("de");
 
 Die aktuell verwendete Sprache kann als Gebietsschema per `DataSource.locale`
 abgefragt werden. Alle verf&uuml;gbaren Sprachen liefert `DataSource.locales`
-als Array von Gebietsschemen, das mit dem als default deklarierte Gebietsschema
+als Array von Gebietsschemen, das mit dem als default deklarierten Gebietsschema
 beginnt.
 
 
