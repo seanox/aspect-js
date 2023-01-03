@@ -86,12 +86,12 @@
 	Expression.lookup("notempty")'x' true    
     
     ~~~Error_1~
-	(25div5)Expression.lookup("eq5") Unexpected identifier
+	(25div5)Expression.lookup("eq5") Unexpected identifier 'Expression'
 	(25 /5)Expression.lookup("eq5")
     ~~~Error_1~
 	2gt1 true 
     ~~~Error_1~
-	(10mod3)Expression.lookup("eq1") Unexpected identifier
+	(10mod3)Expression.lookup("eq1") Unexpected identifier 'Expression'
 	(10%3)Expression.lookup("eq1")
      true
     
@@ -154,10 +154,10 @@
     G2: Private field '#HiddenField_1' must be declared in an enclosing class
 	#HiddenField_1.#Expression.lookup("HiddenField_1")
     G3: Private field '#HiddenField_1' must be declared in an enclosing class
-	#HiddenField_1.#Expression.lookup("HiddenField_2")    
-    G4: Unexpected identifier
-	Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")    
-    G5: Unexpected identifier
+	#HiddenField_1.#Expression.lookup("HiddenField_2")
+    G4: Unexpected identifier 'Expression'
+	Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")
+    G5: Unexpected identifier '#Expression'
 	Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
         
     X0: <input type="hidden" id="HiddenField" value="Test-HF">
