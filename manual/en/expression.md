@@ -19,8 +19,8 @@ as free text as well as in all attributes. Only in the STYLE and SCRIPT tags the
 Expression Language is not supported.
 
 The renderer interprets the expression syntax `{{...}}` hard and therefore the
-character sequence `{{` as well as `}}` must be used inside of the
-expression by escape sequence/escape symbol.
+character sequence `{{` as well as `}}` must be used inside of the expression by
+escape sequence/escape symbol.
 
 The renderer interprets the expression syntax `{{...}}` hard and therefore the
 character sequence `{{` as well as `}}` must be used inside the expression via
@@ -40,16 +40,15 @@ escape sequence `\{\{` and/or `\}\}`.
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
-  * [Variable-Expression](#variable-expression)  
-  * [Combination](#combination)  
+  * [Variable-Expression](#variable-expression)
+  * [Combination](#combination)
 * [Supplement](#supplement)
-  
+
 
 ## Elements
 
-An expression is a sequence of words.  
-A word is an elementary set of words.
-Words are classified according to their characteristics.
+An expression is a set of words, where the words are classified according to
+their characteristics as part of a phrase.
 
 ```
 +-------------------------------------------------------------+
@@ -68,8 +67,8 @@ Words are classified according to their characteristics.
 
 ### Text
 
-Text is not a regular element of the expression.  
-This occurs for attributes when the Expression Language is combined with text.
+Text is not a regular element of the expression. This occurs for attributes when
+the Expression Language is combined with text.
 
 ```html
 <p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}."></p>
@@ -116,40 +115,38 @@ not !         or    ||
 
 ### Value
 
-Value represents the value of an object property or variable.  
-Anything that is not a literal and keyword is potentially a value.  
-Values refer to variables or object properties.  
-With object properties, the reference is directly to the property or, if
-available, to a corresponding getter (get method).  
-If neither an object property nor a variable can be determined, a method or
-other logic is assumed.
+Value represents the value of an object property or variable. Anything that is
+not a literal and keyword is potentially a value. Values refer to variables or
+object properties. With object properties, the reference is directly to the
+property or, if available, to a corresponding getter (get method). If neither an
+object property nor a variable can be determined, a method or other logic is
+assumed.
 
 
 ### Method
 
-Everything that is not literal, keyword and value is potentially a method.  
-If no method can be determined, other logic is assumed.
+Everything that is not literal, keyword and value is potentially a method. If no
+method can be determined, other logic is assumed.
 
 
 ### Logic
 
-Everything that is not literal, keyword, value and method is potentially logic.  
+Everything that is not literal, keyword, value and method is potentially logic.
 Other logic is executed directly.
 
 
 ## Expressions
 
-There are different types of expressions that can be combined.  
-In the following these are explained with their differences and peculiarities.
+There are different types of expressions that can be combined. In the following
+these are explained with their differences and peculiarities.
 
 
 ### Value-Expression
 
-Value represents the value of an object property or variable.  
-Anything that is not a literal and keyword is potentially a value.  
-Values refer to variables or object properties.  
-With object properties, the reference is directly to the property or, if
-available, to a corresponding getter (get method).
+Value represents the value of an object property or variable. Anything that is
+not a literal and keyword is potentially a value. Values refer to variables or
+object properties. With object properties, the reference is directly to the
+property or, if available, to a corresponding getter (get method).
 
 ```
 {{Example.object.field}}
@@ -189,16 +186,16 @@ the variable corresponds to `undefined`.
 With the expression language, global variables can also be created and set at
 the runtime. The expression must begin with the name of a variable (identifier),
 which use the word characters `_ a-z A-Z 0-9` and is separated from the actual
-expression by a colon.  
-  
+expression by a colon.
+
 ```
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
 
-Creates or sets the value for the existing global variable `foo` with
-`6x Hallo`.  
-The expression corresponds to the JavaScript syntax: `var foo = 1 +2 +3 + 'x hello';`
+Creates or sets the value for the existing global variable `foo` with 
+`6x Hallo`. The expression corresponds to the JavaScript syntax: `var foo = 1
+    +2 +3 + 'x hello';`
 
 
 ### Combination

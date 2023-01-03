@@ -6,7 +6,7 @@
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
 aspect-js. Expressions unterst&uuml;tzen die komplette JavaScript-API, die mit
-zus&auml;tzliche Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
+zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
 die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
 ```
@@ -18,7 +18,7 @@ sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
 SCRIPT, hier wird die Expression Language nicht unterst&uuml;tzt.
 
 Der Renderer interpretiert die Expression-Syntax `{{...}}` hart und daher
-m&uuml;ssen die Zeichenfolge `{{` sowie `}}` innerhalb der Expression per
+m&uuml;ssen die Zeichenfolgen `{{` und `}}` innerhalb der Expression per
 Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
 
 
@@ -135,8 +135,8 @@ Sonstige Logik wird unver&auml;ndert ausgef&uuml;hrt.
 
 ## Expressions
 
-Es gibt unterschiedliche Arten von Expressions, die kombinierbar sind.
-Nachfolgend werden diese mit ihren Unterschieden und Eigenheiten erkl&auml;rt.
+Es gibt unterschiedliche Arten von Expressions, die kombinierbar sind und
+nachfolgend mit ihren Unterschieden und Eigenheiten erkl&auml;rt werden.
 
 
 ### Value-Expression
@@ -191,7 +191,7 @@ einen Doppelpunkt von der eigentlichen Expression getrennt ist.
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
-Erstellt oder setzt bei der existierenden globale Variablen `foo` den Wert mit
+Erstellt oder setzt bei der existierenden globalen Variablen `foo` den Wert mit
 `6x Hallo`. Die Expression entspricht der JavaScript-Syntax: `var foo = 1 +2 +3
     + 'x Hallo';`
 
