@@ -37,7 +37,7 @@ as an array.
 ### Namespace.using
 
 Creates a namespace to pass string. Without arguments, the method returns the
-global namespace window.  
+global namespace window.
 
 ```javascript
 Namespace.using("app.example");
@@ -57,7 +57,7 @@ Namespace.using()
 
 Resolves a namespace and returns the determined object(-level). If the namespace
 does not exist, `undefined` is returned. Without arguments, the method returns
-the global namespace `window`.  
+the global namespace `window`.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -75,7 +75,7 @@ Namespace.lookup()
 
 ### Namespace.exists
 
-Checks whether a namespace exists.  
+Checks whether a namespace exists.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -226,7 +226,7 @@ Object.exists("foo");
 
 Equivalent to [Namespace.using](#namespaceusing). Creates a namespace to the
 passed string. Without arguments, the method returns the global namespace
-window.  
+window.
 
 ```javascript
 Object.using("app.example");
@@ -383,7 +383,7 @@ window.location.pathcontext
 
 ## XMLHttpRequest
 
-XMLHttpRequest was indirectly extended by Composite HTTP events.  
+XMLHttpRequest was indirectly extended by Composite HTTP events.
 
 ```javascript
 Composite.EVENT_HTTP_START
