@@ -1,4 +1,4 @@
-[Ereignisse](events.md) | [Inhalt](README.md#test)
+[Ereignisse](events.md) | [Inhalt](README.md#test) | [Entwicklung](development.md)
 - - -
 
 # Test
@@ -822,4 +822,4 @@ Output:
 
 - - -
 
-[Ereignisse](events.md) | [Inhalt](README.md#test)
+[Ereignisse](events.md) | [Inhalt](README.md#test) | [Entwicklung](development.md)
