@@ -1,10 +1,14 @@
-[Resource Bundle](messages.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
+[Resource Bundle](message.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
 - - -
 
 # Model View Controller
 
 Der Model View Controller (MVC) ist ein Entwurfsmuster zur Trennung von
-Interaktion, Daten und Darstellung.
+Interaktion, Daten und Darstellung. Hier muss zwischen I/O-Controller und
+Applikations-Controller unterschieden werden. Das reine MVC-Entwurfsmuster meint
+den I/O-Controller zur &Uuml;bermittlung der Interaktionen. Da dieser durch
+Betriebssystem und Browser bereitgestellt wird, bezieht sich der Controller in
+Seanox aspect-js vordergr&uuml;ndig auf den Applikations-Controller.
 
 ```
 +------------------------------------------+--------------+-----------------------+
@@ -27,37 +31,34 @@ Interaktion, Daten und Darstellung.
 
 ## Controller
 
-Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
-werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur &Uuml;bermittlung
-der Interaktionen. Da dieser durch Betriebssystem und Browser bereitgestellt
-wird, bezieht sich der Controller in Seanox aspect-js vordergr&uuml;ndig auf den
-Applikations-Controller, der Abl&auml;ufe innerhalb einer Applikation (Face-Flow)
-steuert und das Binding von Markup und JavaScript sowie die Steuerung vom
-Datenfluss zwischen View und Model &uuml;bernimmt.  
-In Seanox aspect-js ist der Controller die Zusammenarbeit von Composite, Paths
-und SiteMap.
+Der (Applikations-)Controller steuert Abl&auml;ufe innerhalb einer Applikation
+(Face-Flow) und das Binding von Markup und JavaScript sowie die Steuerung vom
+Datenfluss zwischen View und Model was durch die Zusammenarbeit von Composite,
+Paths und SiteMap &uuml;bernommen wird. Womit hier auch von MVVM (Model View
+ViewModel) und MVCS (Model View Controller Service) gesprochen werden kann.
 
 
 ## Model
 
-Das Modell ist ein darstellbares/projezierbares Objekt.  
-Es empf&auml;ngt (Status)&Auml;nderungen und Interaktionen der View, die durch den 
-Controller &uuml;bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten
-sowie Funktionen und Diensten der Middelware. Das Modell dient vorrangig der
-View zur Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche Funktionalit&auml;t
-nimmt es weitere Komponenten in Anspruch.  
-In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
-repr&auml;sentiert. Konzeptionell ist die Implementierung der Entwurfsmuster Fassade
-und Delegation angedacht, so dass die statischen Modelle intern weitere
-Komponenten und Abstraktion verwenden.
+Das Modell ist ein darstellbares/projezierbares Objekt. Es empf&auml;ngt
+(Status)&Auml;nderungen und Interaktionen der View, die durch den Controller
+&uuml;bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten sowie
+Funktionen und Diensten der Middelware. Das Modell dient vorrangig der View zur
+Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche
+Funktionalit&auml;t nimmt es weitere Komponenten in Anspruch.
+
+In Seanox aspect-js werden Modelle durch statische JavaScript-Objekte
+repr&auml;sentiert, die vergleichbar mit Managed Beans als Singletons / Facades
+/ Delegates genutzt werden, so dass dieses intern weitere Komponenten und
+Abstraktion verwenden k&ouml;nnen.
 
 
 ## View
 
-Die View ist ausschliesslich f&uuml;r die Darstellung bzw. Projektion eines Modells
-verantwortlich.  
-Projektion ist ein wichtiger Begriff, da die Art der Darstellung eines Modells
-nicht eingeschr&auml;nkt ist.  
+Die View ist ausschliesslich f&uuml;r die Darstellung bzw. Projektion eines
+Modells verantwortlich. Wobei Projektion ist ein wichtiger Begriff ist, da die
+Art der Darstellung eines Modells nicht eingeschr&auml;nkt ist.  
+
 In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 
 
@@ -853,4 +854,4 @@ const contact= {
 
 - - -
 
-[Resource Bundle](messages.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
+[Resource Bundle](message.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
