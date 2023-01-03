@@ -76,7 +76,7 @@ typeof objectB.value === "string"
 Access to the original data object is possible with the method
 `ReactProxy.prototype.toObject()`. Here again the note that the data object
 exists decoupled from the ReactProxy instance and will not correspond to the
-current state of the ReactProxy instance.  
+current state of the ReactProxy instance.
 
 From an existing ReactProxy instance, a new ReactProxy instance cannot be
 created. The corresponding methods will always return a reference to the
