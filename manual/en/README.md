@@ -16,6 +16,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [Extension](#extension)
 * [Events](#events)
 * [Test](#test)
+* [Development](#development)
 
 
 ### Motivation
@@ -237,3 +238,12 @@ Machine translation with [DeepL](https://deepl.com).
   * [Control](test.md#control)
   * [Events](test.md#events)
   * [Extension](test.md#extension)
+
+
+### Development
+
+* [Development](development.md#development)
+  * [Build](development.md#build)
+  * [Test](development.md#test)
+  * [Release](development.md#release)
+  * [Playground](development.md#playground)

@@ -14,6 +14,7 @@
 * [Erweiterung](#erweiterung)
 * [Ereignisse](#ereignisse)
 * [Test](#test)
+* [Entwicklung](#entwicklung)
 
 
 ### Motivation
@@ -235,3 +236,12 @@
   * [Control](test.md#control)
   * [Events](test.md#events)
   * [Erweiterung](test.md#erweiterung)
+
+
+### Entwicklung
+
+* [Entwicklung](development.md#entwicklung)
+  * [Build](development.md#build)
+  * [Test](development.md#test)
+  * [Release](development.md#release)
+  * [Playground](development.md#playground)
