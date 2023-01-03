@@ -7,7 +7,7 @@
 ## Contents Overview
 
 * [Build](#build)
-* [Test](#test)
+* [Testing](#testing)
 * [Release](#release)
 * [Playground](#playground)
 
@@ -17,7 +17,7 @@
 TODO:
 
 
-## Test
+## Testing
 
 TODO:
 
