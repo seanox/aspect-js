@@ -244,6 +244,6 @@ Machine translation with [DeepL](https://deepl.com).
 
 * [Development](development.md#development)
   * [Build](development.md#build)
-  * [Test](development.md#test)
+  * [Testing](development.md#testing)
   * [Release](development.md#release)
   * [Playground](development.md#playground)
