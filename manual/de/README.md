@@ -41,7 +41,7 @@
     * [Method-Expression](expression.md#method-expression)
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
-    * [Kombination](expression.md#kombination)  
+    * [Kombination](expression.md#kombination)
   * [Erg&auml;nzung](expression.md#erg-nzung)
 
 
@@ -63,11 +63,11 @@
     * [release](markup.md#release)
     * [render](markup.md#render)
     * [strict](markup.md#strict)
-    * [validate](markup.md#validate)  
+    * [validate](markup.md#validate)
   * [Expression Language](markup.md#expression-language)
   * [Scripting](markup.md#scripting)
   * [Customizing](markup.md#customizing)
-    * [Tag](markup.md#tag)  
+    * [Tag](markup.md#tag)
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
     * [Parameter](markup.md#parameter)
@@ -85,8 +85,8 @@
   * [transform](datasource.md#transform)
   * [collect](datasource.md#collect)
   * [Erg&auml;nzung](datasource.md#erg-nzung)
-  
-  
+
+
 ### Resource Bundle (i18n/l10n)
 
 * [Resource Bundle (i18n/l10n)](message.md#resource-bundle-messages--i18n--l10n)
@@ -132,8 +132,8 @@
     * [Synchronization](mvc.md#synchronization)
     * [Validation](mvc.md#validation)
     * [Events](mvc.md#events)
-  
-  
+
+
 ### Komponenten
 
 * [Komponenten](composite.md#komponenten)
@@ -174,10 +174,10 @@
   * [String](extension.md#string)
   * [window](extension.md#window)
   * [XMLHttpRequest](extension.md#xmlhttprequest)
-  
-  
-### Ereignisse  
-  
+
+
+### Ereignisse
+
 * [Ereignisse](events.md#ereignisse)
   * [Rendering](events.md#rendering)
     * [Composite.EVENT_RENDER_START](events.md#compositeevent_render_start)
