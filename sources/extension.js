@@ -154,7 +154,7 @@ if (typeof Namespace === "undefined") {
 
     /**
      * Resolves a namespace and returns the determined object(-level).
-     * If the namespace does not exist, null is returned.
+     * If the namespace does not exist, undefined is returned.
      * The method has the following various signatures:
      *     Namespace.lookup();
      *     Namespace.lookup(string);
