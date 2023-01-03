@@ -43,8 +43,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [Method-Expression](expression.md#method-expression)
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
-    * [Combination](expression.md#combination)  
-  * [Supplement](expression.md#supplement)  
+    * [Combination](expression.md#combination)
+  * [Supplement](expression.md#supplement)
 
 
 ### Markup
@@ -65,11 +65,11 @@ Machine translation with [DeepL](https://deepl.com).
     * [release](markup.md#release)
     * [render](markup.md#render)
     * [strict](markup.md#strict)
-    * [validate](markup.md#validate)  
+    * [validate](markup.md#validate)
   * [Expression Language](markup.md#expression-language)
   * [Scripting](markup.md#scripting)
   * [Customizing](markup.md#customizing)
-    * [Tag](markup.md#tag)  
+    * [Tag](markup.md#tag)
     * [Selector](markup.md#selector)
     * [Acceptor](markup.md#acceptor)
     * [Parameters](markup.md#parameters)
@@ -87,8 +87,8 @@ Machine translation with [DeepL](https://deepl.com).
   * [transform](datasource.md#transform)
   * [collect](datasource.md#collect)
   * [Supplement](datasource.md#supplement)
-  
-  
+
+
 ### Resource Bundle (i18n/l10n)
 
 * [Resource Bundle (i18n/l10n)](message.md#resource-bundle-messages--i18n--l10n)
@@ -134,8 +134,8 @@ Machine translation with [DeepL](https://deepl.com).
     * [Synchronization](mvc.md#synchronization)
     * [Validation](mvc.md#validation)
     * [Events](mvc.md#events)
-  
-  
+
+
 ### Composite
 
 * [Composite](composite.md#composite)
@@ -155,7 +155,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [Model](composite.md#model)
     * [Property](composite.md#property)
     * [Qualifier](composite.md#qualifier)
-    * [Binding](composite.md#binding)   
+    * [Binding](composite.md#binding)
     * [Events](composite.md#events)
     * [Synchronization](composite.md#synchronization)
     * [Validation](composite.md#validation)
@@ -176,10 +176,10 @@ Machine translation with [DeepL](https://deepl.com).
   * [String](extension.md#string)
   * [window](extension.md#window)
   * [XMLHttpRequest](extension.md#xmlhttprequest)
-  
-  
-### Events  
-  
+
+
+### Events
+
 * [Events](events.md#events)
   * [Rendering](events.md#rendering)
     * [Composite.EVENT_RENDER_START](events.md#compositeevent_render_start)
