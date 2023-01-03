@@ -5,9 +5,9 @@
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
-aspect-js. In den Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die
-mit zus&auml;tzliche Schl&uuml;sselw&ouml;rtern angereichert ist, womit auch die zahlreichen
-arithmetischen und logischen Operatoren verwendet werden k&ouml;nnen.
+aspect-js. Expressions unterst&uuml;tzen die komplette JavaScript-API, die mit
+zus&auml;tzliche Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
+die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
 ```
 {{'Hello World!'}}
@@ -30,25 +30,24 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Keyword](#keyword)
   * [Value](#value)
   * [Methode](#methode)
-  * [Logik](#logik)  
+  * [Logik](#logik)
 * [Expressions](#expressions)
   * [Value-Expression](#value-expression)
   * [Method-Expression](#method-expression)
   * [Element-Expression](#element-expression)
-  * [Variable-Expression](#variable-expression)  
-  * [Kombination](#kombination)  
+  * [Variable-Expression](#variable-expression)
+  * [Kombination](#kombination)
 * [Erg&auml;nzung](#erg-nzung)
-  
+
 
 ## Elemente
 
-Ein Ausdruck ist ein Reihe von W&ouml;rtern.  
-Ein Wort ist ein elementarer Satz oder ein Satzfragment mit mehreren W&ouml;rtern.
-W&ouml;rter werden nach ihren Eigenschaften klassifiziert.
+Ein Ausdruck ist eine Reihe von W&ouml;rtern, wobei die W&ouml;rter als
+Bestandteil eines Satzes nach ihrer Eigenschaft klassifiziert werden. 
 
 ```
 +-------------------------------------------------------------+
-|            Words (alle Elemente eines Expression)           |  
+|            Words (alle Elemente eines Expression)           |
 +--------+----------------------------------------------------+
 |  Text  |                     Expression                     |
 |        +-----------+----------------------------------------+
@@ -63,9 +62,8 @@ W&ouml;rter werden nach ihren Eigenschaften klassifiziert.
 
 ### Text
 
-Text ist kein regul&auml;rer Bestandteil der Expression.  
-Dieser ergibt sich bei Attributen, wenn die Expression Language mit Text
-kombiniert wird.
+Text ist kein regul&auml;rer Bestandteil der Expression. Dieser ergibt sich bei
+Attributen, wenn die Expression Language mit Text kombiniert wird.
 
 ```html
 <p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}."></p>
@@ -75,8 +73,8 @@ kombiniert wird.
 ### Literal
 
 Literale sind in einem Ausdruck mittels einfacher oder doppelter
-Anf&uuml;hrungszeichen eingebetteter Text, der die &uuml;blichen Steuerzeichen und
-Escape-Sequenzen unterst&uuml;tzt.
+Anf&uuml;hrungszeichen eingebetteter Text, der die &uuml;blichen Steuerzeichen
+und Escape-Sequenzen unterst&uuml;tzt.
 
 ```
 {{'Hello World!'}}
@@ -86,8 +84,8 @@ Escape-Sequenzen unterst&uuml;tzt.
 
 ### Keyword
 
-Folgende Schl&uuml;sselw&ouml;rter der JavaScript-Syntax werden in der Expression Language
-unterst&uuml;tzt:
+Folgende Schl&uuml;sselw&ouml;rter der JavaScript-Syntax werden in der
+Expression Language unterst&uuml;tzt:
 
 ```
 true
@@ -99,8 +97,9 @@ undefined
 new
 ```
 
-Als Vereinfachung und zur Formulierung von validem Markup wurden die
-JavaScript-Syntax f&uuml;r die Expression Language um folgende Keywords erweitert:
+Zur Vereinfachung und Formulierung von validem Markup wurde die 
+JavaScript-Syntax f&uuml;r die Expression Language um folgende Keywords
+erweitert:
 
 ```
 and &&        empty !         div /
@@ -113,52 +112,52 @@ not !         or    ||
 
 ### Value
 
-Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
-Alles was kein Literal und Keyword ist, ist potentiell ein Value.  
-Values verweisen auf Variablen oder Objekt-Eigenschaften.  
-Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
-wenn vorhanden auf einen korrespondierenden Getter (get-Methode).  
-Kann weder eine Objekt-Eigenschaft noch eine Variable ermittelt werden, wird von
-einer Methode oder sonstiger Logik ausgegangen.
+Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder
+einer Variablen. Alles was kein Literal und Keyword ist, ist potenziell ein
+Value. Values verweisen auf Variablen oder Objekt-Eigenschaften. Bei
+Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder wenn
+vorhanden auf einen korrespondierenden Getter (get-Methode). Kann weder eine
+Objekt-Eigenschaft noch eine Variable ermittelt werden, wird von einer Methode
+oder sonstiger Logik ausgegangen.
 
 
 ### Methode
 
-Alles was kein Literal, Keyword und Value ist, ist potentiell eine Methode.  
-Kann keine Methode ermittelt werden, wird von sonstiger Logik ausgegangen.
+Alles was kein Literal, Keyword und Value ist, ist potenziell eine Methode. Kann
+keine Methode ermittelt werden, wird von sonstiger Logik ausgegangen.
 
 
 ### Logik
 
-Alles was kein Literal, Keyword, Value und Methode ist, ist potentiell Logik.  
+Alles was kein Literal, Keyword, Value und Methode ist, ist potenziell Logik.
 Sonstige Logik wird unver&auml;ndert ausgef&uuml;hrt.
 
 
 ## Expressions
 
-Es gibt unterschiedliche Arten von Expressions die kombinierbar sind.  
+Es gibt unterschiedliche Arten von Expressions, die kombinierbar sind.
 Nachfolgend werden diese mit ihren Unterschieden und Eigenheiten erkl&auml;rt.
 
 
 ### Value-Expression
 
-Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder Variablen.  
-Alles was kein Literal und Keyword ist, ist potentiell ein Value.  
-Values verweisen auf Variablen oder Objekt-Eigenschaften.  
-Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder
-wenn vorhanden auf einen korrespondierenden Getter (get-Methode).  
+Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder
+Variablen. Alles was kein Literal und Keyword ist, ist potenziell ein Value.
+Values verweisen auf Variablen oder Objekt-Eigenschaften. Bei
+Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder wenn
+vorhanden auf einen korrespondierenden Getter (get-Methode).
 
 ```
 {{Example.object.field}}
 ```
 
-Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht verf&uuml;gbar
-sind, entspricht der R&uuml;ckgabewert `undefined`.
+Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht
+verf&uuml;gbar sind, entspricht der R&uuml;ckgabewert `undefined`.
 
 
 ### Method-Expression
 
-Alles was kein Literal, Keyword und Value ist, ist potentiell eine Methode. 
+Alles was kein Literal, Keyword und Value ist, ist potenziell eine Methode.
 
 ```
 {{Example.getData()}}
@@ -186,20 +185,20 @@ gefunden werden, entspricht der Wert der Variablen `undefined`.
 Mit der Expression-Language lassen sich zur Laufzeit auch globale Variablen
 erzeugen und setzen. Dazu muss die Expression mit dem Namen einer Variablen
 (Bezeichner) beginnen, der die Wortzeichen `_ a-z A-Z 0-9` verwendet und durch
-einen Doppelpunkt von der eigentlichen Expression getrennt ist.  
+einen Doppelpunkt von der eigentlichen Expression getrennt ist.
 
 ```
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
 Erstellt oder setzt bei der existierenden globale Variablen `foo` den Wert mit
-`6x Hallo`.  
-Die Expression entspricht der JavaScript-Syntax: `var foo = 1 +2 +3 + 'x Hallo';`
+`6x Hallo`. Die Expression entspricht der JavaScript-Syntax: `var foo = 1 +2 +3
+    + 'x Hallo';`
 
 
 ### Kombination
 
-Alle der gennannten Arten von Expressions lassen sich kombinieren.
+Alle der genannten Arten von Expressions lassen sich kombinieren.
 
 ```
 {{foo:not empty Foo.data and not empty Foo.data.items ? String(Foo.data.items[0].fieldA).substring(2) : ''}}
@@ -209,7 +208,7 @@ Alle der gennannten Arten von Expressions lassen sich kombinieren.
 ## Erg&auml;nzung
 
 Expressions werden durch den Renderer interpretiert, der nach dem Laden der
-Seite startet. Somit k&ouml;nnen Expressions beim Laden der Seite sichtbar sein.  
+Seite startet. Somit k&ouml;nnen Expressions beim Laden der Seite sichtbar sein.
 Hier empfiehlt sich die Verwendung vom Attribut [release](markup.md#release).
 
 ```html
