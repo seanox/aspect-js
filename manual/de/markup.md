@@ -22,6 +22,7 @@ funktioniert und reagiert somit rekursiv auf Ver&auml;nderungen im DOM.
   * [interval](#interval)
   * [iterate](#iterate)
   * [message](#message)
+  * [namespace](#namespace)
   * [notification](#notification)
   * [output](#output)
   * [release](#release)
@@ -52,8 +53,8 @@ erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 ### composite
 
 Kennzeichnet im Markup ein Element als [Composite](composite.md). Composites
-sind modulare Komponente die in Seanox aspect-js eine elementare Bedeutung haben
-und die zwingend einen Bezeichner (ID) ben&ouml;tigen. Sie werden von der
+sind modulare Komponenten die in Seanox aspect-js eine elementare Bedeutung
+haben und die zwingend einen Bezeichner (ID) ben&ouml;tigen. Sie werden von der 
 [SiteMap](mvc.md#sitemap) als Faces, also als Ziele f&uuml;r virtuelle Pfade im
 Face-Flow verwendet, was direkten Einfluss auf die Sichtbarkeit der Composites
 hat.
@@ -186,16 +187,16 @@ Attribut `import` entfernt. Das Attribut erwartet als Wert ein Element oder
 mehrere Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt
 werden. Auch die Verwendung einer absoluten oder relativen URL zu einer
 entfernten Ressource wird unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen
-und eingef&uuml;gt wird. Der [DataSource-URL (locator)](datasource.md#locator)
-wird auch unterst&uuml;tzt, womit Inhalte aus der [DataSource](datasource.md)
-geladen und transformiert eingef&uuml;gt werden.
+und eingef&uuml;gt wird. Und auch der [DataSource-URL (locator)](
+    datasource.md#locator) wird unterst&uuml;tzt, womit Inhalte aus der
+[DataSource](datasource.md) geladen und transformiert eingef&uuml;gt werden.
 
 In allen F&auml;llen l&auml;sst sich das import-Attribut mit dem
 condition-Attribut kombinieren und wird dann erst ausgef&uuml;hrt, wenn die
 Bedingung `true` ist.
 
 Das Verhalten ist vergleichbar mit dem Attribut `output`, im Unterschied wird
-der Import f&uuml;r das Element nur einmalig ausgef&uuml;hrt.
+der Import f&uuml;r das Element aber nur einmalig ausgef&uuml;hrt.
 
 ```javascript
 const Model = {
@@ -256,9 +257,9 @@ wird die URL f&uuml;r Daten und Transformation daraus abgeleitet.
 ```
 
 Beispiel f&uuml;r den Import per DataSource-URL mit spezifischer Daten- und
-Transformation-URL. Als Wert wird die Daten-URL (locator der XML-Datei) und
-nachfolgend getrennt durch ein Leerzeichen die Transformation-URL (locator vom
-XSLT Template) erwartet. 
+Transformations-URL. Als Wert wird die Daten-URL (locator der XML-Datei) und
+nachfolgend getrennt durch ein Leerzeichen die Transformations-URL (locator vom
+XSLT-Template) erwartet. 
 
 ```html
 <article import="{{'xml:/example/data xslt:/example/style'}}">
@@ -274,7 +275,7 @@ Beim Einf&uuml;gen von Inhalten aus der DataSource, werden
 JavaScript-Bl&ouml;cke automatisch in composite/javascript ge&auml;ndert und
 erst durch den Renderer ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das
 JavaScript ggf. erst abh&auml;ngig vom umschliessenden condition-Attribut
-aufgef&uuml;hrt wird.
+ausgef&uuml;hrt wird.
 
 
 ### interval
@@ -284,7 +285,7 @@ HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss. Als
 Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
 formuliert werden kann. Die Verarbeitung erfolgt nebenl&auml;ufig bzw. asynchron
 aber nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
-Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
+Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnene
 JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
 aber als exakt zu verstehen.
 
@@ -313,7 +314,7 @@ Das SPAN-Element wird alle 1000ms aktualisiert. Das interval-Attribut kann
 f&uuml;r einfache HTML-Elemente, wie auch komplexe und verschachtelte
 HTML-Konstrukte verwendet werden.
 
-Ein aktiver Intervall reagiert dynamisch auf Ver&auml;nderungen im DOM, endet
+Ein aktives Intervall reagiert dynamisch auf Ver&auml;nderungen im DOM, endet
 automatisch, wenn das HTML-Element aus dem DOM entfernt wurde und beginnt neu,
 wenn das HTML-Element dem DOM erneut hinzugef&uuml;gt wird. Daher l&auml;sst
 sich das interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
@@ -347,14 +348,14 @@ ist als Composite-JavaScript m&ouml;glich.
 ### iterate
 
 Die iterative Ausgabe basiert auf Listen, Aufz&auml;hlungen und Arrays. Wird ein
-HTML-Element als iterativ deklariert, wird der initiale innerer HTML-Code als
+HTML-Element als iterativ deklariert, werden der initiale innerer HTML-Code als
 Vorlage verwendet und w&auml;hrend der Iteration der innere HTML-Code
 zun&auml;chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und
 das Ergebnis dem inneren HTML-Code hinzugef&uuml;gt.
 
 Das iterate-Attribut erwartet einen [Variablen-Ausdruck](
     expression.md#variable-expression), zu dem ein Meta-Objekt erstellt wird,
-dass den Zugriff auf die Iteration erm&ouml;glich. So erzeugt der
+dass den Zugriff auf die Iteration erm&ouml;glicht. So erzeugt der
 Variablen-Ausdruck `iterate={{tempA:Model.list}}` das Meta-Objekt
 `tempA = {item, index, data}`. 
 
@@ -398,6 +399,112 @@ Attribut erfordert die Kombination mit den Attributen `validate` und `events`.
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
+
+
+### namespace
+
+Vergleichbar mit Packages in anderen Programmiersprachen, lassen sich Namespaces
+(Namensr&auml;ume) zur hierarchischen Strukturierung von Komponenten, Ressourcen
+und Gesch&auml;ftslogik nutzen.
+
+Auch wenn Packages kein Merkmal von JavaScript sind, lassen sich diese auf
+Objektebene durch das Verketten von Objekten zu einem Objektbaum abbilden. Dabei
+bildet jede Ebene des Objektbaums einen Namespace, was auch als Domain
+betrachtet werden kann.
+
+Im Markup bilden sich Namespaces aus den IDs verschachtelter Composites, wenn
+diese das Attribut `namespace` verwenden.
+
+```html
+<div id="MasterData" composite namespace>
+  <div id="Regions" composite namespace>
+    Namespace: MasterData.Regions
+  </div>    
+</div>
+```
+
+Befinden sich weitere Elemente mit einer ID zwischen den Composites, haben diese
+keine Auswirkungen.
+
+```html
+<div id="MasterData" composite namespace>
+  <section id="Section">
+    <form id="Form">
+      <div id="Regions" composite namespace>
+        Namespace: MasterData.Regions
+        Elements Section and Form are ignored 
+      </div>
+    </form>
+  </section>  
+</div>
+```
+
+Noch spezieller sind in einer Namespace-Kette Composites ohne das Attribut
+`namespace`. Diese Composites wirken entkoppelnd und haben selbst keinen
+Namespace. Innerhalb dieser Composites k&ouml;nnen dann neue Namespaces begonnen
+werden, unabh&auml;ngig von &uuml;bergeordneten Namespaces.
+
+```html
+<div id="Imprint" composite namespace>
+  Namespace: Imprint
+  <div id="Contact" composite>
+    Namespace: Contact
+    <div id="Support" composite namespace>
+      Namespace: Support
+      <div id="Mail" composite namespace>
+        Namespace: Support.Mail  
+      </div>
+      <div id="Channel" composite namespace>
+        Namespace: Support.Channel
+      </div>
+      ...
+    </div>
+    <div id="Community" composite namespace>
+      Namespace: Community
+      <div id="Channel" composite namespace>
+        Namespace: Community.Channel
+      </div>
+      ...
+    </div>
+  </div>
+</div>
+```
+
+Eingef&uuml;hrt wurde dieses Verhalten mit dem Gedanken an Micro-Frontends,
+welche eigene Domains nutzen und an verschiedenen Stellen wiederverwendet werden
+sollen. So lassen sich in der statischen Welt von Seanox aspect-js
+Domain-bezogene Komponenten umsetzen.
+
+Namespaces haben zudem Auswirkungen auf Ressourcen und Module. So haben
+Namespaces im Markup erstmal nur textuellen Charakter und k&ouml;nnen auch ohne
+korrespondierendes Objektmodel existieren und verwendet werden. Im Markup wird
+lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese gk&uuml;ltig,
+werden die Namespaces direkt auf den Pfad von Modulen und deren Ressourcen
+angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
+
+```
++ modules
+  - common.css
+  - common.js
+  + community   
+    - channel.css
+    - channel.html
+    - channel.js
+    - ...
+  - imprint.css
+  - imprint.html
+  - imprint.js
+  + support
+    - mail.css
+    - mail.html
+    - mail.js
+    - ...
+  - ...
+- index.html
+```
+
+Details zu Namespaces auf Objektebene werden im Abschnitt [Composites - Namespace](
+    composite.md#namespace) beschrieben. 
 
 
 ### notification
@@ -484,7 +591,7 @@ wird die URL f&uuml;r Daten und Transformation daraus abgeleitet.
 ```
 
 Beispiel f&uuml;r den Output per DataSource-URL mit spezifischer Daten- und
-Transformation-URL.
+Transformations-URL.
 
 Das output-Attribut erwartet prim&auml;r eine Daten-URL der optional, durch ein
 Leerzeichen getrennt, eine URL zur Transformation folgen kann.
@@ -503,7 +610,7 @@ Beim Einf&uuml;gen von Inhalten aus der DataSource, werden
 JavaScript-Bl&ouml;cke automatisch in composite/javascript ge&auml;ndert und
 erst durch den Renderer ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das
 JavaScript ggf. erst abh&auml;ngig vom umschliessenden condition-Attribut
-aufgef&uuml;hrt wird.
+ausgef&uuml;hrt wird.
 
 
 ### release
@@ -575,11 +682,11 @@ Textausgaben darstellen und auf entsprechende Ereignisse reagieren.
 
 Das Attribut wird in Kombination mit dem Attribut [composite](#composite)
 verwendet und legt fest, dass beim Laden der Ressourcen (CSS, JS, HTML) zu einer
-Komponente der Dateiname in der originalen Schreibweise verwendet wird. Das
+Komponente, der Dateiname in der originalen Schreibweise verwendet wird. Das
 Standardverhalten ohne das Attribut [strict](#strict) verwendet die Composite-Id
 mit einem Kleinbuchstaben am Anfang.
 
-Bespiel zum Standardverhalten:
+Beispiel zum Standardverhalten:
 ```html
 <div id="SmallExample" composite>
 ```
@@ -591,7 +698,7 @@ Bespiel zum Standardverhalten:
 - index.html
 ```
 
-Bespiel mit dem Attribut [strict](#strict):
+Beispiel mit dem Attribut [strict](#strict):
 ```html
 <div id="SmallExample" composite strict>
 ```
@@ -619,8 +726,8 @@ validate-Methode `boolean validate(element, value)` bereitstellt und das zu
 validierende Element in einem Composite eingebettet ist.
 
 Die Synchronisation und das Standard-Verhalten (action) vom Browser werden durch
-die Validierung direkt beeinflusst. Diese kann dazu vier Zust&auml;nde als
-R&uuml;ckgabewert nutzen: `true`, `not true`, `text`, `undefined/void`.
+die Validierung direkt beeinflusst, die dazu vier Zust&auml;nde als
+R&uuml;ckgabewert nutzen kann: `true`, `not true`, `text`, `undefined/void`.
 
 
 #### true
@@ -632,7 +739,7 @@ der Wert mit dem Modell synchronisiert.
 
 #### not true and not undefined/void
 
-Die Validierung ist fehlgeschlagen; es wird ein Fehler angezeigt. Ein
+Die Validierung ist fehlgeschlagen und es wird ein Fehler angezeigt. Der
 R&uuml;ckgabewert gibt an, dass das Standard-Verhalten (action) vom Browser
 nicht ausgef&uuml;hrt werden soll und somit blockiert wird. In diesem Fall wird
 ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
@@ -640,25 +747,24 @@ ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
 
 #### text
 
-Text entspricht: Validierung ist fehlgeschlagen mit einer Fehlermeldung. Wenn
-die Fehlermeldung leer ist, wird alternativ die Meldung vom message-Attribut
+Die Validierung ist mit einer Fehlermeldung fehlgeschlagen. Sollte die
+Fehlermeldung leer sein, wird alternativ die Meldung vom message-Attribut
 verwendet. In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell
 synchronisiert.
 
 
 #### undefined/void
 
-Die Validierung ist fehlgeschlagen; ein Fehler wird angezeigt. Kein
-R&uuml;ckgabewert zeigt an, dass das Standard-Verhalten (action) vom Browser
-trotzdem ausgef&uuml;hrt werden soll. Dieses Verhalten ist z.B. f&uuml;r die
-Validierung von Eingabefeldern wichtig, damit die Eingabe zur
-Benutzeroberfl&auml;che gelangt. In diesem Fall wird ein m&ouml;glicher Wert
-nicht mit dem Modell synchronisiert. 
+Die Validierung ist fehlgeschlagen und es wird ein Fehler angezeigt. Ohne einen
+R&uuml;ckgabewert wird das Standard-Verhalten (action) vom Browser
+ausgef&uuml;hrt. Dieses Verhalten ist z.B. f&uuml;r die Validierung von
+Eingabefeldern wichtig, damit die Eingabe zur Benutzeroberfl&auml;che gelangt.
+In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
 
 Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
 bewusst nicht bereitgestellt, da diese in den meisten F&auml;llen zu starr ist
-und kann mit geringem Aufwand als zentrale L&ouml;sung individuell implementiert
-werden.
+und mit geringem Aufwand als zentrale L&ouml;sung individuell implementiert
+werden kann.
 
 ```css
 input[type='text']:not([title]) {
@@ -788,7 +894,7 @@ Eltern-Elements ansprechen. Selektoren sind flexibler und multifunktionaler. Auf
 diese Art k&ouml;nnen verschiedene Selektoren mit unterschiedlichen Funktionen
 f&uuml;r ein Element zutreffen.
 
-Selectoren werden nach der Reihenfolge ihrer Registrierung iterative durchlaufen
+Selectoren werden nach der Reihenfolge ihrer Registrierung iterativ durchlaufen
 und deren Callback-Methoden ausgef&uuml;hrt. Der R&uuml;ckgabewert der
 Callback-Methode bestimmt dabei, ob die Iteration abgebrochen wird oder nicht.
 Nur der R&uuml;ckgabewert `false` (nicht void, nicht leer) beendet die Iteration
