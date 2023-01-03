@@ -114,7 +114,8 @@ xml://foo/fileA -> ./data/en/foo/fileA.xml
 ## XPath
 
 XPath is used as a functional query language and for the transformation of
-dynamic content.  
+dynamic content.
+
 For more information please read:
 [https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
 
@@ -155,7 +156,7 @@ The transformation via XSLT (1.0) of XML data provides an additional way for
 generating dynamically data and content and can already be done with the fetch
 method, which is based on locators. Sometimes it is necessary to work directly
 with the XMLDocument. In these cases the transform method can be used, because
-the method accepts XMLDocument as well locator (also in a mix).  
+the method accepts XMLDocument as well locator (also in a mix).
 
 ```javascript
 DataSource.fetch("xml://paper", "xslt://article");
@@ -275,7 +276,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
     <description>Pen</description>
     <price>3.00</price>
   </article>
-</collector>  
+</collector>
 ```
 
 Collecting with an own article's collector.
@@ -302,7 +303,7 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
     <description>Pen</description>
     <price>3.00</price>
   </article>
-</articles>  
+</articles>
 ```
 
 
@@ -313,19 +314,19 @@ The DataSource can also be used directly in the markup with the attributes
 
 ```html
 <article import="xml:/example/content">
-  loading resource...  
+  loading resource...
 </article>
 
 <article import="xml:/example/data xslt:/example/style">
-  loading resource...  
+  loading resource...
 </article>
 
 <article output="xml:/example/content">
-  loading resource...  
+  loading resource...
 </article>
 
 <article output="xml:/example/data xslt:/example/style">
-  loading resource...  
+  loading resource...
 </article>
 ```
 
