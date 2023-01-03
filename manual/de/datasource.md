@@ -119,7 +119,8 @@ xml://foo/fileA -> ./data/en/foo/fileA.xml
 ## XPath
 
 XPath wird als funktionale Abfragesprache und f&uuml;r die Transformation von
-dynamischen Inhalten verwendet.  
+dynamischen Inhalten verwendet.
+
 F&uuml;r mehr Informationen siehe:
 [https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
 
@@ -278,7 +279,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
     <description>Pen</description>
     <price>3.00</price>
   </article>
-</collector>  
+</collector>
 ```
 
 Sammlung mit einem eigenen articles-Kollektor.
@@ -305,7 +306,7 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
     <description>Pen</description>
     <price>3.00</price>
   </article>
-</articles>  
+</articles>
 ```
 
 
@@ -316,19 +317,19 @@ Die DataSource kann auch direkt im Markup mit den Attributen
 
 ```html
 <article import="xml:/example/content">
-  loading resource...  
+  loading resource...
 </article>
 
 <article import="xml:/example/data xslt:/example/style">
-  loading resource...  
+  loading resource...
 </article>
 
 <article output="xml:/example/content">
-  loading resource...  
+  loading resource...
 </article>
 
 <article output="xml:/example/data xslt:/example/style">
-  loading resource...  
+  loading resource...
 </article>
 ```
 
