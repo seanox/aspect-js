@@ -112,13 +112,12 @@ not !         or    ||
 
 ### Value
 
-Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder
-einer Variablen. Alles was kein Literal und Keyword ist, ist potenziell ein
-Value. Values verweisen auf Variablen oder Objekt-Eigenschaften. Bei
-Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder wenn
-vorhanden auf einen korrespondierenden Getter (get-Methode). Kann weder eine
-Objekt-Eigenschaft noch eine Variable ermittelt werden, wird von einer Methode
-oder sonstiger Logik ausgegangen.
+Alles was kein Literal und Keyword ist, ist potenziell ein Value. Values
+repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder einer
+Variablen. Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die
+Eigenschaft oder wenn vorhanden auf einen korrespondierenden Getter
+(get-Methode). Kann weder eine Objekt-Eigenschaft noch eine Variable ermittelt
+werden, wird von einer Methode oder sonstiger Logik ausgegangen.
 
 
 ### Methode
@@ -141,11 +140,11 @@ nachfolgend mit ihren Unterschieden und Eigenheiten erkl&auml;rt werden.
 
 ### Value-Expression
 
-Value repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder
-Variablen. Alles was kein Literal und Keyword ist, ist potenziell ein Value.
-Values verweisen auf Variablen oder Objekt-Eigenschaften. Bei
-Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder wenn
-vorhanden auf einen korrespondierenden Getter (get-Methode).
+Alles was kein Literal und Keyword ist, ist potenziell ein Value. Values
+repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder einer
+Variablen. Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die
+Eigenschaft oder wenn vorhanden auf einen korrespondierenden Getter
+(get-Methode).
 
 ```
 {{Example.object.field}}
@@ -191,9 +190,10 @@ einen Doppelpunkt von der eigentlichen Expression getrennt ist.
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
-Erstellt oder setzt bei der existierenden globalen Variablen `foo` den Wert mit
-`6x Hallo`. Die Expression entspricht der JavaScript-Syntax: `var foo = 1 +2 +3
-    + 'x Hallo';`
+Erstellt oder setzt die globale Variablen `foo` mit dem Wert `6x Hallo`.
+
+Die Expression entspricht der JavaScript-Syntax:
+    `var foo = 1 +2 +3 + 'x Hallo';`
 
 
 ### Kombination

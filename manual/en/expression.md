@@ -115,12 +115,11 @@ not !         or    ||
 
 ### Value
 
-Value represents the value of an object property or variable. Anything that is
-not a literal and keyword is potentially a value. Values refer to variables or
-object properties. With object properties, the reference is directly to the
-property or, if available, to a corresponding getter (get method). If neither an
-object property nor a variable can be determined, a method or other logic is
-assumed.
+Anything that is not a literal and keyword is potentially a Value. Values
+represents the value of an object property or a variable. In the case of object
+properties, this is referred to directly or, if available, to a corresponding
+getter (get method). If neither an object property nor a variable can be
+determined, a method or other logic is assumed.
 
 
 ### Method
@@ -143,10 +142,10 @@ these are explained with their differences and peculiarities.
 
 ### Value-Expression
 
-Value represents the value of an object property or variable. Anything that is
-not a literal and keyword is potentially a value. Values refer to variables or
-object properties. With object properties, the reference is directly to the
-property or, if available, to a corresponding getter (get method).
+Anything that is not a literal and keyword is potentially a Value. Values
+represents the value of an object property or a variable. In the case of object
+properties, this is referred to directly or, if available, to a corresponding
+getter (get method).
 
 ```
 {{Example.object.field}}
@@ -192,10 +191,10 @@ expression by a colon.
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
+Creates or sets the value for global variable `foo` with `6x Hallo`.
 
-Creates or sets the value for the existing global variable `foo` with 
-`6x Hallo`. The expression corresponds to the JavaScript syntax: `var foo = 1
-    +2 +3 + 'x hello';`
+The expression corresponds to the JavaScript syntax:
+    `var foo = 1 +2 +3 + 'x hello';`
 
 
 ### Combination
