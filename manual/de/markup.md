@@ -677,6 +677,10 @@ Das Beispiel enth&auml;lt 3 Eingabefelder mit unterschiedlichen Ereignissen
 (`events`) und Zielen (`render`), die jeweils sich hochz&auml;hlende
 Textausgaben darstellen und auf entsprechende Ereignisse reagieren.
 
+__Alternativ kann auch das [reaktive Rendering](reactive.md) verwendet werden,
+wo &Auml;nderungen in den Datenobjekten eine partielle Aktualisierung der View
+ausl&aouml;sen.__
+
 
 ### strict
 

@@ -662,6 +662,9 @@ The example contains 3 input fields with different events (`events`) and targets
 (`render`), each of which represents an incremental text output and reacts to
 corresponding events.
 
+__Alternatively, [reactive rendering](reactive.md) can be used, where changes in
+the data objects trigger a partial update of the view.__
+
 
 ### strict
 
