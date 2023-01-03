@@ -45,7 +45,7 @@ Objekt zur&uuml;ck. Ohne Argumente gibt die Methode den globalen Namensraum
 ```javascript
 Namespace.using("app.example");
     creates window["app", {example: {}}]
-    returns window["app"] / {example: {}}  
+    returns window["app"] / {example: {}}
 
 Namespace.using("app.example", "more");
     creates window["app", {example: {more: {}}}]
@@ -60,7 +60,7 @@ Namespace.using()
 
 L&ouml;st einen Namensraum auf und ermittelt das Objekt. Wenn der Namensraum
 nicht existiert, wird `undefined` zur&uuml;ckgegeben. Ohne Argumente gibt die
-Methode den globale Namensraum `window` zur&uuml;ck.  
+Methode den globale Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -78,7 +78,7 @@ Namespace.lookup()
 
 ### Namespace.exists
 
-Pr&uuml;ft, ob ein Namensraum existiert.  
+Pr&uuml;ft, ob ein Namensraum existiert.
 
 ```javascript
 Namespace.using("app.example.more");
@@ -88,7 +88,7 @@ Namespace.exists("app.example.more")
 
 Namespace.exists(app.example, "more")
     returns boolean true
-  
+
 Namespace.exists(app.example, "nothing")
     returns boolean false
 
@@ -127,7 +127,7 @@ Einfluss auf die Qualit&auml;t der (U)UID hat.
 ```javascript
 Math.uniqueId()
     returns string e.g. "42X3IUW7622CKY02"
-  
+
 Math.uniqueId(32)
     returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
@@ -142,7 +142,7 @@ hat.
 ```javascript
 Math.uniqueSerialId()
     returns string e.g. "0GQ96VN87ZZ2JTYY"
-  
+
 Math.uniqueSerialId(32)
     returns string e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
 ```
@@ -181,12 +181,12 @@ const earth = {
                 return 83000000;
             }
         } 
-    }  
+    }
 }
 
 Object.lookup("earth");
     returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
-  
+
 Object.lookup("earth.europe.germany");
     returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
 
@@ -211,12 +211,12 @@ const earth = {
                 return 83000000;
             }
         } 
-    }  
+    }
 }
 
 Object.exists("earth");
     returns booelan true
-  
+
 Object.exists("earth.europe.germany");
     returns booelan true
 
@@ -232,7 +232,7 @@ Object.exists("foo");
 
 &Auml;quivalent zu [Namespace.using](#namespaceusing). Erstellt einen Namensraum
 zur &uuml;bergebenen Zeichenkette. Ohne Argumente gibt die Methode den globalen
-Namensraum `window` zur&uuml;ck.  
+Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Object.using("app.example");
