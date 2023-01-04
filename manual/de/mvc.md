@@ -214,21 +214,6 @@ SiteMap.customize({...});
 ```
 
 ```javascript
-const map = {
-    "#": ["news", "products", "about", "contact", "legal"],
-    "#products#papers": ["paperA4", "paperA5", "paperA6"],
-    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "#products#pens": ["pencil", "ballpoint", "stylograph"],
-    "#legal": ["terms", "privacy"],
-    ...
-};
-
-SiteMap.customize(map);
-```
-
-Oder etwas k&uuml;rzer als direkter Aufruf der Customize-Methode:
-
-```javascript
 SiteMap.customize({
     "#": ["news", "products", "about", "contact", "legal"],
     "#products#papers": ["paperA4", "paperA5", "paperA6"],
@@ -782,7 +767,7 @@ Ereignisse im HTML und so wird beim Binding das Model nach entsprechenden
 Methoden durchsucht, die dann als Event-Listener registriert werden.
 
 ```javascript
-const contact= {
+const contact = {
     mail: {
         onClick(event) {
             const mail = "mailto:mail@local?subject=Test&body=Greetings";

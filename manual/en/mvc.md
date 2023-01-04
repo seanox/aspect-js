@@ -204,21 +204,6 @@ SiteMap.customize({...});
 ```
 
 ```javascript
-const map = {
-    "#": ["news", "products", "about", "contact", "legal"],
-    "#products#papers": ["paperA4", "paperA5", "paperA6"],
-    "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-    "#products#pens": ["pencil", "ballpoint", "stylograph"],
-    "#legal": ["terms", "privacy"],
-    ...
-};
-
-SiteMap.customize(map);
-```
-
-Or a little shorter the direct call of the customize method:
-
-```javascript
 SiteMap.customize({
     "#": ["news", "products", "about", "contact", "legal"],
     "#products#papers": ["paperA4", "paperA5", "paperA6"],
@@ -753,7 +738,7 @@ the model is searched for corresponding methods that will be registered as event
 listeners.
 
 ```javascript
-const contact= {
+const contact = {
     mail: {
         onClick(event) {
           const mail = "mailto:mail@local?subject=Test&body=Greetings";

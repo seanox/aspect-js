@@ -516,6 +516,9 @@ which sets the targets.
     events="input change" render="#output1"/>
 ```
 
+__Alternatively, [reactive rendering](reactive.md) can be used, where changes in
+the data objects trigger a partial update of the view.__
+
 [Learn more](markup.md#render)
 
 

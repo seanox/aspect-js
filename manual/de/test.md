@@ -712,7 +712,6 @@ Ereignisse werden w&auml;hrend der Simulation ausgel&ouml;st:
 
 ```javascript
 document.querySelector("#inputText").typeValue("Hello World!");
-});
 ```
 
 
@@ -726,7 +725,6 @@ Die Zeichenkette basiert auf `Element.prototype.outerHTML`.
   <input type="text" id="inputText"/>
   <input type="submit"/> 
 </form>
-});
 ```
 
 ```javascript

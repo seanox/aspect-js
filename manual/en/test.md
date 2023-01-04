@@ -692,7 +692,6 @@ The following events are triggered during simulation:
 
 ```javascript
 document.querySelector("#inputText").typeValue("Hello World!");
-});
 ```
 
 
@@ -706,7 +705,6 @@ on `Element.prototype.outerHTML`.
   <input type="text" id="inputText"/>
   <input type="submit"/> 
 </form>
-});
 ```
 
 ```javascript

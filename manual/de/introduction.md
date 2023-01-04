@@ -529,6 +529,10 @@ welche die Ziele festlegen.
     events="input change" render="#output1"/>
 ```
 
+__Alternativ kann auch das [reaktive Rendering](reactive.md) verwendet werden,
+wo &Auml;nderungen in den Datenobjekten eine partielle Aktualisierung der View
+ausl&aouml;sen.__
+
 [Mehr erfahren](markup.md#render)
 
 
