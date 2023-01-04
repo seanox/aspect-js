@@ -24,8 +24,6 @@ Object/Model-Binding.
 * [Common Standard-Komponente](#common-standard-komponente)  
 * [Object/Model-Binding](#objectmodel-binding)
   * [Namespace](#namespace)
-  * [Domain Konzept](#domain-konzept)
-  * [Scope](#scope)
   * [Model](#model)
   * [Property](#property)
   * [Qualifier](#qualifier)
@@ -176,54 +174,149 @@ Logik bzw. Styles gedacht.
 
 ### Namespace
 
-Vergleichbar mit Paketen in anderen Programmiersprachen k&ouml;nnen Namensr&auml;ume zur
-Abbildung hierarchischer Strukturen und zur Gruppierung thematisch verwandter
-Komponenten und Ressourcen genutzt werden.  
-Die Implementierung erfolgt in JavaScript auf Objektebene.  
-Da es kein reales Element der Programmiersprache ist, wird dies durch das
-Verketten von Objekten zu einem Objektbaum abgebildet.  
-Jede Ebene in dieser Objektbaum repr&auml;sentiert einen Namensraum.  
-Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namensr&auml;ume
-Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
-Besonderheit werden auch Arrays unterst&uuml;tzt. Wenn eine Ebene im Namensraum eine
-reine Zahl ist, wird ein Array angenommen.
+Vergleichbar mit Packages in anderen Programmiersprachen, lassen sich Namespaces
+(Namensr&auml;ume) zur hierarchischen Strukturierung von Komponenten, Ressourcen
+und Gesch&auml;ftslogik nutzen.
 
-Das Object/Model-Binding basiert auf den IDs der Composites sowie deren Position
-und Reihenfolge im DOM.  
-Die Wurzel vom Namensraum bildet immer eine Composite-ID.  
-Der Namensraum kann dabei absolut sein, also der Namensraum entspricht einer
-Composite-ID, oder er basiert auf dem Namensraum eines im DOM &uuml;bergeordneten
-Composites.
+Auch wenn Packages kein Merkmal von JavaScript sind, lassen sich diese auf
+Objektebene durch das Verketten von Objekten zu einem Objektbaum abbilden. Dabei
+bildet jede Ebene des Objektbaums einen Namespace, was auch als Domain
+betrachtet werden kann.
 
-```html
-<html>
-  <body>
-    <div id="A">
-      <div id="B">
-        <div id="C">
-        </div>
-      </div>
-    </div>
-  </body>
-</html>  
+Seanox aspect-js erweitert dazu die JavaScript-API um das Namespace-Objekt.
+
+```javascript
+Namespace.using(...);
+Namespace.create(...);
+Namespace.lookup(...);
+Namespace.exists(...);
 ```
 
-Beispiele m&ouml;glicher Namesr&auml;ume:
+Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namespaces
+Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
+Besonderheit werden auch Arrays unterst&uuml;tzt. Nutzt eine Ebene im Namespace
+eine Ganzzahl, wird diese Ebene als Array verwendet.
 
-`a` + `a.b` + `a.b.c`  
-`b` + `b.c`  
-`c`
+Composites bzw. deren Models oder Datenobjekte sind vergleichbar mit Managed
+Beans die statisch als Singletons/Facades/Delegates den globalen Namespace
+nutzen. Um diese Datenobjekte zu strukturieren und Domain-Konzepte umzusetzen,
+sind entsprechende Namespaces erforderlich.
 
+__Wenn Namespaces die IDs von Composites reflektieren und somit HTML-Elemente
+die IDs als ID-Attribut verwenden, wird der Browser zu diesen IDs die
+HTML-Elemente als Variablen im globalen Namespace anlegen. Interessanterweise
+ignoriert der Browser gleichnamige Konstanten und &uuml;berschreibt diese mit
+den HTML-Elementen. Daher sollten Namespaces nach dem BODY-Tag im JavaScript
+erstellt werden oder besser die Namespace-API verwenden, die den globalen
+Namespace von _window_ nutzt, den der Browser nicht &uuml;berschreibt.__
 
-### Domain Konzept
+__Auch f&uuml;r Module und JavaScript-Ressourcen die zur Laufzeit nachgeladen
+werden, ist die Verwendung der Namespace-API der einfachste Weg. Da das
+Nachladen eigene Namespaces nutzt, m&uuml;ssen Variablen die &uuml;bergreifend
+genutzt werden sollen, bewusst den globalen Namespace nutzen, was die
+Namespace-API &uuml;bernimmt.__
 
-TODO:
+```javascript
+Namespace.create("masterdata", {
+    regions: {
+        ...
+    },
+    languages: {
+        ...
+    }
+};
+```
 
+Im Markup bilden sich Namespaces aus den IDs verschachtelter Composites, wenn
+diese das Attribut `namespace` verwenden.
 
-### Scope
+```html
+<div id="MasterData" composite namespace>
+  <div id="Regions" composite namespace>
+    Namespace: MasterData.Regions
+  </div>    
+</div>
+```
 
-Der Scope basiert auf dem Namensraum als Beschreibungstext und bildet diesen auf
-der Objektebene ab.  
+Befinden sich weitere Elemente mit einer ID zwischen den Composites, haben diese
+keine Auswirkungen.
+
+```html
+<div id="MasterData" composite namespace>
+  <section id="Section">
+    <form id="Form">
+      <div id="Regions" composite namespace>
+        Namespace: MasterData.Regions
+        Elements Section and Form are ignored 
+      </div>
+    </form>
+  </section>  
+</div>
+```
+
+Noch spezieller sind in einer Namespace-Kette Composites ohne das Attribut
+`namespace`. Diese Composites wirken entkoppelnd und haben selbst keinen
+Namespace. Innerhalb dieser Composites k&ouml;nnen dann neue Namespaces begonnen
+werden, unabh&auml;ngig von &uuml;bergeordneten Namespaces.
+
+```html
+<div id="Imprint" composite namespace>
+  Namespace: Imprint
+  <div id="Contact" composite>
+    Namespace: Contact
+    <div id="Support" composite namespace>
+      Namespace: Support
+      <div id="Mail" composite namespace>
+        Namespace: Support.Mail
+      </div>
+      <div id="Channel" composite namespace>
+        Namespace: Support.Channel
+      </div>
+      ...
+    </div>
+    <div id="Community" composite namespace>
+      Namespace: Community
+      <div id="Channel" composite namespace>
+        Namespace: Community.Channel
+      </div>
+      ...
+    </div>
+  </div>
+</div>
+```
+
+Eingef&uuml;hrt wurde dieses Verhalten mit dem Gedanken an Micro-Frontends,
+welche eigene Domains nutzen und an verschiedenen Stellen wiederverwendet werden
+sollen. So lassen sich in der statischen Welt von Seanox aspect-js
+Domain-bezogene Komponenten umsetzen.
+
+Namespaces haben zudem Auswirkungen auf Ressourcen und Module. So haben
+Namespaces im Markup erstmal nur textuellen Charakter und k&ouml;nnen auch ohne
+korrespondierendes Objektmodel existieren und verwendet werden. Im Markup wird
+lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese gk&uuml;ltig,
+werden die Namespaces direkt auf den Pfad von Modulen und deren Ressourcen
+angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
+
+```
++ modules
+  - common.css
+  - common.js
+  + community   
+    - channel.css
+    - channel.html
+    - channel.js
+    - ...
+  - imprint.css
+  - imprint.html
+  - imprint.js
+  + support
+    - mail.css
+    - mail.html
+    - mail.js
+    - ...
+  - ...
+- index.html
+```
 
 
 ### Model

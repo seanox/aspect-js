@@ -23,8 +23,6 @@ automatic object/model binding.
 * [Common Standard Component](#common-standard-component) 
 * [Object/Model Binding](#objectmodel-binding)
   * [Namespace](#namespace)
-  * [Domain concept](#domain-concept)
-  * [Scope](#scope)
   * [Model](#model)
   * [Property](#property)
   * [Qualifier](#qualifier)
@@ -170,52 +168,125 @@ logic or styles.
 
 #### Namespace
 
-Similar to packages in other programming languages, namespaces can be used to
-map hierarchical structures and group thematically related components and
-resources.  
-The implementation is realized in JavaScript on the object level.  
-Because it is not a real element of the programming language, this is
-represented by chaining objects to an object tree.  
-Each level in this object tree represents a namespace.  
-As typical for object identifiers, namespaces use letters, numbers and
-underscores separated by a dot. As a special feature, arrays are also supported.
-If a level in the namespace is a pure number, an array is assumed.
+Comparable to packages in other programming languages, namespaces can be used
+for hierarchical structuring of components, resources and business logic.
 
-The object/model binding is based on the IDs of the composites and their
-position and order in the DOM.    
-The root of the namespace always forms a composite ID.  
-The namespace can be absolute, that is, the namespace corresponds to a composite
-ID, or it can be based on the namespace of a parent composite in the DOM.
+Although packages are not a feature of JavaScript, they can be mapped at the
+object level by concatenating objects into an object tree. Here, each level of
+the object tree forms a namespace, which can also be considered a domain.
 
-```html
-<html>
-  <body>
-    <div id="A">
-      <div id="B">
-        <div id="C">
-        </div>
-      </div>
-    </div>
-  </body>
-</html>  
+Seanox aspect-js extends the JavaScript API with the namespace object for this
+purpose.
+
+```javascript
+Namespace.using(...);
+Namespace.create(...);
+Namespace.lookup(...);
+Namespace.exists(...);
 ```
 
-Examples of possible namespaces:
+As is typical for the identifiers of objects, namespaces also use letters,
+numbers and underscores separated by a dot. As a special feature, arrays are
+also supported. If a layer in the namespace uses an integer, this layer is used
+as an array.
 
-`a` + `a.b` + `a.b.c`  
-`b` + `b.c`  
-`c`
+Composites or their models or data objects are comparable with static managed
+beans that use the global namespace as singletons/facades/delegates. In order to
+structure these data objects and implement domain concepts, corresponding
+namespaces are required.
 
+__If namespaces reflect the IDs of composites and thus HTML elements use the IDs
+as ID attributes, the browser will create the HTML elements as variables in the
+global namespace for these IDs. Interestingly, the browser ignores constants of
+the same name and overwrites them with the HTML elements. Therefore, namespaces
+should be created after the BODY tag in JavaScript or better use the namespace
+API that uses the global namespace of window that the browser does not
+overwrite.__
 
-### Domain concept
+__Also for modules and JavaScript resources that are reloaded at runtime, using
+the namespace API is the easiest way. Since reloading uses its own namespaces,
+variables that are to be used across the board must consciously use the global
+namespace, which the namespace API takes care of.__
 
-TODO:
+```javascript
+Namespace.create("masterdata", {
+    regions: {
+        ...
+    },
+    languages: {
+        ...
+    }
+};
+```
 
+In markup, namespaces are formed from the IDs of nested composites if they use
+the attribute `namespace`.
 
-#### Scope
+```html
+<div id="MasterData" composite namespace>
+  <div id="Regions" composite namespace>
+    Namespace: MasterData.Regions
+  </div>    
+</div>
+```
 
-The scope is based on the namespace as a description text and maps this on the
-object level.  
+If there are other elements with an ID between the composites, they have no
+effect.
+
+```html
+<div id="MasterData" composite namespace>
+  <section id="Section">
+    <form id="Form">
+      <div id="Regions" composite namespace>
+        Namespace: MasterData.Regions
+        Elements Section and Form are ignored 
+      </div>
+    </form>
+  </section>  
+</div>
+```
+
+Even more special in a namespace chain are composites without the attribute
+`namespace.` These composites have a decoupling effect and have no namespace
+themselves. New namespaces can then be started within these composites,
+independent of parent namespaces.
+
+```html
+<div id="Imprint" composite namespace>
+  namespace: Imprint
+  <div id="Contact" composite>
+    namespace: Contact
+    <div id="Support" composite namespace>
+      namespace: Support
+      <div id="Mail" composite namespace>
+        namespace: Support.Mail  
+      </div>
+      <div id="Channel" composite namespace>
+        namespace: Support.Channel
+      </div>
+      ...
+    </div>
+    <div id="Community" composite namespace>
+      namespace: Community
+      <div id="Channel" composite namespace>
+        namespace: Community.Channel
+      </div>
+      ...
+    </div>
+  </div>
+</div>
+```
+
+This behavior was introduced with the idea of micro-frontends, which use their
+own domains and are to be reused in various places. This way, domain-related
+components can be implemented in the static world of Seanox aspect-js.
+
+Namespaces also have effects on resources and modules. Thus, namespaces in the
+markup initially have only a textual character and can also exist and be used
+without a corresponding object model. Only the syntax of the namespaces is
+checked in the markup. If this is valid, the namespaces are applied directly to
+the path of modules and their resources and extend the path from the module
+directory.
 
 
 ### Model
