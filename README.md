@@ -90,10 +90,10 @@ specific language governing permissions and limitations under the License.
 [Seanox aspect-js 1.4.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.4.0.zip)
 
 <p>
-  <img src="https://img.shields.io/badge/Blink-successful-green?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Gecko-successful-green?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Goanna-successful-green?style=for-the-badge">
-  <img src="https://img.shields.io/badge/WebKit-successful-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Gecko-tested-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Goanna-tested-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/WebKit-tested-green?style=for-the-badge">
 </p>
 
 
