@@ -89,10 +89,12 @@ specific language governing permissions and limitations under the License.
 [Seanox aspect-js 1.4.0](https://github.com/seanox/aspect-js/releases/download/1.4.0/aspect-js-1.4.0.zip)  
 [Seanox aspect-js 1.4.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.4.0.zip)
 
-<img src="https://img.shields.io/badge/Blink-successful-green?style=for-the-badge">
-<img src="https://img.shields.io/badge/Gecko-successful-green?style=for-the-badge">
-<img src="https://img.shields.io/badge/Goanna-successful-green?style=for-the-badge">
-<img src="https://img.shields.io/badge/WebKit-successful-green?style=for-the-badge">
+<p>
+  <img src="https://img.shields.io/badge/Blink-successful-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Gecko-successful-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Goanna-successful-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/WebKit-successful-green?style=for-the-badge">
+</p>
 
 
 # Release Channels
