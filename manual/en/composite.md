@@ -47,9 +47,8 @@ may consist of one or more modules, or a module may provide one or more componen
 ## Composite
 
 A composite is a functionally independent component that can consist of markup,
-CSS and JavaScript(-Model) and optionally other resources.  
-In relation to the model-view-controller approach, a composite can provide model
-and view.
+CSS and JavaScript(-Model) and optionally other resources. In relation to the
+model-view-controller approach, a composite can provide model and view.
 
 __This distinguishes the composite concept from the JavaScript module concept,__
 __which can also be used. Another important difference concerns the loading__
@@ -77,8 +76,8 @@ that is marked as composite.
 
 ## Outsourcing
 
-The inner markup, CSS and JavaScript of composites can be outsourced.  
-The default directory `./modules` can be changed with the property
+The inner markup, CSS and JavaScript of composites can be outsourced. The
+default directory `./modules` can be changed with the property
 `Composite.MODULES`. The file name of the outsourced resources is derived from
 the ID of the as composite marked HTML element. Which resources or parts of the
 component are swapped out can be decided individually for each component. 
@@ -91,10 +90,10 @@ component are swapped out can be decided individually for each component.
 - index.html
 ```
 
-The default behavior derives the name of the resources from the Composite ID
-and then uses it as the lower case at the beginning. This behavior can be
-changed with the attribute [strict](markup.md#strict) so that the Composite ID
-is used unchanged for the resources.
+The default behavior derives the name of the resources from the Composite ID and
+then uses it as the lower case at the beginning. This behavior can be changed
+with the attribute [strict](markup.md#strict) so that the Composite ID is used
+unchanged for the resources.
 
 
 ## Loading
@@ -103,13 +102,16 @@ The loading of resources and the object/model binding is done partially when the
 composite is needed in the UI, which controls the [SiteMap](sitemap.md) as a
 central face flow management and thus minimizes the loading time considerably,
 because depending on the situation, only the resources of the actively used
-composites are loaded by the UI. 
+composites are loaded by the UI.
+
 The outsourcing and loading of resources at runtime is optional and can be used
 completely, partially or not at all. There is a fixed sequence for reloading and
-including: CSS, JavaScript, HTML/Markup.  
+including: CSS, JavaScript, HTML/Markup.
+
 If the request of a resource with status 404 is answered, it is assumed that
 this resource has not been outsourced. If requests are not answered with status
-200 or 404, an error is assumed.  
+200 or 404, an error is assumed.
+
 Resources are loaded only once with the first request of the component for the
 UI and the content is then cached.
 
@@ -227,7 +229,7 @@ the attribute `namespace`.
 <div id="masterdata" composite namespace>
   <div id="regions" composite namespace>
     Namespace: masterdata.regions
-  </div>    
+  </div>
 </div>
 ```
 
@@ -243,7 +245,7 @@ effect.
         Elements section and form are ignored 
       </div>
     </form>
-  </section>  
+  </section>
 </div>
 ```
 
@@ -260,7 +262,7 @@ independent of parent namespaces.
     <div id="Support" composite namespace>
       namespace: Support
       <div id="Mail" composite namespace>
-        namespace: Support.Mail  
+        namespace: Support.Mail
       </div>
       <div id="Channel" composite namespace>
         namespace: Support.Channel
@@ -294,7 +296,8 @@ directory.
 
 A model is a JavaScript object in any namespace that stores the states of the
 user interface/view and provides an interface for the transition from the user
-interface/view to the business logic and/or backend.  
+interface/view to the business logic and/or backend.
+
 Conceptually, the implementation of the design patterns facade and delegation is
 intended, so that models internally use further components and abstraction.
 
@@ -302,10 +305,9 @@ intended, so that models internally use further components and abstraction.
 #### Property
 
 It is a property inside a model that references HTML elements inside a composite
-with the corresponding ID.  
-The elements of the properties use relative identifiers (ID). The namespace is
-based on the namespace of the composite and can be extended by additional parent
-elements with IDs.
+with the corresponding ID. The elements of the properties use relative
+identifiers (ID). The namespace is based on the namespace of the composite and
+can be extended by additional parent elements with IDs.
 
 ```javascript
 const model = {
@@ -336,9 +338,9 @@ defined by an attribute with the same name.
 
 In some cases an identifier (ID) is not unique. For example, when properties are
 arrays or an iteration is used in the markup. In these cases the identifier can
-be extended by an additional unique qualifier separated by a colon.   
-Qualifiers have the effect of properties in the object/model binding and extend
-the namespace.
+be extended by an additional unique qualifier separated by a colon. Qualifiers
+have the effect of properties in the object/model binding and extend the
+namespace.
 
 ```html
 <input type="text" id="identifier">
@@ -366,7 +368,7 @@ namespace.
 The Composite API detects and monitors the existence of composite markup in the
 DOM. Thus, the corresponding (JavaScript) model can be informed via the `dock`
 `undock` methods when the composite is added to or removed from the DOM as a
-component.  
+component.
 
 The implementation of both methods is optional.
 
@@ -391,7 +393,8 @@ const model = {
 
 The dock method is executed before rendering, before inserting the composite
 into the DOM, or after loading the page during the first render, and can be used
-to prepare model and view.  
+to prepare model and view.
+
 The undock method is executed after the composite is removed from the DOM and
 can be used for postprocessing, cleanup and finalization of the model.
 

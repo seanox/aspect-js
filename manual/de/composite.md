@@ -21,7 +21,7 @@ Object/Model-Binding.
   * [CSS](#css)
   * [JavaScript](#javascript)
   * [HTML](#html)
-* [Common Standard-Komponente](#common-standard-komponente)  
+* [Common Standard-Komponente](#common-standard-komponente)
 * [Object/Model-Binding](#objectmodel-binding)
   * [Namespace](#namespace)
   * [Model](#model)
@@ -48,16 +48,15 @@ kann eine oder mehrere Komponenten bereitstellen.
 
 ## Composite
 
-Ein Composite bezeichnet eine funktional eigenst&auml;ndige Komponente die sich aus
-Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
-zusammensetzen kann.  
-Im Hinblick auf den Model-View-Controller-Ansatz, lassen sich mit einem Composite
-Model und View bereitstellen.
+Ein Composite bezeichnet eine funktional eigenst&auml;ndige Komponente die sich
+aus Markup, CSS und JavaScript(-Model) sowie optional aus weiteren Ressourcen
+zusammensetzen kann. Im Hinblick auf den Model-View-Controller-Ansatz, lassen
+sich mit einem Composite Model und View bereitstellen.
 
-__Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,__
-__was aber ebenfalls verwendet werden kann. Ein anderer wichtiger Unterschied__
-__besteht beim Laden und Ausf&uuml;hren von JavaScript, was bei Composites in__
-__einem Render-Zyklus linear/sequenziell und somit synchron erfolgt.__
+__Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,
+was aber ebenfalls verwendet werden kann. Ein anderer wichtiger Unterschied
+besteht beim Laden und Ausf&uuml;hren von JavaScript, was bei Composites in
+einem Render-Zyklus linear/sequenziell und somit synchron erfolgt.__
 
 
 ## Aufbau
@@ -80,12 +79,12 @@ HTML-Element mit einer eindeutigen Id.
 
 ## Auslagerung
 
-Das innere Markup, CSS und JavaScript von Composites lassen sich auslagern.  
-Das Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
-`Composite.MODULES` ge&auml;ndert werden. Der Dateiname der ausgelagerten Ressourcen
-leitet sich von der ID des als Composite gekennzeichneten HTML-Elements ab.
-Welche Ressourcen bzw. Teile der Komponente ausgelagert werden, kann f&uuml;r jede
-Komponente individuell entschieden werden. 
+Das innere Markup, CSS und JavaScript von Composites lassen sich auslagern. Das
+Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
+`Composite.MODULES` ge&auml;ndert werden. Der Dateiname der ausgelagerten
+Ressourcen leitet sich von der ID des als Composite gekennzeichneten
+HTML-Elements ab. Welche Ressourcen bzw. Teile der Komponente ausgelagert
+werden, kann f&uuml;r jede Komponente individuell entschieden werden. 
 
 ```
 + modules
@@ -97,8 +96,8 @@ Komponente individuell entschieden werden.
 
 Beim Standardverhalten wird der Name der Ressourcen von der Composite-ID
 abgeleitet und nutzt diese dann als Kleinschreibung am Anfang. Dieses Verhalten
-kann mit dem Attribute [strict](markup.md#strict) ge&auml;ndert werden, so dass die
-Composite-ID unver&auml;ndert f&uuml;r die Ressourcen verwendet werden.
+kann mit dem Attribute [strict](markup.md#strict) ge&auml;ndert werden, so dass
+die Composite-ID unver&auml;ndert f&uuml;r die Ressourcen verwendet werden.
 
 
 
@@ -107,22 +106,26 @@ Composite-ID unver&auml;ndert f&uuml;r die Ressourcen verwendet werden.
 Das Laden der Ressourcen und das Object/Model-Binding erfolgt partiell, wenn das
 Composite im UI ben&ouml;tigt wird, was die [SiteMap](sitemap.md) als zentrales
 Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
-situationsabh&auml;ngig vom UI nur die Ressourcen der aktiv verwendeten Composites
-geladen werden.  
-Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l&auml;sst sich
-komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
-eine feste Reihenfolge: CSS, JavaScript, HTML/Markup.  
+situationsabh&auml;ngig vom UI nur die Ressourcen der aktiv verwendeten
+Composites geladen werden.
+
+Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l&auml;sst
+sich komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt
+es eine feste Reihenfolge: CSS, JavaScript, HTML/Markup.
+
 Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
 ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
-mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.  
+mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.
+
 Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente f&uuml;r das UI ausgef&uuml;hrt und der Inhalt dann zwischengespeichert.
+Komponente f&uuml;r das UI ausgef&uuml;hrt und der Inhalt dann
+zwischengespeichert.
 
 
 ### CSS
 
-CSS wird als Style-Element in das HEAD-Element eingef&uuml;gt. Ohne ein HEAD-Element
-verursacht das Einf&uuml;gen einen Fehler.
+CSS wird als Style-Element in das HEAD-Element eingef&uuml;gt. Ohne ein
+HEAD-Element verursacht das Einf&uuml;gen einen Fehler.
 
 
 ### JavaScript
@@ -148,8 +151,8 @@ Namespace.create("login", {
 ### HTML
 
 HTML/Markup wird f&uuml;r ein Composite nur geladen, wenn das HTML-Element der
-Komponente selbst kein inneres HTML besitzt und f&uuml;r das Elemente auch nicht die
-Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
+Komponente selbst kein inneres HTML besitzt und f&uuml;r das Elemente auch nicht
+die Attribute `import` oder `output` deklariert wurden. Nur in diesem Fall wird
 von einer leeren Komponente mit ausgelagertem HTML/Markup ausgegangen.
 
 
@@ -235,7 +238,7 @@ diese das Attribut `namespace` verwenden.
 <div id="masterdata" composite namespace>
   <div id="regions" composite namespace>
     Namespace: masterdata.regions
-  </div>    
+  </div>
 </div>
 ```
 
@@ -251,7 +254,7 @@ keine Auswirkungen.
         Elements section and form are ignored 
       </div>
     </form>
-  </section>  
+  </section>
 </div>
 ```
 
@@ -302,7 +305,7 @@ angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 + modules
   - common.css
   - common.js
-  + community   
+  + community
     - channel.css
     - channel.html
     - channel.js
@@ -323,9 +326,10 @@ angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 ### Model
 
 Ein Model ist ein JavaScript-Objekt in einem beliebigen Namensraum, dass die
-Zust&auml;nde vom User-Interface/View speichert und eine Schnittstelle f&uuml;r den
-&Uuml;bergang von der Benutzerschnittstelle (User-Interface/View) zur Gesch&auml;ftslogik
-und/oder zum Backend zur Verf&uuml;gung stellt.  
+Zust&auml;nde vom User-Interface/View speichert und eine Schnittstelle f&uuml;r
+den &Uuml;bergang von der Benutzerschnittstelle (User-Interface/View) zur
+Gesch&auml;ftslogik und/oder zum Backend zur Verf&uuml;gung stellt.
+
 Konzeptionell ist die Implementierung der Entwurfsmuster Fassade und Delegation
 angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
 
@@ -333,10 +337,9 @@ angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
 ### Property
 
 Es ist eine Eigenschaft innerhalb eines Models, die HTML-Elements innerhalb
-eines Composites mit gleichnamiger ID referenziert.  
-Elemente der Properties nutzen relativen Bezeichner (ID). Der Namensraum basiert
-auf dem vom Composite und erweitert sich um ggf. weitere &uuml;bergeordnete Element
-mit IDs.
+eines Composites mit gleichnamiger ID referenziert. Elemente der Properties
+nutzen relativen Bezeichner (ID). Der Namensraum basiert auf dem vom Composite
+und erweitert sich um ggf. weitere &uuml;bergeordnete Element mit IDs.
 
 ```javascript
 const model = {
@@ -365,11 +368,11 @@ Ereignisse &uuml;ber das gleichnamige Attribut definiert.
 
 ### Qualifier
 
-In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel wenn 
-Eigenschaften Arrays sind oder im Markup eine Iteration verwendet wird. In
-diesen F&auml;llen kann der Bezeichner, getrennt durch einen Doppelpunkt, um einen
-zus&auml;tzlichen eindeutigen Qualifier erweitert werden. Qualifier wirken beim
-Object/Model-Binding wie Properties und verl&auml;ngern den Namensraum.
+In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel
+wenn Eigenschaften Arrays sind oder im Markup eine Iteration verwendet wird. In
+diesen F&auml;llen kann der Bezeichner, getrennt durch einen Doppelpunkt, um
+einen zus&auml;tzlichen eindeutigen Qualifier erweitert werden. Qualifier wirken
+beim Object/Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 
 ```html
 <input type="text" id="identifier">
@@ -390,15 +393,15 @@ Object/Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 
 ### Binding
 
-Die Verkn&uuml;pfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt &uuml;ber die
-Composite-API. Dazu muss ein HTML-Element das Attribut `composite` und eine
-g&uuml;ltige sowie eindeutige ID besitzen, die den Anforderungen des Namensraums
-entspricht.
+Die Verkn&uuml;pfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt
+&uuml;ber die Composite-API. Dazu muss ein HTML-Element das Attribut `composite`
+und eine g&uuml;ltige sowie eindeutige ID besitzen, die den Anforderungen des
+Namensraums entspricht.
 
-Die Composite-API erkennt und &uuml;berwacht die Existenz von Markup der Composites
-im DOM. So kann das korrespondierende (JavaScript-)Model &uuml;ber die Methoden
-`dock` und `undock` informiert werden, wenn das Composite als Komponente dem
-DOM hinzugef&uuml;gt bzw. aus diesem entfernt wird.  
+Die Composite-API erkennt und &uuml;berwacht die Existenz von Markup der
+Composites im DOM. So kann das korrespondierende (JavaScript-)Model &uuml;ber
+die Methoden `dock` und `undock` informiert werden, wenn das Composite als
+Komponente dem DOM hinzugef&uuml;gt bzw. aus diesem entfernt wird.
 
 Die Implementierung beider Methoden ist optional.
 
@@ -421,15 +424,16 @@ const model = {
 </html>
 ```
 
-Die dock-Methode wird vor dem Rendern, vor dem Einf&uuml;gen des Composites in das
-DOM oder nach dem Laden der Seite beim ersten Rendern ausgef&uuml;hrt und kann das
-zur Vorbereitung von Model und Darstellung verwendet werden.  
-Die undock-Methode wird ausgef&uuml;hrt, nachdem das Composite aus dem DOM entfernt
-wurde und l&auml;sst f&uuml;r Nachbereitung, Bereiningung und Finalisierung des Models
-nutzen.
+Die dock-Methode wird vor dem Rendern, vor dem Einf&uuml;gen des Composites in
+das DOM oder nach dem Laden der Seite beim ersten Rendern ausgef&uuml;hrt und
+kann das zur Vorbereitung von Model und Darstellung verwendet werden.
 
-Bei einem Composite in Kombination mit einer Bedingung (condition) h&auml;ngt der
-Aufruf der Methoden vom Ergebnis der Bedingung ab.
+Die undock-Methode wird ausgef&uuml;hrt, nachdem das Composite aus dem DOM
+entfernt wurde und l&auml;sst f&uuml;r Nachbereitung, Bereiningung un
+Finalisierung des Models nutzen.
+
+Bei einem Composite in Kombination mit einer Bedingung (condition) h&auml;ngt
+der Aufruf der Methoden vom Ergebnis der Bedingung ab.
 
 
 ### Events

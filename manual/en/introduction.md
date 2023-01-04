@@ -197,7 +197,8 @@ The declarative approach is primarily implemented using attributes in Seanox
 aspect-js and can be used with all HTML elements and in combination. Excluded
 are `SCRIPT`,  which is only supported with the type `composite/javascript`,
 and `STYLE`, which is not supported. The values of the attributes can be static
-or dynamic when the expression language is used.  
+or dynamic when the expression language is used.
+
 If an attribute contains an expression, the attribute and the value become
 unchangeable, because the renderer sets them again with the updated value of the
 initial expression each time it is refreshed (render cycle).
@@ -209,7 +210,8 @@ initial expression each time it is refreshed (render cycle).
 
 The attribute output the value or result of its expression as an inner HTML code
 for an HTML element. As value are expected one element or more elements as
-NodeList or Array, which are then inserted directly.  
+NodeList or Array, which are then inserted directly.
+
 The [DataSource-URL (locator)](datasource.md#locator) is also supported, which
 loads and inserts transformed content from the [DataSource](datasource.md).
 
@@ -219,11 +221,11 @@ loads and inserts transformed content from the [DataSource](datasource.md).
 </p>
 
 <p output="xml:/example/content">
-  loading resource...  
+  loading resource...
 </p>
 
 <p output="xml:/example/data xslt:/example/style">
-  loading resource...  
+  loading resource...
 </p>
 ```
 
@@ -247,15 +249,15 @@ supported, which loads and inserts transformed content from the
 </p>
 
 <p import="xml:/example/content">
-  loading resource...  
+  loading resource...
 </p>
 
 <p import="xml:/example/data xslt:/example/style">
-  loading resource...  
+  loading resource...
 </p>
 
 <p import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
-  loading resource...  
+  loading resource...
 </p>
 ```
 
@@ -264,11 +266,11 @@ supported, which loads and inserts transformed content from the
 
 ### condition
 
-The condition attribute decides whether an element is kept in the DOM.  
-The expression specified with the attribute must explicitly return `true` for
-the element to be retained in the DOM. If the return value differs, the element
-is temporarily removed from the DOM and can be reinserted later by refreshing
-the __parent element__ if the expression returns `true`.  
+The condition attribute decides whether an element is kept in the DOM. The
+expression specified with the attribute must explicitly return `true` for the
+element to be retained in the DOM. If the return value differs, the element is
+temporarily removed from the DOM and can be reinserted later by refreshing the
+__parent element__ if the expression returns `true`.
 
 ```html
 <article condition="{{Model.visible}}">
@@ -296,10 +298,10 @@ As value an interval in milliseconds is expected, which can also be formulated
 as expression. Processing is concurrent or asynchronous, but not parallel. Means
 that the processing is to start after the set time interval, but this does not
 start until a JavaScript procedure started before has been completed. For this
-reason, the interval is to be understood as near real-time, but not as exact.  
+reason, the interval is to be understood as near real-time, but not as exact
 The interval attribute expects a value in milliseconds. An invalid value causes
 console output. The interval starts automatically and is active as long as the
-element exists in the DOM.   
+element exists in the DOM.
 
 ```html
 <p interval="1000">
@@ -332,16 +334,17 @@ composite JavaScript.
 
 ### iterate
 
-The iterative output is based on lists, enumerations and arrays.  
-If an HTML element is declared as iterative, the initial inner HTML code is used
-as template and during the iteration the inner HTML code is removed first, the
+The iterative output is based on lists, enumerations and arrays. If an HTML
+element is declared as iterative, the initial inner HTML code is used as
+template and during the iteration the inner HTML code is removed first, the
 template is generated individually with each iteration and the result is added
 to the inner HTML code.
-The iterate attribute expects a
-[variable expression](expression.md#variable-expression), as well as a
-meta-object that allows access to the iteration.  
-So the variable expression `iterate={tempA:Model.list}}` creates the
-meta-object `tempA = {item, index, data}`.
+
+The iterate attribute expects a [variable expression](
+    expression.md#variable-expression), as well as a meta-object that allows
+access to the iteration. So the variable expression
+`iterate={tempA:Model.list}}` creates the meta-object `tempA = {item, index,
+    data}`.
 
 ```javascript
 const Model = {
@@ -361,9 +364,9 @@ const Model = {
 
 ### id
 
-The ID (identifier) has an elementary meaning in Seanox aspect-js.   
-It is used by the SiteMap as faces and facets, i.e. as targets for virtual paths
-in face flow and for the object/model binding.
+The ID (identifier) has an elementary meaning in Seanox aspect-js. It is used by
+the SiteMap as faces and facets, i.e. as targets for virtual paths in face flow
+and for the object/model binding.
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the object/model 
@@ -375,16 +378,16 @@ exists in the DOM.
 
 ### composite
 
-Marks an element in the markup as [Composite](composites.md).  
-Composites are modular components that have an elementary meaning in Seanox
-aspect-js and necessarily require an identifier (ID).  
-They are used by the [SiteMap](mvc.md#sitemap) as faces, so as targets for
-virtual paths in the face-flow, which has a direct effect of the visibility of
-the composites.
+Marks an element in the markup as [Composite](composites.md). Composites are
+modular components that have an elementary meaning in Seanox aspect-js and
+necessarily require an identifier (ID). They are used by the [SiteMap](
+    mvc.md#sitemap) as faces, so as targets for virtual paths in the face-flow,
+which has a direct effect of the visibility of the composites.
+
 The [Model View Controller](mvc.md#sitemap) supports automatic
-[object/model binding](object-binding.md) for composites.  
-The resources (CSS, JS, Markup) for composites can be outsourced to the module
-directory and are only loaded automatically when necessary.
+[object/model binding](object-binding.md) for composites. The resources (CSS,
+JS, Markup) for composites can be outsourced to the module directory and are
+only loaded automatically when necessary.
 
 ```html
 <article id="example" composite>
@@ -392,7 +395,7 @@ directory and are only loaded automatically when necessary.
 </article>
 ```
 
-Details about using composites / modular components are described in
+Details about using composites / modular components are described in 
 [Composites](composites.md) and [Model View Controller](mvc.md).
 
 [Learn more](markup.md#composite)
@@ -456,8 +459,8 @@ embedded in a composite.
 ### message
 
 Message is an optional part of [Validation](#validate) and is used for
-text/error output in case of an unconfirmed validation.  
-This requires a combination with the attributes `validate` and `events`. 
+text/error output in case of an unconfirmed validation. This requires a
+combination with the attributes `validate` and `events`. 
 
 ```html
 <form id="Model" composite>
@@ -485,9 +488,8 @@ This requires a combination with the attributes `validate` and `events`.
 ### notification
 
 Notification is an optional part of [Validation](#validate) and displays the
-error output as an info box (browser feature) on the corresponding element.  
-This requires a combination with the attributes `validate`, `events` and
-`message`.
+error output as an info box (browser feature) on the corresponding element. This
+requires a combination with the attributes `validate`, `events` and `message`.
 
 ```html
 <form id="Model" composite>
@@ -505,8 +507,8 @@ This requires a combination with the attributes `validate`, `events` and
 ### render
 
 The `render` attribute requires the combination with the `events` attribute.
-Together they define which targets with which occurring events
-be refreshed.  
+Together they define which targets with which occurring events be refreshed.
+
 The `render` attribute expects a CSS selector or query selector as value.
 which sets the targets.
 
@@ -524,10 +526,10 @@ the data objects trigger a partial update of the view.__
 
 ### release
 
-Inverse indicator that an element was rendered.  
-The renderer removes this attribute when an element is rendered. This effect can
-be used for CSS to display elements only in rendered state. A corresponding CSS
-rule is automatically added to the HEAD when the page is loaded. 
+Inverse indicator that an element was rendered. The renderer removes this
+attribute when an element is rendered. This effect can be used for CSS to
+display elements only in rendered state. A corresponding CSS rule is
+automatically added to the HEAD when the page is loaded. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -550,8 +552,8 @@ the result can be transformed with XSLT.
 ## Resource Bundle (Messages / i18n)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
-internationalization, localization (i18n) and client-related texts.  
-The implementation is based on a set of key-value or label-value data which is
+internationalization, localization (i18n) and client-related texts. The
+implementation is based on a set of key-value or label-value data which is
 stored in the `locales.xml` in the DataSource directory.
 
 [Learn more](messages.md)
@@ -591,20 +593,22 @@ transmitting the interactions. Because this I/O controller is part of the
 operating system and the browser, the controller in Seanox aspect-js refers to
 the application controller. The application controller controls the flow within
 an application (face-flow) and takes over the binding of markup and JavaScript
-as well as the control of the data flow between view and model.  
+as well as the control of the data flow between view and model.
+
 In Seanox aspect-js the controller is the collaboration of Composite, Paths and
 SiteMap.
 
 
 ### Model
 
-The model is a displayable/projectable object.  
-It receives (status) changes and interactions of the view, which are transmitted
-by the controller, or provides the view with an interface to data as well as
-functions and services of the middleware. The model primarily serves the view
-for the representation and management of the states, for business functionality
-it uses additional components.  
-In Seanox aspect-js the models are represented by static JavaScript objects.  
+The model is a displayable/projectable object. It receives (status) changes and
+interactions of the view, which are transmitted by the controller, or provides
+the view with an interface to data as well as functions and services of the
+middleware. The model primarily serves the view for the representation and
+management of the states, for business functionality it uses additional
+components.
+
+In Seanox aspect-js the models are represented by static JavaScript objects.
 Conceptually the implementation of the design pattern facade and delegation is
 planned, so that the static models internally use additional components and
 abstraction.
@@ -612,12 +616,12 @@ abstraction.
 
 ### View
 
-The view is exclusively responsible for the presentation or projection of a
-model.  
-Projection is an important term because the way in which a model is
-presented is not restricted.  
-In the context of Seanox aspect-js, terms face and factes are used for the
-visual representation/projection, which will be explained later.  
+The view is exclusively responsible for the presentation or projection of a 
+model. Projection is an important term because the way in which a model is
+presented is not restricted. In the context of Seanox aspect-js, terms face and
+factes are used for the visual representation/projection, which will be
+explained later.
+
 In Seanox aspect-js the views are represented by the markup.
 
 
@@ -627,7 +631,8 @@ The representation in Seanox aspect-js is multilayered and the views are
 organized as page, faces and facets which are accessed with virtual paths. For
 this purpose, SiteMap provides a hierarchical directory structure based on the
 virtual paths for all views. The SiteMap then controls the access and the
-visualization (show and hide) of the views, which is termed face-flow.  
+visualization (show and hide) of the views, which is termed face-flow.
+
 Face-flow and visualization are resolute and uses the DOM to insert and remove
 the views (faces and facets).
 
@@ -663,20 +668,18 @@ Further components of the SiteMap are the navigation and a permission concept.
 
 ### Virtual Paths
 
-Virtual paths are used for navigation and control of face-flow.  
-The target can be a face, a facet or a function.  
-For SPAs (Single-Page-Applications) the anchor part of the URL is used for the
-paths.
+Virtual paths are used for navigation and control of face-flow. The target can
+be a face, a facet or a function. For SPAs (Single-Page-Applications) the anchor
+part of the URL is used for the paths.
 
 ```
 https://example.local/example/#path
 ```
 
 According to the file system, absolute, relative and additionally functional
-paths are also supported here.  
-Paths consist exclusively of word characters, underscores and optionally the
-minus character (based on combined) IDs. The hash character is used as separator
-and root. Spaces are not supported.
+paths are also supported here. Paths consist exclusively of word characters,
+underscores and optionally the minus character (based on combined) IDs. The hash
+character is used as separator and root. Spaces are not supported.
 
 [Learn more](mvc.md#virtual-paths)
 
@@ -709,7 +712,8 @@ composite and with a unique ID.
 </html>
 ```
 
-The inner markup, CSS and JavaScript can be stored in the file system.  
+The inner markup, CSS and JavaScript can be stored in the file system.
+
 The default directory `./modules` can be changed with the property
 `Composite.MODULES`.
 
@@ -725,16 +729,16 @@ The loading of resources and the object/model binding are partial if the
 component is required in the UI -- means with the first use, which is controlled
 via the [SiteMap](sitemap.md) as central face flow management and thus minimizes
 the loading time, because only resources required for the active UI components
-are loaded selectively. 
+are loaded selectively.
+
 The outsourcing and loading of resources at runtime is optional and can be
 applied completely, partially and not at all. There is a fixed order for loading
 and embedding: CSS, JS, HTML/Markup. 
-  
+
 If the request for a resource is answered with status 404, it is assumed that
 this resource has not been outsourced. If requests are not answered with status
-200 or 404, an error is assumed.  
-The loading of resources is only executed once with the first request of the
-component for the UI.
+200 or 404, an error is assumed. The loading of resources is only executed once
+with the first request of the component for the UI.
 
 From the concept's point of view, the design patterns facade and delegation,
 which internally use additional components and abstraction, are considered for
@@ -833,7 +837,7 @@ Test.create({test() {
 Test.start();
 ```
 
-Task is primarily a meta object.  
+Task is primarily a meta object.
 
 ```
 {name:..., test:..., timeout:..., expected:..., ignore:...}
@@ -987,8 +991,8 @@ The test run can be restarted with `Test.start()`.
 Test.status();
 ```
 
-Makes a snapshot of the status of the current test.  
-The status contains details of the current task and the queue.
+Makes a snapshot of the status of the current test. The status contains details
+of the current task and the queue.
 
 [Learn more](test.m#control)
 
@@ -1002,15 +1006,15 @@ then work similar to the monitor.
 ```javascript
 Test.listen(Test.EVENT_START, function(event, status) {
     ...
-});  
-  
+});
+
 Test.listen(Test.EVENT_PERFORM, function(event, status) {
     ...
-});  
-  
+});
+
 Test.listen(Test.EVENT_FINISH, function(event, status) {
     ...
-});  
+});
 ```
 
 [Learn more](test.m#events)
