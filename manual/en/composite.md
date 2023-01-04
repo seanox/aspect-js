@@ -123,11 +123,12 @@ element, the insertion causes an error.
 ### JavaScript
 
 JavaScript is not inserted as an element, but executed directly with the eval
-method. Because the eval method can use its own namespace for variables, it is
-important to initialize the global variable better with `window[...]`.
+method. Since this uses a custom namespace and not the global namespace, global
+variables must be deliberately created in the global namespace, for which the
+window object or the namespace object should be used.
 
 ```javascript
-window['login'] = {
+Namespace.create("login", {
     validate(element, value) {
     },
     logon: {

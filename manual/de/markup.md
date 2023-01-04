@@ -852,14 +852,15 @@ auch mit dem Attribut `condition` kombiniert werden.
 </script>
 ```
 
-Da das JavaScript nicht als Element eingef&uuml;gt, sondern direkt in einem
-eigenen Namensraum ausgef&uuml;hrt wird, ist es f&uuml;r globale Variablen
-wichtig, dass diese als window-Property initialisiert werden, wenn diese
-sp&auml;ter in der Anwendungslogik verwendet werden sollen.
+JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der
+eval-Methode ausgef&uuml;hrt. Da hierbei ein eigener und nicht der globale
+Namenspace verwendet wird, m&uuml;ssen globale Variablen bewusst im globalen
+Namespace angelegt werden, wofür das window-Objekt oder das Namespace-Objekt
+genutzt werden sollte.
 
 ```html
 <script type="composite/javascript">
-    window['Foo'] = function() {
+    Namespace.create("foo", function() {
         ...
     }
 </script>

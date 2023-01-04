@@ -829,14 +829,14 @@ can also be combined with the `condition` attribute.
 </script>
 ```
 
-Because the JavaScript is not inserted as an element, but directly in a separate
-namespace executed, it is important for global variables that they are it is
-important for global variables that they are initialized as window properties if
-they are to be used later in the application logic.
+JavaScript is not inserted as an element, but executed directly with the eval
+method. Since this uses a custom namespace and not the global namespace, global
+variables must be deliberately created in the global namespace, for which the
+window object or the namespace object should be used.
 
 ```html
 <script type="composite/javascript">
-    window['Foo'] = function() {
+    Namespace.create("foo", function() {
         ...
     }
 </script>

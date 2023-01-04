@@ -127,13 +127,14 @@ verursacht das Einf&uuml;gen einen Fehler.
 
 ### JavaScript
 
-JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der eval-Methode 
-ausgef&uuml;hrt. Da die eval-Methode ggf. einen eigenen Namensraum f&uuml;r Variablen
-bilden kann, ist es wichtig, die globale Variable mit `window[...]` zu
-initialisieren.
+JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der
+eval-Methode ausgef&uuml;hrt. Da hierbei ein eigener und nicht der globale
+Namenspace verwendet wird, m&uuml;ssen globale Variablen bewusst im globalen
+Namespace angelegt werden, wofür das window-Objekt oder das Namespace-Objekt
+genutzt werden sollte.
 
 ```javascript
-window['login'] = {
+Namespace.create("login", {
     validate(element, value) {
     },
     logon: {
