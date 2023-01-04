@@ -1,7 +1,7 @@
 {
   "name": "@seanox/aspect-js",
   "version": "0.0.0",
-  "description": "Fullstack JavaScript UI Framework for SPAs incl. rendering, markup hardening, mvc, models, expression language, datasource, virtual paths, unit test and some more",
+  "description": "JavaScript framework for SPAs incl. reactivity rendering, mvc / mvvm, models, expression language, datasource, virtual paths, unit test and some more",
   "main": "release/aspect-js-min.js",
   "repository": {
     "type": "git",
@@ -14,9 +14,10 @@
     "framework",
     "spa",
     "single page application",
-    "rendering",
+    "reactivity rendering",
     "markup hardening",
     "mvc",
+    "mvvm",
     "models",
     "object binding",
     "el",
