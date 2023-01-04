@@ -110,7 +110,7 @@
       * [Permissions](mvc.md#permissions)
       * [Acceptors](mvc.md#acceptors)
     * [Navigation](mvc.md#navigation)
-    * [Permission Concept](mvc.md#permission-concept)
+    * [Berechtigungskonzept](mvc.md#berechtigungskonzept)
     * [Acceptors](mvc.md#acceptors)
   * [Virtual Paths](mvc.md#virtual-paths)
     * [Root Path](mvc.md#root-path)
