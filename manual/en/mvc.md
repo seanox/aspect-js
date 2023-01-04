@@ -87,7 +87,6 @@ In Seanox aspect-js the views are represented by the markup.
 * [Object/Model Binding](#object-model-binding)
   * [Terms](#terms)
     * [namespace](#namespace)
-    * [scope](#scope)
     * [model](#model)
     * [property](#property)
     * [qualifier](#qualifier)
@@ -514,13 +513,6 @@ is described here in the Model View Controller.
 TODO:
 
 
-#### scope
-
-The scope is based on namespace and represents it on the object level. Means the
-namespace is the description text, the scope is the object if the namespace was
-resolved in the object tree.
-
-
 #### model
 
 The model (model component / component) is a static JavaScript object in any
@@ -549,17 +541,7 @@ const model = {
 };
 ```
 
-The object/model binding is based on the IDs of the composites and their
-position and order in the DOM. The root of the namespace is always based on a
-composite ID. The namespace can be absolute, that is, the namespace corresponds
-to a composite ID, or it is based on the namespace of a parent composite ID in
-the DOM.
-
-Examples of possible namespaces:
-
-`a` + `a.b` + `a.b.c`
-`b` + `b.c`
-`c`
+TODO:
 
 
 #### property

@@ -406,9 +406,9 @@ In markup, namespaces are formed from the IDs of nested composites if they use
 the attribute `namespace`.
 
 ```html
-<div id="MasterData" composite namespace>
-  <div id="Regions" composite namespace>
-    namespace: MasterData.Regions
+<div id="masterdata" composite namespace>
+  <div id="regions" composite namespace>
+    namespace: masterdata.regions
   </div>    
 </div>
 ```
@@ -417,12 +417,12 @@ If there are other elements with an ID between the composites, they have no
 effect.
 
 ```html
-<div id="MasterData" composite namespace>
-  <section id="Section">
-    <form id="Form">
-      <div id="Regions" composite namespace>
-        namespace: MasterData.Regions
-        elements Section and Form are ignored 
+<div id="masterdata" composite namespace>
+  <section id="section">
+    <form id="form">
+      <div id="regions" composite namespace>
+        namespace: masterdata.regions
+        elements section and form are ignored 
       </div>
     </form>
   </section>  

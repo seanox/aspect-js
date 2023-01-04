@@ -232,9 +232,9 @@ Im Markup bilden sich Namespaces aus den IDs verschachtelter Composites, wenn
 diese das Attribut `namespace` verwenden.
 
 ```html
-<div id="MasterData" composite namespace>
-  <div id="Regions" composite namespace>
-    Namespace: MasterData.Regions
+<div id="masterdata" composite namespace>
+  <div id="regions" composite namespace>
+    Namespace: masterdata.regions
   </div>    
 </div>
 ```
@@ -243,12 +243,12 @@ Befinden sich weitere Elemente mit einer ID zwischen den Composites, haben diese
 keine Auswirkungen.
 
 ```html
-<div id="MasterData" composite namespace>
-  <section id="Section">
-    <form id="Form">
-      <div id="Regions" composite namespace>
-        Namespace: MasterData.Regions
-        Elements Section and Form are ignored 
+<div id="masterdata" composite namespace>
+  <section id="section">
+    <form id="form">
+      <div id="regions" composite namespace>
+        Namespace: masterdata.regions
+        Elements section and form are ignored 
       </div>
     </form>
   </section>  

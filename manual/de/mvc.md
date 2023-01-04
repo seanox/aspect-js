@@ -89,7 +89,6 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 * [Object/Model-Binding](#object-model-binding)
   * [Begriffe](#begriffe)
     * [namespace](#namespace)
-    * [scope](#scope)
     * [model](#model)
     * [property](#property)
     * [qualifier](#qualifier)
@@ -535,13 +534,6 @@ Funktionalit&auml;t hier im Model View Controller beschrieben.
 TODO:
 
 
-#### scope
-
-Der Scope basiert auf dem Namensraum und stellt diesen auf der Objektebene dar.
-Das heisst, der Namensraum ist der Beschreibungstext, der Scope ist das Objekt,
-wenn der Namensraum im Objektbaum aufgel&ouml;st wurde.
-
-
 #### model
 
 Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
@@ -570,6 +562,8 @@ const model = {
     }
 };
 ```
+
+TODO:
 
 
 #### property
