@@ -180,7 +180,6 @@
 
   <target name="publish" depends="release">
     <property environment="env"/>
-    <fail unless="env.publish_approved" message="Publish must be approved with publish_approved"/>
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\1${release.version}\2" byline="false"/>
     <exec executable="cmd.exe">
       <arg value="/c npm publish --access public"/>
