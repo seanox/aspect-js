@@ -41,7 +41,7 @@ Attributen, Object/Model-Binding, Model View Controller, Resource Bundle
   erschwert die Manipulation der Attribute im Markup  
   nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
   Verwendung eingesetzt  
-* Model View Controller    
+* Model View Controller (MVC) / Model View ViewModel (MVVM)
   unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept,
   View Object/Model Binding, ......
 * Resource-Bundle / Resource-Messages   

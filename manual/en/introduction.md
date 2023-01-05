@@ -39,7 +39,7 @@ test environment and much more.
 * Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
-* Model View Controller  
+* Model View Controller (MVC) / Model View ViewModel (MVVM)
   supports: events, virtual paths, sitemap, permission concept, view
   object/model binding, ...
 * Resource Bundle / Resource Messages  
