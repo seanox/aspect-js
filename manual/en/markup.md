@@ -265,10 +265,10 @@ blank character.
 </article>
 ```
 
-When inserting content from the DataSource, JavaScript blocks are automatically
-changed to composite/javascript and only executed by the renderer. This ensures
-that the JavaScript is only executed depending on the enclosing condition
-attribute.
+When inserting content from the DataSource, the type of JavaScript blocks is
+automatically changed to `composite/javascript` and only executed by the
+renderer. This ensures that the JavaScript is only executed depending on the
+enclosing condition attribute.
 
 
 ### interval
@@ -592,10 +592,10 @@ followed by a URL for transformation, separated by a space.
 </article>
 ```
 
-When inserting content from the DataSource, JavaScript blocks are automatically
-changed to composite/javascript and are only executed by the renderer. This
-ensures that the JavaScript is only executed depending on surrounding condition
-attributes.
+When inserting content from the DataSource, the type of JavaScript blocks is
+automatically changed to `composite/javascript` and only executed by the
+renderer. This ensures that the JavaScript is only executed depending on the
+enclosing condition attribute.
 
 
 ### release

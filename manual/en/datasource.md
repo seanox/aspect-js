@@ -171,15 +171,15 @@ and XSLT processor, the structure of XMLDocument is different. Therefore, by
 default the root entity will be returned as a node. The behavior can be changed
 with option `raw`. If this is `true`, the XMLDocument is returned as original.
 
-Another feature concerns JavaScript elements. These are automatically changed to
-composite/javascript so that they are not executed automatically when embedding,
-but are deliberately interpreted by the renderer. This is important when using
-[condition](markup.md#condition).
+Another feature concerns JavaScript elements. Their type is automatically
+changed to `composite/javascript` so that they are not executed automatically
+when embedding, but are deliberately interpreted by the renderer. This is
+important when using [condition](markup.md#condition).
 
-Another feature concerns JavaScript elements. These are automatically changed to
-composite/javascript so that they are not executed automatically when embedding,
-but are deliberately interpreted by the renderer. This is important when using
-[condition](markup.md#condition).
+Another feature concerns JavaScript elements. Their type is automatically
+changed to `composite/javascript` so that they are not executed automatically
+when embedding, but are deliberately interpreted by the renderer. This is
+important when using [condition](markup.md#condition).
 
 Another feature concerns the creation/output of text during the transformation.
 The XSLT Processor always generates XML valid text output. Any XML syntax in a

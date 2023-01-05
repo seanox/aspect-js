@@ -271,8 +271,8 @@ XSLT-Template) erwartet.
 </article>
 ```
 
-Beim Einf&uuml;gen von Inhalten aus der DataSource, werden
-JavaScript-Bl&ouml;cke automatisch in composite/javascript ge&auml;ndert und
+Beim Einf&uuml;gen von Inhalten aus der DataSource, wird der Typ von
+JavaScript-Bl&ouml;cken automatisch in `composite/javascript` ge&auml;ndert und
 erst durch den Renderer ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das
 JavaScript ggf. erst abh&auml;ngig vom umschliessenden condition-Attribut
 ausgef&uuml;hrt wird.
@@ -606,8 +606,8 @@ Leerzeichen getrennt, eine URL zur Transformation folgen kann.
 </article>
 ```
 
-Beim Einf&uuml;gen von Inhalten aus der DataSource, werden
-JavaScript-Bl&ouml;cke automatisch in composite/javascript ge&auml;ndert und
+Beim Einf&uuml;gen von Inhalten aus der DataSource, wird der Typ von
+JavaScript-Bl&ouml;cken automatisch in `composite/javascript` ge&auml;ndert und
 erst durch den Renderer ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das
 JavaScript ggf. erst abh&auml;ngig vom umschliessenden condition-Attribut
 ausgef&uuml;hrt wird.

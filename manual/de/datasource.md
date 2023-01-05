@@ -178,11 +178,11 @@ standardm&auml;ssig die Root-Entit&auml;t als Knoten zur&uuml;ckgegeben. Das
 Verhalten kann mit der Option `raw` ge&auml;ndert werden. Wenn dies `true` ist,
 wird das XMLDocument im Original zur&uuml;ckgegeben.
 
-Eine weitere Besonderheit betrifft JavaScript-Elemente. Diese werden automatisch
-in Composite/Javascript umgewandelt, so dass sie beim Einbetten nicht
-automatisch ausgef&uuml;hrt werden, sondern vom Renderer bewusst interpretiert
-werden m&uuml;ssen, was bei der Verwendung von [condition](markup.md#condition)
-zu ber&uuml;cksichtigen ist.
+Eine weitere Besonderheit betrifft JavaScript-Elemente. Deren Type wird
+automatisch in `composite/javascript` ge&auml;ndert, so dass sie beim Einbetten
+nicht automatisch ausgef&uuml;hrt werden, sondern vom Renderer bewusst
+interpretiert werden m&uuml;ssen, was bei der Verwendung von [condition](
+    markup.md#condition) zu ber&uuml;cksichtigen ist.
 
 Eine weitere Besonderheit betrifft die Erstellung/Ausgabe von Text w&auml;hrend
 der Transformation. Der XSLT-Prozessor erzeugt immer eine g&uuml;ltige
