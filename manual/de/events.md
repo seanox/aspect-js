@@ -54,7 +54,7 @@ beginnt erst nach dem Ereignis.
 ## Composite.EVENT_RENDER_NEXT
 
 Das Ereignis tritt bei rekursiver Iteration beim Rendering auf, wenn
-w&auml;hrend eines Render-Zyklus, das Rendering eines weiteren Elements startet.
+w&auml;hrend eines Renderzyklus, das Rendering eines weiteren Elements startet.
 Die Verarbeitung selbst beginnt erst nach dem Ereignis.
 
 
@@ -87,7 +87,7 @@ selbst beginnt erst nach dem Ereignis.
 ## Composite.EVENT_MOUNT_NEXT
 
 Das Ereignis tritt bei rekursiver Iteration beim Object/Model-Binding auf, wenn
-w&auml;hrend eines Render-Zyklus, das Object/Model-Binding eines weiteren
+w&auml;hrend eines Renderzyklus, das Object/Model-Binding eines weiteren
 Elements startet. Die Verarbeitung selbst beginnt erst nach dem Ereignis.
 
 

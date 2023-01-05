@@ -46,7 +46,7 @@ Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
 unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die Werte der
 Attribute k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch
 sein. Enth&auml;lt ein Attribut eine Expression, werden das Attribut und der Wert
-unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
+unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Renderzyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 
@@ -541,7 +541,7 @@ condition-Attribut kombinieren und wird dann erst ausgef&uuml;hrt, wenn die
 Bedingung `true` ist.
 
 Das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
-der Output f&uuml;r das Element mit jedem zutreffenden Render-Zyklus
+der Output f&uuml;r das Element mit jedem zutreffenden Renderzyklus
 ausgef&uuml;hrt.
 
 ```javascript

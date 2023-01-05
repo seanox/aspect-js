@@ -205,7 +205,7 @@ Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
 unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die Werte der
 Attribute k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch
 sein. Enth&auml;lt ein Attribut eine Expression, werden das Attribut und der Wert
-unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Render-Zyklus)
+unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Renderzyklus)
 erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
 
 [Mehr erfahren](markup.md#attribute)
