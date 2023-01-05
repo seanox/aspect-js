@@ -5,8 +5,8 @@
 
 The implementation of Seanox aspect-js focuses on a modular and component-based
 architecture. The framework supports a declarative designation of components in
-the markup, the outsourcing and automatic loading of resources, as well as an
-automatic object/model binding.
+the markup, the outsourcing and automatic loading of resources at runtime, as
+well as an automatic object/model binding.
 
 
 ## Contents Overview
