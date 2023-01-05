@@ -1,7 +1,7 @@
 [DataSource](datasource.md) | [TOC](README.md#resource-bundle-i18nl10n) | [Model View Controller](mvc.md)
 - - -
 
-# Resource Bundle (Messages / i18n / l10n)
+# Resource Bundle (Messages/i18n/l10n)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
 internationalization (i18n), localization (l10n) and client-related texts. The

@@ -50,7 +50,7 @@ Bundle, NoSQL datasource, test environment and much more.
   supports: events, virtual paths, sitemap, permission concept, view
   object/model binding, ...
 - Resource Bundle / Resource Messages  
-  localization (l10n), internationalization (i18n) and text outsourcing 
+  internationalization (i18n), localization (l10n) and text outsourcing 
 - NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
 - Test environment  

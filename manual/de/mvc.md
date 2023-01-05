@@ -48,9 +48,9 @@ Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche
 Funktionalit&auml;t nimmt es weitere Komponenten in Anspruch.
 
 In Seanox aspect-js werden Modelle durch statische JavaScript-Objekte
-repr&auml;sentiert, die vergleichbar mit Managed Beans als Singletons / Facades
-/ Delegates genutzt werden, so dass diese intern weitere Komponenten und
-Abstraktion verwenden k&ouml;nnen.
+repr&auml;sentiert, die vergleichbar mit managed Beans als
+Singletons/Facades/Delegates genutzt werden, so dass diese intern weitere
+Komponenten und Abstraktion verwenden k&ouml;nnen.
 
 
 ## View
@@ -78,7 +78,7 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
     * [Permissions](#permissions)
     * [Acceptors](#acceptors)
   * [Navigation](#navigation)
-  * [Permission Concept](#permission-concept)
+  * [Berechtigungskonzept](#berechtigungskonzept)
   * [Acceptors](#acceptors)
 * [Virtual Paths](#virtual-paths)
   * [Root Path](#root-path)
@@ -104,14 +104,13 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 
 ## SiteMap
 
-Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten sind als
-Page, Faces und Facets organisiert, auf die &uuml;ber virtuelle Pfade
-zugegriffen wird. Zu diesem Zweck stellt SiteMap eine hierarchische
-Verzeichnisstruktur zur Verf&uuml;gung, die auf den virtuellen Pfaden f&uuml;r
-alle Ansichten basiert. Die SiteMap steuert den Zugriff und die Visualisierung
-(Ein- und Ausblenden) der Ansichten, den sogenannten Face-Flow. Face-Flow und
-Visualisierung funktionieren resolut und verwenden das DOM zum Einf&uuml;gen und
-Entfernen der Ansichten (Faces und Facets).
+Die Darstellung in Seanox aspect-js ist in Views organisiert, die Page, Faces
+sowie Facets nutzen und &uuml;ber virtuelle Pfade angesprochen werden. F&uuml;r
+diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
+Verf&uuml;gung, die auf den virtuellen Pfaden aller Views basiert. Die SiteMap
+steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Views --
+der sogenannten Face-Flow. Face-Flow und Visualisierung funktionieren resolut
+und verwenden das DOM zum Einfügen und Entfernen der Views (Faces und Facets).
 
 ```
 +-----------------------------------------------+
@@ -152,20 +151,16 @@ Laufzeitumgebung der gesamten Anwendung.
 
 Ein Face ist die prim&auml;re Projektion von Modellen/Komponenten/Inhalten.
 Diese Projektion kann zus&auml;tzliche Unterstrukturen in Form von Facets und
-Sub-Faces enthalten. Faces sind Komponenten, die verschachtelt werden
-k&ouml;nnen. So werden &uuml;bergeordneten Faces zu partiellen Faces, wenn sich
-der Pfad auf ein Sub-Face bezieht.
-
-Ein Sub-Face wird mit allen seinen &uuml;bergeordneten Faces angezeigt. Wenn die
-&uuml;bergeordneten Faces zus&auml;tzliche Facets enthalten, werden diese Facets
-nicht angezeigt. Die &uuml;bergeordneten Faces werden dann nur
-teilweise/partiell dargestellt.
+Sub-Faces enthalten. So werden &uuml;bergeordnete Faces zu partiellen Faces,
+wenn sich der Pfad auf ein Sub-Face bezieht. In dem Fall werden alle
+&uuml;bergeordneten Faces teilweise/partiell angezeigt, also ohne deren evtl.
+enthaltenen Facets.
 
 
 #### Facets
 
 Facets sind Teile eines Faces (Projektion) und sind in der Regel keine
-eigenst&auml;ndige Ansicht. So k&ouml;nnen z.B. bei einem Such-Formular die
+eigenst&auml;ndige View. So k&ouml;nnen z.B. bei einem Such-Formular die
 Eingabemaske und die Ergebnistabelle separate Facets eines Faces sein, ebenso
 wie Article und/oder Section in einem Face. Sowohl Face als auch Facets sind
 &uuml;ber virtuelle Pfade erreichbar. Der Pfad zu Facets bewirkt, dass das
@@ -230,8 +225,8 @@ h&ouml;heren bekannten/berechtigten Pfad weitergeleitet.__
 
 __Ohne Face-Flow gibt es keine g&uuml;ltigen Pfade. Werden eine
 Benutzeroberfl&auml;che oder Komponenten ohne Face-Flow verwendet, m&uuml;ssen
-diese als _statisch_ gekennzeichnet werden, da die Komponenten sonst
-ausgeblendet (aus dem DOM entfernt) werden.__
+diese als _static_ gekennzeichnet werden, da die Komponenten sonst ausgeblendet
+(aus dem DOM entfernt) werden.__
 
 ```html
 <html>
@@ -268,18 +263,18 @@ SiteMap.customize({
 ```
 
 Alle angeforderten Pfade durchlaufen die registrierten permit-Methoden. Diese
-entscheiden, was mit dem Pfad passiert. Von jeder permit-Methode werden folgende
-R&uuml;ckgabewerte erwartet:
+entscheiden, was mit dem Pfad passiert. Von jeder permit-Methode wird einer der
+folgenden R&uuml;ckgabewerte erwartet:
 
-__True__ Die Validierung ist erfolgreich und die Iteration &uuml;ber weitere
-permit-Methoden wird fortgesetzt. Wenn alle permit-Methoden wahr sind und damit
-den Pfad best&auml;tigen, wird er verwendet.
+`boolean true` Die Validierung ist erfolgreich und die Iteration &uuml;ber
+weitere permit-Methoden wird fortgesetzt. Wenn alle permit-Methoden wahr sind
+und damit den Pfad best&auml;tigen, wird er verwendet.
 
-__String__ Die Validierung (Iteration &uuml;ber weitere permit-Merhoden) wird
+`string` Die Validierung (Iteration &uuml;ber weitere permit-Merhoden) wird
 abgebrochen und es folgt einen Weiterleitung an die zur&uuml;ckgegebene
 Zeichenkette. 
 
-__Otherwise__ Der Pfad gilt als ung&uuml;ltig/unautorisiert, die Validierung
+`otherwise` Der Pfad gilt als ung&uuml;ltig/unautorisiert, die Validierung
 (Iteration &uuml;ber weitere permit-Merhoden) wird abgebrochen und an den
 urspr&uuml;nglichen Pfad weitergeleitet.
 
@@ -289,7 +284,7 @@ urspr&uuml;nglichen Pfad weitergeleitet.
 Akzeptoren arbeiten &auml;hnlich wie die permit-Methoden. Im Unterschied dazu
 werden die Methoden der Akzeptoren nur bei den Pfaden aufgerufen, deren
 RegExp-Muster dem angefragten Pfad entsprechen. Auch von den Methoden der
-Akzeptoren werden die gleiche Arten von R&uuml;ckgabewerte wie bei den
+Akzeptoren werden die gleichen Arten von R&uuml;ckgabewerten wie bei den
 [Permissions](#permissions) erwartet.
 
 ```javascript
@@ -343,7 +338,7 @@ SiteMap.navigate("x#y#z");
 ```
 
 
-### Permission Concept
+### Berechtigungskonzept
 
 Das Berechtigungskonzept basiert auf permit-Methoden, die als Callback-Methoden
 mit der Konfiguration des Face-Flows definiert werden. Es k&ouml;nnen mehrere
@@ -456,10 +451,10 @@ Variable Pfade sind eine Abbildung (Mapping) von virtuellen auf physische Pfade.
 Die Erkl&auml;rung klingt im Kontext der SiteMap und derer virtueller Pfade
 etwas verwirrend und meint hier eine weitere zus&auml;tzliche virtuelle
 Abbildung von Pfaden innerhalb der SiteMap. Dabei bildet ein Pfad der SiteMap
-ein festes Ziel, welches Face und Facet sein k&ouml;nnen. Der Pfad kann nun
+ein festes Ziel, welches ein Face und Facet sein kann. Der Pfad kann nun
 beliebig erweitert werden ohne dass sich das Ziel &auml;ndert. Das Ziel kann den
 erweiterten Pfad dann z.B. zur Parameter&uuml;bergabe nutzen, was vergleichbar
-mit PATH_TRANSLATED und PATH_INFO im CGI ist. 
+mit `PATH_TRANSLATED` und `PATH_INFO` im CGI ist. 
 
 Zur Konfiguration variabler Pfade wird die Zeichenfolge `...` verwendet, die
 einem Facet nachgestellt wird oder direkt als Facet verwendet werden kann.
@@ -475,7 +470,7 @@ SiteMap.customize({
 Die Pfade `#contact` und `#project` sind in diesem Beispiel variabel und
 k&ouml;nnen somit beliebig erweitert werden. Das Ziel ist in beiden F&auml;llen
 fest und die Anfragen werden von `#contact` bzw. `#project` verarbeitet. Die
-Erweitertung vom Pfad kann mit der Methode `SiteMap.lookup(path)` ermittelt
+Erweiterung vom Pfad kann mit der Methode `SiteMap.lookup(path)` ermittelt
 werden. Das zur&uuml;ckgegebene Meta-Objekt enth&auml;lt bei variablen Pfaden
 mit erweiterten Pfaden diesen im data-Property. 
 

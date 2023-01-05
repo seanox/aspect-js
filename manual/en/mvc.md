@@ -47,8 +47,8 @@ The model serves primarily the view for the representation and management of the
 states, for functional functionality it takes up further components.
 
 In Seanox aspect-js models are represented by static JavaScript objects, which
-are used as singletons / facades / delegates comparable to managed beans, so
-that this can use further components and abstraction internally.
+are used as singletons/facades/delegates comparable to managed beans, so that
+this can use further components and abstraction internally.
 
 
 ## View
@@ -147,14 +147,11 @@ environment of the entire application.
 
 #### Face
 
-A face is the primary projection of models/component/content. This projection
-may contain additional sub-components, in form of facets and sub-faces. Faces
-are components that can be nested. Thus, parent faces become partial faces when
-the path refers to a sub-face.
-
-A sub-face is presented with all its parent partial faces. If the parent faces
-contain additional facets, these facets are not displayed. The parent faces are
-therefore only partially presented.
+A face is the primary projection of models/components/content. This projection
+can contain additional substructures in the form of faces and sub-faces. Thus,
+parent faces become partial faces if the path refers to a sub-face. In this
+case, all parent faces are displayed partially, i.e. without their possibly
+contained faces.
 
 
 #### Facets
@@ -260,14 +257,14 @@ All requested paths pass through the registered permit methods. These decide
 what happens to the path. The following return values are expected from each
 permit method:
 
-__True__ The validation is successful and the iteration via further permit
+`boolean true` The validation is successful and the iteration via further permit
 methods is continued. If all permit methods return true and thus confirm the
 path, it is used.
 
-__String__ The validation (iteration over further permit-methods) will be
-aborted and it will be forwarded to the path corresponding to the string. 
+`string` The validation (iteration over further permit-methods) will be aborted
+and it will be forwarded to the path corresponding to the string. 
 
-__Otherwise__ The path is regarded as invalid/unauthorized, the validation
+`otherwise` The path is regarded as invalid/unauthorized, the validation
 (iteration over further permit-methods) will be aborted and is forwarded to the
 original path.
 
@@ -438,7 +435,7 @@ Here, it means another additional virtual mapping of paths inside of the
 SiteMap. A path of the SiteMap represents a fixed target, which can be Face and
 Facet. The path can now be extended without changing the target. The target can
 then use the extended path, for example, to pass parameters, which is comparable
-to PATH_TRANSLATED and PATH_INFO in CGI. 
+to `PATH_TRANSLATED` and `PATH_INFO` in CGI. 
 
 To configure variable paths, the character string `...` is used, which can
 follow a facet or be used directly as a facet.
