@@ -14,8 +14,8 @@ und leichtgewichtigem Ansatz zur Implementierung von Single-Page Applications
 
 Seanox aspect-js greift dazu den deklarativen Ansatz von HTML auf und erweitert
 ihn um Expression Language, reaktives Rendering mit zus&auml;tzlichen
-Attributen, Object/Model-Binding, Model View Controller, Resource Bundle (i18n),
-NoSQL-Datasource, Testumgebung und vieles mehr.
+Attributen, Object/Model-Binding, Model View Controller, Resource Bundle
+(i18n/l10n), NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
 # Merkmale
@@ -45,7 +45,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept,
   View Object/Model Binding, ......
 * Resource-Bundle / Resource-Messages   
-  Lokalisierung, Internationalisierung (i18n) und Text-Auslagerung
+  Internationalisierung (i18n), Lokalisierung (l10n) und Text-Auslagerung
 * NoSQL-DataSource auf Basis von XML  
   leichtgewichtiges Datenmanagement f&uuml;r Aggregation / Projektion / Transformation
 * Testumgebung  
@@ -74,7 +74,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   * [render](#render)
   * [release](#release)
 * [DataSource](#datasource)
-* [Resource Bundle (Messages / i18n)](#resource-bundle-messages--i18n)
+* [Resource Bundle (Messages/i18n/l10n)](#resource-bundle-messages-i18n-l10n)
 * [Model View Controller](#model-view-controller)
   * [Controller](#controller)
   * [Model](#model)
@@ -409,7 +409,7 @@ werden erst bei Bedarf automatisch nachgeladen.
 ```
 
 Details zur Verwendung von Composites / modularen Komponente werden in den
-Abschnitten [Composites](composites.md) und [Model View Controller](mvc.md)
+Abschnitten [Composites](composite.md) und [Model View Controller](mvc.md)
 beschrieben.
 
 [Mehr erfahren](markup.md#composite)
@@ -453,7 +453,7 @@ gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein
 muss.
 
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
-HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis 
+HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
 ermitteln oder wurde keine HTML5-Validierung festgelegt, wird die Validierung
 vom JavaScript-Model aufgerufen, wenn das Modell eine entsprechende
 validate-Methode `boolean validate(element, value)` bereitstellt und das zu
@@ -570,17 +570,15 @@ XSLT transformiert werden kann.
 [Mehr erfahren](datasource.md#datasource)
 
 
-## Resource Bundle (Messages / i18n)
+## Resource Bundle (Messages/i18n/l10n)
 
 (Resource)Messages ist eine statische Erweiterung der [DataSource](
-    datasource.md) f&uuml;r Internationalisierung, Lokalisierung (i18n) sowie
-f&uuml;r Mandanten bezogene Texte.
+    datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung (l10n)
+sowie f&uuml;r Mandanten bezogene Texte. Die Implementierung basiert auf einer
+Menge von Schl&uuml;ssel-Wert-Paaren in Form von Label-Elementen, die in der
+Datei `locales.xml` im DataSource-Verzeichnis definiert werden.
 
-Die Implementierung basiert auf einer Menge von Schl&uuml;ssel-Wert-Paaren in Form
-von Label-Elementen, die in der Datei `locales.xml` im DataSource-Verzeichnis
-definiert werden.
-
-[Mehr erfahren](messages.md)
+[Mehr erfahren](message.md)
 
 
 ## Model View Controller
@@ -1001,7 +999,7 @@ Test.start({auto: boolean});
 ```
 
 Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
-der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Paramete
+der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
 `auto` ignoriert und der Start sofort ausgef&uuml;hrt.
 
 ```javascript

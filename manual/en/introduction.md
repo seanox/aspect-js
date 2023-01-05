@@ -13,8 +13,8 @@ the implementation of single-page applications (SPAs) was born.
 
 Seanox aspect-js takes the declarative approach of HTML and extends it with
 expression language, reactive rendering with additional attributes, object/model
-binding, model view controller, resource bundle (i18n), NoSQL datasource, test
-environment and much more.
+binding, model view controller, resource bundle (i18n/l10n), NoSQL datasource,
+test environment and much more.
 
 
 # Features
@@ -43,7 +43,7 @@ environment and much more.
   supports: events, virtual paths, sitemap, permission concept, view
   object/model binding, ...
 * Resource Bundle / Resource Messages  
-  localization, internationalization (i18n) and text outsourcing 
+  internationalization (i18n), localization (l10n) and text outsourcing 
 * NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
 * Test environment  
@@ -72,7 +72,7 @@ environment and much more.
   * [render](#render)
   * [release](#release)
 * [DataSource](#datasource)
-* [Resource Bundle (Messages / i18n)](#resource-bundle-messages--i18n)
+* [Resource Bundle (Messages/i18n/l10n)](#resource-bundle-messages--i18n-l10n)
 * [Model View Controller](#model-view-controller)
   * [Controller](#controller)
   * [Model](#model)
@@ -298,7 +298,7 @@ As value an interval in milliseconds is expected, which can also be formulated
 as expression. Processing is concurrent or asynchronous, but not parallel. Means
 that the processing is to start after the set time interval, but this does not
 start until a JavaScript procedure started before has been completed. For this
-reason, the interval is to be understood as near real-time, but not as exact
+reason, the interval is to be understood as near real-time, but not as exact.
 The interval attribute expects a value in milliseconds. An invalid value causes
 console output. The interval starts automatically and is active as long as the
 element exists in the DOM.
@@ -378,7 +378,7 @@ exists in the DOM.
 
 ### composite
 
-Marks an element in the markup as [Composite](composites.md). Composites are
+Marks an element in the markup as [Composite](composite.md). Composites are
 modular components that have an elementary meaning in Seanox aspect-js and
 necessarily require an identifier (ID). They are used by the [SiteMap](
     mvc.md#sitemap) as faces, so as targets for virtual paths in the face-flow,
@@ -395,8 +395,8 @@ only loaded automatically when necessary.
 </article>
 ```
 
-Details about using composites / modular components are described in 
-[Composites](composites.md) and [Model View Controller](mvc.md).
+Details about using composites / modular components are described in
+[Composites](composite.md) and [Model View Controller](mvc.md).
 
 [Learn more](markup.md#composite)
 
@@ -549,14 +549,14 @@ the result can be transformed with XSLT.
 [Learn more](datasource.md#datasource)
 
 
-## Resource Bundle (Messages / i18n)
+## Resource Bundle (Messages/i18n/l10n)
 
 (Resource)Messages is a static [DataSource](datasource.md) extension for
-internationalization, localization (i18n) and client-related texts. The
+internationalization (i18n), localization (l10n) and client-related texts. The
 implementation is based on a set of key-value or label-value data which is
 stored in the `locales.xml` in the DataSource directory.
 
-[Learn more](messages.md)
+[Learn more](message.md)
 
 
 ## Model View Controller
