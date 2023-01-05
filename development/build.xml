@@ -196,7 +196,7 @@
     <exec executable="cmd.exe">
       <arg value="/c npm publish --access public"/>
     </exec>
-    <copy file="${workspace}/package.tmp" tofile="${workspace}/package.json" overwrite="true"/>
+    <move file="${workspace}/package.tmp" tofile="${workspace}/package.json" overwrite="true"/>
 
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\10.0.0\2" byline="false"/>
   </target>
