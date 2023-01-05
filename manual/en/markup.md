@@ -832,7 +832,7 @@ can also be combined with the `condition` attribute.
 JavaScript is not inserted as an element, but executed directly with the eval
 method. Since this uses a custom namespace and not the global namespace, global
 variables must be deliberately created in the global namespace, for which the
-window object or the namespace object should be used.
+window or Namespace API should be used.
 
 ```html
 <script type="composite/javascript">

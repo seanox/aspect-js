@@ -855,8 +855,8 @@ auch mit dem Attribut `condition` kombiniert werden.
 JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der
 eval-Methode ausgef&uuml;hrt. Da hierbei ein eigener und nicht der globale
 Namenspace verwendet wird, m&uuml;ssen globale Variablen bewusst im globalen
-Namespace angelegt werden, wofür das window-Objekt oder das Namespace-Objekt
-genutzt werden sollte.
+Namespace angelegt werden, wof&uuml;r das window- oder Namespace-API genutzt
+werden sollte.
 
 ```html
 <script type="composite/javascript">

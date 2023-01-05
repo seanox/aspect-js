@@ -133,8 +133,8 @@ HEAD-Element verursacht das Einf&uuml;gen einen Fehler.
 JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der
 eval-Methode ausgef&uuml;hrt. Da hierbei ein eigener und nicht der globale
 Namenspace verwendet wird, m&uuml;ssen globale Variablen bewusst im globalen
-Namespace angelegt werden, wofür das window-Objekt oder das Namespace-Objekt
-genutzt werden sollte.
+Namespace angelegt werden, wof&uuml;r das window- oder Namespace-API genutzt
+werden sollte.
 
 ```javascript
 Namespace.create("login", {
@@ -187,7 +187,7 @@ Objektebene durch das Verketten von Objekten zu einem Objektbaum abbilden. Dabei
 bildet jede Ebene des Objektbaums einen Namespace, was auch als Domain
 betrachtet werden kann.
 
-Seanox aspect-js erweitert dazu die JavaScript-API um das Namespace-Objekt.
+Seanox aspect-js erweitert dazu das JavaScript-API um das Namespace-API.
 
 ```javascript
 Namespace.using(...);

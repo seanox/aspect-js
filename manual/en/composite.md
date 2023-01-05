@@ -127,7 +127,7 @@ element, the insertion causes an error.
 JavaScript is not inserted as an element, but executed directly with the eval
 method. Since this uses a custom namespace and not the global namespace, global
 variables must be deliberately created in the global namespace, for which the
-window object or the namespace object should be used.
+window or Namespace API should be used.
 
 ```javascript
 Namespace.create("login", {
@@ -178,7 +178,7 @@ Although packages are not a feature of JavaScript, they can be mapped at the
 object level by concatenating objects into an object tree. Here, each level of
 the object tree forms a namespace, which can also be considered a domain.
 
-Seanox aspect-js extends the JavaScript API with the namespace object for this
+Seanox aspect-js extends the JavaScript API with the Namespace API for this
 purpose.
 
 ```javascript
