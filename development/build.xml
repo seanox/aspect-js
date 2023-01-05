@@ -89,9 +89,13 @@
 
     <delete dir="${workspace.release}"/>
     <mkdir dir="${workspace.release}"/>
+
     <property name="release.file" value="${workspace.release}/${ant.project.name}.js"/>
     <property name="release.file.min" value="${workspace.release}/${ant.project.name}-min.js"/>
-    <concat destfile="${release.file}" append="false">
+    <property name="release.file.lite" value="${workspace.release}/${ant.project.name}-lite.js"/>
+    <property name="release.file.lite.min" value="${workspace.release}/${ant.project.name}-lite-min.js"/>
+
+    <concat destfile="${release.file.lite}" append="false">
       <filelist dir="${workspace.sources}">
         <file name="extension.js"/>
         <file name="datasource.js"/>
@@ -99,16 +103,33 @@
         <file name="composite.js"/>
         <file name="reactive.js"/>
         <file name="mvc.js"/>
-        <file name="test.js"/>
-      </filelist>   
+      </filelist>
     </concat>
+
+    <concat destfile="${release.file}" append="false">
+      <filelist dir="${workspace.sources}">
+        <file name="${release.file.lite}"/>
+        <file name="test.js"/>
+      </filelist>
+    </concat>
+
+    <replaceregexp file="${release.file.lite}" flags="g" byline="false"
+        match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
+    <replaceregexp file="${release.file.lite}" flags="g" byline="false"
+        match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
+    <copy file="${release.file.lite}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
+
     <replaceregexp file="${release.file}" flags="g" byline="false"
         match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
     <replaceregexp file="${release.file}" flags="g" byline="false"
         match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
     <copy file="${release.file}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
+
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c npm link ."/>
+    </exec>
+    <exec executable="cmd.exe" dir="compress">
+      <arg value="/c uglifyjs ${release.file.lite} -c -m -o ${release.file.lite.min}"/>
     </exec>
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c uglifyjs ${release.file} -c -m -o ${release.file.min}"/>
@@ -116,16 +137,21 @@
     <exec executable="cmd.exe" dir="compress">
       <arg value="/c npm uninstall -g uglify-js"/>
     </exec>
+    <copy file="${release.file.lite.min}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-lite-min.js" overwrite="true"/>
     <copy file="${release.file.min}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-min.js" overwrite="true"/>
     <copy file="CHANGES" todir="${workspace.release}"/>
     <copy file="LICENSE" todir="${workspace.release}"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-lite.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-lite-min.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-min.js"/>
       <fileset dir="${workspace.release}" includes="CHANGES"/>
       <fileset dir="${workspace.release}" includes="LICENSE"/>
     </touch>
     <zip destfile="${workspace.release}/${ant.project.name}-${release.version}.zip">
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-lite.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-lite-min.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-min.js"/>
       <fileset dir="${workspace.release}" includes="CHANGES"/>
@@ -155,11 +181,23 @@
   </target>
 
   <target name="publish" depends="release">
-    <property environment="env"/>
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\1${release.version}\2" byline="false"/>
     <exec executable="cmd.exe">
       <arg value="/c npm publish --access public"/>
     </exec>
+
+    <copy file="${workspace}/package.json" tofile="${workspace}/package.tmp" overwrite="true"/>
+    <replaceregexp file="${workspace}/package.json"
+        match="(@seanox/aspect-js)" flags="g" byline="false" replace="\1-lite"/>
+    <replaceregexp file="${workspace}/package.json"
+        match="(release/aspect-js)(-min.js)" flags="g" byline="false" replace="\1-lite\2"/>
+    <replaceregexp file="${workspace}/package.json"
+        match=",\s+(\x34)?unit test(\x34)?" flags="g" byline="false" replace=""/>
+    <exec executable="cmd.exe">
+      <arg value="/c npm publish --access public"/>
+    </exec>
+    <copy file="${workspace}/package.tmp" tofile="${workspace}/package.json" overwrite="true"/>
+
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\10.0.0\2" byline="false"/>
   </target>
 
