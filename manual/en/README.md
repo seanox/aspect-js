@@ -92,7 +92,7 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### Resource Bundle (i18n/l10n)
 
-* [Resource Bundle (i18n/l10n)](message.md#resource-bundle-messages--i18n--l10n)
+* [Resource Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)
 
 
 ### Model View Controller
