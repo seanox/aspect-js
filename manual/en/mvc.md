@@ -478,13 +478,11 @@ mail in the background.
 
 ## View Model Binding
 
-Object binding is about linking HTML elements with corresponding model objects
-that exist in JavaScript.
-
-The view model binding part also belongs to the Model View Controller and is
-implemented in Seanox aspect-js by the Composite API. SiteMap is an extension
-and is based on the Composite API. For a better understanding, the functionality
-is described here in the Model View Controller.
+View Model Binding is about linking HTML elements with corresponding model
+objects that exist in JavaScript. This is a part also belongs to the Model View
+Controller and is implemented in Seanox aspect-js by the Composite API. SiteMap
+is an extension and is based on the Composite API. For a better understanding,
+the functionality is described here in the Model View Controller.
 
 
 ### Terms
@@ -703,11 +701,11 @@ More details can be found in chapter [Dock](#undock)
 ### Synchronization
 
 In addition to the static linking and assignment of HTML elements to JavaScript
-models, the object binding also includes the synchronization of values between
-the HTML elements and the fields of the JavaScript models. The synchronization
-depends on events that are declared for the HTML element with the attribute
-`events` and so the synchronization is executed only when one of the defined
-events occurs.
+models, the view model binding also includes the synchronization of values
+between the HTML elements and the fields of the JavaScript models. The
+synchronization depends on events that are declared for the HTML element with
+the attribute `events` and so the synchronization is executed only when one of
+the defined events occurs.
 
 More details about the usage can be found in chapter
 [events](markup.md#events).

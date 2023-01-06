@@ -5,7 +5,7 @@
 
 Mit Seanox aspect-js wird der deklarative Ansatz von HTML aufgegriffen und
 erweitert. Neben der Expression-Language werden den HTML-Elementen
-zus&auml;tzliche Attribute f&uuml;r Funktionen und Objekt-Bindung
+zus&auml;tzliche Attribute f&uuml;r Funktionen und dem View-Model-Binding
 bereitgestellt. Der entsprechende Renderer ist in der Composite-Implementierung
 enthalten und &uuml;berwacht das DOM aktiv &uuml;ber den MutationObserver und
 funktioniert und reagiert somit rekursiv auf Ver&auml;nderungen im DOM.
