@@ -1,7 +1,7 @@
-[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle-i18nl10n) | [Model View Controller](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle-i18nl10n) | [Model-View-Controller](mvc.md)
 - - -
 
-# Resource Bundle (Messages/i18n/l10n)
+# Resource-Bundle (Messages/i18n/l10n)
 
 (Resource)Messages ist eine statische Erweiterung der
 [DataSource](datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung
@@ -74,4 +74,4 @@ beginnt.
 
 - - -
 
-[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle) | [Model View Controller](mvc.md)
+[DataSource](datasource.md) | [Inhalt](README.md#resource-bundle) | [Model-View-Controller](mvc.md)
