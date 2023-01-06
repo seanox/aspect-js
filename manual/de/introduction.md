@@ -1,4 +1,4 @@
-[Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Markup](markup.md)
+[Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Expression Language](expression.md)
 - - -
 
 # Einf&uuml;hrung
@@ -143,7 +143,7 @@ einbezogen wird.
 Expressions bzw. die Expression Language (EL) oder in der vorliegenden
 Dokumentation auch Ausdruck und Ausdr&uuml;cke genannt, sind ein einfacher
 Zugang zum client-seitigen JavaScript und damit zu den Modellen und Komponenten.
-In den Expressions wird das komplette JavaScript-API unterst&uuml;tzt, die mit
+In den Expressions wird das komplette JavaScript-API unterst&uuml;tzt, das mit
 zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
 die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
@@ -1058,4 +1058,4 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 
 - - -
 
-[Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Markup](markup.md)
+[Motivation](motivation.md) | [Inhalt](README.md#einf-hrung) | [Expression Language](expression.md)

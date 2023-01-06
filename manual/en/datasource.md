@@ -1,4 +1,4 @@
-[Expression Language](expression.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
+[Markup](markup.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
 - - -
 
 # DataSource
@@ -94,7 +94,7 @@ with the as default declared language.
 ## Locator
 
 The data in the data storage is addressed with a locator. A locator is a URL
-(`xml://...` or `xslt://...`) that is used absolute and relative to the
+(`xml://...` or `xslt://...`) that is used absolute or relative to the
 DataSource data storage, but does not contain a locale (language specification)
 and file extension in the path. The locale is determined automatically for the
 language setting of the browser, or if this is not supported, the standard from
@@ -184,7 +184,7 @@ important when using [condition](markup.md#condition).
 Another feature concerns the creation/output of text during the transformation.
 The XSLT Processor always generates XML valid text output. Any XML syntax in a
 text is automatically masked. This makes the generation of markup difficult. The
-attribute `escape` was introduced for this purpose and can be used in XML and
+attribute `escape` was introduced for this purpose and can be used in XML and/or
 XSLT files. The attribute expects the values `yes`, `on`, `true` or `1`. In this
 case the automatic escaping is cancelled or undone.
 
@@ -333,4 +333,4 @@ The DataSource can also be used directly in the markup with the attributes
 
 - - -
 
-[Expression Language](expression.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
+[Markup](markup.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)

@@ -29,7 +29,7 @@ __Das reaktive Verhalten basiert auf Notifications innerhalb vom ReactProxy mit
 denen das Rendering angesteuert wird. Damit die Notifications eingerichtet
 werden k&ouml;nnen, muss der ReactProxy die Konsumenten der Daten kennen, wozu
 er die erforderlichen Informationen beim Parsen und Rendern vom Markup sammelt,
-was auch f&auuml;r Markup funktioniert, welches erst zur Laufzeit eingef&uuml;gt
+was auch f&uuml;r Markup funktioniert, welches erst zur Laufzeit eingef&uuml;gt
 wird. Somit muss der ReactProxy immer vor den Konsumenten existieren.__
 
 Beenden l&auml;sst sich das reaktive Rendering durch das gezielte L&ouml;schen

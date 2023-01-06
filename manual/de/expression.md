@@ -1,11 +1,11 @@
-[Markup](markup.md) | [Inhalt](README.md#expression-language) | [DataSource](datasource.md)
+[Einf&uuml;hrung](introduction.md) | [Inhalt](README.md#expression-language) | [Markup](markup.md)
 - - -
 
 # Expression Language
 
 Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
 clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
-aspect-js. Expressions unterst&uuml;tzen das komplette JavaScript-API, die mit
+aspect-js. Expressions unterst&uuml;tzen das komplette JavaScript-API, das mit
 zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
 die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
@@ -112,7 +112,7 @@ not !         or    ||
 
 ### Value
 
-Alles was kein Literal und Keyword ist, ist potenziell ein Value. Values
+Alles was kein Literal und Keyword ist, ist potenziell ein Value. Value
 repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder einer
 Variablen. Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die
 Eigenschaft oder wenn vorhanden auf einen korrespondierenden Getter
@@ -140,7 +140,7 @@ nachfolgend mit ihren Unterschieden und Eigenheiten erkl&auml;rt werden.
 
 ### Value-Expression
 
-Alles was kein Literal und Keyword ist, ist potenziell ein Value. Values
+Alles was kein Literal und Keyword ist, ist potenziell ein Value. Value
 repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder einer
 Variablen. Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die
 Eigenschaft oder wenn vorhanden auf einen korrespondierenden Getter
@@ -190,7 +190,7 @@ einen Doppelpunkt von der eigentlichen Expression getrennt ist.
 {{foo:1 +2 +3 + 'x Hallo'}}
 ```
 
-Erstellt oder setzt die globale Variablen `foo` mit dem Wert `6x Hallo`.
+Erstellt oder setzt die globale Variable `foo` mit dem Wert `6x Hallo`.
 
 Die Expression entspricht der JavaScript-Syntax:
     `var foo = 1 +2 +3 + 'x Hallo';`
@@ -242,4 +242,4 @@ h1:after {
 
 - - -
 
-[Markup](markup.md) | [Inhalt](README.md#expression-language) | [DataSource](datasource.md)
+[Einf&uuml;hrung](introduction.md) | [Inhalt](README.md#expression-language) | [Markup](markup.md)

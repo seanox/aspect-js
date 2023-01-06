@@ -1,4 +1,4 @@
-[Markup](markup.md) | [TOC](README.md#expression-language) | [DataSource](datasource.md)
+[Introduction](introduction.md) | [TOC](README.md#expression-language) | [Markup](markup.md)
 - - -
 
 # Expression Language
@@ -115,7 +115,7 @@ not !         or    ||
 
 ### Value
 
-Anything that is not a literal and keyword is potentially a Value. Values
+Anything that is not a literal and keyword is potentially a Value. Value
 represents the value of an object property or a variable. In the case of object
 properties, this is referred to directly or, if available, to a corresponding
 getter (get method). If neither an object property nor a variable can be
@@ -142,7 +142,7 @@ these are explained with their differences and peculiarities.
 
 ### Value-Expression
 
-Anything that is not a literal and keyword is potentially a Value. Values
+Anything that is not a literal and keyword is potentially a Value. Value
 represents the value of an object property or a variable. In the case of object
 properties, this is referred to directly or, if available, to a corresponding
 getter (get method).
@@ -188,10 +188,10 @@ which use the word characters `_ a-z A-Z 0-9` and is separated from the actual
 expression by a colon.
 
 ```
-{{foo:1 +2 +3 + 'x Hallo'}}
+{{foo:1 +2 +3 + 'x hello'}}
 ```
 
-Creates or sets the value for global variable `foo` with `6x Hallo`.
+Creates or sets the value for global variable `foo` with `6x hello`.
 
 The expression corresponds to the JavaScript syntax:
     `var foo = 1 +2 +3 + 'x hello';`
@@ -242,4 +242,4 @@ h1:after {
 
 - - -
 
-[Markup](markup.md) | [TOC](README.md#expression-language) | [DataSource](datasource.md)
+[Introduction](introduction.md) | [TOC](README.md#expression-language) | [Markup](markup.md)

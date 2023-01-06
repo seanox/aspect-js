@@ -1,4 +1,4 @@
-[Expression Language](expression.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
+[Markup](markup.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
 - - -
 
 # DataSource
@@ -92,14 +92,14 @@ DataSource.localize("de");
 
 Die aktuell verwendete Sprache kann als Gebietsschema per `DataSource.locale`
 abgefragt werden. Alle verf&uuml;gbaren Sprachen liefert `DataSource.locales`
-als Array von Gebietsschemen, das mit dem als default deklarierte Gebietsschema
+als Array von Gebietsschemen, das mit dem als default deklarierten Gebietsschema
 beginnt.
 
 
 ## Locator
 
 Die Daten im Data Storage werden mit einem Locator adressiert. Ein Locator ist
-eine URL (`xml://...` oder `xslt://...`), die absolut und relativ zum
+eine URL (`xml://...` oder `xslt://...`), die absolut oder relativ zum
 Datenspeicher der DataSource verwendet wird, aber kein Locale (Sprachangabe) und
 Dateiendung im Pfad enth&auml;lt. Die Sprache wird automatisch &uuml;ber das
 Gebietsschema des Browsers bestimmt, oder wenn dies nicht unterst&uuml;tzt wird,
@@ -145,7 +145,7 @@ DataSource.fetch("xml://paper", "xslt://article");
 Mit der Transformation wird ein neues XMLDocument erstellt. Je nach Browser und
 XSLT-Prozessor ist die Struktur vom XMLDocument unterschiedlich. Daher wird
 standardm&auml;ssig die Root-Entit&auml;t als Knoten zur&uuml;ckgegeben. Das
-Verhalten kann mit der Option `raw` ge&auml;ndert werden. Wenn dies `true` ist,
+Verhalten kann mit der Option `raw` ge&auml;ndert werden. Wenn diese `true` ist,
 wird das XMLDocument im Original zur&uuml;ckgegeben.
 
 ```javascript
@@ -175,7 +175,7 @@ DataSource.fetch(xml, style, true);
 Mit der Transformation wird ein neues XMLDocument erstellt. Je nach Browser und
 XSLT-Prozessor ist die Struktur vom XMLDocument unterschiedlich. Daher wird
 standardm&auml;ssig die Root-Entit&auml;t als Knoten zur&uuml;ckgegeben. Das
-Verhalten kann mit der Option `raw` ge&auml;ndert werden. Wenn dies `true` ist,
+Verhalten kann mit der Option `raw` ge&auml;ndert werden. Wenn diese `true` ist,
 wird das XMLDocument im Original zur&uuml;ckgegeben.
 
 Eine weitere Besonderheit betrifft JavaScript-Elemente. Deren Type wird
@@ -188,8 +188,8 @@ Eine weitere Besonderheit betrifft die Erstellung/Ausgabe von Text w&auml;hrend
 der Transformation. Der XSLT-Prozessor erzeugt immer eine g&uuml;ltige
 XML-Textausgabe. Jede XML-Syntax in einem Text wird automatisch maskiert, was
 die Generierung von Markup erschwert. Zu diesem Zweck wurde das Attribut
-`escape` eingef&uuml;hrt, das in XML- und XSLT-Dateien verwendet werden kann.
-Das Attribut erwartet die Werte `yes`, `on`, `true` oder `1` und
+`escape` eingef&uuml;hrt, das in XML- und/oder XSLT-Dateien verwendet werden
+kann. Das Attribut erwartet die Werte `yes`, `on`, `true` oder `1` und
 unterdr&uuml;ckt die automatische Maskierung bzw. macht diese
 r&uuml;ckg&auml;ngig.
 
@@ -336,4 +336,4 @@ Die DataSource kann auch direkt im Markup mit den Attributen
 
 - - -
 
-[Expression Language](expression.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
+[Markup](markup.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
