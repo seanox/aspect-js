@@ -14,7 +14,7 @@ und leichtgewichtigem Ansatz zur Implementierung von Single-Page Applications
 
 Seanox aspect-js greift dazu den deklarativen Ansatz von HTML auf und erweitert
 ihn um Expression Language, reaktives Rendering mit zus&auml;tzlichen
-Attributen, Object/Model-Binding, Model View Controller, Resource Bundle
+Attributen, Model-View-Controller, View-Model-Binding, Resource-Bundle
 (i18n/l10n), NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
@@ -41,9 +41,9 @@ Attributen, Object/Model-Binding, Model View Controller, Resource Bundle
   erschwert die Manipulation der Attribute im Markup  
   nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
   Verwendung eingesetzt  
-* Model View Controller (MVC) / Model View ViewModel (MVVM)
+* Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)
   unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept,
-  View Object/Model Binding, ......
+  View-Model-Binding, ......
 * Resource-Bundle / Resource-Messages   
   Internationalisierung (i18n), Lokalisierung (l10n) und Text-Auslagerung
 * NoSQL-DataSource auf Basis von XML  
@@ -74,16 +74,16 @@ Attributen, Object/Model-Binding, Model View Controller, Resource Bundle
   * [render](#render)
   * [release](#release)
 * [DataSource](#datasource)
-* [Resource Bundle (Messages/i18n/l10n)](#resource-bundle-messages-i18n-l10n)
-* [Model View Controller](#model-view-controller)
+* [Resource-Bundle (Messages/i18n/l10n)](#resource-bundle-messages-i18n-l10n)
+* [Model-View-Controller](#model-view-controller)
   * [Controller](#controller)
   * [Model](#model)
   * [View](#view)
 * [SiteMap](#sitemap)
   * [Virtual Paths](#virtual-paths)
-  * [Object/Model-Binding](#objectmodel-binding)
+  * [View-Model-Binding](#view-model-binding)
 * [Komponenten](#komponenten)
-  * [Object/Model-Binding](#objectmodel-binding-1)
+  * [View-Model-Binding](#view-model-binding-1)
 * [Reaktives Rendering](#reaktives-rendering)
 * [Erweiterung](#erweiterung)
 * [Ereignisse](#ereignisse)
@@ -378,12 +378,12 @@ const Model = {
 
 Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie wird
 u.a. von der SiteMap als Faces und Facets, also als Ziel f&uuml;r virtuelle
-Pfade im Face-Flow sowie f&uuml;r das Object/Model-Binding verwendet.
+Pfade im Face-Flow sowie f&uuml;r das View-Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
 einer Besonderheit, da das Attribut nur initial verarbeitet wird.
 &Auml;nderungen zur Laufzeit an einem existierenden Element haben wegen dem
-Object/Model-Binding keine Auswirkungen, solange es im DOM existiert.
+View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
 
 [Mehr erfahren](markup.md#id)
 
@@ -397,10 +397,10 @@ und die zwingend einen Bezeichner (ID) ben&ouml;tigen. Sie werden von der
 Face-Flow verwendet, was direkten Einfluss auf die Sichtbarkeit der Composites
 hat.
 
-Der [Model View Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites ein
-automatisches [Object/Model-Binding](object-binding.md). Die Ressourcen (CSS,
-JS, Markup) lassen sich f&uuml;r Composites in das Modul-Verzeichnis auslagern und
-werden erst bei Bedarf automatisch nachgeladen. 
+Der [Model-View-Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
+ein automatisches [View-Model-Binding](object-binding.md). Die Ressourcen (CSS,
+JS, Markup) lassen sich f&uuml;r Composites in das Modul-Verzeichnis auslagern
+und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
 <article id="example" composite>
@@ -409,7 +409,7 @@ werden erst bei Bedarf automatisch nachgeladen.
 ```
 
 Details zur Verwendung von Composites / modularen Komponente werden in den
-Abschnitten [Composites](composite.md) und [Model View Controller](mvc.md)
+Abschnitten [Composites](composite.md) und [Model-View-Controller](mvc.md)
 beschrieben.
 
 [Mehr erfahren](markup.md#composite)
@@ -570,7 +570,7 @@ XSLT transformiert werden kann.
 [Mehr erfahren](datasource.md#datasource)
 
 
-## Resource Bundle (Messages/i18n/l10n)
+## Resource-Bundle (Messages/i18n/l10n)
 
 (Resource)Messages ist eine statische Erweiterung der [DataSource](
     datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung (l10n)
@@ -581,9 +581,9 @@ Datei `locales.xml` im DataSource-Verzeichnis definiert werden.
 [Mehr erfahren](message.md)
 
 
-## Model View Controller
+## Model-View-Controller
 
-Der Model View Controller (MVC) ist ein Entwurfsmuster zur Trennung von
+Der Model-View-Controller (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung.
 
 ```
@@ -707,7 +707,7 @@ Hash-Zeichen verwendet.
 [Mehr erfahren](mvc.md#virtual-paths)
 
 
-### Object/Model-Binding
+### View-Model-Binding
 
 TODO:
 
@@ -719,7 +719,7 @@ TODO:
 Seanox aspect-js zielt auf eine modulare und auf Komponenten basierte
 Architektur. Das Framework unterst&uuml;tzt dazu eine deklarative Kennzeichnung
 von Komponenten im Markup, die Auslagerung und das automatische Laden von
-Ressourcen, sowie ein automatisches Object/Model-Binding.
+Ressourcen, sowie ein automatisches View-Model-Binding.
 
 Eine Komponente besteht im initialen Markup aus einem als Composite
 gekennzeichneten HTML-Element mit einer eindeutigen Id.
@@ -749,7 +749,7 @@ Das Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
 - index.html
 ```
 
-Das Laden der Ressourcen und die Object/Model-Binding erfolgt partiell, wenn die
+Das Laden der Ressourcen und die View-Model-Binding erfolgt partiell, wenn die
 Komponente im UI ben&ouml;tigt wird -- also mit der ersten Anzeige, was
 &uuml;ber die [SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert
 wird und so die Ladezeit stark minimiert, da punktuell jeweils nur f&uuml;r die
@@ -773,7 +773,7 @@ und Abstraktion verwenden.
 [Mehr erfahren](composite.md)
 
 
-### Object/Model-Binding
+### View-Model-Binding
 
 TODO:
 

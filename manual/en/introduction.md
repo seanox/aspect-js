@@ -12,8 +12,8 @@ client-side full-stack solution with a minimalistic and lightweight approach for
 the implementation of single-page applications (SPAs) was born.
 
 Seanox aspect-js takes the declarative approach of HTML and extends it with
-expression language, reactive rendering with additional attributes, object/model
-binding, model view controller, resource bundle (i18n/l10n), NoSQL datasource,
+expression language, reactive rendering with additional attributes, model view
+controller, view model binding, resource bundle (i18n/l10n), NoSQL datasource,
 test environment and much more.
 
 
@@ -40,8 +40,8 @@ test environment and much more.
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
 * Model View Controller (MVC) / Model View ViewModel (MVVM)
-  supports: events, virtual paths, sitemap, permission concept, view
-  object/model binding, ...
+  supports: events, virtual paths, sitemap, permission concept, view model
+  binding, ...
 * Resource Bundle / Resource Messages  
   internationalization (i18n), localization (l10n) and text outsourcing 
 * NoSQL datasource based on XML  
@@ -79,9 +79,9 @@ test environment and much more.
   * [View](#view)
 * [SiteMap](#sitemap)
   * [Virtual Paths](#virtual-paths)
-  * [Object/Model Binding](#objectmodel-binding)
+  * [View Model Binding](#view-model-binding)
 * [Components](#components)
-  * [Object/Model Binding](#objectmodel-binding-1)
+  * [View Model Binding](#view-model-binding-1)
 * [Reactivity Rendering](#reactivity-rendering)
 * [Extension](#extension)
 * [Events](#events-1)
@@ -366,12 +366,12 @@ const Model = {
 
 The ID (identifier) has an elementary meaning in Seanox aspect-js. It is used by
 the SiteMap as faces and facets, i.e. as targets for virtual paths in face flow
-and for the object/model binding.
+and for the view model binding.
 
 As with all attributes, the expression language can be used, with the difference
-that the attribute is only read at the beginning. Due to the object/model 
-binding, changes to an existing element at runtime have no effect as long as it
-exists in the DOM.
+that the attribute is only read at the beginning. Due to the view model binding,
+changes to an existing element at runtime have no effect as long as it exists in
+the DOM.
 
 [Learn more](markup.md#id)
 
@@ -385,9 +385,9 @@ necessarily require an identifier (ID). They are used by the [SiteMap](
 which has a direct effect of the visibility of the composites.
 
 The [Model View Controller](mvc.md#sitemap) supports automatic
-[object/model binding](object-binding.md) for composites. The resources (CSS,
-JS, Markup) for composites can be outsourced to the module directory and are
-only loaded automatically when necessary.
+[view model binding](object-binding.md) for composites. The resources (CSS, JS,
+Markup) for composites can be outsourced to the module directory and are only
+loaded automatically when necessary.
 
 ```html
 <article id="example" composite>
@@ -684,7 +684,7 @@ character is used as separator and root. Spaces are not supported.
 [Learn more](mvc.md#virtual-paths)
 
 
-### Object/Model Binding
+### View Model Binding
 
 TODO:
 
@@ -695,7 +695,7 @@ TODO:
 
 Seanox aspect-js aims at a modular and component-based architecture. The
 framework supports declarative marking of components in the markup, outsourcing
-and automatic loading of resources, as well as automatic object/model binding.
+and automatic loading of resources, as well as automatic view model binding.
 
 The initial markup of a component consists of an HTML element marked as
 composite and with a unique ID.
@@ -725,11 +725,11 @@ The default directory `./modules` can be changed with the property
 - index.html
 ```
 
-The loading of resources and the object/model binding are partial if the
-component is required in the UI -- means with the first use, which is controlled
-via the [SiteMap](sitemap.md) as central face flow management and thus minimizes
-the loading time, because only resources required for the active UI components
-are loaded selectively.
+The loading of resources and the view model binding are partial if the component
+is required in the UI -- means with the first use, which is controlled via the
+[SiteMap](sitemap.md) as central face flow management and thus minimizes the
+loading time, because only resources required for the active UI components are
+loaded selectively.
 
 The outsourcing and loading of resources at runtime is optional and can be
 applied completely, partially and not at all. There is a fixed order for loading
@@ -747,7 +747,7 @@ the implementation of components.
 [Learn more](composite.md)
 
 
-### Object/Model Binding
+### View Model Binding
 
 TODO:
 
