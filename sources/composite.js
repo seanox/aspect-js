@@ -74,8 +74,8 @@
  * In some cases, the identifier (ID) may not be unique. For example, in cases
  * where properties are arrays or an iteration is used. In these cases the
  * identifier can be extended by an additional unique qualifier separated by a
- * colon. Qualifiers behave like properties during object/model binding and
- * extend the namespace.
+ * colon. Qualifiers behave like properties during view model binding and extend
+ * the namespace.
  *
  *         composite
  *         ----
@@ -851,11 +851,11 @@ if (typeof Composite === "undefined") {
     };
 
     /**
-     * Mounts the as selector passed element(s) with all its children where an
-     * object/model binding is possible. Mount is possible for all elements
-     * with an ID, not only for composite objects and their children.
+     * Mounts the as selector passed element(s) with all its children where a
+     * view model binding is possible. Mount is possible for all elements with
+     * an ID, not only for composite objects and their children.
      * 
-     * The object/model binding is about connecting markup/HTML elements with
+     * The view model binding is about connecting markup/HTML elements with
      * JavaScript models. The models, also known as components, are static
      * constructs/classes in which properties and logic corresponding to the
      * markup/DOM are implemented. This avoids manual implementation and
