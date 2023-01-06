@@ -11,5 +11,5 @@
 /package-lock.json
 
 # Build specific
-/release/
+/release/*.zip
 /test/aspect-js.js
