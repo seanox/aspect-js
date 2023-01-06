@@ -15,7 +15,7 @@ Laufzeitumgebung genutzt werden k&ouml;nnen.
   * [Composite.EVENT_RENDER_START](#compositeevent_render_start)
   * [Composite.EVENT_RENDER_NEXT](#compositeevent_render_next)
   * [Composite.EVENT_RENDER_END](#compositeevent_render_end)
-* [Object/Model-Binding](#objectmodel-binding)
+* [View-Model-Binding](#view-model-binding)
   * [Composite.EVENT_MOUNT_START](#compositeevent_mount_start)
   * [Composite.EVENT_MOUNT_NEXT](#compositeevent_mount_next)
   * [Composite.EVENT_MOUNT_END](#compositeevent_mount_end)
@@ -64,12 +64,12 @@ Das Ereignis tritt mit dem finalen Ende des Renderings auf. Die Verarbeitung
 selbst endet vor dem Ereignis.
 
 
-# Object/Model-Binding
+# View-Model-Binding
 
-Diese Ereignisse treten w&auml;hrend dem Object/Model-Binding auf. Der
+Diese Ereignisse treten w&auml;hrend dem View-Model-Binding auf. Der
 Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
 und/oder das korrespondierende Element beeinflussen, nicht aber das
-Object/Model-Binding.
+View-Model-Binding.
 
 ```javascript
 Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
@@ -80,20 +80,20 @@ Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
 
 ## Composite.EVENT_MOUNT_START
 
-Das Ereignis tritt mit dem Start vom Object/Model-Binding auf. Die Verarbeitung
+Das Ereignis tritt mit dem Start vom View-Model-Binding auf. Die Verarbeitung
 selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_MOUNT_NEXT
 
-Das Ereignis tritt bei rekursiver Iteration beim Object/Model-Binding auf, wenn
-w&auml;hrend eines Renderzyklus, das Object/Model-Binding eines weiteren
-Elements startet. Die Verarbeitung selbst beginnt erst nach dem Ereignis.
+Das Ereignis tritt bei rekursiver Iteration beim View-Model-Binding auf, wenn
+w&auml;hrend eines Renderzyklus, das View-Model-Binding eines weiteren Elements
+startet. Die Verarbeitung selbst beginnt erst nach dem Ereignis.
 
 
 ## Composite.EVENT_MOUNT_END
 
-Das Ereignis tritt mit dem finalen Ende vom Object/Model-Binding auf. Die
+Das Ereignis tritt mit dem finalen Ende vom View-Model-Binding auf. Die
 Verarbeitung selbst endet vor dem Ereignis.
 
 
