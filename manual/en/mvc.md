@@ -478,11 +478,12 @@ mail in the background.
 
 ## View Model Binding
 
-View Model Binding is about linking HTML elements with corresponding model
-objects that exist in JavaScript. This is a part also belongs to the Model View
-Controller and is implemented in Seanox aspect-js by the Composite API. SiteMap
-is an extension and is based on the Composite API. For a better understanding,
-the functionality is described here in the Model View Controller.
+View model binding is about linking HTML elements with corresponding existing
+static JavaScript objects (models), which in Seanox aspect-js is a part of the
+Model View Controller and the Composite API.
+
+SiteMap is an extension and is based on the Composite API. For a better
+understanding, the functionality is described here in the Model View Controller.
 
 
 ### Terms

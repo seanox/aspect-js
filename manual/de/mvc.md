@@ -498,13 +498,13 @@ z.B. um ein Popup zu &ouml;ffnen oder eine Mail im Hintergrund zu senden.
 
 ## View-Model-Binding
 
-Beim View-Model-Binding geht es darum, HTML-Elemente mit entsprechenden
-Modell-Objekten zu verkn&uuml;pfen, die im JavaScript existieren.
+Beim View Model Binding geht es um die Verkn&uuml;pfung von HTML-Elementen mit
+entsprechenden vorhandenen statischen JavaScript-Objekten (Models), was in
+Seanox aspect-js ein Teil vom Model-View-Controller und des Composite API ist.
 
-Das View-Model-Binding geh&ouml;rt ebenfalls zum Model-View-Controller und ist
-in Seanox aspect-js in der Composite-API implementiert, auf der SiteMap als
-Erweiterung und basiert. Zum besseren Verst&auml;ndnis ist die
-Funktionalit&auml;t hier im Model-View-Controller beschrieben.
+SiteMap ist eine Erweiterung und basiert auf dem Composite API. F&uuml;r ein
+besseres Verst&auml;ndnis wird die Funktionalit&auml;t hier im
+Model-View-Controller beschrieben.
 
 
 ### Begriffe
