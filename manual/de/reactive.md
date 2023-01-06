@@ -3,12 +3,12 @@
 
 # Reaktives Rendering
 
-Beim reaktiven Ansatz l&ouml;sen &Auml;nderungen an den Datenobjekten von
-Modellen ein partielles Auffrischen der Konsumenten in der View aus. Konsumenten
-sind alle Ausdr&uuml;cke, die lesend auf den ge&auml;nderten Wert eines
-Datenobjekts zugreifen. Die Ausdr&uuml;cke k&ouml;nnen in Elementen und im
-Freitext verwendet werden. F&uuml;r das reaktive Rendering m&uuml;ssen die
-Datenobjekte den ReactProxy nutzen, wozu `ReactProxy.create(object)` oder
+Beim reaktiven Ansatz l&ouml;sen &Auml;nderungen an den Datenobjekten (Models)
+ein partielles Auffrischen der Konsumenten in der View aus. Konsumenten sind
+alle Ausdr&uuml;cke, die lesend auf den ge&auml;nderten Wert eines Datenobjekts
+zugreifen. Die Ausdr&uuml;cke k&ouml;nnen in Elementen und im Freitext verwendet
+werden. F&uuml;r das reaktive Rendering m&uuml;ssen die Datenobjekte den
+ReactProxy nutzen, wozu `ReactProxy.create(object)` oder
 `Object.prototype.toReactProxy()`, was jede Objekt-Instanz bereitstellt,
 verwendet werden.
 

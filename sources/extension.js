@@ -91,9 +91,9 @@ if (typeof Namespace === "undefined") {
 
             // Composites use IDs which causes corresponding DOM objects
             // (Element) in the global namespace if there are no corresponding
-            // models or data objects. Because namespaces are based on models or
-            // data objects, if an element appears, we assume that a model or
-            // data object does not exist and the recursive search is aborted as
+            // data objects (models). Because namespaces are based on data
+            // objects (models), if an element appears, we assume that a data
+            // object does not exist and the recursive search is aborted as
             // unsuccessful.
 
             if (index === 0
@@ -192,10 +192,9 @@ if (typeof Namespace === "undefined") {
 
             // Composites use IDs which causes corresponding DOM objects
             // (Element) in the global namespace if there are no corresponding
-            // models or data objects. Because namespaces are based on models or
-            // data objects, if an element appears, we assume that a model or
-            // data object does not exist and the recursive search is aborted as
-            // unsuccessful.
+            // data objects (models). Because namespaces are based on data
+            // objects, if an element appears, we assume that a data object does
+            // not exist and the recursive search is aborted as unsuccessful.
 
             if (index === 0
                     && namespace === null) {

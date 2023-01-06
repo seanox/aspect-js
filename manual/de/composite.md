@@ -201,10 +201,10 @@ Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
 Besonderheit werden auch Arrays unterst&uuml;tzt. Nutzt eine Ebene im Namespace
 eine Ganzzahl, wird diese Ebene als Array verwendet.
 
-Composites bzw. deren Models oder Datenobjekte sind vergleichbar mit Managed
-Beans die statisch als Singletons/Facades/Delegates den globalen Namespace
-nutzen. Um diese Datenobjekte zu strukturieren und Domain-Konzepte umzusetzen,
-sind entsprechende Namespaces erforderlich.
+Composites bzw. Datenobjekte (Models) sind vergleichbar mit Managed Beans, die
+statisch als Singletons/Facades/Delegates den globalen Namespace nutzen. Um
+diese Datenobjekte zu strukturieren und Domain-Konzepte umzusetzen, sind
+entsprechende Namespaces erforderlich.
 
 __Wenn Namespaces die IDs von Composites reflektieren und somit HTML-Elemente
 die IDs als ID-Attribut verwenden, wird der Browser zu diesen IDs die
@@ -296,10 +296,10 @@ Domain-bezogene Komponenten umsetzen.
 
 Namespaces haben zudem Auswirkungen auf Ressourcen und Module. So haben
 Namespaces im Markup erstmal nur textuellen Charakter und k&ouml;nnen auch ohne
-korrespondierendes Objektmodel existieren und verwendet werden. Im Markup wird
-lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese gk&uuml;ltig,
-werden die Namespaces direkt auf den Pfad von Modulen und deren Ressourcen
-angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
+ein korrespondierendes JavaScript-Objekt/Modell existieren und verwendet werden.
+Im Markup wird lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese
+gk&uuml;ltig, werden die Namespaces direkt auf den Pfad von Modulen und deren
+Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 
 ```
 + modules

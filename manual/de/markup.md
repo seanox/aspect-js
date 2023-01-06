@@ -478,10 +478,10 @@ Domain-bezogene Komponenten umsetzen.
 
 Namespaces haben zudem Auswirkungen auf Ressourcen und Module. So haben
 Namespaces im Markup erstmal nur textuellen Charakter und k&ouml;nnen auch ohne
-korrespondierendes Objektmodel existieren und verwendet werden. Im Markup wird
-lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese gk&uuml;ltig,
-werden die Namespaces direkt auf den Pfad von Modulen und deren Ressourcen
-angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
+ein korrespondierendes JavaScript-Objekt/Modell existieren und verwendet werden. 
+Im Markup wird lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese
+gk&uuml;ltig, werden die Namespaces direkt auf den Pfad von Modulen und deren
+Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 
 ```
 + modules
