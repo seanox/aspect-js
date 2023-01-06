@@ -24,10 +24,10 @@
  *
  * With aspect-js the declarative approach of HTML is taken up and extended.
  * In addition to the expression language, the HTML elements are provided with
- * additional attributes for functions and object binding attributes.
- * The corresponding renderer is included in the composite implementation and
- * actively monitors the DOM via the MutationObserver and thus reacts
- * recursively to changes in the DOM.
+ * additional attributes for functions and view model binding. The corresponding
+ * renderer is included in the composite implementation and actively monitors
+ * the DOM via the MutationObserver and thus reacts recursively to changes in
+ * the DOM.
  *
  *
  *     TERMS
@@ -120,7 +120,7 @@
 if (typeof Composite === "undefined") {
     
     /**
-     * Static component for rendering and object binding.
+     * Static component for rendering and view model binding.
      * The processing runs in the background and starts automatically when a
      * page is loaded.
      */
@@ -925,12 +925,12 @@ if (typeof Composite === "undefined") {
      * 
      *     Synchronization
      *     ----
-     * The object binding and synchronization assume that a model corresponding
-     * to the composite exists with the same namespace. During synchronization,
-     * the element must also exist as a property in the model. Accepted are
-     * properties with a primitive data type and objects with a property value.
-     * The synchronization expects a positive validation, otherwise it will not
-     * be executed.
+     * View model binding and synchronization assume that a corresponding static
+     * JavaScript object/model exists in the same namespace for the composite.
+     * During synchronization, the element must also exist as a property in the
+     * model. Accepted are properties with a primitive data type and objects
+     * with a property value. The synchronization expects a positive validation,
+     * otherwise it will not be executed.
      * 
      *     Invocation
      *     ---
@@ -2293,7 +2293,7 @@ if (typeof Composite === "undefined") {
             
             // The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
             // ATTRIBUTE_RENDER are processed in Composite.mount(selector) the
-            // object binding and are only mentioned here for completeness.
+            // view model binding and are only mentioned here for completeness.
             
             // The attribute ATTRIBUTE_RELEASE has no functional implementation.
             // This is exclusively inverse indicator that an element was
@@ -2929,7 +2929,7 @@ if (typeof Composite === "undefined") {
                 }
                 
                 // All removed elements are cleaned and if necessary the undock
-                // method is called if an object binding exists.
+                // method is called if an view model binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
                         const cleanup = (node) => {
