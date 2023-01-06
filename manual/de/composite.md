@@ -211,13 +211,13 @@ die IDs als ID-Attribut verwenden, wird der Browser zu diesen IDs die
 HTML-Elemente als Variablen im globalen Namespace anlegen. Interessanterweise
 ignoriert der Browser gleichnamige Konstanten und &uuml;berschreibt diese mit
 den HTML-Elementen. Daher sollten Namespaces nach dem BODY-Tag im JavaScript
-erstellt werden oder besser die Namespace-API verwenden, die den globalen
+erstellt werden oder besser das Namespace-API verwenden, die den globalen
 Namespace von _window_ nutzt, den der Browser nicht &uuml;berschreibt.__
 
 __Auch f&uuml;r Module und JavaScript-Ressourcen die zur Laufzeit nachgeladen
-werden, ist die Verwendung der Namespace-API der einfachste Weg. Da das
+werden, ist die Verwendung vom Namespace-API der einfachste Weg. Da das
 Nachladen eigene Namespaces nutzt, m&uuml;ssen Variablen die &uuml;bergreifend
-genutzt werden sollen, bewusst den globalen Namespace nutzen, was die
+genutzt werden sollen, bewusst den globalen Namespace nutzen, was das
 Namespace-API &uuml;bernimmt.__
 
 ```javascript
@@ -332,7 +332,7 @@ Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
 ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
 Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
-und dem Composite API.
+und dem Composite-API.
 
 Details zum View-Model-Binding werden im Abschnitt
 [Model-View-Controller - Binding](mvc.md#binding) beschrieben.
@@ -365,7 +365,7 @@ const model = {
 </html>
 ```
 
-Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
+Das Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
 dem Wert vom HTML-Element. F&uuml;r ein HTML-Element werden die entsprechenden
 Ereignisse &uuml;ber das gleichnamige Attribut definiert.
 
@@ -398,11 +398,11 @@ beim View-Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 ### Binding
 
 Die Verkn&uuml;pfung bzw. Bindung von Markup und JavaScript(-Model) erfolgt
-&uuml;ber die Composite-API. Dazu muss ein HTML-Element das Attribut `composite`
+&uuml;ber das Composite-API. Dazu muss ein HTML-Element das Attribut `composite`
 und eine g&uuml;ltige sowie eindeutige ID besitzen, die den Anforderungen des
 Namensraums entspricht.
 
-Die Composite-API erkennt und &uuml;berwacht die Existenz von Markup der
+Das Composite-API erkennt und &uuml;berwacht die Existenz von Markup der
 Composites im DOM. So kann das korrespondierende (JavaScript-)Model &uuml;ber
 die Methoden `dock` und `undock` informiert werden, wenn das Composite als
 Komponente dem DOM hinzugef&uuml;gt bzw. aus diesem entfernt wird.

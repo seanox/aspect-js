@@ -48,7 +48,7 @@ Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
 ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
 Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
-und dem Composite API.
+und dem Composite-API.
 
 Details zum View-Model-Binding werden im Abschnitt
 [Model-View-Controller - Binding](mvc.md#binding) beschrieben.
@@ -501,9 +501,9 @@ z.B. um ein Popup zu &ouml;ffnen oder eine Mail im Hintergrund zu senden.
 
 Beim View Model Binding geht es um die Verkn&uuml;pfung von HTML-Elementen mit
 entsprechenden vorhandenen statischen JavaScript-Objekten (Models), was in
-Seanox aspect-js ein Teil vom Model-View-Controller und des Composite API ist.
+Seanox aspect-js ein Teil vom Model-View-Controller und dem Composite-API ist.
 
-SiteMap ist eine Erweiterung und basiert auf dem Composite API. F&uuml;r ein
+SiteMap ist eine Erweiterung und basiert auf dem Composite-API. F&uuml;r ein
 besseres Verst&auml;ndnis wird die Funktionalit&auml;t hier im
 Model-View-Controller beschrieben.
 
@@ -525,7 +525,7 @@ Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
 ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
 Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
-und dem Composite API.
+und dem Composite-API.
 
 
 #### Property
@@ -555,7 +555,7 @@ const model = {
 </html>
 ```
 
-Die Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
+Das Composite-API synchronisiert ereignisgesteuert die Eigenschaft im Modell mit
 dem Wert vom HTML-Element. F&uuml;r ein HTML-Element werden die entsprechenden
 Ereignisse &uuml;ber das gleichnamige Attribut definiert.
 

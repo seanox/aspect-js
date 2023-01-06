@@ -99,7 +99,7 @@ Verarbeitung selbst endet vor dem Ereignis.
 
 # HTTP
 
-Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management
+Das Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management
 f&uuml;r den XMLHttpRequest zur Implementierung Request-bezogener
 Anwendungslogik, z.B. f&uuml;r Logging oder Spinner. 
 
@@ -162,7 +162,7 @@ Verlauf.
 
 # Error
 
-Die Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management
+Das Composite-API unterst&uuml;tzt ein anwendungsweites Event-Management
 f&uuml;r Laufzeitfehler zur Implementierung Ereignis-bezogener Anwendungslogik,
 z.B. f&uuml;r Logging oder Fehlerausgaben. 
 

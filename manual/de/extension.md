@@ -3,7 +3,7 @@
 
 # Erweiterung
 
-Die JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine
+Das JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine
 Funktionen erweitert.
 
 

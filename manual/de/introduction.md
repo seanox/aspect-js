@@ -143,7 +143,7 @@ einbezogen wird.
 Expressions bzw. die Expression Language (EL) oder in der vorliegenden
 Dokumentation auch Ausdruck und Ausdr&uuml;cke genannt, sind ein einfacher
 Zugang zum client-seitigen JavaScript und damit zu den Modellen und Komponenten.
-In den Expressions wird die komplette JavaScript-API unterst&uuml;tzt, die mit
+In den Expressions wird das komplette JavaScript-API unterst&uuml;tzt, die mit
 zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
 die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
@@ -630,7 +630,7 @@ Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
 ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
 Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
-und dem Composite API.
+und dem Composite-API.
 
 Details zum View-Model-Binding werden im Abschnitt
 [Model-View-Controller - Binding](mvc.md#binding) beschrieben.
@@ -812,7 +812,7 @@ Objekte neue Instanzen gebildet.
 
 ## Erweiterung
 
-Die JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine Funktionen
+Das JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine Funktionen
 erweitert.
 
 [Mehr erfahren](extension.md)
@@ -830,14 +830,14 @@ Laufzeitumgebung genutzt werden k&ouml;nnen.
 
 ## Test
 
-Die Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
+Das Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
 Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und
 einzelne Testf&auml;lle (case) verwendet werden.
 
-Als modularer Bestandteil von Seanox aspect-js ist die Test-API in jedem Release
-enthalten, der sich ohne Probleme entfernen l&auml;sst. Da die Test-API einige
+Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
+enthalten, der sich ohne Probleme entfernen l&auml;sst. Da das Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
-die Test-API zur Laufzeit bewusst aktiviert werden.
+das Test-API zur Laufzeit bewusst aktiviert werden.
 
 ```javascript
 Test.activate();
@@ -920,7 +920,7 @@ auf verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
 
 ### Assert
 
-Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Die
+Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Das
 Test-API bietet elementare Aussagen, die erweitert werden k&ouml;nnen. Die
 Funktion ist einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler
 auf.
@@ -966,7 +966,7 @@ Test.start();
 
 ### Konfiguration
 
-Optional kann die Test-API mit jedem Start konfiguriert werden.
+Optional kann das Test-API mit jedem Start konfiguriert werden.
 
 Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
 wird partiell &uuml;bernommen und unbekanntes wird ignoriert.
@@ -1036,7 +1036,7 @@ enth&auml;lt Details zum aktuellen Test und zur Warteschlange.
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
 &Uuml;berwachung der Testausf&uuml;hrung. Die Callback-Methoden werden f&uuml;r
-entsprechende Ereignisse bei der Test-API registriert und funktionieren dann
+entsprechende Ereignisse beim Test-API registriert und funktionieren dann
 &auml;hnlich dem Monitor.
 
 ```javascript

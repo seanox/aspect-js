@@ -3,14 +3,14 @@
 
 # Test
 
-Die Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
+Das Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
 Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und einzelne
 Testf&auml;lle (test case) verwendet werden.
 
-Als modularer Bestandteil von Seanox aspect-js ist die Test-API in jedem Release
-enthalten, der sich ohne Probleme entfernen l&auml;sst. Da die Test-API einige
+Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
+enthalten, der sich ohne Probleme entfernen l&auml;sst. Da das Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
-die Test-API zur Laufzeit bewusst aktiviert werden.
+das Test-API zur Laufzeit bewusst aktiviert werden.
 
 ```javascript
 Test.activate();
@@ -151,7 +151,7 @@ auf verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
 
 ## Assert
 
-Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Die
+Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Das
 Test-API bietet elementare Aussagen, die erweitert werden k&ouml;nnen. Die
 Funktionsweise ist einfach: Wenn eine Behauptung nicht wahr ist, tritt ein
 Fehler auf, optional mit einer individuellen Fehlermeldung.
@@ -373,7 +373,7 @@ Test.start();
 
 ## Konfiguration
 
-Optional kann die Test-API mit jedem Start konfiguriert werden. Als Parameter
+Optional kann das Test-API mit jedem Start konfiguriert werden. Als Parameter
 wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
 &uuml;bernommen und unbekanntes wird ignoriert.
 
@@ -512,7 +512,7 @@ console.error(message);
 console.info(message);
 ```
 
-Um die Konsolenausgabe in Tests einbeziehen zu k&ouml;nnen, unterst&uuml;tzt die
+Um die Konsolenausgabe in Tests einbeziehen zu k&ouml;nnen, unterst&uuml;tzt das
 aktivierte Test-API Weiterleitungen (Forwarding), Listener und Puffer (Buffer)
 f&uuml;r die Konsolenausgabe.
 
@@ -520,15 +520,15 @@ f&uuml;r die Konsolenausgabe.
 ### Forwarding
 
 Das Forwarding l&auml;uft komplett im Hintergrund und verteilt die Ausgaben an
-die Browser-Konsolenausgabe und an die Komponenten der Test-API. Bei (I)Frames
+die Browser-Konsolenausgabe und an die Komponenten vom Test-API. Bei (I)Frames
 wird die Ausgabe an umschliessende bzw. &uuml;bergeordnete Window-Objekte
-weitergeleitet und ist dort mit aktivierter Test-API per Buffer und Listener
+weitergeleitet und ist dort mit aktiviertem Test-API per Buffer und Listener
 zug&auml;nglich.
 
 
 ### Buffer
 
-Bei aktivierter Test-API wird die JavaScript-API vom console-Objekt um den
+Bei aktiviertem Test-API wird die JavaScript-API vom console-Objekt um den
 Buffer _output_ erweitert. Der Buffer enth&auml;lt Zwischenspeicher f&uuml;r die
 Level: _LOG_, _WARN_, _ERROR_ und _INFO_ sowie eine Methode zum Leeren.
 
@@ -660,7 +660,7 @@ Wenn kein Test ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
 
 Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
 &Uuml;berwachung der Testausf&uuml;hrung. Die Callback-Methoden werden f&uuml;r
-entsprechende Ereignisse bei der Test-API registriert und funktionieren dann
+entsprechende Ereignisse beim Test-API registriert und funktionieren dann
 &auml;hnlich dem Monitor.
 
 Liste der verf&uuml;gbaren Ereignisse:
@@ -693,7 +693,7 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 
 ## Erweiterung
 
-Mit der Test-API werden auch Erweiterungen des JavaScript-API aktiv.
+Mit dem Test-API werden auch Erweiterungen des JavaScript-API aktiv.
 
 ### Element
 
