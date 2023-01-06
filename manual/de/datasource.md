@@ -1,4 +1,4 @@
-[Expression Language](expression.md) | [Inhalt](README.md#datasource) | [Resource Bundle](message.md)
+[Expression Language](expression.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
 - - -
 
 # DataSource
@@ -217,8 +217,8 @@ r&uuml;ckg&auml;ngig.
     Seanox aspect-js is a minimalist approach to implementing Single-Page
     Applications (SPAs). This framework takes the declarative approach of HTML
     and extends this with expression language, reactivity rendering with
-    additional attributes, object/model binding, Model View Controller, Resource
-    Bundle, NoSQL datasource, test environment and much more.
+    additional attributes, Model View Controller, view model binding, resource
+    bundle, NoSQL datasource, test environment and much more.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>
@@ -336,4 +336,4 @@ Die DataSource kann auch direkt im Markup mit den Attributen
 
 - - -
 
-[Expression Language](expression.md) | [Inhalt](README.md#datasource) | [Resource Bundle](message.md)
+[Expression Language](expression.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)

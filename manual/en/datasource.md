@@ -212,8 +212,8 @@ case the automatic escaping is cancelled or undone.
     Seanox aspect-js is a minimalist approach to implementing Single-Page
     Applications (SPAs). This framework takes the declarative approach of HTML
     and extends this with expression language, reactivity rendering with
-    additional attributes, object/model binding, Model View Controller, Resource
-    Bundle, NoSQL datasource, test environment and much more.
+    additional attributes, Model View Controller, view model binding, resource
+    bundle, NoSQL datasource, test environment and much more.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>
