@@ -84,7 +84,7 @@ In Seanox aspect-js the views are represented by the markup.
   * [Absolute Path](#absolute-path)
   * [Variable Path](#variable-path)
   * [Functional Path](#functional-path)
-* [Object/Model Binding](#object-model-binding)
+* [View Model Binding](#view-model-binding)
   * [Terms](#terms)
     * [namespace](#namespace)
     * [model](#model)
@@ -476,12 +476,12 @@ mail in the background.
 ```
 
 
-## Object/Model Binding
+## View Model Binding
 
 Object binding is about linking HTML elements with corresponding model objects
 that exist in JavaScript.
 
-The object/model binding part also belongs to the Model View Controller and is
+The view model binding part also belongs to the Model View Controller and is
 implemented in Seanox aspect-js by the Composite API. SiteMap is an extension
 and is based on the Composite API. For a better understanding, the functionality
 is described here in the Model View Controller.
@@ -563,7 +563,7 @@ using the attribute of the same name.
 In some cases, the identifier (ID) may not be unique. For example, in cases
 where properties are arrays or an iteration is used. In these cases the 
 identifier can be extended by an additional unique qualifier separated by a
-colon. Qualifiers behave like properties during object/model binding and extend
+colon. Qualifiers behave like properties during view model binding and extend
 the namespace.
 
 ```html
@@ -607,7 +607,7 @@ attributes `ID` and `composite`.
 </html>
 ```
 
-The composite ID is required for MVC, object/model binding, synchronization and
+The composite ID is required for MVC, view model binding, synchronization and
 validation and must therefore be a valid and unique identifier within the 
 JavaScript namespace. The identifier is also used for face flow to identify and
 control faces and facets and generally models/components.
@@ -618,7 +618,7 @@ control faces and facets and generally models/components.
 In Seanox Aspect-js, components are also termed composites or modules because
 they consist of markup (view), corresponding JavaScript (model) and more.
 
-The object/model binding is about the connection of view/markup/HTML with the
+The view model binding is about the connection of view/markup/HTML with the
 corresponding JavaScript model. The binding forwards interactions and status
 changes of the view to the model and established an interface for middleware
 functions and services for the view. This avoids a manual implementation and
@@ -728,10 +728,10 @@ More details about the usage can be found in chapter
 ### Events
 
 Events, more precisely the interaction between view and model, are also
-considered during object/model binding. The methods for interaction will be
+considered during view model binding. The methods for interaction will be
 implemented only in the model. In the markup itself, no declaration is required.
-The object/model binding knows the available events for HTML. During binding,
-the model is searched for corresponding methods that will be registered as event
+The view model binding knows the available events for HTML. During binding, the
+model is searched for corresponding methods that will be registered as event
 listeners.
 
 ```javascript

@@ -1,9 +1,9 @@
-[Resource Bundle](message.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
+[Resource-Bundle](message.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
 - - -
 
-# Model View Controller
+# Model-View-Controller
 
-Der Model View Controller (MVC) ist ein Entwurfsmuster zur Trennung von
+Der Model-View-Controller (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung. Hier muss zwischen I/O-Controller und
 Applikations-Controller unterschieden werden. Das reine MVC-Entwurfsmuster meint
 den I/O-Controller zur &Uuml;bermittlung der Interaktionen. Da dieser durch
@@ -34,8 +34,9 @@ Seanox aspect-js vordergr&uuml;ndig auf den Applikations-Controller.
 Der (Applikations-)Controller steuert Abl&auml;ufe innerhalb einer Applikation
 (Face-Flow) und das Binding von Markup und JavaScript sowie die Steuerung vom
 Datenfluss zwischen View und Model was durch die Zusammenarbeit von Composite,
-Paths und SiteMap &uuml;bernommen wird. Womit hier auch von MVVM (Model View
-ViewModel) und MVCS (Model View Controller Service) gesprochen werden kann.
+Paths und SiteMap &uuml;bernommen wird. Womit hier auch von MVVM
+(Model-View-ViewModel) und MVCS (Model-View-Controller-Service) gesprochen
+werden kann.
 
 
 ## Model
@@ -86,7 +87,7 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
   * [Absolute Path](#absolute-path)
   * [Variable Path](#variable-path)
   * [Functional Path](#functional-path)
-* [Object/Model-Binding](#object-model-binding)
+* [View-Model-Binding](#view-model-binding)
   * [Begriffe](#begriffe)
     * [namespace](#namespace)
     * [model](#model)
@@ -110,7 +111,7 @@ diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
 Verf&uuml;gung, die auf den virtuellen Pfaden aller Views basiert. Die SiteMap
 steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Views --
 der sogenannten Face-Flow. Face-Flow und Visualisierung funktionieren resolut
-und verwenden das DOM zum Einfügen und Entfernen der Views (Faces und Facets).
+und verwenden das DOM zum Einfï¿½gen und Entfernen der Views (Faces und Facets).
 
 ```
 +-----------------------------------------------+
@@ -495,15 +496,15 @@ z.B. um ein Popup zu &ouml;ffnen oder eine Mail im Hintergrund zu senden.
 ```
 
 
-## Object/Model-Binding
+## View-Model-Binding
 
-Bei der Objekt-Bindung geht es darum, HTML-Elemente mit entsprechenden
+Beim View-Model-Binding geht es darum, HTML-Elemente mit entsprechenden
 Modell-Objekten zu verkn&uuml;pfen, die im JavaScript existieren.
 
-Das Object/Model-Binding geh&ouml;rt ebenfalls zum Model View Controller und ist
+Das View-Model-Binding geh&ouml;rt ebenfalls zum Model-View-Controller und ist
 in Seanox aspect-js in der Composite-API implementiert, auf der SiteMap als
 Erweiterung und basiert. Zum besseren Verst&auml;ndnis ist die
-Funktionalit&auml;t hier im Model View Controller beschrieben.
+Funktionalit&auml;t hier im Model-View-Controller beschrieben.
 
 
 ### Begriffe
@@ -584,7 +585,7 @@ In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel
 wenn Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen
 F&auml;llen kann der Bezeichner durch einen zus&auml;tzlichen eindeutigen
 Qualifier, getrennt durch einen Doppelpunkt, erweitert werden. Qualifier wirken
-beim Object/Model-Binding wie Properties und verl&auml;ngern den Namensraum.
+beim View-Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 
 ```html
 <input type="text" id="identifier">
@@ -628,8 +629,8 @@ die Kombination der Attribute `ID` und `Composite` gebildet.
 </html>
 ```
 
-Die Composite-ID wird beim MVC, Object/Model-Binding sowie zur Synchronisation
-und Validierung ben&ouml;tigt und muss daher eine g&uuml;ltige und eindeutige
+Die Composite-ID wird beim MVC, View-Model-Binding sowie zur Synchronisation und
+Validierung ben&ouml;tigt und muss daher eine g&uuml;ltige und eindeutige
 Zeichenfolge innerhalb des JavaScript-Namensraums sein. Der Bezeichner wird auch
 f&uuml;r den Face-Flow verwendet, um Faces und Facets sowie allgemein
 Modelle/Komponenten zu identifizieren und zu kontrollieren.
@@ -641,7 +642,7 @@ In Seanox Aspect-js werden Komponenten auch Composites oder Module genannt, da
 diese aus Markup (View), korrespondierendem JavaScript (Model) und mehr
 bestehen.
 
-Beim Object/Model-Binding geht es um die Verbindung von View/Markup/HTML mit dem
+Beim View-Model-Binding geht es um die Verbindung von View/Markup/HTML mit dem
 entsprechenden JavaScript-Model. Das Binding leitet Interaktionen und
 Status&auml;nderungen der View an das Model weiter und stellt eine Schnittstelle
 f&uuml;r Middleware-Funktionen und Services f&uuml;r die View bereit. Womit
@@ -678,8 +679,8 @@ const model = {
 </html>
 ```
 
-Die Bindung basiert auf den IDs der HTML-Elemente im Markup (View). Diese IDs
-definieren den Namensraum und das zu verwendende JavaScript-Model. IDs
+Das View-Model-Binding basiert auf den IDs der HTML-Elemente im Markup (View).
+Diese IDs definieren den Namensraum und das zu verwendende JavaScript-Model. IDs
 k&ouml;nnen relative und absolute Namensr&auml;ume verwenden, basieren aber
 prim&auml;r auf der Position eines Elements im DOM und einer korrespondierenden
 Objektstruktur als JavaScript-Model.
@@ -729,12 +730,12 @@ Details werden im Abschnitt [Dock](#undock) beschrieben.
 
 ### Synchronization
 
-Die Objekt-Bindung umfasst neben der statischen Verkn&uuml;pfung und Zuordnung
-von HTML-Elementen (View) zum JavaScript-Model auch die Synchronisation von
-Werten zwischen den HTML-Elementen und den Feldern im JavaScript-Model. Die
-Synchronisation h&auml;ngt von Ereignissen ab, die f&uuml;r das HTML-Element mit
-dem Attribut `events` deklariert sind und wird nur ausgef&uuml;hrt, wenn eines
-der definierten Ereignisse eintritt.
+Das View-Model-Binding umfasst neben der statischen Verkn&uuml;pfung und
+Zuordnung von HTML-Elementen (View) zum JavaScript-Model auch die
+Synchronisation von Werten zwischen den HTML-Elementen und den Feldern im
+JavaScript-Model. Die Synchronisation h&auml;ngt von Ereignissen ab, die
+f&uuml;r das HTML-Element mit dem Attribut `events` deklariert sind und wird nur
+ausgef&uuml;hrt, wenn eines der definierten Ereignisse eintritt.
 
 Details zur Funktionsweise werden im Abschnitt [events](markup.md#events)
 beschrieben.
@@ -754,12 +755,12 @@ beschrieben.
 
 ### Events
 
-Ereignisse, genauer gesagt die Interaktion zwischen View und Modell, werden bei
-der Object/Model-Binding ebenfalls ber&uuml;cksichtigt. Die Methoden zur
-Interaktion werden nur im Model implementiert. Im Markup selbst ist keine
-Deklaration erforderlich. Das Object/Model-Binding kennt die verf&uuml;gbaren
-Ereignisse im HTML und so wird beim Binding das Model nach entsprechenden
-Methoden durchsucht, die dann als Event-Listener registriert werden.
+Ereignisse, genauer gesagt die Interaktion zwischen View und Modell, werden beim
+View-Model-Binding ebenfalls ber&uuml;cksichtigt. Die Methoden zur Interaktion
+werden nur im Model implementiert. Im Markup selbst ist keine Deklaration
+erforderlich. Das View-Model-Binding kennt die verf&uuml;gbaren Ereignisse im
+HTML und so wird beim Binding das Model nach entsprechenden Methoden durchsucht,
+die dann als Event-Listener registriert werden.
 
 ```javascript
 const contact = {
@@ -791,4 +792,4 @@ const contact = {
 
 - - -
 
-[Resource Bundle](message.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
+[Resource-Bundle](message.md) | [Inhalt](README.md#model-view-controller) | [Komponenten](composite.md)
