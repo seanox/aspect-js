@@ -43,11 +43,12 @@ funktioniert und reagiert somit rekursiv auf Ver&auml;nderungen im DOM.
 Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
 umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
 Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
-unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die Werte der
-Attribute k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch
-sein. Enth&auml;lt ein Attribut eine Expression, werden das Attribut und der Wert
-unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Renderzyklus)
-erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
+unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die
+Werte der Attribute k&ouml;nnen statisch oder mit Verwendung der
+Expression-Language dynamisch sein. Enth&auml;lt ein Attribut eine Expression,
+werden das Attribut und der Wert unver&auml;nderlich, da der Renderer diese bei
+jeder Auffrischung (Renderzyklus) erneut mit dem aktualisierten Wert der
+initialen Expression setzen wird.
 
 
 ### composite
@@ -59,10 +60,10 @@ haben und die zwingend einen Bezeichner (ID) ben&ouml;tigen. Sie werden von der
 Face-Flow verwendet, was direkten Einfluss auf die Sichtbarkeit der Composites
 hat.
 
-Der [Model View Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
-ein automatisches [Object/Model-Binding](object-binding.md). Die Ressourcen
-(CSS, JS, Markup) lassen sich f&uuml;r Composites in das Modul-Verzeichnis
-auslagern und werden erst bei Bedarf automatisch nachgeladen. 
+Der [Model-View-Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
+ein automatisches [View-Model-Binding](object-binding.md). Die Ressourcen (CSS,
+JS, Markup) lassen sich f&uuml;r Composites in das Modul-Verzeichnis auslagern
+und werden erst bei Bedarf automatisch nachgeladen. 
 
 ```html
 <article id="example" composite>
@@ -81,7 +82,7 @@ permanent sichtbar.
 ```
 
 Details zur Verwendung von Composites / modularen Komponente werden in den
-Abschnitten [Composites](composite.md) und [Model View Controller](mvc.md)
+Abschnitten [Composites](composite.md) und [Model-View-Controller](mvc.md)
 beschrieben.
 
 
@@ -130,7 +131,7 @@ JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
 einer Besonderheit, da das Attribut nur initial verarbeitet wird.
 &Auml;nderungen zur Laufzeit an einem existierenden Element haben wegen dem
-Object/Model-Binding keine Auswirkungen, solange es im DOM existiert.
+View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -171,12 +172,12 @@ oder _Change_ eintritt und die Validierung den Wert `true` zur&uuml;ckgibt.
 
 Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie wird
 u.a. von der SiteMap als Faces und Facets, also als Ziel f&uuml;r virtuelle
-Pfade im Face-Flow sowie f&uuml;r das Object/Model-Binding verwendet.
+Pfade im Face-Flow sowie f&uuml;r das View-Model-Binding verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch
 mit einer Besonderheit, da das Attribut nur initial verarbeitet wird.
 &Auml;nderungen zur Laufzeit an einem existierenden Element haben wegen dem
-Object/Model-Binding keine Auswirkungen, solange es im DOM existiert.
+View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
 
 
 ### import
@@ -503,8 +504,9 @@ angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 - index.html
 ```
 
-Details zu Namespaces auf Objektebene werden im Abschnitt [Composites - Namespace](
-    composite.md#namespace) beschrieben. 
+Details zu Namespaces werden auch in den Abschnitten [Erweiterung - Namespace](
+    extension.md#namespace) und [Composites - Namespace](composite.md#namespace)
+beschrieben. 
 
 
 ### notification
@@ -720,7 +722,8 @@ Beispiel mit dem Attribut [strict](#strict):
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
 eines Composites und dem korrespondierenden JavaScript-Model, wo eine
-gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein muss.
+gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein
+muss.
 
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis

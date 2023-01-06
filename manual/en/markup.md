@@ -56,10 +56,10 @@ necessarily require an identifier (ID). They are used by the [SiteMap](
     mvc.md#sitemap) as faces, so as targets for virtual paths in the face-flow,
 which has a direct effect of the visibility of the composites.
 
-The [Model View Controller](mvc.md#sitemap) supports automatic
-[object/model binding](object-binding.md) for composites. The resources (CSS,
-JS, Markup) for composites can be outsourced to the module directory and are
-only loaded automatically when necessary.
+The [Model View Controller](mvc.md#sitemap) supports automatic  
+[view model binding](object-binding.md) for composites. The resources (CSS, JS,
+Markup) for composites can be outsourced to the module directory and are only
+loaded automatically when necessary.
 
 ```html
 <article id="example" composite>
@@ -124,9 +124,9 @@ and synchronization of HTML elements with the corresponding JavaScript models
 (see [validate](#validate) for more information).
 
 As with all attributes, the expression language can be used, with the difference
-that the attribute is only read at the beginning. Due to the object/model
-binding, changes to an existing element at runtime have no effect as long as it
-exists in the DOM.
+that the attribute is only read at the beginning. Due to the view model binding,
+changes to an existing element at runtime have no effect as long as it exists in
+the DOM.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -167,12 +167,12 @@ and the validation returns the value `true`.
 
 The ID (identifier) has an elementary meaning in Seanox aspect-js. It is used by
 the SiteMap as faces and facets, i.e. as targets for virtual paths in face flow
-and for the object/model binding.
+and for the view model binding.
 
 As with all attributes, the expression language can be used, with the difference
-that the attribute is only read at the beginning. Due to the object/model
-binding, changes to an existing element at runtime have no effect as long as it
-exists in the DOM.
+that the attribute is only read at the beginning. Due to the view model binding,
+changes to an existing element at runtime have no effect as long as it exists in
+the DOM.
 
 
 ### import
@@ -493,8 +493,9 @@ directory.
 - index.html
 ```
 
-Details about namespaces at the object level are described in section
-[Composites - Namespace](composite.md#namespace).
+Details about namespaces are also described in the chapters
+[Erweiterung - Namespace](extension.md#namespace) and [Composites - Namespace](
+    composite.md#namespace).
 
 
 ### notification
