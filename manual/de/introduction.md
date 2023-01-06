@@ -749,7 +749,7 @@ Das Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
 - index.html
 ```
 
-Das Laden der Ressourcen und die View-Model-Binding erfolgt partiell, wenn die
+Das Laden der Ressourcen und das View-Model-Binding erfolgt partiell, wenn die
 Komponente im UI ben&ouml;tigt wird -- also mit der ersten Anzeige, was
 &uuml;ber die [SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert
 wird und so die Ladezeit stark minimiert, da punktuell jeweils nur f&uuml;r die
