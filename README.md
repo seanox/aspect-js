@@ -20,8 +20,8 @@ fullstack solution.
 Seanox aspect-js focuses on a minimalist approach to implementing
 Single-Page Applications (SPAs). This framework takes the declarative approach
 of HTML and extends this with expression language, reactivity rendering with
-additional attributes, object/model binding, Model View Controller, Resource
-Bundle, NoSQL datasource, test environment and much more.
+additional attributes, Model View Controller, view model binding, resource
+bundle, NoSQL datasource, test environment and much more.
 
 
 # Features
@@ -47,8 +47,8 @@ Bundle, NoSQL datasource, test environment and much more.
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
 - Model View Controller (MVC) / Model View ViewModel (MVVM)  
-  supports: events, virtual paths, sitemap, permission concept, view
-  object/model binding, ...
+  supports: events, virtual paths, sitemap, permission concept, view model
+  binding, ...
 - Resource Bundle / Resource Messages  
   internationalization (i18n), localization (l10n) and text outsourcing 
 - NoSQL datasource based on XML  

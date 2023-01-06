@@ -7,8 +7,8 @@
 * [Expression Language](#expression-language)
 * [Markup](#markup)
 * [DataSource](#datasource)
-* [Resource Bundle](#resource-bundle-i18nl10n)
-* [Model View Controller](#model-view-controller)
+* [Resource-Bundle](#resource-bundle-i18nl10n)
+* [Model-View-Controller](#model-view-controller)
 * [Komponenten](#komponenten)
 * [Reaktives Rendering](#reaktives-rendering)
 * [Erweiterung](#erweiterung)
@@ -88,14 +88,14 @@
   * [Erg&auml;nzung](datasource.md#erg-nzung)
 
 
-### Resource Bundle (i18n/l10n)
+### Resource-Bundle (i18n/l10n)
 
-* [Resource Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)
+* [Resource-Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)
 
 
-### Model View Controller
+### Model-View-Controller
 
-* [Model View Controller](mvc.md#model-view-controller)
+* [Model-View-Controller](mvc.md#model-view-controller)
   * [Controller](mvc.md#controller)
   * [Model](mvc.md#model)
   * [View](mvc.md#view)
@@ -118,7 +118,7 @@
     * [Absolute Path](mvc.md#absolute-path)
     * [Variable Path](mvc.md#variable-path)
     * [Functional Path](mvc.md#functional-path)
-  * [Object/Model-Binding](mvc.md#object-model-binding)
+  * [View-Model-Binding](mvc.md#view-model-binding)
     * [Begriffe](mvc.md#begriffe)
       * [namespace](mvc.md#namespace)
       * [model](mvc.md#model)
@@ -147,7 +147,7 @@
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
   * [Common Standard-Komponente](composite.md##common-standard-komponente) 
-  * [Object/Model-Binding](composite.md#objectmodel-binding)
+  * [View-Model-Binding](composite.md#view-model-binding)
     * [Namespace](composite.md#namespace)
     * [Model](composite.md#model)
     * [Property](composite.md#property)
@@ -182,7 +182,7 @@
     * [Composite.EVENT_RENDER_START](events.md#compositeevent_render_start)
     * [Composite.EVENT_RENDER_NEXT](events.md#compositeevent_render_next)
     * [Composite.EVENT_RENDER_END](events.md#compositeevent_render_end)
-  * [Object/Model-Binding](events.md#objectmodel-binding)
+  * [View-Model-Binding](events.md#view-model-binding)
     * [Composite.EVENT_MOUNT_START](events.md#compositeevent_mount_start)
     * [Composite.EVENT_MOUNT_NEXT](events.md#compositeevent_mount_next)
     * [Composite.EVENT_MOUNT_END](events.md#compositeevent_mount_end)
