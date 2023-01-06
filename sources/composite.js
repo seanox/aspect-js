@@ -75,9 +75,9 @@
  *
  *         composite
  *         ----
- * Composite describes a construct of markup, JavaScript model, CSS and
- * possibly other resources. It describes a component/module without direct
- * relation to the representation.
+ * Composite describes a construct of markup (view), JavaScript object (model),
+ * CSS and possibly other resources. It describes a component/module without
+ * direct relation to the representation.
  *
  *         composite-id
  *         ----
@@ -850,20 +850,30 @@ if (typeof Composite === "undefined") {
      * Mounts the as selector passed element(s) with all its children where a
      * view model binding is possible. Mount is possible for all elements with
      * an ID, not only for composite objects and their children.
-     * 
-     * The view model binding is about connecting markup/HTML elements with
-     * JavaScript models. The models, also known as components, are static
-     * constructs/classes in which properties and logic corresponding to the
-     * markup/DOM are implemented. This avoids manual implementation and
-     * declaration of events as well as synchronization and interaction between
-     * UI and the application logic.
-     * 
+     *
+     * View-model binding is about linking of HTML elements in markup (view)
+     * with corresponding JavaScript objects (models).
+     *
+     * Models are representable/projectable static JavaScript objects that can
+     * provide and receive data, states and interactions for views, comparable
+     * to managed beans and DTOs. As singletons/facades/delegates, they can use
+     * other components and abstractions, contain business logic themselves,
+     * and be a link between the user interface (view) and middleware (backend).
+     *
+     * The required view model binding is part of the Model View Controller and
+     * the Composite API.
+     *
+     * The view as presentation and user interface for interactions and the
+     * model are primarily decoupled. For the MVVM approach as an extension of
+     * the MVC (), the controller establishes the bidirectional connection
+     * between view and model, which means that no manual implementation and
+     * declaration of events, interaction or synchronization is required.
+     *
      *     Principles
      *     ----
-     * Components are a static JavaScript models.
-     * Namespaces are supported, but they must be syntactically valid.
-     * Objects in objects is possible through the namespaces (as static inner
-     * class).
+     * Components are a static JavaScript objects (models). Namespaces are
+     * supported, but they must be syntactically valid. Objects in objects is
+     * possible through the namespaces (as static inner class).
      * 
      *     Binding
      *     ----
@@ -873,7 +883,7 @@ if (typeof Composite === "undefined") {
      * application logic - this is a conscious decision!
      *     Case study:
      * In the markup there is a composite with a property x. There is a
-     * corresponding JavaScript model for the composite but without the
+     * corresponding JavaScript object (model) for the composite but without the
      * property x. The renderer will mount the composite with the JavaScript
      * model, the property x will not be found in the model and will be
      * ignored. At runtime, the model is modified later and the property x is
@@ -1334,8 +1344,8 @@ if (typeof Composite === "undefined") {
      * Composite Element:
      *     {meta:{namespace, model, route, target}, namespace, model, route, target}
      *
-     * The method always requires a corresponding JavaScript model and an
-     * element with a valid element ID in a valid enclosing composite,
+     * The method always requires a corresponding JavaScript object (model) and
+     * an element with a valid element ID in a valid enclosing composite,
      * otherwise the method will return null.
      *
      * @param  element
