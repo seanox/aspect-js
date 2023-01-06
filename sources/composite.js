@@ -47,20 +47,16 @@
  * supported. If an object level in the namespace is a pure number, an array is
  * assumed.
  *
- *         scope
- *         ----
- * The scope is based on namespace and represents it on the object level.
- * Means the namespace is the description text, the scope is the object if the
- * namespace was resolved in the object tree.
- *
  *         model
  *         ----
- * The model (model component / component) is a static JavaScript object in any
- * namespace and provides the logic for the user interface (UI component) and
- * the transition from user interface to business logic and/or the backend.
- * The linking and/or binding of markup and JavaScript model is done by the
- * Composite-API. For this purpose, an HTML element must have a valid and
- * unique ID. The ID must meet the requirements of the namespace.
+ * Models are representable/projectable static JavaScript objects that can provide
+ * and receive data, states and interactions for views, comparable to managed beans
+ * and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
+ * other components and abstractions, contain business logic themselves, and be a
+ * link between the user interface (view) and middleware (backend).
+ *
+ * The required view model binding is part of the Model View Controller and the
+ * Composite API.
  *
  *         property
  *         ----
