@@ -96,8 +96,8 @@
  * controlled and influenced. This way, the access to paths can be stopped
  * and/or redirected/forwarded with own logic. 
  * 
- * The object/model-binding part also belongs to the Model View Controller and
- * is taken over by the Composite API in this implementation. SiteMap is an
+ * The view model binding part also belongs to the Model View Controller and is
+ * taken over by the Composite API in this implementation. SiteMap is an
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
