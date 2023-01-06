@@ -570,9 +570,9 @@ the namespace.
 
 #### Composite
 
-Composite is a construct of markup, JavaScript model, CSS and possibly other
-resources. It describes a component/module without direct relation to the
-representation.
+Composite is a construct of markup (view), JavaScript object (model), CSS and
+possibly other resources. It describes a component/module without direct
+relation to the representation.
 
 
 #### Composite-ID
@@ -601,10 +601,10 @@ control faces and facets and generally models/components.
 ### Binding
 
 In Seanox Aspect-js, components are also termed composites or modules because
-they consist of markup (view), corresponding JavaScript (model) and more.
+they consist of markup (view), corresponding JavaScript object (model) and more.
 
 The view model binding is about the connection of view/markup/HTML with the
-corresponding JavaScript model. The binding forwards interactions and status
+corresponding JavaScript object. The binding forwards interactions and status
 changes of the view to the model and established an interface for middleware
 functions and services for the view. This avoids a manual implementation and
 declaration of events as well as synchronization and interaction between UI and
@@ -640,9 +640,9 @@ const model = {
 ```
 
 The binding is based on the IDs of the HTML elements in the markup. These IDs
-define the namespace and the JavaScript model to be used. IDs can use relative
+define the namespace and the JavaScript object to be used. IDs can use relative
 and absolute namespaces, but are primarily based on the position of an element
-in the DOM and a corresponding object structure as a JavaScript model.
+in the DOM and a corresponding object structure in JavaScript.
 
 
 ### Dock
@@ -688,8 +688,8 @@ More details can be found in chapter [Dock](#undock)
 ### Synchronization
 
 In addition to the static linking and assignment of HTML elements to JavaScript
-models, the view model binding also includes the synchronization of values
-between the HTML elements and the fields of the JavaScript models. The
+objects (models), the view model binding also includes the synchronization of
+values between the HTML elements and the fields of the JavaScript object. The
 synchronization depends on events that are declared for the HTML element with
 the attribute `events` and so the synchronization is executed only when one of
 the defined events occurs.
@@ -704,7 +704,7 @@ The synchronization of values between view (HTML elements) and the fields of
 JavaScript models can be monitored and controlled by validation. Validation is
 declared in HTML via the `validate` attribute in combination with the `events`
 attribute and requires a corresponding validation method in the JavaScript
-model.
+object (model).
 
 More details about the usage can be found in chapter
 [validate](markup.md#validate).

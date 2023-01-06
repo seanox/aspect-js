@@ -433,7 +433,7 @@ https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von
 anderen HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur
 Validierung und Synchronisation von HTML-Elementen und dem korrespondierenden
-JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
+JavaScript-Objekt (Model) (mehr dazu im Abschnitt [validate](#validate)).
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -448,14 +448,14 @@ JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
 
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
-eines Composites und dem korrespondierenden JavaScript-Model, wo eine
+eines Composites und dem korrespondierenden JavaScript-Objekt (Model), wo eine
 gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein
 muss.
 
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
 ermitteln oder wurde keine HTML5-Validierung festgelegt, wird die Validierung
-vom JavaScript-Model aufgerufen, wenn das Modell eine entsprechende
+vom JavaScript-Objekt aufgerufen, wenn das Modell eine entsprechende
 validate-Methode `boolean validate(element, value)` bereitstellt und das zu
 validierende Element in einem Composite eingebettet ist.
 
@@ -647,8 +647,8 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 
 ## SiteMap
 
-Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten sind als
-Page, Faces und Facets organisiert, auf die &uuml;ber virtuelle Pfade
+Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten (Views)
+sind als Page, Faces und Facets organisiert, auf die &uuml;ber virtuelle Pfade
 zugegriffen wird. Zu diesem Zweck stellt SiteMap eine hierarchische
 Verzeichnisstruktur zur Verf&uuml;gung, die auf den virtuellen Pfaden f&uuml;r
 alle Ansichten basiert. Die SiteMap steuert den Zugriff und die Visualisierung

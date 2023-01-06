@@ -78,7 +78,7 @@ paths.
 ```
 
 Details on the use of composites / modular components are described in the
-sections [Composites](composite.md) and [Model View Controller](mvc.md).
+chapter [Composites](composite.md) and [Model View Controller](mvc.md).
 
 
 ### condition
@@ -110,7 +110,7 @@ possible as composite JavaScript.
 </script>
 ```
 
-Details about using embedded JavaScript are described in the section
+Details about using embedded JavaScript are described in the chapter
 [Scripting](#scripting).
 
 
@@ -120,8 +120,8 @@ This declaration binds one or more events (see
 https://www.w3.org/TR/DOM-Level-3-Events) to an HTML element. Events provide
 primary functions for event-driven refreshing of other HTML elements (see
 [render](#render) for more information), and for validating and synchronizing
-and synchronization of HTML elements with the corresponding JavaScript models
-(see [validate](#validate) for more information).
+and synchronization of HTML elements with the corresponding JavaScript objects
+(models) (see [validate](#validate) for more information).
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the view model binding,
@@ -159,7 +159,7 @@ const Model = {
 Example for the general usage, implementation and function as well as the
 interaction of the attributes `events` and `validate`. In the example, the input
 value of the composite field text1 is only transferred to the field of the same
-name in the JavaScript model if at least one of the events: _Input_ or _Change_
+name in the JavaScript object if at least one of the events: _Input_ or _Change_
 and the validation returns the value `true`.
 
 
@@ -704,13 +704,13 @@ Example with the attribute [strict](#strict):
 
 The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
-composite and the corresponding JavaScript model, where a property with the same
-name must exist as a target for synchronization.
+composite and the corresponding JavaScript object (model), where a property with
+the same name must exist as a target for synchronization.
 
 The validation works in two steps and uses the standard HTML5 validation at the
 beginning. If this cannot determine deviations from the expected result or if no
-HTML5 validation is specified, the validation of the JavaScript model is used if
-the model provides a corresponding validate method
+HTML5 validation is specified, the validation of the JavaScript object is used
+if the model provides a corresponding validate method
 `boolean validate(element, value)` and the element to be validated is embedded
 in a composite.
 
@@ -789,8 +789,8 @@ In this example, the input field expects an e-mail address. The value is checked
 continuously during the input and in case of an invalid value an error message
 is written into the attribute `title`, or in case of a valid value the content
 is deleted from the attribute `title`. Below the input field is the control
-output of the corresponding field in the JavaScript model. This field is only
-synchronized if the validate method return the value `true`.
+output of the corresponding field in the JavaScript object (model). This field
+is only synchronized if the validate method return the value `true`.
 
 
 ## Expression Language
@@ -809,7 +809,7 @@ and `import`.
 </article>
 ```
 
-Details about syntax and usage are described in the section
+Details about syntax and usage are described in the chapter
 [Expression Language](expression.md).
 
 

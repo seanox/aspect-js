@@ -170,11 +170,12 @@ umschliessende Face mit allen seinen &uuml;bergeordneten Faces angezeigt wird.
 
 #### Face Flow
 
-Face-Flow beschreibt die Zugriffssteuerung und die Visualisierung von Ansichten.
-Die SiteMap stellt daf&uuml;r Schnittstellen f&uuml;r Berechtigungskonzepte und
-Akzeptoren zur Verf&uuml;gung, mit denen der Face-Flow kontrolliert und
-beeinflusst werden kann. Auf diese Weise kann der Zugriff auf Pfade/Ansichten
-mit eigener Logik gestoppt und/oder umgeleitet bzw. weitergeleitet werden.
+Face-Flow beschreibt die Zugriffssteuerung und die Visualisierung von Ansichten
+(Views). Die SiteMap stellt daf&uuml;r Schnittstellen f&uuml;r
+Berechtigungskonzepte und Akzeptoren zur Verf&uuml;gung, mit denen der Face-Flow
+kontrolliert und beeinflusst werden kann. Auf diese Weise kann der Zugriff auf
+Pfade/Ansichten mit eigener Logik gestoppt und/oder umgeleitet bzw.
+weitergeleitet werden.
 
 
 ### Konfiguration
@@ -586,9 +587,9 @@ beim View-Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 
 #### Composite
 
-Composite ist ein Konstrukt aus Markup, JavaScript-Model, CSS und eventuell
-weiteren Ressourcen. Es beschreibt eine Komponente/Modul ohne direkten Bezug auf
-die Darstellung.
+Composite ist ein Konstrukt aus Markup (View), JavaScript-Objekt (Model), CSS
+und eventuell weiteren Ressourcen. Es beschreibt eine Komponente/Modul ohne
+direkten Bezug auf die Darstellung.
 
 
 #### Composite-ID
@@ -619,11 +620,11 @@ Modelle/Komponenten zu identifizieren und zu kontrollieren.
 ### Binding
 
 In Seanox Aspect-js werden Komponenten auch Composites oder Module genannt, da
-diese aus Markup (View), korrespondierendem JavaScript (Model) und mehr
+diese aus Markup (View), korrespondierendem JavaScript Objekt (Model) und mehr
 bestehen.
 
 Beim View-Model-Binding geht es um die Verbindung von View/Markup/HTML mit dem
-entsprechenden JavaScript-Model. Das Binding leitet Interaktionen und
+entsprechenden JavaScript-Objekt. Das Binding leitet Interaktionen und
 Status&auml;nderungen der View an das Model weiter und stellt eine Schnittstelle
 f&uuml;r Middleware-Funktionen und Services f&uuml;r die View bereit. Womit
 keine manuelle Implementierung und Deklaration von Ereignissen sowie die
@@ -660,22 +661,22 @@ const model = {
 ```
 
 Das View-Model-Binding basiert auf den IDs der HTML-Elemente im Markup (View).
-Diese IDs definieren den Namensraum und das zu verwendende JavaScript-Model. IDs
-k&ouml;nnen relative und absolute Namensr&auml;ume verwenden, basieren aber
-prim&auml;r auf der Position eines Elements im DOM und einer korrespondierenden
-Objektstruktur als JavaScript-Model.
+Diese IDs definieren den Namensraum und das zu verwendende JavaScript-Objekt
+(Model). IDs k&ouml;nnen relative und absolute Namensr&auml;ume verwenden,
+basieren aber prim&auml;r auf der Position eines Elements im DOM und einer
+korrespondierenden Objektstruktur im JavaScript.
 
 
 ### Dock
 
 Wenn ein Composite im DOM verwendet/eingef&uuml;gt wird, wird das entsprechende
-JavaScript-Model angedockt/verkn&uuml;pft und beim Entfernen aus dem DOM
-abgedockt/entkn&uuml;pft. In beiden F&auml;llen kann das Modell optional
+JavaScript-Objekt (Model) angedockt/verkn&uuml;pft und beim Entfernen aus dem
+DOM abgedockt/entkn&uuml;pft. In beiden F&auml;llen kann das Modell optional
 geeignete Methoden implementieren. Die Dock-Methode wird vor dem Rendern, vor
 dem Einf&uuml;gen des Composites in das DOM oder nach dem Laden der Seite beim
 ersten Rendern ausgef&uuml;hrt und kann zur Vorbereitung der Darstellung
 verwendet werden. Die Undock-Methode wird ausgef&uuml;hrt, nachdem das Composite
-aus dem DOM entfernt wurde und kann zur Nachbereitung bzw. Bereiningung der
+aus dem DOM entfernt wurde und kann zur Nachbereitung bzw. Bereinigung der
 Darstellung verwendet werden.
 
 ```javascript
@@ -711,9 +712,9 @@ Details werden im Abschnitt [Dock](#undock) beschrieben.
 ### Synchronization
 
 Das View-Model-Binding umfasst neben der statischen Verkn&uuml;pfung und
-Zuordnung von HTML-Elementen (View) zum JavaScript-Model auch die
+Zuordnung von HTML-Elementen (View) zum JavaScript-Objekt (Model) auch die
 Synchronisation von Werten zwischen den HTML-Elementen und den Feldern im
-JavaScript-Model. Die Synchronisation h&auml;ngt von Ereignissen ab, die
+JavaScript-Objekt. Die Synchronisation h&auml;ngt von Ereignissen ab, die
 f&uuml;r das HTML-Element mit dem Attribut `events` deklariert sind und wird nur
 ausgef&uuml;hrt, wenn eines der definierten Ereignisse eintritt.
 
@@ -724,10 +725,10 @@ beschrieben.
 ### Validation
 
 Die Synchronisation der Werte zwischen den HTML-Elementen (View) und den Feldern
-vom JavaScript-Model kann durch Validierung &uuml;berwacht und gesteuert werden.
-Die Validierung wird in HTML durch die Kombination der Attribute `validate` und
-`events` deklariert und erfordert eine entsprechende Validierungsmethode im
-JavaScript-Model.
+vom JavaScript-Objekt (Model) kann durch Validierung &uuml;berwacht und
+gesteuert werden. Die Validierung wird in HTML durch die Kombination der
+Attribute `validate` und `events` deklariert und erfordert eine entsprechende
+Validierungsmethode im JavaScript-Objekt.
 
 Details zur Funktionsweise werden im Abschnitt [validate](markup.md#validate)
 beschrieben.

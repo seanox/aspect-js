@@ -419,7 +419,7 @@ This declaration binds one or more events
 provide primary functions for event-driven refreshing of other HTML elements
 (see [render](#render) for more information), and for validating and
 synchronizing and synchronization of HTML elements with the corresponding
-JavaScript models (see [validate](#validate) for more information).
+JavaScript objects (models) (see [validate](#validate) for more information).
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -434,13 +434,13 @@ JavaScript models (see [validate](#validate) for more information).
 
 The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
-composite and the corresponding JavaScript model, where a property with the
-same name must exist as a target for synchronization.
+composite and the corresponding JavaScript object (model), where a property with
+the same name must exist as a target for synchronization.
 
 The validation works in two steps and uses the standard HTML5 validation at the
 beginning. If this cannot determine deviations from the expected result or if no
-HTML5 validation is specified, the validation of the JavaScript model is used if
-the model provides a corresponding validate method
+HTML5 validation is specified, the validation of the JavaScript object is used
+if the model provides a corresponding validate method
 `boolean validate(element, value)` and the element to be validated is
 embedded in a composite.
 

@@ -126,7 +126,7 @@ https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
 er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von
 anderen HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur
 Validierung und Synchronisation von HTML-Elementen und dem korrespondierenden
-JavaScript-Model (mehr dazu im Abschnitt [validate](#validate)).
+JavaScript-Objekt (Model) (mehr dazu im Abschnitt [validate](#validate)).
 
 Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
 einer Besonderheit, da das Attribut nur initial verarbeitet wird.
@@ -164,8 +164,9 @@ const Model = {
 Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
 Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
 Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
-JavaScript-Model &uuml;bernommen, wenn mindestens eines der Ereignisse: _Input_
-oder _Change_ eintritt und die Validierung den Wert `true` zur&uuml;ckgibt.
+JavaScript-Objekt &uuml;bernommen, wenn mindestens eines der Ereignisse:
+_Input_ oder _Change_ eintritt und die Validierung den Wert `true`
+zur&uuml;ckgibt.
 
 
 ### id
@@ -721,14 +722,14 @@ Beispiel mit dem Attribut [strict](#strict):
 
 Das Attribut `validate` erfordert die Kombination mit dem Attribut `events`.
 Zusammen definieren und steuern sie die Synchronisation zwischen dem Markup
-eines Composites und dem korrespondierenden JavaScript-Model, wo eine
+eines Composites und dem korrespondierenden JavaScript-Objekt (Model), wo eine
 gleichnamige Eigenschaft als Ziel f&uuml;r die Synchronisation vorhanden sein
 muss.
 
 Die Validierung funktioniert dabei zweistufig und nutzt zu Beginn die Standard
 HTML5-Validierung. Kann diese keine Abweichungen vom erwarteten Ergebnis
 ermitteln oder wurde keine HTML5-Validierung festgelegt, wird die Validierung
-vom JavaScript-Model aufgerufen, wenn das Modell eine entsprechende
+vom JavaScript-Objekt aufgerufen, wenn das Modell eine entsprechende
 validate-Methode `boolean validate(element, value)` bereitstellt und das zu
 validierende Element in einem Composite eingebettet ist.
 
@@ -813,8 +814,8 @@ fortlaufend bei der Eingabe &uuml;berpr&uuml;ft und bei einem ung&uuml;ltigen
 Wert wird eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
 g&uuml;ltigen Wert wird der Inhalt vom Attribut `title` gel&ouml;scht. Unterhalb
 vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
-JavaScript-Model. Dieses Feld wird nur synchronisiert, wenn die validate-Methode
-den Wert `true` zur&uuml;ckgibt.
+JavaScript-Objekt (Model). Dieses Feld wird nur synchronisiert, wenn die
+validate-Methode den Wert `true` zur&uuml;ckgibt.
 
 
 ## Expression Language

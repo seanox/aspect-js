@@ -201,7 +201,7 @@ Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
 Besonderheit werden auch Arrays unterst&uuml;tzt. Nutzt eine Ebene im Namespace
 eine Ganzzahl, wird diese Ebene als Array verwendet.
 
-Composites bzw. Datenobjekte (Models) sind vergleichbar mit Managed Beans, die
+Composites bzw. Datenobjekte (Models) sind vergleichbar mit managed Beans, die
 statisch als Singletons/Facades/Delegates den globalen Namespace nutzen. Um
 diese Datenobjekte zu strukturieren und Domain-Konzepte umzusetzen, sind
 entsprechende Namespaces erforderlich.
@@ -296,10 +296,10 @@ Domain-bezogene Komponenten umsetzen.
 
 Namespaces haben zudem Auswirkungen auf Ressourcen und Module. So haben
 Namespaces im Markup erstmal nur textuellen Charakter und k&ouml;nnen auch ohne
-ein korrespondierendes JavaScript-Objekt (Model) existieren und verwendet
-werden. Im Markup wird lediglich die Syntax der Namespaces geprk&uuml;ft. Ist
-diese g&uuml;ltig, werden die Namespaces direkt auf den Pfad von Modulen und
-deren Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
+ein korrespondierendes JavaScript-Objekt existieren und verwendet werden. Im
+Markup wird lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese
+g&uuml;ltig, werden die Namespaces direkt auf den Pfad von Modulen und deren
+Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 
 ```
 + modules
@@ -433,7 +433,7 @@ das DOM oder nach dem Laden der Seite beim ersten Rendern ausgef&uuml;hrt und
 kann das zur Vorbereitung von Model und Darstellung verwendet werden.
 
 Die undock-Methode wird ausgef&uuml;hrt, nachdem das Composite aus dem DOM
-entfernt wurde und l&auml;sst f&uuml;r Nachbereitung, Bereiningung un
+entfernt wurde und l&auml;sst f&uuml;r Nachbereitung, Bereinigung un
 Finalisierung des Models nutzen.
 
 Bei einem Composite in Kombination mit einer Bedingung (condition) h&auml;ngt
