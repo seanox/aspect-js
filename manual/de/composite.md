@@ -1,4 +1,4 @@
-[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
+[Model-View-Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
 - - -
 
 # Komponenten
@@ -7,7 +7,7 @@ Die Implementierung von Seanox aspect-js ist auf eine modulare und auf
 Komponenten basierte Architektur ausgerichtet. Das Framework unterst&uuml;tzt dazu
 eine deklarative Kennzeichnung von Komponenten im Markup, die Auslagerung und
 das automatische Laden von Ressourcen zur Laufzeit, sowie ein automatisches
-Object/Model-Binding.
+View-Model-Binding.
 
 
 ## Inhalt
@@ -22,7 +22,7 @@ Object/Model-Binding.
   * [JavaScript](#javascript)
   * [HTML](#html)
 * [Common Standard-Komponente](#common-standard-komponente)
-* [Object/Model-Binding](#objectmodel-binding)
+* [View-Model-Binding](#view-model-binding)
   * [Namespace](#namespace)
   * [Model](#model)
   * [Property](#property)
@@ -103,7 +103,7 @@ die Composite-ID unver&auml;ndert f&uuml;r die Ressourcen verwendet werden.
 
 ## Laden
 
-Das Laden der Ressourcen und das Object/Model-Binding erfolgt partiell, wenn das
+Das Laden der Ressourcen und das View-Model-Binding erfolgt partiell, wenn das
 Composite im UI ben&ouml;tigt wird, was die [SiteMap](sitemap.md) als zentrales
 Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
 situationsabh&auml;ngig vom UI nur die Ressourcen der aktiv verwendeten
@@ -173,7 +173,7 @@ Logik bzw. Styles gedacht.
 ```
 
 
-## Object/Model-Binding
+## View-Model-Binding
 
 
 ### Namespace
@@ -372,7 +372,7 @@ In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel
 wenn Eigenschaften Arrays sind oder im Markup eine Iteration verwendet wird. In
 diesen F&auml;llen kann der Bezeichner, getrennt durch einen Doppelpunkt, um
 einen zus&auml;tzlichen eindeutigen Qualifier erweitert werden. Qualifier wirken
-beim Object/Model-Binding wie Properties und verl&auml;ngern den Namensraum.
+beim View-Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 
 ```html
 <input type="text" id="identifier">
@@ -477,4 +477,4 @@ TODO:
 
 - - -
 
-[Model View Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
+[Model-View-Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)

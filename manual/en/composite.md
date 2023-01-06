@@ -6,7 +6,7 @@
 The implementation of Seanox aspect-js focuses on a modular and component-based
 architecture. The framework supports a declarative designation of components in
 the markup, the outsourcing and automatic loading of resources at runtime, as
-well as an automatic object/model binding.
+well as an automatic view model binding.
 
 
 ## Contents Overview
@@ -21,7 +21,7 @@ well as an automatic object/model binding.
   * [JavaScript](#javascript)
   * [HTML](#html)
 * [Common Standard Component](#common-standard-component) 
-* [Object/Model Binding](#objectmodel-binding)
+* [View Model Binding](#view-model-binding)
   * [Namespace](#namespace)
   * [Model](#model)
   * [Property](#property)
@@ -98,7 +98,7 @@ unchanged for the resources.
 
 ## Loading
 
-The loading of resources and the object/model binding is done partially when the
+The loading of resources and the view model binding is done partially when the
 composite is needed in the UI, which controls the [SiteMap](sitemap.md) as a
 central face flow management and thus minimizes the loading time considerably,
 because depending on the situation, only the resources of the actively used
@@ -166,7 +166,7 @@ logic or styles.
 ```
 
 
-## Object/Model Binding
+## View Model Binding
 
 
 #### Namespace
@@ -339,7 +339,7 @@ defined by an attribute with the same name.
 In some cases an identifier (ID) is not unique. For example, when properties are
 arrays or an iteration is used in the markup. In these cases the identifier can
 be extended by an additional unique qualifier separated by a colon. Qualifiers
-have the effect of properties in the object/model binding and extend the
+have the effect of properties in the view model binding and extend the
 namespace.
 
 ```html
