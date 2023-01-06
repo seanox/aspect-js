@@ -163,7 +163,7 @@ CR: Composite Render Iterate: Optimization for using readonly meta object
 CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
     The deletion is only temporary, the renderer still knows the attribute and checks it again in each render cycle.
 CR: Composite Scan: Omission of the intermediate step between render and mount
-CR: Composite Mount: Revision of the object/model binding
+CR: Composite Mount: Revision of the view model binding
 CR: Composite Mount: Stricter use of the hierarchy of IDs in the DOM
 CR: Composite Mount Validation: Change to two-phase validation (HTML5 + model-based validation)
 CR: Composite Mount Validation: Has a direct effect on synchronization, action and default action of the browser
