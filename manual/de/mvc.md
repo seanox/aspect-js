@@ -41,17 +41,17 @@ werden kann.
 
 ## Model
 
-Das Modell ist ein darstellbares/projezierbares Objekt. Es empf&auml;ngt
-(Status)&Auml;nderungen und Interaktionen der View, die durch den Controller
-&uuml;bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten sowie
-Funktionen und Diensten der Middelware. Das Modell dient vorrangig der View zur
-Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche
-Funktionalit&auml;t nimmt es weitere Komponenten in Anspruch.
+Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
+DTOs (Data Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die
+View bereitstellen. Als Singletons/Facades/Delegates k&ouml;nnen sie weitere
+Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
+ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
-In Seanox aspect-js werden Modelle durch statische JavaScript-Objekte
-repr&auml;sentiert, die vergleichbar mit managed Beans als
-Singletons/Facades/Delegates genutzt werden, so dass diese intern weitere
-Komponenten und Abstraktion verwenden k&ouml;nnen.
+Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
+und dem Composite API.
+
+Details zum View-Model-Binding werden im Abschnitt
+[Model-View-Controller - Binding](mvc.md#binding) beschrieben.
 
 
 ## View
@@ -89,12 +89,12 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
   * [Functional Path](#functional-path)
 * [View-Model-Binding](#view-model-binding)
   * [Begriffe](#begriffe)
-    * [namespace](#namespace)
-    * [model](#model)
-    * [property](#property)
-    * [qualifier](#qualifier)
-    * [composite](#composite)
-    * [composite-id](#composite-id)
+    * [Namespace](#namespace)
+    * [Model](#model)
+    * [Property](#property)
+    * [Qualifier](#qualifier)
+    * [Composite](#composite)
+    * [Composite-ID](#composite-id)
   * [Binding](#binding)
   * [Dock](#dock)
   * [Undock](#undock)
@@ -510,44 +510,24 @@ Model-View-Controller beschrieben.
 ### Begriffe
 
 
-#### namespace
+#### Namespace
 
 TODO:
 
 
-#### model
+#### Model
 
-Das Modell (Modell-Komponente / Komponente) ist ein statisches JavaScript-Objekt
-in einem beliebigen Namensraum und stellt die Logik f&uuml;r die 
-Benutzerschnittstelle (UI-Komponente) und den &Uuml;bergang von der
-Benutzerschnittstelle zur Gesch&auml;ftslogik und/oder zum Backend zur
-Verf&uuml;gung. Die Verkn&uuml;pfung bzw. Bindung von Markup und
-JavaScript-Model erfolgt &uuml;ber die Composite-API. Dazu muss ein HTML-Element
-eine g&uuml;ltige und eindeutige ID haben. Die ID muss die Anforderungen des
-Namensraums erf&uuml;llen.
+Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
+DTOs (Data Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die
+View bereitstellen. Als Singletons/Facades/Delegates k&ouml;nnen sie weitere
+Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
+ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
-Details werden im Abschnitt [Binding](#binding) beschrieben.
-
-Die Composite-API erkennt die Existenz der Modell-Komponenten im DOM, bzw. deren
-Abwesenheit. So kann das Modell der Komponente &uuml;ber die statischen Methoden
-`dock` und `undock` informiert werden, wenn die Komponente dem DOM
-hinzugef&uuml;gt bzw. aus diesem entfernt wird, womit sich das Modell
-vorbereiten bzw. finalisieren l&auml;sst. Die Implementierung beider Methoden
-ist optional.
-
-```javascript
-const model = {
-    dock() {
-    },
-    undock() {
-    }
-};
-```
-
-TODO:
+Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
+und dem Composite API.
 
 
-#### property
+#### Property
 
 Referenziert ein Element mit einer ID innerhalb vom DOM eines Composites und die
 korrespondierende Eigenschaft im Modell. Die Elemente der Properties nutzen
@@ -579,7 +559,7 @@ dem Wert vom HTML-Element. F&uuml;r ein HTML-Element werden die entsprechenden
 Ereignisse &uuml;ber das gleichnamige Attribut definiert.
 
 
-#### qualifier
+#### Qualifier
 
 In einigen F&auml;llen ist ein Bezeichner (ID) nicht eindeutig. Zum Beispiel
 wenn Eigenschaften Arrays sind oder eine Iteration verwendet wird. In diesen
@@ -604,14 +584,14 @@ beim View-Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 ```
 
 
-#### composite
+#### Composite
 
 Composite ist ein Konstrukt aus Markup, JavaScript-Model, CSS und eventuell
 weiteren Ressourcen. Es beschreibt eine Komponente/Modul ohne direkten Bezug auf
 die Darstellung.
 
 
-#### composite-id
+#### Composite-ID
 
 Die Composite-ID ist ein anwendungsweit eindeutiger Bezeichner. Sie ist eine
 Zeichenfolge, die aus Buchstaben, Zahlen und Unterstrichen besteht und optional

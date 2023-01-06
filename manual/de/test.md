@@ -63,7 +63,7 @@ Test.start();
 
 Der kleinste Bestandteil in einem Integrationstest, der hier als _Task_
 verwendet wird, da _case_ ein Schl&uuml;sselwort im JavaScript ist. Tasks
-k&aouml;nnen allein implementiert werden, werden aber meist in einem Szenario
+k&ouml;nnen allein implementiert werden, werden aber meist in einem Szenario
 verwendet.
 
 ```javascript

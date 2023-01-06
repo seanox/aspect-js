@@ -623,17 +623,17 @@ und SiteMap.
 
 ### Model
 
-Das Modell ist ein darstellbares/projezierbares Objekt. Es empf&auml;ngt
-(Status)&Auml;nderungen und Interaktionen der View, die durch den Controller
-&uuml;bermittelt werden, bzw. bietet der View eine Schnittstelle zu Daten sowie
-Funktionen und Diensten der Middelware. Das Modell dient vorrangig der View zur
-Darstellung und Verwaltung der Zust&auml;nde, f&uuml;r fachliche Funktionalit&auml;t
-nimmt es weitere Komponenten in Anspruch.
+Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
+DTOs (Data Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die
+View bereitstellen. Als Singletons/Facades/Delegates k&ouml;nnen sie weitere
+Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
+ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
-In Seanox aspect-js werden die Modelle durch statische JavaScript-Objekte
-repr&auml;sentiert. Konzeptionell ist die Implementierung der Entwurfsmuster
-Fassade und Delegation angedacht, so dass die statischen Modelle intern weitere
-Komponenten und Abstraktion verwenden.
+Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
+und dem Composite API.
+
+Details zum View-Model-Binding werden im Abschnitt
+[Model-View-Controller - Binding](mvc.md#binding) beschrieben.
 
 
 ### View

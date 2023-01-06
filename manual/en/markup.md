@@ -466,7 +466,7 @@ components can be implemented in the static world of Seanox aspect-js.
 
 Namespaces also have effects on resources and modules. Thus, namespaces in the
 markup initially have only a textual character and can also exist and be used
-without a corresponding JavaScript object/model. Only the syntax of the
+without a corresponding JavaScript object (model). Only the syntax of the
 namespaces is checked in the markup. If this is valid, the namespaces are
 applied directly to the path of modules and their resources and extend the path
 from the module directory.

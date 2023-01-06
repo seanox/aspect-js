@@ -40,15 +40,17 @@ MVCS (Model View Controller Service).
 
 ## Model
 
-The model is a representable/projectable object. It receives (status)changes and
-interactions of the view, which are transmitted by the controller, or offers the
-view an interface to data as well as functions and services of the middleware.
-The model serves primarily the view for the representation and management of the
-states, for functional functionality it takes up further components.
+Models are representable/projectable static JavaScript objects that can provide
+and receive data, states and interactions for views, comparable to managed beans
+and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
+other components and abstractions, contain business logic themselves, and be a
+link between the user interface (view) and middleware (backend).
 
-In Seanox aspect-js models are represented by static JavaScript objects, which
-are used as singletons/facades/delegates comparable to managed beans, so that
-this can use further components and abstraction internally.
+The required view model binding is part of the Model View Controller and the
+Composite API.
+
+Details about view-model binding are described in chapter
+[Model-View-Controller - Binding](mvc.md#binding).
 
 
 ## View
@@ -86,12 +88,12 @@ In Seanox aspect-js the views are represented by the markup.
   * [Functional Path](#functional-path)
 * [View Model Binding](#view-model-binding)
   * [Terms](#terms)
-    * [namespace](#namespace)
-    * [model](#model)
-    * [property](#property)
-    * [qualifier](#qualifier)
-    * [composite](#composite)
-    * [composite-id](#composite-id)
+    * [Namespace](#namespace)
+    * [Model](#model)
+    * [Property](#property)
+    * [Qualifier](#qualifier)
+    * [Composite](#composite)
+    * [Composite-ID](#composite-id)
   * [Binding](#binding)
   * [Dock](#dock)
   * [Undock](#undock)
@@ -489,43 +491,27 @@ understanding, the functionality is described here in the Model View Controller.
 ### Terms
 
 
-#### namespace
+#### Namespace
 
 TODO:
 
 
-#### model
+#### Model
 
-The model (model component / component) is a static JavaScript object in any
-namespace and provides the logic for the user interface (UI component) and the
-transition from user interface to business logic and/or the backend. The linking
-and/or binding of markup and JavaScript model is done by the Composite API. For
-this purpose, an HTML element must have a valid and unique ID. The ID must meet
-the requirements of the namespace.
+Models are representable/projectable static JavaScript objects that can provide
+and receive data, states and interactions for views, comparable to managed beans
+and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
+other components and abstractions, contain business logic themselves, and be a
+link between the user interface (view) and middleware (backend).
 
-More details about the binding of object, field and value can be found in
-chapter [Binding](#binding).
+The required view model binding is part of the Model View Controller and the
+Composite API.
 
-The Composite API can distinguish between the presence and absence of model
-components in the user interface due to their existence in the DOM. The model
-component is informed about the static method `dock` when it appears in the DOM
-and about the static method `undock` when it is removed from the DOM. With which
-the model component can be prepared or finalized. The implementation of both
-methods is optional.
-
-```javascript
-const model = {
-    dock() {
-    },
-    undock() {
-    }
-};
-```
-
-TODO:
+Details about view-model binding are described in chapter
+[Model-View-Controller - Binding](mvc.md#binding).
 
 
-#### property
+#### Property
 
 Is a property in a static model (model component / component). It corresponds to
 an HTML element with the same ID in the same namespace. The ID of the property
@@ -557,7 +543,7 @@ value of the HTML element. For an HTML element, the relevant events are defined
 using the attribute of the same name.
 
 
-#### qualifier
+#### Qualifier
 
 In some cases, the identifier (ID) may not be unique. For example, in cases
 where properties are arrays or an iteration is used. In these cases the 
@@ -582,14 +568,14 @@ the namespace.
 ```
 
 
-#### composite
+#### Composite
 
 Composite is a construct of markup, JavaScript model, CSS and possibly other
 resources. It describes a component/module without direct relation to the
 representation.
 
 
-#### composite-id
+#### Composite-ID
 
 It is a character sequence consisting of letters, numbers and underscores and
 optionally supports the minus sign if it is not used at the beginning or end. A

@@ -296,10 +296,10 @@ Domain-bezogene Komponenten umsetzen.
 
 Namespaces haben zudem Auswirkungen auf Ressourcen und Module. So haben
 Namespaces im Markup erstmal nur textuellen Charakter und k&ouml;nnen auch ohne
-ein korrespondierendes JavaScript-Objekt/Modell existieren und verwendet werden.
-Im Markup wird lediglich die Syntax der Namespaces geprk&uuml;ft. Ist diese
-gk&uuml;ltig, werden die Namespaces direkt auf den Pfad von Modulen und deren
-Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
+ein korrespondierendes JavaScript-Objekt (Model) existieren und verwendet
+werden. Im Markup wird lediglich die Syntax der Namespaces geprk&uuml;ft. Ist
+diese g&uuml;ltig, werden die Namespaces direkt auf den Pfad von Modulen und
+deren Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 
 ```
 + modules
@@ -325,13 +325,17 @@ Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 
 ### Model
 
-Ein Model ist ein JavaScript-Objekt in einem beliebigen Namensraum, dass die
-Zust&auml;nde vom User-Interface/View speichert und eine Schnittstelle f&uuml;r
-den &Uuml;bergang von der Benutzerschnittstelle (User-Interface/View) zur
-Gesch&auml;ftslogik und/oder zum Backend zur Verf&uuml;gung stellt.
+Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
+DTOs (Data Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die
+View bereitstellen. Als Singletons/Facades/Delegates k&ouml;nnen sie weitere
+Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
+ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
 
-Konzeptionell ist die Implementierung der Entwurfsmuster Fassade und Delegation
-angedacht, so dass Models intern weitere Komponenten und Abstraktion verwenden.
+Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
+und dem Composite API.
+
+Details zum View-Model-Binding werden im Abschnitt
+[Model-View-Controller - Binding](mvc.md#binding) beschrieben.
 
 
 ### Property

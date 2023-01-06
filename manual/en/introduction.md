@@ -601,17 +601,17 @@ SiteMap.
 
 ### Model
 
-The model is a displayable/projectable object. It receives (status) changes and
-interactions of the view, which are transmitted by the controller, or provides
-the view with an interface to data as well as functions and services of the
-middleware. The model primarily serves the view for the representation and
-management of the states, for business functionality it uses additional
-components.
+Models are representable/projectable static JavaScript objects that can provide
+and receive data, states and interactions for views, comparable to managed beans
+and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
+other components and abstractions, contain business logic themselves, and be a
+link between the user interface (view) and middleware (backend).
 
-In Seanox aspect-js the models are represented by static JavaScript objects.
-Conceptually the implementation of the design pattern facade and delegation is
-planned, so that the static models internally use additional components and
-abstraction.
+The required view model binding is part of the Model View Controller and the
+Composite API.
+
+Details about view-model binding are described in chapter
+[Model-View-Controller - Binding](mvc.md#binding).
 
 
 ### View

@@ -286,7 +286,7 @@ components can be implemented in the static world of Seanox aspect-js.
 
 Namespaces also have effects on resources and modules. Thus, namespaces in the
 markup initially have only a textual character and can also exist and be used
-without a corresponding JavaScript object/model. Only the syntax of the
+without a corresponding JavaScript object (model). Only the syntax of the
 namespaces is checked in the markup. If this is valid, the namespaces are
 applied directly to the path of modules and their resources and extend the path
 from the module directory.
@@ -294,12 +294,17 @@ from the module directory.
 
 ### Model
 
-A model is a JavaScript object in any namespace that stores the states of the
-user interface/view and provides an interface for the transition from the user
-interface/view to the business logic and/or backend.
+Models are representable/projectable static JavaScript objects that can provide
+and receive data, states and interactions for views, comparable to managed beans
+and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
+other components and abstractions, contain business logic themselves, and be a
+link between the user interface (view) and middleware (backend).
 
-Conceptually, the implementation of the design patterns facade and delegation is
-intended, so that models internally use further components and abstraction.
+The required view model binding is part of the Model View Controller and the
+Composite API.
+
+Details about view-model binding are described in chapter
+[Model-View-Controller - Binding](mvc.md#binding).
 
 
 #### Property
