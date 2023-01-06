@@ -1034,7 +1034,7 @@ enth&auml;lt Details zum aktuellen Test und zur Warteschlange.
 
 ### Events
 
-Ereignisse (Events) bzw. deren Callback-Methoden sind ein weitere Form zur
+Ereignisse (Events) bzw. deren Callback-Methoden sind eine weitere Form zur
 &Uuml;berwachung der Testausf&uuml;hrung. Die Callback-Methoden werden f&uuml;r
 entsprechende Ereignisse beim Test-API registriert und funktionieren dann
 &auml;hnlich dem Monitor.
