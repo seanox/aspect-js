@@ -385,9 +385,9 @@ necessarily require an identifier (ID). They are used by the [SiteMap](
 which has a direct effect of the visibility of the composites.
 
 The [Model View Controller](mvc.md#sitemap) supports automatic
-[view model binding](object-binding.md) for composites. The resources (CSS, JS,
-Markup) for composites can be outsourced to the module directory and are only
-loaded automatically when necessary.
+[view model binding](composite.md#view-model-binding) for composites. The
+resources (CSS, JS, Markup) for composites can be outsourced to the module
+directory and are loaded automatically when necessary.
 
 ```html
 <article id="example" composite>

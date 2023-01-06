@@ -61,9 +61,9 @@ Face-Flow verwendet, was direkten Einfluss auf die Sichtbarkeit der Composites
 hat.
 
 Der [Model-View-Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
-ein automatisches [View-Model-Binding](object-binding.md). Die Ressourcen (CSS,
-JS, Markup) lassen sich f&uuml;r Composites in das Modul-Verzeichnis auslagern
-und werden erst bei Bedarf automatisch nachgeladen. 
+ein automatisches [View-Model-Binding](composite.md#view-model-binding). Die
+Ressourcen (CSS, JS, Markup) lassen sich f&uuml;r Composites in das
+Modul-Verzeichnis auslagern und werden bei Bedarf automatisch nachgeladen. 
 
 ```html
 <article id="example" composite>
