@@ -100,17 +100,12 @@ beschrieben.
 
 ### condition
 
-Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt. Der
-mit dem Attribut angegebene Ausdruck muss explizit `true` zur&uuml;ckliefern,
-damit das Element im DOM erhalten bleibt. Bei abweichenden R&uuml;ckgabewerten
-wird das Element tempor&auml;r aus dem DOM entfernt und l&auml;sst sich
-sp&auml;ter durch das Auffrischen des __Eltern-Elements__ wieder einf&uuml;gen,
-wenn der Ausdruck `true` zur&uuml;ckliefert.
-
-Eine Besonderheit stellt die Kombination mit dem Attribut [interval](#interval)
-dar, da mit dem Entfernen des Elements aus dem DOM auch der zugeh&ouml;rige
-Timer beendet wird. Wird das Element mit einer sp&auml;teren Auffrischung wieder
-in das DOM aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
+Als Bedingung legt das Attribut fest, ob ein Element im DOM enthalten bleibt.
+Der als Wert angegebene Ausdruck muss explizit `true` zur&uuml;ckliefern, damit
+das Element erhalten bleibt. Bei abweichenden R&uuml;ckgabewerten wird das
+Element tempor&auml;r aus dem DOM entfernt und l&auml;sst sich sp&auml;ter durch
+das Auffrischen des __Eltern-Elements__ wieder einf&uuml;gen, wenn der Ausdruck
+`true` zur&uuml;ckliefert.
 
 ```html
 <article condition="{{Model.visible}}">
@@ -118,8 +113,21 @@ in das DOM aufgenommen, startet der Timer von vorn, wird also nicht fortgesetzt.
 </article>
 ```
 
+Bei der Kombination mit dem Attribut [interval](#interval) ist zu beachten, dass
+mit dem Entfernen des Elements aus dem DOM auch der zugeh&ouml;rige Timer
+beendet wird. Wird das Element mit einer sp&auml;teren Auffrischung wieder in
+das DOM aufgenommen, startet ein neuer Timer, wird also nicht fortgesetzt.
+
+```html
+<article interval="{{1000}}" condition="{{Model.visible}}">
+  ...
+</article>
+```
+
 Die Verwendung vom condition-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite-JavaScript m&ouml;glich.
+ist als SCRIPT element mit dem Typ `composite/javascript` als
+Composite-JavaScript m&ouml;glich, da hier der Renderer die Kontrolle &uuml;ber
+die Skript-Ausf&uuml;hrung hat und nicht der Browser.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">

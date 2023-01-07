@@ -94,17 +94,11 @@ chapter [Composites](composite.md) and [Model View Controller](mvc.md).
 
 ### condition
 
-The condition attribute decides whether an element is kept in the DOM. The
-expression specified with the attribute must explicitly return `true` for the
-element to be retained in the DOM. If the return value differs, the element is
-temporarily removed from the DOM and can be reinserted later by refreshing the
-__parent element__ if the expression returns `true`.
-
-A peculiarity is the combination with the attribute [interval](#interval),
-because with the removal of the element from the DOM also the corresponding
-timer is terminated. If the element is inserted into the DOM again with a later
-refresh, the timer starts again from the beginning and is therefore not
-continued.
+As a condition, the attribute specifies whether an element remains contained in
+the DOM. The expression specified as the value must explicitly return `true` to
+retain the element. If the return value is different, the element is temporarily
+removed from the DOM and can be reinserted later by refreshing the __parent
+element__ if the expression returns `true`.
 
 ```html
 <article condition="{{Model.visible}}">
@@ -112,8 +106,21 @@ continued.
 </article>
 ```
 
+When combined with the attribute [interval](#interval), it should be noted that
+when the element is removed from the DOM, the associated timer is also
+terminated. If the element is added back to the DOM with a later refresh, a new
+timer starts, so it is not continued.
+
+```html
+<article interval="{{1000}}" condition="{{Model.visible}}">
+  ...
+</article>
+```
+
 The use of the condition attribute in combination with embedded JavaScript is
-possible as composite JavaScript.
+possible as SCRIPT element with the type `composite/javascript` as Composite
+JavaScript, because here the renderer has control over the script execution and
+not the browser.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
