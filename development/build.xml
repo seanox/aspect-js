@@ -185,19 +185,6 @@
     <exec executable="cmd.exe">
       <arg value="/c npm publish --access public"/>
     </exec>
-
-    <copy file="${workspace}/package.json" tofile="${workspace}/package.tmp" overwrite="true"/>
-    <replaceregexp file="${workspace}/package.json"
-        match="(@seanox/aspect-js)" flags="g" byline="false" replace="\1-lite"/>
-    <replaceregexp file="${workspace}/package.json"
-        match="(release/aspect-js)(-min.js)" flags="g" byline="false" replace="\1-lite\2"/>
-    <replaceregexp file="${workspace}/package.json"
-        match=",\s+(\x34)?unit test(\x34)?" flags="g" byline="false" replace=""/>
-    <exec executable="cmd.exe">
-      <arg value="/c npm publish --access public"/>
-    </exec>
-    <move file="${workspace}/package.tmp" tofile="${workspace}/package.json" overwrite="true"/>
-
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\10.0.0\2" byline="false"/>
   </target>
 
