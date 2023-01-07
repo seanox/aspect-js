@@ -1,7 +1,4 @@
-1.6.0 2023xxxx
-RQ: SiteMap: Disabled by default
-    Attribute static is then not required for composites.
-    Simplifies micro front-ends without face-flow.
+1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr
 CR: Release: New channel for lite version
     Lite is a version without test module/extension.
