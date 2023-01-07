@@ -202,8 +202,8 @@ __If namespaces reflect the IDs of composites and thus HTML elements use the IDs
 as ID attributes, the browser will create the HTML elements as variables in the
 global namespace for these IDs. Interestingly, the browser ignores constants of
 the same name and overwrites them with the HTML elements. Therefore, namespaces
-should be created after the BODY tag in JavaScript or better use the namespace
-API that uses the global namespace of window that the browser does not
+should be created after the HTML element `BODY` in JavaScript or better use the
+namespace API that uses the global namespace of window that the browser does not
 overwrite.__
 
 __Also for modules and JavaScript resources that are reloaded at runtime, using

@@ -210,9 +210,10 @@ __Wenn Namespaces die IDs von Composites reflektieren und somit HTML-Elemente
 die IDs als ID-Attribut verwenden, wird der Browser zu diesen IDs die
 HTML-Elemente als Variablen im globalen Namespace anlegen. Interessanterweise
 ignoriert der Browser gleichnamige Konstanten und &uuml;berschreibt diese mit
-den HTML-Elementen. Daher sollten Namespaces nach dem BODY-Tag im JavaScript
-erstellt werden oder besser das Namespace-API verwenden, die den globalen
-Namespace von _window_ nutzt, den der Browser nicht &uuml;berschreibt.__
+den HTML-Elementen. Daher sollten Namespaces nach dem HTML-Element `BODY` im
+JavaScript erstellt werden oder besser das Namespace-API verwenden, die den
+globalen Namespace von _window_ nutzt, den der Browser nicht
+&uuml;berschreibt.__
 
 __Auch f&uuml;r Module und JavaScript-Ressourcen die zur Laufzeit nachgeladen
 werden, ist die Verwendung vom Namespace-API der einfachste Weg. Da das
