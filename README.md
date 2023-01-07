@@ -28,7 +28,8 @@ bundle, NoSQL datasource, test environment and much more.
 - Easy integration in markup and JavaScript (clean code)  
   combinable with other JavaScript frameworks if they don't do the same thing do
   and use a different syntax
-- Lightweight implementation (requires no additional frameworks)
+- Lightweight implementation  
+  requires no additional frameworks
 - Component based architecture
 - Namespaces and domain concept  
   for better structuring of components, modules and business logic
@@ -41,7 +42,7 @@ bundle, NoSQL datasource, test environment and much more.
   rendering reacts to changes in data objects and triggers partial rendering on
   consumers
 - Markup rendering  
-  supports: condition, custom tags, events, filter, interval, iterate,
+  supports: conditions, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 - Markup hardening  
   makes it difficult to manipulate the attributes in the markup  

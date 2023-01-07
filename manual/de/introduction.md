@@ -8,21 +8,22 @@
 
 Gepr&auml;gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug
 auf Funktion und einfache Integration ins Markup, entstand die Idee f&uuml;r
-einen &auml;hnliche client-seitigen Full-Stack L&ouml;sung mit minimalistischem
+eine &auml;hnliche client-seitige Full-Stack L&ouml;sung mit minimalistischem
 und leichtgewichtigem Ansatz zur Implementierung von Single-Page Applications
 (SPAs).
 
 Seanox aspect-js greift dazu den deklarativen Ansatz von HTML auf und erweitert
-ihn um Expression Language, reaktives Rendering mit zus&auml;tzlichen
-Attributen, Model-View-Controller, View-Model-Binding, Resource-Bundle
-(i18n/l10n), NoSQL-Datasource, Testumgebung und vieles mehr.
+ihn um Expression Language, reaktives Rendering, zus&auml;tzlichen Attributen,
+Model-View-Controller, View-Model-Binding, Resource-Bundle (i18n/l10n),
+NoSQL-Datasource, Testumgebung und vieles mehr.
 
 
 # Merkmale
 * Einfache Integration in Markup und JavaScript (sauberer Code)  
-  kombinierbar mit anderen JavaScript-Frameworks, wenn diese nicht das Gleiche
+  kombinierbar mit anderen JavaScript-Frameworks, wenn diese nicht dasselbe tun
   und eine andere Syntax verwenden
-* Leichtgewichtige Implementierung (erfordert keine zus&auml;tzlichen Frameworks)
+* Leichtgewichtige Implementierung  
+  erfordert keine zus&auml;tzlichen Frameworks
 * Komponentenbasierte Architektur
 * Namespaces und Domain-Konzept  
   zur besseren Strukturierung von Komponenten, Modulen und Gesch&auml;ftslogik
@@ -32,7 +33,7 @@ Attributen, Model-View-Controller, View-Model-Binding, Resource-Bundle
 * Expression Language  
   Meta-Sprach-Erweiterung mit voller JavaScript-Unterst&uuml;tzung
 * Reaktives Rendering  
-  das Rendering reagiert auf &Auml;nderungen in Datenobjekten l&ouml;st ein
+  das Rendering reagiert auf &Auml;nderungen in Datenobjekten und l&ouml;st ein
   partielles Rendering der Konsumenten aus 
 * Markup-Rendering  
   unterst&uuml;tzt: condition, custom tags, events, filter, interval, iterate,
@@ -41,7 +42,7 @@ Attributen, Model-View-Controller, View-Model-Binding, Resource-Bundle
   erschwert die Manipulation der Attribute im Markup  
   nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
   Verwendung eingesetzt  
-* Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)
+* Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)  
   unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept,
   View-Model-Binding, ......
 * Resource-Bundle / Resource-Messages   
@@ -101,11 +102,11 @@ Attributen, Model-View-Controller, View-Model-Binding, Resource-Bundle
 ## Erste Schritte
 
 Das Framework besteht aus einer JavaScript-Datei und wird &uuml;ber die URL
-eines Release-Channel eingebunden oder als Releases heruntergeladen wird.
+eines Release-Channels eingebunden oder als Releases heruntergeladen.
 
 Release-Channel stellen kontinuierlich die neuesten finalen Hauptversionen zur
-Verf&uuml;gung, diese sind abw&auml;rtskompatibel zur Hauptversion. So ist
-Seanox aspect-js immer auf dem neuesten Stand.
+Verf&uuml;gung, die zur Hauptversion abw&auml;rtskompatibel sind. So ist Seanox
+aspect-js immer auf dem neuesten Stand.
 
 Jedes Release besteht aus zwei Versionen. Die Entwickler-Version beinhaltet
 umfangreiche Kommentare zu Konzeption, Funktion, Arbeitsweise und Verwendung.
@@ -140,10 +141,9 @@ einbezogen wird.
 
 ## Expression Language
 
-Expressions bzw. die Expression Language (EL) oder in der vorliegenden
-Dokumentation auch Ausdruck und Ausdr&uuml;cke genannt, sind ein einfacher
-Zugang zum client-seitigen JavaScript und damit zu den Modellen und Komponenten.
-In den Expressions wird das komplette JavaScript-API unterst&uuml;tzt, das mit
+Expressions bzw. die Expression Language (EL) ist ein einfacher Zugang zum
+clientseitigen JavaScript und damit zu den Modellen und Komponenten im Seanox
+aspect-js. Expressions unterst&uuml;tzen das komplette JavaScript-API, das mit
 zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
 die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 

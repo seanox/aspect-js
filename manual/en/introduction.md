@@ -21,7 +21,8 @@ test environment and much more.
 * Easy integration in markup and JavaScript (clean code)  
   combinable with other JavaScript frameworks if they don't do the same thing do
   and use a different syntax
-* Lightweight implementation (requires no additional frameworks)
+* Lightweight implementation  
+  requires no additional frameworks)
 * Component based architecture
 * Namespaces and domain concept  
   for better structuring of components, modules and business logic
@@ -34,12 +35,12 @@ test environment and much more.
   rendering reacts to changes in data objects and triggers partial rendering on
   consumers
 * Markup rendering  
-  supports: condition, custom tags, events, filter, interval, iterate,
+  supports: conditions, custom tags, events, filter, interval, iterate,
   rendering, resources messages, validation, ...
 * Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
-* Model View Controller (MVC) / Model View ViewModel (MVVM)
+* Model View Controller (MVC) / Model View ViewModel (MVVM)  
   supports: events, virtual paths, sitemap, permission concept, view model
   binding, ...
 * Resource Bundle / Resource Messages  
@@ -137,9 +138,10 @@ Seanox aspect-js works exclusively in the BODY tag, which itself is included.
 ## Expression Language
 
 Expressions or the Expression Language (EL) is a simple access to the
-client-side JavaScript and thus to the models and components. In the expressions
-the complete JavaScript API is supported, which is enhanced with additional
-keywords, so that the numerous arithmetic and logical operators are also usable.
+client-side JavaScript and thus to the models and components in Seanox
+aspect-js. In the expressions the complete JavaScript API is supported, which
+is enhanced with additional keywords, so that also the numerous arithmetic and
+logical operators can be used.
 
 The expression language can be used in the markup as free text and in the
 attributes of the HTML elements. JavaScript and CSS elements are excluded. The
