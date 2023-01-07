@@ -15,7 +15,7 @@ well as an automatic view model binding.
 * [Component](#component)
 * [Composite](#composite)
 * [Structure](#structure)
-* [Outsourcing](#outsourcing)
+* [Resources](#resources)
 * [Loading](#loading)
   * [CSS](#css)
   * [JavaScript](#javascript)
@@ -74,7 +74,7 @@ that is marked as composite.
 ```
 
 
-## Outsourcing
+## Resources
 
 The inner markup, CSS and JavaScript of composites can be outsourced. The
 default directory `./modules` can be changed with the property

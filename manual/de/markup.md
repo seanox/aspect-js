@@ -52,16 +52,8 @@ aktualisiert.
 ### composite
 
 Kennzeichnet im Markup ein Element als [Composite](composite.md). Composites
-sind modulare Komponenten die in Seanox aspect-js eine elementare Bedeutung
-haben und die zwingend einen Bezeichner (ID) ben&ouml;tigen. Sie werden von der 
-[SiteMap](mvc.md#sitemap) als Faces, also als Ziele f&uuml;r virtuelle Pfade im
-Face-Flow verwendet, was direkten Einfluss auf die Sichtbarkeit der Composites
-hat.
-
-Der [Model-View-Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
-ein automatisches [View-Model-Binding](composite.md#view-model-binding). Die
-Ressourcen (CSS, JS, Markup) lassen sich f&uuml;r Composites in das
-Modul-Verzeichnis auslagern und werden bei Bedarf automatisch nachgeladen. 
+sind essenzielle Bestandteile, die zwingend einen Bezeichner (ID / Composite-ID)
+ben&ouml;tigen.
 
 ```html
 <article id="example" composite>
@@ -69,9 +61,31 @@ Modul-Verzeichnis auslagern und werden bei Bedarf automatisch nachgeladen.
 </article>
 ```
 
-Das Attribut hat keinen Wert. Es kann mit dem Attribut `static` kombiniert
-werden. Dann wird das Composite als Face unabh&auml;ngig von virtuellen Pfaden
-permanent sichtbar.
+Als Komponente setzen sich Composites aus verschiedenen [Ressourcen](
+    composite.md#ressourcen) (Markup, CSS, JS) zusammen, die sich auf Basis der
+(Composite-)ID in das Modul-Verzeichnis auslagern lassen und erst bei Bedarf zur
+Laufzeit nachgeladen werden.
+
+Composites sind auch Grundlage f&uuml;r das [View-Model-Binding](
+    mvc.md#view-model-binding), was die Verbindung von HTML-Elementen im Markup
+(View) mit korrespondierenden JavaScript-Objekten (Models) umfasst. Models sind
+statische JavaScript-Objekte, die vergleichbar mit managed Beans und DTOs (Data
+Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die View
+bereitstellen. Die View als Pr&auml;sentationsfl&auml;che und
+Benutzer-Schnittstelle f&uuml;r Interaktionen und das Model sind prim&auml;r
+entkoppelt. F&uuml;r den MVVM (Model-View-ViewModel) Ansatz, als Erweiterung zum
+MVC ([Model-View-Controller](mvc.md#model-view-controller)), verbindet der
+Controller Views und Models auf Basis der Composite-IDs bidirektional, womit
+keine manuelle Implementierung und Deklaration von Ereignissen, Interaktion oder
+Synchronisation erforderlich ist.
+
+Von der [SiteMap](mvc.md#sitemap) werden Composites als [Faces](mvc.md#face) zur
+prim&auml;ren Projektion von JavaScript-Objekten (Models) genutzt, womit sich
+diese als Ziele f&uuml;r virtuelle Pfade im [Face-Flow](mvc.md#face-flow)
+verwenden lassen, was direkten Einfluss auf die Sichtbarkeit der Composites hat.
+Bei aktiver SiteMap lassen sich Composites mit dem Attribut [static](#static)
+kennzeichnen, womit ein Composite als Face unabh&auml;ngig von virtuellen Pfaden
+permanent sichtbar ist.
 
 ```html
 <article id="example" composite static>

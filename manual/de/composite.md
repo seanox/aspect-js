@@ -16,7 +16,7 @@ View-Model-Binding.
 * [Komponente](#komponente)
 * [Composite](#composite)
 * [Aufbau](#aufbau)
-* [Auslagerung](#auslagerung)
+* [Ressourcen](#ressourcen)
 * [Laden](#laden)
   * [CSS](#css)
   * [JavaScript](#javascript)
@@ -77,7 +77,7 @@ HTML-Element mit einer eindeutigen Id.
 ```
 
 
-## Auslagerung
+## Ressourcen
 
 Das innere Markup, CSS und JavaScript von Composites lassen sich auslagern. Das
 Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft

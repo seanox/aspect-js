@@ -141,7 +141,7 @@
   * [Komponente](composite.md#komponente)
   * [Composite](composite.md#composite)
   * [Aufbau](composite.md#aufbau)
-  * [Auslagerung](composite.md#auslagerung)
+  * [Ressourcen](composite.md#ressourcen)
   * [Laden](composite.md#laden)
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)

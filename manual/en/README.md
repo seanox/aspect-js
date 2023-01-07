@@ -143,7 +143,7 @@ Machine translation with [DeepL](https://deepl.com).
   * [Component](composite.md#component)
   * [Composite](composite.md#composite)
   * [Structure](composite.md#structure)
-  * [Outsourcing](composite.md#outsourcing)
+  * [Resources](composite.md#resources)
   * [Loading](composite.md#loading)
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
