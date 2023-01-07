@@ -117,14 +117,14 @@ Erstelle eine HTML-Datei, z.B. _index.html_ und f&uuml;ge Seanox apect-js ein.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
 ```
 
 oder
 
 ```html
 <!-- production version, optimized in size but not obfuscated -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js"></script>
 ```
 
 __Das Framework ist zur Implementierung modularer und komponentenbasierter__
