@@ -132,7 +132,8 @@ __resources, modules, and data requires the use of a web server.__
 
 ## Scope
 
-Seanox aspect-js works exclusively in the BODY tag, which itself is included.
+Seanox aspect-js works exclusively in the HTML element `BODY`, which itself is
+included.
 
 
 ## Expression Language
@@ -143,12 +144,12 @@ aspect-js. In the expressions the complete JavaScript API is supported, which
 is enhanced with additional keywords, so that also the numerous arithmetic and
 logical operators can be used.
 
-The expression language can be used in the markup as free text and in the
-attributes of the HTML elements. JavaScript and CSS elements are excluded. The
-expression language is not supported here. When used as free text, pure text
-(plain text) is always generated as output. The addition of markup, especially
-HTML code, is not possible and is only supported with the attributes `output`
-and `import`.
+The expression language can be used from the HTML element `BODY` on in the
+complete markup as free text, as well as in all attributes. Exceptions are the
+HTML elements `STYLE` and `SCRIPT` whose content is not supported by the
+expression Language. When used as free text, pure text (plain text) is always
+generated as output. The addition of markup, especially HTML code, is not
+possible and is only supported with the attributes `output` and `import`.
  
 ```html
 <body lang="{{DataSource.locale}}">
@@ -195,15 +196,12 @@ Expressions can create and use global variables at runtime.
 
 ## Attributes
 
-The declarative approach is primarily implemented using attributes in Seanox
-aspect-js and can be used with all HTML elements and in combination. Excluded
-are `SCRIPT`,  which is only supported with the type `composite/javascript`,
-and `STYLE`, which is not supported. The values of the attributes can be static
-or dynamic when the expression language is used.
-
-If an attribute contains an expression, the attribute and the value become
-unchangeable, because the renderer sets them again with the updated value of the
-initial expression each time it is refreshed (render cycle).
+In Seanox aspect-js, the declarative approach is implemented with attributes
+that can be used and combined in all HTML elements starting from the HTML
+element 'BODY', which is included. The values of the attributes can be static or
+dynamic with the use of the expression language. If an attribute contains an
+expression, the value is updated by the renderer with each refresh (render
+cycle) based on the initial expression.
 
 [Learn more](markup.md#attributes)
 

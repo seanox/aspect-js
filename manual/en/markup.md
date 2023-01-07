@@ -6,8 +6,9 @@
 With Seanox aspect-js the declarative approach of HTML is taken up and extended.
 In addition to the expression language, the HTML elements are provided with
 additional attributes for functions and view model binding. The corresponding
-renderer is included in the composite implementation and monitors the DOM via
-the MutationObserver and thus reacts recursively to changes in the DOM.
+renderer is included in the composite implementation and actively monitors the
+DOM starting from the BODY element via the MutationObserver and works and reacts
+recursively to changes.
 
 
 ## Contents Overview
@@ -38,14 +39,12 @@ the MutationObserver and thus reacts recursively to changes in the DOM.
 
 ## Attributes
 
-The declarative approach is primarily implemented using attributes in Seanox
-aspect-js and can be used with all HTML elements and in combination. Excluded
-are `SCRIPT`, which is only supported with the type `composite/javascript`,
-and `STYLE`, which is not supported. The values of the attributes can be static
-or dynamic when the expression language is used. If an attribute contains an
-expression, the attribute and the value become unchangeable, because the
-renderer sets them again with the updated value of the initial expression each
-time it is refreshed (render cycle).
+In Seanox aspect-js, the declarative approach is implemented with attributes
+that can be used and combined in all HTML elements starting from the HTML
+element 'BODY', which is included. The values of the attributes can be static or
+dynamic with the use of the expression language. If an attribute contains an
+expression, the value is updated by the renderer with each refresh (render
+cycle) based on the initial expression.
 
 
 ### composite
@@ -849,10 +848,11 @@ window or Namespace API should be used.
 
 ### Tag
 
-Custom tags take over the complete rendering on their own responsibility. The
-return value determines whether the standard functions of the renderer are used
-or not. Only the return value `false` (not void, not empty) terminates the
-rendering for a custom tag without using the standard functions of the renderer.
+Custom HTML elements (tags) take over the complete rendering on their own
+responsibility. The return value determines whether the standard functions of
+the renderer are used or not. Only the return value `false` (not void, not
+empty) terminates the rendering for a custom HTML elements without using the
+standard functions of the renderer.
 
 ```javascript
 Composite.customize("foo", function(element) {

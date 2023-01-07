@@ -135,8 +135,8 @@ __erforderlich.__
 
 ## Arbeitsbereich
 
-Seanox aspect-js agiert ausschliesslich im BODY-Tag, welches selbst mit
-einbezogen wird.
+Seanox aspect-js agiert ausschliesslich im HTML-Element `BODY`, welches selbst
+mit einbezogen wird.
 
 
 ## Expression Language
@@ -147,12 +147,13 @@ aspect-js. Expressions unterst&uuml;tzen das komplette JavaScript-API, das mit
 zus&auml;tzlichen Schl&uuml;sselw&ouml;rtern angereichert ist, womit sich auch
 die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 
-Die Expression-Language kann im Markup als Freitext und in den Attributen der
-HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
-Hier wird die Expression-Language nicht unterst&uuml;tzt. Bei der Verwendung als
-Freitext wird als Ausgabe immer reiner Text (plain text) erzeugt. Das
-Hinzuf&uuml;gen von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich
-und wird nur mit den Attributen `output` und `import` unterst&uuml;tzt.
+Die Expression Language kann ab dem HTML-Element `BODY` im kompletten Markup als
+Freitext, sowie in allen Attributen verwendet werden. Ausgenommen sind die
+HTML-Elemente `STYLE` und `SCRIPT`, deren Inhalt von der Expression Language
+nicht unterst&uuml;tzt wird. Bei der Verwendung als Freitext wird als Ausgabe
+immer reiner Text (plain text) erzeugt. Das Hinzuf&uuml;gen von Markup,
+insbesondere von HTML-Code, ist so nicht m&ouml;glich und wird nur mit den
+Attributen `output` und `import` unterst&uuml;tzt.
 
 ```html
 <body lang="{{DataSource.locale}}">
@@ -199,14 +200,13 @@ Expressions k&ouml;nnen zur Laufzeit globale Variablen erzeugen und nutzen.
 
 ## Attribute
 
-Der deklarative Ansatz ist in Seanox aspect-js vorrangig mit Attributen
-umgesetzt und kann mit allen HTML-Elementen und in Kombination verwendet werden.
-Ausgenommen sind `SCRIPT`, was nur mit dem Typ `composite/javascript`
-unterst&uuml;tzt wird, sowie `STYLE`, welches nicht unterst&uuml;tzt wird. Die Werte der
-Attribute k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch
-sein. Enth&auml;lt ein Attribut eine Expression, werden das Attribut und der Wert
-unver&auml;nderlich, da der Renderer diese bei jeder Auffrischung (Renderzyklus)
-erneut mit dem aktualisierten Wert der initialen Expression setzen wird.
+Der deklarative Ansatz wird in Seanox aspect-js mit Attributen umgesetzt, die
+sich ab dem HTML-Element 'BODY', welches mit eingeschlossen ist, in allen
+HTML-Elementen verwenden und kombinieren lassen. Die Werte der Attribute
+k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch sein.
+Enth&auml;lt ein Attribut eine Expression, wird der Wert durch den Renderer mit
+jeder Auffrischung (Renderzyklus) auf Basis der initialen Expression
+aktualisiert.
 
 [Mehr erfahren](markup.md#attribute)
 
