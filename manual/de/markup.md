@@ -41,7 +41,7 @@ MutationObserver und funktioniert und reagiert rekursiv auf Ver&auml;nderungen.
 ## Attribute
 
 Der deklarative Ansatz wird in Seanox aspect-js mit Attributen umgesetzt, die
-sich ab dem HTML-Element 'BODY', welches mit eingeschlossen ist, in allen
+sich ab dem HTML-Element `BODY`, welches mit eingeschlossen ist, in allen
 HTML-Elementen verwenden und kombinieren lassen. Die Werte der Attribute
 k&ouml;nnen statisch oder mit Verwendung der Expression-Language dynamisch sein.
 Enth&auml;lt ein Attribut eine Expression, wird der Wert durch den Renderer mit

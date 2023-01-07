@@ -198,7 +198,7 @@ Expressions can create and use global variables at runtime.
 
 In Seanox aspect-js, the declarative approach is implemented with attributes
 that can be used and combined in all HTML elements starting from the HTML
-element 'BODY', which is included. The values of the attributes can be static or
+element `BODY`, which is included. The values of the attributes can be static or
 dynamic with the use of the expression language. If an attribute contains an
 expression, the value is updated by the renderer with each refresh (render
 cycle) based on the initial expression.
