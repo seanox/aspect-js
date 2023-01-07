@@ -101,16 +101,22 @@ specific language governing permissions and limitations under the License.
 # Release Channels
 
 ## Latest Release
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js.js)  
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-min.js)
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js)  
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js)
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite.js)  
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite-min.js)
 
 ## Latest Release of Major Version 1.x
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-1.x.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-1.x.js)  
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-1.x-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/releases/aspect-js-1.x-min.js)
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x.js)  
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-min.js)
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite.js)  
+[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite-min.js)
 
 The release channels continuously provide the newest final major versions, which
 are downward compatible to the major version. Seanox aspect-js is always up to
 date when using the release channels.
+
+__The lite versions include everything with the exception of the test API.__
 
 
 # Manuals
