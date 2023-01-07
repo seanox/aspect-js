@@ -49,16 +49,8 @@ cycle) based on the initial expression.
 
 ### composite
 
-Marks an element in the markup as [Composite](composite.md). Composites are
-modular components that have an elementary meaning in Seanox aspect-js and
-necessarily require an identifier (ID). They are used by the [SiteMap](
-    mvc.md#sitemap) as faces, so as targets for virtual paths in the face-flow,
-which has a direct effect of the visibility of the composites.
-
-The [Model View Controller](mvc.md#sitemap) supports automatic  
-[view model binding](composite.md#view-model-binding) for composites. The
-resources (CSS, JS, Markup) for composites can be outsourced to the module
-directory and are loaded automatically when necessary.
+Marks an element in the markup as a [Composite](composite.md). Composites are
+essential components that require an identifier (ID / Composite ID).
 
 ```html
 <article id="example" composite>
@@ -66,9 +58,29 @@ directory and are loaded automatically when necessary.
 </article>
 ```
 
-The attribute has no value. It can be combined with the `static` attribute. Then
-the composite becomes permanently visible as a face independent of virtual
-paths.
+As a component, composites are composed of various [Ressourcen](
+    composite.md#ressourcen) (markup, CSS, JS) that can be outsourced to the
+module directory based on the (composite) ID and are only loaded at runtime when
+used.
+
+Composites are also the basis for [view model binding](
+    mvc.md#view-model-binding), which involves connecting HTML elements in the
+markup (view) with corresponding JavaScript objects (models). Models are static
+JavaScript objects that provide data, states, and functions for the view,
+similar to managed beans and DTOs (Data Transfer Objects). The view as
+presentation and user interface for interactions and the model are primarily
+decoupled. For the MVVM (Model-View-ViewModel) approach, as an extension to the
+MVC ([Model View Controller](mvc.md#model-view-controller)), the controller
+links views and models bidirectionally based on the composite IDsand so no
+manual implementation and declaration of events, interaction or synchronization
+is required.
+
+The [SiteMap](mvc.md#sitemap) uses composites as [faces](mvc.md#face) for the
+primary projection of JavaScript objects (models), which means that they can be
+used as targets for virtual paths in the [face flow](mvc.md#face-flow), which
+has a direct influence on the visibility of the composites. When SiteMap is
+active, composites can be marked with the attribute [static](#static), which
+makes a composite permanently visible as a face regardless of virtual paths.
 
 ```html
 <article id="example" composite static>
