@@ -117,7 +117,7 @@
         match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
     <replaceregexp file="${release.file.lite}" flags="g" byline="false"
         match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
-    <copy file="${release.file.lite}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
+    <copy file="${release.file.lite}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-lite.js" overwrite="true"/>
 
     <replaceregexp file="${release.file}" flags="g" byline="false"
         match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
