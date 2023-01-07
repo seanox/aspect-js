@@ -87,8 +87,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.5.0](https://github.com/seanox/aspect-js/releases/download/1.5.0/aspect-js-1.5.0.zip)  
-[Seanox aspect-js 1.5.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.5.0.zip)
+[Seanox aspect-js 1.5.1](https://github.com/seanox/aspect-js/releases/download/1.5.1/aspect-js-1.5.1.zip)  
+[Seanox aspect-js 1.5.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.5.1.zip)
 
 <p>
   <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
@@ -122,6 +122,10 @@ date when using the release channels.
 
 
 # Changes
+## 1.5.1 20230107  
+BF: Release: Correction of the missing release directory for jsDelivr  
+CR: Release: New channel for lite version  
+
 ## 1.5.0 20230105  
 BF: Review: Optimization and corrections  
 BF: Documentation: Correction of encoding  

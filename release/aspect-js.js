@@ -91,10 +91,9 @@ if (typeof Namespace === "undefined") {
 
             // Composites use IDs which causes corresponding DOM objects
             // (Element) in the global namespace if there are no corresponding
-            // models or data objects. Because namespaces are based on models or
-            // data objects, if an element appears, we assume that a model or
-            // data object does not exist and the recursive search is aborted as
-            // unsuccessful.
+            // data objects (models). Because namespaces are based on data
+            // objects, if an element appears, we assume that a data object does
+            // not exist and the recursive search is aborted as unsuccessful.
 
             if (index === 0
                     && namespace === null) {
@@ -192,10 +191,9 @@ if (typeof Namespace === "undefined") {
 
             // Composites use IDs which causes corresponding DOM objects
             // (Element) in the global namespace if there are no corresponding
-            // models or data objects. Because namespaces are based on models or
-            // data objects, if an element appears, we assume that a model or
-            // data object does not exist and the recursive search is aborted as
-            // unsuccessful.
+            // data objects (models). Because namespaces are based on data
+            // objects, if an element appears, we assume that a data object does
+            // not exist and the recursive search is aborted as unsuccessful.
 
             if (index === 0
                     && namespace === null) {
@@ -982,10 +980,10 @@ if (typeof Messages === "undefined") {
 /**
  * With aspect-js the declarative approach of HTML is taken up and extended.
  * In addition to the expression language, the HTML elements are provided with
- * additional attributes for functions and object binding attributes.
- * The corresponding renderer is included in the composite implementation and
- * actively monitors the DOM via the MutationObserver and thus reacts
- * recursively to changes in the DOM.
+ * additional attributes for functions and view model binding. The corresponding
+ * renderer is included in the composite implementation and actively monitors
+ * the DOM via the MutationObserver and thus reacts recursively to changes in
+ * the DOM.
  *
  *
  *     TERMS
@@ -1005,20 +1003,16 @@ if (typeof Messages === "undefined") {
  * supported. If an object level in the namespace is a pure number, an array is
  * assumed.
  *
- *         scope
- *         ----
- * The scope is based on namespace and represents it on the object level.
- * Means the namespace is the description text, the scope is the object if the
- * namespace was resolved in the object tree.
- *
  *         model
  *         ----
- * The model (model component / component) is a static JavaScript object in any
- * namespace and provides the logic for the user interface (UI component) and
- * the transition from user interface to business logic and/or the backend.
- * The linking and/or binding of markup and JavaScript model is done by the
- * Composite-API. For this purpose, an HTML element must have a valid and
- * unique ID. The ID must meet the requirements of the namespace.
+ * Models are representable/projectable static JavaScript objects that can provide
+ * and receive data, states and interactions for views, comparable to managed beans
+ * and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
+ * other components and abstractions, contain business logic themselves, and be a
+ * link between the user interface (view) and middleware (backend).
+ *
+ * The required view model binding is part of the Model View Controller and the
+ * Composite API.
  *
  *         property
  *         ----
@@ -1032,14 +1026,14 @@ if (typeof Messages === "undefined") {
  * In some cases, the identifier (ID) may not be unique. For example, in cases
  * where properties are arrays or an iteration is used. In these cases the
  * identifier can be extended by an additional unique qualifier separated by a
- * colon. Qualifiers behave like properties during object/model binding and
- * extend the namespace.
+ * colon. Qualifiers behave like properties during view model binding and extend
+ * the namespace.
  *
  *         composite
  *         ----
- * Composite describes a construct of markup, JavaScript model, CSS and
- * possibly other resources. It describes a component/module without direct
- * relation to the representation.
+ * Composite describes a construct of markup (view), JavaScript object (model),
+ * CSS and possibly other resources. It describes a component/module without
+ * direct relation to the representation.
  *
  *         composite-id
  *         ----
@@ -1078,7 +1072,7 @@ if (typeof Messages === "undefined") {
 if (typeof Composite === "undefined") {
     
     /**
-     * Static component for rendering and object binding.
+     * Static component for rendering and view model binding.
      * The processing runs in the background and starts automatically when a
      * page is loaded.
      */
@@ -1809,23 +1803,33 @@ if (typeof Composite === "undefined") {
     };
 
     /**
-     * Mounts the as selector passed element(s) with all its children where an
-     * object/model binding is possible. Mount is possible for all elements
-     * with an ID, not only for composite objects and their children.
-     * 
-     * The object/model binding is about connecting markup/HTML elements with
-     * JavaScript models. The models, also known as components, are static
-     * constructs/classes in which properties and logic corresponding to the
-     * markup/DOM are implemented. This avoids manual implementation and
-     * declaration of events as well as synchronization and interaction between
-     * UI and the application logic.
-     * 
+     * Mounts the as selector passed element(s) with all its children where a
+     * view model binding is possible. Mount is possible for all elements with
+     * an ID, not only for composite objects and their children.
+     *
+     * View-model binding is about linking of HTML elements in markup (view)
+     * with corresponding JavaScript objects (models).
+     *
+     * Models are representable/projectable static JavaScript objects that can
+     * provide and receive data, states and interactions for views, comparable
+     * to managed beans and DTOs. As singletons/facades/delegates, they can use
+     * other components and abstractions, contain business logic themselves,
+     * and be a link between the user interface (view) and middleware (backend).
+     *
+     * The required view model binding is part of the Model View Controller and
+     * the Composite API.
+     *
+     * The view as presentation and user interface for interactions and the
+     * model are primarily decoupled. For the MVVM approach as an extension of
+     * the MVC (), the controller establishes the bidirectional connection
+     * between view and model, which means that no manual implementation and
+     * declaration of events, interaction or synchronization is required.
+     *
      *     Principles
      *     ----
-     * Components are a static JavaScript models.
-     * Namespaces are supported, but they must be syntactically valid.
-     * Objects in objects is possible through the namespaces (as static inner
-     * class).
+     * Components are a static JavaScript objects (models). Namespaces are
+     * supported, but they must be syntactically valid. Objects in objects is
+     * possible through the namespaces (as static inner class).
      * 
      *     Binding
      *     ----
@@ -1835,7 +1839,7 @@ if (typeof Composite === "undefined") {
      * application logic - this is a conscious decision!
      *     Case study:
      * In the markup there is a composite with a property x. There is a
-     * corresponding JavaScript model for the composite but without the
+     * corresponding JavaScript object (model) for the composite but without the
      * property x. The renderer will mount the composite with the JavaScript
      * model, the property x will not be found in the model and will be
      * ignored. At runtime, the model is modified later and the property x is
@@ -1883,12 +1887,12 @@ if (typeof Composite === "undefined") {
      * 
      *     Synchronization
      *     ----
-     * The object binding and synchronization assume that a model corresponding
-     * to the composite exists with the same namespace. During synchronization,
-     * the element must also exist as a property in the model. Accepted are
-     * properties with a primitive data type and objects with a property value.
-     * The synchronization expects a positive validation, otherwise it will not
-     * be executed.
+     * View model binding and synchronization assume that a corresponding static
+     * JavaScript object/model exists in the same namespace for the composite.
+     * During synchronization, the element must also exist as a property in the
+     * model. Accepted are properties with a primitive data type and objects
+     * with a property value. The synchronization expects a positive validation,
+     * otherwise it will not be executed.
      * 
      *     Invocation
      *     ---
@@ -2296,8 +2300,8 @@ if (typeof Composite === "undefined") {
      * Composite Element:
      *     {meta:{namespace, model, route, target}, namespace, model, route, target}
      *
-     * The method always requires a corresponding JavaScript model and an
-     * element with a valid element ID in a valid enclosing composite,
+     * The method always requires a corresponding JavaScript object (model) and
+     * an element with a valid element ID in a valid enclosing composite,
      * otherwise the method will return null.
      *
      * @param  element
@@ -3251,7 +3255,7 @@ if (typeof Composite === "undefined") {
             
             // The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
             // ATTRIBUTE_RENDER are processed in Composite.mount(selector) the
-            // object binding and are only mentioned here for completeness.
+            // view model binding and are only mentioned here for completeness.
             
             // The attribute ATTRIBUTE_RELEASE has no functional implementation.
             // This is exclusively inverse indicator that an element was
@@ -3887,7 +3891,7 @@ if (typeof Composite === "undefined") {
                 }
                 
                 // All removed elements are cleaned and if necessary the undock
-                // method is called if an object binding exists.
+                // method is called if an view model binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
                         const cleanup = (node) => {
@@ -4585,8 +4589,8 @@ if (typeof ReactProxy === "undefined") {
  * controlled and influenced. This way, the access to paths can be stopped
  * and/or redirected/forwarded with own logic. 
  * 
- * The object/model-binding part also belongs to the Model View Controller and
- * is taken over by the Composite API in this implementation. SiteMap is an
+ * The view model binding part also belongs to the Model View Controller and is
+ * taken over by the Composite API in this implementation. SiteMap is an
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
