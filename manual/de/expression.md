@@ -13,9 +13,10 @@ die zahlreichen arithmetischen und logischen Operatoren verwenden lassen.
 {{'Hello World!'}}
 ```
 
-Die Expression Language kann ab dem BODY-Tag im kompletten Markup als Freitext
-sowie in allen Attributen verwendet werden. Ausgenommen sind die Tags STYLE und
-SCRIPT, hier wird die Expression Language nicht unterst&uuml;tzt.
+Die Expression Language kann ab dem HTML-Element `BODY` im kompletten Markup als
+Freitext, sowie in allen Attributen verwendet werden. Ausgenommen sind die
+HTML-Elemente `STYLE` und `SCRIPT`, deren Inhalt von der Expression Language
+nicht unterst&uuml;tzt wird.
 
 Der Renderer interpretiert die Expression-Syntax `{{...}}` hart und daher
 m&uuml;ssen die Zeichenfolgen `{{` und `}}` innerhalb der Expression per
