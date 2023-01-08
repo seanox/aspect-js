@@ -1,10 +1,10 @@
 1.6.0 2023xxxx
+RQ: SiteMap: Disabled by default
+    Attribute static is then not required for composites.
+    Simplifies micro front-ends without face-flow.
 BF: Review: Optimization and corrections
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected during the include, for that to the error.
-CR: SiteMap: Disabled by default
-    Attribute static is then not required for composites.
-    Simplifies micro front-ends without face-flow.
 
 1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr
