@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      div {
+        display: inline;
+      }
+      div:before {
+        content:attr(id);
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        // IMPORTANT -- The tests mvc_sitemap_empty_active.html and
+        // mvc_sitemap_empty_inactive.html should always be synchronized!
+
+        SiteMap.customize({});
+
+        // The SiteMap became active with the first call to
+        // SiteMap.customize(...). This hides composites faces if there is no
+        // matching path and the composites do not use the attribute static.
+
+        Test.activate();
+        
+        Test.create({test() {
+            const match = document.body.innerHTML.match(/(id=\S+)/g);
+            Assert.assertTrue(!!match);
+            Assert.assertEquals("id=\"a\" id=\"a1\" id=\"c\" id=\"c1\"", match.join(" "));
+        }});        
+        
+        Test.start({auto:true});
+    </script>
+  </head>
+  <body>
+    <div id="a" composite static>
+      <div id="a1" composite static>
+        <div id="a2" composite>
+          <div id="a3" composite static>
+            <div id="a4" composite>
+              <div id="a5" composite static>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="a6" composite>
+        <div id="a7" composite static>
+          <div id="a8" composite>
+            <div id="a9" composite static>
+              <div id="a0" composite>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="b" composite>
+      <div id="b1" composite static>
+        <div id="b2" composite>
+          <div id="b3" composite static>
+            <div id="b4" composite>
+              <div id="b5" composite static>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="b6" composite>
+        <div id="b7" composite>
+          <div id="b8" composite static>
+            <div id="b9" composite>
+              <div id="b0" composite static>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="c" composite static>
+      <div id="c1" composite static>
+        <div id="c2" composite>
+          <div id="c3" composite static>
+            <div id="c4" composite>
+              <div id="c5" composite static>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="c6" composite>
+        <div id="c7" composite>
+          <div id="c8" composite static>
+            <div id="c9" composite>
+              <div id="c0" composite static>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

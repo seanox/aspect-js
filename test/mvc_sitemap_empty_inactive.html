@@ -16,14 +16,22 @@
     </style>
     <script src="aspect-js.js"></script>
     <script type="text/javascript">
-       
+
+        // IMPORTANT -- The tests mvc_sitemap_empty_active.html and
+        // mvc_sitemap_empty_inactive.html should always be synchronized!
+
         Test.activate();
-        
+
+        // By default, the SiteMap is inactive until the first call to
+        // SiteMap.customize(...). Thus composites are not faces and are not
+        // hidden. This is helpful for micro frontends without face flow,
+        // because then the attribute static can be omitted.
+
         Test.create({test() {
             const match = document.body.innerHTML.match(/(id=\S+)/g);
             Assert.assertTrue(!!match);
-            Assert.assertEquals("id=\"a\" id=\"a1\" id=\"c\" id=\"c1\"", match.join(" "));
-        }});        
+            Assert.assertEquals("id=\"a\" id=\"a1\" id=\"a2\" id=\"a3\" id=\"a4\" id=\"a5\" id=\"a6\" id=\"a7\" id=\"a8\" id=\"a9\" id=\"a0\" id=\"b\" id=\"b1\" id=\"b2\" id=\"b3\" id=\"b4\" id=\"b5\" id=\"b6\" id=\"b7\" id=\"b8\" id=\"b9\" id=\"b0\" id=\"c\" id=\"c1\" id=\"c2\" id=\"c3\" id=\"c4\" id=\"c5\" id=\"c6\" id=\"c7\" id=\"c8\" id=\"c9\" id=\"c0\"", match.join(" "));
+        }});
         
         Test.start({auto:true});
     </script>
