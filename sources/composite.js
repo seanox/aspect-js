@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.5.0 20230101
+ * @version 1.5.1 20230108
  */
 if (typeof Composite === "undefined") {
     
@@ -2671,6 +2671,18 @@ if (typeof Composite === "undefined") {
             resource = meta.namespace.join("/") + "/" + resource;
         const context = Composite.MODULES + "/" + resource;
 
+        const recursionDetection = (element) => {
+            const id = (element instanceof Element ? element.id || "" : "").toLowerCase().trim();
+            while (id && element instanceof Element) {
+                element = element.parentNode;
+                if (element instanceof Element
+                        && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                        && element.hasAttribute(Composite.ATTRIBUTE_ID)
+                        && (element.id || "").toLowerCase().trim() == id)
+                    throw new Error("Recursion detected during include for composite: " + id);
+            }
+        }
+
         // If the module has already been loaded, it is only necessary to check
         // whether the markup must be inserted. CSS should already exist in the
         // head and the JavaScript will only be executed once.
@@ -2679,6 +2691,7 @@ if (typeof Composite === "undefined") {
                 if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                         && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                         && !composite.innerHTML.trim()) {
+                    recursionDetection(composite);
                     if (composite instanceof Element)
                         composite.innerHTML = Composite.render.cache[context + ".html"];
                 }
@@ -2750,6 +2763,7 @@ if (typeof Composite === "undefined") {
                     throw exception;
                 }
             } else if (request.responseURL.match(/\.html$/)) {
+                recursionDetection(composite);
                 if (composite instanceof Element)
                     composite.innerHTML = content;
             }
