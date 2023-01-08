@@ -101,7 +101,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.2.2 20221223
+ * @version 1.3.0 20230107
  */
 if (typeof Path === "undefined") {
     
@@ -722,7 +722,9 @@ if (typeof SiteMap === "undefined") {
      *     - if the syntax and/or the format of facets are invalid
      */
     SiteMap.customize = function(...variants) {
-        
+
+        SiteMap.customize.active = true;
+
         if (variants.length > 1
                 && variants[0] instanceof RegExp) {
             if (typeof variants[1] !== "function")
@@ -860,7 +862,9 @@ if (typeof SiteMap === "undefined") {
      * cleaning of the cache is done by a MutationObserver.
      */
     Composite.customize((element) => {
-        
+
+        if (!SiteMap.customize.active)
+            return;
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             return;
@@ -909,6 +913,10 @@ if (typeof SiteMap === "undefined") {
         // However, this is only necessary if face + facet have not changed.
         // In all other cases the Window-HashChange-Event does the same
         document.body.addEventListener("click", (event) => {
+
+            if (!SiteMap.customize.active)
+                return;
+
             if (event.target
                     && event.target instanceof Element
                     && event.target.hasAttribute("href")) {
@@ -944,7 +952,8 @@ if (typeof SiteMap === "undefined") {
         const initial = SiteMap.history.size <= 0;
         
         // Without a SiteMap no partially rendering can be initiated.
-        if (SiteMap.paths.size <= 0) {
+        if (!SiteMap.customize.active
+                || SiteMap.paths.size <= 0) {
             if (initial)
                 Composite.render(document.body);
             return;
