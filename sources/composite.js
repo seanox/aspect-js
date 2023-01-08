@@ -654,7 +654,6 @@ if (typeof Composite === "undefined") {
      *     as arguments when the callback function is called
      */
     Composite.fire = function(event, ...variants) {
-
         event = (event || "").trim();
         if (Composite.listeners.size <= 0
                 || !event)
@@ -2672,13 +2671,14 @@ if (typeof Composite === "undefined") {
         const context = Composite.MODULES + "/" + resource;
 
         const recursionDetection = (element) => {
-            const id = (element instanceof Element ? element.id || "" : "").toLowerCase().trim();
-            while (id && element instanceof Element) {
+            const id = (element instanceof Element ? element.id || "" : "").trim();
+            const pattern = id.toLowerCase();
+            while (pattern && element instanceof Element) {
                 element = element.parentNode;
                 if (element instanceof Element
                         && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
                         && element.hasAttribute(Composite.ATTRIBUTE_ID)
-                        && (element.id || "").toLowerCase().trim() == id)
+                        && (element.id || "").toLowerCase().trim() == pattern)
                     throw new Error("Recursion detected during include for composite: " + id);
             }
         }
