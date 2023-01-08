@@ -191,9 +191,9 @@
   </head>
   <body>
     <!-- nested composites/models -->
-    <div id="model_1_A" composite static>
-      <div id="model_1_B" composite static>
-        <div id="model_1_C" composite static>
+    <div id="model_1_A" composite>
+      <div id="model_1_B" composite>
+        <div id="model_1_C" composite>
           <button id="button_1_C" events="click" release>
               1: button_1_C</button>
           <!-- elements with a reference -->
@@ -204,7 +204,7 @@
     </div>
 
     <!-- composite with a nested model object -->
-    <div id="model_2_A" composite static>
+    <div id="model_2_A" composite>
       <div id="model_2_B">
         <div id="model_2_C">
           <button id="button_2_C" events="click" release>

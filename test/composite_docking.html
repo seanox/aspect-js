@@ -517,7 +517,7 @@ Step:64
 :
     </script>
   </head>
-  <body id="page" composite static>
+  <body id="page" composite>
     <!--
       Combined test for mount, dock and undock.
       
@@ -536,7 +536,7 @@ Step:64
       Model-A:C {{modelA.status ? '1' : '0'}}</button>
     <button id="buttonDA" events="click" render="body" release>
       Model-A:D {{modelA.status ? '1' : '0'}}</button>
-    <section id="modelA" composite static condition="{{modelA.status}}">
+    <section id="modelA" composite condition="{{modelA.status}}">
       Model-A
     </section>
 
@@ -548,7 +548,7 @@ Step:64
       Model-B:C {{modelB.status ? '1' : '0'}}</button>
     <button id="buttonDB" events="click" render="body" release>
       Model-B:D {{modelB.status ? '1' : '0'}}</button>
-    <section id="modelB" composite static condition="{{modelB.status}}">
+    <section id="modelB" composite condition="{{modelB.status}}">
       Model-B
     </section>
     
@@ -560,7 +560,7 @@ Step:64
       Model-C:C {{modelC.status ? '1' : '0'}}</button>
     <button id="buttonDC" events="click" render="body" release>
       Model-C:D {{modelC.status ? '1' : '0'}}</button>
-    <section id="modelC" composite static condition="{{modelC.status}}">
+    <section id="modelC" composite condition="{{modelC.status}}">
       Model-C
     </section>
     
@@ -572,7 +572,7 @@ Step:64
       Model-D:C {{modelD.status ? '1' : '0'}}</button>
     <button id="buttonDD" events="click" render="body" release>
       Model-D:D {{modelD.status ? '1' : '0'}}</button>
-    <section id="modelD" composite static condition="{{modelD.status}}">
+    <section id="modelD" composite condition="{{modelD.status}}">
       Model-D
     </section>    
             
@@ -586,7 +586,7 @@ Step:64
       Model-X:C {{modelX.status ? '1' : '0'}}</button>      
     <button id="buttonDX" events="click" render="body" release>
       Model-X:D {{modelX.status ? '1' : '0'}}</button>
-    <section id="modelX" composite static condition="{{modelX.status}}">
+    <section id="modelX" composite condition="{{modelX.status}}">
       Model-X
     </section>
   </body>

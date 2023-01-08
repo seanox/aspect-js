@@ -60,7 +60,7 @@
     -->
     {{countRender:countRender +1}}
     Render:{{countRender}}, Click:{{countClick}}
-    <div id="about" composite static condition="{{true}}">
+    <div id="about" composite condition="{{true}}">
       <button id="refresh" events="click" render="body">refresh</button>
       <div iterate="{{iterate:[1]}}">
         <button id="contact">contact</button>
