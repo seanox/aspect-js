@@ -1,5 +1,5 @@
 1.6.0 2023xxxx
-RQ: Composite: Meta directive to import modules/resources in markup
+AN: Composite: Meta directive to import modules/resources in markup
     #import moduleA ... moduleN
     Meta directives are always exclusive one-line statements.
 BF: Review: Optimization and corrections
@@ -9,6 +9,10 @@ CR: SiteMap: Inactive by default
     Attribute static is then not required for composites.
     Simplifies micro frontends without face-flow.
     SiteMap becomes active with the call of the method SiteMap.customize(...).
+CR: Composite: Errors during rendering are output in the view
+    Rendering does not abort.
+    Errors are also logged as errors on the console.
+    Errors can also be subscribed as a composite event.
 
 1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr

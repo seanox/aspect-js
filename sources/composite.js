@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.5.1 20230108
+ * @version 1.6.0 20230108
  */
 if (typeof Composite === "undefined") {
     
@@ -1743,6 +1743,8 @@ if (typeof Composite === "undefined") {
         }
 
         lock = Composite.lock(Composite.render, selector);
+
+        const origin = selector;
         
         try {
 
@@ -2625,7 +2627,12 @@ if (typeof Composite === "undefined") {
             
             if (selector.hasAttribute(Composite.ATTRIBUTE_RELEASE))
                 selector.removeAttribute(Composite.ATTRIBUTE_RELEASE);
-            
+
+        } catch (exception) {
+            console.error(exception);
+            Composite.fire(Composite.EVENT_ERROR, exception);
+            if (origin instanceof Element)
+                origin.innerText = "Error: " + exception.message;
         } finally {
             lock.release();
         }
@@ -2679,7 +2686,7 @@ if (typeof Composite === "undefined") {
                         && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
                         && element.hasAttribute(Composite.ATTRIBUTE_ID)
                         && (element.id || "").toLowerCase().trim() == pattern)
-                    throw new Error("Recursion detected during include for composite: " + id);
+                    throw new Error("Recursion detected for composite: " + id);
             }
         }
 
