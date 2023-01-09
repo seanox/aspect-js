@@ -165,13 +165,14 @@ if (typeof Test === "undefined") {
                 
                 /**
                  * Internal method to trigger an event.
-                 * All callback functions for this event are called.
-                 * If the script is in a frame, at the parent object it will also try
-                 * to trigger this method. The parent object is always triggered after
-                 * the current object. If an error occurs when calling the current
-                 * object, the parent object is not triggered.
+                 * All callback functions for this event are called. If the
+                 * script is in a frame, at the parent object it will also try
+                 * to trigger this method. The parent object is always triggered
+                 * after the current object. If an error occurs when calling the
+                 * current object, the parent object is not triggered.
                  * @param event  see Test.EVENT_***
-                 * @param status meta object with information about the test execution
+                 * @param status meta object with information about the test
+                 *     execution
                  */
                 fire(event, status) {
                     
@@ -208,21 +209,21 @@ if (typeof Test === "undefined") {
                 
                 /**
                  * Creates and registers a test task.
-                 * A test task is a function or object with the required meta information
-                 * for performing and a test method to be executed.
+                 * A test task is a function or object with the required meta
+                 * information for performing and a test method to be executed.
                  * 
                  *     structure of meta: {name:..., test:..., timeout:..., expected:..., ignore:...}
                  *     
-                 * meta.name       optional name of the test task
-                 * meta.test       an implemented method to be executed as a test
-                 * meta.timeout    maximum runtime of the test task in milliseconds
-                 *                 Exceeding this limit will cause the test to fail.
-                 *                 A value greater than 0 is expected, otherwise the
-                 *                 timeout is ignored.
-                 * meta.expected   if you want to test for the occurrence of an error
-                 *                 The error must occur if the test is successful.
-                 *                 An error object or a RegExp is expected as value.
-                 * meta.ignore     true, if the test is to be ignored
+                 * name       optional name of the test task
+                 * test       an implemented method to be executed as a test
+                 * timeout    maximum runtime of the test task in milliseconds
+                 *            Exceeding this limit will cause the test to fail.
+                 *            A value greater than 0 is expected, otherwise the
+                 *            timeout is ignored.
+                 * expected   if you want to test for the occurrence of an error
+                 *            The error must occur if the test is successful.
+                 *            An error object or a RegExp is expected as value.
+                 * ignore     true, if the test is to be ignored
                  * 
                  *     usage:
                  *     
@@ -270,18 +271,19 @@ if (typeof Test === "undefined") {
 
                 /**
                  * Starts the test run.
-                 * The execution of the tests can optionally be configured with the
-                 * start by passing a meta object. The parameters in the meta object
-                 * are optional and cannot be changed at test runtime. Only with the
-                 * next start can new parameters be passed as meta objects.
+                 * The execution of the tests can optionally be configured with
+                 * the start by passing a meta object. The parameters in the
+                 * meta object are optional and cannot be changed When the test
+                 * are running. Only with the next start can new parameters be
+                 * passed as meta objects.
                  * 
                  *     Test.start({auto: boolean, output: {...}, monitor: {...}});
                  *     
                  *     auto
                  *     ----
                  * true, the start is triggered when the page is loaded     
-                 * If the page is already loaded, the parameter auto is
-                 * ignored and the start is executed immediately.
+                 * If the page is already loaded, the parameter auto is ignored
+                 * and the start is executed immediately.
                  * 
                  *     output
                  *     ----
@@ -303,12 +305,12 @@ if (typeof Test === "undefined") {
                  * 
                  *     monitor
                  *     ----
-                 * Monitors the test procedure and is informed about the various cycles
-                 * during execution. The monitor also controls the data output. For
-                 * example, the output can be redirected to DOM elements. Without a
-                 * monitor the tests will also be performed, but there will be an
-                 * output about success and failure.
-                 * If no monitor is specified, the internal monitor is used with a
+                 * Monitors the test procedure and is informed about the various
+                 * cycles during execution. The monitor also controls the data
+                 * output. For example, the output can be redirected to DOM
+                 * elements. Without a monitor the tests will also be performed,
+                 * but there will be an output about success and failure. If no
+                 * monitor is specified, the internal monitor is used with a
                  * simple console output.     
                  * 
                  *     Implementation of a monitor (as function or object):
@@ -324,13 +326,13 @@ if (typeof Test === "undefined") {
                  *     },
                  *     
                  *     resume(status) {
-                 *         The method is called if the test run is stopped and is to be
-                 *         continued later.
+                 *         The method is called if the test run is stopped and
+                 *         is to be continued later.
                  *     },
                  *     
                  *     interrupt(status) {
-                 *         The method is called if you want to abort the test run.
-                 *         The test run cannot then be resumed.
+                 *         The method is called if you want to abort the test
+                 *         run. The test run cannot then be resumed.
                  *     },
                  *     
                  *     perform(status) {
@@ -338,19 +340,21 @@ if (typeof Test === "undefined") {
                  *     },
                  *     
                  *     response(status) {
-                 *         The method is called when a test task has been performed.
-                 *         Here you can find the result of the test task.
+                 *         The method is called when a test task has been
+                 *         performed. Here you can find the result of the test
+                 *         task.
                  *     },
                  *     
                  *     finish(status) {
-                 *         The method is called when all test tasks have been completed.
+                 *         The method is called when all test tasks have been
+                 *         completed.
                  *     }
                  * };
                  * 
-                 * The current status is passed to all monitor methods as an object.
-                 * The status is a snapshot of the current test run with details of the
-                 * current task and the queue. The details are read-only and cannot be
-                 * changed.
+                 * The current status is passed to all monitor methods as an
+                 * object. The status is a snapshot of the current test run with
+                 * details of the current task and the queue. The details are
+                 * read-only and cannot be changed.
                  *  
                  *     structure of status: {task:..., queue:...}
                  *     
@@ -359,19 +363,21 @@ if (typeof Test === "undefined") {
                  *                 name, test, timeout, expected, serial
                  * task.running    indicator when the test task is in progress
                  * task.timing     start time from the test task in milliseconds
-                 * task.timeout    optional, the time in milliseconds when a timeout is
-                 *                 expected
+                 * task.timeout    optional, the time in milliseconds when a
+                 *                 timeout is expected
                  * task.duration   total execution time of the test task in
-                 *                 milliseconds, is set with the end of the test task
-                 * task.error      optional, if an unexpected error (also assert error)
-                 *                 has occurred, which terminated the test task
+                 *                 milliseconds, is set with the end of the test
+                 *                 task
+                 * task.error      optional, if an unexpected error (also assert
+                 *                 error) has occurred, which terminated the
+                 *                 test task
                  * 
                  * queue.timing    start time in milliseconds 
                  * queue.size      original queue length
                  * queue.length    number of outstanding tests
                  * queue.progress  number of tests performed     
-                 * queue.lock      indicator when a test is performed and the queue is
-                 *                 waiting
+                 * queue.lock      indicator when a test is performed and the
+                 *                 queue is waiting
                  * queue.faults    number of detected faults
                  * 
                  * @param meta  
@@ -554,8 +560,8 @@ if (typeof Test === "undefined") {
                 },
 
                 /**
-                 * Suspends the current test run, which can be continued from the
-                 * current test with Test.resume().
+                 * Suspends the current test run, which can be continued from
+                 * the current test with Test.resume().
                  * @throws An error occurs in the following cases:
                  *     - No worker is present or cannot be suspended
                  */
@@ -578,8 +584,8 @@ if (typeof Test === "undefined") {
                 },
                 
                 /**
-                 * Interrupts the current test run and discards all outstanding tests.
-                 * The test run can be restarted with Test.start().
+                 * Interrupts the current test run and discards all outstanding
+                 * tests. The test run can be restarted with Test.start().
                  * @throws An error occurs in the following cases:
                  *     - No worker is present or cannot be interrupted
                  */
@@ -594,9 +600,9 @@ if (typeof Test === "undefined") {
 
                 /**
                  * Makes a snapshot of the status of the current test.
-                 * The status contains details of the current task and the queue. The
-                 * details are read-only and cannot be changed. If no test is executed,
-                 * false is returned.
+                 * The status contains details of the current task and the
+                 * queue. The details are read-only and cannot be changed. If no
+                 * test is executed, false is returned.
                  *  
                  *     structure of details: {task:..., queue:...}
                  *     
@@ -605,22 +611,24 @@ if (typeof Test === "undefined") {
                  *                 name, test, timeout, expected, serial
                  * task.running    indicator when the test task is in progress
                  * task.timing     start time from the test task in milliseconds
-                 * task.timeout    optional, the time in milliseconds when a timeout is
-                 *                 expected
+                 * task.timeout    optional, the time in milliseconds when a
+                 *                 timeout is expected
                  * task.duration   total execution time of the test task in
-                 *                 milliseconds, is set with the end of the test task
-                 * task.error      optional, if an unexpected error (also assert error)
-                 *                 has occurred, which terminated the test task
+                 *                 milliseconds, is set with the end of the test
+                 *                 task
+                 * task.error      optional, if an unexpected error (also assert
+                 *                 error) has occurred, which terminated the
+                 *                 test task
                  * 
                  * queue.timing    start time in milliseconds 
                  * queue.size      original queue length
                  * queue.length    number of outstanding tests
                  * queue.progress  number of tests performed     
-                 * queue.lock      indicator when a test is performed and the queue is
-                 *                 waiting
+                 * queue.lock      indicator when a test is performed and the
+                 *                 queue is waiting
                  * queue.faults    number of detected faults 
                  * 
-                 * @return an object with detailed status information, otherwise false
+                 * @return an object with status information, otherwise false
                  */
                 status() {
 
@@ -710,9 +718,10 @@ if (typeof Test === "undefined") {
                 value: new Map()
             }); 
 
-            // Redirection of the console level INFO, ERROR, WARN, LOG when using
-            // tests. The outputs are buffered for analysis and listeners can be
-            // implemented whose callback method is called at console outputs.
+            // Redirection of the console level INFO, ERROR, WARN, LOG when
+            // using tests. The outputs are buffered for analysis and listeners
+            // can be implemented whose callback method is called at console
+            // outputs.
 
             /** Cache for analyzing console output */
             console.output = {log:"", warn:"", error:"", info:""};
@@ -743,10 +752,10 @@ if (typeof Test === "undefined") {
             
             /** 
              * General method for redirecting console levels.
-             * If the script is in a frame, at the parent object it will also try
-             * to trigger this method. The parent object is always triggered after
-             * the current object. If an error occurs when calling the current
-             * object, the parent object is not triggered.
+             * If the script is in a frame, at the parent object it will also
+             * try to trigger this method. The parent object is always triggered
+             * after the current object. If an error occurs when calling the
+             * current object, the parent object is not triggered.
              * @param level
              * @param variants
              * @param output
@@ -795,7 +804,7 @@ if (typeof Test === "undefined") {
                 console.forward("info", variants, console.info$origin);
             };
             
-            /** In the case of an error, the errors are forwarded to the console. */
+            /** In case of an error, it is forwarded to the console. */
             window.addEventListener("error", function(event) {
                 if (parent && parent !== window)
                     console.forward("error", ((...variants) => {
@@ -805,8 +814,8 @@ if (typeof Test === "undefined") {
         
             /**
              * Enhancement of the JavaScript API
-             * Adds a method that simulates keyboard input to the Element objects.
-             * The following events are triggered during simulation:
+             * Adds a method that simulates keyboard input to the Element
+             * objects. The following events are triggered during simulation:
              *     focus, keydown, keyup, change
              * @param value simulated input value
              * @param clear option false suppresses emptying before input
@@ -861,8 +870,8 @@ if (typeof Test === "undefined") {
              * Enhancement of the JavaScript API
              * Adds a method to trigger an event for elements.
              * @param event   type of event
-             * @param bubbles deciding whether the event should bubble up through
-             *     the event chain or not
+             * @param bubbles deciding whether the event should bubble up
+             *     through the event chain or not
              * @param cancel  defining whether the event can be canceled
              */         
             if (Element.prototype.trigger === undefined)
@@ -882,8 +891,8 @@ if (typeof Test === "undefined") {
                     
                     /**
                      * Creates a new assertion based on an array of variant
-                     * parameters. Size defines the number of test values. If more
-                     * parameters are passed, the first must be the message.
+                     * parameters. Size defines the number of test values. If
+                     * more parameters are passed, the first must be the message.
                      * @param parameters
                      * @param size
                      */

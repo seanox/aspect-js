@@ -3,6 +3,7 @@ AN: Composite: Meta directive to import modules/resources in markup
     #import moduleA ... moduleN
     Meta directives are always exclusive one-line statements.
 BF: Review: Optimization and corrections
+    Reduce the size of the releases.
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected during the module include, for that to the error.
 CR: SiteMap: Inactive by default
