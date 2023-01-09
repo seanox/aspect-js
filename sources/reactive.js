@@ -3,8 +3,8 @@
  * im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
  * Diese Software unterliegt der Version 2 der Apache License.
  *
- * Seanox aspect-js, Fullstack JavaScript UI Framework
- * Copyright (C) 2022 Seanox Software Solutions
+ * Seanox aspect-js, fullstack for single page applications
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -40,16 +40,17 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.0.0 20221230
+ * @version 1.0.1 20230109
  */
 if (typeof ReactProxy === "undefined") {
 
-    window["ReactProxy"] = {};
+    window["ReactProxy"] = {
 
-    ReactProxy.selector = null;
+        selector: null,
 
-    ReactProxy.create = function(target) {
-        return target.toReactProxy();
+        create(target) {
+            return target.toReactProxy();
+        }
     };
 
     Composite.listen(Composite.EVENT_RENDER_START, function(event, selector) {
