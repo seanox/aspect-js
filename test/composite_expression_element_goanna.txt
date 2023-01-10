@@ -1,6 +1,0 @@
-     goanna
-     ----
-
-     A1-O: Hallo Berlin
-     A1-I: <input id="InputTextA" value="A1" type="text">
-     A1-O: Hallo Berlin 

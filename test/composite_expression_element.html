@@ -10,32 +10,60 @@
       }
     </style>
     <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
     <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
         Test.activate();
-    
-        Test.create({test() {
-            const pattern = Test.read("composite_expression_element_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.innerHTML);
-        }});
-        
+
+        const capture = new Capture();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
-            if (Test.status().queue !== undefined)
-                return;
-            const element = document.querySelector("#InputTextA");
-            if (element.value !== "A1")
-                return;
-            element.value = "";
-            element.typeValue("Hallo Berlin");
-            Test.start();
+            capture.snap();
+            capture.snap(document.querySelector("#InputTextA").getAttribute("value"));
+            if (capture.size() == 2)
+                document.querySelector("#InputTextA").typeValue("Hallo Berlin", true);
+            if (capture.size() == capture.patterns().length)
+                Test.start();
         });
+
+        Test.create({test() {
+            capture.validate();
+        }});
+    </script>
+    <script type="text/test">
+      A1-O: A1
+      A1-I:
+      A1-O: A1
+    </script>
+    <script type="text/test">
+      A1
+    </script>
+    <script type="text/test">
+      A1-O: Hallo Berlin
+      A1-I:
+      A1-O: Hallo Berlin
+    </script>
+    <script type="text/test">
+      A1
+    </script>
+    <script type="text/test">
+      A1-O: Hallo Berlin
+      A1-I:
+      A1-O: Hallo Berlin
+    </script>
+    <script type="text/test">
+      A1
+    </script>
+    <script type="text/test">
+      A1-O: Hallo Berlin
+      A1-I:
+      A1-O: Hallo Berlin
+    </script>
+    <script type="text/test">
+      A1
     </script>
   </head>
   <body>
-    {{navigator.engine}}
-    ----
-
     A1-O: {{#InputTextA.value}}
     A1-I: <input type="text" id="InputTextA" value="A1" events="input keydown keyup" render="body"/>
     A1-O: {{#InputTextA.value}}
