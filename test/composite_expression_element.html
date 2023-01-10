@@ -46,26 +46,11 @@
     <script type="text/test">
       A1
     </script>
-    <script type="text/test">
-      A1-O: Hallo Berlin
-      A1-I:
-      A1-O: Hallo Berlin
-    </script>
-    <script type="text/test">
-      A1
-    </script>
-    <script type="text/test">
-      A1-O: Hallo Berlin
-      A1-I:
-      A1-O: Hallo Berlin
-    </script>
-    <script type="text/test">
-      A1
-    </script>
   </head>
   <body>
     A1-O: {{#InputTextA.value}}
-    A1-I: <input type="text" id="InputTextA" value="A1" events="input keydown keyup" render="body"/>
+    A1-I: <input type="text" id="InputTextA" value="A1" autocomplete="off"
+              events="input keydown keyup" render="body"/>
     A1-O: {{#InputTextA.value}}
   </body>
 </html>
