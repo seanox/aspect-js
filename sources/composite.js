@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230109
+ * @version 1.6.0 20230110
  */
 if (typeof Composite === "undefined") {
     
@@ -3000,6 +3000,8 @@ if (typeof Composite === "undefined") {
                 }                
             });
         })).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
+
+        Composite.render(document.body);
     });
 }
 
