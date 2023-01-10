@@ -101,7 +101,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.0 20230107
+ * @version 1.4.0 20230110
  */
 if (typeof Path === "undefined") {
     
@@ -943,6 +943,15 @@ if (typeof SiteMap === "undefined") {
      */
     window.addEventListener("hashchange", (event) => {
 
+        // Without a SiteMap no partially rendering can be initiated.
+        if (!SiteMap.customize.active
+                || SiteMap.paths.size <= 0)
+            return;
+
+        let source = Path.normalize(SiteMap.location);
+        let locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
+        let target = SiteMap.locate(locate);
+
         // Determine if it is the initial rendering.
         // If this is the case, the history is empty.
         // In case of the initial rendering:
@@ -950,18 +959,6 @@ if (typeof SiteMap === "undefined") {
         //     - window.location.hash must be set finally
         //     - Body must be rendered
         const initial = SiteMap.history.size <= 0;
-        
-        // Without a SiteMap no partially rendering can be initiated.
-        if (!SiteMap.customize.active
-                || SiteMap.paths.size <= 0) {
-            if (initial)
-                Composite.render(document.body);
-            return;
-        }
-
-        let source = Path.normalize(SiteMap.location);
-        let locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
-        let target = SiteMap.locate(locate);
 
         // Initially, no function path is useful, and so in this case will be
         // forwarded to the root.
