@@ -48,7 +48,7 @@
       </loadproperties>
       <delete file="CHANGES.tmp"/>
     </sequential>
-  </macrodef> 
+  </macrodef>
 
   <target name="changes">
     <release-locate/>
@@ -84,6 +84,47 @@
         replace="${now.year}"/>
   </target>
 
+  <macrodef name="file-minimize">
+    <attribute name="file"/>
+    <attribute name="file-min"/>
+    <sequential>
+      <replaceregexp file="@{file}" flags="g" byline="false"
+          match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
+      <replaceregexp file="@{file}" flags="g" byline="false"
+          match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
+      <replaceregexp file="@{file}" flags="g" byline="false"
+          match=" +(\R)" replace="\1"/>
+
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="^(\t*)( ){24}" replace="\1&#x09;&#x09;&#x09;&#x09;&#x09;&#x09;"/>
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="^(\t*)( ){20}" replace="\1&#x09;&#x09;&#x09;&#x09;&#x09;"/>
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="^(\t*)( ){16}" replace="\1&#x09;&#x09;&#x09;&#x09;"/>
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="^(\t*)( ){12}" replace="\1&#x09;&#x09;&#x09;"/>
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="^(\t*)( ){8}" replace="\1&#x09;&#x09;"/>
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="^(\t*)( ){4}" replace="\1&#x09;"/>
+
+      <replaceregexp file="@{file}" flags="g" byline="true"
+          match="\s+$" replace=""/>
+      <replaceregexp file="@{file}" flags="g" byline="false"
+          match="\r\n" replace="&#x0A;"/>
+
+      <exec executable="cmd.exe" dir="compress">
+        <arg value="/c npm link ."/>
+      </exec>
+      <exec executable="cmd.exe" dir="compress">
+        <arg value="/c uglifyjs @{file} -c -m -o @{file-min}"/>
+      </exec>
+      <exec executable="cmd.exe" dir="compress">
+        <arg value="/c npm uninstall -g uglify-js"/>
+      </exec>
+    </sequential>
+  </macrodef>
+
   <target name="release" depends="changes">
     <release-locate/>
 
@@ -113,32 +154,14 @@
       </filelist>
     </concat>
 
-    <replaceregexp file="${release.file.lite}" flags="g" byline="false"
-        match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
-    <replaceregexp file="${release.file.lite}" flags="g" byline="false"
-        match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
+    <file-minimize file="${release.file.lite}" file-min="${release.file.lite.min}"/>
     <copy file="${release.file.lite}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-lite.js" overwrite="true"/>
-
-    <replaceregexp file="${release.file}" flags="g" byline="false"
-        match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
-    <replaceregexp file="${release.file}" flags="g" byline="false"
-        match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
-    <copy file="${release.file}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
-
-    <exec executable="cmd.exe" dir="compress">
-      <arg value="/c npm link ."/>
-    </exec>
-    <exec executable="cmd.exe" dir="compress">
-      <arg value="/c uglifyjs ${release.file.lite} -c -m -o ${release.file.lite.min}"/>
-    </exec>
-    <exec executable="cmd.exe" dir="compress">
-      <arg value="/c uglifyjs ${release.file} -c -m -o ${release.file.min}"/>
-    </exec>
-    <exec executable="cmd.exe" dir="compress">
-      <arg value="/c npm uninstall -g uglify-js"/>
-    </exec>
     <copy file="${release.file.lite.min}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-lite-min.js" overwrite="true"/>
+
+    <file-minimize file="${release.file}" file-min="${release.file.min}"/>
+    <copy file="${release.file}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
     <copy file="${release.file.min}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-min.js" overwrite="true"/>
+
     <copy file="CHANGES" todir="${workspace.release}"/>
     <copy file="LICENSE" todir="${workspace.release}"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
