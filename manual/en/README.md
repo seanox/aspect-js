@@ -105,7 +105,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [Terms](mvc.md#terms)
       * [Page](mvc.md#page)
       * [Face](mvc.md#face)
-      * [Facets](mvc.md#facets)
+      * [Facet](mvc.md#facet)
       * [Face Flow](mvc.md#face-flow)
     * [Configuration](mvc.md#configuration)
       * [Face Flow](mvc.md#face-flow-1)

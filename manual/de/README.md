@@ -103,7 +103,7 @@
     * [Begriffe](mvc.md#begriffe)
       * [Page](mvc.md#page)
       * [Face](mvc.md#face)
-      * [Facets](mvc.md#facets)
+      * [Facet](mvc.md#facet)
       * [Face Flow](mvc.md#face-flow)
     * [Konfiguration](mvc.md#konfiguration)
       * [Face Flow](mvc.md#face-flow-1)
