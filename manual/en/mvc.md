@@ -71,7 +71,7 @@ In Seanox aspect-js the views are represented by the markup.
   * [Terms](#terms)
     * [Page](#page)
     * [Face](#face)
-    * [Facets](#facets)
+    * [Facet](#facet)
     * [Face Flow](#face-flow)
   * [Configuration](#configuration)
     * [Face Flow](#face-flow-1)
@@ -156,7 +156,7 @@ case, all parent faces are displayed partially, i.e. without their possibly
 contained faces.
 
 
-#### Facets
+#### Facet
 
 Facets are parts of a face (projection) and are not normally a standalone view.
 For example, the input mask and result table of a search can be separate facets

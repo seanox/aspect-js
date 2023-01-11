@@ -72,7 +72,7 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
   * [Begriffe](#begriffe)
     * [Page](#page)
     * [Face](#face)
-    * [Facets](#facets)
+    * [Facet](#facet)
     * [Face Flow](#face-flow)
   * [Konfiguration](#konfiguration)
     * [Face Flow](#face-flow-1)
@@ -158,7 +158,7 @@ wenn sich der Pfad auf ein Sub-Face bezieht. In dem Fall werden alle
 enthaltenen Facets.
 
 
-#### Facets
+#### Facet
 
 Facets sind Teile eines Faces (Projektion) und sind in der Regel keine
 eigenst&auml;ndige View. So k&ouml;nnen z.B. bei einem Such-Formular die
