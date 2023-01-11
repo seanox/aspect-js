@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, fullstack for single page applications
- * Copyright (C) 2022 Seanox Software Solutions
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -299,13 +299,13 @@ if (typeof SiteMap === "undefined") {
            
         /** 
          * Pattern for a valid face path:
-         *     - Paths and path segments must always begin with a word character
-         *     - Allowed are the word characters a-z _ 0-9 and additionally -
-         *     - Character - always embedded between the characters: a-z _ 0-9,
-         *       it can not be used at the beginning and end
-         *     - Character # is used to separate the path segments
-         *     - After the separator # at least a word character is expected
-         *     - Only # as root path is also allowed
+         * - Paths and path segments must always begin with a word character
+         * - Allowed are the word characters a-z _ 0-9 and additionally -
+         * - Character - always embedded between the characters: a-z _ 0-9,
+         *   it can not be used at the beginning and end
+         * - Character # is used to separate the path segments
+         * - After the separator # at least a word character is expected
+         * - Only # as root path is also allowed
          */
         get PATTERN_PATH_FACE() {return /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/;},
         
