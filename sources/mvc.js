@@ -126,130 +126,133 @@ if (typeof Path === "undefined") {
         get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i;},
     
         /** Pattern for a functional path. */
-        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/;}
-    };
-    
-    /**
-     * Normalizes a path.
-     * Paths consist exclusively of word characters and underscores (based on
-     * composite IDs) and must begin with a word character and use the hash
-     * character as separator and root. Between the path segments, the hash
-     * character can also be used as a back jump (parent) directive. The back
-     * jump then corresponds to the number of additional hash characters.
-     * 
-     *     Note:
-     * Paths use lowercase letters. Upper case letters are automatically
-     * replaced by lower case letters when normalizing.
-     * 
-     * There are four types of paths:
-     * 
-     *     Functional paths:
-     *     ----
-     * The paths consists of three or more hash characters (###+) and are only
-     * temporary, they serve a function call without changing the current path
-     * (URL hash). If such a path is detected, the return value is always ###.
-     * 
-     *     Root paths:
-     *     ----
-     * These paths are empty or contain only one hash character. The return
-     * value is always the given root path or # if no root path was specified.
-     * 
-     *     Relative paths:
-     *     ----        
-     * These paths begin without hash or begin with two or more hash (##+)
-     * characters. Relative paths are prepended with the passed root.
-     * 
-     *     Absolute paths:
-     *     ----
-     * These paths begin with one hash characters. A possibly passed root is
-     * ignored.
-     * 
-     * All paths are balanced. The directive of two or more hash characters is
-     * resolved, each double hash means that the preceding path segment is
-     * skipped. If more than two hash characters are used, it extends the jump
-     * length.
-     * 
-     *     Examples (root #x#y#z):
-     *     ----
-     * #a#b#c#d#e##f   #a#b#c#d#f
-     * #a#b#c#d#e###f  #a#b#c#f
-     * ###f            #x#f  
-     * ####f           #f
-     * empty           #x#y#z
-     * #               #x#y#z
-     * a#b#c           #x#y#z#a#b#c
-     * 
-     * Invalid roots and paths cause an exception.
-     * The method has the following various signatures:
-     *     function(root, path) 
-     *     function(path) 
-     * @param  root optional, otherwise # is used 
-     * @param  path to normalize (URL is also supported, only the hash is used
-     *     here and the URL itself is ignored)
-     * @return the normalize path
-     * @throws An error occurs in the following cases:
-     *     - if the root and/or the path is invalid
-     */
-    Path.normalize = function(...variants) {
-        
-        if (variants.length <= 0)
-            return null;
-        if (variants.length > 0
-                && !Object.usable(variants[0]))
-            return null;
-        if (variants.length > 1
-                && !Object.usable(variants[1]))
-            return null;        
+        get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/;},
 
-        if (variants.length > 1
-                && typeof variants[0] !== "string")
-            throw new TypeError("Invalid root: " + typeof variants[0]);
-        let root = "#";
-        if (variants.length > 1) {
-            root = variants[0];
-            try {root = Path.normalize(root);
-            } catch (exception) {
-                root = (root || "").trim();
-                throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
-            }        
-        }
-        
-        if (variants.length > 1
-                && typeof variants[1] !== "string")
-            throw new TypeError("Invalid path: " + typeof variants[1]);
-        if (variants.length > 0
-                && typeof variants[0] !== "string")
-            throw new TypeError("Invalid path: " + typeof variants[0]);
-        let path = "";
-        if (variants.length === 1)
-            path = variants[0];
-        if (variants.length === 1
-                && path.match(Path.PATTERN_URL))
-            path = path.replace(Path.PATTERN_URL, "$1");
-        else if (variants.length > 1)
-            path = variants[1];
-        path = (path || "").trim();
-        
-        if (!path.match(Path.PATTERN_PATH))
-            throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
-        
-        path = path.replace(/([^#])#$/, "$1");
-        path = path.replace(/^([^#])/, "#$1");
-        
-        // Functional paths are detected.
-        if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
-            return "###";
-
-        path = root + path;
-        path = path.toLowerCase();
-        
-        // Path will be balanced
-        const pattern = /#[^#]+#{2}/;
-        while (path.match(pattern))
-            path = path.replace(pattern, "#");
-        path = "#" + path.replace(/(^#+)|(#+)$/g, "");
-        
-        return path;
+	    /**
+	     * Normalizes a path.
+	     * Paths consist exclusively of word characters and underscores (based
+         * on composite IDs) and must begin with a word character and use the
+         * hash character as separator and root. Between the path segments, the
+         * hash character can also be used as a back jump (parent) directive.
+         * The back jump then corresponds to the number of additional hash
+         * characters.
+	     * 
+	     *     Note:
+	     * Paths use lowercase letters. Upper case letters are automatically
+	     * replaced by lower case letters when normalizing.
+	     * 
+	     * There are four types of paths:
+	     * 
+	     *     Functional paths:
+	     *     ----
+	     * The paths consists of three or more hash characters (###+) and are
+         * only temporary, they serve a function call without changing the
+         * current path (URL hash). If such a path is detected, the return value
+         * is always ###.
+	     * 
+	     *     Root paths:
+	     *     ----
+	     * These paths are empty or contain only one hash character. The return
+	     * value is always the given root path or # if no root path was
+         * specified.
+	     * 
+	     *     Relative paths:
+	     *     ----        
+	     * These paths begin without hash or begin with two or more hash (##+)
+	     * characters. Relative paths are prepended with the passed root.
+	     * 
+	     *     Absolute paths:
+	     *     ----
+	     * These paths begin with one hash characters. A possibly passed root is
+	     * ignored.
+	     * 
+	     * All paths are balanced. The directive of two or more hash characters
+         * is resolved, each double hash means that the preceding path segment
+         * is skipped. If more than two hash characters are used, it extends the
+         * jump length.
+	     * 
+	     *     Examples (root #x#y#z):
+	     *     ----
+	     * #a#b#c#d#e##f   #a#b#c#d#f
+	     * #a#b#c#d#e###f  #a#b#c#f
+	     * ###f            #x#f  
+	     * ####f           #f
+	     * empty           #x#y#z
+	     * #               #x#y#z
+	     * a#b#c           #x#y#z#a#b#c
+	     * 
+	     * Invalid roots and paths cause an exception.
+	     * The method has the following various signatures:
+	     *     function(root, path) 
+	     *     function(path) 
+	     * @param  root optional, otherwise # is used 
+	     * @param  path to normalize (URL is also supported, only the hash is
+         *     used here and the URL itself is ignored)
+	     * @return the normalize path
+	     * @throws An error occurs in the following cases:
+	     *     - if the root and/or the path is invalid
+	     */
+	    normalize(...variants) {
+	        
+	        if (variants.length <= 0)
+	            return null;
+	        if (variants.length > 0
+	                && !Object.usable(variants[0]))
+	            return null;
+	        if (variants.length > 1
+	                && !Object.usable(variants[1]))
+	            return null;        
+	
+	        if (variants.length > 1
+	                && typeof variants[0] !== "string")
+	            throw new TypeError("Invalid root: " + typeof variants[0]);
+	        let root = "#";
+	        if (variants.length > 1) {
+	            root = variants[0];
+	            try {root = Path.normalize(root);
+	            } catch (exception) {
+	                root = (root || "").trim();
+	                throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
+	            }        
+	        }
+	        
+	        if (variants.length > 1
+	                && typeof variants[1] !== "string")
+	            throw new TypeError("Invalid path: " + typeof variants[1]);
+	        if (variants.length > 0
+	                && typeof variants[0] !== "string")
+	            throw new TypeError("Invalid path: " + typeof variants[0]);
+	        let path = "";
+	        if (variants.length === 1)
+	            path = variants[0];
+	        if (variants.length === 1
+	                && path.match(Path.PATTERN_URL))
+	            path = path.replace(Path.PATTERN_URL, "$1");
+	        else if (variants.length > 1)
+	            path = variants[1];
+	        path = (path || "").trim();
+	        
+	        if (!path.match(Path.PATTERN_PATH))
+	            throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
+	        
+	        path = path.replace(/([^#])#$/, "$1");
+	        path = path.replace(/^([^#])/, "#$1");
+	        
+	        // Functional paths are detected.
+	        if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
+	            return "###";
+	
+	        path = root + path;
+	        path = path.toLowerCase();
+	        
+	        // Path will be balanced
+	        const pattern = /#[^#]+#{2}/;
+	        while (path.match(pattern))
+	            path = path.replace(pattern, "#");
+	        path = "#" + path.replace(/(^#+)|(#+)$/g, "");
+	        
+	        return path;
+	    }
     };
 }
 
@@ -350,6 +353,474 @@ if (typeof SiteMap === "undefined") {
                     SiteMap.history.delete(entry);
                 }
             } else SiteMap.history.add(path);  
+        },
+        
+        /**
+         * Checks a path using existing/registered permit methods.
+         * The path is only allowed if all permit methods confirm the check with
+         * the return value true.
+         * @param  path to check (URL is also supported, only the hash is used
+         *     here and the URL itself is ignored)
+         * @return true if the path has been confirmed as permitted 
+         */
+        permit(path) {
+            for (let acceptor of SiteMap.acceptors) {
+                if (acceptor.pattern
+                        && !acceptor.pattern.test(path))
+                    continue; 
+                acceptor = acceptor.action.call(null, path);
+                if (acceptor !== true) {
+                    if (typeof acceptor === "string")
+                        acceptor = Path.normalize(acceptor);
+                    return acceptor; 
+                }
+            }
+            return true;
+        },
+
+        /**
+         * Determines the real existing path according to the SiteMap. The
+         * methods distinguish between absolute, relative and functional paths.
+         * The functionalities remain unchanged. Absolute and relative paths are
+         * balanced. Relative paths are balanced on the basis of the current
+         * location. All paths are checked against the SiteMap. Invalid paths
+         * are searched for a valid partial path. To do this, the path is
+         * shortened piece by piece. If no valid partial path can be found, the
+         * root is returned. Without passing a path, the current location is
+         * returned.
+         * @param  path to check - optional (URL is also supported, only the
+         *     hash is used here and the URL itself is ignored)
+         * @return the real path determined in the SiteMap, or the unchanged
+         *     function path.
+         */  
+        locate(path) {
+            
+            path = path || "";
+            
+            // The path is normalized. 
+            // Invalid paths are shortened when searching for a valid partial path.
+            // Theoretically, the shortening must end automatically with the root or
+            // the current path.
+
+            const locate = (path) => {
+                const variants = [SiteMap.location, path];
+                if (path.match(/(^#[^#].*$)|(^#$)/))
+                    variants.shift();
+                return variants;
+            };
+            
+            try {path = Path.normalize(...locate(path));
+            } catch (exception) {
+                while (true) {
+                    path = path.replace(/(^[^#]+$)|(#[^#]*$)/, "");
+                    try {path = Path.normalize(...locate(path));
+                    } catch (exception) {
+                        continue;
+                    }
+                    break;
+                }
+            }
+            
+            if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
+                return path;
+
+            let paths = Array.from(SiteMap.paths.keys());
+            paths = paths.concat(Array.from(SiteMap.facets.keys()));
+            while (paths && path.length > 1) {
+                for (const variable of SiteMap.variables)
+                    if ((path + "#").startsWith(variable + "#"))
+                        return path;
+                if (paths.includes(path))
+                    return path;
+                path = Path.normalize(path + "##");
+            }
+            
+            return "#";
+        },
+        
+        /**
+         * Navigates to the given path, if it exists in the SiteMap. All paths
+         * are checked against the SiteMap. Invalid paths are searched for a
+         * valid partial path. To do this, the path is shortened piece by piece.
+         * If no valid partial path can be found, the root is the target.
+         * 
+         * In difference to the forward method, navigate is not executed
+         * directly, instead the change is triggered asynchronous by the
+         * location hash.
+         * 
+         * @param path (URL is also supported, only the hash is used here and
+         *     the URL itself is ignored)
+         */    
+        navigate(path) {
+            Composite.asynchron((path) => {
+                window.location.hash = path;
+            }, SiteMap.locate(path));
+            SiteMap.locate(path)
+        },
+        
+        /**
+         * Returns the meta data for a path.
+         * The meta data is an object with the following structure:
+         *     {path:..., face:..., facet:...}
+         *     
+         * If variable paths are used, an additional data field is available. It
+         * contains the additional data passed with the path, comparable to
+         * PATH_INFO in CGI.    
+         *     {path:..., face:..., facet:..., data:...}
+         *     
+         * If no meta data can be determined because the path is invalid or not
+         * declared in the SiteMap, null is returned.
+         * @param  path optional, without SiteMap.location is used
+         * @return meta data object, otherwise null
+         */
+        lookup(path) {
+            
+            if (arguments.length <= 0)
+                path = SiteMap.location;
+
+            const canonical = (meta) => {
+                if (!meta.facet)
+                    return meta.path;
+                if (meta.path.endsWith("#"))
+                    return meta.path + meta.facet;
+                return meta.path + "#" + meta.facet;
+            };
+
+            for (const variable of SiteMap.variables) {
+                if (!(path + "#").startsWith(variable + "#"))
+                    continue;
+                if (SiteMap.paths.has(variable)) {
+                    return {path, face:variable, facet:null, get data() {
+                        return path.substring(variable.length) || null;
+                    }};
+                } else if (SiteMap.facets.has(variable)) {
+                    const facet = SiteMap.facets.get(variable);
+                    return {path, face:facet.path, facet:facet.facet, get data() {
+                        return path.substring(facet.path.length +facet.facet.length) || null;
+                    }};
+                }
+                break;
+            }
+            
+            if (SiteMap.paths.has(path)) {
+                return {path, face:path, facet:null};
+            } else if (SiteMap.facets.has(path)) {
+                const facet = SiteMap.facets.get(path);
+                return {path:canonical(facet), face:facet.path, facet:facet.facet};
+            }
+            return null;
+        },
+        
+        /**
+         * Forwards to the given path, if it exists in the SiteMap. All paths
+         * are checked against the SiteMap. Invalid paths are searched for a
+         * valid partial path. To do this, the path is shortened piece by piece.
+         * If no valid partial path can be found, the root is the target.
+         * 
+         * In difference to the navigate method, the forwarding is executed
+         * directly, instead the navigate method triggers asynchronous
+         * forwarding by changing the location hash.
+         * 
+         * @param path (URL is also supported, only the hash is used here and
+         *     the URL itself is ignored)
+         */  
+        forward(path) {
+            const event = new Event("hashchange",{bubbles:false, cancelable:true})
+            event.newURL = path;
+            window.dispatchEvent(event);
+        },
+           
+        /**
+         * Checks whether a path or sub-path is currently being used. This is
+         * used to show/hide composites depending on the current location.
+         * @param  path
+         * @return true if the (sub)path is currently used, otherwise false
+         */
+        accept(path) {
+            
+            // Only valid paths can be confirmed.
+            path = (path || "").trim().toLowerCase();
+            if (!path.match(/^#.*$/))
+                return false;
+            path = path.replace(/(#.*?)#*$/, "$1");
+
+            // The current path is determined and it is determined whether it is a
+            // face or a facet. In both cases, a meta object is created:
+            //     {path:#path, facet:...}
+            const location = SiteMap.lookup(Path.normalize(SiteMap.location));
+            if (!location)
+                return false;
+            
+            // Determines whether the passed path is a face, partial face or facet.
+            // (Partial)faces always have the higher priority for facets.
+            // If nothing can be determined, there cannot be a valid path.
+            const lookup = SiteMap.lookup(path);
+            if (!lookup)
+                return false;
+
+            let partial = lookup.path;
+            if (!partial.endsWith("#"))
+                partial += "#";
+            
+            // Facets are only displayed if the paths match and the path does not
+            // refer to a partial face.
+            if (lookup.facet
+                    && location.face !== lookup.face
+                    && !location.path.startsWith(partial))
+                return false;
+
+            // Faces and partial faces are only displayed if the paths match or the
+            // path starts with the passed path as a partial path.
+            if (!location.path.startsWith(partial)
+                    && location.face !== lookup.face)
+                return false;
+
+            // Invalid paths and facets are excluded at this place, because they
+            // already cause a false termination of this method (return false) and do
+            // not have to be checked here anymore.
+
+            return true;
+        },
+        
+        /**
+         * Configures the SiteMap individually. The configuration is passed as a
+         * meta object. The keys (string) correspond to the paths, the values
+         * are arrays with the valid facets for a path.
+         * 
+         *     sitemap = {
+         *         "#": ["news", "products", "about", "contact", "legal"],
+         *         "#products#papers": ["paperA4", "paperA5", "paperA6"],
+         *         "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
+         *         "#products#pens": ["pencil", "ballpoint", "stylograph"],
+         *         "#legal": ["terms", "privacy"],
+         *         ...
+         *     };
+         *     
+         *     sitemap = {
+         *         "#": ["news", "products", "about", "contact...", "legal"],
+         *         "#product": ["..."],
+         *         ...
+         *     };
+         *     
+         * The method has different signatures and can be called several times.
+         * If the method is called more than once, the configurations are
+         * concatenated and existing values in the configuration are
+         * overwritten.
+         * 
+         * The following signatures are available:
+         * 
+         *     SiteMap.customize({meta});
+         *     SiteMap.customize({meta}, function(path) {...});
+         *     SiteMap.customize(RegExp, function(path) {...});
+         *    
+         *     SiteMap as meta object:
+         *     ----
+         * The first configuration describes the SiteMap as a meta object. The
+         * meta object defines all available paths and facets for the face flow.    
+         *     
+         *     SiteMap as meta object and permit function:
+         *     ----
+         * In the second example, a permit method is passed in addition to the
+         * SiteMap as a meta object. This method is used to implement permission
+         * concepts and can be used to check and manipulate paths. Several
+         * permit methods can be registered. All requested paths pass through
+         * the permit method(s). This can decide what happens to the path. From
+         * the permit method a return value is expected, which can have the
+         * following characteristics:
+         * 
+         *     true:
+         * The validation is successful and the iteration via further permit
+         * method is continued. If all permit methods return true and thus
+         * confirm the path, it is used.
+         *      
+         *     String:
+         * The validation (iteration over further permit-methods) will be
+         * aborted and it will be forwarded to the path corresponding to the
+         * string. 
+         * 
+         *     In all other cases:
+         * The path is regarded as invalid/unauthorized, the validation
+         * (iteration over further permit-methods) will be aborted and is
+         * forwarded to the original path.
+         * 
+         * A permit method for paths can optionally be passed to each meta
+         * object. This is interesting for modules that want to register and
+         * validate their own paths.
+         * 
+         *     Acceptor:
+         *     ----
+         * Acceptors work in a similar way to permit methods. In difference,
+         * permit methods are called for each path and acceptors are only called
+         * for those that match the RegExp pattern. Also from the permit method
+         * a return value is expected, which can have the following
+         * characteristics -- see SiteMap with permit function.
+         * 
+         *     SiteMap.customize(/^phone.*$/i, function(path) {
+         *             dial the phone number
+         *     });
+         *     SiteMap.customize(/^mail.*$/i, function(path) {
+         *             send a mail
+         *     });
+         *     SiteMap.customize(/^sms.*$/i, function(path) {
+         *             send a sms
+         *     });
+         *     
+         *     SiteMap.customize(RegExp, function);
+         * 
+         * Permit methods and acceptors are regarded as one set and called in
+         * the order of their registration.
+         * 
+         *     Important note about how the SiteMap works:
+         *     ----
+         * The SiteMap collects all configurations cumulatively. All paths and
+         * facets are summarized, acceptors and permit methods are collected in
+         * the order of their registration. A later determination of which
+         * metadata was registered with which permit methods is not possible.
+         * 
+         * The configuration of the SiteMap is only applied if an error-free
+         * meta object is passed and no errors occur during processing.
+         * 
+         * The method uses variable parameters as and according to the previous
+         * description.
+         *
+         * @param  pattern
+         * @param  callback
+         * @param  meta
+         * @param  permit
+         * @throws An error occurs in the following cases:
+         *     - if the data type of acceptor and/or callback is invalid
+         *     - if the data type of map and/or permit is invalid
+         *     - if the syntax and/or the format of facets are invalid
+         */
+        customize(...variants) {
+
+            SiteMap.customize.active = true;
+
+            if (variants.length > 1
+                    && variants[0] instanceof RegExp) {
+                if (typeof variants[1] !== "function")
+                    throw new TypeError("Invalid acceptor: " + typeof variants[1]);
+                SiteMap.acceptors.add({pattern:variants[0], action:variants[1]});
+                return;
+            }
+
+            if (variants.length < 1
+                    || typeof variants[0] !== "object")
+                throw new TypeError("Invalid map: " + typeof variants[0]);
+            const map = variants[0];
+
+            const acceptors = new Set(SiteMap.acceptors);
+            if (variants.length > 1) {
+                if (typeof variants[1] !== "function")
+                    throw new TypeError("Invalid permit: " + typeof variants[1]);
+                acceptors.add({pattern:null, action:variants[1]});
+            }
+
+            const paths = new Map();
+            SiteMap.paths.forEach((value, key) => {
+                if (typeof key === "string"
+                        && key.match(SiteMap.PATTERN_PATH_FACE))
+                paths.set(key, value);
+            });
+
+            const facets = new Map();
+            SiteMap.facets.forEach((value, key) => {
+                if (typeof key === "string"
+                        && key.match(SiteMap.PATTERN_PATH_FACET))
+                    facets.set(key, value);
+            });
+
+            let variables = new Set();
+            SiteMap.variables.forEach((variable) => {
+                if (typeof variable === "string"
+                        && variable.match(SiteMap.PATTERN_PATH_FACE))
+                    variables.add(variable);
+            });
+
+            Object.keys(map).forEach((key) => {
+
+                // A map entry is based on a path (datatype string beginning with #)
+                // and an array of String or null as value. 
+                if (typeof key !== "string"
+                        || !key.match(SiteMap.PATTERN_PATH_FACE))
+                    return;
+                let value = map[key];
+                if (value !== null
+                        && !Array.isArray(value))
+                    return;
+                
+                key = Path.normalize(key);
+                
+                // The entry is added to the path map, if necessary as empty array.
+                // Thus, the following path map object will be created:
+                //     {#path:[facet, facet, ...], ...}
+                if (!paths.has(key))
+                    paths.set(key, []); 
+                
+                // In the next step, the facets for a path are determined.
+                // These are added to the path in the path map if these do not
+                // already exist there. Additional a facet map object will be created:
+                //     {#facet-path:{path:#path, facet:facet}, ...}
+                value = value || [];
+                value.forEach((facet) => {
+
+                    // Facets is an array of strings with the names of the facets.
+                    // The names must correspond to the PATTERN_PATH_FACET.
+                    if (typeof facet !== "string")
+                        throw new TypeError("Invalid facet: " + typeof facet);
+                    facet = facet.toLowerCase().trim();
+                    if (!facet.match(SiteMap.PATTERN_PATH_FACET)
+                            && !facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE))
+                        throw new Error(`Invalid facet${facet ? ": " + facet : ""}`);
+                    
+                    // Variable paths are collected additionally, so that later on
+                    // when determining the path, the complete SiteMap does not have
+                    // to be searched for variable paths. Variable paths are also
+                    // registered without ... at the end as normal paths.
+                    if (facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE)) {
+                        // If the facet is only "...", it is registered as a variable
+                        // face, otherwise as a variable facet.
+                        facet = facet.replace(/\.+$/, "");
+                        const variable = facet ? key.replace(/#+$/, "") + "#" + facet : key;
+                        if (!variables.has(variable))
+                            variables.add(variable);
+                        // If the face is only "...", it is registered as a face.
+                        // Therefore nothing needs to be done now.
+                        if (!facet)
+                            return;
+                    }
+                    
+                    // If the facet does not exist at the path, the facet is added.
+                    if (!paths.get(key).includes(facet))
+                        paths.get(key).push(facet);
+                    // The facet map object is assembled.
+                    facets.set(Path.normalize(key, facet), {path:key, facet});
+                });
+            });
+            
+            SiteMap.acceptors.clear();
+            acceptors.forEach((value) => {
+                SiteMap.acceptors.add(value);
+            });
+            
+            SiteMap.paths.clear();
+            paths.forEach((value, key) => {
+                SiteMap.paths.set(key, value);
+            });
+            
+            SiteMap.facets.clear();
+            facets.forEach((value, key) => {
+                SiteMap.facets.set(key, value);
+            });
+            
+            SiteMap.variables.clear();
+            variables = Array.from(variables);
+            variables.sort((value1, value2) => {
+                return value1.localeCompare(value2);
+            });
+            variables.forEach((value) => {
+                SiteMap.variables.add(value);
+            });
         }
     };
         
@@ -382,475 +853,7 @@ if (typeof SiteMap === "undefined") {
     //     Set with the path history (optimized)
     Object.defineProperty(SiteMap, "history", {
         value: new Set()
-    });
-    
-    /**
-     * Checks a path using existing/registered permit methods.
-     * The path is only allowed if all permit methods confirm the check with
-     * the return value true.
-     * @param  path to check (URL is also supported, only the hash is used
-     *     here and the URL itself is ignored)
-     * @return true if the path has been confirmed as permitted 
-     */
-    SiteMap.permit = function(path) {
-        for (let acceptor of SiteMap.acceptors) {
-            if (acceptor.pattern
-                    && !acceptor.pattern.test(path))
-                continue; 
-            acceptor = acceptor.action.call(null, path);
-            if (acceptor !== true) {
-                if (typeof acceptor === "string")
-                    acceptor = Path.normalize(acceptor);
-                return acceptor; 
-            }
-        }
-        return true;
-    };
-
-    /**
-     * Determines the real existing path according to the SiteMap.
-     * The methods distinguish between absolute, relative and functional paths.
-     * The functionalities remain unchanged.
-     * Absolute and relative paths are balanced.
-     * Relative paths are balanced on the basis of the current location.
-     * All paths are checked against the SiteMap. Invalid paths are searched
-     * for a valid partial path. To do this, the path is shortened piece by
-     * piece. If no valid partial path can be found, the root is returned.
-     * Without passing a path, the current location is returned.
-     * @param  path to check - optional (URL is also supported, only the hash
-     *     is used here and the URL itself is ignored)
-     * @return the real path determined in the SiteMap, or the unchanged
-     *     function path.
-     */  
-    SiteMap.locate = function(path) {
-        
-        path = path || "";
-        
-        // The path is normalized. 
-        // Invalid paths are shortened when searching for a valid partial path.
-        // Theoretically, the shortening must end automatically with the root or
-        // the current path.
-
-        const locate = (path) => {
-            const variants = [SiteMap.location, path];
-            if (path.match(/(^#[^#].*$)|(^#$)/))
-                variants.shift();
-            return variants;
-        };
-        
-        try {path = Path.normalize(...locate(path));
-        } catch (exception) {
-            while (true) {
-                path = path.replace(/(^[^#]+$)|(#[^#]*$)/, "");
-                try {path = Path.normalize(...locate(path));
-                } catch (exception) {
-                    continue;
-                }
-                break;
-            }
-        }
-        
-        if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
-            return path;
-
-        let paths = Array.from(SiteMap.paths.keys());
-        paths = paths.concat(Array.from(SiteMap.facets.keys()));
-        while (paths && path.length > 1) {
-            for (const variable of SiteMap.variables)
-                if ((path + "#").startsWith(variable + "#"))
-                    return path;
-            if (paths.includes(path))
-                return path;
-            path = Path.normalize(path + "##");
-        }
-        
-        return "#";
-    };
-
-    /**
-     * Navigates to the given path, if it exists in the SiteMap.
-     * All paths are checked against the SiteMap. Invalid paths are searched
-     * for a valid partial path. To do this, the path is shortened piece by
-     * piece. If no valid partial path can be found, the root is the target.
-     * 
-     * In difference to the forward method, navigate is not executed directly,
-     * instead the change is triggered asynchronous by the location hash.
-     * 
-     * @param path (URL is also supported, only the hash is used here and the
-     *     URL itself is ignored)
-     */    
-    SiteMap.navigate = function(path) {
-        Composite.asynchron((path) => {
-            window.location.hash = path;
-        }, SiteMap.locate(path));
-        SiteMap.locate(path)
-    };
-
-    /**
-     * Forwards to the given path, if it exists in the SiteMap.
-     * All paths are checked against the SiteMap. Invalid paths are searched
-     * for a valid partial path. To do this, the path is shortened piece by
-     * piece. If no valid partial path can be found, the root is the target.
-     * 
-     * In difference to the navigate method, the forwarding is executed
-     * directly, instead the navigate method triggers asynchronous forwarding
-     * by changing the location hash.
-     * 
-     * @param path (URL is also supported, only the hash is used here and the
-     *     URL itself is ignored)
-     */  
-    SiteMap.forward = function(path) {
-        const event = new Event("hashchange",{bubbles:false, cancelable:true})
-        event.newURL = path;
-        window.dispatchEvent(event);
-    };
-    
-    /**
-     * Returns the meta data for a path.
-     * The meta data is an object with the following structure:
-     *     {path:..., face:..., facet:...}
-     *     
-     * If variable paths are used, an additional data field is available. It
-     * contains the additional data passed with the path, comparable to
-     * PATH_INFO in CGI.    
-     *     {path:..., face:..., facet:..., data:...}
-     *     
-     * If no meta data can be determined because the path is invalid or not
-     * declared in the SiteMap, null is returned.
-     * @param  path optional, without SiteMap.location is used
-     * @return meta data object, otherwise null
-     */
-    SiteMap.lookup = function(path) {
-        
-        if (arguments.length <= 0)
-            path = SiteMap.location;
-
-        const canonical = (meta) => {
-            if (!meta.facet)
-                return meta.path;
-            if (meta.path.endsWith("#"))
-                return meta.path + meta.facet;
-            return meta.path + "#" + meta.facet;
-        };
-
-        for (const variable of SiteMap.variables) {
-            if (!(path + "#").startsWith(variable + "#"))
-                continue;
-            if (SiteMap.paths.has(variable)) {
-                return {path, face:variable, facet:null, get data() {
-                    return path.substring(variable.length) || null;
-                }};
-            } else if (SiteMap.facets.has(variable)) {
-                const facet = SiteMap.facets.get(variable);
-                return {path, face:facet.path, facet:facet.facet, get data() {
-                    return path.substring(facet.path.length +facet.facet.length) || null;
-                }};
-            }
-            break;
-        }
-        
-        if (SiteMap.paths.has(path)) {
-            return {path, face:path, facet:null};
-        } else if (SiteMap.facets.has(path)) {
-            const facet = SiteMap.facets.get(path);
-            return {path:canonical(facet), face:facet.path, facet:facet.facet};
-        }
-        return null;
-    };
-
-    /**
-     * Checks whether a path or sub-path is currently being used.
-     * This is used to show/hide composites depending on the current location.
-     * @param  path
-     * @return true if the path or sub-path is currently used, otherwise false
-     */
-    SiteMap.accept = function(path) {
-        
-        // Only valid paths can be confirmed.
-        path = (path || "").trim().toLowerCase();
-        if (!path.match(/^#.*$/))
-            return false;
-        path = path.replace(/(#.*?)#*$/, "$1");
-
-        // The current path is determined and it is determined whether it is a
-        // face or a facet. In both cases, a meta object is created:
-        //     {path:#path, facet:...}
-        const location = SiteMap.lookup(Path.normalize(SiteMap.location));
-        if (!location)
-            return false;
-        
-        // Determines whether the passed path is a face, partial face or facet.
-        // (Partial)faces always have the higher priority for facets.
-        // If nothing can be determined, there cannot be a valid path.
-        const lookup = SiteMap.lookup(path);
-        if (!lookup)
-            return false;
-
-        let partial = lookup.path;
-        if (!partial.endsWith("#"))
-            partial += "#";
-        
-        // Facets are only displayed if the paths match and the path does not
-        // refer to a partial face.
-        if (lookup.facet
-                && location.face !== lookup.face
-                && !location.path.startsWith(partial))
-            return false;
-
-        // Faces and partial faces are only displayed if the paths match or the
-        // path starts with the passed path as a partial path.
-        if (!location.path.startsWith(partial)
-                && location.face !== lookup.face)
-            return false;
-
-        // Invalid paths and facets are excluded at this place, because they
-        // already cause a false termination of this method (return false) and do
-        // not have to be checked here anymore.
-
-        return true;
-    };
-    
-    /**
-     * Configures the SiteMap individually.
-     * The configuration is passed as a meta object.
-     * The keys (string) correspond to the paths, the values are arrays with
-     * the valid facets for a path.
-     * 
-     *     sitemap = {
-     *         "#": ["news", "products", "about", "contact", "legal"],
-     *         "#products#papers": ["paperA4", "paperA5", "paperA6"],
-     *         "#products#envelope": ["envelopeA4", "envelopeA5", "envelopeA6"],
-     *         "#products#pens": ["pencil", "ballpoint", "stylograph"],
-     *         "#legal": ["terms", "privacy"],
-     *         ...
-     *     };
-     *     
-     *     sitemap = {
-     *         "#": ["news", "products", "about", "contact...", "legal"],
-     *         "#product": ["..."],
-     *         ...
-     *     };
-     *     
-     * The method has different signatures and can be called several times.
-     * If the method is called more than once, the configurations are
-     * concatenated and existing values in the configuration are overwritten.
-     * 
-     * The following signatures are available:
-     * 
-     *     SiteMap.customize({meta});
-     *     SiteMap.customize({meta}, function(path) {...});
-     *     SiteMap.customize(RegExp, function(path) {...});
-     *    
-     *     SiteMap as meta object:
-     *     ----
-     * The first configuration describes the SiteMap as a meta object.
-     * The meta object defines all available paths and facets for the face
-     * flow.    
-     *     
-     *     SiteMap as meta object and permit function:
-     *     ----
-     * In the second example, a permit method is passed in addition to the
-     * SiteMap as a meta object. This method is used to implement permission
-     * concepts and can be used to check and manipulate paths.
-     * Several permit methods can be registered.
-     * All requested paths pass through the permit method(s). This can decide
-     * what happens to the path. 
-     * From the permit method a return value is expected, which can have the
-     * following characteristics:
-     * 
-     *     true:
-     * The validation is successful and the iteration via further permit method
-     * is continued. If all permit methods return true and thus confirm the
-     * path, it is used.
-     *      
-     *     String:
-     * The validation (iteration over further permit-methods) will be aborted
-     * and it will be forwarded to the path corresponding to the string. 
-     * 
-     *     In all other cases:
-     * The path is regarded as invalid/unauthorized, the validation (iteration
-     * over further permit-methods) will be aborted and is forwarded to the
-     * original path.
-     * 
-     * A permit method for paths can optionally be passed to each meta object.
-     * This is interesting for modules that want to register and validate their
-     * own paths.
-     * 
-     *     Acceptor:
-     *     ----
-     * Acceptors work in a similar way to permit methods.
-     * In difference, permit methods are called for each path and acceptors are
-     * only called for those that match the RegExp pattern.
-     * Also from the permit method a return value is expected, which can have
-     * the following characteristics -- see SiteMap with permit function.
-     * 
-     *     SiteMap.customize(/^phone.*$/i, function(path) {
-     *             dial the phone number
-     *     });
-     *     SiteMap.customize(/^mail.*$/i, function(path) {
-     *             send a mail
-     *     });
-     *     SiteMap.customize(/^sms.*$/i, function(path) {
-     *             send a sms
-     *     });
-     *     
-     *     SiteMap.customize(RegExp, function);
-     * 
-     * Permit methods and acceptors are regarded as one set and called in the
-     * order of their registration.
-     * 
-     *     Important note about how the SiteMap works:
-     *     ----
-     * The SiteMap collects all configurations cumulatively. All paths and
-     * facets are summarized, acceptors and permit methods are collected in the
-     * order of their registration. A later determination of which metadata was
-     * registered with which permit methods is not possible.
-     * 
-     * The configuration of the SiteMap is only applied if an error-free meta
-     * object is passed and no errors occur during processing.
-     * 
-     * The method uses variable parameters as and according to the previous
-     * description.
-     *
-     * @param  pattern
-     * @param  callback
-     * @param  meta
-     * @param  permit
-     * @throws An error occurs in the following cases:
-     *     - if the data type of acceptor and/or callback is invalid
-     *     - if the data type of map and/or permit is invalid
-     *     - if the syntax and/or the format of facets are invalid
-     */
-    SiteMap.customize = function(...variants) {
-
-        SiteMap.customize.active = true;
-
-        if (variants.length > 1
-                && variants[0] instanceof RegExp) {
-            if (typeof variants[1] !== "function")
-                throw new TypeError("Invalid acceptor: " + typeof variants[1]);
-            SiteMap.acceptors.add({pattern:variants[0], action:variants[1]});
-            return;
-        }
-
-        if (variants.length < 1
-                || typeof variants[0] !== "object")
-            throw new TypeError("Invalid map: " + typeof variants[0]);
-        const map = variants[0];
-
-        const acceptors = new Set(SiteMap.acceptors);
-        if (variants.length > 1) {
-            if (typeof variants[1] !== "function")
-                throw new TypeError("Invalid permit: " + typeof variants[1]);
-            acceptors.add({pattern:null, action:variants[1]});
-        }
-
-        const paths = new Map();
-        SiteMap.paths.forEach((value, key) => {
-            if (typeof key === "string"
-                    && key.match(SiteMap.PATTERN_PATH_FACE))
-            paths.set(key, value);
-        });
-
-        const facets = new Map();
-        SiteMap.facets.forEach((value, key) => {
-            if (typeof key === "string"
-                    && key.match(SiteMap.PATTERN_PATH_FACET))
-                facets.set(key, value);
-        });
-
-        let variables = new Set();
-        SiteMap.variables.forEach((variable) => {
-            if (typeof variable === "string"
-                    && variable.match(SiteMap.PATTERN_PATH_FACE))
-                variables.add(variable);
-        });
-
-        Object.keys(map).forEach((key) => {
-
-            // A map entry is based on a path (datatype string beginning with #)
-            // and an array of String or null as value. 
-            if (typeof key !== "string"
-                    || !key.match(SiteMap.PATTERN_PATH_FACE))
-                return;
-            let value = map[key];
-            if (value !== null
-                    && !Array.isArray(value))
-                return;
-            
-            key = Path.normalize(key);
-            
-            // The entry is added to the path map, if necessary as empty array.
-            // Thus, the following path map object will be created:
-            //     {#path:[facet, facet, ...], ...}
-            if (!paths.has(key))
-                paths.set(key, []); 
-            
-            // In the next step, the facets for a path are determined.
-            // These are added to the path in the path map if these do not
-            // already exist there. Additional a facet map object will be created:
-            //     {#facet-path:{path:#path, facet:facet}, ...}
-            value = value || [];
-            value.forEach((facet) => {
-
-                // Facets is an array of strings with the names of the facets.
-                // The names must correspond to the PATTERN_PATH_FACET.
-                if (typeof facet !== "string")
-                    throw new TypeError("Invalid facet: " + typeof facet);
-                facet = facet.toLowerCase().trim();
-                if (!facet.match(SiteMap.PATTERN_PATH_FACET)
-                        && !facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE))
-                    throw new Error(`Invalid facet${facet ? ": " + facet : ""}`);
-                
-                // Variable paths are collected additionally, so that later on
-                // when determining the path, the complete SiteMap does not have
-                // to be searched for variable paths. Variable paths are also
-                // registered without ... at the end as normal paths.
-                if (facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE)) {
-                    // If the facet is only "...", it is registered as a variable
-                    // face, otherwise as a variable facet.
-                    facet = facet.replace(/\.+$/, "");
-                    const variable = facet ? key.replace(/#+$/, "") + "#" + facet : key;
-                    if (!variables.has(variable))
-                        variables.add(variable);
-                    // If the face is only "...", it is registered as a face.
-                    // Therefore nothing needs to be done now.
-                    if (!facet)
-                        return;
-                }
-                
-                // If the facet does not exist at the path, the facet is added.
-                if (!paths.get(key).includes(facet))
-                    paths.get(key).push(facet);
-                // The facet map object is assembled.
-                facets.set(Path.normalize(key, facet), {path:key, facet});
-            });
-        });
-        
-        SiteMap.acceptors.clear();
-        acceptors.forEach((value) => {
-            SiteMap.acceptors.add(value);
-        });
-        
-        SiteMap.paths.clear();
-        paths.forEach((value, key) => {
-            SiteMap.paths.set(key, value);
-        });
-        
-        SiteMap.facets.clear();
-        facets.forEach((value, key) => {
-            SiteMap.facets.set(key, value);
-        });
-        
-        SiteMap.variables.clear();
-        variables = Array.from(variables);
-        variables.sort((value1, value2) => {
-            return value1.localeCompare(value2);
-        });
-        variables.forEach((value) => {
-            SiteMap.variables.add(value);
-        });
-    };
+    });    
     
     /**
      * Rendering filter for all composite elements.
