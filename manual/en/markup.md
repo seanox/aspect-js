@@ -134,17 +134,17 @@ Details about using embedded JavaScript are described in the chapter
 
 ### events
 
-This declaration binds one or more events (see
-https://www.w3.org/TR/DOM-Level-3-Events) to an HTML element. Events provide
-primary functions for event-driven refreshing of other HTML elements (see
-[render](#render) for more information), and for validating and synchronizing
-and synchronization of HTML elements with the corresponding JavaScript objects
-(models) (see [validate](#validate) for more information).
+Binds one or more [events](https://www.w3.org/TR/DOM-Level-3-Events) to an HTML
+element. This allows event-driven synchronization of HTML elements with
+corresponding JavaScript objects (models), as well as validation of the data to
+be synchronized (see [validate](#validate) for more information) and
+event-driven control and refreshing of other HTML elements (see [render](
+    #render) for more information).
 
-As with all attributes, the expression language can be used, with the difference
-that the attribute is only read at the beginning. Due to the view model binding,
-changes to an existing element at runtime have no effect as long as it exists in
-the DOM.
+As with all attributes, the expression language is applicable here, with the
+difference that changes at runtime have no effect, since the attribute or the
+value for the view model binding is only processed initially as long as the HTML
+element exists in the DOM.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -152,9 +152,9 @@ the DOM.
     events="input change" render="#output1"/>
 ```
 
-Example for synchronous refreshing of the HTML element _output1_ by the events
-_Input_ or _Change_ for the HTML element _text1_. In the example, the input
-value of _text1_ is output synchronously with _output1_.
+Example of synchronous refreshing of the HTML element _output1_ with the events
+_Input_ or _Change_ at the HTML element _text1_. In the example, the input value
+of _text1_ is output synchronously with _output1_.
 
 ```javascript
 const Model = {
@@ -174,18 +174,18 @@ const Model = {
 </form>
 ```
 
-Example for the general usage, implementation and function as well as the
-interaction of the attributes `events` and `validate`. In the example, the input
-value of the composite field text1 is only transferred to the field of the same
-name in the JavaScript object if at least one of the events: _Input_ or _Change_
-and the validation returns the value `true`.
+Example of the combined use of the attributes `events` and `validate`. In the
+example, the input value from the composite field _text1_ is transferred to the
+field of the same name in the JavaScript object only if at least one of the
+events: _Input_ or _Change_ occurs and the validation returns `true`.
 
 
 ### id
 
-The ID (identifier) has an elementary meaning in Seanox aspect-js. It is used by
-the SiteMap as faces and facets, i.e. as targets for virtual paths in face flow
-and for the view model binding.
+The ID (identifier) has an elementary meaning in Seanox aspect-js. It is the
+basis for [view model binding](mvc.md#view-model-binding) and is used by
+[SiteMap](mvc.md#sitemap) for [faces](mvc.md#face) and [facets](mvc.md#facet) in
+the [face flow](mvc.md#face-flow) and thus as a destination for virtual paths.
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the view model binding,

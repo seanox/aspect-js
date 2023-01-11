@@ -141,17 +141,17 @@ Details zur Verwendung von eingebettetem JavaScript werden im Abschnitt
 
 ### events
 
-Diese Deklaration bindet ein oder mehrere Ereignisse (siehe
-https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von
-anderen HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur
-Validierung und Synchronisation von HTML-Elementen und dem korrespondierenden
-JavaScript-Objekt (Model) (mehr dazu im Abschnitt [validate](#validate)).
+Bindet ein oder mehrere [Ereignisse](https://www.w3.org/TR/DOM-Level-3-Events)
+an ein HTML-Element. Das erm&ouml;glicht die ereignisgesteuerte Synchronisation
+von HTML-Elementen mit korrespondierenden JavaScript-Objekten (Models), sowie
+die Validierung der zu synchronisierenden Daten (mehr dazu im Abschnitt
+[validate](#validate)) und das ereignisgesteuerte Ansteuern und Auffrischen
+anderer HTML-Elemente (mehr dazu im Abschnitt [render](#render)).
 
-Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
-einer Besonderheit, da das Attribut nur initial verarbeitet wird.
-&Auml;nderungen zur Laufzeit an einem existierenden Element haben wegen dem
-View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
+Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
+Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
+Attribut bzw. der Wert f&uuml;r das View-Model-Binding nur initial verarbeitet
+wird, solange HTML-Element im DOM existiert.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -161,7 +161,7 @@ View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
 
 Beispiel zur synchronen Auffrischung vom HTML-Element _output1_ mit den
 Ereignissen _Input_ oder _Change_ beim HTML-Element _text1_. In dem Beispiel
-wird der Eingabewert von _text1_ synchron mit _output1_ ausgegebem.
+wird der Eingabewert von _text1_ synchron mit _output1_ ausgegeben.
 
 ```javascript
 const Model = {
@@ -181,24 +181,25 @@ const Model = {
 </form>
 ```
 
-Beispiel zur grundlegenden Verwendung, Implementierung und Funktion sowie dem
-Zusammenspiel der Attribute `events` und `validate`. In dem Beispiel wird der
-Eingabewert vom Composite-Feld text1 nur dann in das gleichnamige Feld im
-JavaScript-Objekt &uuml;bernommen, wenn mindestens eines der Ereignisse:
-_Input_ oder _Change_ eintritt und die Validierung den Wert `true`
-zur&uuml;ckgibt.
+Beispiel zur Implementierung und kombinierten Verwendung der Attribute `events`
+und `validate`. In dem Beispiel wird der Eingabewert vom Composite-Feld _text1_
+nur dann in das gleichnamige Feld im JavaScript-Objekt &uuml;bernommen, wenn
+mindestens eines der Ereignisse: _Input_ oder _Change_ eintritt und die
+Validierung den Wert `true` zur&uuml;ckgibt.
 
 
 ### id
 
-Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie wird
-u.a. von der SiteMap als Faces und Facets, also als Ziel f&uuml;r virtuelle
-Pfade im Face-Flow sowie f&uuml;r das View-Model-Binding verwendet.
+Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie
+bildet die Grundlage f&uuml;r das [View-Model-Binding](
+    mvc.md#view-model-binding) und wird von der [SiteMap](mvc.md#sitemap)
+f&uuml;r [Faces](mvc.md#face) und [Facets](mvc.md#facet) im [Face-Flow](
+    mvc.md#face-flow) und somit als Ziel f&uuml;r virtuelle Pfade verwendet.
 
-Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch
-mit einer Besonderheit, da das Attribut nur initial verarbeitet wird.
-&Auml;nderungen zur Laufzeit an einem existierenden Element haben wegen dem
-View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
+Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
+Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
+Attribut bzw. der Wert f&uuml;r das View-Model-Binding nur initial verarbeitet
+wird, solange HTML-Element im DOM existiert.
 
 
 ### import
@@ -840,12 +841,13 @@ validate-Methode den Wert `true` zur&uuml;ckgibt.
 
 ## Expression Language
 
-Die Expression-Language kann im Markup als Freitext und in den Attributen der
-HTML-Elemente verwendet werden. Ausgenommen sind JavaScript- und CSS-Elemente.
-Hier wird die Expression-Language nicht unterst&uuml;tzt. Bei der Verwendung als
-Freitext wird als Ausgabe immer reiner Text (plain text) erzeugt. Das
-Hinzuf&uuml;gen von Markup, insbesondere HTML-Code, ist so nicht m&ouml;glich
-und wird nur mit den Attributen `output` und `import` unterst&uuml;tzt.
+Die Expression Language kann ab dem HTML-Element `BODY` im kompletten Markup als
+Freitext, sowie in allen Attributen verwendet werden. Ausgenommen sind die
+HTML-Elemente `STYLE` und `SCRIPT`, deren Inhalt von der Expression Language
+nicht unterst&uuml;tzt wird. Bei der Verwendung als Freitext wird als Ausgabe
+reiner Text (plain text) erzeugt. Das Hinzuf&uuml;gen von Markup, insbesondere
+HTML-Code, ist so nicht m&ouml;glich und wird nur mit den Attributen `output`
+und `import` unterst&uuml;tzt.
 
 ```html
 <article title="{{Model.title}}">
