@@ -474,7 +474,6 @@ namespaces is checked in the markup. If this is valid, the namespaces are
 applied directly to the path of modules and their resources and extend the path
 from the module directory.
 
-
 ```
 + modules
   - common.css
