@@ -14,6 +14,21 @@ CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
+CR: Release: Revision of the release channels
+    - default: contains all minimized
+      for development, test and deployment
+    - default-max: contains all, not minimized and with comments
+      for development, test
+    - core: contains all minimized, except the Test API
+      for development
+    - core-max: contains all minimized, except the Test API, not minimized and with comments
+      for development and deployment
+    - micro: contains all minimized, except the Test API and SiteMap
+      for deployment of micro frontends without face-flow
+    - micro-max: contains all minimized, except the test API and SiteMap, not minimized and with comments
+      for development and deployment of micro frontends without face-flow
+
+    Lite is a version without test module/extension.
 
 1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr
