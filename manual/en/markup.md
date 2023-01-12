@@ -371,9 +371,9 @@ const Model = {
 
 ### message
 
-Message is an optional part of [Validation](#validate) and is used for
-text/error output in case of an unconfirmed validation. This requires a
-combination with the attributes `validate` and `events`. 
+Message is an optional part of [Validation](#validate) and is used for text and
+error output in case of an unconfirmed validation. This requires a combination
+with the attributes [validate](#validate) and [events](#events). 
 
 ```html
 <form id="Model" composite>

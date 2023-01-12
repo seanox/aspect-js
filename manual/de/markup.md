@@ -384,8 +384,9 @@ const Model = {
 ### message
 
 Message ist ein optionaler Bestandteil der [Validierung](#validate) und wird zur
-Text-/Fehler-Ausgabe im Fall einer unbest&auml;tigten Validierung verwendet. Das
-Attribut erfordert die Kombination mit den Attributen `validate` und `events`. 
+Text- bzw. Fehler-Ausgabe im Fall einer unbest&auml;tigten Validierung verwendet.
+Das Attribut erfordert die Kombination mit den Attributen [validate](#validate)
+und [events](#events). 
 
 ```html
 <form id="Model" composite>
