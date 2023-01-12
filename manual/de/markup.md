@@ -204,22 +204,17 @@ wird, solange HTML-Element im DOM existiert.
 
 ### import
 
-Diese Deklaration l&auml;dt Inhalte dynamisch nach und ersetzt den inneren
-HTML-Code eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das
-Attribut `import` entfernt. Das Attribut erwartet als Wert ein Element oder
-mehrere Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt
-werden. Auch die Verwendung einer absoluten oder relativen URL zu einer
-entfernten Ressource wird unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen
-und eingef&uuml;gt wird. Und auch der [DataSource-URL (locator)](
-    datasource.md#locator) wird unterst&uuml;tzt, womit Inhalte aus der
-[DataSource](datasource.md) geladen und transformiert eingef&uuml;gt werden.
+L&auml;dt den Inhalt f&uuml;r das HTML-Element zur Laufzeit und f&uuml;gt diesen
+als inneres HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [output](
+    #output), nur erfolgt der Import einmalig und das input-Attribut wird nach
+dem erfolgreichen Laden entfernt. Als Wert werden ein oder mehrere Elemente als
+NodeList bzw. Array, sowie absolute oder relative URLs zu einer entfernten
+Ressource und auch die [DataSource-URL (locator)](datasource.md#locator)
+f&uuml;r transformierte Inhalte aus der [DataSource](datasource.md)
+unterst&uuml;tzt.
 
-In allen F&auml;llen l&auml;sst sich das import-Attribut mit dem
-condition-Attribut kombinieren und wird dann erst ausgef&uuml;hrt, wenn die
-Bedingung `true` ist.
-
-Das Verhalten ist vergleichbar mit dem Attribut `output`, im Unterschied wird
-der Import f&uuml;r das Element aber nur einmalig ausgef&uuml;hrt.
+Das import-Attribut l&auml;sst sich mit dem condition-Attribut kombinieren und
+wird dann erst ausgef&uuml;hrt, wenn die Bedingung `true` ist.
 
 ```javascript
 const Model = {
@@ -280,9 +275,9 @@ wird die URL f&uuml;r Daten und Transformation daraus abgeleitet.
 ```
 
 Beispiel f&uuml;r den Import per DataSource-URL mit spezifischer Daten- und
-Transformations-URL. Als Wert wird die Daten-URL (locator der XML-Datei) und
+Transformations-URL. Als Wert sind die Daten-URL (locator der XML-Datei) und
 nachfolgend getrennt durch ein Leerzeichen die Transformations-URL (locator vom
-XSLT-Template) erwartet. 
+XSLT-Template) angegeben. 
 
 ```html
 <article import="{{'xml:/example/data xslt:/example/style'}}">
@@ -297,7 +292,7 @@ XSLT-Template) erwartet.
 Beim Einf&uuml;gen von Inhalten aus der DataSource, wird der Typ von
 JavaScript-Bl&ouml;cken automatisch in `composite/javascript` ge&auml;ndert und
 erst durch den Renderer ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das
-JavaScript ggf. erst abh&auml;ngig vom umschliessenden condition-Attribut
+JavaScript ggf. abh&auml;ngig vom umschliessenden condition-Attribut
 ausgef&uuml;hrt wird.
 
 

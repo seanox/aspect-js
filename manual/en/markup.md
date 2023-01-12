@@ -195,20 +195,16 @@ the DOM.
 
 ### import
 
-This declaration loads content dynamically and replaces the inner HTML code of
-an element. If the content was successfully loaded, the `import` attribute is
-removed. The attribute expects as value one element or more elements as NodeList
-or Array these are then inserted directly. Also supported is the use of an
-absolute or relative URL to a remote resource, which is reloaded and inserted by
-HTTP method GET. Also [DataSource URL (locator)](datasource.md#locator) is
-supported, which loads and inserts transformed content from the [DataSource](
-    datasource.md).
+Loads the content for the HTML element at runtime and inserts it as inner HTML.
+The behavior is similar to the [output](#output) attribute, except that the
+import is done once and the input attribute is removed after successful loading.
+As value one or more elements are supported as NodeList or Array, as well as
+absolute or relative URLs to a remote resource and also the
+[DataSource URL (locator)](datasource.md#locator) for transformed content from
+the [DataSource](datasource.md).
 
-In all cases, the import attribute can be combined with the condition attribute
-and is only executed when the condition is `true`.
-
-The behavior is similar to the `output` attribute, in difference the import for
-the element is executed only once.
+The import attribute can be combined with the condition attribute and will then
+only be executed if the condition is `true`.
 
 ```javascript
 const Model = {
@@ -270,7 +266,7 @@ for data and transformation are derived from it.
 
 Example of importing a DataSource-URL with a specific data URL (locator) and
 transformation URL. As a value, the data URL (locator of the XML file) and the
-transformation URL (locator of the XSLT template) are expected, separated by a
+transformation URL (locator of the XSLT template) are is specified, separated by a
 blank character. 
 
 ```html
@@ -285,7 +281,7 @@ blank character.
 
 When inserting content from the DataSource, the type of JavaScript blocks is
 automatically changed to `composite/javascript` and only executed by the
-renderer. This ensures that the JavaScript is only executed depending on the
+renderer. This ensures that the JavaScript is  executed depending on the
 enclosing condition attribute.
 
 
