@@ -28,8 +28,6 @@ CR: Release: Revision of the release channels
     - micro-max: contains all minimized, except the test API and SiteMap, not minimized and with comments
       for development and deployment of micro frontends without face-flow
 
-    Lite is a version without test module/extension.
-
 1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr
 CR: Release: New channel for lite version
