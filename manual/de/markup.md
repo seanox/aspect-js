@@ -358,16 +358,13 @@ JavaScript ist als Composite-JavaScript m&ouml;glich.
 ### iterate
 
 Die iterative Ausgabe basiert auf Listen, Aufz&auml;hlungen und Arrays. Wird ein
-HTML-Element als iterativ deklariert, werden der initiale innerer HTML-Code als
-Vorlage verwendet und w&auml;hrend der Iteration der innere HTML-Code
-zun&auml;chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und
-das Ergebnis dem inneren HTML-Code hinzugef&uuml;gt.
-
-Das iterate-Attribut erwartet einen [Variablen-Ausdruck](
-    expression.md#variable-expression), zu dem ein Meta-Objekt erstellt wird,
-dass den Zugriff auf die Iteration erm&ouml;glicht. So erzeugt der
-Variablen-Ausdruck `iterate={{tempA:Model.list}}` das Meta-Objekt
-`tempA = {item, index, data}`. 
+HTML-Element als iterativ deklariert, wird das innerer HTML als Vorlage
+verwendet, aus der mit jedem Iterationszyklus aktueller Inhalt erzeugt und als
+inneres HTML eingef&uuml;gt wird. Als Wert wird f&uuml;r das Attribut ein
+[Variablen-Ausdruck](expression.md#variable-expression) erwartet, zu dem ein
+Meta-Objekt erstellt werden kann, was in der Vorlage den Zugriff auf die
+Iteration erm&ouml;glicht. So erzeugt der Variablen-Ausdruck `iterate={{
+    tempA:Model.list}}` das Meta-Objekt `tempA = {item, index, data}`.
 
 ```javascript
 const Model = {
