@@ -537,20 +537,16 @@ ist. Das Attribut erfordert die Kombination mit den Attributen [validate](
 
 ### output
 
-Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehrere
-Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef&uuml;gt
-werden. Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator)
-unterst&uuml;tzt, womit Inhalte aus der [DataSource](datasource.md) geladen und
-transformiert eingef&uuml;gt werden.
+Setzt beim HTML-Element den Wert oder das Ergebnis seines Ausdrucks als inneres
+HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [input](#input), nur
+erfolgt mit jedem Renderzyklus eine aktualisierte Ausgabe. Als Wert werden Text,
+ein oder mehrere Elemente als NodeList bzw. Array, sowie absolute oder relative
+URLs zu einer entfernten Ressource und auch die [DataSource-URL (locator)](
+    datasource.md#locator) f&uuml;r transformierte Inhalte aus der [DataSource](
+    datasource.md) unterst&uuml;tzt.
 
-In allen F&auml;llen l&auml;sst sich das output-Attribut mit dem
-condition-Attribut kombinieren und wird dann erst ausgef&uuml;hrt, wenn die
-Bedingung `true` ist.
-
-Das Verhalten ist vergleichbar mit dem Attribut `import`, im Unterschied wird
-der Output f&uuml;r das Element mit jedem zutreffenden Renderzyklus
-ausgef&uuml;hrt.
+Das output-Attribut l&auml;sst sich mit dem condition-Attribut kombinieren und
+wird dann erst ausgef&uuml;hrt, wenn die Bedingung `true` ist.
 
 ```javascript
 const Model = {
@@ -585,8 +581,20 @@ const Model = {
 </article>
 ```
 
+Beispiel f&uuml;r den Output einer entfernten Ressource per HTTP-Methode GET.
+
+```html
+<article output="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx'}}">
+  loading resource...
+</article>
+
+<article output="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
+  loading resource...
+</article>
+```
+
 Beispiel f&uuml;r den Output per DataSource-URL. Wird nur eine URL angegeben,
-wird die URL f&uuml;r Daten und Transformation daraus abgeleitet. 
+wird die URL f&uuml;r Daten und Transformation daraus abgeleitet.
 
 ```html
 <article output="{{'xml:/example/content'}}">
@@ -599,10 +607,9 @@ wird die URL f&uuml;r Daten und Transformation daraus abgeleitet.
 ```
 
 Beispiel f&uuml;r den Output per DataSource-URL mit spezifischer Daten- und
-Transformations-URL.
-
-Das output-Attribut erwartet prim&auml;r eine Daten-URL der optional, durch ein
-Leerzeichen getrennt, eine URL zur Transformation folgen kann.
+Transformations-URL. Als Wert sind die Daten-URL (locator der XML-Datei) und
+nachfolgend getrennt durch ein Leerzeichen die Transformations-URL (locator vom
+XSLT-Template) angegeben.
 
 ```html
 <article output="{{'xml:/example/data xslt:/example/style'}}">
@@ -617,7 +624,7 @@ Leerzeichen getrennt, eine URL zur Transformation folgen kann.
 Beim Einf&uuml;gen von Inhalten aus der DataSource, wird der Typ von
 JavaScript-Bl&ouml;cken automatisch in `composite/javascript` ge&auml;ndert und
 erst durch den Renderer ausgef&uuml;hrt. So wird gew&auml;hrleistet, dass das
-JavaScript ggf. erst abh&auml;ngig vom umschliessenden condition-Attribut
+JavaScript ggf. abh&auml;ngig vom umschliessenden condition-Attribut
 ausgef&uuml;hrt wird.
 
 

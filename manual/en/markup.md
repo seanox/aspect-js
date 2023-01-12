@@ -251,7 +251,7 @@ Example of importing a remote resource using the HTTP method GET.
 </article>
 ```
 
-Example of importing via DataSource-URL. If only one URL is specified, the UR
+Example of importing via DataSource-URL. If only one URL is specified, the URI
 for data and transformation are derived from it. 
 
 ```html
@@ -521,17 +521,15 @@ attribute requires the combination with the [validate](#validate), [events](
 
 ### output
 
-The attribute output the value or result of its expression as an inner HTML code
-for an HTML element. As value are expected one element or more elements as
-NodeList or Array, which are then inserted directly. The
-[DataSource-URL (locator)](datasource.md#locator) is also supported, which loads
-and inserts transformed content from the [DataSource](datasource.md).
+Sets for the HTML element the value or result of its expression as inner HTML.
+The behavior is similar to the [input](#input) attribute, except that the output
+is updated with each render cycle. Supported values are text, one or more
+elements as NodeList or Array, as well as absolute or relative URLs to a remote
+resource and also the [DataSource-URL (locator)](datasource.md#locator) for
+transformed content from the [DataSource](datasource.md).
 
-In all cases, the output attribute can be combined with the condition attribute
-and is only executed when the condition is `true`.
-
-The behavior is similar to the `import` attribute, except that `output` for the
-element is executed with each relevant render cycle.
+The output attribute can be combined with the condition attribute and will then
+only be executed if the condition is `true`.
 
 ```javascript
 const Model = {
@@ -566,8 +564,20 @@ const Model = {
 </article>
 ```
 
-Example of the output via DataSource-URL. If only one URL is specified, the data
-and transformation URLs are derived from it. 
+Example of outputting a remote resource using the HTTP method GET.
+
+```html
+<article import="{{'https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx'}}">
+  loading resource...
+</article>
+
+<article import="https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_c.htmlx">
+  loading resource...
+</article>
+```
+
+Example of outputting via DataSource-URL. If only one URL is specified, the URI
+for data and transformation are derived from it.
 
 ```html
 <article output="{{'xml:/example/content'}}">
@@ -579,11 +589,10 @@ and transformation URLs are derived from it.
 </article>
 ```
 
-Example of the output via DataSource-URL with a specific data URL and
-transformation URL.
-
-The output attribute expects primarily a data URL which can optionally be
-followed by a URL for transformation, separated by a space.
+Example of outputting a DataSource-URL with a specific data URL (locator) and
+transformation URL. As a value, the data URL (locator of the XML file) and the
+transformation URL (locator of the XSLT template) are is specified, separated by a
+blank character.
 
 ```html
 <article output="{{'xml:/example/data xslt:/example/style'}}">
