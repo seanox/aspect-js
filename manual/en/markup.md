@@ -287,24 +287,17 @@ enclosing condition attribute.
 
 ### interval
 
-This declaration activates an interval-controlled refresh of an HTML element
-without having to trigger the refresh manually. As value an interval in
-milliseconds is expected, which can also be formulated as expression. Processing
-is concurrent or asynchronous, but not parallel. Means that the processing is to
-start after the set time interval, but this does not start until a JavaScript
-procedure started before has been completed. For this reason, the interval is to
-be understood as near real-time, but not as exact.
-
-The interval attribute expects a value in milliseconds. An invalid value causes
-console output. The interval starts automatically with refreshing the declared
-HTML element and will terminated and/or removed when:
-- The element no longer exists in the DOM.
-- the condition attribute is used that is not `true`
-
-If an HTML element is declared as an interval, the original inner HTML code is
-used as a template, and during the intervals the inner HTML code is first
-removed, the template is generated individually with each interval cycle, and
-the result is inserted as inner HTML code.
+Activates an interval-controlled refresh of the HTML element without the need to
+actively trigger the refresh. The interval uses the inner HTML as a template
+from which updated content is generated and inserted with each interval cycle.
+The attribute expects milliseconds as value, which can also be formulated as
+expression, where invalid values cause console output. Processing is concurrent
+or asynchronous but not parallel. Processing will start after the specified time
+when a previously started JavaScript procedure has finished. Therefore, the
+interval should be understood as timely but not exact. The interval starts
+refreshing automatically and ends when:
+- the element no longer exists in the DOM
+- the condition attribute is used that is not true
 
 ```html
 <span interval="1000">
@@ -316,13 +309,12 @@ the result is inserted as inner HTML code.
 </span>
 ```
 
-The SPAN element is refreshed every 1000ms. The interval attribute can be used
-for simple HTML elements as well as complex and nested HTML constructs.
-
-An active interval reacts dynamically when the DOM changes, terminates
-automatically when the HTML element is removed from the DOM and restarts when
-the HTML element is added to the DOM again. Therefore, the interval attribute is
-easy to use and can be controlled with the condition attribute.
+The interval attribute can be used for simple HTML elements and also complex
+HTML constructs. For example, the SPAN element is updated every 1000ms. An
+active interval reacts dynamically to changes in the DOM and starts
+automatically when the HTML element is added to the DOM and ends when it is
+removed from the DOM. This makes the interval attribute easy to use and control
+in combination with the condition attribute.
 
 ```html
 <span interval="1000" condition="{{IntervalModel.isVisible()}}">
@@ -330,8 +322,8 @@ easy to use and can be controlled with the condition attribute.
 </span>
 ```
 
-With the combination of interval and variable expression, the implementation of
-a permanent counter is very simple.
+For example, with the combination of interval and the variable expression, the
+implementation of a permanent counter is simple.
 
 ```html
 {{counter:0}}
@@ -341,8 +333,8 @@ a permanent counter is very simple.
 </p>
 ```
 
-The interval attribute can be used in combination with embedded JavaScript as
-composite JavaScript.
+It is also possible to use the interval attribute in combination with embedded
+JavaScript as a composite JavaScript.
 
 ```html
 <script type="composite/javascript" interval="1000">

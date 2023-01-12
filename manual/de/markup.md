@@ -298,25 +298,18 @@ ausgef&uuml;hrt wird.
 
 ### interval
 
-Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
-HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss. Als
-Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
-formuliert werden kann. Die Verarbeitung erfolgt nebenl&auml;ufig bzw. asynchron
-aber nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
-Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnene
-JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht
-aber als exakt zu verstehen.
-
-Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ung&uuml;ltiger
-Wert verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
-Auffrischen vom deklarierten HTML-Element und wird beendet bzw. entfernt wenn:
+Aktiviert eine intervallgesteuerte Auffrischung des HTML-Elements, ohne dass die
+Auffrischung aktiv angestossen werden muss. Das Intervall nutzt das innere HTML
+als Vorlage, aus der mit jedem Intervallzyklus aktueller Inhalt erzeugt und
+eingef&uuml;gt wird. Das Attribut erwartet als Wert Millisekunden, die auch als
+Expression formuliert werden k&ouml;nnen, wobei ung&uuml;ltige Werte eine
+Konsolenausgabe verursachen. Die Verarbeitung erfolgt nebenl&auml;ufig bzw.
+asynchron aber nicht parallel. Die Verarbeitung wird nach der vorgegebenen Zeit
+starten, wenn eine zuvor begonnene JavaScript-Prozedur beendet wurde. Daher ist
+das Intervall als zeitnah, nicht aber als exakt zu verstehen. Das Intervall
+beginnt mit dem Auffrischen automatisch und endet wenn:
 - das Element nicht mehr im DOM existiert
 - das condition-Attribut verwendet wird, dass nicht `true` ist
-
-Wird ein HTML-Element als Intervall deklariert, wird der urspr&uuml;ngliche
-innerer HTML-Code als Vorlage verwendet und w&auml;hrend der Intervalle zuerst
-der innere HTML-Code entfernt, die Vorlage mit jedem Intervall-Zyklus einzeln
-generiert und das Ergebnis als innerer HTML-Code eingef&uuml;gt.
 
 ```html
 <span interval="1000">
@@ -328,14 +321,13 @@ generiert und das Ergebnis als innerer HTML-Code eingef&uuml;gt.
 </span>
 ```
 
-Das SPAN-Element wird alle 1000ms aktualisiert. Das interval-Attribut kann
-f&uuml;r einfache HTML-Elemente, wie auch komplexe und verschachtelte
-HTML-Konstrukte verwendet werden.
-
-Ein aktives Intervall reagiert dynamisch auf Ver&auml;nderungen im DOM, endet
-automatisch, wenn das HTML-Element aus dem DOM entfernt wurde und beginnt neu,
-wenn das HTML-Element dem DOM erneut hinzugef&uuml;gt wird. Daher l&auml;sst
-sich das interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
+Das interval-Attribut kann f&uuml;r einfache HTML-Elemente und auch komplexe
+HTML-Konstrukte verwendet werden. So wird das SPAN-Element alle 1000ms
+aktualisiert. Ein aktives Intervall reagiert dabei dynamisch auf
+Ver&auml;nderungen im DOM und beginnt automatisch wenn das HTML-Element im DOM
+hinzugef&uuml;gt wird und endet wenn es aus dem DOM entfernt wird. Womit sich
+das interval-Attribut gut in Kombination mit dem condition-Attribut verwenden
+und steuern l&auml;sst.
 
 ```html
 <span interval="1000" condition="{{IntervalModel.isVisible()}}">
@@ -343,8 +335,8 @@ sich das interval-Attribut gut mit dem condition-Attribut verwenden und steuern.
 </span>
 ```
 
-Mit der Kombination von Intervall und Variablen-Expression ist die Umsetzung
-eines permanenten Z&auml;hlers sehr einfach.
+Mit der Kombination von Intervall und Variablen-Expression ist z.B. die
+Umsetzung eines permanenten Z&auml;hlers einfach.
 
 ```html
 {{counter:0}}
@@ -354,8 +346,8 @@ eines permanenten Z&auml;hlers sehr einfach.
 </p>
 ```
 
-Die Verwendung vom interval-Attribut in Verbindung mit eingebettetem JavaScript
-ist als Composite-JavaScript m&ouml;glich.
+Auch die Verwendung vom interval-Attribut in Verbindung mit eingebettetem
+JavaScript ist als Composite-JavaScript m&ouml;glich.
 
 ```html
 <script type="composite/javascript" interval="1000">
