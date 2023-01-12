@@ -502,11 +502,11 @@ Details about namespaces are also described in the chapters
 
 ### notification
 
-Notification is an optional part of [Validation](#validate) and displays the
-error output as an info box (browser feature) on the corresponding element.
-
-This requires a combination with the attributes `validate`, `events` and
-`message`.
+Notification is an optional part of [validation](#validate) and specifies that
+the content of the message attribute is displayed as an info box (browser
+feature) on the corresponding element if validation is not successful. The
+attribute requires the combination with the [validate](#validate), [events](
+    #events) and [message](#message) attributes.
 
 ```html
 <form id="Model" composite>

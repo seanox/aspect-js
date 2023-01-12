@@ -519,11 +519,10 @@ beschrieben.
 ### notification
 
 Notification ist ein optionaler Bestandteil der [Validierung](#validate) und
-zeigt die Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden
-Element an.
-
-Das Attribut erfordert die Kombination mit den Attributen `validate`, `events`
-und `message`.
+legt fest, dass der Inhalt vom message-Attribut als Info-Box (Browser-Feature)
+am entsprechenden Element angezeigt wird, wenn die Validierung nicht erfolgreich
+ist. Das Attribut erfordert die Kombination mit den Attributen [validate](
+    #validate), [events](#events) und [message](#message).
 
 ```html
 <form id="Model" composite>
