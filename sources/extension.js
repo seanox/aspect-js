@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, fullstack for single page applications
- * Copyright (C) 2022 Seanox Software Solutions
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.3.0 20221231
+ * @version 1.4.0 20221231
  */
 if (typeof Namespace === "undefined") {
 
@@ -49,172 +49,205 @@ if (typeof Namespace === "undefined") {
         get PATTERN_NAMESPACE_LEVEL_START() {return /^[_a-z\$][\w\$]*$/i;},
 
         /** Pattern for a valid namespace level */
-        get PATTERN_NAMESPACE_LEVEL() {return /(^[\w\$]+$)|(^\d+$)/;}
-    };
+        get PATTERN_NAMESPACE_LEVEL() {return /(^[\w\$]+$)|(^\d+$)/;},
 
-    /**
-     * Creates a namespace to the passed object, strings and numbers, if the
-     * namespace contains arrays and the numbers can be used as index. Levels of
-     * the namespace levels are separated by a dot. Levels can as fragments also
-     * contain dots. Without arguments the global namespace window is returned.
-     * The method has the following various signatures:
-     *     Namespace.using();
-     *     Namespace.using(string);
-     *     Namespace.using(string, ...string|number);
-     *     Namespace.using(object);
-     *     Namespace.using(object, ...string|number);
-     * @param  levels of the namespace
-     * @return the created or already existing object(-level)
-     * @throws An error occurs in case of invalid data types or syntax 
-     */
-    Namespace.using = function(...levels) {
+        /**
+         * Creates a namespace to the passed object, strings and numbers, if the
+         * namespace contains arrays and the numbers can be used as index.
+         * Levels of the namespace levels are separated by a dot. Levels can as
+         * fragments also contain dots. Without arguments the global namespace
+         * window is returned.
+         *
+         * The method has the following various signatures:
+         *     Namespace.using();
+         *     Namespace.using(string);
+         *     Namespace.using(string, ...string|number);
+         *     Namespace.using(object);
+         *     Namespace.using(object, ...string|number);
+         *
+         * @param  levels of the namespace
+         * @return the created or already existing object(-level)
+         * @throws An error occurs in case of invalid data types or syntax 
+         */
+        using(...levels) {
 
-        if (levels.length <= 0)
-            return window;
+            if (levels.length <= 0)
+                return window;
 
-        Namespace.lookup.filter(...levels);
+            Namespace.lookup.filter(...levels);
 
-        let offset = levels.length;
-        let namespace = null;
-        if (levels.length > 0
-                && typeof levels[0] === "object")
-            namespace = levels.shift();
-        offset -= levels.length;
+            let offset = levels.length;
+            let namespace = null;
+            if (levels.length > 0
+                    && typeof levels[0] === "object")
+                namespace = levels.shift();
+            offset -= levels.length;
 
-        levels = levels.join(".");
-        levels.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((level, index, array) => {
+            levels = levels.join(".");
+            levels.split(Namespace.PATTERN_NAMESPACE_SEPARATOR).forEach((level, index, array) => {
 
-            const pattern = index === 0 && namespace === null
-                    ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
-            if (!level.match(pattern))
-                throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
+                const pattern = index === 0 && namespace === null
+                        ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
+                if (!level.match(pattern))
+                    throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
 
-            // Composites use IDs which causes corresponding DOM objects
-            // (Element) in the global namespace if there are no corresponding
-            // data objects (models). Because namespaces are based on data
-            // objects, if an element appears, we assume that a data object does
-            // not exist and the recursive search is aborted as unsuccessful.
+                // Composites use IDs which causes corresponding DOM objects
+                // (Element) in the global namespace if there are no
+                // corresponding data objects (models). Because namespaces are
+                // based on data objects, if an element appears, we assume that
+                // a data object does not exist and the recursive search is
+                // aborted as unsuccessful.
 
-            if (index === 0
-                    && namespace === null) {
-                namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
-                if (namespace !== undefined
-                        && !(namespace instanceof Element))
-                    return;
-                namespace = window;
+                if (index === 0
+                        && namespace === null) {
+                    namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
+                    if (namespace !== undefined
+                            && !(namespace instanceof Element))
+                        return;
+                    namespace = window;
+                }
+
+                const item = namespace[level]
+                const type = typeof item;
+                if (type !== "undefined"
+                        && type !== "object")
+                    throw new TypeError(`Invalid namespace type at level ${index +1 +offset}: ${type}`);
+                if (item === undefined
+                        || item === null
+                        || item instanceof Element)
+                    if (index < array.length -1
+                            && array[index +1].match(/^\d+$/))
+                        namespace[level] = [];
+                    else namespace[level] = {};
+                namespace = namespace[level];
+            });
+
+            return namespace;
+        },
+            
+        /**
+         * Creates a namespace with an initial value to the passed object,
+         * strings and numbers, if the namespace contains arrays and the numbers
+         * can be used as index. Levels of the namespace levels are separated by
+         * a dot. Levels can as fragments also contain dots. Without arguments,
+         * the global namespace window is used.
+         *
+         * The method has the following various signatures:
+         *     Namespace.create(string, value);
+         *     Namespace.create(string, ...string|number, value);
+         *     Namespace.create(object, value);
+         *     Namespace.create(object, ...string|number, value);
+         *
+         * @param  levels of the namespace
+         * @param  value to initialize/set
+         * @return the created or already existing object(-level)
+         * @throws An error occurs in case of invalid data types or syntax
+         */
+        create(...levels) {
+            if (levels.length < 2)
+                throw new Error("Invalid namespace for creation: Namespace and/or value is missing");
+            const value = levels.pop();
+            levels = Namespace.lookup.filter(...levels);
+            const level = levels.pop();
+            const namespace = Namespace.using(...levels);
+            if (namespace === null)
+                return null;
+            namespace[level] = value;
+            return namespace[level];
+        },
+            
+        /**
+         * Resolves a namespace and returns the determined object(-level).
+         * If the namespace does not exist, undefined is returned.
+         *
+         * The method has the following various signatures:
+         *     Namespace.lookup();
+         *     Namespace.lookup(string);
+         *     Namespace.lookup(string, ...string|number);
+         *     Namespace.lookup(object);
+         *     Namespace.lookup(object, ...string|number);
+         *
+         * @param  levels of the namespace
+         * @return the determined object(-level)
+         * @throws An error occurs in case of invalid data types or syntax
+         */
+        lookup(...levels) {
+
+            if (levels.length <= 0)
+                return window;
+
+            Namespace.lookup.filter(...levels);
+
+            let offset = levels.length;
+            let namespace = null;
+            if (levels.length > 0
+                    && typeof levels[0] === "object")
+                namespace = levels.shift();
+            offset -= levels.length;
+
+            levels = levels.join(".");
+            levels = levels.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
+            for (let index = 0; index < levels.length; index++) {
+
+                const level = levels[index];
+
+                const pattern = index +offset === 0
+                        ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
+                if (!level.match(pattern))
+                    throw new Error(`Invalid namespace at level ${index +1 +offset}${level && level.trim() ? ": " + level.trim() : ""}`);
+
+                // Composites use IDs which causes corresponding DOM objects
+                // (Element) in the global namespace if there are no
+                // corresponding data objects (models). Because namespaces are
+                // based on data objects, if an element appears, we assume that
+                // a data object does not exist and the recursive search is
+                // aborted as unsuccessful.
+
+                if (index === 0
+                        && namespace === null) {
+                    namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
+                    if (namespace !== undefined)
+                        if (namespace instanceof Element)
+                            return undefined;
+                        else continue;
+                    namespace = window;
+                }
+
+                namespace = namespace[level];
+                if (namespace === undefined
+                        || namespace === null)
+                    return namespace;
+
+                if (namespace instanceof Element)
+                    return undefined;
             }
 
-            const item = namespace[level]
-            const type = typeof item;
-            if (type !== "undefined"
-                    && type !== "object")
-                throw new TypeError(`Invalid namespace type at level ${index +1 +offset}: ${type}`);
-            if (item === undefined
-                    || item === null
-                    || item instanceof Element)
-                if (index < array.length -1
-                        && array[index +1].match(/^\d+$/))
-                    namespace[level] = [];
-                else namespace[level] = {};
-            namespace = namespace[level];
-        });
-
-        return namespace;
-    };
-
-    /**
-     * Creates a namespace with an initial value to the passed object, strings
-     * and numbers, if the namespace contains arrays and the numbers can be used
-     * as index. Levels of the namespace levels are separated by a dot. Levels
-     * can as fragments also contain dots. Without arguments, the global
-     * namespace window is used.
-     * The method has the following various signatures:
-     *     Namespace.create(string, value);
-     *     Namespace.create(string, ...string|number, value);
-     *     Namespace.create(object, value);
-     *     Namespace.create(object, ...string|number, value);
-     * @param  levels of the namespace
-     * @param  value to initialize/set
-     * @return the created or already existing object(-level)
-     * @throws An error occurs in case of invalid data types or syntax
-     */
-    Namespace.create = function(...levels) {
-        if (levels.length < 2)
-            throw new Error("Invalid namespace for creation: Namespace and/or value is missing");
-        const value = levels.pop();
-        levels = Namespace.lookup.filter(...levels);
-        const level = levels.pop();
-        const namespace = Namespace.using(...levels);
-        if (namespace === null)
-            return null;
-        namespace[level] = value;
-        return namespace[level];
-    };
-
-    /**
-     * Resolves a namespace and returns the determined object(-level).
-     * If the namespace does not exist, undefined is returned.
-     * The method has the following various signatures:
-     *     Namespace.lookup();
-     *     Namespace.lookup(string);
-     *     Namespace.lookup(string, ...string|number);
-     *     Namespace.lookup(object);
-     *     Namespace.lookup(object, ...string|number);
-     * @param  levels of the namespace
-     * @return the determined object(-level)
-     * @throws An error occurs in case of invalid data types or syntax
-     */
-    Namespace.lookup = function(...levels) {
-
-        if (levels.length <= 0)
-            return window;
-
-        Namespace.lookup.filter(...levels);
-
-        let offset = levels.length;
-        let namespace = null;
-        if (levels.length > 0
-                && typeof levels[0] === "object")
-            namespace = levels.shift();
-        offset -= levels.length;
-
-        levels = levels.join(".");
-        levels = levels.split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
-        for (let index = 0; index < levels.length; index++) {
-
-            const level = levels[index];
-
-            const pattern = index +offset === 0
-                    ? Namespace.PATTERN_NAMESPACE_LEVEL_START : Namespace.PATTERN_NAMESPACE_LEVEL;
-            if (!level.match(pattern))
-                throw new Error(`Invalid namespace at level ${index +1 +offset}${level && level.trim() ? ": " + level.trim() : ""}`);
-
-            // Composites use IDs which causes corresponding DOM objects
-            // (Element) in the global namespace if there are no corresponding
-            // data objects (models). Because namespaces are based on data
-            // objects, if an element appears, we assume that a data object does
-            // not exist and the recursive search is aborted as unsuccessful.
-
-            if (index === 0
-                    && namespace === null) {
-                namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
-                if (namespace !== undefined)
-                    if (namespace instanceof Element)
-                        return undefined;
-                    else continue;
-                namespace = window;
-            }
-
-            namespace = namespace[level];
-            if (namespace === undefined
-                    || namespace === null)
-                return namespace;
-
-            if (namespace instanceof Element)
-                return undefined;
+            return namespace;
+        },
+        
+        /**
+         * Checks whether a namespace exists based on the passed object, strings
+         * and numbers, if the namespace contains arrays and the numbers can be
+         * used as index. Levels of the namespace chain are separated by a dot.
+         * Levels can also be fragments that contain dots. Without arguments the
+         * global namespace window is used.
+         *
+         * The method has the following various signatures:
+         *     Namespace.exists();
+         *     Namespace.exists(string);
+         *     Namespace.exists(string, ...string|number);
+         *     Namespace.exists(object);
+         *     Namespace.exists(object, ...string|number);
+         *
+         * @param  levels of the namespace
+         * @return true if the namespace exists
+         * @throws An error occurs in case of invalid levels or syntax
+         */
+        exists(...levels) {
+            if (levels.length < 1)
+                return false;
+            return Object.usable(Namespace.lookup(...levels));
         }
-
-        return namespace;
     };
 
     Namespace.lookup.filter = function(...levels) {
@@ -236,28 +269,6 @@ if (typeof Namespace === "undefined") {
             chain.push(...level);
         });
         return chain;
-    };
-
-    /**
-     * Checks whether a namespace exists based on the passed object, strings and
-     * numbers, if the namespace contains arrays and the numbers can be used as
-     * index. Levels of the namespace chain are separated by a dot. Levels can
-     * also be fragments that contain dots. Without arguments the global
-     * namespace window is used.
-     * The method has the following various signatures:
-     *     Namespace.exists();
-     *     Namespace.exists(string);
-     *     Namespace.exists(string, ...string|number);
-     *     Namespace.exists(object);
-     *     Namespace.exists(object, ...string|number);
-     * @param  levels of the namespace
-     * @return true if the namespace exists
-     * @throws An error occurs in case of invalid levels or syntax
-     */
-    Namespace.exists = function(...levels) {
-        if (levels.length < 1)
-            return false;
-        return Object.usable(Namespace.lookup(...levels));
     };
 }
 
