@@ -631,8 +631,8 @@ ausgef&uuml;hrt wird.
 ### release
 
 Inverser Indikator daf&uuml;r, dass ein Element gerendert wurde. Der Renderer
-entfernt dieses Attribut, wenn ein Element gerendert wurde. Dieser Effekt kann
-f&uuml;r CSS verwendet werden, um Elemente nur im gerenderten Zustand
+entfernt dieses Attribut, wenn ein HTML-Element gerendert wurde. Dieser Effekt
+kann f&uuml;r CSS verwendet werden, um HTML-Elemente nur im gerenderten Zustand
 anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem Laden
 der Seite hinzugef&uuml;gt. 
 
@@ -643,10 +643,11 @@ der Seite hinzugef&uuml;gt.
 
 ### render
 
-Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignissen
-aufgefrischt werden. Als Wert erwartet das `render` Attribut einen CSS-Selector
-bzw. Query-Selector welche die Ziele festlegen.
+Das Attribut erfordert die Kombination mit dem Attribut [events](#events).
+Zusammen definieren sie, welche Ziele mit welchen auftretenden [Ereignissen](
+    https://www.w3.org/TR/DOM-Level-3-Events) vom Renderer aufgefrischt werden.
+Als Wert werden ein oder mehrere durch Leerzeichen getrennte CSS- bzw.
+Query-Selectoren erwartet, welche die Ziele festlegen.
 
 ```javascript
 const Model = {

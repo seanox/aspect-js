@@ -612,8 +612,8 @@ enclosing condition attribute.
 
 ### release
 
-Inverse indicator that an element was rendered. The renderer removes this
-attribute when an element is rendered. This effect can be used for CSS to
+Inverse indicator that an HTML element was rendered. The renderer removes this
+attribute when an HTML element is rendered. This effect can be used for CSS to
 display elements only in rendered state. A corresponding CSS rule is
 automatically added to the HEAD when the page is loaded. 
 
@@ -624,10 +624,10 @@ automatically added to the HEAD when the page is loaded.
 
 ### render
 
-The `render` attribute requires the combination with the `events` attribute.
-Together they define which targets with which occurring events be refreshed. The
-`render` attribute expects a CSS selector or query selector as value, which
-defines the targets.
+The attribute requires the combination with the [events](#events) attribute.
+Together they define which targets are refreshed by the renderer with which
+occurring events. The expected value is one or more space-separated CSS or Query
+selectors that define the targets.
 
 ```javascript
 const Model = {
