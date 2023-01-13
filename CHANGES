@@ -14,6 +14,7 @@ CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
+CR: Composite: Added adapted method for create/using/lookup/exists
 CR: Release: Revision of the release channels
     - default: contains all minimized
       for development, test and deployment
