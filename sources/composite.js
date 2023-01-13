@@ -284,7 +284,7 @@ if (typeof Composite === "undefined") {
          * List of possible DOM events
          * see also https://www.w3schools.com/jsref/dom_obj_event.asp
          */
-        get events() {return "abort after|print animation|end animation|iteration animation|start"
+        get EVENTS() {return "abort after|print animation|end animation|iteration animation|start"
                 + " before|print before|unload blur"
                 + " can|play can|play|through change click context|menu copy cut"
                 + " dbl|click drag drag|end drag|enter drag|leave drag|over drag|start drop duration|change"
@@ -306,7 +306,7 @@ if (typeof Composite === "undefined") {
         
         /** Patterns with the supported events */
         get PATTERN_EVENT_FUNCTIONS() {return (function() {
-            const pattern = Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+            const pattern = Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                return letter.toUpperCase();
             });
             return new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
@@ -314,19 +314,120 @@ if (typeof Composite === "undefined") {
         
         /** Patterns with the supported events as plain array */
         get PATTERN_EVENT_NAMES() {return (function() {
-            return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+            return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).split(/\s+/);
         })();},
         
         /** Patterns with the supported events as plain array (lower case) */
         get PATTERN_EVENT_FILTER() {return (function() {
-            return Composite.events.replace(/(?:\||\b)(\w)/g, (match, letter) => {
+            return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).toLowerCase().split(/\s+/);
-        })();}        
+        })();},
+
+        /**
+         * Create a composite namespace.
+         * The method has the following various signatures:
+         *     Composite.using(string);
+         *     Composite.using(string, ...string);
+         *     Composite.using(object);
+         *     Composite.using(object, ...string);
+         * @param  levels of the namespace
+         * @return the created or already existing object(-level)
+         * @throws An error occurs in case of invalid data types or syntax
+         */
+        using(...levels) {
+            Composite.lookup.filter(...levels);
+            return Namespace.using.apply(null, levels);
+        },
+
+        /**
+         * Creates a composite with namespace to the passed object and strings.
+         * Levels of the namespace levels are separated by a dot. Levels can as
+         * fragments also contain dots.
+         * The method has the following various signatures:
+         *     Composite.create(string, object);
+         *     Composite.create(string, ...string, object);
+         *     Composite.create(object, object);
+         *     Composite.create(object, ...string, object);
+         * @param  levels of the namespace
+         * @param  value to initialize/set
+         * @return the created or already existing object(-level)
+         * @throws An error occurs in case of invalid data types or syntax
+         */
+        create(...levels) {
+            if (levels === null
+                    || levels.length <= 2
+                    || typeof levels[levels.length -1] !== "object"
+                    || levels[levels.length -1] === null)
+                throw new TypeError(`Invalid namespace, namespace with object are required`);
+            Composite.lookup.filter(...levels);
+            return Namespace.create.apply(null, levels);
+        },
+
+        /**
+         * Determine a composite via the namespace.
+         * The method has the following various signatures:
+         *     Composite.lookup();
+         *     Composite.lookup(string);
+         *     Composite.lookup(string, ...string);
+         *     Composite.lookup(object);
+         *     Composite.lookup(object, ...string);
+         * @param  levels of the namespace
+         * @return the determined object(-level)
+         * @throws An error occurs in case of invalid data types or syntax
+         */
+        lookup(...levels) {
+            Composite.lookup.filter(...levels);
+            return Namespace.lookup.apply(null, levels);
+        },
+
+        /**
+         * Checks whether a namespace for a composite or a composite exists.
+         * The method has the following various signatures:
+         *     Composite.exists();
+         *     Composite.exists(string);
+         *     Composite.exists(string, ...string);
+         *     Composite.exists(object);
+         *     Composite.exists(object, ...string);
+         * @param  levels of the namespace
+         * @return true if the namespace or composite exists
+         * @throws An error occurs in case of invalid data types or syntax
+         */
+        exists(...levels) {
+            Composite.lookup.filter(...levels);
+            return !!Composite.lookup.apply(null, levels);
+        }
     };
-    
+
+    /**
+     * Validates the compatibility of the levels with respect to the namespace
+     * specifications of composites. Unlike normal namespaces, arrays are not
+     * supported. For detected violations, an error is thrown.
+     * @param  levels
+     */
+    Composite.lookup.filter = function(...levels) {
+        if (levels === null
+                || levels.length <= 0)
+            throw new TypeError(`Invalid namespace, levels are required`);
+        levels.forEach((level, index) => {
+            if (index === 0
+                    && typeof level !== "object"
+                    && typeof level !== "string")
+                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
+            if (index === 0
+                    && level === null)
+                throw new TypeError(`Invalid namespace at level ${index +1}: null`);
+            if (index > 0
+                    && (typeof level !== "string"
+                            || !level.match(Composite.PATTERN_COMPOSITE_ID)))
+                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
+            level = typeof level === "string"
+                ? level.split(Namespace.PATTERN_NAMESPACE_SEPARATOR) : [level];
+        });
+    };
+
     /**
      * Set of attributes to be hardened.
      * The hardening of attributes is part of the safety concept and should
