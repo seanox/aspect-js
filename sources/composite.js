@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230110
+ * @version 1.6.0 20230114
  */
 if (typeof Composite === "undefined") {
     
@@ -358,10 +358,10 @@ if (typeof Composite === "undefined") {
          */
         create(...levels) {
             if (levels === null
-                    || levels.length <= 2
+                    || levels.length < 2
                     || typeof levels[levels.length -1] !== "object"
                     || levels[levels.length -1] === null)
-                throw new TypeError(`Invalid namespace, namespace with object are required`);
+                throw new TypeError(`Namespace with object are required`);
             Composite.lookup.filter(...levels);
             return Namespace.create.apply(null, levels);
         },
@@ -411,18 +411,16 @@ if (typeof Composite === "undefined") {
         if (levels === null
                 || levels.length <= 0)
             throw new TypeError(`Invalid namespace, levels are required`);
+        levels = Array.from(levels);
+        if (typeof levels[0] === "object")
+            levels.shift();
+        if (levels.length > 0
+                && typeof levels[levels.length -1] === "object")
+            levels.pop();
+        levels = levels.join(".").split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
         levels.forEach((level, index) => {
-            if (index === 0
-                    && typeof level !== "object"
-                    && typeof level !== "string")
-                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
-            if (index === 0
-                    && level === null)
-                throw new TypeError(`Invalid namespace at level ${index +1}: null`);
-            if (index > 0
-                    && (typeof level !== "string"
-                            || !level.match(Composite.PATTERN_COMPOSITE_ID)))
-                throw new TypeError(`Invalid namespace at level ${index +1}: ${typeof level}`);
+            if (!level.match(Composite.PATTERN_COMPOSITE_ID))
+                throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
             level = typeof level === "string"
                 ? level.split(Namespace.PATTERN_NAMESPACE_SEPARATOR) : [level];
         });
@@ -621,7 +619,7 @@ if (typeof Composite === "undefined") {
      */ 
     if (Object.using === undefined)
         Object.using = function(...levels) {
-            return Namespace.exists.using(null, levels);
+            return Namespace.using.apply(null, levels);
         };
 
     /**
