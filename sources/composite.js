@@ -325,105 +325,6 @@ if (typeof Composite === "undefined") {
                 return letter.toUpperCase();
             }).toLowerCase().split(/\s+/);
         })();},
-
-        /**
-         * Create a composite namespace.
-         * The method has the following various signatures:
-         *     Composite.using(string);
-         *     Composite.using(string, ...string);
-         *     Composite.using(object);
-         *     Composite.using(object, ...string);
-         * @param  levels of the namespace
-         * @return the created or already existing object(-level)
-         * @throws An error occurs in case of invalid data types or syntax
-         */
-        using(...levels) {
-            Composite.lookup.filter(...levels);
-            return Namespace.using.apply(null, levels);
-        },
-
-        /**
-         * Creates a composite with namespace to the passed object and strings.
-         * Levels of the namespace levels are separated by a dot. Levels can as
-         * fragments also contain dots.
-         * The method has the following various signatures:
-         *     Composite.create(string, object);
-         *     Composite.create(string, ...string, object);
-         *     Composite.create(object, object);
-         *     Composite.create(object, ...string, object);
-         * @param  levels of the namespace
-         * @param  value to initialize/set
-         * @return the created or already existing object(-level)
-         * @throws An error occurs in case of invalid data types or syntax
-         */
-        create(...levels) {
-            if (levels === null
-                    || levels.length < 2
-                    || typeof levels[levels.length -1] !== "object"
-                    || levels[levels.length -1] === null)
-                throw new TypeError(`Namespace with object are required`);
-            Composite.lookup.filter(...levels);
-            return Namespace.create.apply(null, levels);
-        },
-
-        /**
-         * Determine a composite via the namespace.
-         * The method has the following various signatures:
-         *     Composite.lookup();
-         *     Composite.lookup(string);
-         *     Composite.lookup(string, ...string);
-         *     Composite.lookup(object);
-         *     Composite.lookup(object, ...string);
-         * @param  levels of the namespace
-         * @return the determined object(-level)
-         * @throws An error occurs in case of invalid data types or syntax
-         */
-        lookup(...levels) {
-            Composite.lookup.filter(...levels);
-            return Namespace.lookup.apply(null, levels);
-        },
-
-        /**
-         * Checks whether a namespace for a composite or a composite exists.
-         * The method has the following various signatures:
-         *     Composite.exists();
-         *     Composite.exists(string);
-         *     Composite.exists(string, ...string);
-         *     Composite.exists(object);
-         *     Composite.exists(object, ...string);
-         * @param  levels of the namespace
-         * @return true if the namespace or composite exists
-         * @throws An error occurs in case of invalid data types or syntax
-         */
-        exists(...levels) {
-            Composite.lookup.filter(...levels);
-            return !!Composite.lookup.apply(null, levels);
-        }
-    };
-
-    /**
-     * Validates the compatibility of the levels with respect to the namespace
-     * specifications of composites. Unlike normal namespaces, arrays are not
-     * supported. For detected violations, an error is thrown.
-     * @param  levels
-     */
-    Composite.lookup.filter = function(...levels) {
-        if (levels === null
-                || levels.length <= 0)
-            throw new TypeError(`Invalid namespace, levels are required`);
-        levels = Array.from(levels);
-        if (typeof levels[0] === "object")
-            levels.shift();
-        if (levels.length > 0
-                && typeof levels[levels.length -1] === "object")
-            levels.pop();
-        levels = levels.join(".").split(Namespace.PATTERN_NAMESPACE_SEPARATOR);
-        levels.forEach((level, index) => {
-            if (!level.match(Composite.PATTERN_COMPOSITE_ID))
-                throw new Error(`Invalid namespace at level ${index +1}${level && level.trim() ? ": " + level.trim() : ""}`);
-            level = typeof level === "string"
-                ? level.split(Namespace.PATTERN_NAMESPACE_SEPARATOR) : [level];
-        });
     };
 
     /**
@@ -1860,7 +1761,7 @@ if (typeof Composite === "undefined") {
             
             if (!(selector instanceof Node))
                 return;
-            
+
             // If a custom tag exists, the macro is executed.
             // Macros are completely user-specific.
             // The return value determines whether the standard functions are
@@ -1907,7 +1808,45 @@ if (typeof Composite === "undefined") {
             let serial = selector.ordinal();
             let object = Composite.render.meta[serial];
             if (!object) {
-                
+
+                // Named access on the Window object
+                // https://html.spec.whatwg.org/multipage/nav-history-apis.html#named-access-on-the-window-object
+                //
+                // What effect does it have:
+                // For elements with an ID, corresponding/reflective element
+                // objects with the same name are automatically created in the
+                // global namespace. Any existing variables and constants are
+                // overwritten.
+                //
+                // What a challenge :-|
+                // Finding a useful and final decision was very difficult.
+                // The approach that won was:
+                //     Use name instead of ID but remain compatible with ID.
+                // The ID remains the main identifier, but the name attribute
+                // can be used alternatively.
+                //
+                // What effect does it have:
+                // - If an element uses the attribute name and not ID, the
+                //    attribute ID is added with the value of the name.
+                // - If an element uses the attribute ID and not name, the
+                //   attribute name is added with the value of ID.
+                // - If an element uses both attributes ID and name and both
+                //   values differ, the value of the attribute ID is set for the
+                //   attribute name.
+                //
+                // Sorry, I wanted to do without such magic, but I couldn't
+                // think of anything better.
+
+                if (selector instanceof Element
+                    && selector.hasAttribute(Composite.ATTRIBUTE_NAME)) {
+                    const id = (selector.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+                    const name = (selector.getAttribute(Composite.ATTRIBUTE_NAME) || "").trim();
+                    if (selector.hasAttribute(Composite.ATTRIBUTE_NAME) && id && id !== name)
+                        selector.setAttribute(Composite.ATTRIBUTE_NAME, id);
+                    else if (!id && name)
+                        selector.setAttribute(Composite.ATTRIBUTE_ID, name);
+                }
+
                 // Acceptors are a very special way to customize. Unlike the
                 // other ways, here the rendering is not shifted into own
                 // implementations. With a acceptor, an element is manipulated

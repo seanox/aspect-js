@@ -14,7 +14,13 @@ CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
-CR: Composite: Added adapted method for create/using/lookup/exists
+CR: Composite: Added id/name synchronization
+    Thus the attribute name can and should be used equivalent to the ID.
+    The renderer automatically adds the attribute ID with the value of the attribute name.
+    This avoids the known problem "Named access on the Window object".
+    https://html.spec.whatwg.org/multipage/nav-history-apis.html#named-access-on-the-window-object
+    https://gomakethings.com/your-browser-automatically-creates-javascript-variables-for-elements-with-an-id/
+
 CR: Release: Revision of the release channels
     - default: contains all minimized
       for development, test and deployment
