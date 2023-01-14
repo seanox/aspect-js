@@ -390,7 +390,7 @@ und [events](#events).
 
 ```html
 <form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
+  <input id="email" type="text" placeholder="email address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required"
       events="input change" render="#Model"/>
@@ -400,9 +400,9 @@ und [events](#events).
 
 ```html
 <form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
+  <input id="text1" type="text" placeholder="email address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
-      validate message="{{Messages['Model.text1.validation.message']}}"
+      validate message="{{Messages['Model.email.validation.message']}}"
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
