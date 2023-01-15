@@ -39,12 +39,19 @@
         // be used without namespaces on the object level.
 
         Test.create({test() {
-            Assert.assertFalse(Namespace.exists("ns3"));
-            Assert.assertUndefined(Namespace.lookup("ns3"));
-            Assert.assertFalse(Namespace.exists("ns3.a"));
-            Assert.assertUndefined(Namespace.lookup("ns3.a"));
-            Assert.assertFalse(Namespace.exists("ns3.a.moduleA"));
-            Assert.assertUndefined(Namespace.lookup("ns3.a.moduleA"));
+
+            // Named access on the Window object
+            // https://html.spec.whatwg.org/multipage/nav-history-apis.html#named-access-on-the-window-object
+            // No model has been implemented for ns3.
+            // But here "named access on the Window object" takes effect and the
+            // browser creates an object with the same name.
+
+            Assert.assertTrue(Namespace.exists("ns3"));
+            Assert.assertNotUndefined(Namespace.lookup("ns3"));
+            Assert.assertEquals("object", typeof ns3);
+            Assert.assertTrue(ns3 instanceof HTMLElement);
+            Assert.assertTrue(Namespace.lookup("ns3") instanceof HTMLElement);
+            Assert.assertEquals(Namespace.lookup("ns3"), ns3);
         }});
 
         Test.create({test() {
