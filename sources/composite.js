@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230114
+ * @version 1.6.0 20230115
  */
 if (typeof Composite === "undefined") {
     
@@ -1808,44 +1808,6 @@ if (typeof Composite === "undefined") {
             let serial = selector.ordinal();
             let object = Composite.render.meta[serial];
             if (!object) {
-
-                // Named access on the Window object
-                // https://html.spec.whatwg.org/multipage/nav-history-apis.html#named-access-on-the-window-object
-                //
-                // What effect does it have:
-                // For elements with an ID, corresponding/reflective element
-                // objects with the same name are automatically created in the
-                // global namespace. Any existing variables and constants are
-                // overwritten.
-                //
-                // What a challenge :-|
-                // Finding a useful and final decision was very difficult.
-                // The approach that won was:
-                //     Use name instead of ID but remain compatible with ID.
-                // The ID remains the main identifier, but the name attribute
-                // can be used alternatively.
-                //
-                // What effect does it have:
-                // - If an element uses the attribute name and not ID, the
-                //    attribute ID is added with the value of the name.
-                // - If an element uses the attribute ID and not name, the
-                //   attribute name is added with the value of ID.
-                // - If an element uses both attributes ID and name and both
-                //   values differ, the value of the attribute ID is set for the
-                //   attribute name.
-                //
-                // Sorry, I wanted to do without such magic, but I couldn't
-                // think of anything better.
-
-                if (selector instanceof Element
-                    && selector.hasAttribute(Composite.ATTRIBUTE_NAME)) {
-                    const id = (selector.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-                    const name = (selector.getAttribute(Composite.ATTRIBUTE_NAME) || "").trim();
-                    if (selector.hasAttribute(Composite.ATTRIBUTE_NAME) && id && id !== name)
-                        selector.setAttribute(Composite.ATTRIBUTE_NAME, id);
-                    else if (!id && name)
-                        selector.setAttribute(Composite.ATTRIBUTE_ID, name);
-                }
 
                 // Acceptors are a very special way to customize. Unlike the
                 // other ways, here the rendering is not shifted into own
