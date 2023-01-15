@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.0 20221231
+ * @version 1.6.0 20230115
  */
 if (typeof Namespace === "undefined") {
 
@@ -207,9 +207,7 @@ if (typeof Namespace === "undefined") {
                         && namespace === null) {
                     namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
                     if (namespace !== undefined)
-                        if (namespace instanceof Element)
-                            return undefined;
-                        else continue;
+                        continue;
                     namespace = window;
                 }
 
