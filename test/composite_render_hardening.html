@@ -21,12 +21,12 @@
     
         Test.activate();
 
-        Namespace.create("model", {
+        const model = {
             _count: 100,
             get count() {
                 return ++this._count;
             }
-        });
+        };
 
         const capture = new Capture();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
@@ -144,10 +144,7 @@
             Assert.assertFalse(temp.querySelector("#loginB a").hasAttribute("validate"));
 
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
-            // special case id/name synchronization by the renderer
-            Assert.assertTrue(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
-            Assert.assertEquals(temp.querySelector("iframe[name='targetC']").getAttribute("id"),
-                    temp.querySelector("iframe[name='targetC']").getAttribute("name"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("title1"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("x-id"));
@@ -182,10 +179,7 @@
             Assert.assertIn(["B2 103", "B2 104"], temp.querySelector("#loginB input[title2]").getAttribute("title2"));
             
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
-            // special case id/name synchronization by the renderer
-            Assert.assertTrue(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
-            Assert.assertEquals(temp.querySelector("iframe[name='targetC']").getAttribute("id"),
-                    temp.querySelector("iframe[name='targetC']").getAttribute("name"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
             Assert.assertEquals("x5", temp.querySelector("iframe[name='targetC']").getAttribute("title1"));
             Assert.assertEquals("x4", temp.querySelector("iframe[name='targetC']").getAttribute("x-id"));
@@ -220,10 +214,7 @@
             Assert.assertIn(["B2 103", "B2 104"], temp.querySelector("#loginB input[title2]").getAttribute("title2"));
             
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
-            // special case id/name synchronization by the renderer
-            Assert.assertTrue(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
-            Assert.assertEquals(temp.querySelector("iframe[name='targetC']").getAttribute("id"),
-                    temp.querySelector("iframe[name='targetC']").getAttribute("name"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
             Assert.assertEquals("x5", temp.querySelector("iframe[name='targetC']").getAttribute("title1"));
             Assert.assertEquals("x4x", temp.querySelector("iframe[name='targetC']").getAttribute("x-id"));
@@ -258,10 +249,7 @@
             Assert.assertIn(["B2 xxx"], temp.querySelector("#loginB input[title2]").getAttribute("title2"));
             
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("composite"));
-            // special case id/name synchronization by the renderer
-            Assert.assertTrue(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
-            Assert.assertEquals(temp.querySelector("iframe[name='targetC']").getAttribute("id"),
-                    temp.querySelector("iframe[name='targetC']").getAttribute("name"));
+            Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("id"));
             Assert.assertFalse(temp.querySelector("iframe[name='targetC']").hasAttribute("render"));
             Assert.assertEquals("x5", temp.querySelector("iframe[name='targetC']").getAttribute("title1"));
             Assert.assertEquals("x4xx", temp.querySelector("iframe[name='targetC']").getAttribute("x-id"));
