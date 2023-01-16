@@ -6,6 +6,7 @@ BF: Review: Optimization and corrections
     Reduce the size of the releases.
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected during the module include, for that to the error.
+BF: Composite: Support of const for models also in combined with Namespace.create(...)
 CR: SiteMap: Inactive by default
     Attribute static is then not required for composites.
     Simplifies micro frontends without face-flow.
@@ -14,13 +15,6 @@ CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
-CR: Composite: Added id/name synchronization
-    Thus the attribute name can and should be used equivalent to the ID.
-    The renderer automatically adds the attribute ID with the value of the attribute name.
-    This avoids the known problem "Named access on the Window object".
-    https://html.spec.whatwg.org/multipage/nav-history-apis.html#named-access-on-the-window-object
-    https://gomakethings.com/your-browser-automatically-creates-javascript-variables-for-elements-with-an-id/
-
 CR: Release: Revision of the release channels
     - default: contains all minimized
       for development, test and deployment
