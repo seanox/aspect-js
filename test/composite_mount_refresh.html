@@ -22,11 +22,17 @@
     
         Test.activate();
 
-        // must be used as global, because the expression language uses its own scope,
-        // alternatively var can be used.
-        Namespace.create("countClick", 0);
+        // The use of let is difficult and should be used with caution. Because
+        // let works exclusively in the current scope. Possible global variables
+        // can be overwritten in the validity area. In the example of
+        // countRender let would create the variable here. But the varibale
+        // expression uses the global scope. So changes in the expression would
+        // not reach the variable in this scope.
+        // It is easier if countRender is a field in an object created with const.
+
+        let countClick = 0
         Namespace.create("countRender", 0);
-        const about = Namespace.create("about", {
+        const about = {
             contact: {
                 onClick() {
                     countClick++;
@@ -37,7 +43,7 @@
                     Composite.render(document.body);
                 }    
             }
-        });
+        };
         
         Test.create({test() {
             while (countRender < 9) {
