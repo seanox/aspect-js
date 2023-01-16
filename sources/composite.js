@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230115
+ * @version 1.6.0 20230116
  */
 if (typeof Composite === "undefined") {
     
@@ -2309,20 +2309,20 @@ if (typeof Composite === "undefined") {
             // in rendered state.   
             
             // The import attribute is interpreted.
-            // This declaration loads the content and replaces the inner HTML of an
-            // element with the content.
+            // This declaration loads the content and replaces the inner HTML of
+            // an element with the content.
             // The following data types are supported:
-            //   1. Node and NodeList as the result of an expression.
-            //   2. URL (relative or absolute) loads markup/content from a remote
-            //      data source via the HTTP method GET
-            //   2. DataSource-URL loads and transforms DataSource data.
-            //   3. Everything else is output directly as string/text.
+            // 1. Node and NodeList as the result of an expression.
+            // 2. URL (relative or absolute) loads markup/content from a remote
+            //    data source via the HTTP method GET
+            // 2. DataSource-URL loads and transforms DataSource data.
+            // 3. Everything else is output directly as string/text.
             // The import is exclusive, similar to the output-attribute, thus
             // overwriting any existing content. The recursive (re)rendering is
             // initiated via the MutationObserver.
-            // Loading and replacing the import function can be combined with the
-            // condition attribute and is only executed when the condition is
-            // true. If the content can be loaded successfully, the import
+            // Loading and replacing the import function can be combined with
+            // the condition attribute and is only executed when the condition
+            // is true. If the content can be loaded successfully, the import
             // attribute is removed.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
                 selector.innerHTML = "";
@@ -2385,9 +2385,9 @@ if (typeof Composite === "undefined") {
             // This declaration sets the value or result of an expression as the
             // content of an element.
             // The following data types are supported:
-            //   1. Node and NodeList as the result of an expression.
-            //   2. DataSource-URL loads and transforms DataSource data.
-            //   3. Everything else is output directly as string/text.
+            // 1. Node and NodeList as the result of an expression.
+            // 2. DataSource-URL loads and transforms DataSource data.
+            // 3. Everything else is output directly as string/text.
             // The output is exclusive, thus overwriting any existing content.
             // The recursive (re)rendering is initiated via the MutationObserver.
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
@@ -2420,8 +2420,8 @@ if (typeof Composite === "undefined") {
             // value cause a console output.
             // The interval starts automatically with the (re)rendering of the
             // declared HTML element and is terminated and removed when:
-            //   - the element no longer exists in the DOM
-            //   - the condition attribute is false
+            // - the element no longer exists in the DOM
+            // - the condition attribute is false
             let interval = String(object.attributes[Composite.ATTRIBUTE_INTERVAL] || "").trim();
             if (interval && !object.interval) {
                 const context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
@@ -2464,17 +2464,17 @@ if (typeof Composite === "undefined") {
             // initially emptied, the template is rendered individually with each
             // iteration cycle and the result is added to the inner HTML.
             // There are two particularities to consider.
-            //   1. The internal recursive rendering must be done sequentially.
-            //   2. The internal rendering creates temporary composite meta
-            //      objects. These meta objects contain meta information in their
-            //      attributes, which can be incorrectly interpreted during
-            //      rescan after the iteration. Therefore, the temporarily
-            //      created meta objects must be removed.
-            //   3. A global variable is required for the iteration. If this
-            //      variable already exists, the existing variable is saved and
-            //      restored at the end of the iteration.
-            // A variable with meta information is used within the iteration:
-            //      e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}   
+            // 1. The internal recursive rendering must be done sequentially.
+            // 2. The internal rendering creates temporary composite meta
+            //    objects. These meta objects contain meta information in their
+            //    attributes, which can be incorrectly interpreted during rescan
+            //    after the iteration. Therefore, the temporarily created meta
+            //    objects must be removed.
+            // 3. A global variable is required for the iteration. If this
+            //    variable already exists, the existing variable is saved and
+            //    restored at the end of the iteration.
+            // A. variable with meta information is used within the iteration:
+            //    e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                 if (!object.iterate) {
                     const iterate = String(object.attributes[Composite.ATTRIBUTE_ITERATE] || "").trim();
@@ -2487,9 +2487,9 @@ if (typeof Composite === "undefined") {
                     } else console.error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
                 }
                 if (object.iterate) {
-                    // A temporary global variable is required for the iteration.
-                    // If this variable already exists, the existing method is
-                    // cached and restored at the end of the iteration.
+                    // A temporary global variable is required for the
+                    // iteration. If this variable already exists, the existing
+                    // is cached and restored at the end of the iteration.
                     const variable = window[object.iterate.name];
                     try {
                         const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
@@ -2607,9 +2607,9 @@ if (typeof Composite === "undefined") {
             
             // Follow other element children recursively.
             // The following are ignored:
-            //   - Elements of type: script + style and custom tags
-            //   - Elements with functions that modify the inner markup
-            //   - Elements that are iteration
+            // - Elements of type: script + style and custom tags
+            // - Elements with functions that modify the inner markup
+            // - Elements that are iteration
             // These elements manipulate the inner markup.
             // This is intercepted by the MutationObserver.
             if (selector.childNodes
@@ -2837,12 +2837,12 @@ if (typeof Composite === "undefined") {
         Composite.fire(Composite.EVENT_ERROR, event);
     });
     
-    // MutationObserver detects changes at the DOM and triggers (re)rendering and
-    // (re)scanning and prevents manipulation of the composite attributes.
-    //   - Text-Nodes: The TextContent of text nodes with an expression is
-    //     protected by the MutationObserver and cannot be manipulated.
-    //   - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
-    //     are protected by the MutationObserver and cannot be manipulated.
+    // MutationObserver detects changes at the DOM and triggers (re)rendering
+    // and (re)scanning and prevents manipulation of the composite attributes.
+    // - Text-Nodes: The TextContent of text nodes with an expression is
+    //   protected by the MutationObserver and cannot be manipulated.
+    // - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
+    //   are protected by the MutationObserver and cannot be manipulated.
     window.addEventListener("load", () => {
     
         // The inverse indicator release shows when an element has been rendered
