@@ -33,6 +33,21 @@
         Test.create({test() {
             capture.validate();
         }});
+
+        const x1 = Namespace.create("x1", {});
+        Test.create({test() {
+            Assert.assertEquals("object", typeof x1);
+            Assert.assertNotNull(x1);
+            Assert.assertEquals(x1, Namespace.using("x1"));
+        }});
+
+        const nsA1 = Namespace.create("nsA1", {});
+        Test.create({test() {
+            Assert.assertEquals("object", typeof nsA1);
+            Assert.assertNotNull(nsA1);
+            Assert.assertEquals(nsA1, Namespace.using("nsA1"));
+            Assert.assertFalse(nsA1 instanceof HTMLElement);
+        }});
     </script>
     <script type="text/test">
     </script>
