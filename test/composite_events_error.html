@@ -29,7 +29,7 @@
         // must be var because it is used in a frame via parent
         // must be used as global, because the expression language uses its own scope,
         // alternatively var can be used.
-        Namespace.create("count", 0);
+        var count = 0;
         let interval = window.setInterval(() => {
             if (count < 3)
                 return;

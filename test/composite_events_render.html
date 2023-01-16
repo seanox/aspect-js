@@ -14,7 +14,7 @@
     
         Test.activate();
 
-        const TestModel = Namespace.create("TestModel", {});
+        const TestModel = {};
         TestModel.ticks = 0;
         TestModel.ping = () => {
             return ++TestModel.ticks;
