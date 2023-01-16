@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230115
+ * @version 1.6.0 20230116
  */
 if (typeof Namespace === "undefined") {
 
@@ -100,14 +100,14 @@ if (typeof Namespace === "undefined") {
 
                 if (index === 0
                         && namespace === null) {
-                    namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
+                    namespace = Namespace.lookup.populate(namespace, level);
                     if (namespace !== undefined
                             && !(namespace instanceof Element))
                         return;
                     namespace = window;
                 }
 
-                const item = namespace[level]
+                const item = Namespace.lookup.populate(namespace, level);
                 const type = typeof item;
                 if (type !== "undefined"
                         && type !== "object")
@@ -119,7 +119,7 @@ if (typeof Namespace === "undefined") {
                             && array[index +1].match(/^\d+$/))
                         namespace[level] = [];
                     else namespace[level] = {};
-                namespace = namespace[level];
+                namespace = Namespace.lookup.populate(namespace, level);
             });
 
             return namespace;
@@ -153,7 +153,7 @@ if (typeof Namespace === "undefined") {
             if (namespace === null)
                 return null;
             namespace[level] = value;
-            return namespace[level];
+            return Namespace.lookup.populate(namespace, level);
         },
             
         /**
@@ -205,13 +205,13 @@ if (typeof Namespace === "undefined") {
 
                 if (index === 0
                         && namespace === null) {
-                    namespace = eval(`typeof ${level} === "undefined" ? undefined : ${level}`);
+                    namespace = Namespace.lookup.populate(namespace, level);
                     if (namespace !== undefined)
                         continue;
                     namespace = window;
                 }
 
-                namespace = namespace[level];
+                namespace = Namespace.lookup.populate(namespace, level);
                 if (namespace === undefined
                         || namespace === null)
                     return namespace;
@@ -268,6 +268,18 @@ if (typeof Namespace === "undefined") {
         });
         return chain;
     };
+
+    Namespace.lookup.populate = function(namespace, level) {
+        if (namespace && namespace !== window)
+            return namespace[level];
+        try {return eval(`typeof ${level} !== "undefined" ? ${level} : undefined`);
+        } catch (error) {
+            if (error instanceof ReferenceError
+                    && namespace === window)
+                return window[level];
+            throw error;
+        }
+    }
 }
 
 /**
