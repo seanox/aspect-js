@@ -21,7 +21,7 @@
 
         const stack = ["Step:0"];
 
-        Namespace.create("modelA", {
+        const modelA = {
             status: true,
             dock() {
                 stack.push("A:dock");
@@ -35,9 +35,9 @@
                     modelA.status = !modelA.status;
                 }
             }
-        });
+        };
 
-        Namespace.create("modelB", {
+        const modelB = {
             status: true,
             undock() {
                 stack.push("B:undock");
@@ -48,9 +48,9 @@
                     modelB.status = !modelB.status;
                 }
             }
-        });
+        };
 
-        Namespace.create("modelC", {
+        const modelC = {
             status: true,
             dock() {
                 stack.push("C:dock");
@@ -61,9 +61,9 @@
                     modelC.status = !modelC.status;
                 }
             }
-        });
+        };
 
-        Namespace.create("modelD", {
+        const modelD = {
             status: true,
             button: {
                 onClick() {
@@ -71,9 +71,9 @@
                     modelD.status = !modelD.status;
                 }
             }
-        });
+        };
 
-        Namespace.create("page", {
+        const page = {
 
             //Test with the assignment via the qualifier.    
             buttonA: {
@@ -124,7 +124,7 @@
             buttonDB: modelB.button,
             buttonDC: modelC.button,
             buttonDD: modelD.button,
-        });
+        };
 
         Test.create({test() {
             Assert.assertSameTo("script[type='text/test-1']", stack.join("\n")); 
