@@ -40,14 +40,9 @@
             Assert.assertEquals(JSON.stringify(pattern), JSON.stringify(values.slice(1)));
         }});
 
-        // Syntax const cannot be used here, unfortunately, because the browser
-        // automatically creates element objects to elements with an ID. If
-        // const is used here, the browser will overwrite that when rendering
-        // :-|
-
-        Namespace.create("modelA", {
+        const modelA = {
             value: "hallo"
-        }.toReactProxy());
+        }.toReactProxy();
 
         window.setTimeout(() => {document.querySelector("#value").typeValue("test");}, 1000);
         window.setTimeout(() => {document.querySelector("#value").typeValue("123");}, 1500);

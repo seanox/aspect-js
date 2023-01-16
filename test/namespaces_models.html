@@ -34,6 +34,9 @@
             capture.validate();
         }});
 
+        // const and Namespace.create(...) in combination
+        // must work without ReferenceError
+
         const x1 = Namespace.create("x1", {});
         Test.create({test() {
             Assert.assertEquals("object", typeof x1);
