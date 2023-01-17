@@ -114,8 +114,8 @@
         
         Test.create({test() {
             // Invalid modules, no error expected
-            Composite.render.include("io/moduleE");
-            Composite.render.include("io/moduleY");
+            _render_include("io/moduleE");
+            _render_include("io/moduleY");
         }});
         
         Test.create({test() {
