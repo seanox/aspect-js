@@ -27,51 +27,51 @@
  * 
  *     Case
  *     ----
- * The smallest and simplest element in an integration test, used here as
- * task, because case is a keyword. It can be implemented alone, but is always
- * used in a scenario.
+ * The smallest and simplest element in an integration test, used here as task,
+ * because case is a keyword. It can be implemented alone, but is always used in
+ * a scenario.
  * 
- * Test.create({test() {
- *     Assert.assertTrue(true);
- * }});
+ *     Test.create({test() {
+ *         Assert.assertTrue(true);
+ *     }});
  * 
- * Test.start();
+ *     Test.start();
  * 
  * 
  *     Scenario
  *     ----
  * A scenario is a sequence of a lot of test cases usually in one file.
  * 
- * Test.create({test() {
- *     Assert.assertTrue(true);
- * }});
+ *     Test.create({test() {
+ *         Assert.assertTrue(true);
+ *     }});
  * 
- * Test.create({name:"example", timeout:1000, test() {
- *     Assert.assertTrue(true);
- * }});
+ *     Test.create({name:"example", timeout:1000, test() {
+ *         Assert.assertTrue(true);
+ *     }});
  * 
- * Test.create({error:Error test() {
- *     throw new Error();
- * }});
+ *     Test.create({error:Error test() {
+ *         throw new Error();
+ *     }});
  * 
- * Test.create({error:/^My Error/i, test() {
- *     throw new Error("My Error");
- * }});
+ *     Test.create({error:/^My Error/i, test() {
+ *         throw new Error("My Error");
+ *     }});
  * 
- * Test.create({ignore:true, test() {
- *     Assert.assertTrue(true);
- * }});
+ *     Test.create({ignore:true, test() {
+ *         Assert.assertTrue(true);
+ *     }});
  * 
- * Test.start();
+ *     Test.start();
  * 
  * 
  *     Suite
  *     ----
  * A suite is a complex bundle of different test cases, scenarios and other
  * suites. Usually a suite consists of different files, which then represent a
- * complex test. An example of a good suite is a cascade of different files, if
- * the test can be started in any file and place. This makes it possible to
- * perform the integration test on different levels and with different
+ * complex test. In an ideal case, a suite is a cascade of different files where
+ * the test can be started in any file and at any place. This makes it possible
+ * to perform the integration test on different levels and with different
  * complexity.
  * 
  *     
@@ -83,14 +83,13 @@
  * implementation here. 
  *
  * @author  Seanox Software Solutions
- * @version 1.3.0 20230109
+ * @version 1.6.0 20230117
  */
 if (typeof Test === "undefined") {
 
     /**
-     * Static component for creating and executing tests.
-     * The component provides static functions and objects for implementing
-     * integration tests.
+     * Static component for creating and executing tests. The component provides
+     * static functions and objects for implementing integration tests.
      *
      * The Test API is part of aspect-js but has to be activated deliberately,
      * otherwise it is not available.
@@ -98,15 +97,15 @@ if (typeof Test === "undefined") {
      *     Test.activate();
      *
      * This is necessary so that some enhancements to the JavaScript API that
-     * are helpful for implementing test are not used productively.
-     * For example, the redirection and caching of console output.
+     * are helpful for implementing test are not used productively. For example,
+     * the redirection and caching of console output.
      */
     window["Test"] = {
 
         /**
-         * Activates the test API.
-         * The method can be called multiple times, but is ignored after the
-         * first call. A later deactivation of the test API is not possible.
+         * Activates the test API. The method can be called multiple times, but
+         * is ignored after the first call. A later deactivation of the test API
+         * is not possible.
          */
         activate() {
 
@@ -128,10 +127,9 @@ if (typeof Test === "undefined") {
                 get TIMESTAMP() {return new Date().toUTCString();},
 
                 /** 
-                 * Activates the test API.
-                 * The method can be called multiple times, but is ignored after
-                 * the first call. A later deactivation of the test API is not
-                 * possible.
+                 * Activates the test API. The method can be called multiple
+                 * times, but is ignored after the first call. A later
+                 * deactivation of the test API is not possible.
                  */
                 activate() {
                 },
@@ -164,12 +162,12 @@ if (typeof Test === "undefined") {
                 },
                 
                 /**
-                 * Internal method to trigger an event.
-                 * All callback functions for this event are called. If the
-                 * script is in a frame, at the parent object it will also try
-                 * to trigger this method. The parent object is always triggered
-                 * after the current object. If an error occurs when calling the
-                 * current object, the parent object is not triggered.
+                 * Internal method to trigger an event. All callback functions
+                 * for this event are called. If the script is in a frame, at
+                 * the parent object it will also try to trigger this method.
+                 * The parent object is always triggered after the current
+                 * object. If an error occurs when calling the current object,
+                 * the parent object is not triggered.
                  * @param event  see Test.EVENT_***
                  * @param status meta object with information about the test
                  *     execution
@@ -208,9 +206,9 @@ if (typeof Test === "undefined") {
                 },
                 
                 /**
-                 * Creates and registers a test task.
-                 * A test task is a function or object with the required meta
-                 * information for performing and a test method to be executed.
+                 * Creates and registers a test task. A test task is a function
+                 * or object with the required meta information for performing
+                 * and a test method to be executed.
                  * 
                  *     structure of meta: {name:..., test:..., timeout:..., expected:..., ignore:...}
                  *     
@@ -225,27 +223,27 @@ if (typeof Test === "undefined") {
                  *            An error object or a RegExp is expected as value.
                  * ignore     true, if the test is to be ignored
                  * 
-                 *     usage:
+                 * Implementation of test:
                  *     
-                 * Test.create({test() {
-                 *     Assert.assertTrue(true);
-                 * }});
+                 *     Test.create({test() {
+                 *         Assert.assertTrue(true);
+                 *     }});
                  * 
-                 * Test.create({name:"example", timeout:1000, test() {
-                 *     Assert.assertTrue(true);
-                 * }});
+                 *     Test.create({name:"example", timeout:1000, test() {
+                 *         Assert.assertTrue(true);
+                 *     }});
                  * 
-                 * Test.create({error:Error test() {
-                 *     throw new Error();
-                 * }});
+                 *     Test.create({error:Error test() {
+                 *         throw new Error();
+                 *     }});
                  * 
-                 * Test.create({error:/^My Error/i, test() {
-                 *     throw new Error("My Error");
-                 * }});
+                 *     Test.create({error:/^My Error/i, test() {
+                 *         throw new Error("My Error");
+                 *     }});
                  * 
-                 * Test.create({ignore:true, test() {
-                 *     Assert.assertTrue(true);
-                 * }});
+                 *     Test.create({ignore:true, test() {
+                 *         Assert.assertTrue(true);
+                 *     }});
                  * 
                  * @param meta
                  */
@@ -270,12 +268,11 @@ if (typeof Test === "undefined") {
                 },
 
                 /**
-                 * Starts the test run.
-                 * The execution of the tests can optionally be configured with
-                 * the start by passing a meta object. The parameters in the
-                 * meta object are optional and cannot be changed When the test
-                 * are running. Only with the next start can new parameters be
-                 * passed as meta objects.
+                 * Starts the test run. The execution of the tests can
+                 * optionally be configured with the start by passing a meta
+                 * object. The parameters in the meta object are optional and
+                 * cannot be changed When the test are running. Only with the
+                 * next start can new parameters be passed as meta objects.
                  * 
                  *     Test.start({auto: boolean, output: {...}, monitor: {...}});
                  *     
@@ -290,18 +287,18 @@ if (typeof Test === "undefined") {
                  * Simple function or object for outputting messages and errors.
                  * If not specified, console object is used.    
                  * 
-                 *     Implementation of an output (as function or object):
+                 * Implementation of an output (as function or object):
                  *     
-                 * var output = {
+                 *     var output = {
                  * 
-                 *     log(message) {
-                 *         ...
-                 *     },
+                 *         log(message) {
+                 *             ...
+                 *         },
                  *     
-                 *     error(message) {
-                 *         ...
-                 *     }
-                 * };
+                 *         error(message) {
+                 *             ...
+                 *         }
+                 *     };
                  * 
                  *     monitor
                  *     ----
@@ -313,43 +310,43 @@ if (typeof Test === "undefined") {
                  * monitor is specified, the internal monitor is used with a
                  * simple console output.     
                  * 
-                 *     Implementation of a monitor (as function or object):
+                 * Implementation of a monitor (as function or object):
                  *     
-                 * var monitor = {
+                 *     var monitor = {
                  * 
-                 *     start(status) {
-                 *         The method is called with the start.
-                 *     },
+                 *         start(status) {
+                 *             The method is called with the start.
+                 *         },
                  *     
-                 *     suspend(status) {
-                 *         The method is called with suspension.
-                 *     },
+                 *         suspend(status) {
+                 *             The method is called with suspension.
+                 *         },
                  *     
-                 *     resume(status) {
-                 *         The method is called if the test run is stopped and
-                 *         is to be continued later.
-                 *     },
+                 *         resume(status) {
+                 *             The method is called if the test run is stopped and
+                 *             is to be continued later.
+                 *         },
                  *     
-                 *     interrupt(status) {
-                 *         The method is called if you want to abort the test
-                 *         run. The test run cannot then be resumed.
-                 *     },
+                 *         interrupt(status) {
+                 *             The method is called if you want to abort the test
+                 *             run. The test run cannot then be resumed.
+                 *         },
                  *     
-                 *     perform(status) {
-                 *         The method is called before a test task is performed.
-                 *     },
+                 *         perform(status) {
+                 *             The method is called before a test task is performed.
+                 *         },
                  *     
-                 *     response(status) {
-                 *         The method is called when a test task has been
-                 *         performed. Here you can find the result of the test
-                 *         task.
-                 *     },
+                 *         response(status) {
+                 *             The method is called when a test task has been
+                 *             performed. Here you can find the result of the test
+                 *             task.
+                 *         },
                  *     
-                 *     finish(status) {
-                 *         The method is called when all test tasks have been
-                 *         completed.
-                 *     }
-                 * };
+                 *         finish(status) {
+                 *             The method is called when all test tasks have been
+                 *             completed.
+                 *         }
+                 *     };
                  * 
                  * The current status is passed to all monitor methods as an
                  * object. The status is a snapshot of the current test run with
@@ -359,8 +356,8 @@ if (typeof Test === "undefined") {
                  *     structure of status: {task:..., queue:...}
                  *     
                  * task.title      title of the test task    
-                 * task.meta       meta information about the test itself
-                 *                 name, test, timeout, expected, serial
+                 * task.meta       meta information about the test itself name,
+                 *                 test, timeout, expected, serial
                  * task.running    indicator when the test task is in progress
                  * task.timing     start time from the test task in milliseconds
                  * task.timeout    optional, the time in milliseconds when a
@@ -599,16 +596,16 @@ if (typeof Test === "undefined") {
                 },
 
                 /**
-                 * Makes a snapshot of the status of the current test.
-                 * The status contains details of the current task and the
-                 * queue. The details are read-only and cannot be changed. If no
-                 * test is executed, false is returned.
+                 * Makes a snapshot of the status of the current test. The
+                 * status contains details of the current task and the queue.
+                 * The details are read-only and cannot be changed. If no test
+                 * is executed, false is returned.
                  *  
                  *     structure of details: {task:..., queue:...}
                  *     
                  * task.title      title of the test task    
-                 * task.meta       meta information about the test itself
-                 *                 name, test, timeout, expected, serial
+                 * task.meta       meta information about the test itself name,
+                 *                 test, timeout, expected, serial
                  * task.running    indicator when the test task is in progress
                  * task.timing     start time from the test task in milliseconds
                  * task.timeout    optional, the time in milliseconds when a
@@ -704,7 +701,7 @@ if (typeof Test === "undefined") {
 
             /** 
              * Test.stack
-             *     Stack of created/registered test tasks (backlog)
+             * Stack of created/registered test tasks (backlog)
              */
             Object.defineProperty(Test, "stack", {
                 value: new Set()
@@ -712,7 +709,7 @@ if (typeof Test === "undefined") {
 
             /** 
              * Test.listeners
-             *     Map with events and their registered listeners
+             * Map with events and their registered listeners
              */
             Object.defineProperty(Test, "listeners", {
                 value: new Map()
@@ -751,11 +748,11 @@ if (typeof Test === "undefined") {
             };
             
             /** 
-             * General method for redirecting console levels.
-             * If the script is in a frame, at the parent object it will also
-             * try to trigger this method. The parent object is always triggered
-             * after the current object. If an error occurs when calling the
-             * current object, the parent object is not triggered.
+             * General method for redirecting console levels. If the script is
+             * in a frame, at the parent object it will also try to trigger this
+             * method. The parent object is always triggered after the current
+             * object. If an error occurs when calling the current object, the
+             * parent object is not triggered.
              * @param level
              * @param variants
              * @param output

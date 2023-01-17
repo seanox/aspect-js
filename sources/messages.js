@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, fullstack for single page applications
- * Copyright (C) 2022 Seanox Software Solutions
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,33 +25,32 @@
  * and localization. The implementation is based on a set of key-value or
  * label-value data which is stored in the locales.xml of the DataSource.
  * 
- *     +- data
- *     |  |
- *     |  +- de...
- *     |  +- en...
- *     |  +- locales.xml
+ *     + data
+ *     |  + de...
+ *     |  + en...
+ *     |  + locales.xml
  *     |
- *     +- modules
- *     +- resources
- *     +- index.html
+ *     + modules
+ *     + resources
+ *     + index.html
  * 
  * The elements for the supported languages are organized in locales in this
  * file. Locales is a set of supported country codes. In each country code, the
  * key values are recorded as label entries.  
  *   
- * <?xml version="1.0"?>
- * <locales>
- *   <de>
- *     <label key="contact.title" value="Kontakt"/>
- *     <label key="contact.development.title">Entwicklung</label>
- *     ...
- *   </de>
- *   <en default="true">
- *     <label key="contact.title" value="Contact"/>
- *     <label key="contact.development.title">Development</label>
- *     ...
- *   </en>
- * </locales>
+ *     <?xml version="1.0"?>
+ *     <locales>
+ *       <de>
+ *         <label key="contact.title" value="Kontakt"/>
+ *         <label key="contact.development.title">Entwicklung</label>
+ *         ...
+ *       </de>
+ *       <en default="true">
+ *         <label key="contact.title" value="Contact"/>
+ *         <label key="contact.development.title">Development</label>
+ *         ...
+ *       </en>
+ *     </locales>
  * 
  * The language is selected automatically on the basis of the language setting
  * of the browser. If the language set there is not supported, the language
@@ -61,12 +60,12 @@
  * array and can be used directly in JavaScript and Markup via Expression
  * Language.
  * 
- * Messages["contact.title"];
+ *     Messages["contact.title"];
  *     
- * <h1 output="{{Messages['contact.title']}}"/>
+ *     <h1 output="{{Messages['contact.title']}}"/>
  * 
  * @author  Seanox Software Solutions
- * @version 1.2.1 20210622
+ * @version 1.2.1 20230117
  */
 if (typeof Messages === "undefined") {
     
@@ -79,9 +78,9 @@ if (typeof Messages === "undefined") {
     
     (function() {
 
-        // Messages are based on DataSources.
-        // To initialize, the DataSource.localize method must be overwritten and
-        // loading of the key-value pairs is embedded.
+        // Messages are based on DataSources. To initialize, the
+        // DataSource.localize method must be overwritten and loading of the
+        // key-value pairs is embedded.
         const localize = DataSource.localize;
         DataSource.localize = (locale) => {
 

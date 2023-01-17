@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230116
+ * @version 1.6.0 20230117
  */
 if (typeof Namespace === "undefined") {
 
@@ -74,7 +74,7 @@ if (typeof Namespace === "undefined") {
             if (levels.length <= 0)
                 return window;
 
-            Namespace.lookup.filter(...levels);
+            _filter(...levels);
 
             let offset = levels.length;
             let namespace = null;
@@ -100,14 +100,14 @@ if (typeof Namespace === "undefined") {
 
                 if (index === 0
                         && namespace === null) {
-                    namespace = Namespace.lookup.populate(namespace, level);
+                    namespace = _populate(namespace, level);
                     if (namespace !== undefined
                             && !(namespace instanceof Element))
                         return;
                     namespace = window;
                 }
 
-                const item = Namespace.lookup.populate(namespace, level);
+                const item = _populate(namespace, level);
                 const type = typeof item;
                 if (type !== "undefined"
                         && type !== "object")
@@ -119,7 +119,7 @@ if (typeof Namespace === "undefined") {
                             && array[index +1].match(/^\d+$/))
                         namespace[level] = [];
                     else namespace[level] = {};
-                namespace = Namespace.lookup.populate(namespace, level);
+                namespace = _populate(namespace, level);
             });
 
             return namespace;
@@ -147,13 +147,13 @@ if (typeof Namespace === "undefined") {
             if (levels.length < 2)
                 throw new Error("Invalid namespace for creation: Namespace and/or value is missing");
             const value = levels.pop();
-            levels = Namespace.lookup.filter(...levels);
+            levels = _filter(...levels);
             const level = levels.pop();
             const namespace = Namespace.using(...levels);
             if (namespace === null)
                 return null;
             namespace[level] = value;
-            return Namespace.lookup.populate(namespace, level);
+            return _populate(namespace, level);
         },
             
         /**
@@ -176,7 +176,7 @@ if (typeof Namespace === "undefined") {
             if (levels.length <= 0)
                 return window;
 
-            Namespace.lookup.filter(...levels);
+            _filter(...levels);
 
             let offset = levels.length;
             let namespace = null;
@@ -205,13 +205,13 @@ if (typeof Namespace === "undefined") {
 
                 if (index === 0
                         && namespace === null) {
-                    namespace = Namespace.lookup.populate(namespace, level);
+                    namespace = _populate(namespace, level);
                     if (namespace !== undefined)
                         continue;
                     namespace = window;
                 }
 
-                namespace = Namespace.lookup.populate(namespace, level);
+                namespace = _populate(namespace, level);
                 if (namespace === undefined
                         || namespace === null)
                     return namespace;
@@ -248,7 +248,7 @@ if (typeof Namespace === "undefined") {
         }
     };
 
-    Namespace.lookup.filter = function(...levels) {
+    const _filter = (...levels) => {
         const chain = [];
         levels.forEach((level, index) => {
             if (index === 0
@@ -269,7 +269,7 @@ if (typeof Namespace === "undefined") {
         return chain;
     };
 
-    Namespace.lookup.populate = function(namespace, level) {
+    const _populate = (namespace, level) => {
         if (namespace && namespace !== window)
             return namespace[level];
         try {return eval(`typeof ${level} !== "undefined" ? ${level} : undefined`);

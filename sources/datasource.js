@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Seanox aspect-js, fullstack for single page applications
- * Copyright (C) 2022 Seanox Software Solutions
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.4.ß 20230109
+ * @version 1.4.0 20230109
  */
 if (typeof DataSource === "undefined") {
     
@@ -305,13 +305,13 @@ if (typeof DataSource === "undefined") {
     (function() {
 
         // DataSource.cache
-        //     Internal cache of XML/XSLT data    
+        // Internal cache of XML/XSLT data
         Object.defineProperty(DataSource, "cache", {
             value: {}
         });        
         
         // DataSource.locales
-        //     List of available locales (as standard marked are at the beginning)
+        // List of available locales (as standard marked are at the beginning)
         Object.defineProperty(DataSource, "locales", {
             value: [],
             enumerable: true
@@ -344,7 +344,7 @@ if (typeof DataSource === "undefined") {
         request.send();
         
         // DataSource.data
-        //     Internal cache of locales.xml
+        // Internal cache of locales.xml
         Object.defineProperty(DataSource, "data", {
             value: request.status === 200 ? request.responseXML : null
         });

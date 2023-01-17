@@ -21,9 +21,8 @@
  * 
  *     DESCRIPTION
  *     ----
- * Static component for the use of a SiteMap for virtual paths.
- * SiteMap is a directory consisting of faces and facets that are addressed by
- * paths.
+ * Static component for the use of a SiteMap for virtual paths. SiteMap is a
+ * directory consisting of faces and facets that are addressed by paths.
  * 
  *     +-----------------------------------------------+
  *     |  Page                                         |
@@ -55,41 +54,40 @@
  * component. For example, the input mask and result table of a search can be
  * separate facets of a face, as can articles or sections of a face. Both face
  * and facet can be accessed via virtual paths. The path to a facet has the
- * effect that the face is displayed with any other faces.
- * The facet is no longer automatically focused, because the own implementation
- * is very simple and much flexible.
+ * effect that the face is displayed with any other faces. The facet is no
+ * longer automatically focused, because the own implementation is very simple
+ * and much flexible.
  *  
- * window.addEventListener("hashchange", (event) => {
- *     var path = Path.normalize(event.newURL || "#");
- *     var target = SiteMap.lookup(path);
- *     if (target) {
- *         target = target.facet || target.face;
+ *     window.addEventListener("hashchange", (event) => {
+ *         var path = Path.normalize(event.newURL || "#");
+ *         var target = SiteMap.lookup(path);
  *         if (target) {
- *             target = target.replace(/(?!=#)#/, " #");
- *             target = document.querySelector(target);
+ *             target = target.facet || target.face;
  *             if (target) {
- *                 target.scrollIntoView(true);
- *                 target.focus();
+ *                 target = target.replace(/(?!=#)#/, " #");
+ *                 target = document.querySelector(target);
+ *                 if (target) {
+ *                     target.scrollIntoView(true);
+ *                     target.focus();
+ *                 }
  *             }
  *         }
- *     }
- * }); 
+ *     });
  * 
- * Faces are also components that can be nested.
- * Thus, parent faces become partial faces when the path refers to a sub-face.
- * A sub-face is presented with all its parent partial faces. If the parent
- * faces contain additional facets, these facets are not displayed. The parent
- * faces are therefore only partially presented.
+ * Faces are also components that can be nested. Thus, parent faces become
+ * partial faces when the path refers to a sub-face. A sub-face is presented
+ * with all its parent partial faces. If the parent faces contain additional
+ * facets, these facets are not displayed. The parent faces are therefore only
+ * partially presented.
  *
  * With the SiteMap the structure of faces, facets and the corresponding paths
  * are described. The SiteMap controls the face flow and the presentation of
- * the components corresponding to a path. 
- * This means that you don't have to take care of showing and hiding components
- * yourself.
+ * the components corresponding to a path. This means that you don't have to
+ * take care of showing and hiding components yourself.
  * 
- * The show and hide is hard realized in the DOM.
- * This means that if a component is hidden, it is physically removed from the
- * DOM and only added again when it is displayed.
+ * The show and hide is hard realized in the DOM. This means that if a component
+ * is hidden, it is physically removed from the DOM and only added again when it
+ * is displayed.
  * 
  * When it comes to controlling face flow, the SiteMap provides hooks for
  * permission concepts and acceptors. With both things the face flow can be
@@ -101,21 +99,19 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.4.0 20230110
+ * @version 1.6.0 20230117
  */
 if (typeof Path === "undefined") {
     
     /**
-     * Static component for the use of (virtual) paths.
-     * Paths are a reference to a target in face flow. The target can be a
-     * face, a facet or a function.
-     * For more details see method Path.normalize(variants).
+     * Static component for the use of (virtual) paths. Paths are a reference
+     * to a target in face flow. The target can be a face, a facet or a
+     * function. For more details see method Path.normalize(variants).
      */    
     window["Path"] = {
             
         /** 
-         * Pattern for a valid path.
-         * The syntax of the path is based on XML entities (DOM).
+         * Pattern for a valid path. The syntax is based on XML entities (DOM).
          * A path segment begins with a word character _ a-z 0-9, optionally
          * more word characters and additionally - can follow, but can not end
          * with the - character. Paths are separated by the # character.
@@ -129,13 +125,12 @@ if (typeof Path === "undefined") {
         get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/;},
 
 	    /**
-	     * Normalizes a path.
-	     * Paths consist exclusively of word characters and underscores (based
-         * on composite IDs) and must begin with a word character and use the
-         * hash character as separator and root. Between the path segments, the
-         * hash character can also be used as a back jump (parent) directive.
-         * The back jump then corresponds to the number of additional hash
-         * characters.
+	     * Normalizes a path. Paths consist exclusively of word characters and
+         * underscores (based on composite IDs) and must begin with a word
+         * character and use the hash character as separator and root. Between
+         * the path segments, the hash character can also be used as a back jump
+         * (parent) directive. The back jump then corresponds to the number of
+         * additional hash characters.
 	     * 
 	     *     Note:
 	     * Paths use lowercase letters. Upper case letters are automatically
@@ -259,9 +254,8 @@ if (typeof Path === "undefined") {
 if (typeof SiteMap === "undefined") {
     
     /**
-     * Static component for the use of a SiteMap for virtual paths.
-     * SiteMap is a directory consisting of faces and facets that are addressed
-     * by paths.
+     * Static component for the use of a SiteMap for virtual paths. SiteMap is a
+     * directory consisting of faces and facets that are addressed by paths.
      * 
      * A face is the primary projection of the content. This projection may
      * contain additional sub-components, in form of facets and sub-faces.
@@ -274,21 +268,20 @@ if (typeof SiteMap === "undefined") {
      * faces. The facet is no longer automatically focused, because the own
      * implementation is very simple and much flexible.
      * 
-     * Faces are also components that can be nested.
-     * Thus, parent faces become partial faces when the path refers to a
-     * sub-face. A sub-face is presented with all its parent partial faces. If
-     * the parent faces contain additional facets, these facets are not
-     * displayed. The parent faces are therefore only partially presented.
+     * Faces are also components that can be nested. Thus, parent faces become
+     * partial faces when the path refers to a sub-face. A sub-face is presented
+     * with all its parent partial faces. If the parent faces contain additional
+     * facets, these facets are not displayed. The parent faces are therefore
+     * only partially presented.
      * 
      * With the SiteMap the structure of faces, facets and the corresponding
      * paths are described. The SiteMap controls the face flow and the
-     * presentation of the components corresponding to a path.
-     * This means that you don't have to take care of showing and hiding
-     * components yourself.
+     * presentation of the components corresponding to a path. This means that
+     * you don't have to take care of showing and hiding components yourself.
      * 
-     * The show and hide is hard realized in the DOM.
-     * This means that if a component is hidden, it is physically removed from
-     * the DOM and only added again when it is displayed.
+     * The show and hide is hard realized in the DOM. This means that if a
+     * component is hidden, it is physically removed from the DOM and only added
+     * again when it is displayed.
      * 
      * When it comes to controlling face flow, the SiteMap provides hooks for
      * permission concepts and acceptors. With both things the face flow can be
@@ -311,20 +304,20 @@ if (typeof SiteMap === "undefined") {
         
         /** 
          * Pattern for a valid facet path:
-         *     - Paths and path segments must always begin with a word character
-         *     - Allowed are the word characters a-z _ 0-9 and additionally -
-         *     - Character - always embedded between the characters: a-z _ 0-9,
-         *       it can not be used at the beginning and end
-         *     - Character # is used to separate the path segments
-         *     - After the separator # at least a word character is expected 
+         * - Paths and path segments must always begin with a word character
+         * - Allowed are the word characters a-z _ 0-9 and additionally -
+         * - Character - always embedded between the characters: a-z _ 0-9, it
+         *   can not be used at the beginning and end
+         * - Character # is used to separate the path segments
+         * - After the separator # at least a word character is expected
          */
         get PATTERN_PATH_FACET() {return /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/;},
         
         /** 
          * Pattern for a valid variable facet path:
-         *     - Same conditions as for the pattern for a valid facet path
-         *     - Every path must end with ...
-         *     - Only ... as facet path is also allowed
+         * - Same conditions as for the pattern for a valid facet path
+         * - Every path must end with ...
+         * - Only ... as facet path is also allowed
          */
         get PATTERN_PATH_FACET_VARIABLE() {return /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/;},
         
@@ -356,9 +349,9 @@ if (typeof SiteMap === "undefined") {
         },
         
         /**
-         * Checks a path using existing/registered permit methods.
-         * The path is only allowed if all permit methods confirm the check with
-         * the return value true.
+         * Checks a path using existing/registered permit methods. The path is
+         * only allowed if all permit methods confirm the check with the return
+         * value true.
          * @param  path to check (URL is also supported, only the hash is used
          *     here and the URL itself is ignored)
          * @return true if the path has been confirmed as permitted 
@@ -397,7 +390,7 @@ if (typeof SiteMap === "undefined") {
             
             path = path || "";
             
-            // The path is normalized. 
+            // The path is normalized.
             // Invalid paths are shortened when searching for a valid partial path.
             // Theoretically, the shortening must end automatically with the root or
             // the current path.
@@ -461,11 +454,13 @@ if (typeof SiteMap === "undefined") {
         /**
          * Returns the meta data for a path.
          * The meta data is an object with the following structure:
+         *
          *     {path:..., face:..., facet:...}
          *     
          * If variable paths are used, an additional data field is available. It
          * contains the additional data passed with the path, comparable to
-         * PATH_INFO in CGI.    
+         * PATH_INFO in CGI.
+         *
          *     {path:..., face:..., facet:..., data:...}
          *     
          * If no meta data can be determined because the path is invalid or not
@@ -825,44 +820,44 @@ if (typeof SiteMap === "undefined") {
     };
         
     // SiteMap.paths
-    //     Map with all paths without facets paths (key:path, value:facets)    
+    // Map with all paths without facets paths (key:path, value:facets)
     Object.defineProperty(SiteMap, "paths", {
         value: new Map()
     });
 
     // SiteMap.facets
-    //     Map with all paths with facet paths {path:key, facet:facet}
-    //     The sum of all paths and assigned facets
+    // Map with all paths with facet paths {path:key, facet:facet}
+    // The sum of all paths and assigned facets
     Object.defineProperty(SiteMap, "facets", {
         value: new Map()
     });
 
     // SiteMap.variables
-    //      Set with all variables paths
+    // Set with all variables paths
     Object.defineProperty(SiteMap, "variables", {
         value: new Set()
     });
 
     // SiteMap.acceptors
-    //     Set with all supported acceptors
+    // Set with all supported acceptors
     Object.defineProperty(SiteMap, "acceptors", {
         value: new Set()
     });
 
     // SiteMap.history
-    //     Set with the path history (optimized)
+    // Set with the path history (optimized)
     Object.defineProperty(SiteMap, "history", {
         value: new Set()
     });    
     
     /**
-     * Rendering filter for all composite elements.
-     * The filter causes an additional condition for the SiteMap to be added to
-     * each composite element that the renderer determines. This condition is
-     * used to show or hide the composite elements in the DOM to the
-     * corresponding virtual paths. The elements are identified by the serial.
-     * The SiteMap uses a map (serial/element) as cache for fast access. The
-     * cleaning of the cache is done by a MutationObserver.
+     * Rendering filter for all composite elements. The filter causes an
+     * additional condition for the SiteMap to be added to each composite
+     * element that the renderer determines. This condition is used to show or
+     * hide the composite elements in the DOM to the corresponding virtual
+     * paths. The elements are identified by the serial. The SiteMap uses a map
+     * (serial/element) as cache for fast access. The cleaning of the cache is
+     * done by a MutationObserver.
      */
     Composite.customize((element) => {
 
@@ -900,21 +895,21 @@ if (typeof SiteMap === "undefined") {
     });
     
     /**
-     * Registration of the attribute 'x' for hardening.
-     * The attribute is therefore more difficult to manipulate in markup.
+     * Registration of the attribute 'x' for hardening. The attribute is
+     * therefore more difficult to manipulate in markup.
      */
     Composite.customize("@ATTRIBUTES-STATICS", "static");
 
     /**
-     * Established a listener that listens when the page loads.
-     * The method initiates the initial usage of the path.
+     * Established a listener that listens when the page loads. The method
+     * initiates the initial usage of the path.
      */
     window.addEventListener("load", () => {
         
         // When clicking on a link with the current path, the focus must be set
         // back to face/facet, as the user may have scrolled on the page.
-        // However, this is only necessary if face + facet have not changed.
-        // In all other cases the Window-HashChange-Event does the same
+        // However, this is only necessary if face + facet have not changed. In
+        // all other cases the Window-HashChange-Event does the same
         document.body.addEventListener("click", (event) => {
 
             if (!SiteMap.customize.active)
@@ -939,10 +934,10 @@ if (typeof SiteMap === "undefined") {
     });
     
     /**
-     * Establishes a listener that listens to changes from the URL hash.
-     * The method corrects invalid and unauthorized paths by forwarding them to
-     * the next valid path, restores the facet of functional paths, and
-     * organizes partial rendering.
+     * Establishes a listener that detects changes to the URL hash. The method
+     * corrects invalid and unauthorized paths by forwarding them to next valid
+     * path, restores the facet of functional paths, and organizes partial
+     * rendering.
      */
     window.addEventListener("hashchange", (event) => {
 
@@ -955,12 +950,11 @@ if (typeof SiteMap === "undefined") {
         let locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
         let target = SiteMap.locate(locate);
 
-        // Determine if it is the initial rendering.
-        // If this is the case, the history is empty.
+        // Indicator for initial rendering when the history is empty.
         // In case of the initial rendering:
-        //     - SiteMap.location must be set finally
-        //     - window.location.hash must be set finally
-        //     - Body must be rendered
+        // - SiteMap.location must be set finally
+        // - window.location.hash must be set finally
+        // - Body must be rendered
         const initial = SiteMap.history.size <= 0;
 
         // Initially, no function path is useful, and so in this case will be
@@ -977,8 +971,8 @@ if (typeof SiteMap === "undefined") {
             return;
         }
 
-        // If window.location.hash, SiteMap.location and new URL match, no update
-        // or rendering is required.
+        // If window.location.hash, SiteMap.location and new URL match, no
+        // update or rendering is required.
         if (target === window.location.hash
                 && target === SiteMap.location
                 && !initial)
@@ -996,16 +990,16 @@ if (typeof SiteMap === "undefined") {
             return;
         }
         
-        // The locations are updated synchronously.
-        // The possible triggering of the hashchange-event can be ignored,
-        // because SiteMap.location and window.location.hash are the same and
-        // therefore no update or rendering is triggered.
+        // The locations are updated synchronously. The possible triggering of
+        // the hashchange-event can be ignored, because SiteMap.location and
+        // window.location.hash are the same and therefore no update or
+        // rendering is triggered.
         SiteMap.location = target;
         
-        // Source and target for rendering are determined.
-        // Because of possible variable paths, the current path does not have to
-        // correspond to the current face/facet and must be determined via the
-        // parent if necessary.
+        // Source and target for rendering are determined. Because of possible
+        // variable paths, the current path does not have to correspond to the
+        // current face/facet and must be determined via the parent if
+        // necessary.
         source = SiteMap.lookup(source);
         target = SiteMap.lookup(target);        
         
@@ -1018,9 +1012,9 @@ if (typeof SiteMap === "undefined") {
         
         // The deepest similarity in both paths is used for rendering.
         // Render as minimal as possible:
-        //   old: #a#b#c#d#e#f  new: #a#b#c#d      -> render #d
-        //   old: #a#b#c#d      new: #a#b#c#d#e#f  -> render #d
-        //   old: #a#b#c#d      new: #e#f          -> render # (body)
+        //     old: #a#b#c#d#e#f  new: #a#b#c#d      -> render #d
+        //     old: #a#b#c#d      new: #a#b#c#d#e#f  -> render #d
+        //     old: #a#b#c#d      new: #e#f          -> render # (body)
         // Initially always the body is rendered.
         let render = "#";
         if (source.startsWith(target))
@@ -1036,8 +1030,8 @@ if (typeof SiteMap === "undefined") {
         window.location.assign(SiteMap.location);
         
         // Update of the hash and thus of the page focus, if the new focus
-        // (hash) was hidden before rendering or did not exist.
-        // For this purpose, the setter must be called in window.location.
+        // (hash) was hidden before rendering or did not exist. For this
+        // purpose, the setter must be called in window.location.
         window.location.hash = window.location.hash;
     });
 }
