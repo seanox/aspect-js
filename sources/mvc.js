@@ -165,16 +165,16 @@ if (typeof Path === "undefined") {
          * is resolved, each double hash means that the preceding path segment
          * is skipped. If more than two hash characters are used, it extends the
          * jump length.
-	     * 
-	     *     Examples (root #x#y#z):
-	     *     ----
-	     * #a#b#c#d#e##f   #a#b#c#d#f
-	     * #a#b#c#d#e###f  #a#b#c#f
-	     * ###f            #x#f  
-	     * ####f           #f
-	     * empty           #x#y#z
-	     * #               #x#y#z
-	     * a#b#c           #x#y#z#a#b#c
+	     *
+         * Examples (root #x#y#z):
+	     *
+         *    #a#b#c#d#e##f   #a#b#c#d#f
+	     *    #a#b#c#d#e###f  #a#b#c#f
+	     *    ###f            #x#f
+	     *    ####f           #f
+	     *    empty           #x#y#z
+	     *    #               #x#y#z
+	     *    a#b#c           #x#y#z#a#b#c
 	     * 
 	     * Invalid roots and paths cause an exception.
 	     * The method has the following various signatures:

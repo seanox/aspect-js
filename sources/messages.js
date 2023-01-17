@@ -26,13 +26,12 @@
  * label-value data which is stored in the locales.xml of the DataSource.
  * 
  *     + data
- *     |  + de...
- *     |  + en...
- *     |  + locales.xml
- *     |
+ *       + de
+ *       + en
+ *       - locales.xml
  *     + modules
  *     + resources
- *     + index.html
+ *     - index.html
  * 
  * The elements for the supported languages are organized in locales in this
  * file. Locales is a set of supported country codes. In each country code, the
