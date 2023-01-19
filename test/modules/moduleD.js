@@ -22,4 +22,4 @@ Namespace.create("moduleG", {
     test: "G"
 });
 
-Namespace.using("moduleH");
+Namespace.use("moduleH");
