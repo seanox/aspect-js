@@ -34,21 +34,21 @@ also supported. If a layer in the namespace uses an integer, this layer is used
 as an array.
 
 
-### Namespace.using
+### Namespace.use
 
 Creates a namespace to pass string. Without arguments, the method returns the
 global namespace window.
 
 ```javascript
-Namespace.using("app.example");
+Namespace.use("app.example");
     creates window["app", {example: {}}]
     returns window["app"] / {example: {}}
 
-Namespace.using("app.example", "more");
+Namespace.use("app.example", "more");
     creates window["app", {example: {more: {}}}]
     returns window["app"] / {example: {more: {}}}
 
-Namespace.using()
+Namespace.use()
     returns window
 ```
 
@@ -60,7 +60,7 @@ does not exist, `undefined` is returned. Without arguments, the method returns
 the global namespace `window`.
 
 ```javascript
-Namespace.using("app.example.more");
+Namespace.use("app.example.more");
 
 Namespace.lookup("app.example.more")
     returns app.example.more
@@ -78,7 +78,7 @@ Namespace.lookup()
 Checks whether a namespace exists.
 
 ```javascript
-Namespace.using("app.example.more");
+Namespace.use("app.example.more");
 
 Namespace.exists("app.example.more")
     returns boolean true
@@ -222,21 +222,21 @@ Object.exists("foo");
 ```
 
 
-### Object.using
+### Object.use
 
-Equivalent to [Namespace.using](#namespaceusing). Creates a namespace to the
+Equivalent to [Namespace.use](#namespaceusing). Creates a namespace to the
 passed string. Without arguments, the method returns the global namespace
 window.
 
 ```javascript
-Object.using("app.example");
+Object.use("app.example");
     returns object window["app.example"] / {}
 
-Object.using("app.example", "more");
+Object.use("app.example", "more");
     returns object window["app.example.more"] / {}
 }
 
-Object.using()
+Object.use()
     returns object window
 ```
 
