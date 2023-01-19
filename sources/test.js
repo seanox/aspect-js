@@ -795,8 +795,9 @@ compliant("Test", {
         };
         
         /** In case of an error, it is forwarded to the console. */
-        window.addEventListener("error", function(event) {
-            if (parent && parent !== window)
+        window.addEventListener("error", (event) => {
+            if (parent
+                    && parent !== window)
                 console.forward("error", ((...variants) => {
                     return variants;
                 })(event.message), null);
@@ -809,52 +810,47 @@ compliant("Test", {
          * @param value simulated input value
          * @param clear option false suppresses emptying before input
          */ 
-        if (Element.prototype.typeValue === undefined) {
-            Element.prototype.typeValue = function(value, clear) {
-                this.focus();
-                if (clear !== false)
-                    this.value = "";
-                const element = this;
-                value = (value || "").split("");
-                value.forEach((digit) => {
-                    element.trigger("keydown");
-                    element.value = (element.value || "") + digit;
-                    element.trigger("keyup");
-                });
-                this.trigger("input");
-            };     
-        }
+        compliant("Element.prototype.typeValue", function(value, clear) {
+            this.focus();
+            if (clear !== false)
+                this.value = "";
+            const element = this;
+            value = (value || "").split("");
+            value.forEach((digit) => {
+                element.trigger("keydown");
+                element.value = (element.value || "") + digit;
+                element.trigger("keyup");
+            });
+            this.trigger("input");
+        });
 
         /**
          * Enhancement of the JavaScript API
          * Adds a method that creates a plain string for an Element.
          */
-        if (Element.prototype.toPlainString === undefined)
-            Element.prototype.toPlainString = function() {
-                return this.outerHTML;
-            };
+        compliant("Element.prototype.toPlainString", function() {
+            return this.outerHTML;
+        });
 
         /**
          * Enhancement of the JavaScript API
          * Adds a method that creates a plain string for a Node.
          */     
-        if (Node.prototype.toPlainString === undefined)
-            Node.prototype.toPlainString = function() {
-                return (new XMLSerializer()).serializeToString(this);
-            };    
+        compliant("Node.prototype.toPlainString", function() {
+            return (new XMLSerializer()).serializeToString(this);
+        });
 
         /**
          * Enhancement of the JavaScript API
          * Adds a method that creates a plain string for an Object.
          */      
-        if (Object.prototype.toPlainString === undefined)
-            Object.prototype.toPlainString = function() {
-                if (this !== null
-                        && typeof this[Symbol.iterator] === 'function')
-                    return JSON.stringify([...this]);
-                return JSON.stringify(this);
-            };     
-          
+        compliant("Object.prototype.toPlainString", function() {
+            if (this !== null
+                    && typeof this[Symbol.iterator] === 'function')
+                return JSON.stringify([...this]);
+            return JSON.stringify(this);
+        });
+
         /**
          * Enhancement of the JavaScript API
          * Adds a method to trigger an event for elements.
@@ -862,250 +858,246 @@ compliant("Test", {
          * @param bubbles deciding whether the event should bubble up
          *     through the event chain or not
          * @param cancel  defining whether the event can be canceled
-         */         
-        if (Element.prototype.trigger === undefined)
-            Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
-                this.dispatchEvent(new Event(event, {bubbles:bubbles, cancelable:cancel}));
-            };
+         */
+        compliant("Element.prototype.trigger", function(event, bubbles = false, cancel = true) {
+            this.dispatchEvent(new Event(event, {bubbles:bubbles, cancelable:cancel}));
+        });
 
-        if (typeof Assert === "undefined") {
+        /**
+         * A set of assertion methods useful for writing tests.
+         * Only failed assertions are recorded.
+         * These methods can be used directly:
+         *     Assert.assertEquals(...);
+         */
+        compliant("Assert", {
+                
+            /**
+             * Creates a new assertion based on an array of variant parameters.
+             * Size defines the number of test values. If more parameters are
+             * passed, the first must be the message.
+             * @param parameters
+             * @param size
+             */
+            create(parameters, size) {
+
+                const assert = {message:null, values:[], error(...variants) {
+                    variants.forEach((parameter, index, array) => {
+                        array[index] = String(parameter).replace(/\{(\d+)\}/g, (match, index) => {
+                            if (index > assert.values.length)
+                                return "[null]";
+                            match = String(assert.values[index]);
+                            match = match.replace(/\s*[\r\n]+\s*/g, " "); 
+                            return match;
+                        });
+                    });
+                    
+                    let message = "expected {1} but was {2}";
+                    if (assert.message !== null) {
+                        assert.message = assert.message.trim();
+                        if (assert.message)
+                            message = assert.message;
+                    }
+                    message = "{0} failed, " + message;
+                    message = message.replace(/\{(\d+)\}/g, (match, index) => {
+                        if (index > variants.length)
+                            return "[null]";
+                        match = String(variants[index]);
+                        match = match.replace(/\s*[\r\n]+\s*/g, " "); 
+                        return match;                
+                    });
+                    return new Error(message);
+                }};
+
+                parameters = Array.from(parameters);
+                if (parameters.length > size)
+                    assert.message = parameters.shift();
+                while (parameters.length > 0)
+                    assert.values.push(parameters.shift());
+    
+                return assert;
+            },
+            
+            /**
+             * Asserts that a value is true.
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
+             */       
+            assertTrue(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] === true)
+                    return;
+                throw assert.error("Assert.assertTrue", "true", "{0}");
+            },
+            
+            /**
+             * Asserts that a value is false.
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
+             */      
+            assertFalse(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] === false)
+                    return;
+                throw assert.error("Assert.assertFalse", "false", "{0}");
+            },
     
             /**
-             * A set of assertion methods useful for writing tests.
-             * Only failed assertions are recorded.
-             * These methods can be used directly:
-             *     Assert.assertEquals(...);
-             */ 
-            window["Assert"] = {
-                
-                /**
-                 * Creates a new assertion based on an array of variant
-                 * parameters. Size defines the number of test values. If
-                 * more parameters are passed, the first must be the message.
-                 * @param parameters
-                 * @param size
-                 */
-                create(parameters, size) {
+             * Asserts that two values are equals.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, expected, actual) 
+             *     function(expected, actual) 
+             * @param message
+             * @param expected
+             * @param actual
+             */     
+            assertEquals(...variants) {
+                const assert = Assert.create(variants, 2);
+                if (assert.values[0] === assert.values[1])
+                    return;
+                throw assert.error("Assert.assertEquals", "{0}", "{1}");
+            },
 
-                    const assert = {message:null, values:[], error(...variants) {
-                        variants.forEach((parameter, index, array) => {
-                            array[index] = String(parameter).replace(/\{(\d+)\}/g, (match, index) => {
-                                if (index > assert.values.length)
-                                    return "[null]";
-                                match = String(assert.values[index]);
-                                match = match.replace(/\s*[\r\n]+\s*/g, " "); 
-                                return match;
-                            });
-                        });
-                        
-                        let message = "expected {1} but was {2}";
-                        if (assert.message !== null) {
-                            assert.message = assert.message.trim();
-                            if (assert.message)
-                                message = assert.message;
-                        }
-                        message = "{0} failed, " + message;
-                        message = message.replace(/\{(\d+)\}/g, (match, index) => {
-                            if (index > variants.length)
-                                return "[null]";
-                            match = String(variants[index]);
-                            match = match.replace(/\s*[\r\n]+\s*/g, " "); 
-                            return match;                
-                        });
-                        return new Error(message);
-                    }};
+            /**
+             * Asserts that two values are not equals.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, unexpected, actual) 
+             *     function(unexpected, actual) 
+             * @param message
+             * @param unexpected
+             * @param actual
+             */      
+            assertNotEquals(...variants) {
+                const assert = Assert.create(variants, 2);
+                if (assert.values[0] !== assert.values[1])
+                    return;
+                throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
+            },
+    
+            /**
+             * Asserts that two values are the same.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, expected, actual) 
+             *     function(expected, actual) 
+             * @param message
+             * @param expected
+             * @param actual
+             */      
+            assertSame(...variants) {
+                const assert = Assert.create([], variants, 2);
+                if (assert.values[0] === assert.values[1])
+                    return;
+                throw assert.error("Assert.assertSame", "{0}", "{1}");
+            },
+            
+            /**
+             * Asserts two values are not the same.
+             * Difference between equals and same: === / == or !== / !=
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, unexpected, actual) 
+             *     function(unexpected, actual) 
+             * @param message
+             * @param unexpected
+             * @param actual
+             */      
+            assertNotSame(...variants) {
+                const assert = Assert.create(variants, 2);
+                if (assert.values[0] !== assert.values[1])
+                    return;
+                throw assert.error("Assert.assertNotSame", "not {0}", "{1}");
+            },
 
-                    parameters = Array.from(parameters);
-                    if (parameters.length > size)
-                        assert.message = parameters.shift();
-                    while (parameters.length > 0)
-                        assert.values.push(parameters.shift());
-        
-                    return assert;
-                },
-                
-                /**
-                 * Asserts that a value is true.
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, value) 
-                 *     function(value) 
-                 * @param message
-                 * @param value
-                 */       
-                assertTrue(...variants) {
-                    const assert = Assert.create(variants, 1);
-                    if (assert.values[0] === true)
-                        return;
-                    throw assert.error("Assert.assertTrue", "true", "{0}");
-                },
-                
-                /**
-                 * Asserts that a value is false.
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, value) 
-                 *     function(value) 
-                 * @param message
-                 * @param value
-                 */      
-                assertFalse(...variants) {
-                    const assert = Assert.create(variants, 1);
-                    if (assert.values[0] === false)
-                        return;
-                    throw assert.error("Assert.assertFalse", "false", "{0}");
-                },
-        
-                /**
-                 * Asserts that two values are equals.
-                 * Difference between equals and same: === / == or !== / !=
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, expected, actual) 
-                 *     function(expected, actual) 
-                 * @param message
-                 * @param expected
-                 * @param actual
-                 */     
-                assertEquals(...variants) {
-                    const assert = Assert.create(variants, 2);
-                    if (assert.values[0] === assert.values[1])
-                        return;
-                    throw assert.error("Assert.assertEquals", "{0}", "{1}");
-                },
+            /**
+             * Asserts that a value is undefined.
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value)
+             *     function(value)
+             * @param message
+             * @param value
+             */
+            assertUndefined(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] === undefined)
+                    return;
+                throw assert.error("Assert.assertUndefined", "undefined", "{0}");
+            },
 
-                /**
-                 * Asserts that two values are not equals.
-                 * Difference between equals and same: === / == or !== / !=
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, unexpected, actual) 
-                 *     function(unexpected, actual) 
-                 * @param message
-                 * @param unexpected
-                 * @param actual
-                 */      
-                assertNotEquals(...variants) {
-                    const assert = Assert.create(variants, 2);
-                    if (assert.values[0] !== assert.values[1])
-                        return;
-                    throw assert.error("Assert.assertNotEquals", "not {0}", "{1}");
-                },
-        
-                /**
-                 * Asserts that two values are the same.
-                 * Difference between equals and same: === / == or !== / !=
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, expected, actual) 
-                 *     function(expected, actual) 
-                 * @param message
-                 * @param expected
-                 * @param actual
-                 */      
-                assertSame(...variants) {
-                    const assert = Assert.create([], variants, 2);
-                    if (assert.values[0] === assert.values[1])
-                        return;
-                    throw assert.error("Assert.assertSame", "{0}", "{1}");
-                },
-                
-                /**
-                 * Asserts two values are not the same.
-                 * Difference between equals and same: === / == or !== / !=
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, unexpected, actual) 
-                 *     function(unexpected, actual) 
-                 * @param message
-                 * @param unexpected
-                 * @param actual
-                 */      
-                assertNotSame(...variants) {
-                    const assert = Assert.create(variants, 2);
-                    if (assert.values[0] !== assert.values[1])
-                        return;
-                    throw assert.error("Assert.assertNotSame", "not {0}", "{1}");
-                },
+            /**
+             * Asserts that a value is not undefined.
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value)
+             *     function(value)
+             * @param message
+             * @param value
+             */
+            assertNotUndefined(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] !== undefined)
+                    return;
+                throw assert.error("Assert.assertNotUndefined", "not undefined", "{0}");
+            },
 
-                /**
-                 * Asserts that a value is undefined.
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, value)
-                 *     function(value)
-                 * @param message
-                 * @param value
-                 */
-                assertUndefined(...variants) {
-                    const assert = Assert.create(variants, 1);
-                    if (assert.values[0] === undefined)
-                        return;
-                    throw assert.error("Assert.assertUndefined", "undefined", "{0}");
-                },
-
-                /**
-                 * Asserts that a value is not undefined.
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, value)
-                 *     function(value)
-                 * @param message
-                 * @param value
-                 */
-                assertNotUndefined(...variants) {
-                    const assert = Assert.create(variants, 1);
-                    if (assert.values[0] !== undefined)
-                        return;
-                    throw assert.error("Assert.assertNotUndefined", "not undefined", "{0}");
-                },
-
-                /**
-                 * Asserts that a value is null.
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, value) 
-                 *     function(value) 
-                 * @param message
-                 * @param value
-                 */    
-                assertNull(...variants) {
-                    const assert = Assert.create(variants, 1);
-                    if (assert.values[0] === null)
-                        return;
-                    throw assert.error("Assert.assertNull", "null", "{0}");
-                },
-        
-                /**
-                 * Asserts that a value is not null.
-                 * If the assertion is false, an error with message is thrown.
-                 * The method has the following various signatures:
-                 *     function(message, value) 
-                 *     function(value) 
-                 * @param message
-                 * @param value
-                 */
-                assertNotNull(...variants) {
-                    const assert = Assert.create(variants, 1);
-                    if (assert.values[0] !== null)
-                        return;
-                    throw assert.error("Assert.assertNotNull", "not null", "{0}");
-                },
-        
-                /**
-                 * Fails a test with an optional message.
-                 * The method has the following various signatures:
-                 *     function(message) 
-                 *     function() 
-                 * @param message
-                 */
-                fail(message) {
-                    if (message)
-                        message = String(message).trim();
-                    message = "Assert.fail" + (message ? ", " + message : "");
-                    throw new Error(message);
-                }      
-            };
-        }
+            /**
+             * Asserts that a value is null.
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
+             */    
+            assertNull(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] === null)
+                    return;
+                throw assert.error("Assert.assertNull", "null", "{0}");
+            },
+    
+            /**
+             * Asserts that a value is not null.
+             * If the assertion is false, an error with message is thrown.
+             * The method has the following various signatures:
+             *     function(message, value) 
+             *     function(value) 
+             * @param message
+             * @param value
+             */
+            assertNotNull(...variants) {
+                const assert = Assert.create(variants, 1);
+                if (assert.values[0] !== null)
+                    return;
+                throw assert.error("Assert.assertNotNull", "not null", "{0}");
+            },
+    
+            /**
+             * Fails a test with an optional message.
+             * The method has the following various signatures:
+             *     function(message) 
+             *     function() 
+             * @param message
+             */
+            fail(message) {
+                if (message)
+                    message = String(message).trim();
+                message = "Assert.fail" + (message ? ", " + message : "");
+                throw new Error(message);
+            }      
+        });
     }
 });
