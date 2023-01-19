@@ -40,157 +40,150 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.0.1 20230117
+ * @version 1.6.0 20230119
  */
-if (typeof ReactProxy === "undefined") {
+compliant("ReactProxy", {
 
-    window["ReactProxy"] = {
+    selector: null,
 
-        selector: null,
+    create(target) {
+        return target.toReactProxy();
+    }
+});
 
-        create(target) {
-            return target.toReactProxy();
+Composite.listen(Composite.EVENT_RENDER_START, function(event, selector) {
+    ReactProxy.selector = selector;
+});
+
+Composite.listen(Composite.EVENT_RENDER_NEXT, function(event, selector) {
+    ReactProxy.selector = selector;
+});
+
+Composite.listen(Composite.EVENT_RENDER_END, function(event, selector) {
+    ReactProxy.selector = null;
+});
+
+/**
+ * Enhancement of the JavaScript API
+ * Adds a function to create a ReactProxy from the object instance.
+ * If it is a ReactProxy, the reference of the instance is returned.
+ */
+compliant("Object.prototype.toReactProxy", function() {
+
+    if (typeof this !== "object")
+        throw new TypeError("Not supported data type: " + typeof this);
+
+    if (Array.isArray(this))
+        return this.map(entry => typeof entry === "object"
+                && entry !== null ? entry.toReactProxy() : entry);
+
+    const target = Object.assign({}, this);
+    for (const key in target) {
+        const value = target[key];
+        if (typeof value === "object"
+                && value !== null)
+            target[key] = target[key].toReactProxy();
+    }
+
+    const proxy = new Proxy(target, {
+
+        notifications: new Map(),
+
+        get(target, key) {
+            try {return target[key];
+            } finally {
+
+                // The registration is delayed so that the getting of values
+                // does not block unnecessarily.
+                Composite.asynchron((selector, target, key, notifications) => {
+
+                    // Registration is performed only during rendering and if
+                    // the key exists in the object.
+                    if (selector === null
+                            || !target.hasOwnProperty(key))
+                        return;
+
+                    let recipients = notifications.get(key) || new Map();
+
+                    // If the selector as the current rendered element is 
+                    // already registered as a recipient, then the registration
+                    // can be canceled.
+                    if (recipients.has(selector.ordinal()))
+                        return;
+
+                    for (const recipient of recipients.values()) {
+                        
+                        // If the selector as the current rendered element is
+                        // already contained in a recipient as the parent, the
+                        // selector as a recipient can be ignored, because the
+                        // rendering is initiated by the parent and includes the
+                        // selector as a child.
+                        if (recipient.contains !== undefined
+                                && recipient.contains(selector))
+                            return;
+
+                        // If the selector as current rendered element contains
+                        // a recipient as parent, the recipient can be removed,
+                        // because the selector element will initiate rendering
+                        // as parent in the future and the existing recipient
+                        // will be rendered as child automatically.
+                        if (selector.contains !== undefined
+                                && selector.contains(recipient))
+                            recipients.delete(recipient.ordinal());
+                    }
+
+                    recipients.set(selector.ordinal(), selector);
+                    notifications.set(key, recipients);
+
+                }, ReactProxy.selector, target, key, this.notifications);
+            }
+        },
+
+        set(target, key, value) {
+
+            if (typeof value === "object"
+                    && value !== null)
+                value = value.toReactProxy();
+
+            try {return target[key] = value;
+            } finally {
+
+                // The registration is delayed so that the setting of values
+                // does not block unnecessarily.
+                Composite.asynchron((selector, target, key, notifications) => {
+
+                    // An update of the recipients is only performed outside the
+                    // rendering and if the key exists in the object.
+                    if (ReactProxy.selector !== null
+                            || !target.hasOwnProperty(key))
+                        return;
+
+                    let recipients = this.notifications.get(key) || new Map();
+                    for (const recipient of recipients.values()) {
+                        // If the recipient is no longer included in the DOM and
+                        // so it can be removed this case.
+                        if (!document.body.contains(recipient))
+                            recipients.delete(recipient.ordinal());
+                        else Composite.render(recipient);
+                    }
+
+                }, ReactProxy.selector, target, key, this.notifications);
+            }
         }
+    });
+    
+    // Prevents a new ReactProxy from being created by a ReactProxy. This is
+    // possible, but the impact is not considered so far. Therefore, the
+    // ReactProxy is created here and not in ReactProxy.prototype.toReactProxy.
+    // This way both places are caught.
+    proxy.toReactProxy = () => {
+        return proxy;
     };
 
-    Composite.listen(Composite.EVENT_RENDER_START, function(event, selector) {
-        ReactProxy.selector = selector;
-    });
+    const origin = this;
+    proxy.toObject = () => {
+        return origin;
+    };
 
-    Composite.listen(Composite.EVENT_RENDER_NEXT, function(event, selector) {
-        ReactProxy.selector = selector;
-    });
-
-    Composite.listen(Composite.EVENT_RENDER_END, function(event, selector) {
-        ReactProxy.selector = null;
-    });
-
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a function to create a ReactProxy from the object instance.
-     * If it is a ReactProxy, the reference of the instance is returned.
-     */
-    if (Object.prototype.toReactProxy === undefined) {
-        Object.prototype.toReactProxy = function() {
-
-            if (typeof this !== "object")
-                throw new TypeError("Not supported data type: " + typeof this);
-
-            if (Array.isArray(this))
-                return this.map(entry => typeof entry === "object"
-                        && entry !== null ? entry.toReactProxy() : entry);
-
-            const target = Object.assign({}, this);
-            for (const key in target) {
-                const value = target[key];
-                if (typeof value === "object"
-                        && value !== null)
-                    target[key] = target[key].toReactProxy();
-            }
-
-            const proxy = new Proxy(target, {
-
-                notifications: new Map(),
-
-                get(target, key) {
-                    try {return target[key];
-                    } finally {
-
-                        // The registration is delayed so that the getting of
-                        // values does not block unnecessarily.
-                        Composite.asynchron((selector, target, key, notifications) => {
-
-                            // Registration is performed only during rendering
-                            // and if the key exists in the object.
-                            if (selector === null
-                                    || !target.hasOwnProperty(key))
-                                return;
-
-                            let recipients = notifications.get(key) || new Map();
-
-                            // If the selector as the current rendered element
-                            // is already registered as a recipient, then the
-                            // registration can be canceled.
-                            if (recipients.has(selector.ordinal()))
-                                return;
-
-                            for (const recipient of recipients.values()) {
-                                // If the selector as the current rendered
-                                // element is already contained in a recipient
-                                // as the parent, the selector as a recipient
-                                // can be ignored, because the rendering is
-                                // initiated by the parent and includes the
-                                // selector as a child.
-                                if (recipient.contains !== undefined
-                                        && recipient.contains(selector))
-                                    return;
-
-                                // If the selector as current rendered element
-                                // contains a recipient as parent, the recipient
-                                // can be removed, because the selector element
-                                // will initiate rendering as parent in the
-                                // future and the existing recipient will be
-                                // rendered as child automatically.
-                                if (selector.contains !== undefined
-                                        && selector.contains(recipient))
-                                    recipients.delete(recipient.ordinal());
-                            }
-
-                            recipients.set(selector.ordinal(), selector);
-                            notifications.set(key, recipients);
-
-                        }, ReactProxy.selector, target, key, this.notifications);
-                    }
-                },
-
-                set(target, key, value) {
-
-                    if (typeof value === "object"
-                            && value !== null)
-                        value = value.toReactProxy();
-
-                    try {return target[key] = value;
-                    } finally {
-
-                        // The registration is delayed so that the setting of
-                        // values does not block unnecessarily.
-                        Composite.asynchron((selector, target, key, notifications) => {
-
-                            // An update of the recipients is only performed
-                            // outside the rendering and if the key exists in
-                            // the object.
-                            if (ReactProxy.selector !== null
-                                    || !target.hasOwnProperty(key))
-                                return;
-
-                            let recipients = this.notifications.get(key) || new Map();
-                            for (const recipient of recipients.values()) {
-                                // If the recipient is no longer included in the
-                                // DOM and so it can be removed this case.
-                                if (!document.body.contains(recipient))
-                                    recipients.delete(recipient.ordinal());
-                                else Composite.render(recipient);
-                            }
-
-                        }, ReactProxy.selector, target, key, this.notifications);
-                    }
-                }
-            });
-
-            // Prevents a new ReactProxy from being created by a ReactProxy.
-            // This is possible, but the impact is not considered so far. So
-            // the creation is done here and not in ReactProxy.create(Object).
-            // This way both places are caught.
-            proxy.toReactProxy = () => {
-                return proxy;
-            };
-
-            const origin = this;
-            proxy.toObject = () => {
-                return origin;
-            };
-
-            return proxy;
-        };
-    }
-}
+    return proxy;
+});
