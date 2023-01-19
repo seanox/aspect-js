@@ -15,6 +15,8 @@ CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
+CR: Composite: Renamed method Object.using(...) in Object.use(...)
+CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
 CR: Release: Revision of the release channels
     - default: contains all minimized
       for development, test and deployment
