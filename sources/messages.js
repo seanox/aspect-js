@@ -64,50 +64,40 @@
  *     <h1 output="{{Messages['contact.title']}}"/>
  * 
  * @author  Seanox Software Solutions
- * @version 1.2.1 20230117
+ * @version 1.6.0 20230119
  */
-if (typeof Messages === "undefined") {
+compliant("Messages", {});
+(() => {
+
+    // Messages are based on DataSources. To initialize, the DataSource.localize
+    // method must be overwritten and loading of the key-value pairs is embedded.
+    const localize = DataSource.localize;
+    DataSource.localize = (locale) => {
+
+        DataSource.localize$origin(locale);
+
+        window["Messages"] = {};
+        const xpath = "/locales/" + DataSource.locale + "/label";
+        const label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+        for (let node = label.iterateNext(); node; node = label.iterateNext()) {
+            const key = (node.getAttribute("key") || "").trim();
+            if (key === "")
+                continue;
+            let value = ((node.getAttribute("value") || "").trim()
+                    + " " + (node.textContent).trim()).trim();
+            value = value.unescape();
+            if (!Messages.hasOwnProperty(key))
+                Object.defineProperty(Messages, key, {
+                    value
+                });
+        }
+    };
     
-    /**
-     * (Resource)Messages is a static DataSource extension for localization and
-     * internationalization. The implementation is based on a set of key-value
-     * or label-value data.
-     */
-    window["Messages"] = {};
+    DataSource.localize$origin = localize;
     
-    (function() {
-
-        // Messages are based on DataSources. To initialize, the
-        // DataSource.localize method must be overwritten and loading of the
-        // key-value pairs is embedded.
-        const localize = DataSource.localize;
-        DataSource.localize = (locale) => {
-
-            DataSource.localize$origin(locale);
-
-            window["Messages"] = {};
-            const xpath = "/locales/" + DataSource.locale + "/label";
-            const label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-            for (let node = label.iterateNext(); node; node = label.iterateNext()) {
-                const key = (node.getAttribute("key") || "").trim();
-                if (key === "")
-                    continue;
-                let value = ((node.getAttribute("value") || "").trim()
-                        + " " + (node.textContent).trim()).trim();
-                value = value.unescape();
-                if (!Messages.hasOwnProperty(key))
-                    Object.defineProperty(Messages, key, {
-                        value
-                    });
-            }
-        };
-        
-        DataSource.localize$origin = localize;
-        
-        if (DataSource.data
-                && DataSource.locale
-                && DataSource.locales
-                && DataSource.locales.includes(DataSource.locale))
-            DataSource.localize(DataSource.locale);
-    })();
-}
+    if (DataSource.data
+            && DataSource.locale
+            && DataSource.locales
+            && DataSource.locales.includes(DataSource.locale))
+        DataSource.localize(DataSource.locale);
+})();
