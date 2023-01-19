@@ -1,5 +1,5 @@
 1.6.0 2023xxxx
-AN: Composite: Meta directive to import modules/resources in markup
+??: Composite: Meta directive to import modules/resources in markup
     #import moduleA ... moduleN
     Meta directives are always exclusive one-line statements.
 BF: Review: Optimization and corrections
@@ -7,6 +7,7 @@ BF: Review: Optimization and corrections
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected during the module include, for that to the error.
 BF: Composite: Support of const for models also in combined with Namespace.create(...)
+BF: Test: Correction of wrong output of Element.prototype.toPlainString()
 CR: SiteMap: Inactive by default
     Attribute static is then not required for composites.
     Simplifies micro frontends without face-flow.
@@ -17,19 +18,24 @@ CR: Composite: Errors during rendering are output in the view
     Errors can also be subscribed as a composite event.
 CR: Composite: Renamed method Object.using(...) in Object.use(...)
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
+??: Release: Channels with the major number are omitted
 CR: Release: Revision of the release channels
-    - default: contains all minimized
-      for development, test and deployment
-    - default-max: contains all, not minimized and with comments
+    - standard: contains all minimized
+      for test and deployment
+    - standard-max: contains all, not minimized and with comments
       for development, test
     - core: contains all minimized, except the Test API
-      for development
+      for deployment
     - core-max: contains all minimized, except the Test API, not minimized and with comments
-      for development and deployment
-    - micro: contains all minimized, except the Test API and SiteMap
+      for development, test
+??  - micro: contains all minimized, except SiteMap, minimized
+      for development, test and deployment of micro frontends without face-flow
+??  - micro-max: contains all minimized, except SiteMap, not minimized and with comments
+      for development, test of micro frontends without face-flow
+??  - micro-core: contains all minimized, except the Test API and SiteMap
       for deployment of micro frontends without face-flow
-    - micro-max: contains all minimized, except the test API and SiteMap, not minimized and with comments
-      for development and deployment of micro frontends without face-flow
+??  - micro-core-max: contains all minimized, except the test API and SiteMap, not minimized and with comments
+      for development, test of micro frontends without face-flow
 
 1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr
