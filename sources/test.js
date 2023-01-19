@@ -832,7 +832,16 @@ if (typeof Test === "undefined") {
                     this.trigger("input");
                 };     
             }
-        
+
+            /**
+             * Enhancement of the JavaScript API
+             * Adds a method that creates a plain string for an Element.
+             */
+            if (Element.prototype.toPlainString === undefined)
+                Element.prototype.toPlainString = function() {
+                    return this.outerHTML;
+                };
+
             /**
              * Enhancement of the JavaScript API
              * Adds a method that creates a plain string for a Node.
@@ -841,16 +850,7 @@ if (typeof Test === "undefined") {
                 Node.prototype.toPlainString = function() {
                     return (new XMLSerializer()).serializeToString(this);
                 };    
-        
-            /**
-             * Enhancement of the JavaScript API
-             * Adds a method that creates a plain string for an Element.
-             */     
-            if (Element.prototype.toPlainString === undefined)
-                Element.prototype.toPlainString = function() {
-                    return this.outerHTML;
-                };
-            
+
             /**
              * Enhancement of the JavaScript API
              * Adds a method that creates a plain string for an Object.
