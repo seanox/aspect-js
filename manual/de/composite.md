@@ -190,7 +190,7 @@ betrachtet werden kann.
 Seanox aspect-js erweitert dazu das JavaScript-API um das Namespace-API.
 
 ```javascript
-Namespace.using(...);
+Namespace.use(...);
 Namespace.create(...);
 Namespace.lookup(...);
 Namespace.exists(...);

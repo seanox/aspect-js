@@ -182,7 +182,7 @@ Seanox aspect-js extends the JavaScript API with the Namespace API for this
 purpose.
 
 ```javascript
-Namespace.using(...);
+Namespace.use(...);
 Namespace.create(...);
 Namespace.lookup(...);
 Namespace.exists(...);
