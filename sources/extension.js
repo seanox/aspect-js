@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230117
+ * @version 1.6.0 20230119
  */
 if (typeof Namespace === "undefined") {
 
@@ -59,17 +59,17 @@ if (typeof Namespace === "undefined") {
          * window is returned.
          *
          * The method has the following various signatures:
-         *     Namespace.using();
-         *     Namespace.using(string);
-         *     Namespace.using(string, ...string|number);
-         *     Namespace.using(object);
-         *     Namespace.using(object, ...string|number);
+         *     Namespace.use();
+         *     Namespace.use(string);
+         *     Namespace.use(string, ...string|number);
+         *     Namespace.use(object);
+         *     Namespace.use(object, ...string|number);
          *
          * @param  levels of the namespace
          * @return the created or already existing object(-level)
          * @throws An error occurs in case of invalid data types or syntax 
          */
-        using(...levels) {
+        use(...levels) {
 
             if (levels.length <= 0)
                 return window;
@@ -149,7 +149,7 @@ if (typeof Namespace === "undefined") {
             const value = levels.pop();
             levels = _filter(...levels);
             const level = levels.pop();
-            const namespace = Namespace.using(...levels);
+            const namespace = Namespace.use(...levels);
             if (namespace === null)
                 return null;
             namespace[level] = value;
@@ -312,7 +312,7 @@ Element.prototype.appendChild = function(node, exclusive) {
  * @param size optional, default is 16
  */
 if (Math.uniqueId === undefined) {
-    Math.uniqueId = function(size) {
+    Math.uniqueId = (size) => {
         size = size || 16;
         if (size < 0)
             size = 16;
@@ -335,7 +335,7 @@ if (Math.uniqueId === undefined) {
  * @param size optional, default is 16
  */
 if (Math.uniqueSerialId === undefined) {
-    Math.uniqueSerialId = function(size) {
+    Math.uniqueSerialId = (size) => {
         size = size || 16;
         if (size < 0)
             size = 16;
@@ -357,7 +357,7 @@ if (Math.uniqueSerialId === undefined) {
  * @return a literal pattern for the specified text 
  */
 if (RegExp.quote === undefined) {
-    RegExp.quote = function(text) {
+    RegExp.quote = (text) => {
         if (!Object.usable(text))
             return null;
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
@@ -431,7 +431,7 @@ if (String.prototype.encodeBase64 === undefined) {
             return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
                 return String.fromCharCode("0x" + code);
             }));
-        } catch (exception) {
+        } catch (error) {
             throw new Error("Malformed character sequence");
         }
     };
@@ -447,7 +447,7 @@ if (String.prototype.decodeBase64 === undefined) {
             return decodeURIComponent(atob(this).split("").map((code) => {
                 return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
             }).join(""));
-        } catch (exception) {
+        } catch (error) {
             throw new Error("Malformed character sequence");
         }
     };
@@ -471,10 +471,10 @@ if (String.prototype.encodeHtml === undefined) {
  */ 
 if (String.prototype.hashCode === undefined) {
     String.prototype.hashCode = function() {
-        if (this.hash === undefined)
-            this.hash = 0;
-        if (this.hash !== 0)
+        if (this.hash !== undefined
+                && this.hash !== 0)
             return this.hash;
+        this.hash = 0;
         let hops = 0;
         for (let loop = 0; loop < this.length; loop++) {
             const temp = 31 *this.hash +this.charCodeAt(loop);
@@ -483,11 +483,9 @@ if (String.prototype.hashCode === undefined) {
                 this.hash = Number.MAX_SAFE_INTEGER -this.hash +this.charCodeAt(loop);
             } else this.hash = temp;
         }
-        this.hash = Math.abs(this.hash);
-        this.hash = this.hash.toString(36);
+        this.hash = Math.abs(this.hash).toString(36);
         this.hash = this.hash.length.toString(36) + this.hash; 
-        this.hash = this.hash + hops.toString(36);
-        this.hash = this.hash.toUpperCase();
+        this.hash = (this.hash + hops.toString(36)).toUpperCase();
         return this.hash;
     };
 }
@@ -498,11 +496,11 @@ if (String.prototype.hashCode === undefined) {
  */ 
 if (String.prototype.unescape === undefined) {
     String.prototype.unescape = function() {
-        let text = this;
-        text = text.replace(/\r/g, "\\r");
-        text = text.replace(/\n/g, "\\n");
-        text = text.replace(/^(["'])/, "\$1");
-        text = text.replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
+        let text = this
+            .replace(/\r/g, "\\r")
+            .replace(/\n/g, "\\n")
+            .replace(/^(["'])/, "\$1")
+            .replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
         return eval(`"${text}"`);
     };
 }
@@ -535,7 +533,7 @@ if (window.location.pathcontext === undefined) {
  * The result will always start with a slash but ends without it.
  */
 if (window.location.combine === undefined) {
-    window.location.combine = function(...paths) {
+    window.location.combine = (...paths) => {
         return "/" + paths.join("/")
             .replace(/[\/\\]+/g, "/")
             .replace(/(^\/+)|(\/+$)/g, "");
