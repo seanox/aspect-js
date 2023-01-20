@@ -305,7 +305,7 @@ if (typeof Composite === "undefined") {
                 + " waiting wheel";},
         
         /** Patterns with the supported events */
-        get PATTERN_EVENT_FUNCTIONS() {return (function() {
+        get PATTERN_EVENT_FUNCTIONS() {return (() => {
             const pattern = Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                return letter.toUpperCase();
             });
@@ -313,94 +313,19 @@ if (typeof Composite === "undefined") {
         })();},
         
         /** Patterns with the supported events as plain array */
-        get PATTERN_EVENT_NAMES() {return (function() {
+        get PATTERN_EVENT_NAMES() {return (() => {
             return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).split(/\s+/);
         })();},
         
         /** Patterns with the supported events as plain array (lower case) */
-        get PATTERN_EVENT_FILTER() {return (function() {
+        get PATTERN_EVENT_FILTER() {return (() => {
             return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
                 return letter.toUpperCase();
             }).toLowerCase().split(/\s+/);
         })();},
     };
-
-    /**
-     * Set of attributes to be hardened.
-     * The hardening of attributes is part of the safety concept and should
-     * make it more difficult to manipulate the markup at runtime. Hardening
-     * observes attributes and undoes changes.
-     * Initially, the list is empty because the policies and rules are too
-     * individual.
-     * 
-     * The following attributes are recommended:
-     *     action        autocomplete      autofocus
-     *     form          formaction        formenctype
-     *     formmethod    formnovalidate    formtarget
-     *     height        list              max
-     *     min           multiple          name
-     *     pattern       placeholder       required
-     *     size          step              target
-     *     type          width
-     *     
-     * The following attributes are automatically hardened:
-     *     composite     id                static*
-     *     
-     * Composite internal/relevant attributes are also protected, these are
-     * removed in markup and managed in memory:
-     *     composite     condition         events
-     *     id            import            interval
-     *     iterate       output            release
-     *     render        validate
-     */
-    Object.defineProperty(Composite, "statics", {
-        value: new Set()
-    });  
-    
-    /**
-     * Composite.macros
-     *     Map for custom tags (key:tag, value:function)
-     */
-    Object.defineProperty(Composite, "macros", {
-        value: new Map()
-    });  
-    
-    /**
-     * Composite.selectors
-     *     Map for custom selectors (key:hash, value:{selector, function})
-     */
-    Object.defineProperty(Composite, "selectors", {
-        value: new Map()
-    });  
-    
-    /**
-     * Composite.acceptors
-     *     Set with acceptor and their registered listeners
-     */
-    Object.defineProperty(Composite, "acceptors", {
-        value: new Set()
-    });  
-    
-    /**
-     * Composite.listeners
-     *     Map with events and their registered listeners
-     */
-    Object.defineProperty(Composite, "listeners", {
-        value: new Map()
-    }); 
-    
-    /** 
-     * Set with docked models.
-     * The set is used for the logic to call the dock and undock methods,
-     * because the static models themselves have no status and the decision
-     * about the current existence in the DOM is not stable.
-     * All docked models are included in the set.
-     */
-    Object.defineProperty(Composite, "models", {
-        value: new Set()
-    });  
 
     /**
      * Lock mechanism for the render, mound and scan methods. The lock controls
@@ -2470,6 +2395,80 @@ if (typeof Composite === "undefined") {
             lock.release();
         }
     };
+        
+    /**
+     * Set of attributes to be hardened.
+     * The hardening of attributes is part of the safety concept and should make
+     * it more difficult to manipulate the markup at runtime. Hardening observes
+     * attributes and undoes changes. Initially, the list is empty because the
+     * policies and rules are too individual.
+     * 
+     * The following attributes are recommended:
+     *     action        autocomplete      autofocus
+     *     form          formaction        formenctype
+     *     formmethod    formnovalidate    formtarget
+     *     height        list              max
+     *     min           multiple          name
+     *     pattern       placeholder       required
+     *     size          step              target
+     *     type          width
+     *     
+     * The following attributes are automatically hardened:
+     *     composite     id                static*
+     *     
+     * Composite internal/relevant attributes are also protected, these are
+     * removed in markup and managed in memory:
+     *     composite     condition         events
+     *     id            import            interval
+     *     iterate       output            release
+     *     render        validate
+     */
+    Object.defineProperty(Composite, "statics", {
+        value: new Set()
+    });  
+    
+    /**
+     * Composite.macros
+     * Map for custom tags (key:tag, value:function)
+     */
+    Object.defineProperty(Composite, "macros", {
+        value: new Map()
+    });  
+    
+    /**
+     * Composite.selectors
+     * Map for custom selectors (key:hash, value:{selector, function})
+     */
+    Object.defineProperty(Composite, "selectors", {
+        value: new Map()
+    });  
+    
+    /**
+     * Composite.acceptors
+     * Set with acceptor and their registered listeners
+     */
+    Object.defineProperty(Composite, "acceptors", {
+        value: new Set()
+    });  
+    
+    /**
+     * Composite.listeners
+     * Map with events and their registered listeners
+     */
+    Object.defineProperty(Composite, "listeners", {
+        value: new Map()
+    }); 
+    
+    /** 
+     * Set with docked models.
+     * The set is used for the logic to call the dock and undock methods, 
+     * because the static models themselves have no status and the decision
+     * about the current existence in the DOM is not stable.
+     * All docked models are included in the set.
+     */
+    Object.defineProperty(Composite, "models", {
+        value: new Set()
+    });  
 
     /**
      * Determines the meta data for an element based on its position in the DOM
