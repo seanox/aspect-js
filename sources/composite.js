@@ -35,25 +35,25 @@
  *
  *         namespace
  *         ----
- * Comparable to packages in other programming languages, namespaces can be
- * used to map hierarchical structures and to group thematically related
- * components and resources.
- * The implementation happens in JavaScript at object level.
- * This means that it is not a real element of the programming language, but is
- * represented by chained static objects. Each level in this object chain
- * represents a namespace.
- * As is typical for object identifiers, namespaces also use letters, numbers,
- * and underscores separated by dots. As a special feature, arrays are also
- * supported. If an object level in the namespace is a pure number, an array is
- * assumed.
+ * Comparable to packages in other programming languages, namespaces can be used
+ * for hierarchical structuring of components, resources and business logic.
+ * Although packages are not a feature of JavaScript, they can be mapped at the
+ * object level by concatenating objects into an object tree. Here, each level
+ * of the object tree forms a namespace, which can also be considered a domain.
+ *
+ * As is typical for the identifiers of objects, namespaces also use letters,
+ * numbers and underscores separated by a dot. As a special feature, arrays are
+ * also supported. If a layer in the namespace uses an integer, this layer is
+ * used as an array.
  *
  *         model
  *         ----
- * Models are representable/projectable static JavaScript objects that can provide
- * and receive data, states and interactions for views, comparable to managed beans
- * and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
- * other components and abstractions, contain business logic themselves, and be a
- * link between the user interface (view) and middleware (backend).
+ * Models are representable/projectable static JavaScript objects that can
+ * provide and receive data, states and interactions for views, comparable to
+ * managed beans and DTOs (Data Transfer Objects). As singleton/facade/delegate,
+ * they can use other components and abstractions, contain business logic
+ * themselves, and be a link between the user interface (view) and middleware
+ * (backend).
  *
  * The required view model binding is part of the Model View Controller and the
  * Composite API.
@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230116
+ * @version 1.6.0 20230120
  */
 if (typeof Composite === "undefined") {
     
@@ -242,9 +242,9 @@ if (typeof Composite === "undefined") {
 
         /** 
          * Pattern for an element id (e.g. name:qualifier...@model...)
-         *     group 1: name
-         *     group 2: qualifier(s) (optional)
-         *     group 3: (namespace+)model (optional)
+         * - group 1: name
+         * - group 2: qualifier(s) (optional)
+         * - group 3: (namespace+)model (optional)
          */
         get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)((?::\w+)*)?(@[_a-z]\w*(?::[_a-z]\w*)*)?$/i;},
 
@@ -761,7 +761,7 @@ if (typeof Composite === "undefined") {
 
         // There must be a corresponding model class.
         // Elements are not supported.
-        const meta = Composite.mount.lookup(selector);
+        const meta = _mount_lookup(selector);
         if (!(meta instanceof Object))
             return;
         
@@ -1030,7 +1030,7 @@ if (typeof Composite === "undefined") {
             
             // There must be a corresponding model class.
             // Elements are not supported.
-            const meta = Composite.mount.lookup(selector);
+            const meta = _mount_lookup(selector);
             if (meta instanceof Object) {
                 
                 // The implicit assignment is based on the on-event-methods
@@ -1098,7 +1098,7 @@ if (typeof Composite === "undefined") {
 
                     // There must be a corresponding model class.
                     // Elements are not supported.
-                    const meta = Composite.mount.lookup(target);
+                    const meta = _mount_lookup(target);
                     if (meta instanceof Object) {
                         
                         let value;
@@ -1256,7 +1256,7 @@ if (typeof Composite === "undefined") {
      *     - in the case of an invalid composite ID
      *     - in the case of an invalid element ID
      */
-    Composite.mount.locate = function(element, namespace = false) {
+    const _mount_locate = (element, namespace = false) => {
 
         if (!(element instanceof Element))
             return null;
@@ -1283,7 +1283,7 @@ if (typeof Composite === "undefined") {
             // namespace. Thus, there can also be decoupled composites and thus
             // models in a nested markup.
 
-            const locate = Composite.mount.locate(element.parentNode, true);
+            const locate = _mount_locate(element.parentNode, true);
             if (!locate)
                 return {model:serial};
             if (locate.namespace)
@@ -1297,7 +1297,7 @@ if (typeof Composite === "undefined") {
                 && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
             throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
 
-        const locate = Composite.mount.locate(element.parentNode);
+        const locate = _mount_locate(element.parentNode);
         if (!element.hasAttribute(Composite.ATTRIBUTE_ID))
             return locate;
 
@@ -1352,10 +1352,10 @@ if (typeof Composite === "undefined") {
      * @throws An error occurs in the following cases:
      *     - in the case of an invalid composite ID
      *     - in the case of an invalid element ID
-     */    
-    Composite.mount.lookup = function(element) {
+     */
+    const _mount_lookup = (element) => {
 
-        const meta = Composite.mount.locate(element);
+        const meta = _mount_locate(element);
         if (!meta)
             return null;
 
@@ -1942,7 +1942,7 @@ if (typeof Composite === "undefined") {
                         
                         // Load modules/components/composite resources.
                         if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
-                            Composite.render.include(selector);                    
+                            _render_include(selector);
                     }
                 }
             }
@@ -2220,7 +2220,7 @@ if (typeof Composite === "undefined") {
                             const serial = placeholder.template.ordinal();
                             const object = {serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
                             Composite.render.meta[serial] = object;
-                            Composite.render.include(placeholder.template);
+                            _render_include(placeholder.template);
                             delete Composite.render.meta[serial];
                         }
                         placeholder.complete = true;
@@ -2598,7 +2598,7 @@ if (typeof Composite === "undefined") {
             if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                 const type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                 if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
-                    try {Composite.render.include.eval(selector.textContent);
+                    try {_render_include_eval(selector.textContent);
                     } catch (exception) {
                         console.error("Composite JavaScript", exception);
                     }
@@ -2650,7 +2650,7 @@ if (typeof Composite === "undefined") {
      * not answered with status 200.
      * @param composite
      */
-    Composite.render.include = function(composite) {
+    const _render_include = (composite) => {
         
         if (!(typeof composite === "string"
                 || composite instanceof Element))
@@ -2672,7 +2672,7 @@ if (typeof Composite === "undefined") {
         let resource = composite instanceof Element ? composite.id : composite;
         if (!object || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
             resource = resource.uncapitalize();
-        let meta = composite instanceof Element ? Composite.mount.locate(composite) : null;
+        let meta = composite instanceof Element ? _mount_locate(composite) : null;
         if (meta && meta.namespace)
             resource = meta.namespace.join("/") + "/" + resource;
         const context = Composite.MODULES + "/" + resource;
@@ -2764,7 +2764,7 @@ if (typeof Composite === "undefined") {
                 style.textContent = content;
                 head.appendChild(style);
             } else if (request.responseURL.match(/\.js$/)) {
-                try {Composite.render.include.eval(content);
+                try {_render_include_eval(content);
                 } catch (exception) {
                     console.error(request.responseURL, exception.name + ": " + exception.message);
                     throw exception;
@@ -2816,7 +2816,7 @@ if (typeof Composite === "undefined") {
      * JavaScript. The meta-section ends with the first comment or JavaScript
      * line.
      */
-    Composite.render.include.eval = function(script) {
+    const _render_include_eval = (script) => {
         script = script.split(/[\r\n]+/);
         while (script && script.length > 0) {
             if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
@@ -2824,7 +2824,7 @@ if (typeof Composite === "undefined") {
             const line = script.shift().replace(/^\s*#import(\s+|$)/, "");
             line.split(/\s+/).forEach((include) => {
                 if (include)
-                    Composite.render.include(include);
+                    _render_include(include);
             });
         }
         script = script.join("\r\n").trim();
@@ -2863,7 +2863,7 @@ if (typeof Composite === "undefined") {
         // the single page application. It consists of common.js and common.css.
         // The configuration of the SiteMap and essential styles can/should be
         // stored here.
-        Composite.render.include("common");
+        _render_include("common");
         
         (new MutationObserver((records) => {
             records.forEach((record) => {
@@ -2984,7 +2984,7 @@ if (typeof Composite === "undefined") {
                             const serial = node.ordinal();
                             const object = Composite.render.meta[serial];
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                                const meta = Composite.mount.lookup(node);
+                                const meta = _mount_lookup(node);
                                 if (meta && meta.meta && meta.meta.model && meta.model
                                         && Composite.models.has(meta.meta.model)) {
                                     Composite.models.delete(meta.meta.model);
@@ -3053,14 +3053,18 @@ if (typeof Expression === "undefined") {
          * not available, the value is retrieved directly from the property. For
          * the get- and is-functions, the first character is changed from
          * property name to uppercase and prefixed with 'get' or 'is'.
-         *     e.g. {{Model.value}} -> Model.getValue()
-         *          {{Model.value}} -> Model.isValue()
+         *
+         *     {{Model.value}} -> Model.getValue()
+         *     {{Model.value}} -> Model.isValue()
+         *
          * In addition to the namespace of JavaScript, the method also supports
          * DOM elements. To do this, the variable in the expression must begin
          * with # and there must be a corresponding element with a matching ID
          * in the DOM.
-         *     e.g. {{#Element}} -> document.querySelector(#Element)
-         *          {{#Element.value}} -> document.querySelector(#Element).value
+         *
+         *     {{#Element}} -> document.querySelector(#Element)
+         *     {{#Element.value}} -> document.querySelector(#Element).value
+         *
          * @param  context    context or expression without context
          * @param  expression expression in combination with a context
          * @return the value of the expression, otherwise false
@@ -3399,7 +3403,7 @@ if (typeof Expression === "undefined") {
     };
 
     // Expression.cache
-    //     Cache (expression/script)
+    // Cache (expression/script)
     Object.defineProperty(Expression, "cache", {
         value: new Map()
     });
