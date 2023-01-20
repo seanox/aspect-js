@@ -18,7 +18,7 @@ CR: Composite: Errors during rendering are output in the view
     Errors can also be subscribed as a composite event.
 CR: Composite: Renamed method Object.using(...) in Object.use(...)
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
-CR: Release: Channels with the major number are omitted
+CR: Release: Channels with major number are omitted
 CR: Release: Revision of the release channels
     - standard: contains all minimized
       for test and deployment
