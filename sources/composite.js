@@ -218,8 +218,8 @@ if (typeof Composite === "undefined") {
          * from the expression by a colon. The variable name must conform to
          * the usual JavaScript conditions and starts with _ or a letter, other
          * word characters (_ 0-9 a-z A-Z) may follow.
-         *     group 1: variable
-         *     group 2: expression
+         * - group 1: variable
+         * - group 2: expression
          */
         get PATTERN_EXPRESSION_VARIABLE() {return /^\s*\{\{\s*((?:(?:_*[a-z])|(?:_\w*))\w*)\s*:\s*(([^}]|(}(?!})))*?)\s*\}\}\s*$/i;},
         
@@ -3018,31 +3018,31 @@ if (typeof Composite === "undefined") {
  * expression Language.
  */
 compliant("Expression", {
-        
+
     /** Constant for element type text */
     get TYPE_TEXT() {return 1;},
-    
+
     /** Constant for element type expression */
     get TYPE_EXPRESSION() {return 2;},
-    
+
     /** Constant for element type literal */
     get TYPE_LITERAL() {return 3;},
-    
+
     /** Constant for element type script */
     get TYPE_SCRIPT() {return 4;},
-    
+
     /** Constant for element type keyword */
     get TYPE_KEYWORD() {return 5;},
-    
+
     /** Constant for element type other */
     get TYPE_OTHER() {return 6;},
-    
+
     /** Constant for element type method */
     get TYPE_METHOD() {return 7;},
-    
+
     /** Constant for element type value */
     get TYPE_VALUE() {return 8;},
-    
+
     /** Constant for element type logic */
     get TYPE_LOGIC() {return 9;},
 
@@ -3160,7 +3160,7 @@ compliant("Expression", {
         // expression with literals can be used.
         //     e.g. {{"{" + "{"}} / {{"}" + "}"}}
 
-        // Lines breaks are ignored, they are interpreted as spaces. So the 
+        // Lines breaks are ignored, they are interpreted as spaces. So the
         // start and end of expressions can be marked with line breaks. After
         // that, text and expressions can be separated.
         expression = expression.replace(/(^[\r\n]+)|([\r\n]+$)/g, "");
