@@ -1220,173 +1220,6 @@ if (typeof Composite === "undefined") {
             lock.release();
         }        
     };
-    
-    /**
-     * Determines the meta data for an element based on its position in the DOM
-     * with the corresponding model, the referenced route and target. The meta
-     * data is only determined as text information.
-     * 
-     * Composite:
-     *     {namespace, model}
-     * 
-     * Composite Element:
-     *     {namespace, model, route, target}
-     *
-     * namespace: namespace of the composite/model
-     *            chain as array without the model or undefined if no chain
-     * model:     corresponds to the enclosing composite
-     * route:     fully qualified route to the target,
-     *            starting with the module, ends with the target
-     * target:    final target in the chain
-     *
-     * A validation at object or JavaScript model level does not take place
-     * here. The fill levels of the meta object can be different, depending on
-     * the collected data and the resulting derivation. Thus, it is possible to
-     * make the theoretical assumptions here by deriving them from the DOM.
-     * Especially the namespace of the model is based on these theoretical
-     * assumptions.
-     * 
-     * If no meta information can be determined, e.g. because no IDs were found
-     * or no enclosing composite was used, null is returned.
-     * 
-     * @param  element
-     * @param  namespace
-     * @return determined meta object for the passed element, otherwise null
-     * @throws An error occurs in the following cases:
-     *     - in the case of an invalid composite ID
-     *     - in the case of an invalid element ID
-     */
-    const _mount_locate = (element, namespace = false) => {
-
-        if (!(element instanceof Element))
-            return null;
-
-        let serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
-            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-
-            // Option namespace restricts the analysis to composites with an
-            // attribute namespace. If a composite is found without one, the
-            // current namespace is terminated and the found composite is
-            // outside the current namespace.
-
-            const object = Composite.render.meta[element.ordinal()];
-            if (!object || !object.attributes
-                    || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
-                return !namespace ? {model:serial} : null;
-
-            // Determine from namespace by parent composite elements with ID and
-            // an attribute namespace. The prerequisite is that the direct
-            // composite from the model uses the attribute namespace. Without
-            // the attribute, the composites and thus the models are without
-            // namespace. Thus, there can also be decoupled composites and thus
-            // models in a nested markup.
-
-            const locate = _mount_locate(element.parentNode, true);
-            if (!locate)
-                return {model:serial};
-            if (locate.namespace)
-                locate.namespace.push(locate.model);
-            else locate.namespace = [locate.model];
-            return {namespace:locate.namespace, model:serial};
-        }
-
-        const object = Composite.render.meta[element.ordinal()];
-        if (object && object.attributes
-                && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
-            throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
-
-        const locate = _mount_locate(element.parentNode);
-        if (!element.hasAttribute(Composite.ATTRIBUTE_ID))
-            return locate;
-
-        if (!serial.match(Composite.PATTERN_ELEMENT_ID))
-            throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
-
-        const meta = {namespace:[], model:null, route:[], target:null};
-        if (locate) {
-            if (locate.namespace)
-                locate.namespace.push(locate.model);
-            else locate.namespace = [locate.model];
-            meta.namespace = locate.namespace;
-            if (locate.route)
-                meta.route.push(...locate.route);
-            else meta.route.push(locate.model);
-        }
-
-        serial = serial.match(Composite.PATTERN_ELEMENT_ID);
-        if (serial[3]) {
-            meta.namespace = serial[3].substring(1).split(/:/);
-            meta.route = [meta.namespace[meta.namespace.length -1]];
-        }
-        meta.route.push(serial[1]);
-        if (serial[2])
-            meta.route.push(...serial[2].substring(1).split(/:/));
-        meta.target = meta.route[meta.route.length -1];
-        meta.model = meta.namespace.pop();
-        if (meta.namespace.length <= 0)
-            delete meta.namespace;
-
-        // a model is always required
-        return meta.model ? meta : null;
-    };
-
-    /**
-     * Determines the meta object for an element based on its position in the
-     * DOM, so the surrounding composite and model, the referenced route and
-     * target in the model.
-     * 
-     * Composite:
-     *     {meta:{namespace, model}, namespace, model}
-     * 
-     * Composite Element:
-     *     {meta:{namespace, model, route, target}, namespace, model, route, target}
-     *
-     * The method always requires a corresponding JavaScript object (model) and
-     * an element with a valid element ID in a valid enclosing composite,
-     * otherwise the method will return null.
-     *
-     * @param  element
-     * @return determined meta object for the passed element, otherwise null
-     * @throws An error occurs in the following cases:
-     *     - in the case of an invalid composite ID
-     *     - in the case of an invalid element ID
-     */
-    const _mount_lookup = (element) => {
-
-        const meta = _mount_locate(element);
-        if (!meta)
-            return null;
-
-        const namespace = Namespace.lookup(...(meta.namespace || []));
-        const model = Object.lookup(namespace || window, meta.model)
-        if (!model)
-            return null;
-        if (meta.target === undefined)
-            return {meta, namespace, model};
-
-        const lookup = {
-            meta,
-            namespace,
-            model,
-            get target() {
-                return Object.lookup(this.namespace, ...(this.meta.route || []));
-            },
-            set target(value) {
-                let chain = [this.meta.model];
-                if (this.meta.route)
-                    chain = this.meta.route;
-                const target = chain.pop();
-                Object.lookup(this.namespace, ...chain)[target] = value;
-            }
-        };
-
-        if (!lookup.model
-                || lookup.target === undefined)
-            return null;
-        return lookup;
-    };
 
     /**
      * There are several ways to customize the renderer.
@@ -2637,7 +2470,174 @@ if (typeof Composite === "undefined") {
             lock.release();
         }
     };
-    
+
+    /**
+     * Determines the meta data for an element based on its position in the DOM
+     * with the corresponding model, the referenced route and target. The meta
+     * data is only determined as text information.
+     * 
+     * Composite:
+     *     {namespace, model}
+     * 
+     * Composite Element:
+     *     {namespace, model, route, target}
+     *
+     * namespace: namespace of the composite/model
+     *            chain as array without the model or undefined if no chain
+     * model:     corresponds to the enclosing composite
+     * route:     fully qualified route to the target,
+     *            starting with the module, ends with the target
+     * target:    final target in the chain
+     *
+     * A validation at object or JavaScript model level does not take place
+     * here. The fill levels of the meta object can be different, depending on
+     * the collected data and the resulting derivation. Thus, it is possible to
+     * make the theoretical assumptions here by deriving them from the DOM.
+     * Especially the namespace of the model is based on these theoretical
+     * assumptions.
+     * 
+     * If no meta information can be determined, e.g. because no IDs were found
+     * or no enclosing composite was used, null is returned.
+     * 
+     * @param  element
+     * @param  namespace
+     * @return determined meta object for the passed element, otherwise null
+     * @throws An error occurs in the following cases:
+     *     - in the case of an invalid composite ID
+     *     - in the case of an invalid element ID
+     */
+    const _mount_locate = (element, namespace = false) => {
+
+        if (!(element instanceof Element))
+            return null;
+
+        let serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
+        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
+            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+                throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
+
+            // Option namespace restricts the analysis to composites with an
+            // attribute namespace. If a composite is found without one, the
+            // current namespace is terminated and the found composite is
+            // outside the current namespace.
+
+            const object = Composite.render.meta[element.ordinal()];
+            if (!object || !object.attributes
+                    || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
+                return !namespace ? {model:serial} : null;
+
+            // Determine from namespace by parent composite elements with ID and
+            // an attribute namespace. The prerequisite is that the direct
+            // composite from the model uses the attribute namespace. Without
+            // the attribute, the composites and thus the models are without
+            // namespace. Thus, there can also be decoupled composites and thus
+            // models in a nested markup.
+
+            const locate = _mount_locate(element.parentNode, true);
+            if (!locate)
+                return {model:serial};
+            if (locate.namespace)
+                locate.namespace.push(locate.model);
+            else locate.namespace = [locate.model];
+            return {namespace:locate.namespace, model:serial};
+        }
+
+        const object = Composite.render.meta[element.ordinal()];
+        if (object && object.attributes
+                && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
+            throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
+
+        const locate = _mount_locate(element.parentNode);
+        if (!element.hasAttribute(Composite.ATTRIBUTE_ID))
+            return locate;
+
+        if (!serial.match(Composite.PATTERN_ELEMENT_ID))
+            throw new Error(`Invalid element id${serial ? ": " + serial : ""}`);
+
+        const meta = {namespace:[], model:null, route:[], target:null};
+        if (locate) {
+            if (locate.namespace)
+                locate.namespace.push(locate.model);
+            else locate.namespace = [locate.model];
+            meta.namespace = locate.namespace;
+            if (locate.route)
+                meta.route.push(...locate.route);
+            else meta.route.push(locate.model);
+        }
+
+        serial = serial.match(Composite.PATTERN_ELEMENT_ID);
+        if (serial[3]) {
+            meta.namespace = serial[3].substring(1).split(/:/);
+            meta.route = [meta.namespace[meta.namespace.length -1]];
+        }
+        meta.route.push(serial[1]);
+        if (serial[2])
+            meta.route.push(...serial[2].substring(1).split(/:/));
+        meta.target = meta.route[meta.route.length -1];
+        meta.model = meta.namespace.pop();
+        if (meta.namespace.length <= 0)
+            delete meta.namespace;
+
+        // a model is always required
+        return meta.model ? meta : null;
+    };
+
+    /**
+     * Determines the meta object for an element based on its position in the
+     * DOM, so the surrounding composite and model, the referenced route and
+     * target in the model.
+     * 
+     * Composite:
+     *     {meta:{namespace, model}, namespace, model}
+     * 
+     * Composite Element:
+     *     {meta:{namespace, model, route, target}, namespace, model, route, target}
+     *
+     * The method always requires a corresponding JavaScript object (model) and
+     * an element with a valid element ID in a valid enclosing composite,
+     * otherwise the method will return null.
+     *
+     * @param  element
+     * @return determined meta object for the passed element, otherwise null
+     * @throws An error occurs in the following cases:
+     *     - in the case of an invalid composite ID
+     *     - in the case of an invalid element ID
+     */
+    const _mount_lookup = (element) => {
+
+        const meta = _mount_locate(element);
+        if (!meta)
+            return null;
+
+        const namespace = Namespace.lookup(...(meta.namespace || []));
+        const model = Object.lookup(namespace || window, meta.model)
+        if (!model)
+            return null;
+        if (meta.target === undefined)
+            return {meta, namespace, model};
+
+        const lookup = {
+            meta,
+            namespace,
+            model,
+            get target() {
+                return Object.lookup(this.namespace, ...(this.meta.route || []));
+            },
+            set target(value) {
+                let chain = [this.meta.model];
+                if (this.meta.route)
+                    chain = this.meta.route;
+                const target = chain.pop();
+                Object.lookup(this.namespace, ...chain)[target] = value;
+            }
+        };
+
+        if (!lookup.model
+                || lookup.target === undefined)
+            return null;
+        return lookup;
+    };
+ 
     /**
      * Load modules/components/composite resources.
      * For components/composites, it is assumed that resources have been
