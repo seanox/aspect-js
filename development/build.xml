@@ -218,7 +218,7 @@
   <target name="test" depends="release">
     <copy file="${release.file}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
     <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
-        match=";const( _)" replace="\1var\2"/>
+        match="(;)const( _)" replace="\1var\2"/>
   </target>
 
   <target name="debug" depends="release">
