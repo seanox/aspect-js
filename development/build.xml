@@ -128,12 +128,12 @@
   <target name="release" depends="changes">
     <release-locate/>
 
-    <property name="release.file.micro.max" value="${workspace.release}/${ant.project.name}-micro-max.js"/>
-    <property name="release.file.micro" value="${workspace.release}/${ant.project.name}-micro.js"/>
-    <property name="release.file.core.max" value="${workspace.release}/${ant.project.name}-core-max.js"/>
-    <property name="release.file.core" value="${workspace.release}/${ant.project.name}-core.js"/>
     <property name="release.file.max" value="${workspace.release}/${ant.project.name}-max.js"/>
     <property name="release.file" value="${workspace.release}/${ant.project.name}.js"/>
+    <property name="release.file.core.max" value="${workspace.release}/${ant.project.name}-core-max.js"/>
+    <property name="release.file.core" value="${workspace.release}/${ant.project.name}-core.js"/>
+    <property name="release.file.micro.max" value="${workspace.release}/${ant.project.name}-micro-max.js"/>
+    <property name="release.file.micro" value="${workspace.release}/${ant.project.name}-micro.js"/>
 
     <delete dir="${workspace.release}"/>
     <mkdir dir="${workspace.release}"/>
@@ -162,37 +162,29 @@
       </filelist>
     </concat>
 
-    <file-minimize file="${release.file.micro.max}" file-min="${release.file.micro}"/>
-    <copy file="${release.file.micro.max}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-micro.max.js" overwrite="true"/>
-    <copy file="${release.file.micro}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-micro.js" overwrite="true"/>
-
-    <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>
-    <copy file="${release.file.core.max}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-core.max.js" overwrite="true"/>
-    <copy file="${release.file.core}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-core.js" overwrite="true"/>
-
     <file-minimize file="${release.file.max}" file-min="${release.file}"/>
-    <copy file="${release.file.max}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x-max.js" overwrite="true"/>
-    <copy file="${release.file}" tofile="${workspace.release}/${ant.project.name}-${release.major}.x.js" overwrite="true"/>
+    <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>
+    <file-minimize file="${release.file.micro.max}" file-min="${release.file.micro}"/>
 
     <copy file="CHANGES" todir="${workspace.release}"/>
     <copy file="LICENSE" todir="${workspace.release}"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-micro-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-micro.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-core-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-core.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-core-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-core.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro.js"/>
       <fileset dir="${workspace.release}" includes="CHANGES"/>
       <fileset dir="${workspace.release}" includes="LICENSE"/>
     </touch>
     <zip destfile="${workspace.release}/${ant.project.name}-${release.version}.zip">
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-micro-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-micro.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-core-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-core.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.major}.x.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-core-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-core.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro.js"/>
       <fileset dir="${workspace.release}" includes="CHANGES"/>
       <fileset dir="${workspace.release}" includes="LICENSE"/>
     </zip>   
