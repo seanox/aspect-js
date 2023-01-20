@@ -113,14 +113,14 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230120
  */
-if (typeof Composite === "undefined") {
+if (compliant("Composite")) {
     
     /**
      * Static component for rendering and view model binding.
      * The processing runs in the background and starts automatically when a
      * page is loaded.
      */
-    window["Composite"] = {
+    compliant("Composite", {
             
         /** Path of the Composite for: modules (sub-directory of work path) */
         get MODULES() {return window.location.combine(window.location.pathcontext, "/modules");},
@@ -325,225 +325,91 @@ if (typeof Composite === "undefined") {
                 return letter.toUpperCase();
             }).toLowerCase().split(/\s+/);
         })();},
-    };
 
-    /**
-     * Lock mechanism for the render, mound and scan methods. The lock controls
-     * that the methods are not used concurrently and/or asynchronously. Each
-     * method opens its own transaction (lock). During a transaction, the
-     * method call requires a lock. If this lock does not exist or differs from
-     * the current transaction, the method call is parked in a queue until the
-     * current lock is released. The methods themselves can call themselves
-     * recursively and do so with the lock they know.
-     * In addition to the lock mechanism, the methods also control the START,
-     * NEXT, and END events.
-     * @param  context  method (render, mound or scan)
-     * @param  selector
-     * @return the created lock as meta object
-     */
-    Composite.lock = function(context, selector) {
-        
-        context.queue = context.queue || [];
+        /**
+         * Lock mechanism for methods: render, mound and scan. The lock controls
+         * that the methods are not used concurrently and/or asynchronously.
+         * Each method opens its own transaction (lock). During a transaction,
+         * the method call requires a lock. If this lock does not exist or
+         * differs from the current transaction, the method call is parked in a
+         * queue until the current lock is released. The methods themselves can
+         * call themselves recursively and do so with the lock they know. In
+         * addition to the lock mechanism, the methods also control the START,
+         * NEXT, and END events.
+         * @param  context  method (render, mound or scan)
+         * @param  selector
+         * @return the created lock as meta object
+         */
+        lock(context, selector) {
+            
+            context.queue = context.queue || [];
 
-        if (context.lock === undefined
-                || context.lock === false) {
-            context.lock = {ticks:1, selector, queue:[],
-                    share() {
-                        this.ticks++;
-                        return this;
-                    },
-                    release() {
-                        this.ticks--;
-                        if (this.ticks > 0)
-                            return;
-                        if (context === Composite.render) {
-                            
-                            // If the selector is a string, several elements must
-                            // be assumed. These can, but do not have to, have a
-                            // relationship in the DOM. Therefore, they are all
-                            // considered and mounted separately. 
-                            
-                            let nodes = [];
-                            if (typeof this.selector === "string") {
-                                const scope = document.querySelectorAll(this.selector);
-                                Array.from(scope).forEach((node) => {
-                                    if (!nodes.includes(node))
-                                        nodes.push(node);
-                                    const scope = node.querySelectorAll("*");
+            if (context.lock === undefined
+                    || context.lock === false) {
+                context.lock = {ticks:1, selector, queue:[],
+                        share() {
+                            this.ticks++;
+                            return this;
+                        },
+                        release() {
+                            this.ticks--;
+                            if (this.ticks > 0)
+                                return;
+                            if (context === Composite.render) {
+                                
+                                // If the selector is a string, several elements
+                                // must be assumed. These can, but do not have
+                                // to, have a relationship in the DOM. Therefore,
+                                // they are all considered and mounted separately.
+                                
+                                let nodes = [];
+                                if (typeof this.selector === "string") {
+                                    const scope = document.querySelectorAll(this.selector);
                                     Array.from(scope).forEach((node) => {
                                         if (!nodes.includes(node))
                                             nodes.push(node);
+                                        const scope = node.querySelectorAll("*");
+                                        Array.from(scope).forEach((node) => {
+                                            if (!nodes.includes(node))
+                                                nodes.push(node);
+                                        });
                                     });
+                                } else if (this.selector instanceof Element) {
+                                    nodes = this.selector.querySelectorAll("*");
+                                    nodes = [this.selector].concat(Array.from(nodes));
+                                }
+                                
+                                // Mount all elements in a composite, incl. itself
+                                nodes.forEach((node) => {
+                                    Composite.mount(node);
                                 });
-                            } else if (this.selector instanceof Element) {
-                                nodes = this.selector.querySelectorAll("*");
-                                nodes = [this.selector].concat(Array.from(nodes));
-                            }
-                            
-                            // Mount all elements in a composite, including itself
-                            nodes.forEach((node) => {
-                                Composite.mount(node);
-                            });
-                            
-                            Composite.fire(Composite.EVENT_RENDER_END, this.selector);
-                        } else if (context === Composite.mount) {
-                            Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
-                        } else throw new Error("Invalid context: " + context);
-                        const selector = context.queue.shift();
-                        if (selector)
-                            Composite.asynchron(context, selector);
-                        context.lock = false;
-                }};
+                                
+                                Composite.fire(Composite.EVENT_RENDER_END, this.selector);
+                            } else if (context === Composite.mount) {
+                                Composite.fire(Composite.EVENT_MOUNT_END, this.selector);
+                            } else throw new Error("Invalid context: " + context);
+                            const selector = context.queue.shift();
+                            if (selector)
+                                Composite.asynchron(context, selector);
+                            context.lock = false;
+                    }};
+                
+                if (context === Composite.render)
+                    Composite.fire(Composite.EVENT_RENDER_START, selector);
+                else if (context === Composite.mount)
+                    Composite.fire(Composite.EVENT_MOUNT_START, selector);
+                else throw new Error("Invalid context: " + context);            
+            } else {
+                if (context === Composite.render)
+                    Composite.fire(Composite.EVENT_RENDER_NEXT, selector);
+                else if (context === Composite.mount)
+                    Composite.fire(Composite.EVENT_MOUNT_NEXT, selector);
+                else throw new Error("Invalid context: " + context);            
+            }
             
-            if (context === Composite.render)
-                Composite.fire(Composite.EVENT_RENDER_START, selector);
-            else if (context === Composite.mount)
-                Composite.fire(Composite.EVENT_MOUNT_START, selector);
-            else throw new Error("Invalid context: " + context);            
-        } else {
-            if (context === Composite.render)
-                Composite.fire(Composite.EVENT_RENDER_NEXT, selector);
-            else if (context === Composite.mount)
-                Composite.fire(Composite.EVENT_MOUNT_NEXT, selector);
-            else throw new Error("Invalid context: " + context);            
+            return context.lock;
         }
-        
-        return context.lock;
-    };
-
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static counter for assigning serial IDs to the object.
-     */    
-    if (Object.indication === undefined)
-        Object.indication = 0;
-    
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a function for getting the serial ID to the objects.
-     */ 
-    if (Object.prototype.ordinal === undefined) {
-        Object.prototype.ordinal = function() {
-            this.serial = this.serial || ++Object.indication;
-            return this.serial;
-        };     
-    }
-
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static function to create a namespace for an object.
-     * Without arguments, the method returns the global namespace window.
-     * The method has the following various signatures:
-     *     Object.using();
-     *     Object.using(string);
-     *     Object.using(string, ...string|number);
-     *     Object.using(object);
-     *     Object.using(object, ...string|number);
-     * @param  levels of the namespace
-     * @return the created or already existing object(-level)
-     * @throws An error occurs in case of invalid data types or syntax 
-     */ 
-    if (Object.using === undefined)
-        Object.using = function(...levels) {
-            return Namespace.using.apply(null, levels);
-        };
-
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static function to determine an object via the namespace.
-     * Without arguments, the method returns the global namespace window.
-     * The method has the following various signatures:
-     *     Object.lookup();
-     *     Object.lookup(string);
-     *     Object.lookup(string, ...string|number);
-     *     Object.lookup(object);
-     *     Object.lookup(object, ...string|number);
-     * @param  levels of the namespace
-     * @return the determined object(-level)
-     * @throws An error occurs in case of invalid data types or syntax
-     */
-    if (Object.lookup === undefined)
-        Object.lookup = function(...levels) {
-            return Namespace.lookup.apply(null, levels);
-        };
-
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static function to check whether an object exists in a namespace.
-     * In difference to the namespace function of the same name, qualifiers are
-     * also supported in the namespace. The effect is the same. Qualifiers are
-     * optional namespace elements at the end that use the colon as a separator.
-     * The method has the following various signatures:
-     *     Object.exists();
-     *     Object.exists(string);
-     *     Object.exists(string, ...string|number);
-     *     Object.exists(object);
-     *     Object.exists(object, ...string|number);
-     * @param  levels of the namespace
-     * @return true if the namespace exists
-     * @throws An error occurs in case of invalid data types or syntax
-     */ 
-    if (Object.exists === undefined)
-        Object.exists = function(...levels) {
-            return Namespace.exists.apply(null, levels);
-        };
-
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static function to checks that an object is not undefined / null.
-     * @param  object
-     * @return true is neither undefined nor null
-     */
-    if (Object.usable === undefined)
-        Object.usable = function(object) {
-            return object !== undefined && object !== null
-        };
-
-    /**
-     * Enhancement of the JavaScript API
-     * Implements an own open method for event management.
-     * The original method is reused in the background.
-     */ 
-    XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function(...variants) {
-
-        const callback = (event = null) => {
-            if (!event)
-                return;
-            if (event.type === "loadstart")
-                event = [Composite.EVENT_HTTP_START, event];
-            else if (event.type === "progress")
-                event = [Composite.EVENT_HTTP_PROGRESS, event]; 
-            else if (event.type === "readystatechange")
-                event = [Composite.EVENT_HTTP_RECEIVE, event]; 
-            else if (event.type === "load")
-                event = [Composite.EVENT_HTTP_LOAD, event]; 
-            else if (event.type === "abort")
-                event = [Composite.EVENT_HTTP_ABORT, event]; 
-            else if (event.type === "error")
-                event = [Composite.EVENT_HTTP_ERROR, event];   
-            else if (event.type === "timeout")
-                event = [Composite.EVENT_HTTP_TIMEOUT, event];   
-            else if (event.type === "loadend")
-                event = [Composite.EVENT_HTTP_END, event]; 
-            else return;
-            Composite.fire(...event); 
-        };
-        
-        if (this.open$init === undefined) {
-            this.open$init = true;
-            this.addEventListener("loadstart", callback);
-            this.addEventListener("progress", callback);
-            this.addEventListener("readystatechange", callback);
-            this.addEventListener("load", callback);
-            this.addEventListener("abort", callback);
-            this.addEventListener("error", callback);
-            this.addEventListener("timeout", callback);
-            this.addEventListener("loadend", callback);
-        }
-        
-        this.open$origin(...variants);
-    };
+    });
     
     /**
      * Registers a callback function for composite events.
@@ -2636,7 +2502,7 @@ if (typeof Composite === "undefined") {
             return null;
         return lookup;
     };
- 
+
     /**
      * Load modules/components/composite resources.
      * For components/composites, it is assumed that resources have been
@@ -2829,6 +2695,129 @@ if (typeof Composite === "undefined") {
         script = script.join("\r\n").trim();
         if (script)
             eval(script);
+    };
+    
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a static counter for assigning serial IDs to the object.
+     */
+    compliant("Object.indication", 0);
+    
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a function for getting the serial ID to the objects.
+     */
+    compliant("Object.prototype.ordinal", function() {
+        this.serial = this.serial || ++Object.indication;
+        return this.serial;
+    });
+
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a static function to create and use a namespace for an object.
+     * Without arguments, the method returns the global namespace window.
+     * The method has the following various signatures:
+     *     Object.use();
+     *     Object.use(string);
+     *     Object.use(string, ...string|number);
+     *     Object.use(object);
+     *     Object.use(object, ...string|number);
+     * @param  levels of the namespace
+     * @return the created or already existing object(-level)
+     * @throws An error occurs in case of invalid data types or syntax 
+     */ 
+    compliant("Object.use",
+        (...levels) => Namespace.use.apply(null, levels));
+
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a static function to determine an object via the namespace.
+     * Without arguments, the method returns the global namespace window.
+     * The method has the following various signatures:
+     *     Object.lookup();
+     *     Object.lookup(string);
+     *     Object.lookup(string, ...string|number);
+     *     Object.lookup(object);
+     *     Object.lookup(object, ...string|number);
+     * @param  levels of the namespace
+     * @return the determined object(-level)
+     * @throws An error occurs in case of invalid data types or syntax
+     */
+    compliant("Object.lookup",
+        (...levels) => Namespace.lookup.apply(null, levels));
+
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a static function to check whether an object exists in a namespace.
+     * In difference to the namespace function of the same name, qualifiers are
+     * also supported in the namespace. The effect is the same. Qualifiers are
+     * optional namespace elements at the end that use the colon as a separator.
+     * The method has the following various signatures:
+     *     Object.exists();
+     *     Object.exists(string);
+     *     Object.exists(string, ...string|number);
+     *     Object.exists(object);
+     *     Object.exists(object, ...string|number);
+     * @param  levels of the namespace
+     * @return true if the namespace exists
+     * @throws An error occurs in case of invalid data types or syntax
+     */ 
+    compliant("Object.exists",
+        (...levels) => Namespace.exists.apply(null, levels));
+
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a static function to checks that an object is not undefined / null.
+     * @param  object
+     * @return true is neither undefined nor null
+     */
+    compliant("Object.usable",
+        object => object !== undefined && object !== null);
+
+    /**
+     * Enhancement of the JavaScript API
+     * Implements an own open method for event management.
+     * The original method is reused in the background.
+     */ 
+    XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function(...variants) {
+
+        const callback = (event = null) => {
+            if (!event)
+                return;
+            if (event.type === "loadstart")
+                event = [Composite.EVENT_HTTP_START, event];
+            else if (event.type === "progress")
+                event = [Composite.EVENT_HTTP_PROGRESS, event]; 
+            else if (event.type === "readystatechange")
+                event = [Composite.EVENT_HTTP_RECEIVE, event]; 
+            else if (event.type === "load")
+                event = [Composite.EVENT_HTTP_LOAD, event]; 
+            else if (event.type === "abort")
+                event = [Composite.EVENT_HTTP_ABORT, event]; 
+            else if (event.type === "error")
+                event = [Composite.EVENT_HTTP_ERROR, event];   
+            else if (event.type === "timeout")
+                event = [Composite.EVENT_HTTP_TIMEOUT, event];   
+            else if (event.type === "loadend")
+                event = [Composite.EVENT_HTTP_END, event]; 
+            else return;
+            Composite.fire(...event); 
+        };
+        
+        if (this.open$init === undefined) {
+            this.open$init = true;
+            this.addEventListener("loadstart", callback);
+            this.addEventListener("progress", callback);
+            this.addEventListener("readystatechange", callback);
+            this.addEventListener("load", callback);
+            this.addEventListener("abort", callback);
+            this.addEventListener("error", callback);
+            this.addEventListener("timeout", callback);
+            this.addEventListener("loadend", callback);
+        }
+        
+        this.open$origin(...variants);
     };
 
     // Listener when an error occurs and triggers a matching composite-event.
