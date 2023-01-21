@@ -26,21 +26,40 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230119
  */
-if (typeof Namespace === "undefined") {
 
-    /**
-     * Namespace at object level. Comparable to packages in other programming
-     * languages, namespaces can be used to map hierarchical structures and to
-     * group thematically related components and resources. The implementation
-     * happens in JavaScript at object level. This means that it is not a real
-     * element of the programming language but is represented by chained static
-     * objects. Each level in this object chain represents a namespace.
-     * As is typical for object identifiers, namespaces also use letters,
-     * numbers, and underscores separated by dots. As a special feature, arrays
-     * are also supported. If an object level in the namespace is a pure number,
-     * an array is assumed.
-     */
-    window["Namespace"] = {
+// Compliant takes over the task that the existing JavaScript API can be
+// manipulated in a controlled way. Controlled means that errors occur when
+// trying to overwrite existing objects and functions. The mechanism is
+// temporary and is removed after the page is loaded.
+
+if (window.compliant !== undefined)
+    throw new Error("JavaScript incompatibility detected for: compliant");
+window.compliant = (context, payload) => {
+    const type = new Function(`return typeof ${context}`)();
+    if (type !== "undefined")
+        throw new Error("JavaScript incompatibility detected for: " + context);
+    if (typeof payload !== "undefined")
+        eval(`${context} = payload`);
+    return true;
+};
+window.addEventListener("load",
+    event => delete window.compliant);
+
+/**
+ * Comparable to packages in other programming languages, namespaces can be used
+ * for hierarchical structuring of components, resources and business logic.
+ * Although packages are not a feature of JavaScript, they can be mapped at the
+ * object level by concatenating objects into an object tree. Here, each level
+ * of the object tree forms a namespace, which can also be considered a domain.
+ *
+ * As is typical for the identifiers of objects, namespaces also use letters,
+ * numbers and underscores separated by a dot. As a special feature, arrays are
+ * also supported. If a layer in the namespace uses an integer, this layer is
+ * used as an array.
+ */
+if (compliant("Namespace")) {
+
+    compliant("Namespace", {
             
         /** Pattern for the namespace separator */
         get PATTERN_NAMESPACE_SEPARATOR() {return /\./;},
@@ -246,7 +265,7 @@ if (typeof Namespace === "undefined") {
                 return false;
             return Object.usable(Namespace.lookup(...levels));
         }
-    };
+    });
 
     const _filter = (...levels) => {
         const chain = [];
@@ -311,21 +330,19 @@ Element.prototype.appendChild = function(node, exclusive) {
  * The quality of the ID is dependent of the length.
  * @param size optional, default is 16
  */
-if (Math.uniqueId === undefined) {
-    Math.uniqueId = (size) => {
-        size = size || 16;
-        if (size < 0)
-            size = 16;
-        let unique = "";
-        for (let loop = 0; loop < size; loop++) {
-            const random = Math.floor(Math.random() * Math.floor(26));
-            if ((Math.floor(Math.random() *Math.floor(26))) % 2 === 0)
-                unique += String(random % 10);
-            else unique += String.fromCharCode(65 +random); 
-        }
-        return unique;
-    };
-}
+compliant("Math.uniqueId", (size) => {
+    size = size || 16;
+    if (size < 0)
+        size = 16;
+    let unique = "";
+    for (let loop = 0; loop < size; loop++) {
+        const random = Math.floor(Math.random() * Math.floor(26));
+        if ((Math.floor(Math.random() *Math.floor(26))) % 2 === 0)
+            unique += String(random % 10);
+        else unique += String.fromCharCode(65 +random);
+    }
+    return unique;
+});
 
 /**
  * Enhancement of the JavaScript API
@@ -334,20 +351,18 @@ if (Math.uniqueId === undefined) {
  * The quality of the ID is dependent of the length.
  * @param size optional, default is 16
  */
-if (Math.uniqueSerialId === undefined) {
-    Math.uniqueSerialId = (size) => {
-        size = size || 16;
-        if (size < 0)
-            size = 16;
-        let serial;
-        serial = (new Date().getTime() -946684800000).toString(36);
-        serial = (serial.length.toString(36) + serial).toUpperCase();
-        serial = Math.uniqueId() + serial;
-        if (serial.length > size)
-            serial = serial.substring(serial.length -size);
-        return serial;
-    };
-}
+compliant("Math.uniqueSerialId", (size) => {
+    size = size || 16;
+    if (size < 0)
+        size = 16;
+    let serial;
+    serial = (new Date().getTime() -946684800000).toString(36);
+    serial = (serial.length.toString(36) + serial).toUpperCase();
+    serial = Math.uniqueId() + serial;
+    if (serial.length > size)
+        serial = serial.substring(serial.length -size);
+    return serial;
+});
 
 /**
  * Enhancement of the JavaScript API
@@ -356,186 +371,162 @@ if (Math.uniqueSerialId === undefined) {
  * @param  text text to be literalized
  * @return a literal pattern for the specified text 
  */
-if (RegExp.quote === undefined) {
-    RegExp.quote = (text) => {
-        if (!Object.usable(text))
-            return null;
-        return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
-    };
-}
+compliant("RegExp.quote", (text) => {
+    if (!Object.usable(text))
+        return null;
+    return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a capitalize function to the String objects.
- */ 
-if (String.prototype.capitalize === undefined) {
-    String.prototype.capitalize = function() {
-        if (this.length <= 0)
-            return this;
-        return this.charAt(0).toUpperCase() + this.slice(1);
-    };
-}
+ */
+compliant("String.prototype.capitalize", function() {
+    if (this.length <= 0)
+        return this;
+    return this.charAt(0).toUpperCase() + this.slice(1);
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds an uncapitalize function to the String objects.
  */
-if (String.prototype.uncapitalize === undefined) {
-    String.prototype.uncapitalize = function() {
-        if (this.length <= 0)
-            return this;
-        return this.charAt(0).toLowerCase() + this.slice(1);
-    };
-}
+compliant("String.prototype.uncapitalize", function() {
+    if (this.length <= 0)
+        return this;
+    return this.charAt(0).toLowerCase() + this.slice(1);
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a function for encoding the string objects in hexadecimal code.
- */      
-if (String.prototype.encodeHex === undefined) {
-    String.prototype.encodeHex = function() {
-        let result = "";
-        for (let loop = 0; loop < this.length; loop++) {
-            let digit = Number(this.charCodeAt(loop)).toString(16).toUpperCase();
-            while (digit.length < 2)
-                digit = "0" + digit;            
-            result += digit;
-        }
-        return "0x" + result;
-    };
-}
+ */
+compliant("String.prototype.encodeHex", function() {
+    let result = "";
+    for (let loop = 0; loop < this.length; loop++) {
+        let digit = Number(this.charCodeAt(loop)).toString(16).toUpperCase();
+        while (digit.length < 2)
+            digit = "0" + digit;
+        result += digit;
+    }
+    return "0x" + result;
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a function for decoding hexadecimal code to the string objects.
- */     
-if (String.prototype.decodeHex === undefined) {
-    String.prototype.decodeHex = function() {
-        let text = this;
-        if (text.match(/^0x/))
-            text = text.substring(2);
-        let result = "";
-        for (let loop = 0; loop < text.length; loop += 2)
-            result += String.fromCharCode(parseInt(text.substring(loop, 2), 16));
-        return result;
-    };
-}
+ */
+compliant("String.prototype.decodeHex", function() {
+    let text = this;
+    if (text.match(/^0x/))
+        text = text.substring(2);
+    let result = "";
+    for (let loop = 0; loop < text.length; loop += 2)
+        result += String.fromCharCode(parseInt(text.substring(loop, 2), 16));
+    return result;
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a method for encoding Base64.
- */ 
-if (String.prototype.encodeBase64 === undefined) {
-    String.prototype.encodeBase64 = function() {
-        try {
-            return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
-                return String.fromCharCode("0x" + code);
-            }));
-        } catch (error) {
-            throw new Error("Malformed character sequence");
-        }
-    };
-}
+ */
+compliant("String.prototype.encodeBase64", function() {
+    try {
+        return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
+            return String.fromCharCode("0x" + code);
+        }));
+    } catch (error) {
+        throw new Error("Malformed character sequence");
+    }
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a method for decoding Base64.
- */ 
-if (String.prototype.decodeBase64 === undefined) {
-    String.prototype.decodeBase64 = function() {
-        try {
-            return decodeURIComponent(atob(this).split("").map((code) => {
-                return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
-            }).join(""));
-        } catch (error) {
-            throw new Error("Malformed character sequence");
-        }
-    };
-}
+ */
+compliant("String.prototype.decodeBase64", function() {
+    try {
+        return decodeURIComponent(atob(this).split("").map((code) => {
+            return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
+        }).join(""));
+    } catch (error) {
+        throw new Error("Malformed character sequence");
+    }
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds an HTML encode function to the String objects.
- */ 
-if (String.prototype.encodeHtml === undefined) {
-    String.prototype.encodeHtml = function() {
-        const element = document.createElement("div");
-        element.textContent = this;
-        return element.innerHTML;
-    };
-}
+ */
+compliant("String.prototype.encodeHtml", function() {
+    const element = document.createElement("div");
+    element.textContent = this;
+    return element.innerHTML;
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a method for calculating a hash value.
- */ 
-if (String.prototype.hashCode === undefined) {
-    String.prototype.hashCode = function() {
-        if (this.hash !== undefined
-                && this.hash !== 0)
-            return this.hash;
-        this.hash = 0;
-        let hops = 0;
-        for (let loop = 0; loop < this.length; loop++) {
-            const temp = 31 *this.hash +this.charCodeAt(loop);
-            if (!Number.isSafeInteger(temp)) {
-                hops++;
-                this.hash = Number.MAX_SAFE_INTEGER -this.hash +this.charCodeAt(loop);
-            } else this.hash = temp;
-        }
-        this.hash = Math.abs(this.hash).toString(36);
-        this.hash = this.hash.length.toString(36) + this.hash; 
-        this.hash = (this.hash + hops.toString(36)).toUpperCase();
+ */
+compliant("String.prototype.hashCode", function() {
+    if (this.hash !== undefined
+            && this.hash !== 0)
         return this.hash;
-    };
-}
+    this.hash = 0;
+    let hops = 0;
+    for (let loop = 0; loop < this.length; loop++) {
+        const temp = 31 *this.hash +this.charCodeAt(loop);
+        if (!Number.isSafeInteger(temp)) {
+            hops++;
+            this.hash = Number.MAX_SAFE_INTEGER -this.hash +this.charCodeAt(loop);
+        } else this.hash = temp;
+    }
+    this.hash = Math.abs(this.hash).toString(36);
+    this.hash = this.hash.length.toString(36) + this.hash;
+    this.hash = (this.hash + hops.toString(36)).toUpperCase();
+    return this.hash;
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a decoding of slash sequences (control characters).
- */ 
-if (String.prototype.unescape === undefined) {
-    String.prototype.unescape = function() {
-        let text = this
-            .replace(/\r/g, "\\r")
-            .replace(/\n/g, "\\n")
-            .replace(/^(["'])/, "\$1")
-            .replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
-        return eval(`"${text}"`);
-    };
-}
+ */
+compliant("String.prototype.unescape", function() {
+    let text = this
+        .replace(/\r/g, "\\r")
+        .replace(/\n/g, "\\n")
+        .replace(/^(["'])/, "\$1")
+        .replace(/([^\\])((?:\\{2})*)(?=["'])/g, "$1$2\\");
+    return eval(`"${text}"`);
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a property to get the UID for the window instance.
- */  
-if (window.serial === undefined) {
-    Object.defineProperty(window, "serial", {
-        value: Math.uniqueSerialId()
-    });
-}
+ */
+compliant("window.serial");
+Object.defineProperty(window, "serial", {
+    value: Math.uniqueSerialId()
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a property to get the context path.
  * The context path is a part of the request URI and can be compared with the
  * current working directory.
- */  
-if (window.location.pathcontext === undefined) {
-    Object.defineProperty(window.location, "pathcontext", {
-        value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
-    });
-}
+ */
+compliant("window.location.pathcontext");
+Object.defineProperty(window.location, "pathcontext", {
+    value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
+});
 
 /**
  * Enhancement of the JavaScript API
  * Adds a method to combine paths to a new one.
  * The result will always start with a slash but ends without it.
  */
-if (window.location.combine === undefined) {
-    window.location.combine = (...paths) => {
-        return "/" + paths.join("/")
-            .replace(/[\/\\]+/g, "/")
-            .replace(/(^\/+)|(\/+$)/g, "");
-    };
-}
+compliant("window.location.combine", (...paths) => {
+    return "/" + paths.join("/")
+        .replace(/[\/\\]+/g, "/")
+        .replace(/(^\/+)|(\/+$)/g, "");
+});
