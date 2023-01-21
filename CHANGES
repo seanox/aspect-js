@@ -5,6 +5,7 @@ BF: Review: Optimization and corrections
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected during the module include, for that to the error.
 BF: Composite: Support of const for models also in combined with Namespace.create(...)
+BF: Composite: Validation with message and notification also work without model
 BF: Test: Correction of wrong output of Element.prototype.toPlainString()
 CR: SiteMap: Inactive by default
     Attribute static is then not required for composites.
