@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230119
+ * @version 1.6.0 20230121
  */
 compliant("DataSource", {
         
@@ -148,8 +148,8 @@ compliant("DataSource", {
         
         // JavaScript are automatically changed to composite/javascript during
         // import. Therefore, imported scripts are not executed directly, but
-        // only by the renderer. This is important in combination with the
-        // condition attribute.
+        // only by the renderer. This is important in combination with
+        // ATTRIBUTE_CONDITION.
         nodes = result.querySelectorAll("script[type],script:not([type])");
         nodes.forEach((node) => {
             if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
