@@ -525,7 +525,7 @@ if (compliant("Composite")) {
                 selector = selector.trim();
                 if (!selector)
                     return;
-                let  validate = Array.from(document.querySelectorAll(selector));
+                let validate = Array.from(document.querySelectorAll(selector));
                 validate.forEach((node, index) => {
                     validate[index] = Composite.validate(node, lock);
                     if (validate[index] === undefined)
@@ -548,12 +548,6 @@ if (compliant("Composite")) {
             
             let valid = true;
 
-            // There must be a corresponding model class.
-            // Elements are not supported.
-            const meta = _mount_lookup(selector);
-            if (!(meta instanceof Object))
-                return;
-            
             // Resets the customer-specific error.
             // This is necessary for the checkValidity method to work.
             if (typeof selector.setCustomValidity === "function")
@@ -566,38 +560,44 @@ if (compliant("Composite")) {
             if (typeof selector.checkValidity === "function")
                 valid = selector.checkValidity();
 
-            // Validation is a function at the model level
-            // If a composite consists of several model levels, the validation
-            // may have to be organized accordingly if necessary. Interactive
-            // composite elements are a property object. Therefore, they are
-            // primarily a property and the validation is located in the
-            // surrounding model and not in the property object itself.
-            
-            let value;
-            if (selector instanceof Element) {
-                if (selector.tagName.match(/^input$/i)
-                        && selector.type.match(/^radio|checkbox/i))
-                    value = selector.checked;
-                else if (selector.tagName.match(/^select/i)
-                        && "selectedIndex" in selector)
-                    value = selector.options[selector.selectedIndex].value;
-                else if (Composite.ATTRIBUTE_VALUE in selector)
-                    value = selector[Composite.ATTRIBUTE_VALUE];
-            }        
-            
-            // Implicit validation via the model
-            // If a corresponding validate method has been implemented in the
-            // model. The declaration with ATTRIBUTE_VALIDATE is not required
-            // here. The validation through the model only works if the
-            // corresponding composite is active/present in the DOM!
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                    && valid === true
-                    && lock !== true
-                    && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
-                const validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
-                if (value !== undefined)
-                    valid = validate.call(meta.model, selector, value);
-                else valid = validate.call(meta.model, selector);
+            // There can be a corresponding model.
+            const meta = _mount_lookup(selector);
+            if (meta instanceof Object) {
+
+                // Validation is a function at the model level
+                // If a composite consists of several model levels, the
+                // validation may have to be organized accordingly if necessary.
+                // Interactive composite elements are a property object.
+                // Therefore, they are primarily a property and the validation
+                // is located in the surrounding model and not in the property
+                // object itself.
+                
+                let value;
+                if (selector instanceof Element) {
+                    if (selector.tagName.match(/^input$/i)
+                            && selector.type.match(/^radio|checkbox/i))
+                        value = selector.checked;
+                    else if (selector.tagName.match(/^select/i)
+                            && "selectedIndex" in selector)
+                        value = selector.options[selector.selectedIndex].value;
+                    else if (Composite.ATTRIBUTE_VALUE in selector)
+                        value = selector[Composite.ATTRIBUTE_VALUE];
+                }        
+                
+                // Implicit validation via the model
+                // If a corresponding validate method has been implemented in
+                // the model. The declaration with ATTRIBUTE_VALIDATE is not
+                // required here. The validation through the model only works if
+                // the corresponding composite is active/present in the DOM!
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                        && valid === true
+                        && lock !== true
+                        && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
+                    const validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
+                    if (value !== undefined)
+                        valid = validate.call(meta.model, selector, value);
+                    else valid = validate.call(meta.model, selector);
+                }            
             }
 
             // ATTRIBUTE_VALIDATE can be combined with ATTRIBUTE_MESSAGE and
@@ -786,8 +786,7 @@ if (compliant("Composite")) {
                 events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
                         && array.indexOf(event) === index);
                 
-                // There must be a corresponding model class.
-                // Elements are not supported.
+                // There must be a corresponding model.
                 const meta = _mount_lookup(selector);
                 if (meta instanceof Object) {
                     
@@ -852,10 +851,11 @@ if (compliant("Composite")) {
                         
                         let result;
                         
-                        let valid = true;
+                        // Step 1: Validation
 
-                        // There must be a corresponding model class.
-                        // Elements are not supported.
+                        let valid = Composite.validate(target, false);
+
+                        // There must be a corresponding model.
                         const meta = _mount_lookup(target);
                         if (meta instanceof Object) {
                             
@@ -870,11 +870,7 @@ if (compliant("Composite")) {
                                 else if (Composite.ATTRIBUTE_VALUE in target)
                                     value = target[Composite.ATTRIBUTE_VALUE];
                             }
-                            
-                            // Step 1: Validation
-                            
-                            valid = Composite.validate(target, false);
-                            
+
                             // In case of a failed validation, the event and the
                             // default action of the browser will be canceled.
                             if (valid === true) {
