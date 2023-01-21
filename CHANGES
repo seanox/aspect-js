@@ -1,7 +1,4 @@
 1.6.0 2023xxxx
-??: Composite: Meta directive to import modules/resources in markup
-    #import moduleA ... moduleN
-    Meta directives are always exclusive one-line statements.
 BF: Review: Optimization and corrections
     Added detection of future incompatibilities.
     Reduce the size of the releases.
