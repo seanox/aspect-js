@@ -120,7 +120,7 @@ if (compliant("Composite")) {
      * The processing runs in the background and starts automatically when a
      * page is loaded.
      */
-    compliant("Composite", {
+    compliant("Composite", window.Composite = {
             
         /** Path of the Composite for: modules (sub-directory of work path) */
         get MODULES() {return window.location.combine(window.location.pathcontext, "/modules");},
@@ -2541,13 +2541,13 @@ if (compliant("Composite")) {
      * Enhancement of the JavaScript API
      * Adds a static counter for assigning serial IDs to the object.
      */
-    compliant("Object.indication", 0);
+    compliant("Object.indication", Object.indication = 0);
     
     /**
      * Enhancement of the JavaScript API
      * Adds a function for getting the serial ID to the objects.
      */
-    compliant("Object.prototype.ordinal", function() {
+    compliant("Object.prototype.ordinal", Object.prototype.ordinal = function() {
         this.serial = this.serial || ++Object.indication;
         return this.serial;
     });
@@ -2566,7 +2566,7 @@ if (compliant("Composite")) {
      * @return the created or already existing object(-level)
      * @throws An error occurs in case of invalid data types or syntax 
      */ 
-    compliant("Object.use",
+    compliant("Object.use", Object.use =
         (...levels) => Namespace.use.apply(null, levels));
 
     /**
@@ -2583,7 +2583,7 @@ if (compliant("Composite")) {
      * @return the determined object(-level)
      * @throws An error occurs in case of invalid data types or syntax
      */
-    compliant("Object.lookup",
+    compliant("Object.lookup", Object.lookup =
         (...levels) => Namespace.lookup.apply(null, levels));
 
     /**
@@ -2602,7 +2602,7 @@ if (compliant("Composite")) {
      * @return true if the namespace exists
      * @throws An error occurs in case of invalid data types or syntax
      */ 
-    compliant("Object.exists",
+    compliant("Object.exists", Object.exists =
         (...levels) => Namespace.exists.apply(null, levels));
 
     /**
@@ -2611,7 +2611,7 @@ if (compliant("Composite")) {
      * @param  object
      * @return true is neither undefined nor null
      */
-    compliant("Object.usable",
+    compliant("Object.usable", Object.usable =
         object => object !== undefined && object !== null);
 
     /**
@@ -2845,7 +2845,7 @@ if (compliant("Composite")) {
  * elements STYLE and SCRIPT whose content is not supported by the expression
  * language.
  */
-compliant("Expression", {
+compliant("Expression", window.Expression = {
 
     /** Constant for element type text */
     get TYPE_TEXT() {return 1;},
