@@ -84,7 +84,7 @@
  * It is a character sequence consisting of letters, numbers and underscores
  * and optionally supports the minus sign if it is not used at the beginning or
  * end. A composite ID is at least one character long and is composed by
- * combining the attributes ID and composite.
+ * combining the attributes ID and COMPOSITE.
  *
  *
  *     PRINCIPLES
@@ -93,7 +93,7 @@
  * The world is static. So also aspect-js and all components. This avoids the
  * management and establishment of instances.
  *
- * Composite attributes are elementary and immutable.
+ * Attributes ID and COMPOSITE are elementary and immutable.
  * They are read the first time an element occurs and stored in the object
  * cache. Therefore, these attributes cannot be changed later because they are
  * then used from the object cache.
@@ -103,7 +103,7 @@
  *
  * Clean Code Rendering - The aspect-js relevant attributes are stored in meta
  * objects to each element and are removed in the markup. The following
- * attributes are essential: composite, id -- they are cached and remain at the
+ * attributes are essential: COMPOSITE, ID -- they are cached and remain at the
  * markup, these cannot be changed. the MutationObserver will restore them.
  *
  * Markup/DOM, object tree and virtual paths are analog/homogeneous.
@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230120
+ * @version 1.6.0 20230121
  */
 if (compliant("Composite")) {
     
@@ -125,7 +125,7 @@ if (compliant("Composite")) {
         /** Path of the Composite for: modules (sub-directory of work path) */
         get MODULES() {return window.location.combine(window.location.pathcontext, "/modules");},
 
-        /** Constant for attribute composite */
+        /** Constant for attribute COMPOSITE */
         get ATTRIBUTE_COMPOSITE() {return "composite";},
         
         /** Constant for attribute condition */
@@ -193,9 +193,8 @@ if (compliant("Composite")) {
         /**
          * Pattern for all static attributes.
          * Static attributes are not removed from the element during rendering,
-         * but are also set in the meta object like non-static attributes.
-         * These attributes are also intended for direct use in JavaScript and
-         * CSS.
+         * but are also set in the meta object like non-static attributes. These
+         * attributes are also intended for direct use in JavaScript and CSS.
          */
         get PATTERN_ATTRIBUTE_STATIC() {return /^(composite|id)$/i;},
 
@@ -215,9 +214,9 @@ if (compliant("Composite")) {
         /**
          * Patterns for expressions with variable.
          * Variables are at the beginning of the expression and are separated
-         * from the expression by a colon. The variable name must conform to
-         * the usual JavaScript conditions and starts with _ or a letter, other
-         * word characters (_ 0-9 a-z A-Z) may follow.
+         * from the expression by a colon. The variable name must conform to the
+         * usual JavaScript conditions and starts with _ or a letter, other word
+         * characters (_ 0-9 a-z A-Z) may follow.
          * - group 1: variable
          * - group 2: expression
          */
@@ -231,9 +230,9 @@ if (compliant("Composite")) {
 
         /** 
          * Pattern for all composite-script elements.
-         * These elements are not automatically executed by the browser but
-         * must be triggered by rendering. Therefore, these scripts can be
-         * combined and controlled with the condition attribute.
+         * These elements are not automatically executed by the browser but must
+         * be triggered by rendering. Therefore, these scripts can be combined
+         * and controlled with ATTRIBUTE_CONDITION.
          */
         get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
@@ -358,10 +357,10 @@ if (compliant("Composite")) {
                             if (context === Composite.render) {
                                 
                                 // If the selector is a string, several elements
-                                // must be assumed. These can, but do not have
-                                // to, have a relationship in the DOM. Therefore,
-                                // they are all considered and mounted separately.
-                                
+                                // must be assumed, which may or may not have a
+                                // relation to the DOM. Therefore, they are all
+                                // considered and mounted separately.
+
                                 let nodes = [];
                                 if (typeof this.selector === "string") {
                                     const scope = document.querySelectorAll(this.selector);
@@ -379,7 +378,8 @@ if (compliant("Composite")) {
                                     nodes = [this.selector].concat(Array.from(nodes));
                                 }
                                 
-                                // Mount all elements in a composite, incl. itself
+                                // Mount all elements in a composite, including
+                                // the composite element itself
                                 nodes.forEach((node) => {
                                     Composite.mount(node);
                                 });
@@ -408,1860 +408,1705 @@ if (compliant("Composite")) {
             }
             
             return context.lock;
-        }
-    });
-    
-    /**
-     * Registers a callback function for composite events.
-     * @param  event    see Composite.EVENT_***
-     * @param  callback callback function
-     * @throws An error occurs in the following cases:
-     *     - event is not valid or is not supported
-     *     - callback function is not implemented correctly or does not exist
-     */
-    Composite.listen = function(event, callback) {
+        },
         
-        if (typeof event !== "string")
-            throw new TypeError("Invalid event: " + typeof event);
-        if (typeof callback !== "function"
-                && callback !== null
-                && callback !== undefined)
-            throw new TypeError("Invalid callback: " + typeof callback);        
-        if (!event.match(Composite.PATTERN_EVENT))
-            throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
-        
-        event = event.toLowerCase();
-        if (!Composite.listeners.has(event)
-                || !Array.isArray(Composite.listeners.get(event)))
-            Composite.listeners.set(event, []);
-        Composite.listeners.get(event).push(callback);
-    };
-    
-    /**
-     * Triggers an event.
-     * All callback functions for this event are called.
-     * @param event    see Composite.EVENT_***
-     * @param variants up to five additional optional arguments that are passed
-     *     as arguments when the callback function is called
-     */
-    Composite.fire = function(event, ...variants) {
-        event = (event || "").trim();
-        if (Composite.listeners.size <= 0
-                || !event)
-            return;
-        const listeners = Composite.listeners.get(event.toLowerCase());
-        if (!Array.isArray(listeners))
-            return;
-        variants = [event, ...variants];
-        listeners.forEach((callback) => {
-            callback(...variants);
-        });        
-    };
-
-    /**
-     * Asynchronous call of a function.
-     * In reality, it is a non-blocking function call, because asynchronous
-     * execution is not possible without Web Worker.
-     * @param task     function to be executed
-     * @param variants up to five additional optional arguments that are passed
-     *     as arguments when the callback function is called
-     */
-    Composite.asynchron = function(task, ...variants) {
-        window.setTimeout((invoke, ...variants) => {
-            invoke(...variants);
-        }, 0, task, ...variants);
-    };
-    
-    /**
-     * Validates the as selector passed element(s), if the element(s) are
-     * marked with the attribute 'validate', a two-step validation is performed.
-     * In the first step, the HTML5 validation is checked if it exists.
-     * If this validation is valid or does not exist, the model-based
-     * validation is executed if it exists. For this purpose, the static method
-     * validate is expected in the model. The current element and the current
-     * value (if available) are passed as arguments.
-     * 
-     * The validation can have four states:
-     *     true, not true, text, undefined/void
-     *     
-     *         true
-     *         ----
-     * The validation was successful.
-     * No error is displayed and the default action of the browser is used.
-     * If possible the value is synchronized with the model.
-     * 
-     *         not true and not undefined/void
-     *         ----
-     * The validation failed; an error is displayed.
-     * A return value indicates that the default action of the browser should
-     * not be executed and so it is blocked. In this case, a possible value is
-     * not synchronized with the model.
-     * 
-     *         text
-     *         ----
-     * Text corresponds to: Invalid + error message.
-     * If the error message is empty, the message from the message attribute is
-     * used alternatively.
-     * 
-     *         undefined/void
-     *         ----
-     * The validation failed; an error is displayed.
-     * No return value indicates that the default action of the browser should
-     * nevertheless be executed. This behavior is important e.g. for the
-     * validation of input fields, so that the input reaches the user
-     * interface. In this case, a possible value is not synchronized with the
-     * model. 
-     *
-     * @param  selector selector
-     * @param  lock     unlocking of the model validation
-     * @return validation result
-     *     true, false, undefined/void
-     */
-    Composite.validate = function(selector, lock) {
-        
-        if (arguments.length < 2
-                || lock !== false)
-            lock = true;
-        
-        if (typeof selector === "string") {
-            selector = selector.trim();
-            if (!selector)
-                return;
-            let  validate = Array.from(document.querySelectorAll(selector));
-            validate.forEach((node, index) => {
-                validate[index] = Composite.validate(node, lock);
-                if (validate[index] === undefined)
-                    validate[index] = 0;
-                else validate[index] = validate[index] === true ? 1 : 2; 
-            });
-            validate = validate.join("");
-            if (validate.match(/^1+$/))
-                return true;
-            if (validate.match(/2/))
-                return false;
-            return;
-        }
-
-        if (!(selector instanceof Element))
-            return;
-        
-        const serial = selector.ordinal();
-        const object = Composite.render.meta[serial];
-        
-        let valid = true;
-
-        // There must be a corresponding model class.
-        // Elements are not supported.
-        const meta = _mount_lookup(selector);
-        if (!(meta instanceof Object))
-            return;
-        
-        // Resets the customer-specific error.
-        // This is necessary for the checkValidity method to work.
-        if (typeof selector.setCustomValidity === "function")
-            selector.setCustomValidity("");
-        
-        // Explicit validation via HTML5.
-        // If the validation fails here, model validation and synchronization is
-        // not and rendering always performed. In this case the event and thus
-        // the default action of  the browser is cancelled.
-        if (typeof selector.checkValidity === "function")
-            valid = selector.checkValidity();
-
-        // Validation is a function at the model level.
-        // If a composite consists of several model levels, the validation may
-        // have to be organized accordingly if necessary.
-        // Interactive composite elements are a property object. Therefore, they
-        // are primarily a property and the validation is located in the
-        // surrounding model and not in the property object itself.
-        
-        let value;
-        if (selector instanceof Element) {
-            if (selector.tagName.match(/^input$/i)
-                    && selector.type.match(/^radio|checkbox/i))
-                value = selector.checked;
-            else if (selector.tagName.match(/^select/i)
-                    && "selectedIndex" in selector)
-                value = selector.options[selector.selectedIndex].value;
-            else if (Composite.ATTRIBUTE_VALUE in selector)
-                value = selector[Composite.ATTRIBUTE_VALUE];
-        }        
-        
-        // Implicit validation via the model.
-        // If a corresponding validate method has been implemented in the model.
-        // The declaration with the attribute validate is not required here.
-        // The validation through the model only works if the corresponding
-        // composite is active/present in the DOM!
-        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
-                && valid === true
-                && lock !== true
-                && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
-            const validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
-            if (value !== undefined)
-                valid = validate.call(meta.model, selector, value);
-            else valid = validate.call(meta.model, selector);
-        }
-
-        // The attribute VALIDATE can be combined with the attributes MESSAGE and
-        // NOTIFICATION. However, the attributes MESSAGE and NOTIFICATION have no
-        // effect without the attribute VALIDATE.
-        // The value of the attribute MESSAGE is used as an error message if the
-        // validation was not successful. To output the error message, the
-        // browser function of the HTML5 form validation is used. This message is
-        // displayed via mouse-over.
-        // If the attribute NOTIFICATION is also used, a value is not expected,
-        // the message is also displayed as an overlay/notification/report.
-        if (valid !== true) {
-            let message;
-            if (typeof valid === "string"
-                    && valid.trim())
-                message = valid.trim();
-            if (typeof message !== "string") {
-                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE))
-                    message = String(object.attributes[Composite.ATTRIBUTE_MESSAGE] || "");
-                if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                    message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
-            }
-            if (typeof selector.setCustomValidity === "function"
-                    && Object.usable(message)) {
-                selector.setCustomValidity(message);
-                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
-                        && typeof selector.reportValidity === "function")
-                    selector.reportValidity();
-            }
-        }     
-        
-        if (valid === undefined)
-            return;
-        return valid; 
-    };
-
-    /**
-     * Mounts the as selector passed element(s) with all its children where a
-     * view model binding is possible. Mount is possible for all elements with
-     * an ID, not only for composite objects and their children.
-     *
-     * View-model binding is about linking of HTML elements in markup (view)
-     * with corresponding JavaScript objects (models).
-     *
-     * Models are representable/projectable static JavaScript objects that can
-     * provide and receive data, states and interactions for views, comparable
-     * to managed beans and DTOs. As singletons/facades/delegates, they can use
-     * other components and abstractions, contain business logic themselves,
-     * and be a link between the user interface (view) and middleware (backend).
-     *
-     * The required view model binding is part of the Model View Controller and
-     * the Composite API.
-     *
-     * The view as presentation and user interface for interactions and the
-     * model are primarily decoupled. For the MVVM approach as an extension of
-     * the MVC (), the controller establishes the bidirectional connection
-     * between view and model, which means that no manual implementation and
-     * declaration of events, interaction or synchronization is required.
-     *
-     *     Principles
-     *     ----
-     * Components are a static JavaScript objects (models). Namespaces are
-     * supported, but they must be syntactically valid. Objects in objects is
-     * possible through the namespaces (as static inner class).
-     * 
-     *     Binding
-     *     ----
-     * The object constraint only includes what has been implemented in the
-     * model (snapshot). An automatic extension of the models at runtime by the
-     * renderer is not detected/supported, but can be implemented in the
-     * application logic - this is a conscious decision!
-     *     Case study:
-     * In the markup there is a composite with a property x. There is a
-     * corresponding JavaScript object (model) for the composite but without the
-     * property x. The renderer will mount the composite with the JavaScript
-     * model, the property x will not be found in the model and will be
-     * ignored. At runtime, the model is modified later and the property x is
-     * added. The renderer will not detect the change in the model and the
-     * property x will not be mounted during re-rendering. Only when the
-     * composite is completely removed from the DOM (e.g. by a condition) and
-     * then newly added to the DOM, the property x is also mounted, because the
-     * renderer then uses the current snapshot of the model and the property x
-     * also exists in the model.
-     * 
-     *     Validation
-     *     ----
-     * If an element is marked with the attribute 'validate', a two-step
-     * validation is performed.
-     * In the first step, the HTML5 validation is checked if it exists.
-     * If this validation is valid or does not exist, the model-based
-     * validation is executed if it exists. For this purpose, the static method
-     * validate is expected in the model. The current element and the current
-     * value (if available) are passed as arguments.
-     * 
-     * The validation can have three states:
-     *     true, not true, undefined/void
-     *     
-     *         true
-     *         ----
-     * The validation was successful.
-     * No error is displayed and the default action of the browser is used.
-     * If possible the value is synchronized with the model.
-     * 
-     *         not true and not undefined/void
-     *         ----
-     * The validation failed; an error is displayed.
-     * A return value indicates that the default action of the browser should
-     * not be executed and so it is blocked. In this case, a possible value is
-     * not synchronized with the model.
-     * 
-     *         undefined/void
-     *         ----
-     * The validation failed; an error is displayed.
-     * A return value indicates that the default action of the browser should
-     * nevertheless be executed. This behavior is important e.g. for the
-     * validation of input fields, so that the input reaches the user
-     * interface. In this case, a possible value is not synchronized with the
-     * model.
-     * 
-     *     Synchronization
-     *     ----
-     * View model binding and synchronization assume that a corresponding static
-     * JavaScript object/model exists in the same namespace for the composite.
-     * During synchronization, the element must also exist as a property in the
-     * model. Accepted are properties with a primitive data type and objects
-     * with a property value. The synchronization expects a positive validation,
-     * otherwise it will not be executed.
-     * 
-     *     Invocation
-     *     ---
-     * For events, actions can be implemented in the model.
-     * Actions are static methods in the model whose name begins with 'on' and
-     * is followed by the name (camel case) of the event. As an argument, the
-     * occurring event is passed.
-     * The action methods can have a return value, but do not have to.
-     * If their return value is false, the event and thus the default action of
-     * the browser is cancelled.     
-     * The invocation expects a positive validation, otherwise it will not be
-     * executed.
-     * 
-     *     Events
-     *     ----
-     * Composite.EVENT_MOUNT_START
-     * Composite.EVENT_MOUNT_NEXT
-     * Composite.EVENT_MOUNT_END
-     * 
-     *     Queue and Lock:
-     *     ----
-     * The method used a simple queue and transaction management so that the
-     * concurrent execution of rendering works sequentially in the order of the
-     * method call.
-     * 
-     * @param  selector
-     * @param  lock
-     * @throws An error occurs in the following cases:
-     *     - namespace is not valid or is not supported
-     *     - namespace cannot be created if it already exists as a method
-     */
-    Composite.mount = function(selector, lock) {
-        
-        Composite.mount.queue = Composite.mount.queue || [];
-        
-        // The lock locks concurrent mount requests.
-        // Concurrent mounting causes unexpected effects.
-        if (Composite.mount.lock
-                && Composite.mount.lock !== lock) {
-            if (!Composite.mount.queue.includes(selector))
-                Composite.mount.queue.push(selector);
-            return;
-        }
-
-        lock = Composite.lock(Composite.mount, selector);
+        /**
+         * Registers a callback function for composite events.
+         * @param  event    see Composite.EVENT_***
+         * @param  callback callback function
+         * @throws An error occurs in the following cases:
+         *     - event is not valid or is not supported
+         *     - callback is not implemented correctly or does not exist
+         */
+        listen(event, callback) {
             
-        try {
+            if (typeof event !== "string")
+                throw new TypeError("Invalid event: " + typeof event);
+            if (typeof callback !== "function"
+                    && callback !== null
+                    && callback !== undefined)
+                throw new TypeError("Invalid callback: " + typeof callback);        
+            if (!event.match(Composite.PATTERN_EVENT))
+                throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
+            
+            event = event.toLowerCase();
+            if (!Composite.listeners.has(event)
+                    || !Array.isArray(Composite.listeners.get(event)))
+                Composite.listeners.set(event, []);
+            Composite.listeners.get(event).push(callback);
+        },
+        
+        /**
+         * Triggers an event.
+         * All callback functions for this event are called.
+         * @param event    see Composite.EVENT_***
+         * @param variants up to five additional optional arguments that are
+         *     passed as arguments when the callback function is called
+         */
+        fire(event, ...variants) {
+            event = (event || "").trim();
+            if (Composite.listeners.size <= 0
+                    || !event)
+                return;
+            const listeners = Composite.listeners.get(event.toLowerCase());
+            if (!Array.isArray(listeners))
+                return;
+            variants = [event, ...variants];
+            listeners.forEach((callback) => {
+                callback(...variants);
+            });        
+        },
+
+        /**
+         * Asynchronous or in reality non-blocking call of a function. Because
+         * the asynchronous execution is not possible without Web Worker.
+         * @param task     function to be executed
+         * @param variants up to five additional optional arguments that are
+         *     passed as arguments when the callback function is called
+         */
+        asynchron(task, ...variants) {
+            window.setTimeout((invoke, ...variants) => {
+                invoke(...variants);
+            }, 0, task, ...variants);
+        },
+        
+        /**
+         * Validates the as selector passed element(s), if the element(s) are
+         * marked with ATTRIBUTE_VALIDATE, a two-step validation is performed.
+         * In the first step, the HTML5 validation is checked if it exists. If
+         * this validation is valid or does not exist, the model based
+         * validation is executed if it exists. For this purpose, the static
+         * method validate is expected in the model. The current element and the
+         * current value (if available) are passed as arguments.
+         * 
+         * The validation can have four states:
+         * 
+         *     true, not true, text, undefined/void
+         *     
+         *         true
+         *         ----
+         * The validation was successful. No error is displayed and the default
+         * action of the browser is used. If possible the value is synchronized
+         * with the model.
+         * 
+         *         not true and not undefined/void
+         *         ----
+         * The validation failed; an error is displayed. An existing return
+         * value indicates that the default action of the browser should not be
+         * executed and so it is blocked. In this case, a possible value is not
+         * synchronized with the model.
+         * 
+         *         text
+         *         ----
+         * Text corresponds to: Invalid + error message. If the error message is
+         * empty, the message from ATTRIBUTE_MESSAGE is used alternatively.
+         * 
+         *         undefined/void
+         *         ----
+         * The validation failed; an error is displayed. No return value
+         * indicates that the default action of the browser should nevertheless
+         * be executed. This behavior is important e.g. for the validation of
+         * input fields, so that the input reaches the user interface. In this
+         * case, a possible value is not synchronized with the model. 
+         *
+         * @param  selector selector
+         * @param  lock     unlocking of the model validation
+         * @return validation result
+         *     true, false, undefined/void
+         */
+        validate(selector, lock) {
+            
+            if (arguments.length < 2
+                    || lock !== false)
+                lock = true;
             
             if (typeof selector === "string") {
                 selector = selector.trim();
                 if (!selector)
                     return;
-                const nodes = document.querySelectorAll(selector);
-                nodes.forEach((node) => {
-                    Composite.mount(node, lock.share());
+                let  validate = Array.from(document.querySelectorAll(selector));
+                validate.forEach((node, index) => {
+                    validate[index] = Composite.validate(node, lock);
+                    if (validate[index] === undefined)
+                        validate[index] = 0;
+                    else validate[index] = validate[index] === true ? 1 : 2; 
                 });
-                return; 
+                validate = validate.join("");
+                if (validate.match(/^1+$/))
+                    return true;
+                if (validate.match(/2/))
+                    return false;
+                return;
             }
 
-            // Exclusive for elements
-            // and without multiple object binding
-            // and script and style elements are not supported 
-            if (!(selector instanceof Element)
-                    || Composite.mount.queue.includes(selector)
-                    || selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
+            if (!(selector instanceof Element))
                 return;
-
-            // An element/selector should only be mounted once.
-            Composite.mount.stack = Composite.mount.stack || [];
-            if (Composite.mount.stack.includes(selector))
-                return;
-
+            
             const serial = selector.ordinal();
             const object = Composite.render.meta[serial];
             
-            // Objects that were not rendered should not be mounted.
-            // This can happen if new DOM elements are created during rendering
-            // that are rendered later.
-            if (!(object instanceof Object))
-                return;
-            
-            // The explicit events are declared by the attribute: events.
-            // The model can, but does not have to, implement the corresponding
-            // method. Explicit events are mainly used to synchronize view and
-            // model and to trigger targets of the attribute: render.
-            let events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
-                    ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
-            events = String(events || "");
-            events = events.toLowerCase().split(/\s+/);
-            events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
-                    && array.indexOf(event) === index);
-            
+            let valid = true;
+
             // There must be a corresponding model class.
             // Elements are not supported.
             const meta = _mount_lookup(selector);
-            if (meta instanceof Object) {
+            if (!(meta instanceof Object))
+                return;
+            
+            // Resets the customer-specific error.
+            // This is necessary for the checkValidity method to work.
+            if (typeof selector.setCustomValidity === "function")
+                selector.setCustomValidity("");
+            
+            // Explicit validation via HTML5
+            // If the validation fails, model validation and synchronization is
+            // not and rendering always performed. In this case the event and
+            // thus the default action of  the browser is cancelled.
+            if (typeof selector.checkValidity === "function")
+                valid = selector.checkValidity();
+
+            // Validation is a function at the model level
+            // If a composite consists of several model levels, the validation
+            // may have to be organized accordingly if necessary. Interactive
+            // composite elements are a property object. Therefore, they are
+            // primarily a property and the validation is located in the
+            // surrounding model and not in the property object itself.
+            
+            let value;
+            if (selector instanceof Element) {
+                if (selector.tagName.match(/^input$/i)
+                        && selector.type.match(/^radio|checkbox/i))
+                    value = selector.checked;
+                else if (selector.tagName.match(/^select/i)
+                        && "selectedIndex" in selector)
+                    value = selector.options[selector.selectedIndex].value;
+                else if (Composite.ATTRIBUTE_VALUE in selector)
+                    value = selector[Composite.ATTRIBUTE_VALUE];
+            }        
+            
+            // Implicit validation via the model
+            // If a corresponding validate method has been implemented in the
+            // model. The declaration with ATTRIBUTE_VALIDATE is not required
+            // here. The validation through the model only works if the
+            // corresponding composite is active/present in the DOM!
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
+                    && valid === true
+                    && lock !== true
+                    && typeof meta.model[Composite.ATTRIBUTE_VALIDATE] === "function") {
+                const validate = meta.model[Composite.ATTRIBUTE_VALIDATE];
+                if (value !== undefined)
+                    valid = validate.call(meta.model, selector, value);
+                else valid = validate.call(meta.model, selector);
+            }
+
+            // ATTRIBUTE_VALIDATE can be combined with ATTRIBUTE_MESSAGE and
+            // ATTRIBUTE_NOTIFICATION. However, ATTRIBUTE_MESSAGE and
+            // ATTRIBUTE_NOTIFICATION have no effect without ATTRIBUTE_VALIDATE.
+            // The value of the ATTRIBUTE_MESSAGE is used as an error message if
+            // the validation was not successful. To output the error message,
+            // the browser function of the HTML5 form validation is used. This
+            // message is displayed via mouse-over.
+            // If ATTRIBUTE_NOTIFICATION is also used, a value is not expected,
+            // the message is output as overlay/notification/report.
+            if (valid !== true) {
+                let message;
+                if (typeof valid === "string"
+                        && valid.trim())
+                    message = valid.trim();
+                if (typeof message !== "string") {
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE))
+                        message = String(object.attributes[Composite.ATTRIBUTE_MESSAGE] || "");
+                    if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                        message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
+                }
+                if (typeof selector.setCustomValidity === "function"
+                        && Object.usable(message)) {
+                    selector.setCustomValidity(message);
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
+                            && typeof selector.reportValidity === "function")
+                        selector.reportValidity();
+                }
+            }     
+            
+            if (valid === undefined)
+                return;
+            return valid; 
+        },
+
+        /**
+         * Mounts the as selector passed element(s) with all its children where
+         * a view model binding is possible. Mount is possible for all elements
+         * with ATTRIBUTE_ID, not only for composite objects and their children.
+         *
+         * View-model binding is about linking of HTML elements in markup (view)
+         * with corresponding JavaScript objects (models).
+         *
+         * Models are representable/projectable static JavaScript objects that
+         * can provide and receive data, states and interactions for views,
+         * comparable to managed beans and DTOs. As singleton/facade/delegate,
+         * they can use other components and abstractions, contain business
+         * logic themselves, and be a link between the user interface (view) and
+         * middleware (backend).
+         *
+         * The required view model binding is part of the Model View Controller
+         * and the Composite API.
+         *
+         * The view as presentation and user interface for interactions and the
+         * model are primarily decoupled. For the MVVM approach as an extension
+         * of the MVC, the controller establishes the bidirectional connection
+         * between view and model, which means that no manual implementation and
+         * declaration of events, interaction or synchronization is required.
+         *
+         *     Principles
+         *     ----
+         * Components are a static JavaScript objects (models). Namespaces are
+         * supported, but they must be syntactically valid. Objects in objects
+         * is possible through the namespaces (as static inner class).
+         * 
+         *     Binding
+         *     ----
+         * The object constraint only includes what has been implemented in the
+         * model (snapshot). An automatic extension of the models at runtime by
+         * the renderer is not detected/supported, but can be implemented in the
+         * application logic - this is a conscious decision!
+         *     Case study:
+         * In the markup there is a composite with a property x. There is a
+         * corresponding JavaScript object (model) for the composite but without
+         * the property x. The renderer will mount the composite with the
+         * JavaScript model, the property x will not be found in the model and
+         * will be ignored. At runtime, the model is modified later and the
+         * property x is added. The renderer will not detect the change in the
+         * model and the property x will not be mounted during re-rendering.
+         * Only when the composite is completely removed from the DOM (e.g. by a
+         * condition) and then newly added to the DOM, the property x is also
+         * mounted, because the renderer then uses the current snapshot of the
+         * model and the property x also exists in the model.
+         * 
+         *     Validation
+         *     ----
+         * Details are described to Composite.validate(selector, lock)   
+         * 
+         *     Synchronization
+         *     ----
+         * View model binding and synchronization assume that a corresponding
+         * static JavaScript object/model exists in the same namespace for the
+         * composite. During synchronization, the element must also exist as a
+         * property in the model. Accepted are properties with a primitive data
+         * type and objects with a property value. The synchronization expects a
+         * positive validation, otherwise it will not be executed.
+         * 
+         *     Invocation
+         *     ---
+         * For events, actions can be implemented in the model. Actions are
+         * static methods in the model whose name begins with 'on' and is
+         * followed by the name (camel case) of the event. As an argument, the
+         * occurring event is passed. The action methods can have a return
+         * value, but do not have to. If their return value is false, the event
+         * and thus the default action of the browser is cancelled. The
+         * invocation expects a positive validation, otherwise it will not be
+         * executed.
+         * 
+         *     Events
+         *     ----
+         * Composite.EVENT_MOUNT_START
+         * Composite.EVENT_MOUNT_NEXT
+         * Composite.EVENT_MOUNT_END
+         * 
+         *     Queue and Lock:
+         *     ----
+         * The method used a simple queue and transaction management so that the
+         * concurrent execution of rendering works sequentially in the order of
+         * the method call.
+         * 
+         * @param  selector
+         * @param  lock
+         * @throws An error occurs in the following cases:
+         *     - namespace is not valid or is not supported
+         *     - namespace cannot be created if it already exists as a method
+         */
+        mount(selector, lock) {
+            
+            Composite.mount.queue = Composite.mount.queue || [];
+            
+            // The lock locks concurrent mount requests.
+            // Concurrent mounting causes unexpected effects.
+            if (Composite.mount.lock
+                    && Composite.mount.lock !== lock) {
+                if (!Composite.mount.queue.includes(selector))
+                    Composite.mount.queue.push(selector);
+                return;
+            }
+
+            lock = Composite.lock(Composite.mount, selector);
                 
-                // The implicit assignment is based on the on-event-methods
-                // implemented in the model. These are determined and added to
-                // the list of events if the events have not yet been explicitly
-                // declared.
+            try {
                 
-                // Events are possible for composites and interactive composite
-                // elements. Composites define the scope with their model.
-                // Interactive composite elements are a property object in the
-                // model that contains the interaction methods corresponding to
-                // the events.
-                // Therefore, the scope of interactive composite elements shifts
-                // from the model to the property object.
-                // In all cases, a name-based alignment in the model and thus an
-                // ID is required. Anonymous interaction elements do not have
-                // this alignment and no scope can be determined.
+                if (typeof selector === "string") {
+                    selector = selector.trim();
+                    if (!selector)
+                        return;
+                    const nodes = document.querySelectorAll(selector);
+                    nodes.forEach((node) => {
+                        Composite.mount(node, lock.share());
+                    });
+                    return; 
+                }
 
-                let model = meta.model;
-                if (meta.target !== undefined)
-                    if (typeof meta.target === "object")
-                        model = meta.target;
-                    else model = null;
+                // Exclusive for elements
+                // and without multiple object binding
+                // and script and style elements are not supported 
+                if (!(selector instanceof Element)
+                        || Composite.mount.queue.includes(selector)
+                        || selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
+                    return;
 
-                for (let entry in model)
-                    if (typeof model[entry] === "function"
-                            && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
-                        entry = entry.substring(2).toLowerCase();
-                        if (!events.includes(entry))
-                            events.push(entry);
-                    }
+                // An element/selector should only be mounted once.
+                Composite.mount.stack = Composite.mount.stack || [];
+                if (Composite.mount.stack.includes(selector))
+                    return;
 
-                let prototype = model ? Object.getPrototypeOf(model) : null;
-                while (prototype) {
-                    Object.getOwnPropertyNames(prototype).forEach(entry => {
+                const serial = selector.ordinal();
+                const object = Composite.render.meta[serial];
+                
+                // Objects that were not rendered should not be mounted. This
+                // can happen if new DOM elements are created during rendering
+                // that are rendered later.
+                if (!(object instanceof Object))
+                    return;
+                
+                // The explicit events are declared by ATTRIBUTE_EVENTS. The
+                // model can, but does not have to, implement the corresponding
+                // method. Explicit events are mainly used to synchronize view
+                // and model and to trigger targets of ATTRIBUTE_RENDER.
+                let events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+                        ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+                events = String(events || "");
+                events = events.toLowerCase().split(/\s+/);
+                events = events.filter((event, index, array) => Composite.PATTERN_EVENT_FILTER.includes(event)
+                        && array.indexOf(event) === index);
+                
+                // There must be a corresponding model class.
+                // Elements are not supported.
+                const meta = _mount_lookup(selector);
+                if (meta instanceof Object) {
+                    
+                    // The implicit assignment is based on the on-event-methods
+                    // implemented in the model. These are determined and added
+                    // to the list of events if the events have not yet been
+                    // explicitly declared.
+                    
+                    // Events are possible for composites and their interactive
+                    // elements. For this purpose, composites define the scope
+                    // with their model. Interactive composite elements are a
+                    // object in the model that contains the interaction methods
+                    // corresponding to the events. Therefore, the scope of
+                    // interactive composite elements shifts from the model to
+                    // the according object. In all cases, a name-based
+                    // alignment in the model and thus ATTRIBUTE_ID is required
+                    // Anonymous interaction elements do not have this alignment
+                    // and no scope can be determined.
+
+                    let model = meta.model;
+                    if (meta.target !== undefined)
+                        if (typeof meta.target === "object")
+                            model = meta.target;
+                        else model = null;
+
+                    for (let entry in model)
                         if (typeof model[entry] === "function"
                                 && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
                             entry = entry.substring(2).toLowerCase();
                             if (!events.includes(entry))
                                 events.push(entry);
                         }
-                    });
-                    prototype = Object.getPrototypeOf(prototype);
+
+                    let prototype = model ? Object.getPrototypeOf(model) : null;
+                    while (prototype) {
+                        Object.getOwnPropertyNames(prototype).forEach(entry => {
+                            if (typeof model[entry] === "function"
+                                    && entry.match(Composite.PATTERN_EVENT_FUNCTIONS)) {
+                                entry = entry.substring(2).toLowerCase();
+                                if (!events.includes(entry))
+                                    events.push(entry);
+                            }
+                        });
+                        prototype = Object.getPrototypeOf(prototype);
+                    }
                 }
-            }
 
-            // The determined events are registered.
-            Composite.mount.stack.push(selector);
-            events.forEach((event) => {
-                selector.addEventListener(event.toLowerCase(), (event) => {
+                // The determined events are registered.
+                Composite.mount.stack.push(selector);
+                events.forEach((event) => {
+                    selector.addEventListener(event.toLowerCase(), (event) => {
 
-                    const target = event.currentTarget;
-                    const serial = target.ordinal();
-                    const object = Composite.render.meta[serial];
+                        const target = event.currentTarget;
+                        const serial = target.ordinal();
+                        const object = Composite.render.meta[serial];
 
-                    let action = event.type.toLowerCase();
-                    if (!Composite.PATTERN_EVENT_FILTER.includes(action))
-                        return;
-                    action = Composite.PATTERN_EVENT_FILTER.indexOf(action);
-                    action = Composite.PATTERN_EVENT_NAMES[action];
-                    
-                    let result;
-                    
-                    let valid = true;
+                        let action = event.type.toLowerCase();
+                        if (!Composite.PATTERN_EVENT_FILTER.includes(action))
+                            return;
+                        action = Composite.PATTERN_EVENT_FILTER.indexOf(action);
+                        action = Composite.PATTERN_EVENT_NAMES[action];
+                        
+                        let result;
+                        
+                        let valid = true;
 
-                    // There must be a corresponding model class.
-                    // Elements are not supported.
-                    const meta = _mount_lookup(target);
-                    if (meta instanceof Object) {
-                        
-                        let value;
-                        if (target instanceof Element) {
-                            if (target.tagName.match(/^input$/i)
-                                    && target.type.match(/^radio|checkbox/i))
-                                value = target.checked;
-                            else if (target.tagName.match(/^select/i)
-                                    && "selectedIndex" in target)
-                                value = target.options[target.selectedIndex].value;
-                            else if (Composite.ATTRIBUTE_VALUE in target)
-                                value = target[Composite.ATTRIBUTE_VALUE];
-                        }
-                        
-                        // Step 1: Validation
-                        
-                        valid = Composite.validate(target, false);
-                        
-                        // In case of a failed validation, the event and the
-                        // default action of the browser will be canceled.
-                        if (valid === true) {
-    
-                            // Step 2: Synchronisation
+                        // There must be a corresponding model class.
+                        // Elements are not supported.
+                        const meta = _mount_lookup(target);
+                        if (meta instanceof Object) {
                             
-                            // The synchronization expects a data field. It can
-                            // be a simple data type or an object with the
-                            // property value. Other targets are ignored.
-                            // The synchronization expects a positive validation,
-                            // otherwise it will not be executed.
-                            const accept = (property) => {
-                                const type = typeof property;
-                                if (property === undefined)
-                                    return false;
-                                if (type === "object"
-                                        && property === null)
-                                    return true;
-                                return type === "boolean"
-                                    || type === "number"
-                                    || type === "string";
-                            };
-                            
-                            // A composite is planned as a container for
-                            // sub-elements. Theoretically, an input element can
-                            // also be a composite and thus both model and input
-                            // element / data field. In this case, a composite
-                            // can assign a value to itself.
-                            if (accept(meta.target)) {
-                                meta.target = value;
-                            } else if (typeof meta.target === "object") {
-                                if (accept(meta.target["value"]))
-                                    meta.target["value"] = value;
-                            } else if (meta.target === undefined) {
-                                if (accept(meta.model["value"]))
-                                    meta.model["value"] = value;                                
+                            let value;
+                            if (target instanceof Element) {
+                                if (target.tagName.match(/^input$/i)
+                                        && target.type.match(/^radio|checkbox/i))
+                                    value = target.checked;
+                                else if (target.tagName.match(/^select/i)
+                                        && "selectedIndex" in target)
+                                    value = target.options[target.selectedIndex].value;
+                                else if (Composite.ATTRIBUTE_VALUE in target)
+                                    value = target[Composite.ATTRIBUTE_VALUE];
                             }
                             
-                            // Step 3: Invocation
-
-                            // Events are possible for composites and interactive
-                            // composite elements. Composites define the scope
-                            // with their model.
-                            // Interactive composite elements are a property
-                            // object in the model that contains the interaction
-                            // methods corresponding to the events.
-                            // Therefore, the scope of interactive composite
-                            // elements shifts from the model to the property
-                            // object.
-                            // In all cases, a name-based alignment in the model
-                            // and thus an ID is required. Anonymous interaction
-                            // elements do not have this alignment and no scope
-                            // can be determined.
+                            // Step 1: Validation
                             
-                            let model = meta.model;
-                            if (meta.target !== undefined)
-                                if (meta.target
-                                        && typeof meta.target === "object")
-                                    model = meta.target;
-                                else model = null;
+                            valid = Composite.validate(target, false);
+                            
+                            // In case of a failed validation, the event and the
+                            // default action of the browser will be canceled.
+                            if (valid === true) {
+        
+                                // Step 2: Synchronisation
+                                
+                                // Synchronization expects a data field. It can
+                                // be a simple data type or an object with the
+                                // property value. Other targets are ignored.
+                                // The synchronization expects a successfully
+                                // validation, otherwise it will not be executed.
+                                const accept = (property) => {
+                                    const type = typeof property;
+                                    if (property === undefined)
+                                        return false;
+                                    if (type === "object"
+                                            && property === null)
+                                        return true;
+                                    return type === "boolean"
+                                        || type === "number"
+                                        || type === "string";
+                                };
+                                
+                                // A composite is planned as a container for
+                                // sub-elements. Theoretically, an input element
+                                // can also be a composite and thus both model
+                                // and input element / data field. In this case,
+                                // a composite can assign a value to itself.
+                                if (accept(meta.target)) {
+                                    meta.target = value;
+                                } else if (typeof meta.target === "object") {
+                                    if (accept(meta.target["value"]))
+                                        meta.target["value"] = value;
+                                } else if (meta.target === undefined) {
+                                    if (accept(meta.model["value"]))
+                                        meta.model["value"] = value;                                
+                                }
+                                
+                                // Step 3: Invocation
 
-                            // For the event, a corresponding method is searched
-                            // in the model that can be called. If their return
-                            // value is false, the event and thus the default
-                            // action of the browser is cancelled. 
-                            // The invocation expects a positive validation,
-                            // otherwise it will not be executed.
-                            if (model && typeof model["on" + action] === "function")
-                                result = model["on" + action].call(model, event);
+                                // Events are possible for composites and their
+                                // interactive elements. For this purpose,
+                                // composites define the scope with their model.
+                                // Interactive composite elements are a object
+                                // in the model that contains the interaction
+                                // methods corresponding to the events.
+                                // Therefore, the scope of interactive composite
+                                // elements shifts from the model to the
+                                // according object. In all cases, a name-based
+                                // alignment in the model and thus ATTRIBUTE_ID
+                                // is required. Anonymous interaction elements
+                                // do not have this alignment and no scope can
+                                // be determined.
+                                
+                                let model = meta.model;
+                                if (meta.target !== undefined)
+                                    if (meta.target
+                                            && typeof meta.target === "object")
+                                        model = meta.target;
+                                    else model = null;
+
+                                // For the event, a corresponding method is
+                                // searched in the model that can be called. If
+                                // their return value is false, the event and
+                                // thus the default action of the browser is
+                                // cancelled. The invocation expects a positive
+                                // validation, otherwise it will not be executed.
+                                if (model && typeof model["on" + action] === "function")
+                                    result = model["on" + action].call(model, event);
+                            }
                         }
-                    }
 
-                    // Step 4: Rendering
-                    
-                    // Rendering is performed in all cases.
-                    // When an event occurs, all elements that correspond to the
-                    // query selector rendering are updated. 
-                    let events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
-                            ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
-                    events = String(events || "");
-                    events = events.toLowerCase().split(/\s+/);
-                    if (events.includes(action.toLowerCase())) {
-                        let render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
-                                ? object.attributes[Composite.ATTRIBUTE_RENDER] : "";
-                        render = String(render || "");
-                        if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                            render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
-                        Composite.render(render);
-                    }
-                    
-                    if (meta instanceof Object) {
-                        if ((result !== undefined && !result)
-                                || (valid !== undefined && valid !== true))
-                            event.preventDefault();
-                        if (result !== undefined)
-                            return result;
-                    }
-                });
-            });
-        } finally {
-            lock.release();
-        }        
-    };
-
-    /**
-     * There are several ways to customize the renderer.
-     * 
-     *     Custom Tag (Macro)
-     *     ----
-     * Macros are completely user-specific.
-     * The return value determines whether the standard functions are used or
-     * not. Only the return value false (not void, not empty) terminates the
-     * rendering for the macro without using the standard functions of the
-     * rendering.
-     *
-     *     Composite.customize(tag:string, function(element) {...});
-     * 
-     *     Custom Selector
-     *     ----
-     * Selectors work similar to macros.
-     * Unlike macros, selectors use a CSS selector to detect elements.
-     * This selector must match the current element from the point of view of
-     * the parent. Selectors are more flexible and multifunctional. Therefore,
-     * different selectors and thus different functions can match one element.
-     * In this case, all implemented callback methods are performed.
-     * The return value determines whether the loop is aborted or not.
-     * Only the return value false (not void, not empty) terminates the loop
-     * over other selectors and the rendering for the selector without using
-     * the standard functions of the rendering.
-     * 
-     *     Composite.customize(selector:string, function(element) {...}); 
-     * 
-     * Macros and selectors are based on a text key.
-     * If this key is used more than once, existing macros and selectors will
-     * be overwritten.    
-     *     
-     *     Custom Acceptor
-     *     ---
-     * Acceptors are a very special way to customize. Unlike the other ways,
-     * here the rendering is not shifted into own implementations. With an
-     * acceptor, an element is manipulated before rendering and only if the
-     * renderer processes the element initially. This makes it possible to make
-     * individual changes to the attributes or the markup before the renderer
-     * processes them. This does not affect the implementation of the
-     * rendering.
-     * 
-     *     Composite.customize(function(element) {...});
-     *     
-     *     Configuration
-     *     ---
-     * The customize method also supports the configuration of the composite.
-     * For this purpose, the parameter and the value are passed.
-     * 
-     *     Composite.customize(parameter:string, value);
-     *     
-     * Parameters start with @ and thereby differ from Acceptor/Selector/Tag.
-     *     
-     *     @ATTRIBUTES-STATICS
-     * Static attributes are a component of the hardening of the markup. These
-     * attributes are observed by the renderer and manipulation is made more
-     * difficult by restoring the original value.
-     * As value one or more attributes separated by spaces are expected.
-     * The method can be called several times. This has a cumulative effect and
-     * the attributes are collected. It is not possible to remove attributes.    
-     * 
-     *     Composite.customize("@ATTRIBUTES-STATICS", "...");
-     *     
-     * @param  variants
-     * @throws An error occurs in the following cases:
-     *     - namespace is not valid or is not supported
-     *     - callback function is not implemented correctly
-     */
-    Composite.customize = function(...variants) {
-        
-        let scope;
-        if (variants.length > 0)
-            scope = variants[0];
-
-        // Statics are used for hardening the attributes in the markup.
-        // Hardening makes it more difficult to manipulate the attributes. 
-        // At runtime, additional attributes can be declared as static. However,
-        // this function is not cheap, since the values of the attributes used at
-        // that time must be determined for all elements to be restored, for
-        // which purpose the complete DOM is analyzed (full DOM scan).
-        // The composite-specific static attributes (PATTERN_ATTRIBUTE_ACCEPT)
-        // are excluded from this function because they are already actively
-        // monitored by the MutationObserver.
-        if (typeof scope === "string"
-                && variants.length > 1
-                && typeof variants[1] === "string"
-                && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
-            const changes = [];
-            const statics = (variants[1] || "").trim().split(/\s+/);
-            statics.forEach((entry) => {
-                entry = entry.toLowerCase();
-                if (!Composite.statics.has(entry)
-                        && !entry.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
-                    Composite.statics.add(entry);
-                    changes.push(entry); 
-                }
-            });
-            const scanning = (element) => {
-                if (!(element instanceof Element))
-                    return;
-                const serial = element.ordinal();
-                const object = Composite.render.meta[serial];
-                if (!object)
-                    return;
-                changes.forEach((attribute) => {
-                    object.statics = object.statics || {};
-                    if (object.statics.hasOwnProperty[attribute]
-                            && object.statics[attribute] !== undefined)
-                        return;
-                    if (element.hasAttribute(attribute))
-                        object.statics[attribute] = element.getAttribute(attribute);
-                    else object.statics[attribute] = null;
-                });
-                Array.from(element.childNodes).forEach((node) => {
-                    scanning(node);        
-                });
-            };
-            scanning(document.body);
-            return;
-        }
-        
-        // If only one argument of type function is passed, the method is
-        // registered as an acceptor.
-        if (typeof scope === "function"
-                && variants.length === 1) {
-            Composite.acceptors.add(scope);
-            return;
-        }
-
-        // Custom tags, here also called macro, are based on a case-insensitive
-        // tag name (key) and a render function (value). In this function, the
-        // tag name and the render functions are registered and a RegExp will be
-        // created so that the custom tags can be found faster.
-        if (typeof scope !== "string")
-            throw new TypeError("Invalid scope: " + typeof scope);
-        const callback = variants.length > 1 ? variants[1] : null;
-        if (typeof callback !== "function"
-                && callback !== null
-                && callback !== undefined)
-            throw new TypeError("Invalid callback: " + typeof callback);
-        scope = scope.trim();
-        if (scope.length <= 0)
-            throw new Error("Invalid scope");
-            
-        if (scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE)) {
-            if (callback === null)
-                Composite.macros.delete(scope.toLowerCase());
-            else Composite.macros.set(scope.toLowerCase(), callback);
-        } else {
-            const hash = scope.toLowerCase().hashCode();
-            if (callback === null)
-                Composite.selectors.delete(hash);
-            else Composite.selectors.set(hash, {selector:scope, callback});
-        } 
-    };
-    
-    /**
-     * Rendering involves updating and, if necessary, reconstructing an HTML
-     * element and all its children. The declarative commands for rendering
-     * (attributes) and the expression language are executed.
-     *
-     *     Queue and Lock:
-     *     ----
-     * The method used a simple queue and transaction management so that the
-     * concurrent execution of rendering works sequentially in the order of the
-     * method call.
-     * 
-     *     Element Meta Object
-     *     ---- 
-     * With the processed HTML elements and text nodes, simplified meta objects
-     * are created. The serial, the reference on the HTML element and the
-     * initial attributes (which are required for rendering) are stored there.
-     * 
-     *     Serial
-     *     ----
-     * Serial is a special extension of the JavaScript API of the object and
-     * creates a unique ID for each object. This ID can be used to compare, map
-     * and reference a wide variety of objects. Composite and rendering use
-     * serial, since this cannot be changed via the markup.  
-     *     
-     *     Text Node (simple embedded expression)
-     *     ----
-     * A text node contain static and dynamic contents as well as parameters.
-     * Dynamic contents and parameters are formulated as expressions, but only
-     * the dynamic contents are output. Parameters are interpreted, but do
-     * not generate any output. During initial processing, a text node is
-     * analyzed and, if necessary, splited into static content, dynamic
-     * content and parameters. To do this, the original text node is replaced
-     * by new separate text nodes:
-     *     e.g. "text {{expr}} + {{var:expr}}"
-     *              -> ["text ", {{expr}}, " + ", {{var:expr}}]
-     * When the text nodes are split, meta objects are created for them. The
-     * meta objects are compatible with the meta objects of the rendering
-     * methods but use the additional attributes:
-     *     Composite.ATTRIBUTE_TEXT, Composite.ATTRIBUTE_NAME and
-     *     Composite.ATTRIBUTE_VALUE
-     * Only static content uses Composite.ATTRIBUTE_TEXT, dynamic content and
-     * parameters use Composite.ATTRIBUTE_VALUE, and only the parameters use
-     * Composite.ATTRIBUTE_NAME. The meta objects for dynamic content also have
-     * their own rendering method for generating output. Static content is
-     * ignored later during rendering because it is unchangeable.     
-     *     
-     *     Events + Validate + Message + Notification + Render
-     *     ----
-     * Events primarily controls the synchronization of the input values of
-     * HTML elements with the properties of a model. Means that the value in
-     * the model only changes if an event occurs for the corresponding HTML
-     * element. Synchronization is performed at a low level. Means that the
-     * properties are synchronized directly and without the use of get and set
-     * methods but accessors (getters and setters) are supported. For a better
-     * control a declarative validation is supported. If the attribute VALIDATE
-     * exists, the value for this is ignored, the static method
-     * <Model>.validate(element, value) is  called in the corresponding model.
-     * This call must return a true value as the result, otherwise the element
-     * value is not stored into the corresponding model property. If an event
-     * occurs, synchronization is performed. After that will be checked whether
-     * the render attribute exists. All selectors listed here are then
-     * triggered for re-rendering. (Re)rendering is independent of
-     * synchronization and validation and is executed immediately after an
-     * event occurs.
-     * The validation can be combined with the attributes MESSAGE and
-     * NOTIFICATION. However, the attributes MESSAGE and NOTIFICATION have no
-     * effect without the attribute VALIDATE. The value of the attribute
-     * MESSAGE is used as an error message if the validation was not
-     * successful. To output the error message, the browser function of the
-     * HTML5 form validation is used. This message is displayed via mouse-over.
-     * values on/true/1 of the attribute NOTIFICATION specifies that the
-     * message is also displayed as overlay/notification/report.
-     *     
-     *     Condition
-     *     ----
-     * The declaration can be used with all HTML elements, but not with script
-     * and style. The condition defines whether an element exists in the DOM or
-     * not. An expression is expected that explicitly returns true. Only then
-     * will the element exist in the DOM. With all other return values, the
-     * element is removed from the DOM. The condition is validated with each
-     * render cycle that includes the element. Thus, elements that are removed
-     * are also reinserted into the DOM.
-     * Invalid or incorrect expressions behave like not true and cause a
-     * console error output.
-     * JavaScript (composite/javascript) elements are executed or not.     
-     *     
-     *     Import
-     *     ----
-     * This declaration loads the content and replaces the inner HTML of an
-     * element with the content. The attribute expects as value one element or
-     * more elements as node list or array -- these are then inserted directly
-     * and behave similar to the output-attribute, or the value is considered
-     * as a remote resource with relative or absolute URL and will be loaded
-     * via the HTTP method GET.
-     * If the content was successfully imported and inserted, the import
-     * attribute is removed. Recursive rendering is initiated by the
-     * MutationObserver.
-     * The import attribute can be combined with the condition attribute so
-     * that the import is only executed if the condition is true.
-     * 
-     *     Output
-     *     ----
-     * Set the value or result of an expression as the content of an element.
-     * For an expression, the result can also be an element or a node list with
-     * elements. All other data types are set as text. This output is
-     * exclusive, thus overwriting any existing content.
-     * The recursive (re)rendering is initiated via the MutationObserver.
-     *     
-     *     Interval
-     *     ----
-     * Interval rendering based on a window interval.
-     * If an HTML element is declared as interval, its initial inner HTML is
-     * used as a template. During the intervals, the inner HTML is first
-     * emptied, the template is rendered individually with each interval cycle,
-     * and the result is added to the inner HTML. The interval attribute
-     * expects a value in milliseconds. An invalid value cause a console
-     * output. The interval starts automatically with the (re)rendering of the
-     * declared HTML element and is terminated and removed when:
-     *   - the element no longer exists in the DOM
-     *   - condition the condition attribute is false
-     *     
-     *     Iterate
-     *     ----
-     * Iterative rendering based on lists, enumeration and arrays.
-     * If an HTML element is declared as iterate, its initial inner HTML is
-     * used as a template. During iteration, the inner HTML is initially
-     * emptied, the template is rendered individually with each iteration cycle
-     * and the result is added to the inner HTML.
-     * The expression for the iteration is a parameter expression. The
-     * parameter is a meta object and supports access to the iteration cycle.
-     *     e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data
-     * Invalid or incorrect expressions behave like an empty iterator and cause
-     * a console error output.   
-     *     
-     *     Release
-     *     ----
-     * Inverse indicator that an element was rendered.
-     * The renderer removes this attribute when an element is rendered.
-     * This effect is used by CSS to display elements only when rendered.
-     * The required CSS rule is automatically added to the head.   
-     *            
-     *     Scripting
-     *     ----
-     * Embedded scripting brings some peculiarities.
-     * The default scripting is automatically executed by the browser and
-     * independent of rendering. Therefore, the scripting for rendering has
-     * been adapted and a new script type have been introduced:
-     *     composite/javascript
-     * This script type use the normal JavaScript. Unlike type text/javascript,
-     * the browser does not recognize them and does not execute the JavaScript
-     * code automatically. Only the render recognizes the JavaScript code and
-     * executes it in each render cycle when the cycle includes the script
-     * element. In this way, the execution of the script element can also be
-     * combined with the attribute condition.
-     * 
-     *     Custom Tag (Macro)
-     *     ----
-     * More details about the usage can be found in:
-     *     Composite.customize(tag:string, function(element) {...});
-     * 
-     *     Custom Selector
-     *     ----
-     * More details about the usage can be found in
-     *     Composite.customize(selector:string, function(element) {...}); 
-     * 
-     *     Custom Acceptor
-     *     ----  
-     * More details about the usage can be found in
-     *     Composite.customize(function(element) {...});
-     *     
-     *     Events
-     *     ----
-     * Composite.EVENT_RENDER_START
-     * Composite.EVENT_RENDER_NEXT
-     * Composite.EVENT_RENDER_END
-     * 
-     * @param selector
-     * @param lock
-     */
-    Composite.render = function(selector, lock) {
-        
-        if (!selector)
-            return;
-
-        Composite.render.queue = Composite.render.queue || [];
-        
-        // The lock locks concurrent render requests.
-        // Concurrent rendering causes unexpected states due to manipulations
-        // at the DOM. HTML elements that are currently being processed can
-        // be omitted or replaced from the DOM. Access to parent and child
-        // elements may then no longer be possible.
-        if (Composite.render.lock
-                && Composite.render.lock !== lock) {
-            if (!Composite.render.queue.includes(selector))
-                Composite.render.queue.push(selector);
-            return;
-        }
-
-        lock = Composite.lock(Composite.render, selector);
-
-        const origin = selector;
-        
-        try {
-
-            if (typeof selector === "string") {
-                selector = selector.trim();
-                if (!selector)
-                    return;
-                const nodes = document.querySelectorAll(selector);
-                nodes.forEach((node) => {
-                    Composite.render(node, lock.share());
-                });
-                return;
-            }
-            
-            if (!(selector instanceof Node))
-                return;
-
-            // If a custom tag exists, the macro is executed.
-            // Macros are completely user-specific.
-            // The return value determines whether the standard functions are
-            // used or not. Only the return value false (not void, not empty)
-            // terminates the rendering for the macro without using the standard
-            // functions.
-            const macro = Composite.macros.get(selector.nodeName.toLowerCase());
-            if (macro && macro(selector) === false)
-                return;
-            
-            // If a custom selector exists, the macro is executed.
-            // Selectors work similar to macros.
-            // Unlike macros, selectors use a CSS selector to detect elements.
-            // This selector must match the current element from the point of
-            // view of the parent.
-            // Selectors are more flexible and multifunctional. Therefore,
-            // different selectors and thus different functions can match one
-            // element. In this case, all implemented callback methods are
-            // performed.
-            // The return value determines whether the loop is aborted or not.
-            // Only the return value false (not void, not empty) terminates the
-            // loop and the rendering for the selector without using the standard
-            // functions.
-            if (selector.parentNode) {
-                for (const [key, macro] of Composite.selectors) {
-                    const nodes = selector.parentNode.querySelectorAll(macro.selector);
-                    if (Array.from(nodes).includes(selector)) {
-                        if (macro.callback(selector) === false)
-                            return;
-                    }
-                }
-            }
-
-            // Associative array (meta store) for element-related meta-objects,
-            // those which are created during rendering: (key:serial, value:meta)
-            Composite.render.meta = Composite.render.meta || [];
-            
-            // Register each analyzed node/element and minimizes multiple
-            // analysis. For registration, the serial number of the node/element
-            // is used. The node prototype has been enhanced with creation and a
-            // get-function. During the analysis, the attributes of an element
-            // (not node) containing an expression or all allowed attributes are
-            // cached in the memory (Composite.render.meta).
-            let serial = selector.ordinal();
-            let object = Composite.render.meta[serial];
-            if (!object) {
-
-                // Acceptors are a very special way to customize. Unlike the
-                // other ways, here the rendering is not shifted into own
-                // implementations. With a acceptor, an element is manipulated
-                // before rendering and only if the renderer processes the
-                // element initially. This makes it possible to make individual
-                // changes to the attributes or the markup before the renderer
-                // processes them. This does not affect the implementation of the
-                // rendering. The method call with an acceptor:
-                //     Composite.customize(function(element) {...});
-                Composite.acceptors.forEach((acceptor) => {
-                    acceptor.call(null, selector);
-                });
-
-                object = {serial, element:selector, attributes:{}};
-                Composite.render.meta[serial] = object;
-                if ((selector instanceof Element)
-                        && selector.attributes) {
-                    Array.from(selector.attributes).forEach((attribute) => {
-                        attribute = {name:attribute.name.toLowerCase(), value:(attribute.value || "").trim()};
-                        if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
-                                || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                                || Composite.statics.has(attribute.name)) {
-                            
-                            // Remove all internal attributes but not the statics.
-                            // Static attributes are still used in the markup or
-                            // for the rendering.
-                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                                    && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    && !Composite.statics.has(attribute.name)
-                                    && attribute.name !== Composite.ATTRIBUTE_RELEASE)
-                                selector.removeAttribute(attribute.name);
-                            
-                            object.attributes[attribute.name] = attribute.value;
-                            
-                            // Special case of the attributes ID and EVENTS:
-                            // Both attributes are used initially for the object
-                            // and event binding. Expressions are supported for
-                            // the attributes, but these are only initially
-                            // resolved during the first rendering.
-                            
-                            // Special case of the static attributes:
-                            // These attributes are used initially markup harding.
-                            // Expressions are supported for the attributes, but
-                            // these are only initially resolved during the first
-                            // rendering.
-                            
-                            if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
-                                    && (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                            || attribute.name === Composite.ATTRIBUTE_ID
-                                            || attribute.name === Composite.ATTRIBUTE_EVENTS
-                                            || Composite.statics.has(attribute.name)))
-                                attribute.value = Expression.eval(selector.ordinal() + ":" + attribute.name, attribute.value);
-                            
-                            // The initial value of the static attribute is
-                            // registered for the restore. This is a part of the
-                            // markup hardening of the MutationObserver.                            
-                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    || attribute.name === Composite.ATTRIBUTE_ID
-                                    || attribute.name === Composite.ATTRIBUTE_EVENTS)
-                                object.attributes[attribute.name] = attribute.value;
-
-                            // The initial value of the static attribute is
-                            // registered for the restore. This is a part of the
-                            // markup hardening of the MutationObserver.
-                            object.statics = object.statics || {};
-                            if (Composite.statics.has(attribute.name))
-                                object.statics[attribute.name] = attribute.value;
-                            
-                            // The result of the expression must be written back
-                            // to the static attributes.   
-                            if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
-                                    || attribute.name === Composite.ATTRIBUTE_ID
-                                    || attribute.name === Composite.ATTRIBUTE_EVENTS
-                                    || Composite.statics.has(attribute.name))
-                                selector.setAttribute(attribute.name, attribute.value);
+                        // Step 4: Rendering
+                        
+                        // Rendering is performed in all cases. When an event
+                        // occurs, all elements that correspond to the query
+                        // selector rendering are updated. 
+                        let events = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_EVENTS)
+                                ? object.attributes[Composite.ATTRIBUTE_EVENTS] : "";
+                        events = String(events || "");
+                        events = events.toLowerCase().split(/\s+/);
+                        if (events.includes(action.toLowerCase())) {
+                            let render = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_RENDER)
+                                    ? object.attributes[Composite.ATTRIBUTE_RENDER] : "";
+                            render = String(render || "");
+                            if ((render || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                                render = Expression.eval(serial + ":" + Composite.ATTRIBUTE_RENDER, render);
+                            Composite.render(render);
+                        }
+                        
+                        if (meta instanceof Object) {
+                            if ((result !== undefined && !result)
+                                    || (valid !== undefined && valid !== true))
+                                event.preventDefault();
+                            if (result !== undefined)
+                                return result;
                         }
                     });
+                });
+            } finally {
+                lock.release();
+            }        
+        },
+
+        /**
+         * There are several ways to customize the renderer.
+         * 
+         *     Custom Tag (Macro)
+         *     ----
+         * Macros are completely user-specific. The return value determines
+         * whether the standard functions are used or not. Only the return value
+         * false (not void, not empty) terminates the rendering for the macro
+         * without using the standard functions of the rendering.
+         *
+         *     Composite.customize(tag:string, function(element) {...});
+         * 
+         *     Custom Selector
+         *     ----
+         * Selectors work similar to macros. Unlike macros, selectors use a CSS
+         * selector to detect elements. This selector must match the current
+         * element from the point of view of the parent. Selectors are more
+         * flexible and multifunctional. Therefore, different selectors and thus
+         * different functions can match one element. In this case, all
+         * implemented callback methods are performed. The return value
+         * determines whether the loop is aborted or not. Only the return value
+         * false (not void, not empty) terminates the loop over other selectors
+         * and the rendering for the selector without using the standard
+         * functions of the rendering.
+         * 
+         *     Composite.customize(selector:string, function(element) {...}); 
+         * 
+         * Macros and selectors are based on a text key. If this key is used
+         * more than once, existing macros and selectors will be overwritten.    
+         *     
+         *     Custom Acceptor
+         *     ---
+         * Acceptors are a very special way to customize. Unlike the other ways,
+         * here the rendering is not shifted into own implementations. With an
+         * acceptor, an element is manipulated before rendering and only if the
+         * renderer processes the element initially. This makes it possible to
+         * make individual changes to the attributes or the markup before the
+         * renderer processes them. This does not affect the implementation of
+         * the rendering.
+         * 
+         *     Composite.customize(function(element) {...});
+         *     
+         *     Configuration
+         *     ---
+         * The customize method also supports the configuration of the
+         * composite. For this purpose, the parameter and the value are passed.
+         * 
+         *     Composite.customize(parameter:string, value);
+         *     
+         * Parameters start with @ and thereby differ from Acceptor/Selector/Tag.
+         *     
+         *     @ATTRIBUTES-STATICS
+         * Static attributes are a component of the hardening of the markup.
+         * These attributes are observed by the renderer and manipulation is
+         * made more difficult by restoring the original value. As value one or
+         * more attributes separated by spaces are expected. The method can be
+         * called several times. This has a cumulative effect and the attributes
+         * are collected. It is not possible to remove attributes.    
+         * 
+         *     Composite.customize("@ATTRIBUTES-STATICS", "...");
+         *     
+         * @param  variants
+         * @throws An error occurs in the following cases:
+         *     - namespace is not valid or is not supported
+         *     - callback function is not implemented correctly
+         */
+        customize(...variants) {
+            
+            let scope;
+            if (variants.length > 0)
+                scope = variants[0];
+
+            // STATIC is used for hardening attributes in markup. Hardening
+            // makes the manipulation of attributes more difficult. At runtime,
+            // additional attributes can be declared as static. However, this
+            // function is not cheap, since the values of the attributes used at
+            // that time must be determined for all elements to be restored, for
+            // which purpose the complete DOM is analyzed (full DOM scan). The
+            // composite-specific static attributes (PATTERN_ATTRIBUTE_ACCEPT)
+            // are excluded from this function because they are already actively
+            // monitored by the MutationObserver.
+            if (typeof scope === "string"
+                    && variants.length > 1
+                    && typeof variants[1] === "string"
+                    && scope.match(/^@ATTRIBUTES-STATICS$/i)) {
+                const changes = [];
+                const statics = (variants[1] || "").trim().split(/\s+/);
+                statics.forEach((entry) => {
+                    entry = entry.toLowerCase();
+                    if (!Composite.statics.has(entry)
+                            && !entry.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)) {
+                        Composite.statics.add(entry);
+                        changes.push(entry); 
+                    }
+                });
+                const scanning = (element) => {
+                    if (!(element instanceof Element))
+                        return;
+                    const serial = element.ordinal();
+                    const object = Composite.render.meta[serial];
+                    if (!object)
+                        return;
+                    changes.forEach((attribute) => {
+                        object.statics = object.statics || {};
+                        if (object.statics.hasOwnProperty[attribute]
+                                && object.statics[attribute] !== undefined)
+                            return;
+                        if (element.hasAttribute(attribute))
+                            object.statics[attribute] = element.getAttribute(attribute);
+                        else object.statics[attribute] = null;
+                    });
+                    Array.from(element.childNodes).forEach((node) => {
+                        scanning(node);        
+                    });
+                };
+                scanning(document.body);
+                return;
+            }
+            
+            // If only one argument of type function is passed, the method is
+            // registered as an acceptor.
+            if (typeof scope === "function"
+                    && variants.length === 1) {
+                Composite.acceptors.add(scope);
+                return;
+            }
+
+            // Custom tags, here also called macro, are based on a
+            // case-insensitive tag name (key) and a render function (value). In
+            // this function, the tag name and the render functions are
+            // registered and a RegExp will be created so that the custom tags
+            // can be found faster.
+            if (typeof scope !== "string")
+                throw new TypeError("Invalid scope: " + typeof scope);
+            const callback = variants.length > 1 ? variants[1] : null;
+            if (typeof callback !== "function"
+                    && callback !== null
+                    && callback !== undefined)
+                throw new TypeError("Invalid callback: " + typeof callback);
+            scope = scope.trim();
+            if (scope.length <= 0)
+                throw new Error("Invalid scope");
+                
+            if (scope.match(Composite.PATTERN_CUSTOMIZE_SCOPE)) {
+                if (callback === null)
+                    Composite.macros.delete(scope.toLowerCase());
+                else Composite.macros.set(scope.toLowerCase(), callback);
+            } else {
+                const hash = scope.toLowerCase().hashCode();
+                if (callback === null)
+                    Composite.selectors.delete(hash);
+                else Composite.selectors.set(hash, {selector:scope, callback});
+            } 
+        },
+        
+        /**
+         * Rendering involves updating and, if necessary, reconstructing an HTML
+         * element and all its children. The declarative commands for rendering
+         * (attributes) and the expression language are executed.
+         *
+         *     Queue and Lock:
+         *     ----
+         * The method used a simple queue and transaction management so that the
+         * concurrent execution of rendering works sequentially in the order of
+         * the method call.
+         * 
+         *     Element Meta Object
+         *     ---- 
+         * With the processed HTML elements and text nodes, simplified meta
+         * objects are created. The serial, the reference on the HTML element
+         * and the initial attributes (which are required for rendering) are
+         * stored there.
+         * 
+         *     Serial
+         *     ----
+         * Serial is a special extension of the JavaScript API of the object and
+         * creates a unique ID for each object. This ID can be used to compare,
+         * map and reference a wide variety of objects. Composite and rendering
+         * use serial, since this cannot be changed via the markup.  
+         *     
+         * The following attributes and elements are supported:
+         *
+         * - Attributes:
+         *     COMPOSITE    INTERVAL        OUTPUT
+         *     CONDITION    ITERATE         RELEASE
+         *     EVENTS       MESSAGE         RENDER
+         *     ID           NAMESPACE       VALIDATE
+         *     IMPORT       NOTIFICATION
+         *
+         * - Expression Language
+         * - Scripting
+         * - Customizing
+         *   Tag, Selector, Acceptor
+         *
+         * Details are described in the documentation:
+         * https://github.com/seanox/aspect-js/blob/master/manual/en/markup.md#contents-overview           
+         * 
+         * @param selector
+         * @param lock
+         */
+        render(selector, lock) {
+            
+            if (!selector)
+                return;
+
+            Composite.render.queue = Composite.render.queue || [];
+            
+            // The lock locks concurrent render requests. Concurrent rendering
+            // causes unexpected states due to manipulations at the DOM. HTML
+            // elements that are currently being processed can be omitted or
+            // replaced from the DOM. Access to parent and child elements may
+            // then no longer be possible.
+            if (Composite.render.lock
+                    && Composite.render.lock !== lock) {
+                if (!Composite.render.queue.includes(selector))
+                    Composite.render.queue.push(selector);
+                return;
+            }
+
+            lock = Composite.lock(Composite.render, selector);
+
+            const origin = selector;
+            
+            try {
+
+                if (typeof selector === "string") {
+                    selector = selector.trim();
+                    if (!selector)
+                        return;
+                    const nodes = document.querySelectorAll(selector);
+                    nodes.forEach((node) => {
+                        Composite.render(node, lock.share());
+                    });
+                    return;
+                }
+                
+                if (!(selector instanceof Node))
+                    return;
+
+                // If a custom tag exists, the macro is executed. Macros are
+                // completely user-specific. The return value determines whether
+                // the standard functions are used or not. Only the return value
+                // false (not void, not empty) terminates the rendering for the
+                // macro without using the standard functions.
+                const macro = Composite.macros.get(selector.nodeName.toLowerCase());
+                if (macro && macro(selector) === false)
+                    return;
+                
+                // If a custom selector exists, the macro is executed. Selectors
+                // work similar to macros. Unlike macros, selectors use a CSS
+                // selector to detect elements. This selector must match the
+                // current element from the point of view of the parent.
+                // Selectors are more flexible and multifunctional. Therefore,
+                // different selectors and thus different functions can match
+                // one element. In this case, all implemented callback methods
+                // are performed. The return value determines whether the loop
+                // is aborted or not. Only the return value false (not void, not
+                // empty) terminates the loop and the rendering for the selector
+                // without using the standard functions.
+                if (selector.parentNode) {
+                    for (const [key, macro] of Composite.selectors) {
+                        const nodes = selector.parentNode.querySelectorAll(macro.selector);
+                        if (Array.from(nodes).includes(selector)) {
+                            if (macro.callback(selector) === false)
+                                return;
+                        }
+                    }
+                }
+
+                // Associative array (meta store) for element-related meta
+                // objects, those which are created during rendering:
+                // (key:serial, value:meta)
+                Composite.render.meta = Composite.render.meta || [];
+                
+                // Register each analyzed node/element and minimizes multiple
+                // analysis. For registration, the serial number of the
+                // node/element is used. The node prototype has been enhanced
+                // with creation and a get-function. During the analysis, the
+                // attributes of an element (not node) containing an expression
+                // or all allowed attributes are cached in the memory
+                // (Composite.render.meta).
+                let serial = selector.ordinal();
+                let object = Composite.render.meta[serial];
+                if (!object) {
+
+                    // Acceptors are a very special way to customize. Unlike the
+                    // other ways, here the rendering is not shifted into own
+                    // implementations. With a acceptor, an element is
+                    // manipulated before rendering and only if the renderer
+                    // processes the element initially. This makes it possible
+                    // to make individual changes to the attributes or the
+                    // markup before the renderer processes them. This does not
+                    // affect the implementation of the rendering.
+                    // Example of the method call with an acceptor:
+                    //     Composite.customize(function(element) {...});
+                    Composite.acceptors.forEach((acceptor) => {
+                        acceptor.call(null, selector);
+                    });
+
+                    object = {serial, element:selector, attributes:{}};
+                    Composite.render.meta[serial] = object;
+                    if ((selector instanceof Element)
+                            && selector.attributes) {
+                        Array.from(selector.attributes).forEach((attribute) => {
+                            attribute = {name:attribute.name.toLowerCase(), value:(attribute.value || "").trim()};
+                            if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
+                                    || attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                    || Composite.statics.has(attribute.name)) {
+                                
+                                // Remove all internal attributes but not the
+                                // statics. Static attributes are still used in
+                                // the markup or for the rendering.
+                                if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                        && !attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                        && !Composite.statics.has(attribute.name)
+                                        && attribute.name !== Composite.ATTRIBUTE_RELEASE)
+                                    selector.removeAttribute(attribute.name);
+                                
+                                object.attributes[attribute.name] = attribute.value;
+                                
+                                // Special case: ATTRIBUTE_ID/ATTRIBUTE_EVENTS
+                                // Both attributes are used initially for the
+                                // object and event binding. Expressions are
+                                // supported for the attributes, but these are
+                                // only initially resolved during the first
+                                // rendering.
+                                
+                                // Special case: static attributes
+                                // These attributes are used initially markup
+                                // harding. Expressions are supported for the
+                                // attributes, but these are only initially
+                                // resolved during the first rendering.
+                                
+                                if (attribute.value.match(Composite.PATTERN_EXPRESSION_CONTAINS)
+                                        && (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                                || attribute.name === Composite.ATTRIBUTE_ID
+                                                || attribute.name === Composite.ATTRIBUTE_EVENTS
+                                                || Composite.statics.has(attribute.name)))
+                                    attribute.value = Expression.eval(selector.ordinal() + ":" + attribute.name, attribute.value);
+                                
+                                // The initial value of the static attribute is
+                                // registered for the restore. This is a part of
+                                // the markup hardening of the MutationObserver.                            
+                                if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                        || attribute.name === Composite.ATTRIBUTE_ID
+                                        || attribute.name === Composite.ATTRIBUTE_EVENTS)
+                                    object.attributes[attribute.name] = attribute.value;
+
+                                // The initial value of the static attribute is
+                                // registered for the restore. This is a part of
+                                // the markup hardening of the MutationObserver.
+                                object.statics = object.statics || {};
+                                if (Composite.statics.has(attribute.name))
+                                    object.statics[attribute.name] = attribute.value;
+                                
+                                // The result of the expression must be written
+                                // back to the static attributes.   
+                                if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
+                                        || attribute.name === Composite.ATTRIBUTE_ID
+                                        || attribute.name === Composite.ATTRIBUTE_EVENTS
+                                        || Composite.statics.has(attribute.name))
+                                    selector.setAttribute(attribute.name, attribute.value);
+                            }
+                        });
+                        
+                        // ATTRIBUTE_CONDITION: If an HTML element uses this
+                        // attribute, a text node is created for the element as
+                        // a placeholder with a corresponding meta object for
+                        // the details of the element, condition and the outer
+                        // HTML as a template. Then the HTML element in the DOM
+                        // is replaced by the placeholder as text node. The
+                        // original selector is switched to the text node with
+                        // which the rendering continues.
+                        const condition = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                                ? object.attributes[Composite.ATTRIBUTE_CONDITION] : null;
+                        delete object.attributes[Composite.ATTRIBUTE_CONDITION];        
+                        if (condition) {
+                            
+                            // The original HTML element is replaced by a
+                            // placeholder. Because the meta object is replaced,
+                            // all attributes must be copied completely for
+                            // later output, except for ATTRIBUTE_CONDITION,
+                            // which controls the placeholder and should not
+                            // create a new or recursive placeholder.
+                            delete object.attributes[Composite.ATTRIBUTE_CONDITION];
+                            
+                            // The placeholder and its meta object are created.
+                            // This indirectly prevents the MutationObserver
+                            // from rendering the placeholder, because the
+                            // placeholder is already known.
+                            const placeholder = document.createTextNode("");
+                            object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
+                                    condition, template:selector.cloneNode(true), output:null, complete:false, share:null
+                            };
+
+                            // The Meta object is registered.
+                            Composite.render.meta[object.serial] = object;
+
+                            // The meta object for the HTML element is removed,
+                            // because only the new placeholder is relevant.
+                            delete Composite.render.meta[serial];
+
+                            Composite.fire(Composite.EVENT_RENDER_NEXT, placeholder);
+
+                            selector.parentNode.replaceChild(placeholder, selector);
+                            
+                            // The placeholder now exists in the DOM.
+                            // On object level is now switched from template to
+                            // placeholder and the normal markup processing is
+                            // continued.                         
+                            
+                            selector = placeholder;
+                            serial = selector.ordinal();
+                            object = Composite.render.meta[serial];
+                            
+                        } else {
+                            
+                            // Load modules/components/composite resources.
+                            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                                _render_include(selector);
+                        }
+                    }
+                }
+                
+                // The placeholder-output is interpreted.
+                // The output is controlled by the placeholder.
+                if (object.hasOwnProperty("placeholder")) {
                     
-                    // The condition attribute is interpreted.
-                    // If an HTML element uses the condition attribute, a text
-                    // node is created for the HTML element as a placeholder
-                    // For the placeholder, a meta object is created with all the
-                    // details of the HTML element, the condition and the outer
-                    // HTML code of the HTML element as a template. Then the HTML
-                    // element in the DOM is replaced by the placeholder (text
-                    // node). The original selector is switched to the text node
-                    // and the rendering is continued with the text node.
-                    const condition = object.attributes.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
-                            ? object.attributes[Composite.ATTRIBUTE_CONDITION] : null;
-                    delete object.attributes[Composite.ATTRIBUTE_CONDITION];        
-                    if (condition) {
-                        
-                        // The initial HTML element is replaced by a placeholder.
-                        // Because the meta object is also replaced, all
-                        // attributes must be completely copied for later
-                        // rendering, excluding the attribute 'condition', which
-                        // is controlled by the placeholder and should not create
-                        // a new or recursive placeholder.
-                        delete object.attributes[Composite.ATTRIBUTE_CONDITION];
-                        
-                        // The placeholder and its meta object are created.
-                        // This indirectly prevents the MutationObserver from
-                        // rendering the placeholder, since the placeholder is
-                        // already known.
-                        const placeholder = document.createTextNode("");
-                        object = {serial:placeholder.ordinal(), element:placeholder, attributes:object.attributes,
-                                condition, template:selector.cloneNode(true), output:null, complete:false, share:null
-                        };
+                    // The corresponding placeholder is determined for the
+                    // output so that the rendering can be forwarded. 
+                    // The placeholder uses the lock to exclude recursions.
+                    // Therefore, the passing of the lock is important here.
+                    Composite.render(object.placeholder.element, lock.share());
+                    
+                    // The placeholder takes care of everything.
+                    // It checks if the output is still needed in the DOM and
+                    // updates it if necessary. So there is nothing more to do
+                    // here and rendering can be aborted.
+                    
+                    // The placeholder now exists in the DOM.
+                    // On object level is now switched from template to
+                    // placeholder and the normal markup processing is
+                    // continued.                         
+                    
+                    selector = object.placeholder.element;
+                    serial = selector.ordinal();
+                    object = Composite.render.meta[serial];                
+                    
+                    return;
+                }
+                
+                // A text node contain static and dynamic contents as well as
+                // parameters. Dynamic contents and parameters are formulated
+                // as expressions, but only the dynamic contents are output.
+                // Parameters are interpreted, but do not generate any output.
+                // During initial processing, a text node is analyzed and, if
+                // necessary, split into static content, dynamic content and
+                // parameters. To do this, the original text node is replaced by
+                // new separate text nodes:
+                //     e.g. "text {{expr}} + {{var:expr}}"
+                //              ->  ["text ", {{expr}}, " + ", {{var:expr}}]
+                //
+                // When the text nodes are split, meta objects are created for
+                // them. The meta objects are compatible with the meta objects
+                // of the rendering methods but use the additional attributes: 
+                //     Composite.ATTRIBUTE_TEXT, Composite.ATTRIBUTE_NAME and
+                //     Composite.ATTRIBUTE_VALUE
+                // Only static content uses Composite.ATTRIBUTE_TEXT, dynamic
+                // content and parameters use Composite.ATTRIBUTE_VALUE, and
+                // only the parameters use Composite.ATTRIBUTE_NAME. The meta
+                // objects for dynamic content also have their own rendering
+                // method for generating output. Static content is ignored later
+                // during rendering because it is unchangeable.
+                if (selector.nodeType === Node.TEXT_NODE
+                        && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                    
+                    // Elements of type: script + style are ignored.
+                    // No expression is replaced here.
+                    if (selector.parentNode
+                            && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
+                        return;
+                    
+                    // Text nodes are only analyzed once. Pure text is
+                    // completely ignored, only text nodes with a expression as
+                    // value are updated.
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_TEXT))
+                        return;
 
-                        // The Meta object is registered.
-                        Composite.render.meta[object.serial] = object;
-
-                        // The meta object for the HTML element is removed,
-                        // because only the new placeholder is relevant.
-                        delete Composite.render.meta[serial];
-
-                        Composite.fire(Composite.EVENT_RENDER_NEXT, placeholder);
-
-                        selector.parentNode.replaceChild(placeholder, selector);
+                    // New/unknown text nodes must be analyzed and prepared. If
+                    // the meta object for text nodes Composite.ATTRIBUTE_TEXT
+                    // and Composite.ATTRIBUTE_VALUE are not contained, it must
+                    // be new.
+                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)) {
+                        object.render();
+                        return;
+                    }   
                         
-                        // The placeholder now exists in the DOM.
-                        // On object level is now switched from template to
-                        // placeholder and the normal markup processing is
-                        // continued.                         
+                    // Step 1:
+                    // If the text node does not contain an expression, the
+                    // content is static. Static text nodes are marked with the
+                    // attribute Composite.ATTRIBUTE_TEXT.
+                    
+                    let content = selector.textContent;
+                    if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                         
-                        selector = placeholder;
+                        // Step 2:
+                        // All expressions are determined. A meta object is
+                        // created for all expressions. In the text content from
+                        // the text node, the expressions are replaced by a
+                        // placeholder in the format of the expression with a
+                        // serial. Empty expressions are removed/ignored.
+                        
+                        // All created meta objects with an expression have a
+                        // special render method for updating the text content
+                        // of the text node.
+                        
+                        // Step 3:
+                        // The format of the expression distinguishes whether it
+                        // is a parameter or an output expression. Parameter
+                        // expressions start with the name of the parameter and
+                        // are interpreted later, but do not generate any output.
+                        
+                        content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
+                            if (!match.substring(2, match.length -2).trim())
+                                return "";
+                            const node = document.createTextNode("");
+                            const serial = node.ordinal();
+                            const object = {serial, element:node, attributes:{}, value:null,
+                                render() {
+                                    let word = "";
+                                    if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
+                                        const name = String(this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
+                                        const value = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
+                                        window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
+                                    } else {
+                                        word = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "");
+                                        word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
+                                    }
+                                    this.value = word;
+                                    this.element.textContent = word;
+                                }};
+                                const param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                                if (param) {
+                                    object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
+                                    object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
+                                } else object.attributes[Composite.ATTRIBUTE_VALUE] = match;
+                            Composite.render.meta[serial] = object;
+                            return "{{" + serial + "}}";
+                        });
+                        
+                        // Step 4:
+                        // The prepared text with expression placeholders is
+                        // analyzed. All placeholders are determined and the
+                        // text is split at the placeholders. The result is an
+                        // array of words. Each word are new text nodes with
+                        // static text or dynamic content.
+                        
+                        if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                            const words = content.split(/(\{\{\d+\}\})/);
+                            words.forEach((word, index, array) => {
+                                if (word.match(/^\{\{\d+\}\}$/)) {
+                                    const serial = parseInt(word.substring(2, word.length -2).trim());
+                                    const object = Composite.render.meta[serial];
+                                    Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
+                                    object.render();
+                                    array[index] = object.element;
+                                } else {
+                                    const node = document.createTextNode(word);
+                                    const serial = node.ordinal();
+                                    const object = {serial, element:node, attributes:{}};
+                                    Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
+                                    object.element.textContent = word;
+                                    object.attributes[Composite.ATTRIBUTE_TEXT] = word;
+                                    Composite.render.meta[serial] = object;
+                                    array[index] = object.element;
+                                }
+                            });
+                            
+                            // Step 5:
+                            // The newly created text nodes are inserted before
+                            // the current text node. The current text node can
+                            // then be deleted, since its content is displayed
+                            // using the newly created text nodes.
+                            
+                            // For internal and temporary calls, no parent can
+                            // exist.
+                            if (selector.parentNode === null)
+                                return;
+                            
+                            // The new text nodes are inserted before the
+                            // current element one.
+                            words.forEach((node) => {
+                                selector.parentNode.insertBefore(node, selector);
+                            });
+                            
+                            // The current element will be removed.
+                            selector.parentNode.removeChild(selector);                        
+                            
+                            return;
+                        }
+                        
+                        // If the text content contains empty expressions, these
+                        // are corrected and the content is used as static.
+                        selector.nodeValue = content;
+                    }
+                    
+                    object.attributes[Composite.ATTRIBUTE_TEXT] = content;
+                    
+                    return;
+                }
+                
+                // Internal method for emulating the composite hierarchy for a
+                // temporary container element. The help method is required for
+                // the lookup and locate methods to work with templates, because
+                // both require the complete composite hierarchy to determine
+                // the namespace of the models. The return value is a DIV
+                // structure that corresponds to the composite hierarchy.
+                const imitate = (element) => {
+                    if (!(element instanceof Element))
+                        return null;
+                    let container = document.createElement("div");
+                    let construct = container;
+                    for (; element; element = element.parentNode) {
+                        if (!(element instanceof Element)
+                                || !element.hasAttribute(Composite.ATTRIBUTE_ID))
+                            continue;
+                        const temp = document.createElement("div");
+                        temp.setAttribute(Composite.ATTRIBUTE_ID, element.getAttribute(Composite.ATTRIBUTE_ID));
+                        if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
+                            temp.setAttribute(Composite.ATTRIBUTE_COMPOSITE, "");
+                        temp.appendChild(construct);
+                        construct = temp;
+                    }
+                    return container;
+                };            
+                
+                // Internal method for docking models. Only composites ar
+                // mounted based on their model. This excludes the placeholders
+                // (are text nodes) of conditions.
+                const dock = (model) => {
+                    if (typeof model !== "string"
+                            || Composite.models.has(model))
+                        return;
+                    Composite.models.add(model);
+                    model = Object.lookup(model);
+                    if (model && typeof model.dock === "function")
+                        model.dock.call(model);
+                };
+
+                // Only composites are mounted based on their model. This
+                // excludes the placeholders (are text nodes) of conditions.
+                if (selector instanceof Element
+                        && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                    const model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                    if (!model.match(Composite.PATTERN_COMPOSITE_ID))
+                        throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
+                    dock(model);
+                }
+                
+                // ATTRIBUTE_CONDITION: The is a very special implementation. So
+                // it was important that a condition can remove and add a node
+                // in the DOM. To do this, a placeholder and a template are
+                // created for an element with a condition. The placeholder is a
+                // text node without content and therefore invisible in the user
+                // interface. The placeholder is the cached markup of the
+                // element. Thus, the renderer can insert or remove the markup
+                // before the placeholder according to the condition.
+                if (selector.nodeType === Node.TEXT_NODE
+                        && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
+                    const placeholder = object;
+                    
+                    // If the share from the placeholder corresponds to the
+                    // current lock, the rendering for placeholder and output
+                    // has already been done and nothing more needs to be done.
+                    if (placeholder.share === lock.ordinal())
+                        return;
+                    placeholder.share = lock.ordinal();
+                    
+                    // If the placeholder share does not match the current lock,
+                    // the placeholder and output rendering must be performed.
+                    // Both are only taken over by the placeholder. It decides
+                    // whether the output has to be added, updated or removed in
+                    // the DOM and does so. The goal is that a condition
+                    // consists of two parts. Both parts are checked and
+                    // rendered, but the expression(s) are called only once in
+                    // one render cycle.
+
+                    if (placeholder.condition
+                            && placeholder.condition.match(Composite.PATTERN_EXPRESSION_CONDITION)
+                            && Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
+                        
+                        // Load modules/components/composite resources.
+                        // Composites with condition are only loaded with the
+                        // first use.                    
+                        if (!placeholder.complete) {
+                            if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                                // The include method is designed for the
+                                // renderer and expects meta objects in the meta
+                                // cache. These meta-objects do not exist for
+                                // templates, so it must be created temporarily
+                                // and then removed again.
+                                const serial = placeholder.template.ordinal();
+                                const object = {serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
+                                Composite.render.meta[serial] = object;
+                                _render_include(placeholder.template);
+                                delete Composite.render.meta[serial];
+                            }
+                            placeholder.complete = true;
+                        }
+                        
+                        // Only composites are mounted based on their model.
+                        // This excludes the placeholders (are text nodes) of
+                        // conditions.
+                        if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                            const model = String(placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
+                            if (!model.match(Composite.PATTERN_COMPOSITE_ID))
+                                throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
+                            dock(model);
+                        }
+                        
+                        if (!placeholder.output) {
+                            
+                            // The placeholder output is rendered recursively
+                            // and finally and inserted before the placeholder.
+                            // Therefore, rendering can be stopped afterwards.
+                            const template = placeholder.template.cloneNode(true);
+
+                            // Rendering templates should have the same effects
+                            // as rendering markups in the current DOM. This
+                            // requires the real composite hierarchy, which is
+                            // simulated here.
+                            const container = imitate(selector.parentNode);
+                            container.appendChild(template);
+                                                    
+                            // The placeholder output is rendered recursively
+                            // and finally and inserted before the placeholder.
+                            // Therefore, rendering can be stopped afterwards.
+                            placeholder.output = template;
+                            
+                            // The meta object is prepared and registered so
+                            // that the attributes of the placeholder are
+                            // available for rendering.
+                            const serial = template.ordinal();
+                            const output = {serial, element:template, attributes:object.attributes};
+                            Composite.render.meta[serial] = output;
+                            
+                            // The placeholder output is rendered recursively
+                            // and finally and inserted in the iterate
+                            // container. Therefore, rendering can be stopped
+                            // afterwards.
+                            Composite.render(template, lock.share());
+                            output.placeholder = placeholder;
+                            selector.parentNode.insertBefore(template, selector);
+                            return;
+                        }
+                        
+                        // The output now exists in the DOM. The render task of
+                        // the placeholder is done. On object level is now
+                        // switched from placeholder to output and the normal
+                        // markup processing is continued.                    
+                        
+                        selector = placeholder.output;
                         serial = selector.ordinal();
                         object = Composite.render.meta[serial];
                         
                     } else {
-                        
-                        // Load modules/components/composite resources.
-                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
-                            _render_include(selector);
-                    }
-                }
-            }
-            
-            // The placeholder-output is interpreted.
-            // The output is controlled by the placeholder.
-            if (object.hasOwnProperty("placeholder")) {
-                
-                // The corresponding placeholder is determined for the output so
-                // that the rendering can be forwarded. 
-                // The placeholder uses the lock to exclude recursions.
-                // Therefore, the passing of the lock is important here.
-                Composite.render(object.placeholder.element, lock.share());
-                
-                // The placeholder takes care of everything.
-                // It checks if the output is still needed in the DOM and updates
-                // it if necessary. So there is nothing more to do here and
-                // rendering can be aborted.
-                
-                // The placeholder now exists in the DOM.
-                // On object level is now switched from template to
-                // placeholder and the normal markup processing is
-                // continued.                         
-                
-                selector = object.placeholder.element;
-                serial = selector.ordinal();
-                object = Composite.render.meta[serial];                
-                
-                return;
-            }
-            
-            // A text node contain static and dynamic contents as well as
-            // parameters. Dynamic contents and parameters are formulated as
-            // expressions, but only the dynamic contents are output. Parameters
-            // are interpreted, but do not generate any output. During initial
-            // processing, a text node is analyzed and, if necessary, split
-            // into static content, dynamic content and parameters. To do this,
-            // the original text node is replaced by new separate text nodes:
-            //     e.g. "text {{expr}} + {{var:expr}}" ->  ["text ", {{expr}}, " + ", {{var:expr}}]
-            // When the text nodes are split, meta objects are created for them.
-            // The meta objects are compatible with the meta objects of the
-            // rendering methods but use the additional attributes: 
-            //     Composite.ATTRIBUTE_TEXT, Composite.ATTRIBUTE_NAME and
-            //     Composite.ATTRIBUTE_VALUE
-            // Only static content uses Composite.ATTRIBUTE_TEXT, dynamic content
-            // and parameters use Composite.ATTRIBUTE_VALUE, and only the
-            // parameters use Composite.ATTRIBUTE_NAME.
-            // The meta objects for dynamic content also have their own rendering
-            // method for generating output. Static content is ignored later
-            // during rendering because it is unchangeable.
-            if (selector.nodeType === Node.TEXT_NODE
-                    && !object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                
-                // Elements of type: script + style are ignored.
-                // No expression is replaced here.
-                if (selector.parentNode
-                        && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
-                    return;
-                
-                // Text nodes are only analyzed once.
-                // Pure text is completely ignored, only text nodes with a
-                // expression as value are updated.
-                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_TEXT))
-                    return;
 
-                // New/unknown text nodes must be analyzed and prepared.
-                // If the meta object for text nodes Composite.ATTRIBUTE_TEXT and
-                // Composite.ATTRIBUTE_VALUE are not contained, it must be new.
-                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)) {
-                    object.render();
-                    return;
-                }   
-                    
-                // Step 1:
-                // If the text node does not contain an expression, the content
-                // is static. Static text nodes are marked with the attribute
-                // Composite.ATTRIBUTE_TEXT.
-                
-                let content = selector.textContent;
-                if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                    
-                    // Step 2:
-                    // All expressions are determined. A meta object is created
-                    // for all expressions. In the text content from the text
-                    // node, the expressions are replaced by a placeholder in the
-                    // format of the expression with a serial.
-                    // Empty expressions are removed/ignored.
-                    
-                    // All created meta objects with an expression have a special
-                    // render method for updating the text content of the text
-                    // node.
-                    
-                    // Step 3:
-                    // The format of the expression distinguishes whether it is a
-                    // parameter or an output expression. Parameter expressions
-                    // start with the name of the parameter and are interpreted
-                    // later, but do not generate any output.
-                    
-                    content = content.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
-                        if (!match.substring(2, match.length -2).trim())
-                            return "";
-                        const node = document.createTextNode("");
-                        const serial = node.ordinal();
-                        const object = {serial, element:node, attributes:{}, value:null,
-                            render() {
-                                let word = "";
-                                if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
-                                    const name = String(this.attributes[Composite.ATTRIBUTE_NAME] || "").trim();
-                                    const value = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "").trim();
-                                    window[name] = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, value);
-                                } else {
-                                    word = String(this.attributes[Composite.ATTRIBUTE_VALUE] || "");
-                                    word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
-                                }
-                                this.value = word;
-                                this.element.textContent = word;
-                            }};
-                            const param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
-                            if (param) {
-                                object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
-                                object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
-                            } else object.attributes[Composite.ATTRIBUTE_VALUE] = match;
-                        Composite.render.meta[serial] = object;
-                        return "{{" + serial + "}}";
-                    });
-                    
-                    // Step 4:
-                    // The prepared text with expression placeholders is
-                    // analyzed. All placeholders are determined and the text is
-                    // split at the placeholders. The result is an array of
-                    // words. Each word are new text nodes with static text or
-                    // dynamic content.
-                    
-                    if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
-                        const words = content.split(/(\{\{\d+\}\})/);
-                        words.forEach((word, index, array) => {
-                            if (word.match(/^\{\{\d+\}\}$/)) {
-                                const serial = parseInt(word.substring(2, word.length -2).trim());
-                                const object = Composite.render.meta[serial];
-                                Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
-                                object.render();
-                                array[index] = object.element;
-                            } else {
-                                const node = document.createTextNode(word);
-                                const serial = node.ordinal();
-                                const object = {serial, element:node, attributes:{}};
-                                Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
-                                object.element.textContent = word;
-                                object.attributes[Composite.ATTRIBUTE_TEXT] = word;
-                                Composite.render.meta[serial] = object;
-                                array[index] = object.element;
-                            }
-                        });
+                        const condition = (placeholder.condition || "").trim();
+                        if (!condition.match(Composite.PATTERN_EXPRESSION_CONDITION))
+                            console.error(`Invalid condition${condition ? ": " + condition : ""}`);
                         
-                        // Step 5:
-                        // The newly created text nodes are inserted before the
-                        // current text node. The current text node can then be
-                        // deleted, since its content is displayed using the
-                        // newly created text nodes.
-                        
-                        // For internal and temporary calls, no parent can exist.
-                        if (selector.parentNode === null)
+                        // The output is removed from the DOM because the
+                        // condition is not explicitly true.
+                        if (!placeholder.output)
                             return;
-                        
-                        // The new text nodes are inserted before the current
-                        // element one.
-                        words.forEach((node) => {
-                            selector.parentNode.insertBefore(node, selector);
+                        selector.parentNode.removeChild(placeholder.output);
+                        delete placeholder.output;
+                        return;
+                    }
+                }
+                
+                if (!(selector instanceof Element))
+                    return;
+                
+                // The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
+                // ATTRIBUTE_RENDER are processed in Composite.mount(selector)
+                // the view model binding and are only mentioned here for
+                // completeness.
+                
+                // The attribute ATTRIBUTE_RELEASE has no functional
+                // implementation. This is exclusively inverse indicator that an
+                // element was rendered. The renderer removes this attribute
+                // when an element is rendered. This effect can be used for CSS
+                // to display elements only in rendered state.   
+                
+                // ATTRIBUTE_IMPORT: This declaration loads the content and
+                // replaces the inner HTML of an element with the content.
+                // The following data types are supported:
+                // 1. Node and NodeList as the result of an expression.
+                // 2. URL (relative or absolute) loads markup/content from a
+                //    remote data source via the HTTP method GET
+                // 2. DataSource-URL loads and transforms DataSource data.
+                // 3. Everything else is output directly as string/text.
+                // The import is exclusive, similar to ATTRIBUTE_OUTPUT, thus
+                // overwriting any existing content. The recursive (re)rendering
+                // is initiated via the MutationObserver. Loading and replacing
+                // the import function can be combined with ATTRIBUTE_CONDITION
+                // and is only executed when the condition is true. If the
+                // content can be loaded successfully, ATTRIBUTE_IMPORT is
+                // removed.
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
+                    selector.innerHTML = "";
+                    let value = object.attributes[Composite.ATTRIBUTE_IMPORT];
+                    if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                        value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, String(value));
+
+                    Composite.render.cache = Composite.render.cache || {};
+                    
+                    if (!value) {
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                    
+                    } else if (value instanceof Element
+                            || value instanceof NodeList) {
+                        selector.appendChild(value, true);
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+
+                    } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
+                        let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
+                        data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
+                        data[1] = DataSource.fetch("xml://" + data[1]);
+                        data = DataSource.transform(data[1], data[2]);
+                        selector.appendChild(data, true);
+                        const serial = selector.ordinal();
+                        const object = Composite.render.meta[serial];
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                    
+                    } else if (Composite.render.cache[value] !== undefined) {
+                        selector.innerHTML = Composite.render.cache[value];
+                        const serial = selector.ordinal();
+                        const object = Composite.render.meta[serial];
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                    
+                    } else {
+                        Composite.asynchron((selector, lock, url) => {
+                            try {
+                                const request = new XMLHttpRequest();
+                                request.overrideMimeType("text/plain");
+                                request.open("GET", url, false);
+                                request.send();
+                                if (request.status !== 200)
+                                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                                const content = request.responseText.trim();
+                                Composite.render.cache[request.responseURL] = content;
+                                selector.innerHTML = content;
+                                const serial = selector.ordinal();
+                                const object = Composite.render.meta[serial];
+                                delete object.attributes[Composite.ATTRIBUTE_IMPORT];
+                            } catch (error) {
+                                Composite.fire(Composite.EVENT_HTTP_ERROR, error);
+                                throw error;
+                            } finally {
+                                lock.release();
+                            }
+                        }, selector, lock.share(), value);
+                    }
+                } 
+                
+                // ATTRIBUTE_OUTPUT: This declaration sets the value or result
+                // of an expression as the content of an element.
+                // The following data types are supported:
+                // 1. Node and NodeList as the result of an expression.
+                // 2. DataSource-URL loads and transforms DataSource data.
+                // 3. Everything else is output directly as string/text.
+                // The output is exclusive, thus overwriting any existing
+                // content. The recursive (re)rendering is initiated via the
+                // MutationObserver.
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
+                    selector.innerHTML = "";
+                    let value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
+                    if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                        value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
+                    if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
+                        let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
+                        data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
+                        data[1] = DataSource.fetch("xml://" + data[1]);
+                        data = DataSource.transform(data[1], data[2]);
+                        selector.appendChild(data, true);
+                    } else if (value instanceof Node)
+                        selector.appendChild(value.cloneNode(true), true);
+                    else if (value instanceof NodeList)
+                        Array.from(value).forEach(function(node, index) {
+                            selector.appendChild(node.cloneNode(true), index === 0);
                         });
-                        
-                        // The current element will be removed.
-                        selector.parentNode.removeChild(selector);                        
-                        
-                        return;
-                    }
-                    
-                    // If the text content contains empty expressions, these are
-                    // corrected and the content is used as static.
-                    selector.nodeValue = content;
+                    else selector.innerHTML = String(value);
                 }
-                
-                object.attributes[Composite.ATTRIBUTE_TEXT] = content;
-                
-                return;
-            }
-            
-            // Internal method for emulating the composite hierarchy for a
-            // temporary container element. The help method is required for the
-            // lookup and locate methods to work with templates, because both
-            // require the complete composite hierarchy to determine the
-            // namespace of the models. The return value is a DIV structure that
-            // corresponds to the composite hierarchy.
-            const imitate = (element) => {
-                if (!(element instanceof Element))
-                    return null;
-                let container = document.createElement("div");
-                let construct = container;
-                for (; element; element = element.parentNode) {
-                    if (!(element instanceof Element)
-                            || !element.hasAttribute(Composite.ATTRIBUTE_ID))
-                        continue;
-                    const temp = document.createElement("div");
-                    temp.setAttribute(Composite.ATTRIBUTE_ID, element.getAttribute(Composite.ATTRIBUTE_ID));
-                    if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-                        temp.setAttribute(Composite.ATTRIBUTE_COMPOSITE, "");
-                    temp.appendChild(construct);
-                    construct = temp;
-                }
-                return container;
-            };            
-            
-            // Internal method for docking models.
-            // Only composites are mounted based on their model.
-            // This excludes the placeholders (are text nodes) of conditions.
-            const dock = (model) => {
-                if (typeof model !== "string"
-                        || Composite.models.has(model))
-                    return;
-                Composite.models.add(model);
-                model = Object.lookup(model);
-                if (model && typeof model.dock === "function")
-                    model.dock.call(model);
-            };
 
-            // Only composites are mounted based on their model.
-            // This excludes the placeholders (are text nodes) of conditions.
-            if (selector instanceof Element
-                    && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                const model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
-                if (!model.match(Composite.PATTERN_COMPOSITE_ID))
-                    throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
-                dock(model);
-            }
-            
-            // The condition attribute is interpreted.
-            // The condition is a very special implementation.
-            // So it was important that a condition can remove and add a node in
-            // the DOM. To do this, a placeholder and a template are created for
-            // an element with a condition. The placeholder is a text node
-            // without content and therefore invisible in the user interface.
-            // The placeholder is the cached markup of the element.
-            // Thus, the renderer can insert or remove the markup before the
-            // placeholder according to the condition.
-            if (selector.nodeType === Node.TEXT_NODE
-                    && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)) {
-                const placeholder = object;
-                
-                // If the share from the placeholder corresponds to the current
-                // lock, the rendering for placeholder and output has already
-                // been done and nothing more needs to be done.
-                if (placeholder.share === lock.ordinal())
-                    return;
-                placeholder.share = lock.ordinal();
-                
-                // If the placeholder share does not match the current lock, the
-                // placeholder and output rendering must be performed. Both are
-                // only taken over by the placeholder. It decides whether the
-                // output has to be added, updated or removed in the DOM and does
-                // so. The goal is that a condition consists of two parts. Both
-                // parts are checked and rendered, but the expression(s) are
-                // called only once in one render cycle.
-
-                if (placeholder.condition
-                        && placeholder.condition.match(Composite.PATTERN_EXPRESSION_CONDITION)
-                        && Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, placeholder.condition) === true) {
-                    
-                    // Load modules/components/composite resources.
-                    // Composites with condition are only loaded with the first use.                    
-                    if (!placeholder.complete) {
-                        if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                            // The include method is designed for the renderer
-                            // and expects meta objects in the meta cache. These
-                            // meta-objects do not exist for templates, so it
-                            // must be created temporarily and then removed again.
-                            const serial = placeholder.template.ordinal();
-                            const object = {serial, element:placeholder.template, attributes:placeholder.attributes, share:null};
-                            Composite.render.meta[serial] = object;
-                            _render_include(placeholder.template);
-                            delete Composite.render.meta[serial];
+                // ATTRIBUTE_INTERVAL: Interval based rendering. If an HTML
+                // element is declared as interval, its initial inner HTML is
+                // used as a template. During the intervals, the inner HTML is
+                // first emptied, the template is rendered individually with
+                // each interval cycle, and the result is added to the inner
+                // HTML. ATTRIBUTE_INTERVAL expects a value in milliseconds. An
+                // invalid value cause a console output. The interval starts
+                // automatically with the (re)rendering of the declared HTML
+                // element and is terminated and removed when:
+                // - the element no longer exists in the DOM
+                // - ATTRIBUTE_CONDITION is false
+                let interval = String(object.attributes[Composite.ATTRIBUTE_INTERVAL] || "").trim();
+                if (interval && !object.interval) {
+                    const context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
+                    interval = String(Expression.eval(context, interval));
+                    if (interval.match(/^\d+$/)) {
+                        if (object.hasOwnProperty("placeholder")) {
+                            object = object.placeholder;
+                            selector = object.element;
                         }
-                        placeholder.complete = true;
-                    }
-                    
-                    // Only composites are mounted based on their model.
-                    // This excludes the placeholders (are text nodes) of conditions.
-                    if (placeholder.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                        const model = String(placeholder.attributes[Composite.ATTRIBUTE_ID] || "").trim();
-                        if (!model.match(Composite.PATTERN_COMPOSITE_ID))
-                            throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
-                        dock(model);
-                    }
-                    
-                    if (!placeholder.output) {
-                        
-                        // The placeholder output is rendered recursively and
-                        // finally and inserted before the placeholder.
-                        // Therefore, rendering can be stopped afterwards.
-                        const template = placeholder.template.cloneNode(true);
-
-                        // Rendering templates should have the same effects as
-                        // rendering markups in the current DOM. This requires
-                        // the real composite hierarchy, which is simulated here.
-                        const container = imitate(selector.parentNode);
-                        container.appendChild(template);
-                                                
-                        // The placeholder output is rendered recursively and
-                        // finally and inserted before the placeholder.
-                        // Therefore, rendering can be stopped afterwards.
-                        // var template = placeholder.template.cloneNode(true);                 
-                        placeholder.output = template;
-                        
-                        // The meta object is prepared and registered so that
-                        // the attributes of the placeholder are available for
-                        // rendering.
-                        const serial = template.ordinal();
-                        const output = {serial, element:template, attributes:object.attributes};
-                        Composite.render.meta[serial] = output;
-                        
-                        // The placeholder output is rendered recursively and
-                        // finally and inserted in the iterate container.
-                        // Therefore, rendering can be stopped afterwards.
-                        Composite.render(template, lock.share());
-                        output.placeholder = placeholder;
-                        selector.parentNode.insertBefore(template, selector);
-                        return;
-                    }
-                    
-                    // The output now exists in the DOM.
-                    // The render task of the placeholder is done.
-                    // On object level is now switched from placeholder to
-                    // output and the normal markup processing is continued.                    
-                    
-                    selector = placeholder.output;
-                    serial = selector.ordinal();
-                    object = Composite.render.meta[serial];
-                    
-                } else {
-
-                    const condition = (placeholder.condition || "").trim();
-                    if (!condition.match(Composite.PATTERN_EXPRESSION_CONDITION))
-                        console.error(`Invalid condition${condition ? ": " + condition : ""}`);
-                    
-                    // The output is removed from the DOM because the condition
-                    // is not explicitly true.
-                    if (!placeholder.output)
-                        return;
-                    selector.parentNode.removeChild(placeholder.output);
-                    delete placeholder.output;
-                    return;
-                }
-            }
-            
-            if (!(selector instanceof Element))
-                return;
-            
-            // The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
-            // ATTRIBUTE_RENDER are processed in Composite.mount(selector) the
-            // view model binding and are only mentioned here for completeness.
-            
-            // The attribute ATTRIBUTE_RELEASE has no functional implementation.
-            // This is exclusively inverse indicator that an element was
-            // rendered. The renderer removes this attribute when an element is
-            // rendered. This effect can be used for CSS to display elements only
-            // in rendered state.   
-            
-            // The import attribute is interpreted.
-            // This declaration loads the content and replaces the inner HTML of
-            // an element with the content.
-            // The following data types are supported:
-            // 1. Node and NodeList as the result of an expression.
-            // 2. URL (relative or absolute) loads markup/content from a remote
-            //    data source via the HTTP method GET
-            // 2. DataSource-URL loads and transforms DataSource data.
-            // 3. Everything else is output directly as string/text.
-            // The import is exclusive, similar to the output-attribute, thus
-            // overwriting any existing content. The recursive (re)rendering is
-            // initiated via the MutationObserver.
-            // Loading and replacing the import function can be combined with
-            // the condition attribute and is only executed when the condition
-            // is true. If the content can be loaded successfully, the import
-            // attribute is removed.
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)) {
-                selector.innerHTML = "";
-                let value = object.attributes[Composite.ATTRIBUTE_IMPORT];
-                if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, String(value));
-
-                Composite.render.cache = Composite.render.cache || {};
-                
-                if (!value) {
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
-                
-                } else if (value instanceof Element
-                        || value instanceof NodeList) {
-                    selector.appendChild(value, true);
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
-
-                } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
-                    data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
-                    data[1] = DataSource.fetch("xml://" + data[1]);
-                    data = DataSource.transform(data[1], data[2]);
-                    selector.appendChild(data, true);
-                    const serial = selector.ordinal();
-                    const object = Composite.render.meta[serial];
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                
-                } else if (Composite.render.cache[value] !== undefined) {
-                    selector.innerHTML = Composite.render.cache[value];
-                    const serial = selector.ordinal();
-                    const object = Composite.render.meta[serial];
-                    delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                
-                } else {
-                    Composite.asynchron((selector, lock, url) => {
-                        try {
-                            const request = new XMLHttpRequest();
-                            request.overrideMimeType("text/plain");
-                            request.open("GET", url, false);
-                            request.send();
-                            if (request.status !== 200)
-                                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-                            const content = request.responseText.trim();
-                            Composite.render.cache[request.responseURL] = content;
-                            selector.innerHTML = content;
-                            const serial = selector.ordinal();
-                            const object = Composite.render.meta[serial];
-                            delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                        } catch (error) {
-                            Composite.fire(Composite.EVENT_HTTP_ERROR, error);
-                            throw error;
-                        } finally {
-                            lock.release();
-                        }
-                    }, selector, lock.share(), value);
-                }
-            } 
-            
-            // The output attribute is interpreted.
-            // This declaration sets the value or result of an expression as the
-            // content of an element.
-            // The following data types are supported:
-            // 1. Node and NodeList as the result of an expression.
-            // 2. DataSource-URL loads and transforms DataSource data.
-            // 3. Everything else is output directly as string/text.
-            // The output is exclusive, thus overwriting any existing content.
-            // The recursive (re)rendering is initiated via the MutationObserver.
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
-                selector.innerHTML = "";
-                let value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
-                if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                    value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
-                if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                    let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
-                    data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
-                    data[1] = DataSource.fetch("xml://" + data[1]);
-                    data = DataSource.transform(data[1], data[2]);
-                    selector.appendChild(data, true);
-                } else if (value instanceof Node)
-                    selector.appendChild(value.cloneNode(true), true);
-                else if (value instanceof NodeList)
-                    Array.from(value).forEach(function(node, index) {
-                        selector.appendChild(node.cloneNode(true), index === 0);
-                    });
-                else selector.innerHTML = String(value);
-            }
-
-            // The interval attribute is interpreted.
-            // Interval rendering based on a window interval.
-            // If an HTML element is declared as interval, its initial inner HTML
-            // is used as a template. During the intervals, the inner HTML is
-            // first emptied, the template is rendered individually with each
-            // interval cycle, and the result is added to the inner HTML.
-            // The interval attribute expects a value in milliseconds. An invalid
-            // value cause a console output.
-            // The interval starts automatically with the (re)rendering of the
-            // declared HTML element and is terminated and removed when:
-            // - the element no longer exists in the DOM
-            // - the condition attribute is false
-            let interval = String(object.attributes[Composite.ATTRIBUTE_INTERVAL] || "").trim();
-            if (interval && !object.interval) {
-                const context = serial + ":" + Composite.ATTRIBUTE_INTERVAL;
-                interval = String(Expression.eval(context, interval));
-                if (interval.match(/^\d+$/)) {
-                    if (object.hasOwnProperty("placeholder")) {
-                        object = object.placeholder;
-                        selector = object.element;
-                    }
-                    interval = parseInt(interval);
-                    object.interval = {
-                        object,
-                        selector,
-                        task(interval) {
-                            const serial = interval.selector.ordinal();
-                            const object = Composite.render.meta[serial];
-                            let interrupt = !document.body.contains(interval.selector);
-                            if (!object)
-                                interrupt = true;
-                            if (object
-                                    && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
-                                    && (!object.condition.element
-                                            || !document.body.contains(object.condition.element)))
-                                interrupt = true;
-                            if (interrupt) {
-                                window.clearInterval(interval.timer);
-                                delete interval.object.interval                         
-                            } else Composite.render(interval.selector);
-                        }
-                    };
-                    object.interval.timer = window.setInterval(object.interval.task, interval, object.interval);
-                } else if (interval)
-                    console.error("Invalid interval: " + interval);
-            }
-            
-            // The iterate attribute is interpreted.
-            // Iterative rendering based on lists, enumeration and arrays.
-            // If an HTML element is declared iteratively, its initial inner HTML
-            // is used as a template. During iteration, the inner HTML is
-            // initially emptied, the template is rendered individually with each
-            // iteration cycle and the result is added to the inner HTML.
-            // There are two particularities to consider.
-            // 1. The internal recursive rendering must be done sequentially.
-            // 2. The internal rendering creates temporary composite meta
-            //    objects. These meta objects contain meta information in their
-            //    attributes, which can be incorrectly interpreted during rescan
-            //    after the iteration. Therefore, the temporarily created meta
-            //    objects must be removed.
-            // 3. A global variable is required for the iteration. If this
-            //    variable already exists, the existing variable is saved and
-            //    restored at the end of the iteration.
-            // A. variable with meta information is used within the iteration:
-            //    e.g iterate={{tempA:Model.list}} -> tempA = {item, index, data}
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
-                if (!object.iterate) {
-                    const iterate = String(object.attributes[Composite.ATTRIBUTE_ITERATE] || "").trim();
-                    const content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
-                    if (content) {
-                        object.iterate = {name:content[1].trim(),
-                            expression:"{{" + content[2].trim() + "}}"
+                        interval = parseInt(interval);
+                        object.interval = {
+                            object,
+                            selector,
+                            task(interval) {
+                                const serial = interval.selector.ordinal();
+                                const object = Composite.render.meta[serial];
+                                let interrupt = !document.body.contains(interval.selector);
+                                if (!object)
+                                    interrupt = true;
+                                if (object
+                                        && object.hasOwnProperty(Composite.ATTRIBUTE_CONDITION)
+                                        && (!object.condition.element
+                                                || !document.body.contains(object.condition.element)))
+                                    interrupt = true;
+                                if (interrupt) {
+                                    window.clearInterval(interval.timer);
+                                    delete interval.object.interval                         
+                                } else Composite.render(interval.selector);
+                            }
                         };
-                        object.template = selector.cloneNode(true);
-                    } else console.error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
+                        object.interval.timer = window.setInterval(object.interval.task, interval, object.interval);
+                    } else if (interval)
+                        console.error("Invalid interval: " + interval);
                 }
-                if (object.iterate) {
-                    // A temporary global variable is required for the
-                    // iteration. If this variable already exists, the existing
-                    // is cached and restored at the end of the iteration.
-                    const variable = window[object.iterate.name];
-                    try {
-                        const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
-                        selector.innerHTML = "";
-                        let iterate = Expression.eval(context, object.iterate.expression);
-                        if (iterate) {
-                            if (iterate instanceof XPathResult) {
-                                const meta = {entry:null, array:[], iterate};
-                                while (meta.entry = meta.iterate.iterateNext())
-                                    meta.array.push(meta.entry);
-                                iterate = meta.array;
-                            } else iterate = Array.from(iterate);
-                            iterate.forEach((item, index, array) => {
-                                const meta = {};
-                                Object.defineProperty(meta, "item", {
-                                    value: item,
-                                    enumerable: true
+                
+                // ATTRIBUTE_ITERATE: Iterative rendering based on lists,
+                // enumeration and arrays. If an HTML element is declared
+                // iteratively, its initial inner HTML is used as a template.
+                // During iteration, the inner HTML is initially emptied, the
+                // template is rendered individually with each iteration cycle
+                // and the result is added to the inner HTML.
+                // There are some particularities to consider:
+                // 1. The internal recursive rendering must be done
+                //    sequentially.
+                // 2. The internal rendering creates temporary composite meta
+                //    objects. These meta objects contain meta information in
+                //    their attributes, which can be incorrectly interpreted
+                //    during rescan after the iteration. Therefore, the
+                //    temporarily created meta objects must be removed.
+                // 3. A global variable is required for the iteration. If this
+                //    variable already exists, the existing variable is saved
+                //    and restored at the end of the iteration.
+                // A. Variable with meta information about the iteration is used
+                //    within the iteration:
+                //    e.g iterate={{tempA:Model.list}}
+                //            -> tempA = {item, index, data}
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
+                    if (!object.iterate) {
+                        const iterate = String(object.attributes[Composite.ATTRIBUTE_ITERATE] || "").trim();
+                        const content = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                        if (content) {
+                            object.iterate = {name:content[1].trim(),
+                                expression:"{{" + content[2].trim() + "}}"
+                            };
+                            object.template = selector.cloneNode(true);
+                        } else console.error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
+                    }
+                    if (object.iterate) {
+                        // A temporary global variable is required for the
+                        // iteration. If this variable already exists, the
+                        // existing is cached and restored at the end of the
+                        // iteration.
+                        const variable = window[object.iterate.name];
+                        try {
+                            const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
+                            selector.innerHTML = "";
+                            let iterate = Expression.eval(context, object.iterate.expression);
+                            if (iterate) {
+                                if (iterate instanceof XPathResult) {
+                                    const meta = {entry:null, array:[], iterate};
+                                    while (meta.entry = meta.iterate.iterateNext())
+                                        meta.array.push(meta.entry);
+                                    iterate = meta.array;
+                                } else iterate = Array.from(iterate);
+                                iterate.forEach((item, index, array) => {
+                                    const meta = {};
+                                    Object.defineProperty(meta, "item", {
+                                        value: item,
+                                        enumerable: true
+                                    });
+                                    Object.defineProperty(meta, "index", {
+                                        value: index,
+                                        enumerable: true
+                                    });
+                                    Object.defineProperty(meta, "data", {
+                                        value: array,
+                                        enumerable: true
+                                    });
+                                    window[object.iterate.name] = meta;
+                                    const template = document.createElement("div");
+                                    const container = imitate(selector.parentNode);
+                                    container.appendChild(template);
+                                    template.appendChild(object.template.cloneNode(true).childNodes);
+                                    Composite.render(template, lock.share());
+                                    selector.appendChild(template.childNodes);
+                                    delete Composite.render.meta[template.ordinal()];                                 
                                 });
-                                Object.defineProperty(meta, "index", {
-                                    value: index,
-                                    enumerable: true
-                                });
-                                Object.defineProperty(meta, "data", {
-                                    value: array,
-                                    enumerable: true
-                                });
-                                window[object.iterate.name] = meta;
-                                const template = document.createElement("div");
-                                const container = imitate(selector.parentNode);
-                                container.appendChild(template);
-                                template.appendChild(object.template.cloneNode(true).childNodes);
-                                Composite.render(template, lock.share());
-                                selector.appendChild(template.childNodes);
-                                delete Composite.render.meta[template.ordinal()];                                 
-                            });
+                            }
+                        } finally {
+                            // If necessary, restore the temporary variable.
+                            delete window[object.iterate.name];
+                            if (variable !== undefined)
+                                window[object.iterate.name] = variable;
                         }
-                    } finally {
-                        // If necessary, restore the temporary variable.
-                        delete window[object.iterate.name];
-                        if (variable !== undefined)
-                            window[object.iterate.name] = variable;
-                    }
-                    // The content is finally rendered, the enclosing container
-                    // element itself, or more precisely the attributes, still
-                    // needs to be updated.
-                }
-            }
-            
-            // The expression in the attributes is interpreted.
-            // The expression is stored in a meta object and loaded from there,
-            // the attributes of the element can be overwritten in a render cycle
-            // and are available (conserved) for further cycles. A special case
-            // is the text element. The result is output here as textContent.
-            // Elements of type: script + style are ignored.
-            if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
-                const attributes = [];
-                for (const key in object.attributes)
-                    if (object.attributes.hasOwnProperty(key))
-                        attributes.push(key);
-                if (Composite.ATTRIBUTE_VALUE in selector
-                        && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
-                        && !attributes.includes(Composite.ATTRIBUTE_VALUE))
-                    attributes.push(Composite.ATTRIBUTE_VALUE);
-                attributes.forEach((attribute) => {
-                    // Ignore all internal attributes
-                    if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
-                            && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
-                        return;
-                    let value = String(object.attributes[attribute] || "");
-                    if (!value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                        return;
-                    const context = serial + ":" + attribute;
-                    value = Expression.eval(context, value);
-                    // If the type value is 'undefined', the attribute is
-                    // removed. Since the attribute contains an expression, the
-                    // removal is only temporary and is checked again at the next
-                    // render cycle and possibly inserted again if the expression
-                    // returns a return value.
-                    if (value !== undefined) {
-                        value = String(value).encodeHtml();
-                        value = value.replace(/"/g, "&quot;");
-                        // Special case attribute value, here primarily the value
-                        // of the property must be set, the value of the
-                        // attribute is optional. Changing the value does not
-                        // trigger an event, so no unwanted recursions occur.
-                        if (attribute.toLowerCase() === Composite.ATTRIBUTE_VALUE
-                                && Composite.ATTRIBUTE_VALUE in selector)
-                            selector.value = value;
-                        selector.setAttribute(attribute, value);
-                    } else selector.removeAttribute(attribute);
-                });
-            }
-
-            // Embedded scripting brings some special effects.
-            // The default scripting is automatically executed by the browser and
-            // independent of rendering. Therefore, the scripting for rendering
-            // has been adapted and a new script type have been introduced:
-            //     composite/javascript
-            // This script type use the normal JavaScript. Unlike type
-            // text/javascript, the browser does not recognize them and does not
-            // execute the JavaScript code automatically. Only the render
-            // recognizes the JavaScript code and executes it in each render
-            // cycle when the cycle includes the script element. In this way, the
-            // execution of the script element can also be combined with the
-            // attribute condition.
-            if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
-                const type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
-                if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
-                    try {_render_include_eval(selector.textContent);
-                    } catch (exception) {
-                        console.error("Composite JavaScript", exception);
+                        // The content is finally rendered, the enclosing
+                        // container element itself, or more precisely the
+                        // attributes, still needs to be updated.
                     }
                 }
-            }
-            
-            // Follow other element children recursively.
-            // The following are ignored:
-            // - Elements of type: script + style and custom tags
-            // - Elements with functions that modify the inner markup
-            // - Elements that are iteration
-            // These elements manipulate the inner markup.
-            // This is intercepted by the MutationObserver.
-            if (selector.childNodes
-                    && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                    && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))) {
-                Array.from(selector.childNodes).forEach((node) => {
-                    // The rendering is recursive, if necessary the node is then
-                    // no longer available. For example, if a condition is
-                    // replaced by the placeholder,
-                    if (!selector.contains(node))
-                        return;
-                    Composite.render(node, lock.share());
-                });
-            }
-            
-            if (selector.hasAttribute(Composite.ATTRIBUTE_RELEASE))
-                selector.removeAttribute(Composite.ATTRIBUTE_RELEASE);
+                
+                // EXPRESSION: The expression in the attributes is interpreted.
+                // The expression is stored in a meta object and loaded from
+                // there, the attributes of the element can be overwritten in a
+                // render cycle and are available (conserved) for further cycles.
+                // A special case is the text element. The result is output here
+                // as textContent. Elements of type: script + style are ignored.
+                if (!selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
+                    const attributes = [];
+                    for (const key in object.attributes)
+                        if (object.attributes.hasOwnProperty(key))
+                            attributes.push(key);
+                    if (Composite.ATTRIBUTE_VALUE in selector
+                            && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
+                            && !attributes.includes(Composite.ATTRIBUTE_VALUE))
+                        attributes.push(Composite.ATTRIBUTE_VALUE);
+                    attributes.forEach((attribute) => {
+                        // Ignore all internal attributes
+                        if (attribute.match(Composite.PATTERN_ATTRIBUTE_ACCEPT)
+                                && !attribute.match(Composite.PATTERN_ATTRIBUTE_STATIC))
+                            return;
+                        let value = String(object.attributes[attribute] || "");
+                        if (!value.match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                            return;
+                        const context = serial + ":" + attribute;
+                        value = Expression.eval(context, value);
+                        // If the type value is undefined, the attribute is
+                        // removed. Since the attribute contains an expression,
+                        // the removal is only temporary and is checked again at
+                        // the next render cycle and possibly inserted again if
+                        // the expression returns a return value.
+                        if (value !== undefined) {
+                            value = String(value).encodeHtml();
+                            value = value.replace(/"/g, "&quot;");
+                            // Special case attribute value, here primarily the
+                            // value of the property must be set, the value of
+                            // the attribute is optional. Changing the value
+                            // does not trigger an event, so no unwanted
+                            // recursions occur.
+                            if (attribute.toLowerCase() === Composite.ATTRIBUTE_VALUE
+                                    && Composite.ATTRIBUTE_VALUE in selector)
+                                selector.value = value;
+                            selector.setAttribute(attribute, value);
+                        } else selector.removeAttribute(attribute);
+                    });
+                }
 
-        } catch (exception) {
-            console.error(exception);
-            Composite.fire(Composite.EVENT_ERROR, exception);
-            if (origin instanceof Element)
-                origin.innerText = "Error: " + exception.message;
-        } finally {
-            lock.release();
+                // Embedded scripting brings some special effects. The default
+                // scripting is automatically executed by the browser and
+                // independent of rendering. Therefore, the scripting for
+                // rendering has been adapted and a new script type have been
+                // introduced: composite/javascript. This script type use the
+                // normal JavaScript. Unlike type text/javascript, the browser
+                // does not recognize them and does not execute the JavaScript
+                // code automatically. Only the render recognizes the JavaScript
+                // code and executes it in each render cycle when the cycle
+                // includes the script element. In this way, the execution of
+                // the script element can also be combined with
+                // ATTRIBUTE_CONDITION.
+                if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
+                    const type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
+                    if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
+                        try {_render_include_eval(selector.textContent);
+                        } catch (exception) {
+                            console.error("Composite JavaScript", exception);
+                        }
+                    }
+                }
+                
+                // Follow other element children recursively.
+                // The following are ignored:
+                // - Elements of type: script + style and custom tags
+                // - Elements with functions that modify the inner markup
+                // - Elements that are iteration
+                // These elements manipulate the inner markup.
+                // This is intercepted by the MutationObserver.
+                if (selector.childNodes
+                        && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
+                        && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))) {
+                    Array.from(selector.childNodes).forEach((node) => {
+                        // The rendering is recursive, if necessary the node is
+                        // then no longer available. For example, if a condition
+                        // is replaced by the placeholder,
+                        if (!selector.contains(node))
+                            return;
+                        Composite.render(node, lock.share());
+                    });
+                }
+                
+                if (selector.hasAttribute(Composite.ATTRIBUTE_RELEASE))
+                    selector.removeAttribute(Composite.ATTRIBUTE_RELEASE);
+
+            } catch (exception) {
+                console.error(exception);
+                Composite.fire(Composite.EVENT_ERROR, exception);
+                if (origin instanceof Element)
+                    origin.innerText = "Error: " + exception.message;
+            } finally {
+                lock.release();
+            }
         }
-    };
-        
+    });
+
     /**
      * Set of attributes to be hardened.
      * The hardening of attributes is part of the safety concept and should make
@@ -2280,14 +2125,14 @@ if (compliant("Composite")) {
      *     type          width
      *     
      * The following attributes are automatically hardened:
-     *     composite     id                static*
+     *     COMPOSITE     ID                STATIC*
      *     
      * Composite internal/relevant attributes are also protected, these are
      * removed in markup and managed in memory:
-     *     composite     condition         events
-     *     id            import            interval
-     *     iterate       output            release
-     *     render        validate
+     *     COMPOSITE     CONDITION         EVENTS
+     *     ID            IMPORT            INTERVAL
+     *     ITERATE       OUTPUT            RELEASE
+     *     RENDER        VALIDATE
      */
     Object.defineProperty(Composite, "statics", {
         value: new Set()
@@ -2381,8 +2226,8 @@ if (compliant("Composite")) {
             if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
                 throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
 
-            // Option namespace restricts the analysis to composites with an
-            // attribute namespace. If a composite is found without one, the
+            // Option namespace restricts the analysis to composites with
+            // ATTRIBUTE_NAMESPACE. If a composite is found without one, the
             // current namespace is terminated and the found composite is
             // outside the current namespace.
 
@@ -2391,12 +2236,12 @@ if (compliant("Composite")) {
                     || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
                 return !namespace ? {model:serial} : null;
 
-            // Determine from namespace by parent composite elements with ID and
-            // an attribute namespace. The prerequisite is that the direct
-            // composite from the model uses the attribute namespace. Without
-            // the attribute, the composites and thus the models are without
-            // namespace. Thus, there can also be decoupled composites and thus
-            // models in a nested markup.
+            // Determine from namespace by parent composite elements with
+            // ATTRIBUTE_ID and ATTRIBUTE_NAMESPACE. The prerequisite is that
+            // the direct composite from the model uses ATTRIBUTE_NAMESPACE.
+            // Without the attribute, the composites and thus the models are
+            // without namespace. Thus, there can also be decoupled composites
+            // and thus models in a nested markup.
 
             const locate = _mount_locate(element.parentNode, true);
             if (!locate)
@@ -2504,15 +2349,14 @@ if (compliant("Composite")) {
     };
 
     /**
-     * Load modules/components/composite resources.
-     * For components/composites, it is assumed that resources have been
-     * outsourced. For outsourcing CSS, JS and HTML are supported.
-     * The resources are stored in the module directory (./modules by default
-     * is relative to the page URL). The resources (response) are stored in the
-     * render cache, but only to detect and prevent repeated loading. The
-     * resources will only be requested once. If they do not exist (status 404),
-     * it is not tried again. Otherwise, an error is thrown if the request is
-     * not answered with status 200.
+     * Load modules/components/composite resources. For components/composites,
+     * it is assumed that resources have been outsourced. For outsourcing CSS,
+     * JS and HTML are supported. The resources are stored in the module
+     * directory (./modules by default is relative to the page URL). The
+     * resources (response) are stored in the render cache, but only to detect
+     * and prevent repeated loading. The resources will only be requested once.
+     * If they do not exist (status 404), it is not tried again. Otherwise, an
+     * error is thrown if the request is not answered with status 200.
      * @param composite
      */
     const _render_include = (composite) => {
@@ -2579,11 +2423,10 @@ if (compliant("Composite")) {
             const request = new XMLHttpRequest();
             request.overrideMimeType("text/plain"); 
 
-            // At first, HEAD is used to check if the resource exists.
-            // A HEAD before the GET appeared more friendly than a hard GET with
-            // errors. It costs one request more and has no benefit.
-            // Only server states 200 and 404 are supported, all others will
-            // cause an error.
+            // At first, HEAD is used to check if the resource exists. A HEAD
+            // before the GET appeared more friendly than a hard GET with
+            // errors. It costs one request more and has no benefit. Only server
+            // states 200 and 404 are supported, all others will cause an error.
             request.open("HEAD", resource, false);
             request.send();
             if (request.status === 404)
@@ -2591,9 +2434,8 @@ if (compliant("Composite")) {
             if (request.status !== 200)
                 throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
 
-            // If the resource exists it will be loaded.
-            // Only server states 200 and 404 are supported, all others will
-            // cause an error.
+            // If the resource exists it will be loaded. Only server states 200
+            // and 404 are supported, all others will cause an error.
             request.open("GET", resource, false);
             request.send();
             if (request.status === 404)
@@ -2610,8 +2452,8 @@ if (compliant("Composite")) {
             // initialize the global variable better with window[...].
             
             // HTML/Markup is preloaded into the render cache if available. If
-            // markup exists for the composite, the import attribute with the
-            // URL is added to the item. Inserting then takes over the import
+            // markup exists for the composite, ATTRIBUTE_IMPORT with the URL is
+            // added to the item. Inserting then takes over the import
             // implementation, which then also accesses the render cache.
 
             const content = request.responseText.trim();
@@ -2641,15 +2483,14 @@ if (compliant("Composite")) {
             }
         }
 
-        // The sequence of loading is strictly defined.
-        //     sequence: CSS, JS, HTML
+        // The sequence of loading is strictly defined: CSS, JS, HTML
         loading(context + ".css");
         loading(context + ".js");
         
         // HTML/Markup is only loaded if it is a known composite object and the
-        // element does not contain a markup (inner HTML) and the attributes
-        // import and output are not set. Thus is the assumption that for an
-        // empty element outsourced markup should exist.
+        // element does not contain a markup (inner HTML) and ATTRIBUTE_IMPORT
+        // and output are not set. Thus is the assumption that for an empty
+        // element outsourced markup should exist.
         if (object
                 && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                 && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
@@ -2667,15 +2508,14 @@ if (compliant("Composite")) {
      * relative to the URL. 
      * 
      * Composite modules consist of the optional resources CSS, JS and HTML.
-     * The #import meta-directive can only load CSS and JS.
-     * The behavior is the same as when loading composites in the markup. The
-     * server status 404 does not cause an error, because all resources of a
-     * composite are optional, also JavaScript. Server states other than 200
-     * and 404 cause an error. CSS resources are added to the HEAD and lead to
-     * an error if no HEAD element exists in the DOM. Markup (HTML) is not
-     * loaded because no target can be set for the output.
-     * The meta directive can be used multiple times in the meta section of a
-     * Composite JavaScript.    
+     * The #import meta-directive can only load CSS and JS. The behavior is the
+     * same as when loading composites in the markup. The server status 404 does
+     * not cause an error, because all resources of a composite are optional,
+     * also JavaScript. Server states other than 200 and 404 cause an error. CSS
+     * resources are added to the HEAD and lead to an error if no HEAD element
+     * exists in the DOM. Markup (HTML) is not loaded because no target can be
+     * set for the output. The meta directive can be used multiple times in the
+     * meta section of a Composite JavaScript.    
      * 
      * Meta directives can be used only at the beginning of the composite
      * JavaScript. The meta-section ends with the first comment or JavaScript
@@ -2826,7 +2666,7 @@ if (compliant("Composite")) {
     });
     
     // MutationObserver detects changes at the DOM and triggers (re)rendering
-    // and (re)scanning and prevents manipulation of the composite attributes.
+    // and (re)scanning and prevents manipulation of ATTRIBUTE_COMPOSITE.
     // - Text-Nodes: The TextContent of text nodes with an expression is
     //   protected by the MutationObserver and cannot be manipulated.
     // - The attributes of the renderer (Composite.PATTERN_ATTRIBUTE_ACCEPT)
@@ -2847,18 +2687,18 @@ if (compliant("Composite")) {
         }
         
         // Initially the common-module is loaded.
-        // The common-module is similar to an autostart, it is used to initialize
-        // the single page application. It consists of common.js and common.css.
-        // The configuration of the SiteMap and essential styles can/should be
-        // stored here.
+        // The common-module is similar to an autostart, it is used to
+        // initialize the single page application. It consists of common.js and
+        // common.css. The configuration of the SiteMap and essential styles
+        // can/should be stored here.
         _render_include("common");
         
         (new MutationObserver((records) => {
             records.forEach((record) => {
 
-                // Without Meta-Store, the renderer hasn't run yet.
-                // The reaction by the MutationObserver only makes sense when the
-                // renderer has run initially.
+                // Without Meta-Store, the renderer hasn't run yet. The reaction
+                // by the MutationObserver only makes sense when the renderer
+                // has run initially.
                 if (!Composite.render.meta)
                     return;
 
@@ -2921,8 +2761,8 @@ if (compliant("Composite")) {
                 
                 // Theoretically, the target object may be unknown by the
                 // renderer, but normally the mutation observer reacts to the
-                // parent element when inserting new elements.
-                // Therefore, this case was not implemented.
+                // parent element when inserting new elements. Therefore, this
+                // case was not implemented.
                 
                 // All new inserted elements are rendered if they are unknown for
                 // the renderer. It is important that the new nodes are also
@@ -3001,9 +2841,9 @@ if (compliant("Composite")) {
  * operators can be used.
  *
  * The expression language can be used from the HTML element BODY on in the
- * complete markup as free text, as well as in all attributes. Exceptions are
- * the HTML elements STYLE and SCRIPT whose content is not supported by the
- * expression Language.
+ * complete markup as free text, as well as in all ks. Exceptions are the HTML
+ * elements STYLE and SCRIPT whose content is not supported by the expression
+ * language.
  */
 compliant("Expression", {
 
@@ -3389,8 +3229,10 @@ compliant("Expression", {
     }
 });
 
-// Expression.cache
-// Cache (expression/script)
+/**
+ * Expression.cache
+ * Cache (expression/script)
+ */
 Object.defineProperty(Expression, "cache", {
     value: new Map()
 });
