@@ -134,11 +134,13 @@
     <property name="release.file.core" value="${workspace.release}/${ant.project.name}-core.js"/>
     <property name="release.file.micro.max" value="${workspace.release}/${ant.project.name}-micro-max.js"/>
     <property name="release.file.micro" value="${workspace.release}/${ant.project.name}-micro.js"/>
+    <property name="release.file.micro.core.max" value="${workspace.release}/${ant.project.name}-micro-core-max.js"/>
+    <property name="release.file.micro.core" value="${workspace.release}/${ant.project.name}-micro-core.js"/>
 
     <delete dir="${workspace.release}"/>
     <mkdir dir="${workspace.release}"/>
 
-    <concat destfile="${release.file.micro.max}" append="false">
+    <concat destfile="${release.file.micro.core.max}" append="false">
       <filelist dir="${workspace.sources}">
         <file name="extension.js"/>
         <file name="datasource.js"/>
@@ -147,12 +149,21 @@
         <file name="reactive.js"/>
       </filelist>
     </concat>
+    <replaceregexp file="${release.file.micro.core.max}" flags="g" byline="false"
+        match="\b(compliant\(\x22([\w\.]+)\x22,)\s*(window\.)?\2\s*=( )*" replace="\1 "/>
+
+    <concat destfile="${release.file.micro.max}" append="false">
+      <filelist dir="${workspace.sources}">
+        <file name="${release.file.micro.core.max}"/>
+        <file name="test.js"/>
+      </filelist>
+    </concat>
     <replaceregexp file="${release.file.micro.max}" flags="g" byline="false"
         match="\b(compliant\(\x22([\w\.]+)\x22,)\s*(window\.)?\2\s*=( )*" replace="\1 "/>
 
     <concat destfile="${release.file.core.max}" append="false">
       <filelist dir="${workspace.sources}">
-        <file name="${release.file.micro.max}"/>
+        <file name="${release.file.micro.core.max}"/>
         <file name="mvc.js"/>
       </filelist>
     </concat>
@@ -171,6 +182,7 @@
     <file-minimize file="${release.file.max}" file-min="${release.file}"/>
     <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>
     <file-minimize file="${release.file.micro.max}" file-min="${release.file.micro}"/>
+    <file-minimize file="${release.file.micro.core.max}" file-min="${release.file.micro.core}"/>
 
     <copy file="CHANGES" todir="${workspace.release}"/>
     <copy file="LICENSE" todir="${workspace.release}"/>
@@ -181,6 +193,8 @@
       <fileset dir="${workspace.release}" includes="${ant.project.name}-core.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-max.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-micro.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core.js"/>
       <fileset dir="${workspace.release}" includes="CHANGES"/>
       <fileset dir="${workspace.release}" includes="LICENSE"/>
     </touch>
@@ -191,6 +205,8 @@
       <fileset dir="${workspace.release}" includes="${ant.project.name}-core.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-max.js"/>
       <fileset dir="${workspace.release}" includes="${ant.project.name}-micro.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core-max.js"/>
+      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core.js"/>
       <fileset dir="${workspace.release}" includes="CHANGES"/>
       <fileset dir="${workspace.release}" includes="LICENSE"/>
     </zip>   
