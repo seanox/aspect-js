@@ -101,7 +101,8 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230121
  */
-compliant("SiteMap", window.SiteMap = {
+window.SiteMap =
+compliant("SiteMap", {
    
     /** 
      * Pattern for a valid face path:
@@ -845,8 +846,9 @@ window.addEventListener("hashchange", (event) => {
  * Static component for the use of (virtual) paths. Paths are a reference to a
  * target in face flow. The target can be a face, a facet or a function. For
  * more details see method Path.normalize(variants).
- */    
-compliant("Path", window.Path = {
+ */
+window.Path =
+compliant("Path", {
             
     /** 
      * Pattern for a valid path. The syntax is based on XML entities (DOM). A
