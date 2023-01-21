@@ -94,8 +94,8 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230121
  */
-window.Test =
-compliant("Test", {
+compliant("Test");
+compliant(null, window.Test = {
 
     /**
      * Activates the test API. The method can be called multiple times, but is
@@ -811,8 +811,8 @@ compliant("Test", {
          * @param value simulated input value
          * @param clear option false suppresses emptying before input
          */
-        Element.prototype.typeValue =
-        compliant("Element.prototype.typeValue", function(value, clear) {
+        compliant("Element.prototype.typeValue");
+        compliant(null, Element.prototype.typeValue = function(value, clear) {
             this.focus();
             if (clear !== false)
                 this.value = "";
@@ -830,8 +830,8 @@ compliant("Test", {
          * Enhancement of the JavaScript API
          * Adds a method that creates a plain string for an Element.
          */
-        Element.prototype.toPlainString =
-        compliant("Element.prototype.toPlainString", function() {
+        compliant("Element.prototype.toPlainString");
+        compliant(null, Element.prototype.toPlainString = function() {
             return this.outerHTML;
         });
 
@@ -839,8 +839,8 @@ compliant("Test", {
          * Enhancement of the JavaScript API
          * Adds a method that creates a plain string for a Node.
          */
-        Node.prototype.toPlainString =
-        compliant("Node.prototype.toPlainString", function() {
+        compliant("Node.prototype.toPlainString");
+        compliant(null, Node.prototype.toPlainString = function() {
             return (new XMLSerializer()).serializeToString(this);
         });
 
@@ -848,8 +848,8 @@ compliant("Test", {
          * Enhancement of the JavaScript API
          * Adds a method that creates a plain string for an Object.
          */
-        Object.prototype.toPlainString =
-        compliant("Object.prototype.toPlainString", function() {
+        compliant("Object.prototype.toPlainString");
+        compliant(null, Object.prototype.toPlainString = function() {
             if (this !== null
                     && typeof this[Symbol.iterator] === 'function')
                 return JSON.stringify([...this]);
@@ -864,8 +864,8 @@ compliant("Test", {
          *     through the event chain or not
          * @param cancel  defining whether the event can be canceled
          */
-        Element.prototype.trigger =
-        compliant("Element.prototype.trigger", function(event, bubbles = false, cancel = true) {
+        compliant("Element.prototype.trigger");
+        compliant(null, Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
             this.dispatchEvent(new Event(event, {bubbles:bubbles, cancelable:cancel}));
         });
 
@@ -875,8 +875,8 @@ compliant("Test", {
          * These methods can be used directly:
          *     Assert.assertEquals(...);
          */
-        window.Assert =
-        compliant("Assert", {
+        compliant("Assert");
+        compliant(null, window.Assert = {
                 
             /**
              * Creates a new assertion based on an array of variant parameters.
