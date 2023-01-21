@@ -147,6 +147,8 @@
         <file name="reactive.js"/>
       </filelist>
     </concat>
+    <replaceregexp file="${release.file.micro.max}" flags="g" byline="false"
+        match="\b(compliant\(\x22([\w\.]+)\x22,)\s*(window\.)?\2\s*=( )*" replace="\1 "/>
 
     <concat destfile="${release.file.core.max}" append="false">
       <filelist dir="${workspace.sources}">
@@ -154,6 +156,8 @@
         <file name="mvc.js"/>
       </filelist>
     </concat>
+    <replaceregexp file="${release.file.core.max}" flags="g" byline="false"
+        match="\b(compliant\(\x22([\w\.]+)\x22,)\s*(window\.)?\2\s*=( )*" replace="\1 "/>
 
     <concat destfile="${release.file.max}" append="false">
       <filelist dir="${workspace.sources}">
@@ -161,6 +165,8 @@
         <file name="test.js"/>
       </filelist>
     </concat>
+    <replaceregexp file="${release.file.max}" flags="g" byline="false"
+        match="\b(compliant\(\x22([\w\.]+)\x22,)\s*(window\.)?\2\s*=( )*" replace="\1 "/>
 
     <file-minimize file="${release.file.max}" file-min="${release.file}"/>
     <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>
