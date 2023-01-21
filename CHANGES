@@ -3,7 +3,7 @@ BF: Review: Optimization and corrections
     Added detection of future incompatibilities.
     Reduce the size of the releases.
 BF: Composite: Added recursion detection for include of composite markup
-    If a recursion is detected during the module include, for that to the error.
+    If a recursion is detected when the module is included, an error is output.
 BF: Composite: Support of const for models also in combined with Namespace.create(...)
 BF: Composite: Validation with message and notification also work without model
 BF: Test: Correction of wrong output of Element.prototype.toPlainString()
