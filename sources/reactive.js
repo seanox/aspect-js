@@ -42,8 +42,8 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230119
  */
-window.ReactProxy =
-compliant("ReactProxy", {
+compliant("ReactProxy");
+compliant(null, window.ReactProxy = {
 
     selector: null,
 
@@ -69,8 +69,8 @@ Composite.listen(Composite.EVENT_RENDER_END, function(event, selector) {
  * Adds a function to create a ReactProxy from the object instance.
  * If it is a ReactProxy, the reference of the instance is returned.
  */
-Object.prototype.toReactProxy =
-compliant("Object.prototype.toReactProxy", function() {
+compliant("Object.prototype.toReactProxy");
+compliant(null, Object.prototype.toReactProxy = function() {
 
     if (typeof this !== "object")
         throw new TypeError("Not supported data type: " + typeof this);

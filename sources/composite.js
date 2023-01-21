@@ -120,8 +120,8 @@ if (compliant("Composite")) {
      * The processing runs in the background and starts automatically when a
      * page is loaded.
      */
-    window.Composite =
-    compliant("Composite", {
+    compliant("Composite");
+    compliant(null, window.Composite = {
             
         /** Path of the Composite for: modules (sub-directory of work path) */
         get MODULES() {return window.location.combine(window.location.pathcontext, "/modules");},
@@ -2538,15 +2538,15 @@ if (compliant("Composite")) {
      * Enhancement of the JavaScript API
      * Adds a static counter for assigning serial IDs to the object.
      */
-    Object.indication =
-    compliant("Object.indication", 0);
+    compliant("Object.indication");
+    compliant(null, Object.indication = 0);
     
     /**
      * Enhancement of the JavaScript API
      * Adds a function for getting the serial ID to the objects.
      */
-    Object.prototype.ordinal =
-    compliant("Object.prototype.ordinal", function() {
+    compliant("Object.prototype.ordinal");
+    compliant(null, Object.prototype.ordinal = function() {
         this.serial = this.serial || ++Object.indication;
         return this.serial;
     });
@@ -2565,8 +2565,8 @@ if (compliant("Composite")) {
      * @return the created or already existing object(-level)
      * @throws An error occurs in case of invalid data types or syntax 
      */
-    Object.use =
-    compliant("Object.use",
+    compliant("Object.use");
+    compliant(null, Object.use =
         (...levels) => Namespace.use.apply(null, levels));
 
     /**
@@ -2583,8 +2583,8 @@ if (compliant("Composite")) {
      * @return the determined object(-level)
      * @throws An error occurs in case of invalid data types or syntax
      */
-    Object.lookup =
-    compliant("Object.lookup",
+    compliant("Object.lookup");
+    compliant(null, Object.lookup =
         (...levels) => Namespace.lookup.apply(null, levels));
 
     /**
@@ -2603,8 +2603,8 @@ if (compliant("Composite")) {
      * @return true if the namespace exists
      * @throws An error occurs in case of invalid data types or syntax
      */
-    Object.exists =
-    compliant("Object.exists",
+    compliant("Object.exists");
+    compliant(null, Object.exists =
         (...levels) => Namespace.exists.apply(null, levels));
 
     /**
@@ -2613,8 +2613,8 @@ if (compliant("Composite")) {
      * @param  object
      * @return true is neither undefined nor null
      */
-    Object.usable =
-    compliant("Object.usable",
+    compliant("Object.usable");
+    compliant(null, Object.usable =
         object => object !== undefined && object !== null);
 
     /**
@@ -2848,8 +2848,8 @@ if (compliant("Composite")) {
  * elements STYLE and SCRIPT whose content is not supported by the expression
  * language.
  */
-window.Expression =
-compliant("Expression", {
+compliant("Expression");
+compliant(null, window.Expression = {
 
     /** Constant for element type text */
     get TYPE_TEXT() {return 1;},

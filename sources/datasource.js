@@ -42,8 +42,8 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230121
  */
-window.DataSource =
-compliant("DataSource", {
+compliant("DataSource");
+compliant(null, window.DataSource = {
         
     /** Path of the DataSource for: data (sub-directory of work path) */
     get DATA() {return window.location.combine(window.location.pathcontext, "/data");},
@@ -289,8 +289,8 @@ compliant("DataSource", {
  * Enhancement of the JavaScript API
  * Adds a method for cloning a XMLDocument.
  */
-XMLDocument.prototype.clone =
-compliant("XMLDocument.prototype.clone", function() {
+compliant("XMLDocument.prototype.clone");
+compliant(null, XMLDocument.prototype.clone = function() {
     const clone = this.implementation.createDocument(null, null);
     clone.appendChild(clone.importNode(this.documentElement, true));
     return clone; 

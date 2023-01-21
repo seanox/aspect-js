@@ -32,11 +32,12 @@
 // trying to overwrite existing objects and functions. The mechanism is
 // temporary and is removed after the page is loaded.
 //
-// In the code, the method is used in an unconventional form and a kind of
-// double assignment takes place.
+// In the code, the method is used in an unconventional form.
 //
-//     compliant("Composite", window.Composite = {...});
-//     compliant("Object.prototype.ordinal", Object.prototype.ordinal = function() {...}
+//     compliant("Composite");
+//     compliant(null, window.Composite = {...});
+//     compliant("Object.prototype.ordinal");
+//     compliant(null, Object.prototype.ordinal = function() {...}
 //
 // This is only for the IDE so that syntax completion has a chance there. This
 // syntax will be simplified and corrected in the build process for the
@@ -45,6 +46,9 @@
 if (window.compliant !== undefined)
     throw new Error("JavaScript incompatibility detected for: compliant");
 window.compliant = (context, payload) => {
+    if (context === null
+            || context === undefined)
+        return payload;
     const type = new Function(`return typeof ${context}`)();
     if (type !== "undefined")
         throw new Error("JavaScript incompatibility detected for: " + context);
@@ -69,8 +73,8 @@ window.addEventListener("load",
  */
 if (compliant("Namespace")) {
 
-    window.Namespace =
-    compliant("Namespace", {
+    compliant("Namespace");
+    compliant(null, window.Namespace = {
 
         /** Pattern for the namespace separator */
         get PATTERN_NAMESPACE_SEPARATOR() {return /\./;},
@@ -341,8 +345,8 @@ Element.prototype.appendChild = function(node, exclusive) {
  * The quality of the ID is dependent of the length.
  * @param size optional, default is 16
  */
-Math.uniqueId =
-compliant("Math.uniqueId", (size) => {
+compliant("Math.uniqueId");
+compliant(null, Math.uniqueId = (size) => {
     size = size || 16;
     if (size < 0)
         size = 16;
@@ -363,8 +367,8 @@ compliant("Math.uniqueId", (size) => {
  * The quality of the ID is dependent of the length.
  * @param size optional, default is 16
  */
-Math.uniqueSerialId =
-compliant("Math.uniqueSerialId", (size) => {
+compliant("Math.uniqueSerialId");
+compliant(null, Math.uniqueSerialId = (size) => {
     size = size || 16;
     if (size < 0)
         size = 16;
@@ -384,8 +388,8 @@ compliant("Math.uniqueSerialId", (size) => {
  * @param  text text to be literalized
  * @return a literal pattern for the specified text 
  */
-RegExp.quote =
-compliant("RegExp.quote", (text) => {
+compliant("RegExp.quote");
+compliant(null, RegExp.quote = (text) => {
     if (!Object.usable(text))
         return null;
     return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
@@ -395,8 +399,8 @@ compliant("RegExp.quote", (text) => {
  * Enhancement of the JavaScript API
  * Adds a capitalize function to the String objects.
  */
-String.prototype.capitalize =
-compliant("String.prototype.capitalize", function() {
+compliant("String.prototype.capitalize");
+compliant(null, String.prototype.capitalize = function() {
     if (this.length <= 0)
         return this;
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -406,8 +410,8 @@ compliant("String.prototype.capitalize", function() {
  * Enhancement of the JavaScript API
  * Adds an uncapitalize function to the String objects.
  */
-String.prototype.uncapitalize =
-compliant("String.prototype.uncapitalize", function() {
+compliant("String.prototype.uncapitalize");
+compliant(null, String.prototype.uncapitalize = function() {
     if (this.length <= 0)
         return this;
     return this.charAt(0).toLowerCase() + this.slice(1);
@@ -417,8 +421,8 @@ compliant("String.prototype.uncapitalize", function() {
  * Enhancement of the JavaScript API
  * Adds a function for encoding the string objects in hexadecimal code.
  */
-String.prototype.encodeHex =
-compliant("String.prototype.encodeHex", function() {
+compliant("String.prototype.encodeHex");
+compliant(null, String.prototype.encodeHex = function() {
     let result = "";
     for (let loop = 0; loop < this.length; loop++) {
         let digit = Number(this.charCodeAt(loop)).toString(16).toUpperCase();
@@ -433,8 +437,8 @@ compliant("String.prototype.encodeHex", function() {
  * Enhancement of the JavaScript API
  * Adds a function for decoding hexadecimal code to the string objects.
  */
-String.prototype.decodeHex =
-compliant("String.prototype.decodeHex", function() {
+compliant("String.prototype.decodeHex");
+compliant(null, String.prototype.decodeHex = function() {
     let text = this;
     if (text.match(/^0x/))
         text = text.substring(2);
@@ -448,8 +452,8 @@ compliant("String.prototype.decodeHex", function() {
  * Enhancement of the JavaScript API
  * Adds a method for encoding Base64.
  */
-String.prototype.encodeBase64 =
-compliant("String.prototype.encodeBase64", function() {
+compliant("String.prototype.encodeBase64");
+compliant(null, String.prototype.encodeBase64 = function() {
     try {
         return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
             return String.fromCharCode("0x" + code);
@@ -463,8 +467,8 @@ compliant("String.prototype.encodeBase64", function() {
  * Enhancement of the JavaScript API
  * Adds a method for decoding Base64.
  */
-String.prototype.decodeBase64 =
-compliant("String.prototype.decodeBase64", function() {
+compliant("String.prototype.decodeBase64");
+compliant(null, String.prototype.decodeBase64 = function() {
     try {
         return decodeURIComponent(atob(this).split("").map((code) => {
             return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
@@ -478,8 +482,8 @@ compliant("String.prototype.decodeBase64", function() {
  * Enhancement of the JavaScript API
  * Adds an HTML encode function to the String objects.
  */
-String.prototype.encodeHtml =
-compliant("String.prototype.encodeHtml", function() {
+compliant("String.prototype.encodeHtml");
+compliant(null, String.prototype.encodeHtml = function() {
     const element = document.createElement("div");
     element.textContent = this;
     return element.innerHTML;
@@ -489,8 +493,8 @@ compliant("String.prototype.encodeHtml", function() {
  * Enhancement of the JavaScript API
  * Adds a method for calculating a hash value.
  */
-String.prototype.hashCode =
-compliant("String.prototype.hashCode", function() {
+compliant("String.prototype.hashCode");
+compliant(null, String.prototype.hashCode = function() {
     if (this.hash !== undefined
             && this.hash !== 0)
         return this.hash;
@@ -513,8 +517,8 @@ compliant("String.prototype.hashCode", function() {
  * Enhancement of the JavaScript API
  * Adds a decoding of slash sequences (control characters).
  */
-String.prototype.unescape =
-compliant("String.prototype.unescape", function() {
+compliant("String.prototype.unescape");
+compliant(null, String.prototype.unescape = function() {
     let text = this
         .replace(/\r/g, "\\r")
         .replace(/\n/g, "\\n")
@@ -548,8 +552,8 @@ Object.defineProperty(window.location, "pathcontext", {
  * Adds a method to combine paths to a new one.
  * The result will always start with a slash but ends without it.
  */
-window.location.combine =
-compliant("window.location.combine", (...paths) => {
+compliant("window.location.combine");
+compliant(null, window.location.combine = (...paths) => {
     return "/" + paths.join("/")
         .replace(/[\/\\]+/g, "/")
         .replace(/(^\/+)|(\/+$)/g, "");

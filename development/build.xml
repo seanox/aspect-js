@@ -150,7 +150,7 @@
       </filelist>
     </concat>
     <replaceregexp file="${release.file.micro.core.max}" flags="g" byline="false"
-        match="\b((window\.)?[\w\.]+)\s*=\s*(?=compliant\b\(\x22\1\x22,)" replace=""/>
+        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
 
     <concat destfile="${release.file.micro.max}" append="false">
       <filelist dir="${workspace.sources}">
@@ -159,7 +159,7 @@
       </filelist>
     </concat>
     <replaceregexp file="${release.file.micro.max}" flags="g" byline="false"
-        match="\b((window\.)?[\w\.]+)\s*=\s*(?=compliant\b\(\x22\1\x22,)" replace=""/>
+        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
 
     <concat destfile="${release.file.core.max}" append="false">
       <filelist dir="${workspace.sources}">
@@ -168,7 +168,7 @@
       </filelist>
     </concat>
     <replaceregexp file="${release.file.core.max}" flags="g" byline="false"
-        match="\b((window\.)?[\w\.]+)\s*=\s*(?=compliant\b\(\x22\1\x22,)" replace=""/>
+        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
 
     <concat destfile="${release.file.max}" append="false">
       <filelist dir="${workspace.sources}">
@@ -177,7 +177,7 @@
       </filelist>
     </concat>
     <replaceregexp file="${release.file.max}" flags="g" byline="false"
-        match="\b(compliant\(\x22([\w\.]+)\x22,)\s*(window\.)?\2\s*=( )*" replace="\1 "/>
+        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
 
     <file-minimize file="${release.file.max}" file-min="${release.file}"/>
     <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>

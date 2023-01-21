@@ -101,8 +101,8 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230121
  */
-window.SiteMap =
-compliant("SiteMap", {
+compliant("SiteMap");
+compliant(null, window.SiteMap = {
    
     /** 
      * Pattern for a valid face path:
@@ -847,8 +847,8 @@ window.addEventListener("hashchange", (event) => {
  * target in face flow. The target can be a face, a facet or a function. For
  * more details see method Path.normalize(variants).
  */
-window.Path =
-compliant("Path", {
+compliant("Path");
+compliant(null, window.Path = {
             
     /** 
      * Pattern for a valid path. The syntax is based on XML entities (DOM). A
