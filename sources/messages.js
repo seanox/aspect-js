@@ -66,7 +66,8 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230121
  */
-window.Messages = compliant("Messages", {});
+window.Messages =
+compliant("Messages", {});
 (() => {
 
     // Messages are based on DataSources. To initialize, the DataSource.localize
