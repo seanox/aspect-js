@@ -16,6 +16,11 @@ CR: Composite: Errors during rendering are output in the view
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
 CR: Composite: Renamed method Object.using(...) in Object.use(...)
+CR: Composite: Optimization when loading module resources
+    - JavaScript for modules is only loaded if no JavaScript model exists
+    - CSS for modules is only loaded if HTML is also loaded
+    - Omission of the HEAD request
+    Minimizes HTTP requests in the background and when loading the page.
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
 CR: Release: Channels with major number are omitted
 CR: Release: Revision of the release channels
