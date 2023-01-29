@@ -9,6 +9,7 @@
       }
     </style>
     <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
     <script type="text/javascript">
     
         Test.activate();
@@ -50,20 +51,18 @@
             }
         };
 
-        const snapshots = [];
+        const capture = new Capture();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
-            let snapshot = document.body.textContent;
-            snapshot = snapshot.replace(/^\s+/mg, "");
-            snapshots.push(snapshot);
-            if (snapshots.length === 9)
+            capture.snap();
+            if (capture.snapshots().length === 9)
                 Composite.render(document.body);
-            if (snapshots.length === 10)
+            if (capture.snapshots().length === 10)
                 Composite.render(document.body);
         });
 
         const timeout = window.setInterval(() => {
-            if (snapshots.length !== snapshots.ticks) {
-                snapshots.ticks = snapshots.length;
+            if (capture.snapshots().length !== capture.snapshots().ticks) {
+              capture.snapshots().ticks = capture.snapshots().length;
                 return;
             } else window.clearInterval(timeout);
             Test.start();
@@ -104,20 +103,24 @@
             styles = Array.from(styles);
             let stylesA = styles.filter(entry => entry.textContent.includes("moduleA"));
             Assert.assertEquals(1, stylesA.length);
+            // The following modules was loaded as a JavaScript import and
+            // therefore no CSS is included.
             let stylesB = styles.filter(entry => entry.textContent.includes("moduleB"));
-            Assert.assertEquals(1, stylesB.length);
+            Assert.assertEquals(0, stylesB.length);
             let stylesC = styles.filter(entry => entry.textContent.includes("moduleC"));
-            Assert.assertEquals(1, stylesC.length);
+            Assert.assertEquals(0, stylesC.length);
             let stylesX = styles.filter(entry => entry.textContent.includes("moduleX"));
-            Assert.assertEquals(1, stylesX.length);
+            Assert.assertEquals(0, stylesX.length);
         }});
-        
-        Test.create({test() {
-            // Invalid modules, no error expected
+
+        Test.create({expected:/Invalid namespace at level 1: io\/moduleE/, test() {
             _render_include("io/moduleE");
+        }});
+
+        Test.create({expected:/Invalid namespace at level 1: io\/moduleY/, test() {
             _render_include("io/moduleY");
         }});
-        
+
         Test.create({test() {
             // To control the events, a resource is manually loaded multiple times.
             // Modules should be loaded once.
@@ -133,36 +136,32 @@
             for (const [key, value] of urlMap)
                 result += "\r\n" + key + " " + value.join("");
 
-            console.test(result);
-
-            Assert.assertSameTo("script[type='text/test']", result);
+            try {Assert.assertSameTo("script[type='text/test']", result);
+            } catch (error) {
+                console.test(result);
+                throw  error;
+            }
         }});
     </script>
     <script type="text/test">
-/modules/common.css 404 X
-/modules/common.js 200 XX
-/modules/moduleA.css 200 XX
-/modules/moduleA.js 200 XX
-/modules/moduleB.css 200 XX
-/modules/moduleB.js 200 XX
-/modules/moduleC.css 200 XX
-/modules/moduleC.js 200 XX
-/modules/io/moduleX.css 200 XX
-/modules/io/moduleX.js 200 XX
-/modules/io/moduleY.css 404 X
-/modules/io/moduleY.js 404 X
-/modules/moduleA.html 404 X
-/modules/moduleE.css 404 X
-/modules/moduleE.js 404 X
-/modules/moduleE.html 404 X
-/resources/import_a.htmlx 200 X
-/resources/import_b.htmlx 200 X
-/resources/import_o.htmlx 404 XXX
-https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_x.htmlx 200 X
-/resources/import_c.htmlx 200 X
-/modules/io/moduleE.css 404 X
-/modules/io/moduleE.js 404 X
-/nix.xxx 404 XXX
+      /modules/common.js 200 X
+      /modules/common.css 404 X
+      /modules/moduleA.js 200 X
+      /modules/moduleB.js 200 X
+      /modules/moduleC.js 200 X
+      /modules/io/moduleX.js 200 X
+      /modules/io/moduleY.js 404 X
+      /modules/moduleA.css 200 X
+      /modules/moduleA.html 404 X
+      /modules/moduleE.js 404 X
+      /modules/moduleE.css 404 X
+      /modules/moduleE.html 404 X
+      /resources/import_a.htmlx 200 X
+      /resources/import_b.htmlx 200 X
+      /resources/import_o.htmlx 404 XXX
+      https://raw.githubusercontent.com/seanox/aspect-js/master/test/resources/import_x.htmlx 200 X
+      /resources/import_c.htmlx 200 X
+      /nix.xxx 404 XXX
     </script>
   </head>
   <body>
