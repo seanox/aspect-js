@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230121
+ * @version 1.6.0 20230129
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
@@ -83,7 +83,7 @@ if (compliant("Namespace")) {
         get PATTERN_NAMESPACE_LEVEL_START() {return /^[_a-z\$][\w\$]*$/i;},
 
         /** Pattern for a valid namespace level */
-        get PATTERN_NAMESPACE_LEVEL() {return /(^[\w\$]+$)|(^\d+$)/;},
+        get PATTERN_NAMESPACE_LEVEL() {return /^[\w\$]+$/;},
 
         /**
          * Creates a namespace to the passed object, strings and numbers, if the
