@@ -2371,7 +2371,7 @@ if (compliant("Composite")) {
         if (composite.length <= 0
                 || (composite.length === 1
                         && !(composite[0] instanceof Element)
-                                && typeof composite[0] !== "string"))
+                        && typeof composite[0] !== "string"))
             throw new TypeError("Invalid composite for include");
         if (composite.length === 1
                 && composite[0] instanceof Element)
