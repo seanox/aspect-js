@@ -17,6 +17,7 @@ CR: Composite: Errors during rendering are output in the view
     Errors can also be subscribed as a composite event.
 CR: Composite: Renamed method Object.using(...) in Object.use(...)
 CR: Composite: Optimization when loading module resources
+    - Change of sequence to: JS, CSS, HTML (markup)
     - JavaScript for modules is only loaded if no JavaScript model exists
     - CSS for modules is only loaded if HTML is also loaded
     - Omission of the HEAD request
