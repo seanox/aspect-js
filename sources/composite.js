@@ -797,7 +797,7 @@ if (compliant("Composite")) {
                     
                     // Events are possible for composites and their interactive
                     // elements. For this purpose, composites define the scope
-                    // with their model. Interactive composite elements are a
+                    // with their model. Interactive composite elements are an
                     // object in the model that contains the interaction methods
                     // corresponding to the events. Therefore, the scope of
                     // interactive composite elements shifts from the model to
@@ -880,7 +880,7 @@ if (compliant("Composite")) {
                                 // Synchronization expects a data field. It can
                                 // be a simple data type or an object with the
                                 // property value. Other targets are ignored.
-                                // The synchronization expects a successfully
+                                // The synchronization expects a successful
                                 // validation, otherwise it will not be executed.
                                 const accept = (property) => {
                                     const type = typeof property;
@@ -914,7 +914,7 @@ if (compliant("Composite")) {
                                 // Events are possible for composites and their
                                 // interactive elements. For this purpose,
                                 // composites define the scope with their model.
-                                // Interactive composite elements are a object
+                                // Interactive composite elements are an object
                                 // in the model that contains the interaction
                                 // methods corresponding to the events.
                                 // Therefore, the scope of interactive composite
@@ -1262,7 +1262,7 @@ if (compliant("Composite")) {
 
                     // Acceptors are a very special way to customize. Unlike the
                     // other ways, here the rendering is not shifted into own
-                    // implementations. With a acceptor, an element is
+                    // implementations. With an acceptor, an element is
                     // manipulated before rendering and only if the renderer
                     // processes the element initially. This makes it possible
                     // to make individual changes to the attributes or the
@@ -1458,7 +1458,7 @@ if (compliant("Composite")) {
                         return;
                     
                     // Text nodes are only analyzed once. Pure text is
-                    // completely ignored, only text nodes with a expression as
+                    // completely ignored, only text nodes with an expression as
                     // value are updated.
                     if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_TEXT))
                         return;
@@ -1529,7 +1529,7 @@ if (compliant("Composite")) {
                         // The prepared text with expression placeholders is
                         // analyzed. All placeholders are determined and the
                         // text is split at the placeholders. The result is an
-                        // array of words. Each word are new text nodes with
+                        // array of words. Each word is a new text nodes with
                         // static text or dynamic content.
                         
                         if (content.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
@@ -1634,11 +1634,11 @@ if (compliant("Composite")) {
                     dock(model);
                 }
                 
-                // ATTRIBUTE_CONDITION: The is a very special implementation. So
-                // it was important that a condition can remove and add a node
-                // in the DOM. To do this, a placeholder and a template are
-                // created for an element with a condition. The placeholder is a
-                // text node without content and therefore invisible in the user
+                // ATTRIBUTE_CONDITION: Is a very special implementation. So it
+                // was important that a condition can remove and add a node in
+                // the DOM. To do this, a placeholder and a template are created
+                // for an element with a condition. The placeholder is a text
+                // node without content and therefore invisible in the user
                 // interface. The placeholder is the cached markup of the
                 // element. Thus, the renderer can insert or remove the markup
                 // before the placeholder according to the condition.
@@ -1722,7 +1722,7 @@ if (compliant("Composite")) {
                             Composite.render.meta[serial] = output;
                             
                             // The placeholder output is rendered recursively
-                            // and finally and inserted in the iterate
+                            // and finally and inserted in the iterated
                             // container. Therefore, rendering can be stopped
                             // afterwards.
                             Composite.render(template, lock.share());
@@ -2402,7 +2402,7 @@ if (compliant("Composite")) {
         const context = Composite.MODULES + "/" + resource.join("/");
 
         // Based on namespace and resource a corresponding JavaScript object is
-        // searched for. Therefore here with invalid namespace / composite IDs
+        // searched for. Therefore, here with invalid namespace / composite IDs
         // an error occurs, which must be noticed however already before, it is
         // to be ensured that only modules are loaded to valid composites
         // (namespace + composite ID). Later, it is also decided whether
@@ -2425,7 +2425,7 @@ if (compliant("Composite")) {
                 if (element instanceof Element
                         && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
                         && element.hasAttribute(Composite.ATTRIBUTE_ID)
-                        && (element.id || "").toLowerCase().trim() == pattern)
+                        && (element.id || "").toLowerCase().trim() === pattern)
                     throw new Error("Recursion detected for composite: " + id);
             }
         }
@@ -2453,7 +2453,8 @@ if (compliant("Composite")) {
         const loading = (resource) => {
 
             const normalize = (path) => {
-                (anchor = document.createElement("a")).href = path;
+                const anchor = document.createElement("a");
+                anchor.href = path;
                 return anchor.pathname;
             };
 
@@ -2844,7 +2845,7 @@ if (compliant("Composite")) {
                 }
                 
                 // All removed elements are cleaned and if necessary the undock
-                // method is called if an view model binding exists.
+                // method is called if a view model binding exists.
                 if (record.removedNodes) {
                     record.removedNodes.forEach((node) => {
                         const cleanup = (node) => {
@@ -3002,7 +3003,7 @@ compliant(null, window.Expression = {
 
     /**
      * Analyzes and finds the components of an expression and creates a
-     * JavaScript from them. Created scripts are cached an reused as needed.
+     * JavaScript from them. Created scripts are cached a reused as needed.
      * @param  expression
      * @return the created JavaScript
      */
