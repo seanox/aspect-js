@@ -681,7 +681,7 @@ the data objects trigger a partial update of the view.__
 ### strict
 
 The attribute is used in combination with the attribute [composite](#composite)
-and specifies that when loading the resources (CSS, JS, HTML) for a component,
+and specifies that when loading the resources (JS, CSS, HTML) for a component,
 the file name is used in its original notation. The default behavior without the
 [strict](#strict) attribute uses the composite id with lower case at the
 beginning.

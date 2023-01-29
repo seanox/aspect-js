@@ -701,7 +701,7 @@ ausl&aouml;sen.__
 ### strict
 
 Das Attribut wird in Kombination mit dem Attribut [composite](#composite)
-verwendet und legt fest, dass beim Laden der Ressourcen (CSS, JS, HTML) zu einer
+verwendet und legt fest, dass beim Laden der Ressourcen (JS, CSS, HTML) zu einer
 Komponente, der Dateiname in der originalen Schreibweise verwendet wird. Das
 Standardverhalten ohne das Attribut [strict](#strict) verwendet die Composite-Id
 mit einem Kleinbuchstaben am Anfang.
