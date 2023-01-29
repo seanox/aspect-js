@@ -2502,7 +2502,7 @@ if (compliant("Composite")) {
             if (resource.match(/\.js$/)) {
                 try {_render_include_eval(content);
                 } catch (exception) {
-                    console.error(request.responseURL, exception.name + ": " + exception.message);
+                    console.error(resource, exception.name + ": " + exception.message);
                     throw exception;
                 }
             } else if (resource.match(/\.css$/)) {
@@ -2583,7 +2583,7 @@ if (compliant("Composite")) {
             line = line.replace(/^\s*#import(\s+|$)/, "");
             line.split(/\s+/).forEach((include) => {
                 if (!include.match(/^\w+(\/\w+)*$/))
-                    throw new Error("Invalid include" + (include ? ": " + include : ""));
+                    throw new Error("Invalid import" + (include ? ": " + include : ""));
                 _render_include(...(include.split(/\/+/)));
             });
         }
