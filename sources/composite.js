@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230121
+ * @version 1.6.0 20230128
  */
 if (compliant("Composite")) {
     
@@ -2354,34 +2354,68 @@ if (compliant("Composite")) {
      * and prevent repeated loading. The resources will only be requested once.
      * If they do not exist (status 404), it is not tried again. Otherwise, an
      * error is thrown if the request is not answered with status 200.
+     *
+     * The method also supports string arrays for resources with path. Then each
+     * path element is an array entry.
+     *
+     * Following rules apply to loading resources:
+     * - Composite ID / namespace / path must have a valid syntax
+     * - HTML is loaded only for elements when the elements have no content
+     * - CSS is only loaded when HTML is also loaded
+     * - JavaScript is loaded only if no corresponding JavaScript model exists
+     *
      * @param composite
      */
-    const _render_include = (composite) => {
-        
-        if (!(typeof composite === "string"
-                || composite instanceof Element))
-            throw new TypeError("Invalid composite: " + typeof composite);
-        
-        let object;
+    const _render_include = (...composite) => {
+
+        if (composite.length <= 0
+                || (composite.length === 1
+                        && !(composite[0] instanceof Element)
+                                && typeof composite[0] !== "string"))
+            throw new TypeError("Invalid composite for include");
+        if (composite.length === 1
+                && composite[0] instanceof Element)
+            composite = composite[0];
+
+        // For module/composites only resources of the current domain are used,
+        // therefore only the URI and not the URL is used as key in the cache.
+        Composite.render.cache = Composite.render.cache || {};
+
+        let resource = composite;
+
+        let object = null;
         if (composite instanceof Element) {
             if (!composite.hasAttribute(Composite.ATTRIBUTE_ID))
                 throw new Error("Unknown composite without id");
             object = Composite.render.meta[composite.ordinal()];   
             if (!object)
                 throw new Error("Unknown composite");
+            resource = composite.id;
+            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
+                resource = resource.uncapitalize();
+            const meta = _mount_locate(composite);
+            if (meta && meta.namespace)
+                resource = meta.namespace.concat(resource);
+            else resource = [resource];
         }
-        
-        // For module/composites only resources of the current domain are used,
-        // therefore only the URI and not the URL is used as key in the cache.
-        Composite.render.cache = Composite.render.cache || {};
 
-        let resource = composite instanceof Element ? composite.id : composite;
-        if (!object || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
-            resource = resource.uncapitalize();
-        let meta = composite instanceof Element ? _mount_locate(composite) : null;
-        if (meta && meta.namespace)
-            resource = meta.namespace.join("/") + "/" + resource;
-        const context = Composite.MODULES + "/" + resource;
+        const context = Composite.MODULES + "/" + resource.join("/");
+
+        // Based on namespace and resource a corresponding JavaScript object is
+        // searched for. Therefore here with invalid namespace / composite IDs
+        // an error occurs, which must be noticed however already before, it is
+        // to be ensured that only modules are loaded to valid composites
+        // (namespace + composite ID). Later, it is also decided whether
+        // JavaScript must be loaded. This is only necessary if lookup cannot
+        // determine a JavaScript model (undefined or element).
+
+        // Theoretically an error can occur during the lookup if namespace or
+        // composite ID are invalid, but this should already run on error
+        // before, so it is not done here -- otherwise this is a bug!
+
+        resource = resource.join(".");
+
+        const lookup = Object.lookup(resource);
 
         const recursionDetection = (element) => {
             const id = (element instanceof Element ? element.id || "" : "").trim();
@@ -2415,32 +2449,42 @@ if (compliant("Composite")) {
         Composite.render.cache[context + ".composite"] = null;
 
         // Internal method for loading a composite resource.
-        // Supports CSS, JS and HTML.
+        // Supports JS, CSS and HTML.
         const loading = (resource) => {
-            const request = new XMLHttpRequest();
-            request.overrideMimeType("text/plain"); 
 
-            // At first, HEAD is used to check if the resource exists. A HEAD
-            // before the GET appeared more friendly than a hard GET with
-            // errors. It costs one request more and has no benefit. Only server
-            // states 200 and 404 are supported, all others will cause an error.
-            request.open("HEAD", resource, false);
-            request.send();
-            if (request.status === 404)
+            const normalize = (path) => {
+                (anchor = document.createElement("a")).href = path;
+                return anchor.pathname;
+            };
+
+            // JS and CSS are loaded only once
+            resource = normalize(resource);
+            if (resource in Composite.render.cache
+                    && resource.match(/\.(js|css)$/i))
                 return;
-            if (request.status !== 200)
-                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
 
-            // If the resource exists it will be loaded. Only server states 200
-            // and 404 are supported, all others will cause an error.
-            request.open("GET", resource, false);
-            request.send();
-            if (request.status === 404)
+            // Resource has already been requested, but with no useful response
+            // and unsuccessful requests will not be repeated
+            if (resource in Composite.render.cache
+                    && Composite.render.cache[resource] === undefined)
                 return;
-            if (request.status !== 200)
-                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
 
-            // CSS is inserted into the HEad element as a style element.
+            if (!(resource in Composite.render.cache)) {
+                Composite.render.cache[resource] = undefined;
+                const request = new XMLHttpRequest();
+                request.overrideMimeType("text/plain");
+                request.open("GET", resource, false);
+                request.send();
+                // Only server states 200 and 404 are supported, all others will
+                // cause an error and the requests are not repeated later
+                if (request.status === 404)
+                    return;
+                if (request.status !== 200)
+                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                Composite.render.cache[resource] = request.responseText.trim();
+            }
+
+            // CSS is inserted into the HEAD element as a style element.
             // Without a head element, the inserting causes an error.
 
             // JavaScript is not inserted as an element, it is executed
@@ -2453,13 +2497,14 @@ if (compliant("Composite")) {
             // added to the item. Inserting then takes over the import
             // implementation, which then also accesses the render cache.
 
-            const content = request.responseText.trim();
-            if (!content)
-                return;
-            const url = document.createElement("a");
-            url.href = request.responseURL;
-            Composite.render.cache[url.pathname] = content;
-            if (request.responseURL.match(/\.css$/)) {
+            const content = Composite.render.cache[resource];
+            if (resource.match(/\.js$/)) {
+                try {_render_include_eval(content);
+                } catch (exception) {
+                    console.error(request.responseURL, exception.name + ": " + exception.message);
+                    throw exception;
+                }
+            } else if (resource.match(/\.css$/)) {
                 const head = document.querySelector("html head");
                 if (!head)
                     throw new Error("No head element found");
@@ -2467,32 +2512,40 @@ if (compliant("Composite")) {
                 style.setAttribute("type", "text/css");
                 style.textContent = content;
                 head.appendChild(style);
-            } else if (request.responseURL.match(/\.js$/)) {
-                try {_render_include_eval(content);
-                } catch (exception) {
-                    console.error(request.responseURL, exception.name + ": " + exception.message);
-                    throw exception;
-                }
-            } else if (request.responseURL.match(/\.html$/)) {
+            } else if (resource.match(/\.html$/)) {
                 recursionDetection(composite);
                 if (composite instanceof Element)
                     composite.innerHTML = content;
             }
         }
 
-        // The sequence of loading is strictly defined: CSS, JS, HTML
+        // The sequence of loading is strictly defined: JS, CSS, HTML
+
+        // JavaScript is only loaded if no corresponding object exists for the
+        // composite id or the object is an element object
+        if (typeof lookup === "undefined"
+                || lookup instanceof Element
+                || resource === "common")
+            loading(context + ".js");
+
+        // CSS and HTML are loaded only if they are resources to an element and
+        // the element is empty, excludes CSS for common. Since CSS resources
+        // are loaded only once, common.css can be requested again later.
+        if (resource === "common")
+            loading(context + ".css");
+
+        // CSS and HTML/Markup is only loaded if it is a known composite object
+        // and the element does not contain a markup (inner HTML) and
+        // ATTRIBUTE_IMPORT and output are not set. Thus is the assumption that
+        // for an empty element outsourced markup should exist.
+
+        if (!object
+                || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
+                || composite.innerHTML.trim())
+            return;
         loading(context + ".css");
-        loading(context + ".js");
-        
-        // HTML/Markup is only loaded if it is a known composite object and the
-        // element does not contain a markup (inner HTML) and ATTRIBUTE_IMPORT
-        // and output are not set. Thus is the assumption that for an empty
-        // element outsourced markup should exist.
-        if (object
-                && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                && !composite.innerHTML.trim())
-            loading(context + ".html");
+        loading(context + ".html");
     };
 
     /**
@@ -2523,10 +2576,14 @@ if (compliant("Composite")) {
         while (script && script.length > 0) {
             if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
                 break;
-            const line = script.shift().replace(/^\s*#import(\s+|$)/, "");
+            let line = script.shift();
+            if (!line.trim())
+                continue;
+            line = line.replace(/^\s*#import(\s+|$)/, "");
             line.split(/\s+/).forEach((include) => {
-                if (include)
-                    _render_include(include);
+                if (!include.match(/^\w+(\/\w+)*$/))
+                    throw new Error("Invalid include" + (include ? ": " + include : ""));
+                _render_include(...(include.split(/\/+/)));
             });
         }
         script = script.join("\r\n").trim();
