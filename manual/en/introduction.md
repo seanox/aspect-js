@@ -386,7 +386,7 @@ which has a direct effect of the visibility of the composites.
 
 The [Model View Controller](mvc.md#sitemap) supports automatic
 [view model binding](composite.md#view-model-binding) for composites. The
-resources (CSS, JS, Markup) for composites can be outsourced to the module
+resources (JS, CSS, Markup) for composites can be outsourced to the module
 directory and are loaded automatically when necessary.
 
 ```html
@@ -733,7 +733,7 @@ loaded selectively.
 
 The outsourcing and loading of resources at runtime is optional and can be
 applied completely, partially and not at all. There is a fixed order for loading
-and embedding: CSS, JS, HTML/Markup. 
+and embedding: JS, CSS, HTML/Markup. 
 
 If the request for a resource is answered with status 404, it is assumed that
 this resource has not been outsourced. If requests are not answered with status

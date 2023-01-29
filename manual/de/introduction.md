@@ -399,7 +399,7 @@ hat.
 
 Der [Model-View-Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
 ein automatisches [View-Model-Binding](composite.md#view-model-binding). Die
-Ressourcen (CSS, JS, Markup) lassen sich f&uuml;r Composites in das
+Ressourcen (JS, CSS, Markup) lassen sich f&uuml;r Composites in das
 Modul-Verzeichnis auslagern und werden bei Bedarf automatisch nachgeladen. 
 
 ```html
@@ -757,7 +757,7 @@ aktiven UI-Komponenten ben&ouml;tigten Ressourcen geladen werden.
 
 Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l&auml;sst sich
 komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
-eine feste Reihenfolge: CSS, JS, HTML/Markup.
+eine feste Reihenfolge: JS, CSS, HTML/Markup.
 
 Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
 ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
