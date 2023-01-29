@@ -23,6 +23,7 @@ CR: Composite: Optimization when loading module resources
     - Omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
+CR: Release: Added the manual (de/en) to the release package (zip)
 CR: Release: Channels with major number are omitted
 CR: Release: Revision of the release channels
     - standard: contains all minimized

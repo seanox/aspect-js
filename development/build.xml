@@ -26,6 +26,7 @@
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.test" value="${workspace}/test"/>
   <property name="workspace.release" value="${workspace}/release"/>
+  <property name="workspace.release.temp" value="${workspace.release}/temp"/>
 
   <macrodef name="release-locate">
     <sequential>
@@ -184,41 +185,38 @@
     <file-minimize file="${release.file.micro.max}" file-min="${release.file.micro}"/>
     <file-minimize file="${release.file.micro.core.max}" file-min="${release.file.micro.core}"/>
 
-    <copy file="CHANGES" todir="${workspace.release}"/>
-    <copy file="LICENSE" todir="${workspace.release}"/>
+    <mkdir dir="${workspace.release.temp}"/>
+    <copy todir="${workspace.release.temp}">
+      <fileset dir="${workspace.release}">
+        <include name="${ant.project.name}-max.js"/>
+        <include name="${ant.project.name}.js"/>
+        <include name="${ant.project.name}-core-max.js"/>
+        <include name="${ant.project.name}-core.js"/>
+        <include name="${ant.project.name}-micro-max.js"/>
+        <include name="${ant.project.name}-micro.js"/>
+        <include name="${ant.project.name}-micro-core-max.js"/>
+        <include name="${ant.project.name}-micro-core.js"/>
+      </fileset>
+    </copy>
+    <copy todir="${workspace.release.temp}">
+      <fileset dir="${workspace}">
+        <include name="manual/**/*"/>
+        <include name="CHANGES"/>
+        <include name="LICENSE"/>
+        <include name="README.md"/>
+      </fileset>
+    </copy>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-core-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-core.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core.js"/>
-      <fileset dir="${workspace.release}" includes="CHANGES"/>
-      <fileset dir="${workspace.release}" includes="LICENSE"/>
+      <fileset dir="${workspace.release}" includes="**/*"/>
     </touch>
     <zip destfile="${workspace.release}/${ant.project.name}-${release.version}.zip">
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-core-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-core.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core-max.js"/>
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-micro-core.js"/>
-      <fileset dir="${workspace.release}" includes="CHANGES"/>
-      <fileset dir="${workspace.release}" includes="LICENSE"/>
-    </zip>   
-    <delete>
-      <fileset dir="${workspace.release}">
-        <exclude name="*.js"/>
-        <exclude name="*.zip"/>
-      </fileset>
-    </delete>
+      <fileset dir="${workspace.release.temp}" includes="**/*"/>
+    </zip>
+    <delete dir="${workspace.release.temp}"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.version}.zip"/>
     </touch>
+
     <replaceregexp file="${workspace}/README.md"
         match="(Seanox ${ant.project.name} )\d+(\.\d+)*" flags="g" byline="false"
         replace="\1${release.version}"/>
