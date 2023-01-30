@@ -18,7 +18,8 @@
             DataSource.localize("xx");
             Assert.assertEquals("xxA", Messages["all.a"]);
             Assert.assertEquals("xxB", Messages["all.b"]);
-            Assert.assertEquals("xxX", Messages["xx"]);
+            // xx is declared multiple times, the last one wins
+            Assert.assertEquals("xxX3", Messages["xx"]);
             Assert.assertEquals(undefined, Messages["xde"]);
             Assert.assertEquals(undefined, Messages["xen"]);
         }});
@@ -27,7 +28,8 @@
             DataSource.localize("xde");
             Assert.assertEquals("xdeA", Messages["all.a"]);
             Assert.assertEquals("xdeB", Messages["all.b"]);
-            Assert.assertEquals("xdeX", Messages["xde"]);
+            // xde is declared multiple times, the last one wins
+            Assert.assertEquals("xdeX3", Messages["xde"]);
             Assert.assertEquals(undefined, Messages["xx"]);
             Assert.assertEquals(undefined, Messages["xen"]);
         }});
@@ -36,7 +38,8 @@
             DataSource.localize("xen");
             Assert.assertEquals("xenA", Messages["all.a"]);
             Assert.assertEquals("xenB", Messages["all.b"]);
-            Assert.assertEquals("xenX", Messages["xen"]);
+            // xde is declared multiple times, the last one wins
+            Assert.assertEquals("xenX3", Messages["xen"]);
             Assert.assertEquals(undefined, Messages["xx"]);
             Assert.assertEquals(undefined, Messages["xde"]);
         }});
