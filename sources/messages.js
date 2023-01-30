@@ -62,40 +62,52 @@
  *     Messages["contact.title"];
  *     
  *     <h1 output="{{Messages['contact.title']}}"/>
- * 
+ *
+ * In addition, the object message is also provided. Unlike Messages, message is
+ * an object tree analogous to the keys from Messages. The dot in the keys is
+ * the indicator of the levels in the tree.
+ *
+ *     messages.contact.title;
+ *
+ *     <h1 output="{{messages.contact.title}}"/>
+ *
+ * Both objects are only available if there are also labels.
+ *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230121
+ * @version 1.6.0 20230130
  */
 compliant("Messages");
 compliant(null, window.Messages = {});
 (() => {
 
-    // Messages are based on DataSources. To initialize, the DataSource.localize
-    // method must be overwritten and loading of the key-value pairs is embedded.
     const localize = DataSource.localize;
+
     DataSource.localize = (locale) => {
 
-        DataSource.localize$origin(locale);
+        localize(locale);
 
-        window["Messages"] = {};
+        delete window.messages;
+        delete window.Messages;
+
+        const map = new Map();
         const xpath = "/locales/" + DataSource.locale + "/label";
-        const label = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-        for (let node = label.iterateNext(); node; node = label.iterateNext()) {
-            const key = (node.getAttribute("key") || "").trim();
-            if (key === "")
-                continue;
-            let value = ((node.getAttribute("value") || "").trim()
-                    + " " + (node.textContent).trim()).trim();
-            value = value.unescape();
-            if (!Messages.hasOwnProperty(key))
-                Object.defineProperty(Messages, key, {
-                    value
-                });
-        }
+        const result = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+        for (let node = result.iterateNext(); node; node = result.iterateNext())
+            map.set((node.getAttribute("key") || "").trim(),
+                ((node.getAttribute("value") || "").trim()
+                    || (node.textContent || "").trim()).unescape());
+        new Map([...map.entries()].sort()).forEach((value, key) => {
+            if (!key.match(/^\w+(\.\w+)*$/))
+                return;
+            Namespace.create("messages", key, value);
+            Object.defineProperty(Namespace.use("Messages"), key, {
+                value
+            });
+        });
     };
-    
-    DataSource.localize$origin = localize;
-    
+
+    // Messages are based on DataSources. To initialize, DataSource.localize()
+    // must be overwritten and loading of the key-value pairs is embedded.
     if (DataSource.data
             && DataSource.locale
             && DataSource.locales
