@@ -144,7 +144,7 @@
         }});
 
         Test.create({test() {
-            Assert.assertEquals("Error: Invalid import", document.getElementById("moduleF1").innerText);
+            Assert.assertEquals("Error: Invalid import", document.getElementById("moduleF").innerText);
         }});
     </script>
     <script type="text/test">
@@ -160,7 +160,11 @@
       /modules/moduleE.js 404 X
       /modules/moduleE.css 404 X
       /modules/moduleE.html 404 X
-      /modules/moduleF1.js 200 X
+      /modules/moduleF.js 200 X
+      /modules/moduleG.js 404 X
+      /modules/moduleH.js 404 X
+      /modules/moduleH.css 404 X
+      /modules/moduleH.html 200 X
       /resources/import_a.htmlx 200 X
       /resources/import_b.htmlx 200 X
       /resources/import_o.htmlx 404 XX
@@ -187,8 +191,13 @@
       <div id="moduleE" composite></div>
     </section>
 
-    very special case: moduleF1.html is not loaded because an empty import runs
-    into an error at moduleF1.js and the import is aborted at this point
-    -FA<div id="moduleF1" composite></div>AF-
+    very special case: moduleF.html is not loaded because an empty import runs
+    into an error at moduleF.js and the import is aborted at this point
+    -FA<div id="moduleF" composite></div>AF-
+
+    <div id="moduleG" composite>moduleG</div>
+    <div id="moduleG" composite>moduleG</div>
+    <div id="moduleH" composite></div>
+    <div id="moduleH" composite></div>
   </body>
 </html>

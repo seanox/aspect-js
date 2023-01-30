@@ -1,2 +1,0 @@
-#import
-const moduleF1 = {};
