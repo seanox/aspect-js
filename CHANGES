@@ -22,6 +22,11 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - Omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
+CR: Datasource: Optimization when loading module resources
+    - Omission of the HEAD request
+    - Omission of XML error when the request receives an error page
+    Minimizes HTTP requests in the background and when loading the page.
+CR: Message: Added messages as alternative object tree for associative array Message
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
 CR: Release: Added the manual (de/en) to the release package (zip)
 CR: Release: Channels with major number are omitted
