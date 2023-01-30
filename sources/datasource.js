@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230121
+ * @version 1.6.0 20230130
  */
 compliant("DataSource");
 compliant(null, window.DataSource = {
@@ -329,18 +329,14 @@ compliant(null, XMLDocument.prototype.clone = function() {
         throw new Error("Locale not available");
     
     const request = new XMLHttpRequest();
-    request.overrideMimeType("application/xslt+xml");
-    request.open("HEAD", DataSource.DATA + "/locales.xml", false);
-    request.send();
-    if (request.status === 404)
-        return;
+    request.overrideMimeType("text/plain");
     request.open("GET", DataSource.DATA + "/locales.xml", false);
     request.send();
     
     // DataSource.data
     // Internal cache of locales.xml
     Object.defineProperty(DataSource, "data", {
-        value: request.status === 200 ? request.responseXML : null
+        value: request.status === 200 ? new DOMParser().parseFromString(request.responseText,"text/xml") : null
     });
     if (!DataSource.data
             && request.status !== 404)
