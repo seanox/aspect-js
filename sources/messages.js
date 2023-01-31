@@ -74,7 +74,7 @@
  * Both objects are only available if there are also labels.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230130
+ * @version 1.6.0 20230131
  */
 compliant("Messages");
 compliant(null, window.Messages = {});
@@ -97,12 +97,19 @@ compliant(null, window.Messages = {});
                 ((node.getAttribute("value") || "").trim()
                     || (node.textContent || "").trim()).unescape());
         new Map([...map.entries()].sort()).forEach((value, key) => {
-            if (!key.match(/^\w+(\.\w+)*$/))
-                return;
-            Namespace.create("messages", key, value);
-            Object.defineProperty(Namespace.use("Messages"), key, {
-                value
-            });
+            const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\b\w+)$/);
+            if (match) {
+                // In order for the object tree to branch from each level, each
+                // level must be an object. Therefore, an anonymous object is
+                // used for the level, which returns the actual text via
+                // Object.prototype.toString().
+                Object.defineProperty(Namespace.use("messages", match[1]), match[2], {
+                    value: {toString() {return value;}}, writable: false
+                });
+                Object.defineProperty(Namespace.use("Messages"), key, {
+                    value, writable: false
+                });
+            }
         });
     };
 
