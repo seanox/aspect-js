@@ -22,6 +22,10 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - Omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
+CR: Composite: Optimization for present attributes
+    - autofocus, disabled, hidden, multiple, readonly, required
+    The attributes can be controlled by the values true and false.
+    In case of false the attribute is removed.
 CR: Datasource: Optimization when loading module resources
     - Omission of the HEAD request
     - Omission of XML error when the request receives an error page
@@ -33,19 +37,23 @@ CR: Release: Channels with major number are omitted
 CR: Release: Revision of the release channels
     - standard: contains all minimized
       for test and deployment
-    - standard-max: contains all, not minimized and with comments
+    - standard-max: contains all
+      not minimized and with comments
       for development, test
     - core: contains all minimized, except the Test API
       for deployment
-    - core-max: contains all minimized, except the Test API, not minimized and with comments
+    - core-max: contains all minimized, except the Test API
+      not minimized and with comments
       for development, test
     - micro: contains all minimized, except SiteMap, minimized
       for development, test and deployment of micro frontends without face-flow
-    - micro-max: contains all minimized, except SiteMap, not minimized and with comments
+    - micro-max: contains all minimized, except SiteMap
+      not minimized and with comments
       for development, test of micro frontends without face-flow
     - micro-core: contains all minimized, except the Test API and SiteMap
       for deployment of micro frontends without face-flow
-    - micro-core-max: contains all minimized, except the test API and SiteMap, not minimized and with comments
+    - micro-core-max: contains all minimized, except the test API and SiteMap
+      not minimized and with comments
       for development, test of micro frontends without face-flow
 
 1.5.1 20230107

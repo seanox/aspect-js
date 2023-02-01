@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230128
+ * @version 1.6.0 20230201
  */
 if (compliant("Composite")) {
     
@@ -2753,9 +2753,28 @@ if (compliant("Composite")) {
         // common.css. The configuration of the SiteMap and essential styles
         // can/should be stored here.
         _render_include("common");
-        
+
         (new MutationObserver((records) => {
             records.forEach((record) => {
+
+                // HTML uses attributes whose pure presences have effects:
+                //     autofocus, disabled, hidden, multiple, readonly, required
+                // With the expression language the setting and removing of
+                // these attributes is not possible. This task is taken over by
+                // the MutationObserver. It reacts to the values true and false
+                // for the present attributes and removes the attribute from the
+                // HTML element in case of false.
+
+                if (record.type === "attributes") {
+                    const attribute = record.attributeName;
+                    if (attribute.match(/^(autofocus|disabled|hidden|multiple|readonly|required)$/i)) {
+                        const value = String(record.target.getAttribute(attribute));
+                        if (value === "false")
+                            record.target.removeAttribute(attribute)
+                        if (value === "true")
+                            record.target.setAttribute(attribute, attribute);
+                    }
+                }
 
                 // Without Meta-Store, the renderer hasn't run yet. The reaction
                 // by the MutationObserver only makes sense when the renderer
