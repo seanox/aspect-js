@@ -78,6 +78,9 @@
  */
 compliant("Messages");
 compliant(null, window.Messages = {});
+compliant("messages");
+compliant(null, window.messages = {});
+
 (() => {
 
     const localize = DataSource.localize;
@@ -97,13 +100,14 @@ compliant(null, window.Messages = {});
                 ((node.getAttribute("value") || "").trim()
                     || (node.textContent || "").trim()).unescape());
         new Map([...map.entries()].sort()).forEach((value, key) => {
-            const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\b\w+)$/);
+            const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\w+)$/);
             if (match) {
                 // In order for the object tree to branch from each level, each
                 // level must be an object. Therefore, an anonymous object is
                 // used for the level, which returns the actual text via
                 // Object.prototype.toString().
-                Object.defineProperty(Namespace.use("messages", match[1]), match[2], {
+                const namespace = "messages" + (match[1] ? "." + match[1] : "");
+                Object.defineProperty(Namespace.use(namespace), match[2], {
                     value: {toString() {return value;}}, writable: false
                 });
                 Object.defineProperty(Namespace.use("Messages"), key, {
