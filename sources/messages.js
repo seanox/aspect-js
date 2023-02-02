@@ -74,7 +74,7 @@
  * Both objects are only available if there are also labels.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230131
+ * @version 1.6.0 20230202
  */
 compliant("Messages");
 compliant(null, window.Messages = {});
@@ -83,11 +83,11 @@ compliant(null, window.messages = {});
 
 (() => {
 
-    const localize = DataSource.localize;
+    const _localize = DataSource.localize;
 
     DataSource.localize = (locale) => {
 
-        localize(locale);
+        _localize(locale);
 
         delete window.messages;
         delete window.Messages;
@@ -108,10 +108,10 @@ compliant(null, window.messages = {});
                 // Object.prototype.toString().
                 const namespace = "messages" + (match[1] ? "." + match[1] : "");
                 Object.defineProperty(Namespace.use(namespace), match[2], {
-                    value: {toString() {return value;}}, writable: false
+                    value: {toString() {return value;}}
                 });
                 Object.defineProperty(Namespace.use("Messages"), key, {
-                    value, writable: false
+                    value
                 });
             }
         });
