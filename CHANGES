@@ -22,10 +22,6 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - Omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
-CR: Composite: Optimization for present attributes
-    - autofocus, disabled, hidden, multiple, readonly, required
-    The attributes can be controlled by the values true and false.
-    In case of false the attribute is removed.
 CR: Datasource: Optimization when loading module resources
     - Omission of the HEAD request
     - Omission of XML error when the request receives an error page
