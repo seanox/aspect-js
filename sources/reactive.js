@@ -40,7 +40,7 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230119
+ * @version 1.6.0 20230202
  */
 compliant("ReactProxy");
 compliant(null, window.ReactProxy = {
@@ -75,11 +75,8 @@ compliant(null, Object.prototype.toReactProxy = function() {
     if (typeof this !== "object")
         throw new TypeError("Not supported data type: " + typeof this);
 
-    if (Array.isArray(this))
-        return this.map(entry => typeof entry === "object"
-                && entry !== null ? entry.toReactProxy() : entry);
-
-    const target = Object.assign({}, this);
+    const target = Array.isArray(this)
+            ? Array.from(this) : Object.assign({}, this);
     for (const key in target) {
         const value = target[key];
         if (typeof value === "object"
@@ -105,7 +102,7 @@ compliant(null, Object.prototype.toReactProxy = function() {
                             || !target.hasOwnProperty(key))
                         return;
 
-                    let recipients = notifications.get(key) || new Map();
+                    const recipients = notifications.get(key) || new Map();
 
                     // If the selector as the current rendered element is 
                     // already registered as a recipient, then the registration
@@ -160,7 +157,7 @@ compliant(null, Object.prototype.toReactProxy = function() {
                             || !target.hasOwnProperty(key))
                         return;
 
-                    let recipients = this.notifications.get(key) || new Map();
+                    const recipients = this.notifications.get(key) || new Map();
                     for (const recipient of recipients.values()) {
                         // If the recipient is no longer included in the DOM and
                         // so it can be removed this case.
