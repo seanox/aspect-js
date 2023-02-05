@@ -173,11 +173,11 @@ CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
 CR: DataSource Fetch: Omission of the parameter raw
     When using the transformation a NodeList is always returned.
 CR: DataSource Fetch: Added optional parameters for the transformation
-    The parameters are passed to the XSLTProcessor as meta-object or map.
+    The parameters are passed to the XSLTProcessor as meta object or map.
 CR: DataSource Transform: Omission of the parameter raw
     When using the transformation a NodeList is always returned.
 CR: DataSource Transform: Added optional parameters for the transformation
-    The parameters are passed to the XSLTProcessor as meta-object or map.
+    The parameters are passed to the XSLTProcessor as meta object or map.
 CR: DataSource Transform: Change of return value from NodeList to DocumentFragment
     
 1.2.0 20191231
