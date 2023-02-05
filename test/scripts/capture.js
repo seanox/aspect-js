@@ -31,13 +31,20 @@ class Capture {
     validate() {
         this._snapshots.forEach((snapshot, index) => {
             console.log(`Test based on script #${index +1}`);
-            Assert.assertEquals(this._patterns[index], snapshot);
+            try {Assert.assertEquals(this._patterns[index], snapshot);
+            } catch (error) {
+                this.output(index);
+                throw error;
+            }
         });
     }
 
-    output() {
+    output(index = -1) {
         let content = "";
-        this._snapshots.forEach((snapshot, index) => {
+        let snapshots = this._snapshots;
+        if (index >= 0 && index < snapshots.length)
+            snapshots = snapshots.slice(index, index+1);
+        snapshots.forEach((snapshot, index) => {
             content += "\n<script type=\"text/test\">";
             snapshot.split(/\s*[\r\n]+\s*/).forEach(line => {
                 content += "\n  " + line;
