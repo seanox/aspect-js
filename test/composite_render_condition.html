@@ -47,9 +47,9 @@
             listE: ["a", "b", "c"]
         });
         
-        const testS = (text) => {
+        const testS = (text, index) => {
             const span = document.createElement("span");
-            span.textContent = text;
+            span.textContent = text + ":" + index;
             return span;
         };        
         
@@ -95,10 +95,10 @@
       C1C
       D1D
       E1E
-      F1F
-      F2F
-      F3F
-      F4F
+      F1Error: Invalid expressionF
+      F2Error: Invalid expressionF
+      F3Error: Invalid expressionF
+      F4Error: Invalid condition: trueF
       OnA: false
       A2AA
       B2B
@@ -109,8 +109,8 @@
       O3: 1 falsex3++; output3.textContent = x3;
       O4: 1 falsex4++; output4.textContent = x4;
       E::E
-      SA:1:1:SA
-      SB:1:1:SB
+      SA:1:1:A:SA
+      SB:1:1:B:SB
       OnA: true
       OnB: false
       A3-1
@@ -130,10 +130,10 @@
       C1C
       D1D
       E1E
-      F1F
-      F2F
-      F3F
-      F4F
+      F1Error: Invalid expressionF
+      F2Error: Invalid expressionF
+      F3Error: Invalid expressionF
+      F4Error: Invalid condition: trueF
       OnA: false
       A2AA
       B2B
@@ -144,8 +144,8 @@
       O3: 1 true
       O4: 1 true
       E:abc:E
-      SA:2:1:SA
-      SB:2:2:SB
+      SA:2:1:A:SA
+      SB:2:2:B:SB
       OnA: true
       OnB: true
       OnA: true
@@ -161,10 +161,10 @@
       C1C
       D1D
       E1E
-      F1F
-      F2F
-      F3F
-      F4F
+      F1Error: Invalid expressionF
+      F2Error: Invalid expressionF
+      F3Error: Invalid expressionF
+      F4Error: Invalid condition: trueF
       OnA: true
       A2A
       B2BB
@@ -175,8 +175,8 @@
       O3: 1 falsex3++; output3.textContent = x3;
       O4: 2 falsex4++; output4.textContent = x4;
       E::E
-      SA:3:1:SA
-      SB:3:3:SB
+      SA:3:1:A:SA
+      SB:3:3:B:SB
       OnA: false
       OnB: false
       A3-1
@@ -197,10 +197,10 @@
       C1C
       D1D
       E1E
-      F1F
-      F2F
-      F3F
-      F4F
+      F1Error: Invalid expressionF
+      F2Error: Invalid expressionF
+      F3Error: Invalid expressionF
+      F4Error: Invalid condition: trueF
       OnA: true
       A2A
       B2BB
@@ -211,8 +211,8 @@
       O3: 1 true
       O4: 2 true
       E:abc:E
-      SA:4:1:SA
-      SB:4:4:SB
+      SA:4:1:A:SA
+      SB:4:4:B:SB
       OnA: false
       OnB: true
       OnA: false
@@ -228,10 +228,10 @@
       C1C
       D1D
       E1E
-      F1F
-      F2F
-      F3F
-      F4F
+      F1Error: Invalid expressionF
+      F2Error: Invalid expressionF
+      F3Error: Invalid expressionF
+      F4Error: Invalid condition: trueF
       OnA: false
       A2AA
       B2B
@@ -242,8 +242,8 @@
       O3: 1 falsex3++; output3.textContent = x3;
       O4: 3 falsex4++; output4.textContent = x4;
       E::E
-      SA:5:1:SA
-      SB:5:5:SB
+      SA:5:1:A:SA
+      SB:5:5:B:SB
       OnA: true
       OnB: false
       A3-1
@@ -287,9 +287,9 @@
         condition="{{not Model.toggleE()}}"><span>{{list.item}}</span></span>:E
     
     {{s1:(s1 || 0) +1}}
-    SA:{{s1}}:<span id="outputS1" condition="{{true}}" import="{{testS(s1)}}">---</span>:SA   
+    SA:{{s1}}:<span id="outputSA" condition="{{true}}" import="{{testS(s1,'A')}}">---</span>:SA
     <!-- Expectation: testS(s1) is imported once, since the import is only executed once. --> 
-    SB:{{s1}}:<span id="outputS1" condition="{{true}}" output="{{testS(s1)}}">---</span>:SB   
+    SB:{{s1}}:<span id="outputSB" condition="{{true}}" output="{{testS(s1,'B')}}">---</span>:SB
     <!-- Expectation: testS(s1) is output multiple, since the output is executed several times. -->
     OnA: {{Model.onA}}
     OnB: {{Model.onB}}
