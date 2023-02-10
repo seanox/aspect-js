@@ -33,6 +33,9 @@ CR: Datasource: Optimization when loading module resources
     Minimizes HTTP requests in the background and when loading the page.
 CR: Message: Added messages as alternative object tree for associative array Message
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
+CR: Reactive: Added field parent at the levels of the object tree from a ReactProxy
+    The field is added automatically if no parent exists on the object levels
+    and is used to access parent object levels.
 CR: Release: Added the manual (de/en) to the release package (zip)
 CR: Release: Channels with major number are omitted
 CR: Release: Revision of the release channels
