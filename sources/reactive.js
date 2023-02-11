@@ -44,189 +44,219 @@
  */
 compliant("ReactProxy");
 compliant(null, window.ReactProxy = {
-
-    selector: null,
-
     create(target) {
         return target.toReactProxy();
     }
 });
 
-Composite.listen(Composite.EVENT_RENDER_START, function(event, selector) {
-    ReactProxy.selector = selector;
-});
+{
+    let _selector = null;
 
-Composite.listen(Composite.EVENT_RENDER_NEXT, function(event, selector) {
-    ReactProxy.selector = selector;
-});
+    Composite.listen(Composite.EVENT_RENDER_START, (event, selector) => {
+        _selector = selector;
+    });
 
-Composite.listen(Composite.EVENT_RENDER_END, function(event, selector) {
-    ReactProxy.selector = null;
-});
+    Composite.listen(Composite.EVENT_RENDER_NEXT, (event, selector) => {
+        _selector = selector;
+    });
 
-/**
- * Enhancement of the JavaScript API
- * Adds a function to create a ReactProxy from the object instance.
- * If it is a ReactProxy, the reference of the instance is returned.
- */
-compliant("Object.prototype.toReactProxy");
-compliant(null, Object.prototype.toReactProxy = function() {
+    Composite.listen(Composite.EVENT_RENDER_END, (event, selector) => {
+        _selector = null;
+    });
 
-    const reactive = (object, parent, filter) => {
+    const _secret = "\0" + Math.uniqueId();
 
-        if (typeof object !== "object")
-            throw new TypeError("Not supported data type: " + typeof object);
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a function to create a ReactProxy from the object instance.
+     * If it is a ReactProxy, the reference of the instance is returned.
+     */
+    compliant("Object.prototype.toReactProxy");
+    compliant(null, Object.prototype.toReactProxy = function() {
 
-        const proxy = new Proxy(object, {
+        const reactive = (object, parent, filter) => {
 
-            notifications: new Map(),
+            if (typeof object !== "object")
+                throw new TypeError("Not supported data type: " + typeof object);
 
-            cache: new Map(),
+            if (typeof object[_secret] === "object")
+                object = object[_secret];
 
-            get(target, key) {
+            const proxy = new Proxy(object, {
 
-                try {return target[key];
-                } finally {
+                notifications: new Map(),
 
-                    // The registration is delayed so that the getting of values
-                    // does not block unnecessarily.
-                    Composite.asynchron((selector, target, key, notifications) => {
+                cache: new Map(),
 
-                        // Registration is performed only during rendering an
-                        // if the key exists in the object.
-                        if (selector === null
-                                || !target.hasOwnProperty(key))
-                            return;
+                get(target, key) {
 
-                        // Special for elements with attribute iterate. For
-                        // these, the highest parent element with the attribute
-                        // iterate is searched for and registered as the
-                        // recipient. Why -- Iterate provides temporary
-                        // variables which can be used in the enclosed markup.
-                        // If these places are registered as recipients, these
-                        // temporary variables cannot be accessed later in the
-                        // expressions, which causes errors because the
-                        // temporary variables no longer exist. Since element
-                        // with the attribute iterate can be nested and the
-                        // expression can be based on a parent one, the topmost
-                        // one is searched for.
+                    // Proxy is implemented exotically, cannot be inherited and
+                    // has no prototype. Therefore, this unconventional way with
+                    // a secret simulated property that is used as an indicator
+                    // for existing ReacProxy instances and also contains a
+                    // reference to the original object.
 
-                        for (let node = selector; node.parentNode; node = node.parentNode) {
-                            const meta = (Composite.render.meta || [])[node.ordinal()] || {};
-                            if (meta.attributes && meta.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))
-                                selector = node;
-                        }
+                    // https://stackoverflow.com/questions/37714787/can-i-extend-proxy-with-an-es2015-class
 
-                        const recipients = notifications.get(key) || new Map();
+                    if (key === _secret)
+                        return target;
 
-                        // If the selector as the current rendered element is
-                        // already registered as a recipient, then the
-                        // registration can be canceled.
-                        if (recipients.has(selector.ordinal()))
-                            return;
+                    try {return target[key];
+                    } finally {
 
-                        for (const recipient of recipients.values()) {
+                        // The registration is delayed so that the getting of
+                        // values does not block unnecessarily.
+                        Composite.asynchron((selector, target, key, notifications) => {
 
-                            // If the selector as the current rendered element
-                            // is already contained in a recipient as the
-                            // parent, the selector as a recipient can be
-                            // ignored, because the rendering is initiated by
-                            // the parent and includes the selector as a child.
-                            if (recipient.contains !== undefined
-                                    && recipient.contains(selector))
+                            // Registration is performed only during rendering
+                            // and if the key exists in the object.
+                            if (selector === null
+                                    || !target.hasOwnProperty(key))
                                 return;
 
-                            // If the selector as current rendered element
-                            // contains a recipient as parent, the recipient can
-                            // be removed, because the selector element will
-                            // initiate rendering as parent in the future and
-                            // the existing recipient will be rendered as child
-                            // automatically.
-                            if (selector.contains !== undefined
-                                    && selector.contains(recipient))
-                                recipients.delete(recipient.ordinal());
-                        }
+                            // Special for elements with attribute iterate. For
+                            // these, the highest parent element with the
+                            // attribute iterate is searched for and registered
+                            // as the recipient. Why -- Iterate provides
+                            // temporary variables which can be used in the
+                            // enclosed markup. If these places are registered
+                            // as recipients, these temporary variables cannot
+                            // be accessed later in the expressions, which
+                            // causes errors because the temporary variables no
+                            // longer exist. Since element with the attribute
+                            // iterate can be nested and the expression can be
+                            // based on a parent one, the topmost one is
+                            // searched for.
 
-                        recipients.set(selector.ordinal(), selector);
-                        notifications.set(key, recipients);
+                            for (let node = selector; node.parentNode; node = node.parentNode) {
+                                const meta = (Composite.render.meta || [])[node.ordinal()] || {};
+                                if (meta.attributes && meta.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))
+                                    selector = node;
+                            }
 
-                    }, ReactProxy.selector, target, key, this.notifications);
-                }
-            },
+                            const recipients = notifications.get(key) || new Map();
 
-            set(target, key, value) {
+                            // If the selector as the current rendered element
+                            // is already registered as a recipient, then the
+                            // registration can be canceled.
+                            if (recipients.has(selector.ordinal()))
+                                return;
 
-                if (typeof value === "object"
-                        && value !== null)
-                    value = value.toReactProxy();
+                            for (const recipient of recipients.values()) {
 
-                try {return target[key] = value;
-                } finally {
+                                // If the selector as the current rendered
+                                // element is already contained in a recipient
+                                // as the parent, the selector as a recipient
+                                // can be ignored, because the rendering is
+                                // initiated by the parent and includes the
+                                // selector as a child.
+                                if (recipient.contains !== undefined
+                                        && recipient.contains(selector))
+                                    return;
 
-                    if (this.cache.get(key) === value)
-                        return;
-                    this.cache.set(key, value);
+                                // If the selector as current rendered element
+                                // contains a recipient as parent, the recipient
+                                // can be removed, because the selector element
+                                // will initiate rendering as parent in the
+                                // future and the existing recipient will be
+                                // rendered as child automatically.
+                                if (selector.contains !== undefined
+                                        && selector.contains(recipient))
+                                    recipients.delete(recipient.ordinal());
+                            }
 
-                    // The registration is delayed so that the setting of values
-                    // does not block unnecessarily.
-                    Composite.asynchron((selector, target, key, notifications) => {
+                            recipients.set(selector.ordinal(), selector);
+                            notifications.set(key, recipients);
 
-                        // An update of the recipients is only performed outside
-                        // the rendering and if the key exists in the object.
-                        if (ReactProxy.selector !== null
-                                || !target.hasOwnProperty(key))
+                        }, _selector, target, key, this.notifications);
+                    }
+                },
+
+                set(target, key, value) {
+
+                    if (typeof value === "object"
+                            && value !== null)
+                        value = reactive(value, parent, filter);
+
+                    try {return target[key] = value;
+                    } finally {
+
+                        if (this.cache.get(key) === value)
                             return;
+                        this.cache.set(key, value);
 
-                        const recipients = this.notifications.get(key) || new Map();
-                        for (const recipient of recipients.values()) {
-                            // If the recipient is no longer included in the DOM
-                            // and so it can be removed this case.
-                            if (!document.body.contains(recipient))
-                                recipients.delete(recipient.ordinal());
-                            else Composite.render(recipient);
-                        }
+                        // The registration is delayed so that the setting of
+                        // values does not block unnecessarily.
+                        Composite.asynchron((selector, target, key, notifications) => {
 
-                    }, ReactProxy.selector, target, key, this.notifications);
+                            // An update of the recipients is only performed
+                            // outside the rendering and if the key exists in
+                            // the object.
+                            if (_selector !== null
+                                    || !target.hasOwnProperty(key))
+                                return;
+
+                            const recipients = this.notifications.get(key) || new Map();
+                            for (const recipient of recipients.values()) {
+                                // If the recipient is no longer included in the
+                                // DOM and so it can be removed this case.
+                                if (!document.body.contains(recipient))
+                                    recipients.delete(recipient.ordinal());
+                                else Composite.render(recipient);
+                            }
+
+                        }, _selector, target, key, this.notifications);
+                    }
                 }
-            }
-        });
+            });
 
-        // Prevents creating a ReactProxy from an existing one. This is possible,
-        // but the impacts have not yet been considered. Thus, ReactProxy is
-        // created here and not in ReactProxy.prototype.toReactProxy. This way
-        // both places are caught.
-        proxy.toReactProxy = () => {
+            // Prevents creating a ReactProxy from an existing one. This is
+            // possible in principle, but the impact of existing references to
+            // have not been considered to the end. Therefore, ReactProxy is
+            // created here and not in ReactProxy.prototype.toReactProxy. This
+            // way both places are caught.
+            proxy.toReactProxy = () => {
+                return proxy;
+            };
+
+            proxy.toObject = () => {
+                return object;
+            };
+
+            // The filter prevents endless recursions that can occur during
+            // recursive scanning from the object tree.
+
+            filter = filter || [];
+            filter.push(object);
+            filter.push(proxy);
+
+            // For ReactProxy instances, the read-only property parent is
+            // automatically added at each object level if an object level does
+            // not already have one with the same name. This property supports
+            // access to parent object levels.
+
+            if (typeof parent === "object") {
+                filter.push(parent);
+                if (typeof proxy.parent === "undefined")
+                    Object.defineProperty(proxy, "parent", {
+                        value: parent
+                    });
+            }
+
+            for (const key in proxy) {
+                let value = proxy[key];
+                if (typeof value !== "object"
+                        || value === null
+                        || filter.includes(value))
+                    continue;
+                if (typeof value[_secret] === "object")
+                    value = value[_secret];
+                proxy[key] = reactive(value, object, filter);
+            }
+
             return proxy;
         };
 
-        proxy.toObject = () => {
-            return object;
-        };
-
-        // The filter prevents endless recursions that can occur during
-        // recursive scanning from the object tree.
-
-        filter = filter || [];
-        filter.push(object);
-
-        if (typeof parent === "object") {
-            filter.push(parent);
-            if (typeof proxy.parent === "undefined")
-                Object.defineProperty(proxy, "parent", {
-                    value: parent
-                });
-        }
-
-        for (const key in proxy) {
-            const value = proxy[key];
-            if (typeof value === "object"
-                    && value !== null
-                    && !filter.includes(value))
-                proxy[key] = reactive(value, object, filter);
-        }
-
-        return proxy;
-    };
-
-    return reactive(this);
-});
+        return reactive(this);
+    });
+}
