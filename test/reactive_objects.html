@@ -80,7 +80,12 @@
 
             // Assertion
             Assert.assertTrue(objectD.objectA !== objectA);
-        }});
+
+            objectC.objectB = objectB;
+
+            // Assertion
+            Assert.assertTrue(objectC.objectB !== objectB);
+          }});
 
         const modelX = {
             valueA: 10000,
