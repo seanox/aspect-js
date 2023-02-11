@@ -53,15 +53,18 @@ objectA.objectB !== objectB
 
 const objectD = ({}).toReactProxy();
 objectD.objectB = objectB;
+objectD.objectB.text = "A";
 
 // Assertions
 objectD.objectB !== objectB
-objectD.objectB === objectC.objectB
+objectD.objectB !== objectC.objectB
+objectD.objectB.text === "A"
+objectC.objectB.text === "A"
 ```
 
-__The ReactProxy instance and the original data object are decoupled. Comparable
-to a DTO (Data Transfer Object), the ReactProxy instance is independent and has
-no direct references to the original data object.__
+__The ReactProxy is a substitute for another object and controls access to the
+original object. Even though the ReactProxy and the object are independent
+instances, the ReactProxy is tightly coupled to the original object.__
 
 ```javascript
 const objectA = {};
@@ -69,18 +72,20 @@ const objectB = objectA.toReactProxy();
 objectB.value = "B";
 
 // Assertions
-typeof objectA.value === "undefined"
+typeof objectA.value === "string"
 typeof objectB.value === "string"
+objectA.value === objectB.value
 ```
 
 Access to the original data object is possible with the method
-`ReactProxy.prototype.toObject()`. Here again the note that the data object
-exists decoupled from the ReactProxy instance and will not correspond to the
-current state of the ReactProxy instance.
+`ReactProxy.prototype.toObject()`.
 
 From an existing ReactProxy instance, a new ReactProxy instance cannot be
-created. The corresponding methods will always return a reference to the
-original ReactProxy instance.
+created. `ReactProxy.prototype.toReactProxy()` will always return a reference to
+itself. The situation is slightly different when another ReactProxy object is
+added as a value to an existing ReactProxy instance. Then a new ReactProxy
+instance is created based on the original object to be added as ReactProxy
+object.
 
 ```javascript
 const objectA = ({}).toReactProxy();
@@ -95,7 +100,7 @@ objectB === objectC
 const objectD = ({objectA}).toReactProxy();
 
 // Assertion
-objectD.objectA === objectA
+objectD.objectA !== objectA
 ```
 
 __Prevent misunderstanding__

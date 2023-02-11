@@ -35,8 +35,8 @@ wird. Somit muss der ReactProxy immer vor den Konsumenten existieren.__
 Beenden l&auml;sst sich das reaktive Rendering durch das gezielte L&ouml;schen
 von ReactProxy-Instanzen mit der `delete` Methode.
 
-Der ReactProxy wirkt permanent rekursiv auf alle Objektebenen und auch auf die
-Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden, auch wenn diese
+Der ReactProxy wirkt permanent rekursiv auf allen Objektebenen und auch auf die
+Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden. Auch wenn diese
 Objekte nicht explizit den ReactProxy nutzen, werden f&uuml;r die referenzierten
 Objekte neue Instanzen gebildet.
 
@@ -57,16 +57,19 @@ objectA.objectB !== objectB
 
 const objectD = ({}).toReactProxy();
 objectD.objectB = objectB;
+objectD.objectB.text = "A";
 
 // Assertions
 objectD.objectB !== objectB
-objectD.objectB === objectC.objectB
+objectD.objectB !== objectC.objectB
+objectD.objectB.text === "A"
+objectC.objectB.text === "A"
 ```
 
-__Die ReactProxy-Instanz und das urspr&uuml;ngliche Datenobjekt sind entkoppelt.
-Vergleichbar mit einem DTO (Data Transfer Object) ist die ReactProxy-Instanz
-eigenst&auml;ndig und hat keine direkten Referenzen zum urspr&uuml;nglichen
-Datenobjekt.__
+__Der ReactProxy ist ein Stellvertreter (Substitute) f&uuml;r ein anderes Objekt
+und kontrolliert den Zugriff auf das urspr&uuml;ngliche Objekt. Auch wenn
+ReactProxy und das Objekt eigenst&auml;ndige Instanzen sind, ist der ReactProxy
+fest an das urspr&uuml;ngliche Objekt gekoppelt.__
 
 ```javascript
 const objectA = {};
@@ -74,18 +77,21 @@ const objectB = objectA.toReactProxy();
 objectB.value = "B";
 
 // Assertions
-typeof objectA.value === "undefined"
+typeof objectA.value === "string"
 typeof objectB.value === "string"
+objectA.value === objectB.value
 ```
 
 Der Zugriff auf das urspr&uuml;ngliche Datenobjekt ist mit der Methode
-`ReactProxy.prototype.toObject()` m&ouml;glich. Hierzu nochmal der Hinweis, dass
-das Datenobjekt entkoppelt von der ReactProxy-Instanz existiert und nicht dem
-aktuellen Stand der ReactProxy-Instanz entsprechen wird.
+`ReactProxy.prototype.toObject()` m&ouml;glich.
 
 Von einer bestehenden ReactProxy-Instanz kann keine neue ReactProxy-Instanz
-erstellt werden. Die entsprechenden Methoden werden immer eine Referenz auf die
-urspr&uuml;ngliche ReactProxy-Instanz zur&uuml;ckgeben.
+erstellt werden. `ReactProxy.prototype.toReactProxy()` wird immer eine Referenz
+auf sich selbst zur&uuml;ckgeben. Etwas anders verh&auml;lt es sich, wenn einer
+bestehenden ReactProxy-Instanz ein anderes ReactProxy-Objekt als Wert
+hinzugef&uuml;gt wird. Dann wird auf Basis vom urspr&uuml;nglichen Objekt, das
+als ReactProxy-Objekt hinzugef&uuml;gt werden soll, eine neue ReactProxy-Instanz
+erstellt.
 
 ```javascript
 const objectA = ({}).toReactProxy();
@@ -100,19 +106,20 @@ objectB === objectC
 const objectD = ({objectA}).toReactProxy();
 
 // Assertion
-objectD.objectA === objectA
+objectD.objectA !== objectA
 ```
 
-__Missverständnis vorbeugen__
+__Missverst&auml;ndnisse vorbeugen__
 
 Der ReactProxy selbst hat keinen direkten Einfluss auf die View, sondern fordert
 den Renderer auf, einzelne konsumierende Elemente zu aktualisieren, was
-besonders dann beachtet werden muss, wenn Ausdrücke temporäre Variablen nutzen,
-wie sie z.B. beim Attribut `iterate` verwendet werden.
+besonders dann beachtet werden muss, wenn Ausdr&uuml;cke tempor&auml;re
+Variablen nutzen, wie sie z.B. beim Attribut `iterate` verwendet werden.
 
-Elemente mit dem Attribut`iterate` werden automatisch berücksichtigt und so wird
-in diesem Fall wird immer das oberste Element mit dem Attribut `iterate`
-aktualisiert, damit die temporären Variablen in allen Ausdrücken verfügbar sind.
+Elemente mit dem Attribut`iterate` werden automatisch ber&uuml;cksichtigt und so
+wird in diesem Fall wird immer das oberste Element mit dem Attribut `iterate`
+aktualisiert, damit die tempor&auml;ren Variablen in allen Ausdr&uuml;cken
+verf&uuml;gbar sind.
 
 
 
