@@ -40,7 +40,7 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230210
+ * @version 1.6.0 20230211
  */
 compliant("ReactProxy");
 compliant(null, window.ReactProxy = {
@@ -222,7 +222,7 @@ compliant(null, Object.prototype.toReactProxy = function() {
             if (typeof value === "object"
                     && value !== null
                     && !filter.includes(value))
-                proxy[key] = reactive(proxy[key], object, filter);
+                proxy[key] = reactive(value, object, filter);
         }
 
         return proxy;
