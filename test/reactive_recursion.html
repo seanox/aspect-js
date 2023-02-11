@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        const capture = new Capture();
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            capture.snap();
+            const count = capture.patterns().length;
+            console.log(capture.size())
+            if (capture.size() == 1)
+                window.setTimeout(() =>  {
+                    model.list[1].text = "D";
+                }, 500);
+            if (capture.size() == count)
+                Test.start();
+            if (capture.size() > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
+        });
+
+        Test.create({test() {
+            capture.validate();
+        }});
+
+        const model = ({
+            list: [
+                {text: "A"},
+                {text: "B"},
+                {text: "C"},
+            ],
+            get recursionA() {
+                return this.ordinal();
+            },
+            get recursionB() {
+            },
+            inner: {
+                get text() {
+                    return this.parent.list[1].text;
+                }
+            }
+        }).toReactProxy();
+    </script>
+    <script type="text/test">
+      A: _1_
+      B: _B_
+      C: _B_
+      D:
+      A
+      B
+      C
+    </script>
+    <script type="text/test">
+      A: _1_
+      B: _D_
+      C: _B_
+      D:
+      A
+      B
+      C
+    </script>
+    <script type="text/test">
+      A: _1_
+      B: _D_
+      C: _D_
+      D:
+      A
+      B
+      C
+    </script>
+    <script type="text/test">
+      A: _1_
+      B: _D_
+      C: _D_
+      D:
+          A
+          D
+          C
+    </script>
+  </head>
+  <body>
+    A: _{{model.recursionA}}_
+    B: _{{model.list[1].text}}_
+    C: _{{model.inner.text}}_
+    D: <div iterate="{{list:model.list}}">
+         {{list.item.text}}
+       </div>
+  </body>
+</html>
