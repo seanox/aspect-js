@@ -107,6 +107,11 @@ const objectD = ({objectA}).toReactProxy();
 
 // Assertion
 objectD.objectA !== objectA
+
+objectC.objectB = objectB;
+
+// Assertion
+objectC.objectB !== objectB
 ```
 
 __Missverst&auml;ndnisse vorbeugen__
