@@ -33,45 +33,26 @@
             const objectA = {}
             const objectB = {}
             objectA.objectB = objectB;
-            Assert.assertEquals(objectA.objectB, objectB);
+
+            // Assertions
+            Assert.assertTrue(objectA.objectB === objectB);
 
             const objectC = objectA.toReactProxy();
-            Assert.assertNotEquals(objectC.objectB, objectB);
-            Assert.assertNotEquals(objectC.objectB, objectA.objectB);
-            Assert.assertEquals(objectA.objectB, objectB);
+
+            // Assertions
+            Assert.assertTrue(objectC.objectB === objectA.objectB);
+            Assert.assertTrue(objectC.objectB !== objectB);
+            Assert.assertTrue(objectA.objectB !== objectB);
 
             const objectD = ({}).toReactProxy();
             objectD.objectB = objectB;
-            Assert.assertNotEquals(objectD.objectB, objectB);
-            Assert.assertNotEquals(objectD.objectB, objectC.objectB);
-        }});
+            objectD.objectB.text = "A";
 
-        Test.create({test() {
-            const objectA = ({}).toReactProxy();
-            const objectB = objectA.toReactProxy();
-            const objectC = ReactProxy.create(objectA);
-            Assert.assertEquals(objectA, objectB);
-            Assert.assertEquals(objectA, objectC);
-            Assert.assertEquals(objectB, objectC);
-
-            const objectD = ({objectA}).toReactProxy();
-            Assert.assertEquals(objectD.objectA, objectA);
-        }});
-
-        Test.create({test() {
-            const objectA = {};
-            const objectB = objectA.toReactProxy();
-            Assert.assertNotEquals(objectA, objectB);
-
-            const objectC = objectB.toObject();
-            Assert.assertNotEquals(objectC, objectB);
-            Assert.assertEquals(objectC, objectA);
-
-            const objectD = objectB.toObject().toReactProxy();
-            Assert.assertNotEquals(objectD, objectB);
-
-            const objectE = objectD.toObject()
-            Assert.assertEquals(objectE, objectA);
+            // Assertions
+            Assert.assertTrue(objectD.objectB !== objectB);
+            Assert.assertTrue(objectD.objectB !== objectC.objectB);
+            Assert.assertTrue(objectD.objectB.text === "A");
+            Assert.assertTrue(objectC.objectB.text === "A");
         }});
 
         Test.create({test() {
@@ -79,8 +60,26 @@
             const objectB = objectA.toReactProxy();
             objectB.value = "B";
 
-            Assert.assertEquals("undefined", typeof objectA.value);
-            Assert.assertEquals("string", typeof typeof objectB.value);
+            // Assertions
+            Assert.assertTrue(typeof objectA.value === "string");
+            Assert.assertTrue(typeof objectB.value === "string");
+            Assert.assertTrue(objectA.value === objectB.value);
+        }});
+
+        Test.create({test() {
+            const objectA = ({}).toReactProxy();
+            const objectB = objectA.toReactProxy();
+            const objectC = ReactProxy.create(objectA);
+
+            // Assertions
+            Assert.assertTrue(objectA === objectB);
+            Assert.assertTrue(objectA === objectC);
+            Assert.assertTrue(objectB === objectC);
+
+            const objectD = ({objectA}).toReactProxy();
+
+            // Assertion
+            Assert.assertTrue(objectD.objectA !== objectA);
         }});
 
         const modelX = {
@@ -131,7 +130,7 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
       a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
       a-arrayB: F
@@ -144,11 +143,37 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
       a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
       a-arrayB: F
       x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
+    </script>
+    <script type="text/test">
+      A: _10001_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
+    </script>
+    <script type="text/test">
+      A: _10001_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayB: F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
       x-arrayB: F
     </script>
     <script type="text/test">
@@ -157,11 +182,11 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
       a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
       x-arrayB: F
     </script>
     <script type="text/test">
@@ -170,12 +195,38 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
       a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
       x-arrayB: F
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      x-arrayB: F
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20000_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      x-arrayB: FXe
     </script>
     <script type="text/test">
       A: _10003_
@@ -183,12 +234,12 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      x-arrayB: FXe
     </script>
     <script type="text/test">
       A: _10003_
@@ -196,12 +247,25 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      x-arrayB: FXe
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20010_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXe
     </script>
     <script type="text/test">
       A: _10003_
@@ -209,12 +273,12 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXe
     </script>
     <script type="text/test">
       A: _10003_
@@ -222,12 +286,12 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXe
     </script>
     <script type="text/test">
       A: _10003_
@@ -235,12 +299,25 @@
       F: _30000_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: FAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXe
+    </script>
+    <script type="text/test">
+      A: _10003_
+      C: _20030_
+      F: _30000_
+      x: _object_
+      Y: _object_
+      A-a: X
+      X-a: X
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXeAe
     </script>
     <script type="text/test">
       A: _10003_
@@ -248,12 +325,12 @@
       F: _30100_
       x: _object_
       Y: _object_
-      A-a: A
+      A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: FAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXeAe
     </script>
     <script type="text/test">
       A: _10003_
@@ -263,10 +340,10 @@
       Y: _object_
       A-a: C
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: FAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXeAe
     </script>
     <script type="text/test">
       A: _10003_
@@ -276,10 +353,10 @@
       Y: _object_
       A-a: C
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: FAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXeAe
     </script>
     <script type="text/test">
       A: _10003_
@@ -289,10 +366,10 @@
       Y: _object_
       A-a: C
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CAb"}]
-      a-arrayB: FAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
+      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB: FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      x-arrayB: FXeAe
     </script>
   </head>
   <body>
