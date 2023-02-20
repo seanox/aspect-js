@@ -115,30 +115,27 @@ document.body.appendChild(nodes, true);
 
 ## Math
 
-### Math.uniqueId
+### Math.unique
 
 Creates an alphanumeric (U)UID with fixed size, where the length influences the
 quality of the (U)UID. 
 
 ```javascript
-Math.uniqueId()
+Math.unique()
     returns string e.g. "42X3IUW7622CKY02"
 
-Math.uniqueId(32)
+Math.unique(32)
     returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
-### Math.uniqueSerialId
+### Math.serial
 
-Creates an alphanumeric (U)UID with fixed size and a serial relation to time,
-where the length influences the quality of the (U)UID.
+Creates a time-based unique alphanumeric UID that is chronologically sortable as
+text and contains the time and a counter if UIDs are created at the same time.
 
 ```javascript
-Math.uniqueSerialId()
-    returns string e.g. "0GQ96VN87ZZ2JTYY"
-
-Math.uniqueSerialId(32)
-    returns string e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
+Math.serial()
+    returns string e.g. "89BFASDV910"
 ```
 
 

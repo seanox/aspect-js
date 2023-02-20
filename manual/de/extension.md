@@ -119,32 +119,29 @@ document.body.appendChild(nodes, true);
 
 ## Math
 
-### Math.uniqueId
+### Math.unique
 
 Erzeugt eine alphanumerische (U)UID mit fester L&auml;nge, wobei die L&auml;nge
 Einfluss auf die Qualit&auml;t der (U)UID hat.
 
 ```javascript
-Math.uniqueId()
+Math.unique()
     returns string e.g. "42X3IUW7622CKY02"
 
-Math.uniqueId(32)
+Math.unique(32)
     returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
 
-### Math.uniqueSerialId
+### Math.serial
 
-Erzeugt eine alphanumerische (U)UID mit fester L&auml;nge und einem seriellen
-Bezug zur Zeit, wobei die L&auml;nge Einfluss auf die Qualit&auml;t der (U)UID
-hat.
+Erzeugt eine zeitbasierte eindeutige alphanumerische UID, die als Text
+chronologisch sortierbar ist und die Uhrzeit sowie einen Z&auml;hler
+enth&auml;lt, wenn UIDs zeitgleich erstellt werden.
 
 ```javascript
-Math.uniqueSerialId()
-    returns string e.g. "0GQ96VN87ZZ2JTYY"
-
-Math.uniqueSerialId(32)
-    returns string e.g. "65RQR5X5URNGO3H087ZZ2JTYZ"
+Math.serial()
+    returns string e.g. "89BFASDV910"
 ```
 
 
