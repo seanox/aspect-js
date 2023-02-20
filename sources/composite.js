@@ -111,7 +111,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230205
+ * @version 1.6.0 20230220
  */
 if (compliant("Composite")) {
     
@@ -2441,20 +2441,19 @@ if (compliant("Composite")) {
             eval(script);
     };
     
-    /**
-     * Enhancement of the JavaScript API
-     * Adds a static counter for assigning serial IDs to the object.
-     */
-    compliant("Object.indication");
-    compliant(null, Object.indication = 0);
+    let _serial = 0;
     
     /**
      * Enhancement of the JavaScript API
      * Adds a function for getting the serial ID to the objects.
      */
+    compliant("Object.prototype.serial");
     compliant("Object.prototype.ordinal");
     compliant(null, Object.prototype.ordinal = function() {
-        this.serial = this.serial || ++Object.indication;
+        if (typeof this.serial === "undefined")
+            Object.defineProperty(this, "serial", {
+                value: ++_serial
+            });
         return this.serial;
     });
 
