@@ -40,7 +40,7 @@
  * objects do not explicitly use the ReactProxy.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230211
+ * @version 1.6.0 20230220
  */
 compliant("ReactProxy");
 compliant(null, window.ReactProxy = {
@@ -64,7 +64,7 @@ compliant(null, window.ReactProxy = {
         _selector = null;
     });
 
-    const _secret = "\0" + Math.uniqueId();
+    const _secret = "\0" + Math.unique();
 
     /**
      * Enhancement of the JavaScript API
