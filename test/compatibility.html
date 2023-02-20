@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+
+        // Object.defineProperty by default writable = true
+        Test.create({test() {
+            const o = {};
+            let serial = 0;
+            Object.defineProperty(o, "x", {
+                value: ++serial
+            });
+            Assert.assertEquals(1, o.x);
+            Assert.assertEquals(200, o.x = 200);
+            Assert.assertEquals(1, o.x);
+        }});
+
+        Test.start({auto:true});
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
