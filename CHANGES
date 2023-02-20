@@ -33,6 +33,10 @@ CR: Datasource: Optimization when loading module resources
     Minimizes HTTP requests in the background and when loading the page.
 CR: Message: Added messages as alternative object tree for associative array Message
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
+CR: Extension: Math.unique(...) replaces Math.uniqueId(...)
+CR: Extension: Math.serial() replaces Math.uniqueSerialId(...)
+    The method is now completely time-based and independent of Math.unique().
+    The serial is still unique and as text chronologically sortable.
 CR: Release: Added the manual (de/en) to the release package (zip)
 CR: Release: Channels with major number are omitted
 CR: Release: Revision of the release channels
