@@ -35,13 +35,10 @@
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230221
  */
-if (compliant("Expression")) {
-
-    /** Cache (expression/script) */
-    const _cache = new Map()
+(() => {
 
     compliant("Expression");
-    compliant("Expression", window.Expression = {
+    compliant(null, window.Expression = {
 
         /** Constant for element type text */
         get TYPE_TEXT() {
@@ -454,4 +451,7 @@ if (compliant("Expression")) {
             }
         }
     });
-}
+
+    /** Cache (expression/script) */
+    const _cache = new Map()
+})();

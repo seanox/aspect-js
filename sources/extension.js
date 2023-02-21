@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230220
+ * @version 1.6.0 20230221
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
@@ -71,7 +71,7 @@ window.addEventListener("load",
  * also supported. If a layer in the namespace uses an integer, this layer is
  * used as an array.
  */
-if (compliant("Namespace")) {
+(() => {
 
     compliant("Namespace");
     compliant(null, window.Namespace = {
@@ -314,7 +314,7 @@ if (compliant("Namespace")) {
             throw error;
         }
     }
-}
+})();
 
 /**
  * Enhancement of the JavaScript API
@@ -323,21 +323,23 @@ if (compliant("Namespace")) {
  * @param node      node(s)
  * @param exclusive existing children will be removed first
  */
-Element.prototype.appendChild$origin = Element.prototype.appendChild;
-Element.prototype.appendChild = function(node, exclusive) {
-    if (exclusive)
-        this.innerHTML = "";
-    if (node instanceof Node) {
-        this.appendChild$origin(node);
-    } else if (Array.isArray(node)
-            || node instanceof NodeList
-            || (Symbol && Symbol.iterator
-                    && node && typeof node[Symbol.iterator])) {
-        node = Array.from(node);
-        for (let loop = 0; loop < node.length; loop++)
-            this.appendChild$origin(node[loop]);
-    } else this.appendChild$origin(node);
-};
+(() => {
+    const _appendChild = Element.prototype.appendChild;
+    Element.prototype.appendChild = function(node, exclusive) {
+        if (exclusive)
+            this.innerHTML = "";
+        if (node instanceof Node) {
+            _appendChild.call(this, node);
+        } else if (Array.isArray(node)
+                || node instanceof NodeList
+                || (Symbol && Symbol.iterator
+                        && node && typeof node[Symbol.iterator])) {
+            node = Array.from(node);
+            for (let loop = 0; loop < node.length; loop++)
+                _appendChild.call(this, node[loop]);
+        } else _appendChild.call(this, node);
+   };
+})();
 
 /**
  * Enhancement of the JavaScript API
@@ -366,7 +368,11 @@ compliant(null, Math.unique = (size) => {
  * chronologically sortable as text and contains the time and a counter if
  * serial are created at the same time.
  */
-if (compliant("Math.serial")) {
+(() => {
+    compliant("Math.serial");
+    compliant(null, Math.serial = () => {
+        return _serial.toString();
+    });
     const _offset = -946684800000;
     const _serial = {timing:new Date().getTime() + _offset, number:0,
         toString() {
@@ -376,13 +382,9 @@ if (compliant("Math.serial")) {
             const serial = this.timing.toString(36);
             const number = this.number.toString(36);
             return (serial.length.toString(36) + serial
-                    + number.length.toString(36) + number).toUpperCase();
+                + number.length.toString(36) + number).toUpperCase();
         }};
-    compliant("Math.serial");
-    compliant(null, Math.serial = () => {
-        return _serial.toString();
-    });
-}
+})();
 
 /**
  * Enhancement of the JavaScript API
