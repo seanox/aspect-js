@@ -146,6 +146,7 @@
         <file name="extension.js"/>
         <file name="datasource.js"/>
         <file name="messages.js"/>
+        <file name="expression.js"/>
         <file name="composite.js"/>
         <file name="reactive.js"/>
       </filelist>
