@@ -74,14 +74,14 @@
  * Both objects are only available if there are also labels.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230202
+ * @version 1.6.0 20230222
  */
-compliant("Messages");
-compliant(null, window.Messages = {});
-compliant("messages");
-compliant(null, window.messages = {});
-
 (() => {
+
+    compliant("Messages");
+    compliant(null, window.Messages = {});
+    compliant("messages");
+    compliant(null, window.messages = {});
 
     const _localize = DataSource.localize;
 
