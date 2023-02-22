@@ -543,7 +543,7 @@
                 return;
             
             const serial = selector.ordinal();
-            const object = Composite.render.meta[serial];
+            const object = _render_meta[serial];
             
             let valid = true;
 
@@ -766,7 +766,7 @@
                     return;
 
                 const serial = selector.ordinal();
-                const object = Composite.render.meta[serial];
+                const object = _render_meta[serial];
                 
                 // Objects that were not rendered should not be mounted. This
                 // can happen if new DOM elements are created during rendering
@@ -840,7 +840,7 @@
 
                         const target = event.currentTarget;
                         const serial = target.ordinal();
-                        const object = Composite.render.meta[serial];
+                        const object = _render_meta[serial];
 
                         let action = event.type.toLowerCase();
                         if (!Composite.PATTERN_EVENT_FILTER.includes(action))
@@ -1073,7 +1073,7 @@
                     if (!(element instanceof Element))
                         return;
                     const serial = element.ordinal();
-                    const object = Composite.render.meta[serial];
+                    const object = _render_meta[serial];
                     if (!object)
                         return;
                     changes.forEach((attribute) => {
@@ -1243,20 +1243,14 @@
                     }
                 }
 
-                // Associative array (meta store) for element-related meta
-                // objects, those which are created during rendering:
-                // (key:serial, value:meta)
-                Composite.render.meta = Composite.render.meta || [];
-                
                 // Register each analyzed node/element and minimizes multiple
-                // analysis. For registration, the serial number of the
-                // node/element is used. The node prototype has been enhanced
-                // with creation and a get-function. During the analysis, the
-                // attributes of an element (not node) containing an expression
-                // or all allowed attributes are cached in the memory
-                // (Composite.render.meta).
+                // analysis. For registration, the serial of the node/element is
+                // used. The node prototype has been enhanced with creation and
+                // a get-function. During the analysis, the attributes of an
+                // element (not node) containing an expression or all allowed
+                // attributes are cached in the memory (_render_meta).
                 let serial = selector.ordinal();
-                let object = Composite.render.meta[serial];
+                let object = _render_meta[serial];
                 if (!object) {
 
                     // Acceptors are a very special way to customize. Unlike the
@@ -1274,7 +1268,7 @@
                     });
 
                     object = {serial, element:selector, attributes:{}};
-                    Composite.render.meta[serial] = object;
+                    _render_meta[serial] = object;
                     if ((selector instanceof Element)
                             && selector.attributes) {
                         Array.from(selector.attributes).forEach((attribute) => {
@@ -1361,11 +1355,11 @@
                             const attributes = object.attributes;
                             object = {serial:marker.ordinal(), element:marker, attributes,
                                 condition: {expression, template, marker, element:null, attributes, complete:false, share:null}};
-                            Composite.render.meta[object.serial] = object;
+                            _render_meta[object.serial] = object;
 
                             // The meta-object for the HTML element is removed,
                             // because only the new marker is relevant.
-                            delete Composite.render.meta[serial];
+                            delete _render_meta[serial];
 
                             // The marker is initially created and in the DOM.
                             selector.parentNode.replaceChild(marker, selector);
@@ -1438,7 +1432,7 @@
                     condition.element = condition.template.cloneNode(true);
                     const element = condition.element;
                     const attributes = Object.assign({}, condition.attributes);
-                    Composite.render.meta[element.ordinal()] = {serial:element.ordinal(), element, attributes, condition};
+                    _render_meta[element.ordinal()] = {serial:element.ordinal(), element, attributes, condition};
 
                     // Load modules/components/composite resources. Composites
                     // with condition are only loaded with the first use.
@@ -1558,7 +1552,7 @@
                                     object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
                                     object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
                                 } else object.attributes[Composite.ATTRIBUTE_VALUE] = match;
-                            Composite.render.meta[serial] = object;
+                            _render_meta[serial] = object;
                             return "{{" + serial + "}}";
                         });
                         
@@ -1574,7 +1568,7 @@
                             words.forEach((word, index, array) => {
                                 if (word.match(/^\{\{\d+\}\}$/)) {
                                     const serial = parseInt(word.substring(2, word.length -2).trim());
-                                    const object = Composite.render.meta[serial];
+                                    const object = _render_meta[serial];
                                     Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
                                     object.render();
                                     array[index] = object.element;
@@ -1585,7 +1579,7 @@
                                     Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
                                     object.element.textContent = word;
                                     object.attributes[Composite.ATTRIBUTE_TEXT] = word;
-                                    Composite.render.meta[serial] = object;
+                                    _render_meta[serial] = object;
                                     array[index] = object.element;
                                 }
                             });
@@ -1671,8 +1665,6 @@
                     if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, String(value));
 
-                    Composite.render.cache = Composite.render.cache || {};
-                    
                     if (!value) {
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
                     
@@ -1688,13 +1680,13 @@
                         data = DataSource.transform(data[1], data[2]);
                         selector.appendChild(data, true);
                         const serial = selector.ordinal();
-                        const object = Composite.render.meta[serial];
+                        const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                     
-                    } else if (Composite.render.cache[value] !== undefined) {
-                        selector.innerHTML = Composite.render.cache[value];
+                    } else if (_render_cache[value] !== undefined) {
+                        selector.innerHTML = _render_cache[value];
                         const serial = selector.ordinal();
-                        const object = Composite.render.meta[serial];
+                        const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                     
                     } else {
@@ -1707,10 +1699,10 @@
                                 if (request.status !== 200)
                                     throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
                                 const content = request.responseText.trim();
-                                Composite.render.cache[request.responseURL] = content;
+                                _render_cache[request.responseURL] = content;
                                 selector.innerHTML = content;
                                 const serial = selector.ordinal();
-                                const object = Composite.render.meta[serial];
+                                const object = _render_meta[serial];
                                 delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                             } catch (error) {
                                 Composite.fire(Composite.EVENT_HTTP_ERROR, error);
@@ -2052,7 +2044,7 @@
             // current namespace is terminated and the found composite is
             // outside the current namespace.
 
-            const object = Composite.render.meta[element.ordinal()];
+            const object = _render_meta[element.ordinal()];
             if (!object || !object.attributes
                     || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
                 return !namespace ? {model:serial} : null;
@@ -2073,7 +2065,7 @@
             return {namespace:locate.namespace, model:serial};
         }
 
-        const object = Composite.render.meta[element.ordinal()];
+        const object = _render_meta[element.ordinal()];
         if (object && object.attributes
                 && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
             throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
@@ -2169,6 +2161,18 @@
         return lookup;
     };
 
+    /** Associative array of reusable content for rendering */
+    const _render_cache = {};
+
+    /**
+     * Associative array for element-related meta objects, those which are
+     * created during rendering: (key:serial, value:meta)
+     */
+    const _render_meta = [];
+    Object.defineProperty(Composite.render, "meta", {
+        value: _render_meta
+    });
+
     /**
      * Load modules/components/composite resources. For components/composites,
      * it is assumed that resources have been outsourced. For outsourcing CSS,
@@ -2201,17 +2205,13 @@
                 && composite[0] instanceof Element)
             composite = composite[0];
 
-        // For module/composites only resources of the current domain are used,
-        // therefore only the URI and not the URL is used as key in the cache.
-        Composite.render.cache = Composite.render.cache || {};
-
         let resource = composite;
 
         let object = null;
         if (composite instanceof Element) {
             if (!composite.hasAttribute(Composite.ATTRIBUTE_ID))
                 throw new Error("Unknown composite without id");
-            object = Composite.render.meta[composite.ordinal()];   
+            object = _render_meta[composite.ordinal()];
             if (!object)
                 throw new Error("Unknown composite");
             resource = composite.id;
@@ -2257,20 +2257,20 @@
         // If the module has already been loaded, it is only necessary to check
         // whether the markup must be inserted. CSS should already exist in the
         // head and the JavaScript will only be executed once.
-        if (Composite.render.cache[context + ".composite"] !== undefined) {
-            if (Composite.render.cache[context + ".html"] !== undefined) {
+        if (_render_cache[context + ".composite"] !== undefined) {
+            if (_render_cache[context + ".html"] !== undefined) {
                 if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                         && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                         && !composite.innerHTML.trim()) {
                     recursionDetection(composite);
                     if (composite instanceof Element)
-                        composite.innerHTML = Composite.render.cache[context + ".html"];
+                        composite.innerHTML = _render_cache[context + ".html"];
                 }
             }
             return;
         }
 
-        Composite.render.cache[context + ".composite"] = null;
+        _render_cache[context + ".composite"] = null;
 
         // Internal method for loading a composite resource.
         // Supports JS, CSS and HTML.
@@ -2284,18 +2284,18 @@
 
             // JS and CSS are loaded only once
             resource = normalize(resource);
-            if (resource in Composite.render.cache
+            if (resource in _render_cache
                     && resource.match(/\.(js|css)$/i))
                 return;
 
             // Resource has already been requested, but with no useful response
             // and unsuccessful requests will not be repeated
-            if (resource in Composite.render.cache
-                    && Composite.render.cache[resource] === undefined)
+            if (resource in _render_cache
+                    && _render_cache[resource] === undefined)
                 return;
 
-            if (!(resource in Composite.render.cache)) {
-                Composite.render.cache[resource] = undefined;
+            if (!(resource in _render_cache)) {
+                _render_cache[resource] = undefined;
                 const request = new XMLHttpRequest();
                 request.overrideMimeType("text/plain");
                 request.open("GET", resource, false);
@@ -2306,7 +2306,7 @@
                     return;
                 if (request.status !== 200)
                     throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-                Composite.render.cache[resource] = request.responseText.trim();
+                _render_cache[resource] = request.responseText.trim();
             }
 
             // CSS is inserted into the HEAD element as a style element.
@@ -2322,7 +2322,7 @@
             // added to the item. Inserting then takes over the import
             // implementation, which then also accesses the render cache.
 
-            const content = Composite.render.cache[resource];
+            const content = _render_cache[resource];
             if (resource.match(/\.js$/)) {
                 try {_render_include_eval(content);
                 } catch (exception) {
@@ -2602,11 +2602,11 @@
                 // Without Meta-Store, the renderer hasn't run yet. The reaction
                 // by the MutationObserver only makes sense when the renderer
                 // has run initially.
-                if (!Composite.render.meta)
+                if (!_render_meta.length)
                     return;
 
                 const serial = record.target.ordinal();
-                const object = Composite.render.meta[serial];
+                const object = _render_meta[serial];
                 
                 // Text changes are only monitored at text nodes with expression.
                 // Manipulations are corrected/restored.
@@ -2680,7 +2680,7 @@
                         if ((node instanceof Element
                                 || (node instanceof Node
                                         && node.nodeType === Node.TEXT_NODE))
-                                && !Composite.render.meta[node.ordinal()]
+                                && !_render_meta[node.ordinal()]
                                 && document.body.contains(node))
                             Composite.render(node);
                     });
@@ -2713,7 +2713,7 @@
                             // is not performed without the matching meta-object.
 
                             const serial = node.ordinal();
-                            const object = Composite.render.meta[serial];
+                            const object = _render_meta[serial];
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                                 const meta = _mount_lookup(node);
                                 if (meta && meta.meta && meta.meta.model && meta.model
@@ -2724,7 +2724,7 @@
                                 }
                             }
                             
-                            delete Composite.render.meta[node.ordinal()];
+                            delete _render_meta[node.ordinal()];
                         };
                         cleanup(node);
                     });
