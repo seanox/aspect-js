@@ -40,275 +40,272 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230130
+ * @version 1.6.0 20230222
  */
-compliant("DataSource");
-compliant(null, window.DataSource = {
-        
-    /** Path of the DataSource for: data (sub-directory of work path) */
-    get DATA() {return window.location.combine(window.location.pathcontext, "/data");},
-
-    /** 
-     * Pattern for a DataSource locator
-     * The locator syntax is based on the URL syntax. Only the parts schema and
-     * path are used. A path segment begins with a word character _ a-z 0-9,
-     * optionally more word characters and additionally - can follow, but can
-     * not end with the - character. Paths are separated by the / character.
-     */
-    get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;},
-    
-    /** Pattern to detect JavaScript elements */
-    get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i;},    
-    
-    /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
-    get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
-    
-    /** Constant for attribute type */
-    get ATTRIBUTE_TYPE() {return "type";},
-    
-    /** The currently used language. */
-    get locale() {return DataSource.locales ? DataSource.locales.selection : null;},
-                
-    /**
-     * Changes the localization of the DataSource.
-     * Only locales from locales.xml can be used, other values cause an
-     * exception.
-     * @param  locale
-     * @throws Error in the case of invalid locales
-     */
-    localize(locale) {
-        
-        if (!DataSource.data
-                || !DataSource.locales) 
-            throw new Error("Locale not available");
-
-        if (typeof locale !== "string")
-            throw new TypeError("Invalid locale: " + typeof locale);        
-        
-        locale = (locale || "").trim().toLowerCase();
-        if (!locale
-                || !DataSource.locales.includes(locale))
-            throw new Error("Locale not available");
-
-        DataSource.locales.selection = locale;
-    },
-    
-    /**
-     * Transforms an XMLDocument based on a passed stylesheet.
-     * The data and the stylesheet can be passed as Locator, XMLDocument and in
-     * mix. The result as a DocumentFragment. Optionally, a meta object or a map
-     * with parameters for the XSLTProcessor can be passed.
-     * @param  xml   locator or XMLDocument
-     * @param  style locator or XMLDocument 
-     * @param  meta  optional parameters for the XSLTProcessor 
-     * @return the transformation result as a DocumentFragment
-     */
-    transform(xml, style, meta) {
-        
-        if (typeof xml === "string"
-                && xml.match(DataSource.PATTERN_LOCATOR))
-            xml = DataSource.fetch(xml);
-            
-        if (typeof style === "string"
-                && style.match(DataSource.PATTERN_LOCATOR))
-            style = DataSource.fetch(style);
-        
-        if (!(xml instanceof XMLDocument))
-            throw new TypeError("Invalid xml document");   
-        if (!(style instanceof XMLDocument))
-            throw new TypeError("Invalid xml stylesheet");
-
-        const processor = new XSLTProcessor();
-        processor.importStylesheet(style);
-        if (meta && typeof meta === "object") {
-            const set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
-            for (const [key, value] of set)
-                if (typeof meta[key] !== "function")
-                    processor.setParameter(null, key, value);
-        }
-        
-        // The escape attribute converts text to HTML. Without the escape
-        // attribute, HTML tag symbols < and > are masked and output as text.
-        let escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
-        escape = !!escape.match(/^yes|on|true|1$/i);
-
-        // Workaround for some browsers, e.g. MS Edge, if they have problems
-        // with !DOCTYPE + !ENTITY. Therefore the document is copied so that the
-        // DOCTYPE declaration is omitted.
-        let result = processor.transformToDocument(xml.clone());
-        let nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
-        nodes.forEach((node) => {
-            if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
-                const content = node.innerHTML;
-                if (content.indexOf("<") < 0
-                        && content.indexOf(">") < 0)
-                    node.innerHTML = node.textContent;
-            }
-            node.removeAttribute("escape");
-        });
-        
-        // JavaScript are automatically changed to composite/javascript during
-        // import. Therefore, imported scripts are not executed directly, but
-        // only by the renderer. This is important in combination with
-        // ATTRIBUTE_CONDITION.
-        nodes = result.querySelectorAll("script[type],script:not([type])");
-        nodes.forEach((node) => {
-            if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
-                    || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
-                node.setAttribute("type", "composite/javascript");
-        });
-        
-        nodes = result.childNodes;
-        if (result.body)
-            nodes = result.body.childNodes;
-        else if (result.firstChild
-                && result.firstChild.nodeName.match(/^transformiix\b/i))
-            nodes = result.firstChild.childNodes;
-        const fragment = document.createDocumentFragment();
-        nodes = Array.from(nodes);
-        for (let loop = 0; loop < nodes.length; loop++)
-            fragment.appendChild(nodes[loop]);
-        return fragment;
-    },
-    
-    /**
-     * Fetch the data to a locator as XMLDocument.
-     * Optionally the data can be transformed via XSLT, for which a meta object
-     * or map with parameters for the XSLTProcessor can be passed. When using
-     * the transformation, the return type changes to a  DocumentFragment.
-     * @param  locators  locator
-     * @param  transform locator of the transformation style
-     *     With the boolean true, the style is derived from the locator by using
-     *     the file extension xslt.
-     * @param  meta      optional parameters for the XSLTProcessor
-     * @return the fetched data as XMLDocument or as DocumentFragment, if the
-     *     transformation is used
-     * @throws Error in the case of invalid arguments
-     */    
-    fetch(locator, transform, meta) {
-        
-        if (typeof locator !== "string"
-                || !locator.match(DataSource.PATTERN_LOCATOR))
-            throw new Error("Invalid locator: " + String(locator));
-
-        const type = locator.match(DataSource.PATTERN_LOCATOR)[1];
-        const path = locator.match(DataSource.PATTERN_LOCATOR)[2];
-        
-        if (arguments.length === 1) {
-
-            DataSource.cache = DataSource.cache || {};
-            
-            let data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
-            data = data.replace(/\/+/g, "/");
-            const hash = data.hashCode();
-            if (DataSource.cache.hasOwnProperty(hash))
-                return DataSource.cache[hash];
-            
-            const request = new XMLHttpRequest();
-            request.overrideMimeType("application/xslt+xml");
-            request.open("GET", data, false);
-            request.send();
-            if (request.status !== 200)
-                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-            data = request.responseXML;
-            DataSource.cache[hash] = data;
-            
-            return data.clone();
-        }
-        
-        if (!type.match(/^xml$/)
-                && transform)
-            throw new Error("Transformation is not supported for this locator");
-
-        const data = DataSource.fetch(locator);
-        if (!transform)
-            return data.clone();
-        
-        let style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
-        if (typeof transform !== "boolean") {
-            style = transform;
-            if (typeof style !== "string"
-                    || !style.match(DataSource.PATTERN_LOCATOR))
-                throw new Error("Invalid style: " + String(style));  
-        }
-        
-        return DataSource.transform(data, DataSource.fetch(style), meta);
-    },
-    
-    /**
-     * Collects and concatenates multiple XML files in a new XMLDocument.
-     * The method has the following various signatures:
-     *     DataSource.collect(locator, ...);
-     *     DataSource.collect(collector, [locators]);
-     * @param  collector name of the collector element in the XMLDocument
-     * @param  locators  Array or VarArg with locators
-     * @return the created XMLDocument, otherwise null
-     * @throws Error in the case of invalid arguments
-     */
-    collect(...variants) {
-        
-        if (variants.length <= 0)
-            return null;
-
-        let collection = [];
-
-        let collector = "collection";
-        if (variants.length === 2
-                && typeof variants[0] === "string"
-                && Array.isArray(variants[1])) {
-            if (!variants[0].match(DataSource.PATTERN_WORD))
-                throw new TypeError("Invalid collector");
-            collector = variants[0];
-            collection = Array.from(variants[1]);
-        } else if (variants.length === 1
-                && Array.isArray(variants[0])) {
-            collection = collection.concat(variants[0]);
-        } else collection = Array.from(variants);
-        
-        DataSource.cache = DataSource.cache || {};
-        let hash = collector.hashCode() + ":" + collection.join().hashCode();
-        collection.forEach((entry) => {
-            hash += ":" + String(entry).hashCode();
-        });
-        if (DataSource.cache.hasOwnProperty(hash))
-            return DataSource.cache[hash].clone();  
-
-        const root = document.implementation.createDocument(null, collector, null);
-        collection.forEach((entry) => {
-            if (typeof entry !== "string")
-                throw new TypeError("Invalid collection entry");
-            root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
-        });
-
-        DataSource.cache[hash] = root;
-        return root.clone();
-    }      
-});
-
-/**
- * Enhancement of the JavaScript API
- * Adds a method for cloning a XMLDocument.
- */
-compliant("XMLDocument.prototype.clone");
-compliant(null, XMLDocument.prototype.clone = function() {
-    const clone = this.implementation.createDocument(null, null);
-    clone.appendChild(clone.importNode(this.documentElement, true));
-    return clone; 
-}); 
-    
 (() => {
 
-    // DataSource.cache
-    // Internal cache of XML/XSLT data
+    compliant("DataSource");
+    compliant(null, window.DataSource = {
+            
+        /** Path of the DataSource for: data (sub-directory of work path) */
+        get DATA() {return window.location.combine(window.location.pathcontext, "/data");},
+
+        /**
+         * Pattern for a DataSource locator, based on the URL syntax but only
+         * the parts schema and path are used. A path segment begins with a word
+         * character _ a-z 0-9, optionally more word characters and additionally
+         * - can follow, but can not end with the - character. Paths are
+         * separated by the / character.
+         */
+        get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;},
+        
+        /** Pattern to detect JavaScript elements */
+        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i;},    
+        
+        /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
+        get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
+        
+        /** Constant for attribute type */
+        get ATTRIBUTE_TYPE() {return "type";},
+        
+        /** The currently used language. */
+        get locale() {return DataSource.locales ? DataSource.locales.selection : null;},
+                    
+        /**
+         * Changes the localization of the DataSource.
+         * Only locales from locales.xml can be used, other values cause an
+         * exception.
+         * @param  locale
+         * @throws Error in the case of invalid locales
+         */
+        localize(locale) {
+            
+            if (!DataSource.data
+                    || !DataSource.locales) 
+                throw new Error("Locale not available");
+
+            if (typeof locale !== "string")
+                throw new TypeError("Invalid locale: " + typeof locale);        
+            
+            locale = (locale || "").trim().toLowerCase();
+            if (!locale
+                    || !DataSource.locales.includes(locale))
+                throw new Error("Locale not available");
+
+            DataSource.locales.selection = locale;
+        },
+        
+        /**
+         * Transforms an XMLDocument based on a passed stylesheet.
+         * The data and the stylesheet can be passed as Locator, XMLDocument an
+         * in mix. The result as a DocumentFragment. Optionally, a meta object
+         * or a map with parameters for the XSLTProcessor can be passed.
+         * @param  xml   locator or XMLDocument
+         * @param  style locator or XMLDocument 
+         * @param  meta  optional parameters for the XSLTProcessor 
+         * @return the transformation result as a DocumentFragment
+         */
+        transform(xml, style, meta) {
+            
+            if (typeof xml === "string"
+                    && xml.match(DataSource.PATTERN_LOCATOR))
+                xml = DataSource.fetch(xml);
+                
+            if (typeof style === "string"
+                    && style.match(DataSource.PATTERN_LOCATOR))
+                style = DataSource.fetch(style);
+            
+            if (!(xml instanceof XMLDocument))
+                throw new TypeError("Invalid xml document");   
+            if (!(style instanceof XMLDocument))
+                throw new TypeError("Invalid xml stylesheet");
+
+            const processor = new XSLTProcessor();
+            processor.importStylesheet(style);
+            if (meta && typeof meta === "object") {
+                const set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
+                for (const [key, value] of set)
+                    if (typeof meta[key] !== "function")
+                        processor.setParameter(null, key, value);
+            }
+            
+            // Attribute escape converts text to HTML. Without, HTML tag symbols
+            // < and > are masked and output as text.
+            let escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
+            escape = !!escape.match(/^yes|on|true|1$/i);
+
+            // Workaround for some browsers, e.g. MS Edge, if they have problems
+            // with !DOCTYPE + !ENTITY. Therefore the document is copied so that
+            // the DOCTYPE declaration is omitted.
+            let result = processor.transformToDocument(xml.clone());
+            let nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
+            nodes.forEach((node) => {
+                if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
+                    const content = node.innerHTML;
+                    if (content.indexOf("<") < 0
+                            && content.indexOf(">") < 0)
+                        node.innerHTML = node.textContent;
+                }
+                node.removeAttribute("escape");
+            });
+            
+            // JavaScript are automatically changed to composite/javascript
+            // during the import. Therefore, imported scripts are not executed
+            // directly, but only by the renderer. This is important in
+            // combination with ATTRIBUTE_CONDITION.
+            nodes = result.querySelectorAll("script[type],script:not([type])");
+            nodes.forEach((node) => {
+                if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
+                        || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
+                    node.setAttribute("type", "composite/javascript");
+            });
+            
+            nodes = result.childNodes;
+            if (result.body)
+                nodes = result.body.childNodes;
+            else if (result.firstChild
+                    && result.firstChild.nodeName.match(/^transformiix\b/i))
+                nodes = result.firstChild.childNodes;
+            const fragment = document.createDocumentFragment();
+            nodes = Array.from(nodes);
+            for (let loop = 0; loop < nodes.length; loop++)
+                fragment.appendChild(nodes[loop]);
+            return fragment;
+        },
+        
+        /**
+         * Fetch the data to a locator as XMLDocument.
+         * Optionally the data can be transformed via XSLT, for which a meta
+         * object or map with parameters for the XSLTProcessor can be passed.
+         * When using the transformation, the return type changes to a
+         * DocumentFragment.
+         * @param  locators  locator
+         * @param  transform locator of the transformation style
+         *     With the boolean true, the style is derived from the locator by
+         *     using the file extension xslt.
+         * @param  meta      optional parameters for the XSLTProcessor
+         * @return the fetched data as XMLDocument or as DocumentFragment, if
+         *     the transformation is used
+         * @throws Error in the case of invalid arguments
+         */    
+        fetch(locator, transform, meta) {
+            
+            if (typeof locator !== "string"
+                    || !locator.match(DataSource.PATTERN_LOCATOR))
+                throw new Error("Invalid locator: " + String(locator));
+
+            const type = locator.match(DataSource.PATTERN_LOCATOR)[1];
+            const path = locator.match(DataSource.PATTERN_LOCATOR)[2];
+            
+            if (arguments.length === 1) {
+
+                let data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
+                data = data.replace(/\/+/g, "/");
+                const hash = data.hashCode();
+                if (_cache.hasOwnProperty(hash))
+                    return _cache[hash];
+                
+                const request = new XMLHttpRequest();
+                request.overrideMimeType("application/xslt+xml");
+                request.open("GET", data, false);
+                request.send();
+                if (request.status !== 200)
+                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                data = request.responseXML;
+                _cache[hash] = data;
+                
+                return data.clone();
+            }
+            
+            if (!type.match(/^xml$/)
+                    && transform)
+                throw new Error("Transformation is not supported for this locator");
+
+            const data = DataSource.fetch(locator);
+            if (!transform)
+                return data.clone();
+            
+            let style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
+            if (typeof transform !== "boolean") {
+                style = transform;
+                if (typeof style !== "string"
+                        || !style.match(DataSource.PATTERN_LOCATOR))
+                    throw new Error("Invalid style: " + String(style));  
+            }
+            
+            return DataSource.transform(data, DataSource.fetch(style), meta);
+        },
+        
+        /**
+         * Collects and concatenates multiple XML files in a new XMLDocument.
+         * The method has the following various signatures:
+         *     DataSource.collect(locator, ...);
+         *     DataSource.collect(collector, [locators]);
+         * @param  collector name of the collector element in the XMLDocument
+         * @param  locators  Array or VarArg with locators
+         * @return the created XMLDocument, otherwise null
+         * @throws Error in the case of invalid arguments
+         */
+        collect(...variants) {
+            
+            if (variants.length <= 0)
+                return null;
+
+            let collection = [];
+
+            let collector = "collection";
+            if (variants.length === 2
+                    && typeof variants[0] === "string"
+                    && Array.isArray(variants[1])) {
+                if (!variants[0].match(DataSource.PATTERN_WORD))
+                    throw new TypeError("Invalid collector");
+                collector = variants[0];
+                collection = Array.from(variants[1]);
+            } else if (variants.length === 1
+                    && Array.isArray(variants[0])) {
+                collection = collection.concat(variants[0]);
+            } else collection = Array.from(variants);
+            
+            let hash = collector.hashCode() + ":" + collection.join().hashCode();
+            collection.forEach((entry) => {
+                hash += ":" + String(entry).hashCode();
+            });
+            if (_cache.hasOwnProperty(hash))
+                return _cache[hash].clone();
+
+            const root = document.implementation.createDocument(null, collector, null);
+            collection.forEach((entry) => {
+                if (typeof entry !== "string")
+                    throw new TypeError("Invalid collection entry");
+                root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
+            });
+
+            _cache[hash] = root;
+            return root.clone();
+        }      
+    });
+
+    /**
+     * Enhancement of the JavaScript API
+     * Adds a method for cloning a XMLDocument.
+     */
+    compliant("XMLDocument.prototype.clone");
+    compliant(null, XMLDocument.prototype.clone = function() {
+        const clone = this.implementation.createDocument(null, null);
+        clone.appendChild(clone.importNode(this.documentElement, true));
+        return clone; 
+    });
+
+    // XML/XSLT data cache
+    const _cache = {};
     Object.defineProperty(DataSource, "cache", {
         value: {}
-    });        
-        
+    });
+
     // DataSource.locales
     // List of available locales (as standard marked are at the beginning)
     Object.defineProperty(DataSource, "locales", {
-        value: [],
-        enumerable: true
+        value: [], enumerable: true
     });    
     
     let locale = [];
@@ -334,7 +331,7 @@ compliant(null, XMLDocument.prototype.clone = function() {
     request.send();
     
     // DataSource.data
-    // Internal cache of locales.xml
+    // Cache of locales.xml, can also be used by other components
     Object.defineProperty(DataSource, "data", {
         value: request.status === 200 ? new DOMParser().parseFromString(request.responseText,"text/xml") : null
     });
