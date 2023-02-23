@@ -37,14 +37,14 @@
             // Assertions
             Assert.assertTrue(objectA.objectB === objectB);
 
-            const objectC = objectA.toReactProxy();
+            const objectC = objectA.reactive();
 
             // Assertions
             Assert.assertTrue(objectC.objectB === objectA.objectB);
             Assert.assertTrue(objectC.objectB !== objectB);
             Assert.assertTrue(objectA.objectB !== objectB);
 
-            const objectD = ({}).toReactProxy();
+            const objectD = ({}).reactive();
             objectD.objectB = objectB;
             objectD.objectB.text = "A";
 
@@ -57,7 +57,7 @@
 
         Test.create({test() {
             const objectA = {};
-            const objectB = objectA.toReactProxy();
+            const objectB = objectA.reactive();
             objectB.value = "B";
 
             // Assertions
@@ -67,16 +67,16 @@
         }});
 
         Test.create({test() {
-            const objectA = ({}).toReactProxy();
-            const objectB = objectA.toReactProxy();
-            const objectC = ReactProxy.create(objectA);
+            const objectA = ({}).reactive();
+            const objectB = objectA.reactive();
+            const objectC = Reactive.create(objectA);
 
             // Assertions
             Assert.assertTrue(objectA === objectB);
             Assert.assertTrue(objectA === objectC);
             Assert.assertTrue(objectB === objectC);
 
-            const objectD = ({objectA}).toReactProxy();
+            const objectD = ({objectA}).reactive();
 
             // Assertion
             Assert.assertTrue(objectD.objectA !== objectA);
@@ -101,7 +101,7 @@
             arrayB: [{text: "D"},{text: "E"},{text: "F"}]
         };
 
-        const modelA = modelX.toReactProxy();
+        const modelA = modelX.reactive();
 
         modelA.a = "A";
         modelX.a = "X";

@@ -42,7 +42,7 @@
 
         const modelA = {
             value: "hallo"
-        }.toReactProxy();
+        }.reactive();
 
         window.setTimeout(() => {document.querySelector("#value").typeValue("test");}, 1000);
         window.setTimeout(() => {document.querySelector("#value").typeValue("123");}, 1500);

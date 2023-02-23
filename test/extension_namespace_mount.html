@@ -34,9 +34,9 @@
             capture.validate();
         }});
 
-        Namespace.create("modelA", {text: {value: "A1"}}.toReactProxy());
-        Namespace.create("a.modelA", {text: {value: "A2"}}.toReactProxy());
-        Namespace.create("b.modelA", {text: {value: "A3"}}.toReactProxy());
+        Namespace.create("modelA", {text: {value: "A1"}}.reactive());
+        Namespace.create("a.modelA", {text: {value: "A2"}}.reactive());
+        Namespace.create("b.modelA", {text: {value: "A3"}}.reactive());
 
         window.setTimeout(() => {document.querySelector("#modelA #text").typeValue("aaa")}, 1000);
         window.setTimeout(() => {document.querySelector("#a #modelA #text").typeValue("bbb")}, 1500);

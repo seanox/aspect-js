@@ -10,7 +10,7 @@ Namespace.create("reactiveX", {
     valueG: null
 });
 
-Namespace.create("reactiveA", reactiveX.toReactProxy());
+Namespace.create("reactiveA", reactiveX.reactive());
 
 reactiveA.a = "A";
 reactiveX.a = "X";

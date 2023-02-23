@@ -34,7 +34,7 @@
         });
         modelA = {
             valueA: "hallo"
-        }.toReactProxy();
+        }.reactive();
 
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000);
         window.setTimeout(() => {window.location.href = "#modela";}, 2000);

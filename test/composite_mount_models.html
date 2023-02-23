@@ -55,9 +55,9 @@
               model_1_C: {
               }
             }
-        }).toReactProxy());
+        }).reactive());
         Namespace.create("model_1_B", ({
-        }).toReactProxy());
+        }).reactive());
         Namespace.create("model_1_C", ({
             button_1_C: {
                 text: "1: must not change",
@@ -65,7 +65,7 @@
                     this.text += " 1";
                 }
             }
-        }).toReactProxy());
+        }).reactive());
 
         Namespace.create("model_2_A", ({
             model_2_B: {
@@ -78,7 +78,7 @@
                     }
                 }
             }
-        }).toReactProxy());
+        }).reactive());
         Namespace.create("model_2_B", ({
             model_2_C: {
                 button_2_C: {
@@ -88,7 +88,7 @@
                   }
                 }
             }
-        }).toReactProxy());
+        }).reactive());
         Namespace.create("model_2_C", ({
             button_2_C: {
                 text: "2c: must not change",
@@ -96,7 +96,7 @@
                     this.text += "2c";
                 }
             }
-        }).toReactProxy());
+        }).reactive());
     </script>
     <script type="text/test">
       1: button_1_C

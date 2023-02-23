@@ -35,7 +35,7 @@
 
         const modelA = {
             valueA: 123
-        }.toReactProxy();
+        }.reactive();
         window.setTimeout(() => {modelA.valueA = 456}, 1000);
         window.setTimeout(() => {modelA.valueA = 123}, 1250);
         window.setTimeout(() => {modelA.valueA = 456}, 1500);

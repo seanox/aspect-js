@@ -29,7 +29,7 @@
 
         const modelA = {
             valueA: ["Spring", "Winter"]
-        }.toReactProxy();
+        }.reactive();
         window.setTimeout(() => {modelA.valueA = ["Spring", "Summer", "Autumn", "Winter"];}, 1000)
     </script>
     <script type="text/test">
