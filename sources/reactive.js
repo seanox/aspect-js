@@ -35,19 +35,19 @@
  * Reactivity rendering is implemented as an optional module and uses the
  * available API.
  *
- * The ReactProxy works permanently recursively on all objects, in all levels of
- * a model and also on the objects that are added later as values, even if these
- * objects do not explicitly use the ReactProxy.
+ * Reactive works permanently recursively on all objects, in all levels of a
+ * model and also on the objects that are added later as values, even if these
+ * objects do not explicitly use the Reactive.
  *
  * @author  Seanox Software Solutions
  * @version 1.6.0 20230223
  */
 (() => {
 
-    compliant("ReactProxy");
-    compliant(null, window.ReactProxy = {
+    compliant("Reactive");
+    compliant(null, window.Reactive = {
         create(target) {
-            return target.toReactProxy();
+            return target.reactive();
         }
     });
 
@@ -64,18 +64,18 @@
 
     /**
      * Enhancement of the JavaScript API
-     * Adds a function to create a ReactProxy from the object instance.
-     * If it is a ReactProxy, the reference of the instance is returned.
+     * Adds a function to create a reactive object to an object instance. If it
+     * is already a reactive object, the reference of the instance is returned.
      */
-    compliant("Object.prototype.toReactProxy");
-    compliant(null, Object.prototype.toReactProxy = function() {
+    compliant("Object.prototype.reactive");
+    compliant(null, Object.prototype.reactive = function() {
         return _reactive(this);
     });
 
     // Proxy is implemented exotically, cannot be inherited and has no
     // prototype. Therefore, this unconventional way with a secret simulated
-    // property that is used as an indicator for existing ReactProxy instances
-    // and also contains a reference to the original object.
+    // property that is used as an indicator for existing reactive object
+    // instances and also contains a reference to the original object.
     // https://stackoverflow.com/questions/37714787/can-i-extend-proxy-with-an-es2015-class
     const _secret = Math.serial();
 
@@ -98,8 +98,8 @@
                 // Proxy is implemented exotically, cannot be inherited and has
                 // no prototype. Therefore, this unconventional way with a
                 // secret simulated property that is used as an indicator for
-                // existing ReactProxy instances and also contains a reference
-                // to the original object.
+                // existing reactive object instances and also contains a
+                // reference to the original object.
                 if (key === _secret)
                     return target;
 
@@ -209,11 +209,12 @@
             }
         });
 
-        // Prevents creating a ReactProxy from an existing one. This is possible
-        // in principle, but the impact of existing references to have not been
-        // considered to the end. Therefore, ReactProxy is created here and not
-        // in ReactProxy.prototype.toReactProxy. This way both places are caught.
-        proxy.toReactProxy = () => {
+        // Prevents creating a reactive object from an existing one. This is
+        // possible in principle, but the impact of existing references to have
+        // not been considered to the end. Therefore, reactive object is created
+        // here and not in Reactive.prototype.reactive. This way both places
+        // are caught.
+        proxy.reactive = () => {
             return proxy;
         };
 
@@ -228,7 +229,7 @@
         filter.push(object);
         filter.push(proxy);
 
-        // For ReactProxy instances, the read-only property parent is
+        // For reactive object instances, the read-only property parent is
         // automatically added at each object level if an object level does not
         // already have one with the same name. This property supports access to
         // parent object levels.
