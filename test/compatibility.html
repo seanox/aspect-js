@@ -26,6 +26,15 @@
             Assert.assertEquals(1, o.x);
         }});
 
+        Test.create({test() {
+            const a = 1; {
+                const a = 2; {
+                    const a = 3;
+                    Assert.assertEquals(3, a);}
+                Assert.assertEquals(2, a);}
+            Assert.assertEquals(1, a);
+        }});
+
         Test.start({auto:true});
     </script>
   </head>
