@@ -150,10 +150,10 @@ compliant(null, window.Test = {
                     throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
                 
                 event = event.toLowerCase();
-                if (!Test.listeners.has(event)
-                        && !Array.isArray(Test.listeners.get(event)))
-                    Test.listeners.set(event, []);
-                Test.listeners.get(event).push(callback);
+                if (!_listeners.has(event)
+                        && !Array.isArray(_listeners.get(event)))
+                    _listeners.set(event, []);
+                _listeners.get(event).push(callback);
             },
             
             /**
@@ -172,30 +172,25 @@ compliant(null, window.Test = {
                 if (typeof Test.worker === "object")
                     Test.worker.status = event;
 
-                const invoke = (context, event, status) => {
-                    if (typeof context.Test.worker === "object"
-                            && typeof context.Test.worker.monitor === "object"
-                            && typeof context.Test.worker.monitor[event] === "function")
-                    try {context.Test.worker.monitor[event](status);
-                    } catch (error) {
-                        console.error(error);
-                    }        
-                    
-                    event = (event || "").trim();
-                    if (context.Test.listeners.size <= 0
-                            || !event)
-                        return;
-                    const listeners = context.Test.listeners.get(event.toLowerCase());
-                    if (!Array.isArray(listeners))
-                        return;
+                if (typeof Test.worker === "object"
+                        && typeof Test.worker.monitor === "object"
+                        && typeof Test.worker.monitor[event] === "function")
+                try {Test.worker.monitor[event](status);
+                } catch (error) {
+                    console.error(error);
+                }
+
+                event = (event || "").trim();
+                if (!event)
+                    return;
+                const listeners = _listeners.get(event.toLowerCase());
+                if (Array.isArray(listeners))
                     listeners.forEach((callback) => {
                         callback(event, status);
-                    });                  
-                };
-                
-                invoke(window, event, status);
+                    });
+
                 if (parent && parent !== window)
-                    try {invoke(parent, event, status);
+                    try {parent.Test.fire(event, status);
                     } catch (exception) {
                     }
             },
@@ -697,13 +692,8 @@ compliant(null, window.Test = {
         /** Backlog of created/registered test tasks */
         const _stack = new Set();
 
-        /** 
-         * Test.listeners
-         * Map with events and their registered listeners
-         */
-        Object.defineProperty(Test, "listeners", {
-            value: new Map()
-        });
+        /** Map with events and their registered listeners */
+        const _listeners = new Map();
 
         (() => {
 
