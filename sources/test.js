@@ -252,11 +252,11 @@ compliant(null, window.Test = {
                         && meta.ignore === true)
                     return;
                 
-                if (Test.stack.has(meta))
+                if (_stack.has(meta))
                     return;
-                
-                Test.stack.add(meta);
-                const stack = Array.from(Test.stack);
+
+                _stack.add(meta);
+                const stack = Array.from(_stack);
                 Object.defineProperty(meta, "serial", {
                     value: Math.max(stack.length, stack.length > 1 ? stack[stack.length -2].serial +1 : 1)
                 });       
@@ -446,7 +446,7 @@ compliant(null, window.Test = {
                 // Queue of currently running test tasks
                 Test.worker.queue = Test.worker.queue || {timing:false, stack:[], size:0, lock:false, progress:0, faults:0};
                 if (Test.worker.queue.stack.length <= 0) {
-                    Test.worker.queue.stack = Array.from(Test.stack);
+                    Test.worker.queue.stack = Array.from(_stack);
                     Test.worker.queue.size = Test.worker.queue.stack.length;
                     Test.worker.queue.timing = new Date().getTime();
                 }
@@ -694,13 +694,8 @@ compliant(null, window.Test = {
             }    
         };
 
-        /** 
-         * Test.stack
-         * Stack of created/registered test tasks (backlog)
-         */
-        Object.defineProperty(Test, "stack", {
-            value: new Set()
-        }); 
+        /** Backlog of created/registered test tasks */
+        const _stack = new Set();
 
         /** 
          * Test.listeners
