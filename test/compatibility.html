@@ -26,6 +26,7 @@
             Assert.assertEquals(1, o.x);
         }});
 
+        // Constants must function correctly in the scopes
         Test.create({test() {
             const a = 1; {
                 const a = 2; {
