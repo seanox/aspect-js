@@ -99,7 +99,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230122
+ * @version 1.6.0 20230222
  */
 (() => {
 

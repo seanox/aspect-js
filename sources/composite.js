@@ -2503,7 +2503,7 @@
      * Implements an own open method for event management.
      * The original method is reused in the background.
      */ 
-    XMLHttpRequest.prototype.open$origin = XMLHttpRequest.prototype.open;
+    const _request_open = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(...variants) {
 
         const callback = (event = null) => {
@@ -2528,9 +2528,8 @@
             else return;
             Composite.fire(...event); 
         };
-        
-        if (this.open$init === undefined) {
-            this.open$init = true;
+
+        if (this.status === XMLHttpRequest.UNSENT) {
             this.addEventListener("loadstart", callback);
             this.addEventListener("progress", callback);
             this.addEventListener("readystatechange", callback);
@@ -2540,8 +2539,8 @@
             this.addEventListener("timeout", callback);
             this.addEventListener("loadend", callback);
         }
-        
-        this.open$origin(...variants);
+
+        _request_open.call(this, ...variants);
     };
 
     // Listener when an error occurs and triggers a matching composite-event.

@@ -92,7 +92,7 @@
  * the redirection and caching of console output.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230121
+ * @version 1.6.0 20230223
  */
 compliant("Test");
 compliant(null, window.Test = {
@@ -692,7 +692,7 @@ compliant(null, window.Test = {
                     return false;
                 return status;
             }    
-        };    
+        };
 
         /** 
          * Test.stack
@@ -708,102 +708,105 @@ compliant(null, window.Test = {
          */
         Object.defineProperty(Test, "listeners", {
             value: new Map()
-        }); 
+        });
 
-        // Redirection of the console level INFO, ERROR, WARN, LOG when using
-        // tests. The outputs are buffered for analysis and listeners can be
-        // implemented whose callback method is called at console outputs.
+        (() => {
 
-        /** Cache for analyzing console output */
-        console.output = {log:"", warn:"", error:"", info:""};
-        
-        /** Clears the cache from the console output. */
-        console.output.clear = function() {
-            console.output.log   = "";
-            console.output.warn  = "";
-            console.output.error = "";
-            console.output.info  = "";
-        };
-        
-        /** Set of registered listeners for occurring console outputs. */
-        Object.defineProperty(console, "listeners", {
-            value: new Set()
-        });        
-        
-        /**
-         * Registers a callback function for console output.
-         * Expected method signatures:
-         *     function(level)
-         *     function(level, ...)
-         * @param callback callback function
-         */
-        console.listen = function(callback) {
-            console.listeners.add(callback);
-        };
-        
-        /** 
-         * General method for redirecting console levels. If the script is in a
-         * frame, at the parent object it will also try to trigger this method.
-         * The parent object is always triggered after the current object. If an
-         * error occurs when calling the current object, the parent object is
-         * not triggered.
-         * @param level
-         * @param variants
-         * @param output
-         */
-        console.forward = function(level, variants, output) {
-            
-            console.output[level] += Array.from(variants).join(", ");
+            // Redirection of the console level INFO, ERROR, WARN, LOG when
+            // using tests. The outputs are buffered for analysis and listeners
+            // can be implemented whose callback method is called at console
+            // outputs.
 
-            if (output)
-                output(...variants);
+            /** Cache for analyzing console output */
+            const _output = {log:"", warn:"", error:"", info:""};
 
-            console.listeners.forEach((callback) => {
-                callback(...([level, ...variants]));
+            console.output = {
+                get log()   {return _output.log;},
+                get warn()  {return _output.warn;},
+                get error() {return _output.error;},
+                get info()  {return _output.info;}
+            };
+
+            /** Clears the cache from the console output. */
+            console.output.clear = function() {
+                _output.log   = "";
+                _output.warn  = "";
+                _output.error = "";
+                _output.info  = "";
+            };
+
+            /** Set of registered listeners for occurring console outputs. */
+            const _listeners = new Set();
+
+            /**
+             * Registers a callback function for console output.
+             * Expected method signatures:
+             *     function(level)
+             *     function(level, ...)
+             * @param callback callback function
+             */
+            console.listen = function(callback) {
+                _listeners.add(callback);
+            };
+
+            /**
+             * General method for redirecting console levels. If the script is in a
+             * frame, at the parent object it will also try to trigger this method.
+             * The parent object is always triggered after the current object. If an
+             * error occurs when calling the current object, the parent object is
+             * not triggered.
+             * @param level
+             * @param variants
+             * @param output
+             */
+            console.forward = function(level, variants, output) {
+                _output[level] += Array.from(variants).join(", ");
+                if (output)
+                    output(...variants);
+                _listeners.forEach((callback) => {
+                    callback(...([level, ...variants]));
+                });
+                if (!parent
+                        || parent === window
+                        || !parent.console
+                        || typeof parent.console.forward !== "function")
+                    return;
+                parent.console.forward(...(Array.from(arguments).slice(0, 2)));
+            };
+
+            /** Redirect for the level: LOG */
+            const _log = console.log;
+            console.log = function(...variants) {
+                console.forward("log", variants, _log);
+            };
+
+            /** Redirect for the level: WARN */
+            const _warn = console.warn;
+            console.warn = function(...variants) {
+                console.forward("warn", variants, _warn);
+            };
+
+            /** Redirect for the level: ERROR */
+            const _error = console.error;
+            console.error = function(...variants) {
+                console.forward("error", variants, _error);
+            };
+
+            /** Redirect for the level: INFO */
+            const _info = console.info;
+            console.info = function(...variants) {
+                console.forward("info", variants, _info);
+            };
+
+            /** In case of an error, it is forwarded to the console. */
+            window.addEventListener("error", (event) => {
+                if (parent && parent !== window)
+                    console.forward("error", ((...variants) => {
+                        return variants;
+                    })(event.message), null);
             });
+        })();
 
-            if (!parent
-                    || parent === window
-                    || !parent.console
-                    || typeof parent.console.forward !== "function")
-                return;
-
-            parent.console.forward(...(Array.from(arguments).slice(0, 2)));
-        };
-        
-        /** Redirect for the level: LOG */
-        console.log$origin = console.log;
-        console.log = function(...variants) {
-            console.forward("log", variants, console.log$origin);
-        };
-        
-        /** Redirect for the level: WARN */
-        console.warn$origin = console.warn;
-        console.warn = function(...variants) {
-            console.forward("warn", variants, console.warn$origin);
-        };
-        
-        /** Redirect for the level: ERROR */
-        console.error$origin = console.error;
-        console.error = function(...variants) {
-            console.forward("error", variants, console.error$origin);
-        };
-        
-        /** Redirect for the level: INFO */
-        console.info$origin = console.info;
-        console.info = function(...variants) {
-            console.forward("info", variants, console.info$origin);
-        };
-        
-        /** In case of an error, it is forwarded to the console. */
-        window.addEventListener("error", (event) => {
-            if (parent
-                    && parent !== window)
-                console.forward("error", ((...variants) => {
-                    return variants;
-                })(event.message), null);
-        });        
-    
         /**
          * Enhancement of the JavaScript API
          * The following events are triggered during simulation:
@@ -1102,8 +1105,7 @@ compliant(null, window.Test = {
             fail(message) {
                 if (message)
                     message = String(message).trim();
-                message = "Assert.fail" + (message ? ", " + message : "");
-                throw new Error(message);
+                throw new Error("Assert.fail" + (message ? ", " + message : ""));
             }      
         });
     }
