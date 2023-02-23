@@ -52,12 +52,15 @@
     });
 
     let _selector = null;
+
     Composite.listen(Composite.EVENT_RENDER_START, (event, selector) => {
         _selector = selector;
     });
+
     Composite.listen(Composite.EVENT_RENDER_NEXT, (event, selector) => {
         _selector = selector;
     });
+
     Composite.listen(Composite.EVENT_RENDER_END, (event, selector) => {
         _selector = null;
     });
