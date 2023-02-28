@@ -36,6 +36,14 @@
             Assert.assertEquals(1, a);
         }});
 
+        // In maps, keys for set and get must be nullable.
+        Test.create({test() {
+            const map = new Map();
+            map.set(null, 123);
+            Assert.assertEquals(123, map.get(null));
+            Assert.assertUndefined(map.get());
+        }});
+
         Test.start({auto:true});
     </script>
   </head>
