@@ -40,9 +40,9 @@
             const objectC = objectA.reactive();
 
             // Assertions
-            Assert.assertTrue(objectC.objectB === objectA.objectB);
+            Assert.assertTrue(objectC.objectB !== objectA.objectB);
             Assert.assertTrue(objectC.objectB !== objectB);
-            Assert.assertTrue(objectA.objectB !== objectB);
+            Assert.assertTrue(objectA.objectB === objectB);
 
             const objectD = ({}).reactive();
             objectD.objectB = objectB;
@@ -50,9 +50,23 @@
 
             // Assertions
             Assert.assertTrue(objectD.objectB !== objectB);
-            Assert.assertTrue(objectD.objectB !== objectC.objectB);
+            Assert.assertTrue(objectD.objectB === objectC.objectB);
             Assert.assertTrue(objectD.objectB.text === "A");
             Assert.assertTrue(objectC.objectB.text === "A");
+
+            const objectE = {text: "A"};
+            const objectF = objectE.reactive();
+            objectF.text = "B";
+
+            // Assertions
+            Assert.assertTrue(objectE.text === "B");
+            Assert.assertTrue(objectF.text === "B");
+
+            objectE.text = "C";
+
+            // Assertions
+            Assert.assertTrue(objectE.text === "C");
+            Assert.assertTrue(objectF.text === "C");
         }});
 
         Test.create({test() {
@@ -69,7 +83,7 @@
         Test.create({test() {
             const objectA = ({}).reactive();
             const objectB = objectA.reactive();
-            const objectC = Reactive.create(objectA);
+            const objectC = Reactive(objectA);
 
             // Assertions
             Assert.assertTrue(objectA === objectB);
@@ -79,13 +93,13 @@
             const objectD = ({objectA}).reactive();
 
             // Assertion
-            Assert.assertTrue(objectD.objectA !== objectA);
+            Assert.assertTrue(objectD.objectA === objectA);
 
             objectC.objectB = objectB;
 
             // Assertion
-            Assert.assertTrue(objectC.objectB !== objectB);
-          }});
+            Assert.assertTrue(objectC.objectB === objectB);
+        }});
 
         const modelX = {
             valueA: 10000,
@@ -137,8 +151,8 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      a-arrayB: F
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}] vs. [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB vs. a-arrayB: F vs. F
       x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
       x-arrayB: F
     </script>
@@ -150,35 +164,9 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      a-arrayB: F
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}] vs. [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB vs. a-arrayB: F vs. F
       x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
-    </script>
-    <script type="text/test">
-      A: _10001_
-      C: _20000_
-      F: _30000_
-      x: _object_
-      Y: _object_
-      A-a: X
-      X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
-      x-arrayB: F
-    </script>
-    <script type="text/test">
-      A: _10001_
-      C: _20000_
-      F: _30000_
-      x: _object_
-      Y: _object_
-      A-a: X
-      X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
       x-arrayB: F
     </script>
     <script type="text/test">
@@ -189,9 +177,9 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}] vs. [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB vs. a-arrayB: F vs. F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
       x-arrayB: F
     </script>
     <script type="text/test">
@@ -202,75 +190,36 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: F
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}] vs. [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB vs. a-arrayB: F vs. F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
       x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
-      C: _20000_
+      C: _20010_
       F: _30000_
       x: _object_
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}] vs. [{"text":"A"},{"text":"B"},{"text":"C"}]
+      a-arrayB vs. a-arrayB: F vs. F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
       x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
-      C: _20000_
-      F: _30000_
-      x: _object_
-      Y: _object_
-      A-a: X
-      X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      x-arrayB: FXe
-    </script>
-    <script type="text/test">
-      A: _10003_
       C: _20010_
       F: _30000_
       x: _object_
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      x-arrayB: FXe
-    </script>
-    <script type="text/test">
-      A: _10003_
-      C: _20010_
-      F: _30000_
-      x: _object_
-      Y: _object_
-      A-a: X
-      X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXb"}]
-      x-arrayB: FXe
-    </script>
-    <script type="text/test">
-      A: _10003_
-      C: _20010_
-      F: _30000_
-      x: _object_
-      Y: _object_
-      A-a: X
-      X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: F vs. F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -280,10 +229,10 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: F vs. F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -293,10 +242,10 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: F vs. F
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -306,23 +255,10 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXeAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXe
-    </script>
-    <script type="text/test">
-      A: _10003_
-      C: _20030_
-      F: _30000_
-      x: _object_
-      Y: _object_
-      A-a: X
-      X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXeAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXeAe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: FXeAe vs. FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -332,10 +268,10 @@
       Y: _object_
       A-a: X
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXeAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXeAe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: FXeAe vs. FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -345,10 +281,10 @@
       Y: _object_
       A-a: C
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXeAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXeAe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: FXeAe vs. FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -358,10 +294,10 @@
       Y: _object_
       A-a: C
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXeAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXeAe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: FXeAe vs. FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
     <script type="text/test">
       A: _10003_
@@ -371,10 +307,10 @@
       Y: _object_
       A-a: C
       X-a: X
-      a-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      a-arrayB: FXeAe
-      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
-      x-arrayB: FXeAe
+      a-arrayA vs. x-arrayA: [{"text":"A"},{"text":"B"},{"text":"CXbAb"}] vs. [{"text":"A"},{"text":"B"},{"text":"CXbAb"}]
+      a-arrayB vs. a-arrayB: FXeAe vs. FXeAe
+      x-arrayA: [{"text":"A"},{"text":"B"},{"text":"C"}]
+      x-arrayB: F
     </script>
   </head>
   <body>
@@ -388,9 +324,13 @@
     A-a: {{modelA.a}}
     X-a: {{modelX.a}}
 
-    a-arrayA: {{JSON.stringify(modelA.arrayA)}}
-    a-arrayB: {{modelA.arrayB[2].text}}
+    a-arrayA vs. x-arrayA: {{JSON.stringify(modelA.arrayA) + " vs. " + JSON.stringify(modelX.arrayA)}}
+    a-arrayB vs. a-arrayB: {{modelA.arrayB[2].text + " vs. " + modelX.arrayB[2].text}}
 
+    <!--
+      To the original object gives without proxy no notifications so the
+      representation remains unchanged, but not the value!
+     -->
     x-arrayA: {{JSON.stringify(modelX.arrayA)}}
     x-arrayB: {{modelX.arrayB[2].text}}
   </body>
