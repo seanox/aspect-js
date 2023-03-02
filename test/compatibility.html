@@ -46,6 +46,42 @@
             Assert.assertUndefined(map.get());
         }});
 
+        // The combination of Object.create(object) and Proxy must work as
+        // expected. Important here is the behavior of the Prototype of
+        // Object.create(object).
+        Test.create({test() {
+
+            const a = {x:1, w() {return this.x +1}};
+            const b = new Proxy(Object.create(a), {});
+            Assert.assertFalse(a == b);
+
+            a.w = function() {
+              return this.x + "_x";
+            };
+            a.z = function() {
+              return this.w() + "_o";
+            };
+
+            b.x = 2;
+            Assert.assertEquals("1_x_o", a.z());
+            Assert.assertEquals("2_x_o", b.z());
+
+            a.m = {o:5};
+            Assert.assertEquals("object", typeof a.m);
+            Assert.assertEquals("object", typeof b.m);
+            Assert.assertTrue(a.m == b.m);
+            b.m = new Proxy(b.m, {});
+            Assert.assertTrue(a.m != b.m);
+
+            a.u = 123
+            Assert.assertTrue(a.u === b.u);
+            b.u = 456;
+            Assert.assertTrue(a.u !== b.u);
+            delete a.u;
+            Assert.assertTrue(typeof a.u === "undefined");
+            Assert.assertTrue(typeof b.u === "number");
+        }});
+
         Test.start({auto:true});
     </script>
   </head>
