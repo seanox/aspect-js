@@ -6,7 +6,7 @@ class Capture {
     }
 
     snap(content) {
-        if (typeof content === "undefined")
+        if (content === undefined)
             content = document.body.textContent;
         this._snapshots.push(content.simplify());
     }
@@ -39,7 +39,7 @@ class Capture {
         });
     }
 
-    output(index = -1) {
+    toScript(index = -1) {
         let content = "";
         let snapshots = this._snapshots;
         if (index >= 0 && index < snapshots.length)
