@@ -239,11 +239,15 @@
   <target name="test" depends="release">
     <copy file="${release.file}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
     <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
+        match="(const\s+(_secret)\s+=\s+)Math\.serial\(\)(;)" replace="\1&quot;__\2&quot;\3"/>
+    <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
         match="(;const )(_\w+)" replace="\1\2 = window.__\2"/>
   </target>
 
   <target name="debug" depends="release">
     <copy file="${release.file.max}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+    <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
+        match="(const\s+(_secret)\s+=\s+)Math\.serial\(\)(;)" replace="\1&quot;__\2&quot;\3"/>
     <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
         match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
   </target>
