@@ -26,12 +26,14 @@
                 }, 500);
             if (capture.size() == count)
                 Test.start();
-            if (capture.size() > count)
-                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
         });
 
         Test.create({test() {
             capture.validate();
+        }});
+
+        Test.create({test() {
+            Assert.assertEquals(capture.size(), capture.snapshots().length);
         }});
 
         const model = ({
@@ -43,50 +45,73 @@
             get recursionA() {
                 return this.ordinal();
             },
-            get recursionB() {
-            },
+            propA: {v:"A"},
+            propB: {v:"B"},
+            propC: {v:"C"},
+            propX: {v:"X"},
             inner: {
                 get text() {
-                    return this.parent.list[1].text;
+                    return model.list[1].text;
                 }
             }
         }).reactive();
+
+        window.setTimeout(() => {
+            model.propX = model.propC = model.propB = model.propA = model.propX;
+        }, 1000);
+        window.setTimeout(() => {
+            model.propX = model.propC = model.propB = model.propA = model.propX;
+        }, 2000);
     </script>
     <script type="text/test">
-      A: _1_
+      A: _7_
       B: _B_
       C: _B_
       D:
       A
       B
       C
+      X: _X_
     </script>
     <script type="text/test">
-      A: _1_
+      A: _7_
       B: _D_
       C: _B_
       D:
       A
       B
       C
+      X: _X_
     </script>
     <script type="text/test">
-      A: _1_
+      A: _7_
       B: _D_
       C: _D_
       D:
       A
       B
       C
+      X: _X_
     </script>
     <script type="text/test">
-      A: _1_
+      A: _7_
       B: _D_
       C: _D_
       D:
-          A
-          D
-          C
+      A
+      D
+      C
+      X: _X_
+    </script>
+    <script type="text/test">
+      A: _7_
+      B: _D_
+      C: _D_
+      D:
+      A
+      D
+      C
+      X: _X_
     </script>
   </head>
   <body>
@@ -96,5 +121,6 @@
     D: <div iterate="{{list:model.list}}">
          {{list.item.text}}
        </div>
+    X: _{{model.propX.v}}_
   </body>
 </html>
