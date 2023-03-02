@@ -39,7 +39,7 @@ class Capture {
         });
     }
 
-    toScript(index = -1) {
+    output(index = -1) {
         let content = "";
         let snapshots = this._snapshots;
         if (index >= 0 && index < snapshots.length)
