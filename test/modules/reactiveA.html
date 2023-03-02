@@ -5,5 +5,16 @@ F: _{{reactiveA.valueB.valueE.valueF}}_
 x: _{{typeof reactiveX.valueX}}_
 Y: _{{typeof reactiveA.valueY}}_
 
+<!--
+  To the original object gives without proxy no notifications so the
+  representation remains unchanged, but not the value!
+-->
+
+A-a vs. X-a: {{reactiveA.a + " vs. " + reactiveX.a}}
+
+<!--
+  To the original object gives without proxy no notifications so the
+  representation remains unchanged, but not the value!
+-->
 A-a: {{reactiveA.a}}
 X-a: {{reactiveX.a}}
