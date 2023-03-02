@@ -36,10 +36,12 @@
             Assert.assertEquals(1, a);
         }});
 
-        // In maps, keys for set and get must be nullable.
+        // In maps, keys for set, get and has must be nullable.
         Test.create({test() {
             const map = new Map();
+            Assert.assertFalse(map.has(null));
             map.set(null, 123);
+            Assert.assertTrue(map.has(null));
             Assert.assertEquals(123, map.get(null));
             Assert.assertUndefined(map.get());
         }});
