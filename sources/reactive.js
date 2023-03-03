@@ -28,9 +28,9 @@
  *
  * The mechanism is based on notifications that arise from setting and getting
  * from the model as a data source. Which is supported by the proxy object in
- * JavaScript. These events can be used to determine which elements/nodes in the
- * DOM consume which data from the model and need to be refreshed when changes
- * occur.
+ * JavaScript and its events can then be used to determine which elements/nodes
+ * in the DOM consume what data from the model and need to be updated when
+ * changes are made.
  *
  * Reactivity rendering is implemented as an optional module and uses the
  * available API.
@@ -39,16 +39,25 @@
  * model and also on the objects that are added later as values, even if these
  * objects do not explicitly use the Reactive.
  *
+ * Object and model are decoupled by Reactive. The implementation uses free
+ * (unbound) proxies for this purpose. These proxies reference an object but are
+ * not bound to an object level in the object tree and they synchronize the data
+ * bidirectionally. Managed these proxies are managed with a weak map where the
+ * object is the key and the garbage collection can dispose of this objects with
+ * associated proxies when not in use.
+ *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230223
+ * @version 1.6.0 20230303
  */
 (() => {
 
     compliant("Reactive");
-    compliant(null, window.Reactive = {
-        create(target) {
-            return target.reactive();
-        }
+    compliant(null, window.Reactive = (object) => {
+        if (typeof object !== "object")
+            throw new TypeError("Not supported data type: " + typeof object);
+        if (object === "object")
+            throw new TypeError("Not supported data type: null");
+        return _reactive(object);
     });
 
     let _selector = null;
@@ -75,64 +84,200 @@
         return _reactive(this);
     });
 
-    // Proxy is implemented exotically, cannot be inherited and has no
-    // prototype. Therefore, this unconventional way with a secret simulated
-    // property that is used as an indicator for existing reactive object
-    // instances and also contains a reference to the original object.
-    // https://stackoverflow.com/questions/37714787/can-i-extend-proxy-with-an-es2015-class
+    /**
+     * Proxy is implemented exotically, cannot be inherited and has no
+     * prototype. Therefore, this unconventional way with a secret simulated
+     * property that is used as an indicator for existing reactive objects
+     * instances. The value is not programmatically constant, instead it is
+     * defined with the start of the application.
+     * https://stackoverflow.com/questions/37714787/can-i-extend-proxy-with-an-es2015-class
+     */
     const _secret = Math.serial();
 
-    const _reactive = (object, parent, register) => {
+    /**
+     * Weak map with the assignment of objects to proxies. The object is the key
+     * and the proxy is the value. A feature of WeakMap is that when the key is
+     * purged from the garbage collection, the value and thus the proxy is also
+     * purged. Thus, this should be an efficient way to manage unbound proxies.
+     */
+    const _register = new WeakMap();
 
-        if (typeof object !== "object")
-            throw new TypeError("Not supported data type: " + typeof object);
+    const _reactive = (object) => {
 
-        // If for a proxy object the parents match, proxy must already exist in
-        // the proper place in the object tree.
-        if (typeof object[_secret] === "object"
-                && object[_secret].parent === parent)
+        if (typeof object !== "object"
+                || object === null)
             return object;
 
-        // For all other objects, a proxy must be created. Also for proxies,
-        // even if proxy in proxy is prevented. Not internally, so it works
-        // recursively. Endless loops are prevented with the register.
+        // Proxy remains proxy
+        if (object[_secret] !== undefined)
+            return object;
 
-        if (register.has(object))
-            return register.get(object);
+        // For all objects, a proxy must be created. Also for proxies, even if
+        // proxy in proxy is prevented. Not internally, so it works recursively.
+        // Endless loops are prevented with the register.
+
+        if (_register.has(object))
+            return _register.get(object);
 
         const proxy = new Proxy(object, {
-
-            meta: {parent:null, target:null},
 
             notifications: new Map(),
 
             cache: new Map(),
 
-            defineProperty(target, key, descriptor) {
+            get(target, key) {
+
+                try {
+
+                    // Proxy is implemented exotically, cannot be inherited and
+                    // has no prototype. Therefore, this unconventional way with
+                    // a secret simulated property that is used as an indicator
+                    // for existing reactive object instances and also contains
+                    // a reference to the original object.
+                    if (key === _secret)
+                        return target;
+
+                    // Proxies are only used for objects, other data types are
+                    // returned directly.
+                    let value = target[key];
+                    if (typeof value !== "object"
+                            || value === null)
+                        return value;
+
+                    // Proxy remains proxy
+                    if (value[_secret] !== undefined)
+                        return value;
+
+                    // A proxy always returns proxies for objects. To decouple
+                    // object, proxy and view and to avoid reference to object
+                    // tree/level, loose proxies are used. The mapping is based
+                    // only on objects not on object level via the register.
+                    if (_register.has(value))
+                        return _register.get(value)
+                    return _reactive(value);
+
+                    // To be economical with resources, proxies are not created
+                    // for objects immediately, but only when they are requested
+                    // via getter. Therefore, the properties for an object are
+                    // not analyzed recursively.
+
+                } finally {
+
+                    // The registration is delayed so that the getting of values
+                    // does not block unnecessarily.
+                    Composite.asynchron((selector, target, key, notifications) => {
+
+                        // Registration is performed only during rendering and
+                        // if the key exists in the object.
+                        if (selector === null
+                                || !target.hasOwnProperty(key))
+                            return;
+
+                        // Special for elements with attribute iterate. For
+                        // these, the highest parent element with the attribute
+                        // iterate is searched for and registered as the
+                        // recipient. Why -- Iterate provides temporary
+                        // variables which can be used in the enclosed markup.
+                        // If these places are registered as recipients, these
+                        // temporary variables cannot be accessed later in the
+                        // expressions, which causes errors because the
+                        // temporary variables no longer exist. Since element
+                        // with the attribute iterate can be nested and the
+                        // expression can be based on a parent one, the topmost
+                        // one is searched for.
+
+                        for (let node = selector; node.parentNode; node = node.parentNode) {
+                            const meta = (Composite.render.meta || [])[node.ordinal()] || {};
+                            if (meta.attributes && meta.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))
+                                selector = node;
+                        }
+
+                        const recipients = notifications.get(key) || new Map();
+
+                        // If the selector as the current rendered element is
+                        // already registered as a recipient, then the
+                        // registration can be canceled.
+                        if (recipients.has(selector.ordinal()))
+                            return;
+
+                        for (const recipient of recipients.values()) {
+
+                            // If the selector as the current rendered element
+                            // is already contained in a recipient as the
+                            // parent, the selector as a recipient can be
+                            // ignored, because the rendering is initiated by
+                            // the parent and includes the selector as a child.
+                            if (recipient.contains !== undefined
+                                    && recipient.contains(selector))
+                                return;
+
+                            // If the selector as current rendered element
+                            // contains a recipient as parent, the recipient can
+                            // be removed, because the selector element will
+                            // initiate rendering as parent in the future and
+                            // the existing recipient will be rendered as child
+                            // automatically.
+                            if (selector.contains !== undefined
+                                    && selector.contains(recipient))
+                                recipients.delete(recipient.ordinal());
+                        }
+
+                        recipients.set(selector.ordinal(), selector);
+                        notifications.set(key, recipients);
+
+                    }, _selector, target, key, this.notifications);
+                }
             },
 
             set(target, key, value) {
-            },
 
-            get(target, key) {
-            },
+                // To decouple object, proxy and view, the original objects are
+                // always used as value and never the proxies.
+                if (typeof value === "object"
+                        && value[_secret] !== undefined)
+                    value = value[_secret];
 
-            deleteProperty(target, property) {
+                // To be economical with resources, proxies are not created for
+                // objects immediately, but only when they are explicitly
+                // requested via getter.
+
+                try {return target[key] = value;
+                } finally {
+
+                    // Unwanted recursions due to repeated value assignments:
+                    // a = a / a = c = b = a must be avoided so that no infinite
+                    // render cycle is initiated.
+                    if (this.cache.get(key) === value)
+                        return;
+                    this.cache.set(key, value);
+
+                    // The registration is delayed so that the setting of values
+                    // does not block unnecessarily.
+                    Composite.asynchron((selector, target, key, notifications) => {
+
+                        // An update of the recipients is only performed outside
+                        // the rendering and if the key exists in the object.
+                        if (selector !== null
+                                || !target.hasOwnProperty(key))
+                            return;
+
+                        const recipients = this.notifications.get(key) || new Map();
+                        for (const recipient of recipients.values()) {
+                            // If the recipient is no longer included in the DOM
+                            // and so it can be removed this case.
+                            if (!document.body.contains(recipient))
+                                recipients.delete(recipient.ordinal());
+                            else Composite.render(recipient);
+                        }
+
+                    }, _selector, target, key, this.notifications);
+                }
             }
         });
 
-        // The register prevents endless recursions that can occur during
-        // recursive scanning from the object tree.
-        register = register || new Map();
-        register.set(object, proxy)
-
-        for (const key in proxy) {
-            let value = proxy[key];
-            if (typeof value === "object"
-                    && value !== null
-                    && !filter.includes(value))
-                proxy[key] = _reactive(value, object, register);
-        }
+        // On the one hand, the register manages the unbound proxies, on the
+        // other hand, it protects against endless recursions.
+        _register.set(object, proxy);
 
         return proxy;
     };

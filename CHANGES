@@ -12,6 +12,7 @@ BF: Reactive: Correction for the use of arrays
 BF: Reactive: Correction/optimization for elements with iterate
     The renderer always updates the top element with iterate in the DOM so that
     temporary variables are available in the expressions.
+CR: Reactive: Optimization of object-model-view decoupling
 CR: Reactive: Refactoring to distinguish from frameworks with similar name
 CR: SiteMap: Inactive by default
     Attribute static is then not required for composites.
