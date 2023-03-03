@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230221
+ * @version 1.6.0 20230303
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
@@ -52,7 +52,7 @@ window.compliant = (context, payload) => {
     const type = new Function(`return typeof ${context}`)();
     if (type !== "undefined")
         throw new Error("JavaScript incompatibility detected for: " + context);
-    if (typeof payload !== "undefined")
+    if (payload !== undefined)
         return eval(`${context} = payload`);
     return true;
 };

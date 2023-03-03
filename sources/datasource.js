@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230222
+ * @version 1.6.0 20230303
  */
 (() => {
 
@@ -310,7 +310,7 @@
     
     let locale = [];
     locale = locale.concat(navigator.language);
-    if (typeof navigator.languages !== "undefined")
+    if (navigator.languages !== undefined)
         locale = locale.concat(navigator.languages);
     Array.from(locale).forEach((language) => {
         language = language.match(/^[a-z]+/i, "");

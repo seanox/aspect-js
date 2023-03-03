@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230222
+ * @version 1.6.0 20230303
  */
 (() => {
 
@@ -2348,7 +2348,7 @@
 
         // JavaScript is only loaded if no corresponding object exists for the
         // composite id or the object is an element object
-        if (typeof lookup === "undefined"
+        if (lookup === undefined
                 || lookup instanceof Element
                 || resource === "common")
             loading(context + ".js");
@@ -2425,7 +2425,7 @@
     compliant("Object.prototype.serial");
     compliant("Object.prototype.ordinal");
     compliant(null, Object.prototype.ordinal = function() {
-        if (typeof this.serial === "undefined")
+        if (this.serial === undefined)
             Object.defineProperty(this, "serial", {
                 value: ++_serial
             });

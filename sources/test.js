@@ -92,7 +92,7 @@
  * the redirection and caching of console output.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230223
+ * @version 1.6.0 20230303
  */
 compliant("Test");
 compliant(null, window.Test = {
@@ -144,7 +144,7 @@ compliant(null, window.Test = {
                     throw new TypeError("Invalid event: " + typeof event);
                 if (typeof callback !== "function"
                         && callback !== null
-                        && typeof callback !== "undefined")
+                        && callback !== undefined)
                     throw new TypeError("Invalid callback: " + typeof callback);
                 if (!event.match(Test.PATTERN_EVENT))
                     throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
