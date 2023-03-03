@@ -10,54 +10,91 @@
       }
     </style>
     <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
     <script type="text/javascript">
         Test.activate();
 
-        const snapshots = [];
+        const capture = new Capture();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
-            const snapshot = document.body.textContent.trim();
-            snapshots.push(snapshot);
-            if (snapshots.length == 9)
-                Test.start();
-            if (snapshots.length > 9)
-                Assert.assertEquals("expected {1} steps but was {2}", 9, snapshots.length);
+          capture.snap();
+          const count = capture.patterns().length;
+          if (capture.size() == count)
+              Test.start();
+          if (capture.size() > count)
+              Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
         });
 
         Test.create({test() {
-            Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[0].textContent,
-                    snapshots[7]);
-        }});
-
-        Test.create({test() {
-            Assert.assertSameText(document.querySelectorAll("script[type='text/test']")[1].textContent,
-                    snapshots[8]);
+            capture.validate();
         }});
 
         const modelA = {
             valueA: 123
         }.reactive();
         window.setTimeout(() => {modelA.valueA = 456}, 1000);
-        window.setTimeout(() => {modelA.valueA = 123}, 1250);
-        window.setTimeout(() => {modelA.valueA = 456}, 1500);
-        window.setTimeout(() => {modelA.valueA = 123}, 1750);
+        window.setTimeout(() => {modelA.valueA = 123}, 1500);
+        window.setTimeout(() => {modelA.valueA = 456}, 2000);
+        window.setTimeout(() => {modelA.valueA = 123}, 2500);
     </script>
     <script type="text/test">
       _A_123_
       true:  _true
       false: _
-      react: _A456B
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: _A456B_
     </script>
     <script type="text/test">
       _A_123_
       true:  _true
       false: _
-      react: _
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
     </script>
   </head>
   <body>
     _A_{{modelA.valueA}}_
     true:  _<span condition="{{true}}">true</span>
     false: _<span condition="{{false}}">false</span>
-    react: _<span condition="{{modelA.valueA != 123}}">A{{modelA.valueA}}B</span>
+    react: _<span condition="{{modelA.valueA != 123}}">A{{modelA.valueA}}B</span>_
   </body>
 </html>
