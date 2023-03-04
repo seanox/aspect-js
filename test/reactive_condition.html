@@ -29,17 +29,25 @@
         }});
 
         const modelA = {
-            valueA: 123
+            valueA: 123,
+            get valueAa() {
+                return this.valueA;
+            },
+            valueAb() {
+                return this.valueA;
+            }
         }.reactive();
         window.setTimeout(() => {modelA.valueA = 456}, 1000);
-        window.setTimeout(() => {modelA.valueA = 123}, 1500);
-        window.setTimeout(() => {modelA.valueA = 456}, 2000);
-        window.setTimeout(() => {modelA.valueA = 123}, 2500);
+        window.setTimeout(() => {modelA.valueA = 123}, 1250);
+        window.setTimeout(() => {modelA.valueA = 456}, 1500);
+        window.setTimeout(() => {modelA.valueA = 123}, 1750);
     </script>
     <script type="text/test">
       _A_123_
       true:  _true
       false: _
+      react: __
+      react: __
       react: __
     </script>
     <script type="text/test">
@@ -47,29 +55,7 @@
       true:  _true
       false: _
       react: __
-    </script>
-    <script type="text/test">
-      _A_456_
-      true:  _true
-      false: _
-      react: _A456B_
-    </script>
-    <script type="text/test">
-      _A_123_
-      true:  _true
-      false: _
-      react: _A456B_
-    </script>
-    <script type="text/test">
-      _A_123_
-      true:  _true
-      false: _
       react: __
-    </script>
-    <script type="text/test">
-      _A_456_
-      true:  _true
-      false: _
       react: __
     </script>
     <script type="text/test">
@@ -77,17 +63,119 @@
       true:  _true
       false: _
       react: _A456B_
+      react: __
+      react: __
     </script>
     <script type="text/test">
-      _A_123_
+      _A_456_
       true:  _true
       false: _
+      react: _A456B_
+      react: _A456B_
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: _A456B_
+      react: _A456B_
       react: _A456B_
     </script>
     <script type="text/test">
       _A_123_
       true:  _true
       false: _
+      react: _A456B_
+      react: _A456B_
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+      react: _A456B_
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+      react: __
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+      react: __
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: __
+      react: __
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: _A456B_
+      react: __
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: _A456B_
+      react: _A456B_
+      react: __
+    </script>
+    <script type="text/test">
+      _A_456_
+      true:  _true
+      false: _
+      react: _A456B_
+      react: _A456B_
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: _A456B_
+      react: _A456B_
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+      react: _A456B_
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+      react: __
+      react: _A456B_
+    </script>
+    <script type="text/test">
+      _A_123_
+      true:  _true
+      false: _
+      react: __
+      react: __
       react: __
     </script>
   </head>
@@ -96,5 +184,7 @@
     true:  _<span condition="{{true}}">true</span>
     false: _<span condition="{{false}}">false</span>
     react: _<span condition="{{modelA.valueA != 123}}">A{{modelA.valueA}}B</span>_
+    react: _<span condition="{{modelA.valueAa != 123}}">A{{modelA.valueA}}B</span>_
+    react: _<span condition="{{modelA.valueAb() != 123}}">A{{modelA.valueA}}B</span>_
   </body>
 </html>
