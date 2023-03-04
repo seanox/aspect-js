@@ -74,12 +74,19 @@
  * Both objects are only available if there are also labels.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230222
+ * @version 1.6.0 20230304
  */
 (() => {
 
     compliant("Messages");
-    compliant(null, window.Messages = {});
+    compliant(null, window.Messages = {
+        customize(label, ...values) {
+            let text = Messages[label] || "";
+            for (let index = 0; index < values.length; index++)
+                text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);
+            return text.replace(/\{\d+\}/g, "");
+        }
+    });
     compliant("messages");
     compliant(null, window.messages = {});
 
