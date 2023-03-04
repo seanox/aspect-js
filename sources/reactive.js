@@ -47,7 +47,7 @@
  * associated proxies when not in use.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230303
+ * @version 1.6.0 20230304
  */
 (() => {
 
@@ -137,9 +137,19 @@
                     if (key === _secret)
                         return target;
 
+                    let value;
+
+                    // During analysis, getters must be invoked via the proxy to
+                    // identify the final targets behind the getter.
+                    if (_selector) {
+                        const descriptor = Object.getOwnPropertyDescriptor(target, key);
+                        if (descriptor && typeof descriptor.get === "function")
+                            value = descriptor.get.call(proxy);
+                        else value = target[key];
+                    } else value = target[key];
+
                     // Proxies are only used for objects, other data types are
                     // returned directly.
-                    let value = target[key];
                     if (typeof value !== "object"
                             || value === null)
                         return value;
