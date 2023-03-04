@@ -244,6 +244,7 @@
                 // To decouple object, proxy and view, the original objects are
                 // always used as value and never the proxies.
                 if (typeof value === "object"
+                        && value !== null
                         && value[_secret] !== undefined)
                     value = value[_secret];
 
