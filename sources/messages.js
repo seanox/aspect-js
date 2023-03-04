@@ -78,17 +78,10 @@
  */
 (() => {
 
-    compliant("Messages");
-    compliant(null, window.Messages = {
-        customize(label, ...values) {
-            let text = Messages[label] || "";
-            for (let index = 0; index < values.length; index++)
-                text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);
-            return text.replace(/\{\d+\}/g, "");
-        }
-    });
     compliant("messages");
     compliant(null, window.messages = {});
+    compliant("Messages");
+    compliant(null, window.Messages = {});
 
     const _localize = DataSource.localize;
 
@@ -98,6 +91,15 @@
 
         delete window.messages;
         delete window.Messages;
+
+        window.Messages = {
+            customize(label, ...values) {
+                let text = Messages[label] || "";
+                for (let index = 0; index < values.length; index++)
+                    text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);
+                return text.replace(/\{\d+\}/g, "");
+            }
+        }
 
         const map = new Map();
         const xpath = "/locales/" + DataSource.locale + "/label";
