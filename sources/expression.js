@@ -442,8 +442,7 @@
             if (serial)
                 _cache.set(serial, script);
 
-            try {
-                return eval(script);
+            try {return eval(script);
             } catch (exception) {
                 exception.message += "\n\t" + script;
                 console.error(exception);
