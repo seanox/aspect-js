@@ -40,34 +40,34 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230303
+ * @version 1.6.0 20230305
  */
 (() => {
 
+    /** Path of the DataSource for: data (sub-directory of work path) */
+    const DATA = window.location.combine(window.location.pathcontext, "/data");
+
+    /**
+     * Pattern for a DataSource locator, based on the URL syntax but only
+     * the parts schema and path are used. A path segment begins with a word
+     * character _ a-z 0-9, optionally more word characters and additionally
+     * - can follow, but can not end with the - character. Paths are
+     * separated by the / character.
+     */
+    const PATTERN_LOCATOR = /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;
+
+    /** Pattern to detect JavaScript elements */
+    const PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;
+
+    /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
+    const PATTERN_WORD = /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;
+
+    /** Constant for attribute type */
+    const ATTRIBUTE_TYPE = "type";
+
     compliant("DataSource");
     compliant(null, window.DataSource = {
-            
-        /** Path of the DataSource for: data (sub-directory of work path) */
-        get DATA() {return window.location.combine(window.location.pathcontext, "/data");},
 
-        /**
-         * Pattern for a DataSource locator, based on the URL syntax but only
-         * the parts schema and path are used. A path segment begins with a word
-         * character _ a-z 0-9, optionally more word characters and additionally
-         * - can follow, but can not end with the - character. Paths are
-         * separated by the / character.
-         */
-        get PATTERN_LOCATOR() {return /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;},
-        
-        /** Pattern to detect JavaScript elements */
-        get PATTERN_JAVASCRIPT() {return /^\s*text\s*\/\s*javascript\s*$/i;},    
-        
-        /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
-        get PATTERN_WORD() {return /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;},
-        
-        /** Constant for attribute type */
-        get ATTRIBUTE_TYPE() {return "type";},
-        
         /** The currently used language. */
         get locale() {return DataSource.locales ? DataSource.locales.selection : null;},
                     
@@ -108,11 +108,11 @@
         transform(xml, style, meta) {
             
             if (typeof xml === "string"
-                    && xml.match(DataSource.PATTERN_LOCATOR))
+                    && xml.match(PATTERN_LOCATOR))
                 xml = DataSource.fetch(xml);
                 
             if (typeof style === "string"
-                    && style.match(DataSource.PATTERN_LOCATOR))
+                    && style.match(PATTERN_LOCATOR))
                 style = DataSource.fetch(style);
             
             if (!(xml instanceof XMLDocument))
@@ -155,8 +155,8 @@
             // combination with ATTRIBUTE_CONDITION.
             nodes = result.querySelectorAll("script[type],script:not([type])");
             nodes.forEach((node) => {
-                if (!node.hasAttribute(DataSource.ATTRIBUTE_TYPE)
-                        || (node.getAttribute(DataSource.ATTRIBUTE_TYPE) || "").match(DataSource.PATTERN_JAVASCRIPT))
+                if (!node.hasAttribute(ATTRIBUTE_TYPE)
+                        || (node.getAttribute(ATTRIBUTE_TYPE) || "").match(PATTERN_JAVASCRIPT))
                     node.setAttribute("type", "composite/javascript");
             });
             
@@ -191,15 +191,15 @@
         fetch(locator, transform, meta) {
             
             if (typeof locator !== "string"
-                    || !locator.match(DataSource.PATTERN_LOCATOR))
+                    || !locator.match(PATTERN_LOCATOR))
                 throw new Error("Invalid locator: " + String(locator));
 
-            const type = locator.match(DataSource.PATTERN_LOCATOR)[1];
-            const path = locator.match(DataSource.PATTERN_LOCATOR)[2];
+            const type = locator.match(PATTERN_LOCATOR)[1];
+            const path = locator.match(PATTERN_LOCATOR)[2];
             
             if (arguments.length === 1) {
 
-                let data = DataSource.DATA + "/" + DataSource.locale + "/" + path + "." + type;
+                let data = DATA + "/" + DataSource.locale + "/" + path + "." + type;
                 data = data.replace(/\/+/g, "/");
                 const hash = data.hashCode();
                 if (_cache.hasOwnProperty(hash))
@@ -229,7 +229,7 @@
             if (typeof transform !== "boolean") {
                 style = transform;
                 if (typeof style !== "string"
-                        || !style.match(DataSource.PATTERN_LOCATOR))
+                        || !style.match(PATTERN_LOCATOR))
                     throw new Error("Invalid style: " + String(style));  
             }
             
@@ -257,7 +257,7 @@
             if (variants.length === 2
                     && typeof variants[0] === "string"
                     && Array.isArray(variants[1])) {
-                if (!variants[0].match(DataSource.PATTERN_WORD))
+                if (!variants[0].match(PATTERN_WORD))
                     throw new TypeError("Invalid collector");
                 collector = variants[0];
                 collection = Array.from(variants[1]);
@@ -327,7 +327,7 @@
     
     const request = new XMLHttpRequest();
     request.overrideMimeType("text/plain");
-    request.open("GET", DataSource.DATA + "/locales.xml", false);
+    request.open("GET", DATA + "/locales.xml", false);
     request.send();
     
     // DataSource.data
