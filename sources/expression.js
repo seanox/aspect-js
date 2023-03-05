@@ -77,13 +77,12 @@
 
             try {
                 if (typeof context === "string"
-                    && expression === undefined) {
+                        && expression === undefined) {
                     if (context.match(/^#[a-z]\w*$/i))
                         return document.querySelector(context);
-                    if (context.match(/^(#[a-z]\w*)\.(.*)*$/i)) {
-                        expression = context.match(/^(#[a-z]\w*)\.(.*)*$/i);
+                    expression = context.match(/^(#[a-z]\w*)\.(.*)*$/i);
+                    if (expression)
                         return Expression.lookup(document.querySelector(expression[1]), expression[2]);
-                    }
                     if (context.indexOf(".") < 0)
                         return eval(context);
                     expression = context.match(/^(.*?)\.(.*)$/);
@@ -96,10 +95,10 @@
                 let method = "get" + expression[1].capitalize();
                 const keys = Object.keys(context);
                 if (!keys.includes(method)
-                    || typeof context[method] !== "function")
+                        || typeof context[method] !== "function")
                     method = "is" + expression[1].capitalize();
                 if (keys.includes(method)
-                    && typeof context[method] === "function") {
+                        && typeof context[method] === "function") {
                     context = (context[method])();
                     if (expression.length > 2)
                         return Expression.lookup(context, expression[2]);
@@ -150,7 +149,7 @@
 
             // Empty expressions are interpreted like an empty string.
             if (expression === null
-                || expression === undefined)
+                    || expression === undefined)
                 expression = "";
             else expression = expression.trim();
             if (expression === "")
@@ -336,7 +335,7 @@
                     });
                 else if (typeof word.data === "string")
                     if (word.data
-                        && word.data.length)
+                            && word.data.length)
                         words.push(word);
                     else
                         merge(word.data);
@@ -358,9 +357,9 @@
                 else if (word.type === TYPE_KEYWORD)
                     script += " " + word.data + " ";
                 else if (word.type === TYPE_LITERAL
-                    || word.type === TYPE_VALUE
-                    || word.type === TYPE_METHOD
-                    || word.type === TYPE_LOGIC)
+                        || word.type === TYPE_VALUE
+                        || word.type === TYPE_METHOD
+                        || word.type === TYPE_LOGIC)
                     script += word.data;
             });
             script = script.replace(/(^\n)|(\r$)/g, "");
@@ -399,7 +398,7 @@
 
             let serial;
             if (variants.length > 1
-                && variants[0])
+                    && variants[0])
                 serial = String(variants[0]);
 
             let script = serial ? _cache.get(serial) : null;
