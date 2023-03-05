@@ -6,6 +6,7 @@ BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected when the module is included, an error is output.
 BF: Composite: Support of const for models also in combined with Namespace.create(...)
 BF: Composite: Validation with message and notification also work without model
+BF: Composite: Child elements in a condition are mounted
 BF: Test: Correction of wrong output of Element.prototype.toPlainString()
 BF: Reactive: Correction for the use of arrays
     The data type incorrectly changed from array to object.
@@ -33,8 +34,8 @@ CR: Datasource: Optimization when loading module resources
     - Omission of the HEAD request
     - Omission of XML error when the request receives an error page
     Minimizes HTTP requests in the background and when loading the page.
-CR: Message: Added messages as alternative object tree for associative array Message
-CR: Message: Added Messages.customize(label, ...values) to fill placeholders with values
+CR: Messages: Added messages as alternative object tree for associative array Messages
+CR: Messages: Added Messages.customize(label, ...values) to fill placeholders with values
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
 CR: Extension: Math.unique(...) replaces Math.uniqueId(...)
 CR: Extension: Math.serial() replaces Math.uniqueSerialId(...)

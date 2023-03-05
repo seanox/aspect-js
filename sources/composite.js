@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230303
+ * @version 1.6.0 20230305
  */
 (() => {
 
@@ -355,15 +355,32 @@
                             if (this.ticks > 0)
                                 return;
                             if (context === Composite.render) {
-                                
+
+                                // To ensure that on conditions when the lock is
+                                // created for the marker, the children are also
+                                // mounted, the selector must be switched to the
+                                // element, because the marker is a text node
+                                // without children.
+
+                                let selector = this.selector;
+                                if (selector instanceof Node
+                                        && selector.nodeType === Node.TEXT_NODE) {
+                                    let serial = selector.ordinal();
+                                    let object = _render_meta[serial] || {};
+                                    if (object.condition
+                                            && object.condition.element
+                                            && object.condition.marker === this.selector)
+                                        selector = object.condition.element;
+                                }
+
                                 // If the selector is a string, several elements
                                 // must be assumed, which may or may not have a
                                 // relation to the DOM. Therefore, they are all
                                 // considered and mounted separately.
 
                                 let nodes = [];
-                                if (typeof this.selector === "string") {
-                                    const scope = document.querySelectorAll(this.selector);
+                                if (typeof selector === "string") {
+                                    const scope = document.querySelectorAll(selector);
                                     Array.from(scope).forEach((node) => {
                                         if (!nodes.includes(node))
                                             nodes.push(node);
@@ -373,9 +390,9 @@
                                                 nodes.push(node);
                                         });
                                     });
-                                } else if (this.selector instanceof Element) {
-                                    nodes = this.selector.querySelectorAll("*");
-                                    nodes = [this.selector].concat(Array.from(nodes));
+                                } else if (selector instanceof Element) {
+                                    nodes = selector.querySelectorAll("*");
+                                    nodes = [selector].concat(Array.from(nodes));
                                 }
                                 
                                 // Mount all elements in a composite, including
@@ -1354,7 +1371,7 @@
                             const template = selector.cloneNode(true);
                             const attributes = object.attributes;
                             object = {serial:marker.ordinal(), element:marker, attributes,
-                                condition: {expression, template, marker, element:null, attributes, complete:false, share:null}};
+                                condition:{expression, template, marker, element:null, attributes, complete:false, share:null}};
                             _render_meta[object.serial] = object;
 
                             // The meta-object for the HTML element is removed,
