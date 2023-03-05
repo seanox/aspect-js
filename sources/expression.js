@@ -33,57 +33,22 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230221
+ * @version 1.6.0 202300305
  */
 (() => {
 
+    const TYPE_TEXT       = 1;
+    const TYPE_EXPRESSION = 2;
+    const TYPE_LITERAL    = 3;
+    const TYPE_SCRIPT     = 4;
+    const TYPE_KEYWORD    = 5;
+    const TYPE_OTHER      = 6;
+    const TYPE_METHOD     = 7;
+    const TYPE_VALUE      = 8;
+    const TYPE_LOGIC      = 9;
+
     compliant("Expression");
     compliant(null, window.Expression = {
-
-        /** Constant for element type text */
-        get TYPE_TEXT() {
-            return 1;
-        },
-
-        /** Constant for element type expression */
-        get TYPE_EXPRESSION() {
-            return 2;
-        },
-
-        /** Constant for element type literal */
-        get TYPE_LITERAL() {
-            return 3;
-        },
-
-        /** Constant for element type script */
-        get TYPE_SCRIPT() {
-            return 4;
-        },
-
-        /** Constant for element type keyword */
-        get TYPE_KEYWORD() {
-            return 5;
-        },
-
-        /** Constant for element type other */
-        get TYPE_OTHER() {
-            return 6;
-        },
-
-        /** Constant for element type method */
-        get TYPE_METHOD() {
-            return 7;
-        },
-
-        /** Constant for element type value */
-        get TYPE_VALUE() {
-            return 8;
-        },
-
-        /** Constant for element type logic */
-        get TYPE_LOGIC() {
-            return 9;
-        },
 
         /**
          * Resolves a value expression recursively if necessary. Value expressions
@@ -225,31 +190,31 @@
             expression = expression.replace(/(^\n+)|(\n+$)/g, "");
 
             const assemble = (word) => {
-                if (word.type === Expression.TYPE_TEXT)
+                if (word.type === TYPE_TEXT)
                     cascade.text.push(word);
-                else if (word.type === Expression.TYPE_EXPRESSION)
+                else if (word.type === TYPE_EXPRESSION)
                     cascade.expression.push(word);
-                else if (word.type === Expression.TYPE_SCRIPT)
+                else if (word.type === TYPE_SCRIPT)
                     cascade.script.push(word);
-                else if (word.type === Expression.TYPE_LITERAL)
+                else if (word.type === TYPE_LITERAL)
                     cascade.literal.push(word);
-                else if (word.type === Expression.TYPE_KEYWORD)
+                else if (word.type === TYPE_KEYWORD)
                     cascade.keyword.push(word);
-                else if (word.type === Expression.TYPE_OTHER)
+                else if (word.type === TYPE_OTHER)
                     cascade.other.push(word);
-                else if (word.type === Expression.TYPE_VALUE)
+                else if (word.type === TYPE_VALUE)
                     cascade.value.push(word);
-                else if (word.type === Expression.TYPE_METHOD)
+                else if (word.type === TYPE_METHOD)
                     cascade.method.push(word);
-                else if (word.type === Expression.TYPE_LOGIC)
+                else if (word.type === TYPE_LOGIC)
                     cascade.logic.push(word);
             };
 
             expression.split(/\n/).forEach((entry) => {
-                const object = {type: Expression.TYPE_TEXT, data: entry};
+                const object = {type: TYPE_TEXT, data: entry};
                 if (entry.match(/^\{\{.*\}\}$/)) {
                     object.data = object.data.substring(2, object.data.length - 2);
-                    object.type = Expression.TYPE_EXPRESSION;
+                    object.type = TYPE_EXPRESSION;
                 } else object.data = "\"" + object.data.replace(/\\/, "\\\\").replace(/"/, "\\\"") + "\"";
                 assemble(object);
                 cascade.words.push(object);
@@ -271,17 +236,17 @@
                 const pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
                 while (text.match(pattern)) {
                     text = text.replace(pattern, (match, script, literal) => {
-                        script = {type: Expression.TYPE_SCRIPT, data: script};
+                        script = {type: TYPE_SCRIPT, data: script};
                         assemble(script);
                         words.push(script);
-                        literal = {type: Expression.TYPE_LITERAL, data: literal};
+                        literal = {type: TYPE_LITERAL, data: literal};
                         assemble(literal);
                         words.push(literal);
                         return "";
                     });
                 }
                 if (text.length > 0) {
-                    text = {type: Expression.TYPE_SCRIPT, data: text};
+                    text = {type: TYPE_SCRIPT, data: text};
                     assemble(text);
                     words.push(text);
                 }
@@ -315,10 +280,10 @@
                 });
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
-                    const object = {type: Expression.TYPE_OTHER, data: entry};
+                    const object = {type: TYPE_OTHER, data: entry};
                     if (entry.match(/^\r/)) {
                         object.data = entry.substring(1);
-                        object.type = Expression.TYPE_KEYWORD;
+                        object.type = TYPE_KEYWORD;
                     }
                     assemble(object);
                     words.push(object);
@@ -339,15 +304,15 @@
                 text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
-                    const object = {type: Expression.TYPE_LOGIC, data: entry};
+                    const object = {type: TYPE_LOGIC, data: entry};
                     if (entry.match(/^\r\r/)) {
                         object.data = "Expression.lookup(\"" + entry.substring(2) + "\")";
-                        object.type = Expression.TYPE_VALUE;
+                        object.type = TYPE_VALUE;
                     } else if (entry.match(/^\r[^\r]/)) {
                         object.data = entry.substring(1);
                         if (object.data.match(/^#[a-z]/i))
                             object.data = "Expression.lookup(\"" + object.data + "\")";
-                        object.type = Expression.TYPE_METHOD;
+                        object.type = TYPE_METHOD;
                     }
                     assemble(object);
                     words.push(object);
@@ -387,14 +352,14 @@
 
             let script = "";
             words.forEach((word) => {
-                if (word.type === Expression.TYPE_TEXT)
+                if (word.type === TYPE_TEXT)
                     script += "\n" + word.data + "\r";
-                else if (word.type === Expression.TYPE_KEYWORD)
+                else if (word.type === TYPE_KEYWORD)
                     script += " " + word.data + " ";
-                else if (word.type === Expression.TYPE_LITERAL
-                    || word.type === Expression.TYPE_VALUE
-                    || word.type === Expression.TYPE_METHOD
-                    || word.type === Expression.TYPE_LOGIC)
+                else if (word.type === TYPE_LITERAL
+                    || word.type === TYPE_VALUE
+                    || word.type === TYPE_METHOD
+                    || word.type === TYPE_LOGIC)
                     script += word.data;
             });
             script = script.replace(/(^\n)|(\r$)/g, "");
