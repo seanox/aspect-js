@@ -51,19 +51,20 @@
     compliant(null, window.Expression = {
 
         /**
-         * Resolves a value expression recursively if necessary. Value expressions
-         * refer to a property in a static model. The value is retrieved using a
-         * corresponding get- or is-function or, if this is not available, the value
-         * is retrieved directly from the property. For the get- and is-functions,
-         * the first character is changed from name to uppercase and prefixed with
-         * 'get' or 'is'.
+         * Resolves a value expression recursively. Value expressions refer to a
+         * property in a static model. The value is read with a corresponding is
+         * or get function or, if this is not available, the value is read
+         * directly from the property. For the is- and get-functions, the first
+         * character is changed from name to uppercase and prefixed with 'get'
+         * or 'is'.
          *
          *     {{Model.value}} -> Model.getValue()
          *     {{Model.value}} -> Model.isValue()
          *
-         * In addition to the namespace of JavaScript, the method also supports DOM
-         * elements. To do this, the variable in the expression must begin with #
-         * and there must be a corresponding element with a matching ID in the DOM.
+         * In addition to the namespace of JavaScript, the method also supports
+         * DOM elements. To do this, the variable in the expression must begin
+         * with # and there must be a corresponding element with a matching ID
+         * in the DOM.
          *
          *     {{#Element}} -> document.querySelector(#Element)
          *     {{#Element.value}} -> document.querySelector(#Element).value
@@ -124,12 +125,12 @@
         parse(expression) {
 
             // Terms:
-            // An expression is an array of words. A word is an elementary phrase or
-            // a partial array with more words.
+            // An expression is an array of words. A word is an elementary
+            // phrase or a partial array with more words.
 
             // Structure:
-            // The words are classified in several steps and separated according to
-            // their characteristics.
+            // The words are classified in several steps and separated according
+            // to their characteristics.
 
             // +-------------------------------------------------------------+
             // |            words (all elements of an expression)            |
@@ -143,9 +144,9 @@
             // |        |           |           |  value  |  method  | logic |
             // +--------+-----------+-----------+---------+----------+-------+
 
-            // Line breaks we are interpreted as blanks. Therefore, all line breaks
-            // are replaced by spaces. So the characters 0x0D and 0x0A can be used
-            // later as internal separator and auxiliary marker.
+            // Line breaks we are interpreted as blanks. Therefore, all line
+            // breaks are replaced by spaces. So the characters 0x0D and 0x0A
+            // can be used later as internal separator and auxiliary marker.
 
             // Empty expressions are interpreted like an empty string.
             if (expression === null
@@ -169,15 +170,15 @@
             };
 
             // Step 1:
-            // Separation of text and expression as words. Expression is always in
-            // {{...}} included, everything else before/after is text. Escaping of
-            // {{ and }} is not possible and is not supported. Alternatively, an
-            // expression with literals can be used.
+            // Separation of text and expression as words. Expression is always
+            // enclosed in {{...}}, everything else before/after is text.
+            // Escaping of {{ and }} is not possible and not supported.
+            // Alternatively, an expression with literals can be used.
             //     e.g. {{"{" + "{"}} / {{"}" + "}"}}
 
             // Lines breaks are ignored, they are interpreted as spaces. So the
-            // start and end of expressions can be marked with line breaks. After
-            // that, text and expressions can be separated.
+            // start and end of expressions can be marked with line breaks.
+            // After that, text and expressions can be separated.
             expression = expression.replace(/(^[\r\n]+)|([\r\n]+$)/g, "");
             expression = expression.replace(/[\r\n]/g, " ");
             expression = expression.replace(/(\{\{)/g, "\n$1");
@@ -211,7 +212,7 @@
             };
 
             expression.split(/\n/).forEach((entry) => {
-                const object = {type: TYPE_TEXT, data: entry};
+                const object = {type:TYPE_TEXT, data:entry};
                 if (entry.match(/^\{\{.*\}\}$/)) {
                     object.data = object.data.substring(2, object.data.length - 2);
                     object.type = TYPE_EXPRESSION;
@@ -221,12 +222,12 @@
             });
 
             // Step 2:
-            // Separation of expressions in literal and script as partial words. The
-            // expression objects are retained but their value changes from text to
-            // array with literal and script as partial words. It was difficult to
-            // control the missed quotation marks ('/"). Replacing them with Unicode
-            // notation was the easiest way. All other attempts used wild masking
-            // and unmasking.
+            // Separation of expressions in literal and script as partial words.
+            // The expression objects are retained but their value changes from
+            // text to array with literal and script as partial words. It was
+            // difficult to control the missed quotation marks ('/"). Replacing
+            // them with Unicode notation was the easiest way. All other
+            // attempts used wild masking and unmasking.
 
             cascade.expression.forEach((entry) => {
                 let text = entry.data;
@@ -236,17 +237,17 @@
                 const pattern = /(^.*?)(([\'\"]).*?(\3|$))/m;
                 while (text.match(pattern)) {
                     text = text.replace(pattern, (match, script, literal) => {
-                        script = {type: TYPE_SCRIPT, data: script};
+                        script = {type:TYPE_SCRIPT, data:script};
                         assemble(script);
                         words.push(script);
-                        literal = {type: TYPE_LITERAL, data: literal};
+                        literal = {type:TYPE_LITERAL, data:literal};
                         assemble(literal);
                         words.push(literal);
                         return "";
                     });
                 }
                 if (text.length > 0) {
-                    text = {type: TYPE_SCRIPT, data: text};
+                    text = {type:TYPE_SCRIPT, data:text};
                     assemble(text);
                     words.push(text);
                 }
@@ -280,7 +281,7 @@
                 });
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
-                    const object = {type: TYPE_OTHER, data: entry};
+                    const object = {type:TYPE_OTHER, data:entry};
                     if (entry.match(/^\r/)) {
                         object.data = entry.substring(1);
                         object.type = TYPE_KEYWORD;
@@ -304,7 +305,7 @@
                 text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
-                    const object = {type: TYPE_LOGIC, data: entry};
+                    const object = {type:TYPE_LOGIC, data:entry};
                     if (entry.match(/^\r\r/)) {
                         object.data = "Expression.lookup(\"" + entry.substring(2) + "\")";
                         object.type = TYPE_VALUE;
@@ -379,14 +380,14 @@
          * Interprets the passed expression. In case of an error, the error is
          * returned and no exception is thrown. A serial can be specified
          * optionally. The serial is an alias for caching compiled expressions.
-         * Without, the expressions are always compiled. The function uses variable
-         * parameters and has the following signatures:
+         * Without, the expressions are always compiled. The function uses
+         * variable parameters and has the following signatures:
          *     function(expression)
          *     function(serial, expression)
          * @param  serial
          * @param  expression
-         * @return the return value of the interpreted expression or an error if an
-         *     error or exception has occurred
+         * @return the return value of the interpreted expression or an error if
+         *     an error or exception has occurred
          */
         eval(...variants) {
 
