@@ -69,6 +69,13 @@
          *     {{#Element}} -> document.querySelector(#Element)
          *     {{#Element.value}} -> document.querySelector(#Element).value
          *
+         * The syntax for element IDs is based on the syntax for variables in
+         * JavaScript. For more complex or deviating element IDs with extended
+         * syntax, these can be enclosed in square brackets:
+         *
+         *     {{#[Element:1@xxx.xxx]}} -> document.querySelector(#Element:1@xxx.xxx)
+         *     {{#[Element:1@xxx.xxx].value}} -> document.querySelector(#Element:1@xxx.xxx).value
+         *
          * @param  context    context or expression without context
          * @param  expression expression in combination with a context
          * @return the value of the expression, otherwise false
@@ -83,6 +90,15 @@
                     expression = context.match(/^(#[_a-z]\w*)\.(.*)*$/i);
                     if (expression)
                         return Expression.lookup(document.querySelector(expression[1]), expression[2]);
+                    expression = context.match(/^(#)\[([^\[\]]*)]$/);
+                    if (expression)
+                        return document.querySelector(expression[1] + expression[2]);
+                    // Possibly non-Word characters in the complex element
+                    // expression must be fledged for the query selector!
+                    // The developer should not have to do this himself later.
+                    expression = context.match(/^(#)\[([^\[\]]*)]\.(.*)*$/);
+                    if (expression)
+                        return Expression.lookup(document.querySelector(expression[1] + expression[2].replace(/(\W)/g, "\\$1")), expression[3]);
                     if (context.indexOf(".") < 0)
                         return eval(context);
                     expression = context.match(/^(.*?)\.(.*)$/);
@@ -317,11 +333,17 @@
             //    (?:[\w\.]{0,}\w)?
             // 4. start of methods signature, followed by a round bracket
             //    (?=\()
+            //
+            // Challenge complex element syntax #[...] : The pattern for simple
+            // variables is very hungry and therefore the expression for complex
+            // element syntax must be modified afterwards.
 
             cascade.other.forEach((entry) => {
                 let text = entry.data;
                 text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
                 text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
+                text = text.replace(/#\[(.*?|\r|\n)*?\](?:[\w\.]{0,}\w)?/g, match =>
+                    "\n\r" + match.replace(/[\r\n]+/g, "") + "\n");
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
                     const object = {type:TYPE_LOGIC, data:entry};
@@ -330,7 +352,7 @@
                         object.type = TYPE_VALUE;
                     } else if (entry.match(/^\r[^\r]/)) {
                         object.data = entry.substring(1);
-                        if (object.data.match(/^#[_a-z]/i))
+                        if (object.data.match(/^#\[?[_a-z]/i))
                             object.data = "Expression.lookup(\"" + object.data + "\")";
                         object.type = TYPE_METHOD;
                     }
