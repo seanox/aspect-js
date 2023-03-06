@@ -86,19 +86,16 @@
                 if (typeof context === "string"
                         && expression === undefined) {
                     if (context.match(/^#[_a-z]\w*$/i))
-                        return document.querySelector(context);
-                    expression = context.match(/^(#[_a-z]\w*)\.(.*)*$/i);
+                        return document.getElementById(context.substring(1));
+                    expression = context.match(/^(?:#([_a-z]\w*))\.(.*)*$/i);
                     if (expression)
-                        return Expression.lookup(document.querySelector(expression[1]), expression[2]);
-                    expression = context.match(/^(#)\[([^\[\]]*)]$/);
+                        return Expression.lookup(document.getElementById(expression[1]), expression[2]);
+                    expression = context.match(/^#\[([^\[\]]*)]$/);
                     if (expression)
-                        return document.querySelector(expression[1] + expression[2]);
-                    // Possibly non-Word characters in the complex element
-                    // expression must be fledged for the query selector!
-                    // The developer should not have to do this himself later.
-                    expression = context.match(/^(#)\[([^\[\]]*)]\.(.*)*$/);
+                        return document.getElementById(expression[1]);
+                    expression = context.match(/^#\[([^\[\]]*)]\.(.*)*$/);
                     if (expression)
-                        return Expression.lookup(document.querySelector(expression[1] + expression[2].replace(/(\W)/g, "\\$1")), expression[3]);
+                        return Expression.lookup(document.getElementById(expression[1]), expression[2]);
                     if (context.indexOf(".") < 0)
                         return eval(context);
                     expression = context.match(/^(.*?)\.(.*)$/);
@@ -342,7 +339,9 @@
                 let text = entry.data;
                 text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
                 text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
-                text = text.replace(/#\[(.*?|\r|\n)*?\](?:[\w\.]{0,}\w)?/g, match =>
+                text = text.replace(/(?:#\[(.*?|\r|\n)*?\](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/g, match =>
+                    "\n\r\r" + match.replace(/[\r\n]+/g, "") + "\n");
+                text = text.replace(/(?:#\[(.*?|\r|\n)*?\](?:[\w\.]{0,}\w)?(?=\())/g, match =>
                     "\n\r" + match.replace(/[\r\n]+/g, "") + "\n");
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
