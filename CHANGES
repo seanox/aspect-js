@@ -19,6 +19,8 @@ CR: SiteMap: Inactive by default
     Attribute static is then not required for composites.
     Simplifies micro frontends without face-flow.
     SiteMap becomes active with the call of the method SiteMap.customize(...).
+CR: Expression: Extension of the syntax for elements
+    - Support of the underscore at the beginning
 CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.

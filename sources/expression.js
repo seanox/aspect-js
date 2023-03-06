@@ -33,7 +33,7 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300305
+ * @version 1.6.0 202300306
  */
 (() => {
 
@@ -78,9 +78,9 @@
             try {
                 if (typeof context === "string"
                         && expression === undefined) {
-                    if (context.match(/^#[a-z]\w*$/i))
+                    if (context.match(/^#[_a-z]\w*$/i))
                         return document.querySelector(context);
-                    expression = context.match(/^(#[a-z]\w*)\.(.*)*$/i);
+                    expression = context.match(/^(#[_a-z]\w*)\.(.*)*$/i);
                     if (expression)
                         return Expression.lookup(document.querySelector(expression[1]), expression[2]);
                     if (context.indexOf(".") < 0)
@@ -293,15 +293,35 @@
 
             // Step 4:
             // Detection of value- and method-expressions
-            //     method expression: (^|[^\w\.])(#?[a-zA-Z](?:[\w\.]*[\w])*)(?=\()
-            // The expression is followed by a round bracket.
-            //     value expression: (^|[^\w\.])(#?[a-zA-Z](?:[\w\.]*[\w])*(?=(?:[^\w\(\.]|$)))
-            // The expression is followed by a non-word character or the end.
+            //
+            //     value: (^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))
+            //            +-1-------++-2-----++-3-------------+-4-----------------+
+            //
+            // 1. variable start (non-word character or the start)
+            //    (^|[^\w\.])
+            // 2. element or variable
+            //    #?[_a-z]
+            // 3. optionally object-based qualification
+            //    (?:[\w\.]{0,}\w)?
+            // 4. variable end, followed by a non-word character or the end
+            //    (?=(?:[^\w\(\.]|$))
+            //
+            //     method: (^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?(?=\()
+            //             +-1-------++-2-----++-3-------------+-4---+
+            //
+            // 1. variable start (non-word character or the start)
+            //    (^|[^\w\.])
+            // 2. element or variable
+            //    #?[_a-z]
+            // 3. optionally object-based qualification
+            //    (?:[\w\.]{0,}\w)?
+            // 4. start of methods signature, followed by a round bracket
+            //    (?=\()
 
             cascade.other.forEach((entry) => {
                 let text = entry.data;
-                text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
-                text = text.replace(/(^|[^\w\.])(#?[a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
+                text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
+                text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
                 const words = [];
                 text.split(/\n/).forEach((entry) => {
                     const object = {type:TYPE_LOGIC, data:entry};
@@ -310,7 +330,7 @@
                         object.type = TYPE_VALUE;
                     } else if (entry.match(/^\r[^\r]/)) {
                         object.data = entry.substring(1);
-                        if (object.data.match(/^#[a-z]/i))
+                        if (object.data.match(/^#[_a-z]/i))
                             object.data = "Expression.lookup(\"" + object.data + "\")";
                         object.type = TYPE_METHOD;
                     }
