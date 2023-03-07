@@ -33,10 +33,11 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300306
+ * @version 1.6.0 202300307
  */
 (() => {
 
+    const TYPE_WORDS      = 0;
     const TYPE_TEXT       = 1;
     const TYPE_EXPRESSION = 2;
     const TYPE_LITERAL    = 3;
@@ -168,17 +169,18 @@
             if (expression === "")
                 return "";
 
-            const cascade = {
-                words: [],
-                text: [],
-                expression: [],
-                literal: [],
-                script: [],
-                keyword: [],
-                other: [],
-                value: [],
-                method: [],
-                logic: []
+            const structure = {
+                collector: new Map(),
+                push(...variants) {
+                    const size = variants.length;
+                    const type = size > 1 ? variants[0] : variants[0].type;
+                    if (!this.collector.has(type))
+                        this.collector.set(type, []);
+                    this.collector.get(type).push(variants[size > 1 ? 1 : 0]);
+                },
+                list(type) {
+                    return this.collector.get(type) || [];
+                }
             };
 
             // Step 1:
@@ -202,35 +204,14 @@
 
             expression = expression.replace(/(^\n+)|(\n+$)/g, "");
 
-            const assemble = (word) => {
-                if (word.type === TYPE_TEXT)
-                    cascade.text.push(word);
-                else if (word.type === TYPE_EXPRESSION)
-                    cascade.expression.push(word);
-                else if (word.type === TYPE_SCRIPT)
-                    cascade.script.push(word);
-                else if (word.type === TYPE_LITERAL)
-                    cascade.literal.push(word);
-                else if (word.type === TYPE_KEYWORD)
-                    cascade.keyword.push(word);
-                else if (word.type === TYPE_OTHER)
-                    cascade.other.push(word);
-                else if (word.type === TYPE_VALUE)
-                    cascade.value.push(word);
-                else if (word.type === TYPE_METHOD)
-                    cascade.method.push(word);
-                else if (word.type === TYPE_LOGIC)
-                    cascade.logic.push(word);
-            };
-
             expression.split(/\n/).forEach((entry) => {
                 const object = {type:TYPE_TEXT, data:entry};
                 if (entry.match(/^\{\{.*\}\}$/)) {
                     object.data = object.data.substring(2, object.data.length - 2);
                     object.type = TYPE_EXPRESSION;
                 } else object.data = "\"" + object.data.replace(/\\/, "\\\\").replace(/"/, "\\\"") + "\"";
-                assemble(object);
-                cascade.words.push(object);
+                structure.push(object);
+                structure.push(TYPE_WORDS, object);
             });
 
             // Step 2:
@@ -241,7 +222,7 @@
             // them with Unicode notation was the easiest way. All other
             // attempts used wild masking and unmasking.
 
-            cascade.expression.forEach((entry) => {
+            structure.list(TYPE_EXPRESSION).forEach((entry) => {
                 let text = entry.data;
                 text = text.replace(/(^|[^\\])((?:\\{2})*)(\\\')/g, "$1$2\\u0027");
                 text = text.replace(/(^|[^\\])((?:\\{2})*)(\\\")/g, "$1$2\\u0022");
@@ -250,17 +231,17 @@
                 while (text.match(pattern)) {
                     text = text.replace(pattern, (match, script, literal) => {
                         script = {type:TYPE_SCRIPT, data:script};
-                        assemble(script);
+                        structure.push(script);
                         words.push(script);
                         literal = {type:TYPE_LITERAL, data:literal};
-                        assemble(literal);
+                        structure.push(literal);
                         words.push(literal);
                         return "";
                     });
                 }
                 if (text.length > 0) {
                     text = {type:TYPE_SCRIPT, data:text};
-                    assemble(text);
+                    structure.push(text);
                     words.push(text);
                 }
                 entry.data = words;
@@ -282,7 +263,7 @@
             const keywords = ["and", "&&", "or", "||", "not", "!",
                 "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
                 "div", "/", "mod", "%"];
-            cascade.script.forEach((entry) => {
+            structure.list(TYPE_SCRIPT).forEach((entry) => {
                 let text = entry.data;
                 for (let loop = 0; loop < keywords.length; loop += 2) {
                     const pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
@@ -298,7 +279,7 @@
                         object.data = entry.substring(1);
                         object.type = TYPE_KEYWORD;
                     }
-                    assemble(object);
+                    structure.push(object);
                     words.push(object);
                 });
                 entry.data = words;
@@ -335,7 +316,7 @@
             // variables is very hungry and therefore the expression for complex
             // element syntax must be modified afterwards.
 
-            cascade.other.forEach((entry) => {
+            structure.list(TYPE_OTHER).forEach((entry) => {
                 let text = entry.data;
                 text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?(?=(?:[^\w\(\.]|$)))/gi, "$1\n\r\r$2\n");
                 text = text.replace(/(^|[^\w\.])(#?[_a-z](?:[\w\.]{0,}\w)?)(?=\()/gi, "$1\n\r$2\n");
@@ -355,14 +336,14 @@
                             object.data = "Expression.lookup(\"" + object.data + "\")";
                         object.type = TYPE_METHOD;
                     }
-                    assemble(object);
+                    structure.push(object);
                     words.push(object);
                 });
                 entry.data = words;
             });
 
             // Step 5:
-            // Create a flat sequence from the cascade.
+            // Create a flat sequence from the cascaded structure.
 
             const words = [];
             const merge = (word) => {
@@ -381,7 +362,7 @@
                     else
                         merge(word.data);
             };
-            merge(cascade.words);
+            merge(structure.list(TYPE_WORDS));
 
             // Step 6:
             // Create a script from the word sequence. The possible word types:
