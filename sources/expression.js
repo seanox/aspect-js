@@ -191,7 +191,7 @@
             // Lines breaks are ignored, they are interpreted as spaces. So the
             // start and end of expressions can be marked with line breaks.
             // After that, text and expressions can be separated.
-            expression = expression.replace(/(^[\r\n]+)|([\r\n]+$)/g, "");
+            expression = expression.replace(/(^\s+)|(\s+$)/g, "");
             expression = expression.replace(/[\r\n]/g, " ");
             expression = expression.replace(/(\{\{)/g, "\n$1");
             expression = expression.replace(/(\}\})/g, "$1\n");
