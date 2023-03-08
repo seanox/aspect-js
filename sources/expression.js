@@ -193,7 +193,7 @@
             // Lines breaks are ignored, they are interpreted as spaces. So the
             // start and end of expressions can be marked with line breaks.
             // After that, text and expressions can be separated.
-            expression = expression.replace(/(^\s+)|(\s+$)/g, "");
+            expression = expression.trim();
             expression = expression.replace(/[\r\n]/g, " ");
             expression = expression.replace(/(\{\{)/g, "\n$1");
             expression = expression.replace(/(\}\})/g, "$1\n");
@@ -202,7 +202,7 @@
             if (expression.indexOf("\n") < 0)
                 return "\"" + expression + "\"";
 
-            expression = expression.replace(/(^\n+)|(\n+$)/g, "");
+            expression = expression.trim();
 
             expression.split(/\n/).forEach((entry) => {
                 const object = {type:TYPE_TEXT, data:entry};
