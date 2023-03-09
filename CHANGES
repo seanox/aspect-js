@@ -20,22 +20,24 @@ CR: SiteMap: Inactive by default
     Simplifies micro frontends without face-flow.
     SiteMap becomes active with the call of the method SiteMap.customize(...).
 CR: Expression: Extension of the syntax for elements and variables
-    - Support of the underscore at the beginning
-    - Support of complex element syntax #[...]
+    - support of the underscore at the beginning
+    - support of complex element syntax #[...]
+CR: Expression: Optimization
+    - complete new approach for parser and interpreter
 CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.
     Errors can also be subscribed as a composite event.
 CR: Composite: Renamed method Object.using(...) in Object.use(...)
 CR: Composite: Optimization when loading module resources
-    - Change of sequence to: JS, CSS, HTML (markup)
+    - change of sequence to: JS, CSS, HTML (markup)
     - JavaScript for modules is only loaded if no JavaScript model exists
     - CSS for modules is only loaded if HTML is also loaded
-    - Omission of the HEAD request
+    - omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
 CR: Datasource: Optimization when loading module resources
-    - Omission of the HEAD request
-    - Omission of XML error when the request receives an error page
+    - omission of the HEAD request
+    - omission of XML error when the request receives an error page
     Minimizes HTTP requests in the background and when loading the page.
 CR: Messages: Added messages as alternative object tree for associative array Messages
 CR: Messages: Added Messages.customize(label, ...values) to fill placeholders with values
