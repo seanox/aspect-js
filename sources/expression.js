@@ -161,6 +161,10 @@
                 expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\")/g, "$1$2\\u0022");
 
                 // replace all literals "..." / '...' with placeholders
+                // This simplifies later analysis because text can contain
+                // anything and the parser would have to constantly distinguish
+                // between logic and text. If the literals are replaced by
+                // numeric placeholders, only logic remains.
                 expression = expression.replace(/(\").*?(\')/g,
                     (match, text) => _parse(TYPE_TEXT, text, patches));
                 expression = expression.replace(/(\").*?(\")/g,
@@ -168,11 +172,11 @@
 
                 // mapping of keywords to operators
                 // IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
-                //     and &&        empty !         div /
-                //     eq  ==        eeq   ===       ge  >=
-                //     gt  >         le    <=        lt  <
-                //     mod %         ne    !=        nee !==
-                //     not !         or    ||
+                //     and  &&        empty  !         div  /
+                //     eq   ==        eeq    ===       ge   >=
+                //     gt   >         le     <=        lt   <
+                //     mod  %         ne     !=        nee  !==
+                //     not  !         or     ||
                 expression = expression.replace(PATTERN_KEYWORDS, (match, group1, group2) =>
                     group1 + KEYWORDS[KEYWORDS.indexOf(group2) +1]
                 );
@@ -222,7 +226,7 @@
                 // Let's see if the plan works and the code is smaller, faster and
                 // maintains compatibility with the old version.
 
-                patches.push("\"" + expression + "\"")
+                patches.push("\"" + expression + "\"");
                 return "\r" + (patches.length -1) + "\n";
 
             default:
