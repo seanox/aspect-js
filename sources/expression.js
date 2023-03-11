@@ -66,8 +66,6 @@
                     && variants[0])
                 serial = String(variants[0]);
 
-            _patches.clear();
-
             let script = serial ? _cache.get(serial) : null;
             if (!script)
                 script = _parse(TYPE_MIXED, expression);
@@ -84,8 +82,17 @@
     const TYPE_MIXED  = 0;
     const TYPE_TEXT   = 1;
     const TYPE_PHRASE = 2;
-    const TYPE_SCRIPT = 3;
-    const TYPE_NUMBER = 4;
+    const TYPE_NUMBER = 3;
+    const TYPE_SCRIPT = 4;
+    const TYPE_LOGIC  = 5;
+
+    const KEYWORDS = ["and", "&&", "or", "||", "not", "!",
+        "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
+        "div", "/", "mod", "%"];
+
+    const PATTERN_KEYWORDS = new RegExp("(^|[^\\w\\.])("
+            + KEYWORDS.filter((keyword, index) => index % 2 === 0).join("|")
+            + ")(?=[^\\w\\.]|$)", "ig");
 
     /**
      * Analyzes and finds the components of an expression and creates a
@@ -137,7 +144,7 @@
                 expression = expression.trim();
                 if (!expression)
                     return "";
-                const symbol = ["", "\"", "\'", "", ""][type];
+                const symbol = ["\"", "\'", ""][type -1];
                 patches.push(symbol + expression + symbol);
                 return "\r" + (patches.length -1) + "\n";
 
@@ -166,13 +173,39 @@
                 //     gt  >         le    <=        lt  <
                 //     mod %         ne    !=        nee !==
                 //     not !         or    ||
-                const keywords = ["and", "&&", "or", "||", "not", "!",
-                    "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
-                    "div", "/", "mod", "%"];
-                for (let loop = 0; loop < keywords.length; loop += 2) {
-                    const pattern = new RegExp("(^|[^\\w\\.])(" + keywords[loop] + ")(?=[^\\w\\.]|$)", "ig");
-                    expression = expression.replace(pattern, "$1 " + keywords[loop +1] + " ");
-                }
+                expression = expression.replace(PATTERN_KEYWORDS, (match, group1, group2) =>
+                    group1 + KEYWORDS[KEYWORDS.indexOf(group2) +1]
+                );
+
+            case TYPE_LOGIC:
+
+                // The next challenge is the tolerant handling of values and
+                // object chains, which is well solved in JSP EL. If a level is
+                // not set in an object chain, then there is no error, but it
+                // continues as if the complete object chain has no value at the
+                // end.
+                //
+                //     a.b.c.d() / a.b.c[7].d() / a.b.c().d() / ...
+                //
+                // If c is not defined, there should be no error and interpreted
+                // as if the object chain had no value at the end. The value in
+                // this implementation should then be undefined. Any methods in
+                // object chain after c are then not called, of course.
+                //
+                // To make this possible without much effort, all object chains
+                // should be encapsulated in a special method that returns the
+                // value undefined in case of ReferenceError. Other errors are
+                // thrown normally.
+                //
+                //     a.b.c[7].d() -> _eval("a.b.c[7].d()")
+                //
+                // The challenge in the challenge are the methods and arrays of
+                // the object chains that can contain further object chains. For
+                // this, methods and arrays must be recognized and recursively
+                // prepared. Also unclear is the execution time due to the
+                // numerous internal method calls that eval will contain.
+
+                // ----
 
                 // - extract all numericals [\d\.]+ as variable
                 //   are replaced by placeholder \nNumber\n
