@@ -170,6 +170,10 @@
                 expression = expression.replace(/(\").*?(\")/g,
                     (match, text) => _parse(TYPE_TEXT, text, patches));
 
+                // Without literals, tabs have no relevance and can be replaced
+                // by spaces, and we have and additional internal marker.
+                expression = expression.replace(/\t+/g, " ").trim();
+
                 // mapping of keywords to operators
                 // IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
                 //     and  &&        empty  !         div  /
