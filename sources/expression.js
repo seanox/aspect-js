@@ -72,16 +72,18 @@
             if (serial)
                 _cache.set(serial, script);
 
-            try {return eval(script);
+            // CR/LF of markers must be removed so that the end of line is not
+            // interpreted as separation of commands or logic: a\nb == a;b
+            try {return eval(script.replace(/[\r\n]+/g, " "));
             } catch (exception) {
 
                 // The code for of the internal invoke method is enclosed with
-                // CR/LF markers. If an error occurs, the source code is output
-                // along with the error message. With the CR/LF markers the
+                // TAB/LF markers. If an error occurs, the source code is output
+                // along with the error message. With the TAB/LF markers the
                 // additional code can be detected, bounded and removed and the
                 // source code looks more understandable again.
 
-                script = script.replace(/(^|\r).*?(\n|$)/g, "");
+                script = script.replace(/(\t).*?(\n)/g, "");
                 exception.message += "\n\t" + script;
                 console.error(exception);
                 return exception.message;
@@ -134,9 +136,9 @@
                 structure = structure.replace(/\{\{(.*?)\}\}/g,
                     (match, script) => _parse(TYPE_SCRIPT, script, patches));
 
-                // find all places outside the detected and replaced scripts
-                // this is everything outside of \r...\n
-                structure = structure.replace(/((?:[^\n]*$)|(?:[^\n]*(?=\r)))/g,
+                // find all places outside the detected replacements at the
+                // beginning ^...\r and between \n...\r and at the end \n...$
+                structure = structure.replace(/((?:[^\n]+$)|(?:[^\n]+(?=\r)))/g,
                     (match, text) => _parse(TYPE_TEXT, text, patches));
 
                 // if everything is replaced, the expression must have the
@@ -151,6 +153,7 @@
 
                 // splices still need to be made scriptable
                 structure = structure.replace(/(\n\r)+/g, " + ");
+                structure = structure.replace(/(^\r)|(\n$)/g, "");
 
                 return structure
 
@@ -161,8 +164,6 @@
                 // Text vs. Phrase -- because of the different delimiters, two
                 // different terms were needed
 
-                if (!expression)
-                    return "";
                 const symbol = ["\"", "\'", ""][type -1];
                 patches.push(symbol + expression + symbol);
                 return "\r" + (patches.length -1) + "\n";
@@ -201,7 +202,7 @@
                 //     mod  %         ne     !=        nee  !==
                 //     not  !         or     ||
                 expression = expression.replace(PATTERN_KEYWORDS, (match, group1, group2) =>
-                    group1 + KEYWORDS[KEYWORDS.indexOf(group2) +1]
+                    group1 + KEYWORDS[KEYWORDS.indexOf(group2.toLowerCase()) +1]
                 );
 
                 // The next challenge is the tolerant handling of values and
@@ -261,6 +262,14 @@
                 // What is logic?
                 // A script without brackets.
 
+                // Keywords must be replaced by placeholders so that they are
+                // not interpreted as variables. Keywords are case-insensitive.
+                let pattern = /(^|[^\w\.])(true|false|null|undefined|new|instanceof|typeof)(?=[^\w\.]|$)/ig;
+                expression = expression.replace(pattern, (match, group1, group2) => {
+                    patches.push(group2.toLowerCase());
+                    return (group1 || "") + "\t" + (patches.length -1) + "\n";
+                });
+
                 // According to the current idea, it is now about contained
                 // object chains. These must be enclosed by a method that can
                 // catch the ReferenceError.
@@ -278,15 +287,15 @@
                 // 3B ot in the object chain following bracket expressions
 
                 // The code for of the internal invoke method is enclosed with
-                // CR/LF markers. If an error occurs, the source code is output
-                // along with the error message. With the CR/LF markers the
+                // TAB/LF markers. If an error occurs, the source code is output
+                // along with the error message. With the TAB/LF markers the
                 // additional code can be detected, bounded and removed and the
                 // source code looks more understandable again.
 
-                const pattern = /(^|[^\w\.])((?:(?:[_a-z][\w]*)|(?:\t\d+\n))(?:(?:\.+[_a-z][\w]*)|(?:\t\d+\n))*)/ig;
+                pattern = /(^|[^\w\.])((?:(?:[_a-z][\w]*)|(?:\t\d+\n))(?:(?:\.+[_a-z][\w]*)|(?:\t\d+\n))*)/ig;
                 return expression.replace(pattern, (match, group1, group2) => {
                     group2 = _fill(group2, patches);
-                    group2 = "\r_invoke(()=>\n" + group2 + "\r)\n";
+                    group2 = "\t_invoke(()=>\n" + group2 + "\t)\n";
                     patches.push(group2);
                     return (group1 || "") + "\t" + (patches.length -1) + "\n";
                 });
