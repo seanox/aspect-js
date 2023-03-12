@@ -72,7 +72,20 @@
             if (serial)
                 _cache.set(serial, script);
 
-            // TODO:
+            try {return eval(script);
+            } catch (exception) {
+
+                // The code for of the internal invoke method is enclosed with
+                // CR/LF markers. If an error occurs, the source code is output
+                // along with the error message. With the CR/LF markers the
+                // additional code can be detected, bounded and removed and the
+                // source code looks more understandable again.
+
+                script = script.replace(/(^|\r).*?(\n|$)/g, "");
+                exception.message += "\n\t" + script;
+                console.error(exception);
+                return exception.message;
+            }
         }
     });
 
@@ -93,6 +106,10 @@
     const PATTERN_KEYWORDS = new RegExp("(^|[^\\w\\.])("
             + KEYWORDS.filter((keyword, index) => index % 2 === 0).join("|")
             + ")(?=[^\\w\\.]|$)", "ig");
+
+    const _fill = (expression, patches) => {
+        return expression.replace(/[\t\r](\d+)\n/g, (match, id) => patches[id]);
+    };
 
     /**
      * Analyzes and finds the components of an expression and creates a
@@ -117,7 +134,7 @@
                 structure = structure.replace(/\{\{(.*?)\}\}/g,
                     (match, script) => _parse(TYPE_SCRIPT, script, patches));
 
-                // find all places outside the detected and eplaced scripts
+                // find all places outside the detected and replaced scripts
                 // this is everything outside of \r...\n
                 structure = structure.replace(/((?:[^\n]*$)|(?:[^\n]*(?=\r)))/g,
                     (match, text) => _parse(TYPE_TEXT, text, patches));
@@ -140,6 +157,9 @@
             case TYPE_TEXT:
             case TYPE_PHRASE:
             case TYPE_NUMBER:
+
+                // Text vs. Phrase -- because of the different delimiters, two
+                // different terms were needed
 
                 expression = expression.trim();
                 if (!expression)
@@ -185,8 +205,6 @@
                     group1 + KEYWORDS[KEYWORDS.indexOf(group2) +1]
                 );
 
-            case TYPE_LOGIC:
-
                 // The next challenge is the tolerant handling of values and
                 // object chains, which is well solved in JSP EL. If a level is
                 // not set in an object chain, then there is no error, but it
@@ -205,7 +223,12 @@
                 // value undefined in case of ReferenceError. Other errors are
                 // thrown normally.
                 //
-                //     a.b.c[7].d() -> _eval("a.b.c[7].d()")
+                //     a.b.c[7].d() -> _invoke("a.b.c[7].d()")
+                //
+                // To avoid multiple masking and parsing, however, the code is
+                // described as an anonymous function.
+                //
+                //     a.b.c[7].d() -> _invoke(()=>a.b.c[7].d())
                 //
                 // The challenge in the challenge are the methods and arrays of
                 // the object chains that can contain further object chains. For
@@ -213,31 +236,73 @@
                 // prepared. Also unclear is the execution time due to the
                 // numerous internal method calls that eval will contain.
 
-                // ----
+                // To avoid complicated parsing of all brackets (square and
+                // round), bracket expressions that have no other bracket
+                // expressions are iteratively replaced by placeholders \t...\n.
+                // At the end there should be no more brackets. Placeholders can
+                // then be read as a part of the object chain. What simplifies
+                // the boundary (beginning / end) of the object chains.
 
-                // - extract all numericals [\d\.]+ as variable
-                //   are replaced by placeholder \nNumber\n
-                // - replace all expression keywords with the real operators
-                // - replace the expression in all brackets (recursively)
-                //   by \r_eval("return\r" + expression + "\r")\r
-                //   thereby the variables have to be filled again
-                // - a window.eval(...) will execute the expression
-                // - _eval returns undefined for ReferenceError
-                //   similar behavior to JSP EL
-                // - for other errors \n...\n are removed in the error output
-                //   the developer should recognize/see his code
+                for (let counts = -1; counts < patches.length;) {
+                    counts = patches.length;
+                    expression = expression.replace(/(\([^\(\)\[\]]*\))|(\[[^\(\)\[\]]*\])/g, match => {
+                        match = match.replace(/^(.)(.*)(.)$/gs,
+                            (match, group1, group2, group3) =>
+                                group1 + _parse(TYPE_LOGIC, group2 || "", patches) + group3);
+                        patches.push(_fill(match, patches));
+                        return "\t" + (patches.length -1) + "\n";
+                    });
+                }
 
-                // Let's see if the plan works and the code is smaller, faster and
-                // maintains compatibility with the old version.
-
-                patches.push("\"" + expression + "\"");
+                patches.push(_fill(_parse(TYPE_LOGIC, expression, patches), patches));
                 return "\r" + (patches.length -1) + "\n";
+
+            case TYPE_LOGIC:
+
+                // What is logic?
+                // A script without brackets.
+
+                // According to the current idea, it is now about contained
+                // object chains. These must be enclosed by a method that can
+                // catch the ReferenceError.
+                //
+                // (^|[^\w\.])((?:(?:[_a-z][\w]*)|(?:\t\d+\n))(?:(?:\.+[_a-z][\w]*)|(?:\t\d+\n))*)
+                // (+-1A-----)(---(--+-2A------+)|(--2B----+))(--(--+-3A---------+)|(--+-3B--+))*)
+                //
+                // 1A without lookbehind the non-word character after which an
+                //    object chain can begin.
+                //
+                // 2A start of an object chain with word characters
+                // 2B or start of an object chain with a bracket expression
+                //
+                // 3A in the object chain following word character sequences
+                // 3B ot in the object chain following bracket expressions
+
+                // The code for of the internal invoke method is enclosed with
+                // CR/LF markers. If an error occurs, the source code is output
+                // along with the error message. With the CR/LF markers the
+                // additional code can be detected, bounded and removed and the
+                // source code looks more understandable again.
+
+                const pattern = /(^|[^\w\.])((?:(?:[_a-z][\w]*)|(?:\t\d+\n))(?:(?:\.+[_a-z][\w]*)|(?:\t\d+\n))*)/ig;
+                return expression.replace(pattern, (match, group1, group2) => {
+                    group2 = _fill(group2, patches);
+                    group2 = "\r_invoke(()=>\n" + group2 + "\r)\n";
+                    patches.push(group2);
+                    return (group1 || "") + "\t" + (patches.length -1) + "\n";
+                });
 
             default:
                 throw new Error("Unexpected script type");
         }
     };
 
-    const _eval = (expression) => {
+    const _invoke = (invocation) => {
+        try {return invocation.call(window);
+        } catch (error) {
+            if (error instanceof ReferenceError)
+                return;
+            throw error;
+        }
     };
 })();
