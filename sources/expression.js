@@ -150,7 +150,7 @@
                     (match, placeholder) => "\r" + patches[placeholder] + "\n");
 
                 // splices still need to be made scriptable
-                structure = structure.replace(/(\n\r)+/g, " + ").trim();
+                structure = structure.replace(/(\n\r)+/g, " + ");
 
                 return structure
 
@@ -161,7 +161,6 @@
                 // Text vs. Phrase -- because of the different delimiters, two
                 // different terms were needed
 
-                expression = expression.trim();
                 if (!expression)
                     return "";
                 const symbol = ["\"", "\'", ""][type -1];
@@ -185,14 +184,14 @@
                 // anything and the parser would have to constantly distinguish
                 // between logic and text. If the literals are replaced by
                 // numeric placeholders, only logic remains.
-                expression = expression.replace(/(\").*?(\')/g,
-                    (match, text) => _parse(TYPE_TEXT, text, patches));
-                expression = expression.replace(/(\").*?(\")/g,
-                    (match, text) => _parse(TYPE_TEXT, text, patches));
+                expression = expression.replace(/(\')(.*?)(\1)/g,
+                    (match, delimiter, text) => _parse(TYPE_PHRASE, text, patches));
+                expression = expression.replace(/(\")(.*?)(\1)/g,
+                    (match, delimiter, text) => _parse(TYPE_TEXT, text, patches));
 
                 // Without literals, tabs have no relevance and can be replaced
                 // by spaces, and we have and additional internal marker.
-                expression = expression.replace(/\t+/g, " ").trim();
+                expression = expression.replace(/\t+/g, " ");
 
                 // mapping of keywords to operators
                 // IMPORTANT: KEYWORDS ARE CASE-INSENSITIVE
