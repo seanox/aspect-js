@@ -222,10 +222,10 @@
                 // IDs that do not follow the JavaScript syntax for variables.
                 expression = expression.replace(/#+([_a-z]\w*)/ig,
                     (match, element) =>
-                        "document.getElementById(" + element + ")");
+                        "document.getElementById(\"" + element + "\")");
                 expression = expression.replace(/#+\[([^\[\]])\]/ig,
                     (match, element) =>
-                        "document.getElementById(" + element + ")");
+                        "document.getElementById(\"" + element + "\")");
 
                 // small optimization by merging spaces
                 expression = expression.replace(/ {2,}/g, " ");
