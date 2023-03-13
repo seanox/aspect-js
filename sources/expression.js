@@ -184,11 +184,11 @@
                 while (true) {
                     const match = expression.match(/[\'\"]/);
                     if (match == "\"") {
-                        expression = expression.replace(/(\")(.*?)(\1)/g,
-                            (match, delimiter, text) => _parse(TYPE_TEXT, text, patches));
+                        expression = expression.replace(/\"(.*?)\"/gs,
+                            (match, text) => _parse(TYPE_TEXT, text, patches));
                     } else if (match == "\'") {
-                        expression = expression.replace(/(\')(.*?)(\1)/g,
-                            (match, delimiter, text) => _parse(TYPE_PHRASE, text, patches));
+                        expression = expression.replace(/\'(.*?)\'/gs,
+                            (match, text) => _parse(TYPE_PHRASE, text, patches));
                     } else break;
                 }
 
