@@ -15,25 +15,26 @@
     
         Test.activate();
 
-        const TestModel_1 = {};
-        TestModel_1.field_1 = "f1";
-        TestModel_1.field_2 = "f2";
-        TestModel_1.method_1 = () => {
-            return "m1";
+        const TestModel_1 = {
+            field_1: "f1",
+            field_2: "f2",
+            method_1() {
+                return "m1";
+            },
+            method_2(value_1) {
+              return "m2" + value_1;
+            },
+            get field_3() {
+                return "f3";
+            },
+            get field_11() {
+                return [{x:{y:"f11[0]->x->y"}}];
+            },
+            get field_12() {
+                return [{x:[{y:"f12[0]->x->y"}]}];
+            }
         };
-        TestModel_1.method_2 = (value_1) => {
-            return "m2" + value_1;
-        };
-        TestModel_1.getField_3 = () => {
-            return "f3";
-        };
-        TestModel_1.getField_11 = () => {
-            return [{x:{y:"f11[0]->x->y"}}];
-        };
-        TestModel_1.getField_12 = () => {
-            return [{x:[{y:"f12[0]->x->y"}]}];
-        };
-        
+
         Test.create({test() {
             const pattern = Test.read("composite_expression_parse_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.innerHTML);
