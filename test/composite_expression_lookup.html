@@ -10,19 +10,18 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script src="composite_expression.js"></script>
     <script type="text/javascript">
     
         Test.activate();
 
         Namespace.create("ModelA", {
             a: "ma",
-            getB() {
+            get b() {
                 return "mb";
             },
-            isC() {
+            get c() {
                 return true;
-            }  
+            }
         });
 
         Test.create({test() {
