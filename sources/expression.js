@@ -209,9 +209,9 @@
 
                 // Keywords must be replaced by placeholders so that they are
                 // not interpreted as variables. Keywords are case-insensitive.
-                let pattern = /(^|[^\w\.])(true|false|null|undefined|new|instanceof|typeof)(?=[^\w\.]|$)/ig;
-                expression = expression.replace(pattern, (match, group1, group2) =>
-                    (group1 || "") + group2.toLowerCase());
+                expression = expression.replace(/(^|[^\w\.])(true|false|null|undefined|new|instanceof|typeof)(?=[^\w\.]|$)/ig,
+                    (match, group1, group2) =>
+                        (group1 || "") + group2.toLowerCase());
 
                 // element expressions are translated into JavaScript
                 //
@@ -220,10 +220,10 @@
                 //
                 // The version with square brackets is for more complex element
                 // IDs that do not follow the JavaScript syntax for variables.
-                expression = expression.replace(/#([_a-z]\w*)/ig,
+                expression = expression.replace(/#+([_a-z]\w*)/ig,
                     (match, element) =>
                         "document.getElementById(" + element + ")");
-                expression = expression.replace(/#\[([^\[\]])\]/ig,
+                expression = expression.replace(/#+\[([^\[\]])\]/ig,
                     (match, element) =>
                         "document.getElementById(" + element + ")");
 
