@@ -70,8 +70,10 @@
 
     invalid word boundaries:
     ----
-     true
-     true
+    trueandtrue is not defined
+	trueandtrue true
+    trueeqtrue is not defined
+	trueeqtrue true
     identifier starts immediately after numeric literal
 	1le2 true
     identifier starts immediately after numeric literal
@@ -84,17 +86,18 @@
 	1lt2 true
     true true
     unexpected token: string literal
-	Expression.lookup("notempty")'x' true
+	notempty'x' true
 
     identifier starts immediately after numeric literal
-	(25div5)Expression.lookup("eq5") unexpected token: identifier
-	(25 /5)Expression.lookup("eq5")
+	(25div5)eq5 unexpected token: identifier
+	(25 /5)eq5
     identifier starts immediately after numeric literal
 	2gt1 true
     identifier starts immediately after numeric literal
-	(10mod3)Expression.lookup("eq1") unexpected token: identifier
-	(10%3)Expression.lookup("eq1")
-     true
+	(10mod3)eq1 unexpected token: identifier
+	(10%3)eq1
+    trueorfalse is not defined
+	trueorfalse true
 
     lower / upper case:
     ----
@@ -120,25 +123,28 @@
     1
     -12
 
+    unknown is not defined
+	unknown
+    unknown is not defined
+	unknown + '123'
 
-    undefined123
-
-    A1:
-    A2:
+    A1: Peter is not defined
+	Peter
+    A2: Peter is not defined
+	Peter.und.der.Wolf
     A3: Peter is not defined
 	Peter.und.der()
 
     B1: [object HTMLInputElement]
-    B2: Expression.lookup(...) is not a function
-	Expression.lookup("#HiddenField.value")()
+    B2: document.getElementById(...).value is not a function
+	document.getElementById("HiddenField").value()
     B3: Test-HF
 
-    C1: private names aren't valid in this context
-	#Expression.lookup("#HiddenField")
-    C2: private names aren't valid in this context
-	#Expression.lookup("#HiddenField.value")()
-    C3: private names aren't valid in this context
-	#Expression.lookup("#HiddenField.value")()
+    C1: [object HTMLInputElement]
+    C2: document.getElementById(...).value is not a function
+	document.getElementById("HiddenField").value()
+    C3: document.getElementById(...).value is not a function
+	document.getElementById("HiddenField").value()
 
     D1:
 
@@ -147,19 +153,19 @@
     E2: '#' not followed by identifier
 	# + #
 
-    F1: Expression.lookup(...) is not a function
-	'123' + Expression.lookup("#HiddenField.value")() + 'abc'
+    F1: document.getElementById(...).value is not a function
+	'123' + document.getElementById("HiddenField").value() + 'abc'
     F2: 123Test-HFabc
 
     G1: [object HTMLInputElement]
-    G2: private names aren't valid in this context
-	#HiddenField_1.#Expression.lookup("HiddenField_1")
-    G3: private names aren't valid in this context
-	#HiddenField_1.#Expression.lookup("HiddenField_2")
+    G2: document.getElementById(...).document is undefined
+	document.getElementById("HiddenField_1").document.getElementById("HiddenField_1")
+    G3: document.getElementById(...).document is undefined
+	document.getElementById("HiddenField_1").document.getElementById("HiddenField_2")
     G4: unexpected token: identifier
-	Expression.lookup("#HiddenField_1") Expression.lookup("#HiddenField_2")
-    G5: unexpected token: private identifier
-	Expression.lookup("#HiddenField_1")#Expression.lookup("HiddenField_2")
+	document.getElementById("HiddenField_1") document.getElementById("HiddenField_2")
+    G5: unexpected token: identifier
+	document.getElementById("HiddenField_1")document.getElementById("HiddenField_2")
 
     X0: <input type="hidden" id="HiddenField" value="Test-HF">
     X1: <input type="hidden" id="HiddenField_1" value="Test-HF_A">
