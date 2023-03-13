@@ -31,7 +31,7 @@ class Capture {
     validate() {
         this._snapshots.forEach((snapshot, index) => {
             console.log(`Test based on script #${index +1}`);
-            try {Assert.assertEquals(this._patterns[index], snapshot);
+            try {Assert.assertSameText(this._patterns[index], snapshot);
             } catch (error) {
                 this.output(index);
                 throw error;

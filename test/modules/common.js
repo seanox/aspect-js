@@ -29,8 +29,10 @@ if (String.prototype.simplify === undefined) {
     String.prototype.simplify = function() {
         return this.trim().replace(/\t/g, "    ")
             .replace(/(\r\n)|(\n\r)|[\r\n]/gm, "\n")
-            .replace(/(\s*\n\s*)+/gm, "\n")
-            .replace(/(^\s+)|(\s+$)/gm, "");
+            .replace(/(^ +)|( +$)/gm, "")
+            .replace(/\s*\n+\s*\n+/g, "\n")
+            .replace(/&gt;/g, ">")
+            .replace(/&lt;/g, "<");
     }
 }
 
