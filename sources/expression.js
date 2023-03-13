@@ -72,18 +72,8 @@
             if (serial)
                 _cache.set(serial, script);
 
-            // CR/LF of markers must be removed so that the end of line is not
-            // interpreted as separation of commands or logic: a\nb == a;b
-            try {return eval(script.replace(/[\r\n]+/g, " "));
+            try {return eval(script);
             } catch (exception) {
-
-                // The code for of the internal invoke method is enclosed with
-                // TAB/LF markers. If an error occurs, the source code is output
-                // along with the error message. With the TAB/LF markers the
-                // additional code can be detected, bounded and removed and the
-                // source code looks more understandable again.
-
-                script = script.replace(/(\t).*?(\n)/g, "");
                 exception.message += "\n\t" + script;
                 console.error(exception);
                 return exception.message;
@@ -95,11 +85,9 @@
     const _cache = new Map();
 
     const TYPE_MIXED  = 0;
-    const TYPE_TEXT   = 1;
-    const TYPE_PHRASE = 2;
-    const TYPE_NUMBER = 3;
-    const TYPE_SCRIPT = 4;
-    const TYPE_LOGIC  = 5;
+    const TYPE_PHRASE = 1;
+    const TYPE_TEXT   = 2;
+    const TYPE_SCRIPT = 3;
 
     const KEYWORDS = ["and", "&&", "or", "||", "not", "!",
         "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
@@ -132,12 +120,12 @@
 
                 let structure = expression;
 
-                // find all places outside the detected and replaced scripts
+                // find all places that contain scripts
                 structure = structure.replace(/\{\{(.*?)\}\}/g,
                     (match, script) => _parse(TYPE_SCRIPT, script, patches));
 
-                // find all places outside the detected replacements at the
-                // beginning ^...\r and between \n...\r and at the end \n...$
+                // find all places outside the detected script replacements at
+                // the beginning ^...\r and between \n...\r and at the end \n...$
                 structure = structure.replace(/((?:[^\n]+$)|(?:[^\n]+(?=\r)))/g,
                     (match, text) => _parse(TYPE_TEXT, text, patches));
 
@@ -151,20 +139,27 @@
                 structure = structure.replaceAll(/(?:\r(\d+)\n)/g,
                     (match, placeholder) => "\r" + patches[placeholder] + "\n");
 
+                // masked quotation marks will be restored.
+                structure = structure.replaceAll("\r\\u0022\n", '"');
+                structure = structure.replaceAll("\r\\u0027\n", "'");
+
                 // splices still need to be made scriptable
                 structure = structure.replace(/(\n\r)+/g, " + ");
                 structure = structure.replace(/(^\r)|(\n$)/g, "");
+
+                // CR/LF of markers must be removed so that the end of line is not
+                // interpreted as separation of commands or logic: a\nb == a;b
+                structure = structure.replace(/[\r\n]+/g, " ");
 
                 return structure
 
             case TYPE_TEXT:
             case TYPE_PHRASE:
-            case TYPE_NUMBER:
 
                 // Text vs. Phrase -- because of the different delimiters, two
                 // different terms were needed
 
-                const symbol = ["\"", "\'", ""][type -1];
+                const symbol = ["\'", "\""][type -1];
                 patches.push(symbol + expression + symbol);
                 return "\r" + (patches.length -1) + "\n";
 
@@ -177,21 +172,28 @@
                 // Mask escaped quotes (single and double) so that they are not
                 // mistakenly found by the parser as delimiting string/phrase.
                 // rule: search for an odd number of slashes followed by quotes
-                expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\')/g, "$1$2\\u0027");
-                expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\")/g, "$1$2\\u0022");
+                expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\")/g, "$1$2\r\\u0022\n");
+                expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\')/g, "$1$2\r\\u0027\n");
 
-                // replace all literals "..." / '...' with placeholders
-                // This simplifies later analysis because text can contain
-                // anything and the parser would have to constantly distinguish
-                // between logic and text. If the literals are replaced by
-                // numeric placeholders, only logic remains.
-                expression = expression.replace(/(\')(.*?)(\1)/g,
-                    (match, delimiter, text) => _parse(TYPE_PHRASE, text, patches));
-                expression = expression.replace(/(\")(.*?)(\1)/g,
-                    (match, delimiter, text) => _parse(TYPE_TEXT, text, patches));
+                // Replace all literals "..." / '...' with placeholders. This
+                // simplifies later analysis because text can contain anything
+                // and the parser would have to constantly distinguish between
+                // logic and text. If the literals are replaced by numeric
+                // placeholders, only logic remains. Important is a flexible
+                // processing, because the order of ' and " is not defined.
+                while (true) {
+                    const match = expression.match(/[\'\"]/);
+                    if (match == "\"") {
+                        expression = expression.replace(/(\")(.*?)(\1)/g,
+                            (match, delimiter, text) => _parse(TYPE_TEXT, text, patches));
+                    } else if (match == "\'") {
+                        expression = expression.replace(/(\')(.*?)(\1)/g,
+                            (match, delimiter, text) => _parse(TYPE_PHRASE, text, patches));
+                    } else break;
+                }
 
-                // Without literals, tabs have no relevance and can be replaced
-                // by spaces, and we have and additional internal marker.
+                // without literals, tabs have no relevance and can be replaced
+                // by spaces, and we have and additional internal marker
                 expression = expression.replace(/\t+/g, " ");
 
                 // mapping of keywords to operators
@@ -205,112 +207,34 @@
                     group1 + KEYWORDS[KEYWORDS.indexOf(group2.toLowerCase()) +1]
                 );
 
-                // The next challenge is the tolerant handling of values and
-                // object chains, which is well solved in JSP EL. If a level is
-                // not set in an object chain, then there is no error, but it
-                // continues as if the complete object chain has no value at the
-                // end.
-                //
-                //     a.b.c.d() / a.b.c[7].d() / a.b.c().d() / ...
-                //
-                // If c is not defined, there should be no error and interpreted
-                // as if the object chain had no value at the end. The value in
-                // this implementation should then be undefined. Any methods in
-                // object chain after c are then not called, of course.
-                //
-                // To make this possible without much effort, all object chains
-                // should be encapsulated in a special method that returns the
-                // value undefined in case of ReferenceError. Other errors are
-                // thrown normally.
-                //
-                //     a.b.c[7].d() -> _invoke("a.b.c[7].d()")
-                //
-                // To avoid multiple masking and parsing, however, the code is
-                // described as an anonymous function.
-                //
-                //     a.b.c[7].d() -> _invoke(()=>a.b.c[7].d())
-                //
-                // The challenge in the challenge are the methods and arrays of
-                // the object chains that can contain further object chains. For
-                // this, methods and arrays must be recognized and recursively
-                // prepared. Also unclear is the execution time due to the
-                // numerous internal method calls that eval will contain.
-
-                // To avoid complicated parsing of all brackets (square and
-                // round), bracket expressions that have no other bracket
-                // expressions are iteratively replaced by placeholders \t...\n.
-                // At the end there should be no more brackets. Placeholders can
-                // then be read as a part of the object chain. What simplifies
-                // the boundary (beginning / end) of the object chains.
-
-                for (let counts = -1; counts < patches.length;) {
-                    counts = patches.length;
-                    expression = expression.replace(/(\([^\(\)\[\]]*\))|(\[[^\(\)\[\]]*\])/g, match => {
-                        match = match.replace(/^(.)(.*)(.)$/gs,
-                            (match, group1, group2, group3) =>
-                                group1 + _parse(TYPE_LOGIC, group2 || "", patches) + group3);
-                        patches.push(_fill(match, patches));
-                        return "\t" + (patches.length -1) + "\n";
-                    });
-                }
-
-                patches.push(_fill(_parse(TYPE_LOGIC, expression, patches), patches));
-                return "\r" + (patches.length -1) + "\n";
-
-            case TYPE_LOGIC:
-
-                // What is logic?
-                // A script without brackets.
-
                 // Keywords must be replaced by placeholders so that they are
                 // not interpreted as variables. Keywords are case-insensitive.
                 let pattern = /(^|[^\w\.])(true|false|null|undefined|new|instanceof|typeof)(?=[^\w\.]|$)/ig;
-                expression = expression.replace(pattern, (match, group1, group2) => {
-                    patches.push(group2.toLowerCase());
-                    return (group1 || "") + "\t" + (patches.length -1) + "\n";
-                });
+                expression = expression.replace(pattern, (match, group1, group2) =>
+                    (group1 || "") + group2.toLowerCase());
 
-                // According to the current idea, it is now about contained
-                // object chains. These must be enclosed by a method that can
-                // catch the ReferenceError.
+                // element expressions are translated into JavaScript
                 //
-                // (^|[^\w\.])((?:(?:[_a-z][\w]*)|(?:\t\d+\n))(?:(?:\.+[_a-z][\w]*)|(?:\t\d+\n))*)
-                // (+-1A-----)(---(--+-2A------+)|(--2B----+))(--(--+-3A---------+)|(--+-3B--+))*)
+                //     #element   -> document.getElementById(element)
+                //     #[element] -> document.getElementById(element)
                 //
-                // 1A without lookbehind the non-word character after which an
-                //    object chain can begin.
-                //
-                // 2A start of an object chain with word characters
-                // 2B or start of an object chain with a bracket expression
-                //
-                // 3A in the object chain following word character sequences
-                // 3B ot in the object chain following bracket expressions
+                // The version with square brackets is for more complex element
+                // IDs that do not follow the JavaScript syntax for variables.
+                expression = expression.replace(/#([_a-z]\w*)/ig,
+                    (match, element) =>
+                        "document.getElementById(" + element + ")");
+                expression = expression.replace(/#\[([^\[\]])\]/ig,
+                    (match, element) =>
+                        "document.getElementById(" + element + ")");
 
-                // The code for of the internal invoke method is enclosed with
-                // TAB/LF markers. If an error occurs, the source code is output
-                // along with the error message. With the TAB/LF markers the
-                // additional code can be detected, bounded and removed and the
-                // source code looks more understandable again.
+                // small optimization by merging spaces
+                expression = expression.replace(/ {2,}/g, " ");
 
-                pattern = /(^|[^\w\.])((?:(?:[_a-z][\w]*)|(?:\t\d+\n))(?:(?:\.+[_a-z][\w]*)|(?:\t\d+\n))*)/ig;
-                return expression.replace(pattern, (match, group1, group2) => {
-                    group2 = _fill(group2, patches);
-                    group2 = "\t_invoke(()=>\n" + group2 + "\t)\n";
-                    patches.push(group2);
-                    return (group1 || "") + "\t" + (patches.length -1) + "\n";
-                });
+                patches.push(_fill(expression, patches));
+                return "\r" + (patches.length -1) + "\n";
 
             default:
                 throw new Error("Unexpected script type");
-        }
-    };
-
-    const _invoke = (invocation) => {
-        try {return invocation.call(window);
-        } catch (error) {
-            if (error instanceof ReferenceError)
-                return;
-            throw error;
         }
     };
 })();
