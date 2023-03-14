@@ -210,8 +210,8 @@
                 // Keywords must be replaced by placeholders so that they are
                 // not interpreted as variables. Keywords are case-insensitive.
                 expression = expression.replace(/(^|[^\w\.])(true|false|null|undefined|new|instanceof|typeof)(?=[^\w\.]|$)/ig,
-                    (match, group1, group2) =>
-                        (group1 || "") + group2.toLowerCase());
+                    (match, group1 = "", group2 = "") =>
+                        group1 + group2.toLowerCase());
 
                 // (?...) tolerates the enclosed code. If an error occurs there,
                 // the expression will be false, but will not cause the error
