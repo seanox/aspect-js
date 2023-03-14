@@ -136,19 +136,19 @@
     </script>
   </head>
   <body>
-    <div id="OutputA1">{{tempA}}</div>
+    <div id="OutputA1">{{(?tempA)}}</div>
     <div iterate={{tempA:TestModel.listA}}>
       <input id="a:{{tempA.index}}" type="text" value="{{tempA.index}}: {{tempA.item}} of {{tempA.data}}">
     </div>
-    <div id="OutputA2">{{tempA}}</div>
+    <div id="OutputA2">{{(?tempA)}}</div>
 
     <div id="OutputB1">{{tempB()}}</div>
     <div iterate={{tempB:TestModel.listB}}>
       <input id="b:{{tempB.index}}" type="text" value="{{tempB.index}}: {{tempB.item}} of {{tempB.data}}">
     </div>
     <div id="OutputB2">{{tempB()}}</div>
-    
-    {{s1:(s1 || 0) +1}}
+
+    {{s1:((?s1) || 0) +1}}
     S:{{s1}}:<span id="OutputS1" iterate="{{tempS:TestModel.listA}}" import="{{testS(s1)}}">---</span>
     
     <table>
