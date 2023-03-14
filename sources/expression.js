@@ -243,10 +243,10 @@
                 //
                 // The version with square brackets is for more complex element
                 // IDs that do not follow the JavaScript syntax for variables.
-                expression = expression.replace(/#+([_a-z]\w*)/ig,
+                expression = expression.replace(/#([_a-z]\w*)/ig,
                     (match, element) =>
                         "document.getElementById(\"" + element + "\")");
-                expression = expression.replace(/#+\[([^\[\]]*)\]/ig,
+                expression = expression.replace(/#\[([^\[\]]*)\]/ig,
                     (match, element) =>
                         "document.getElementById(\"" + element + "\")");
 
