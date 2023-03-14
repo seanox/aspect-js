@@ -246,7 +246,7 @@
                 expression = expression.replace(/#+([_a-z]\w*)/ig,
                     (match, element) =>
                         "document.getElementById(\"" + element + "\")");
-                expression = expression.replace(/#+\[([^\[\]])\]/ig,
+                expression = expression.replace(/#+\[([^\[\]]*)\]/ig,
                     (match, element) =>
                         "document.getElementById(\"" + element + "\")");
 
