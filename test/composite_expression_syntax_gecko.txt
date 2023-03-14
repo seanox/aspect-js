@@ -140,11 +140,12 @@
 	document.getElementById("HiddenField").value()
     B3: Test-HF
 
-    C1: [object HTMLInputElement]
-    C2: document.getElementById(...).value is not a function
-	document.getElementById("HiddenField").value()
-    C3: document.getElementById(...).value is not a function
-	document.getElementById("HiddenField").value()
+    C1: private names aren't valid in this context
+	#document.getElementById("HiddenField")
+    C2: private names aren't valid in this context
+	#document.getElementById("HiddenField").value()
+    C3: private names aren't valid in this context
+	#document.getElementById("HiddenField").value()
 
     D1:
 
