@@ -40,6 +40,11 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
+CR: Composite: Optimization meta directives
+    - can now be used anywhere in the code, also in combination with conditions
+    - can now also be separated from the next command with a semicolon
+CR: Composite: Added the #export meta directive for JavaScript modules
+    Makes local variables and constants from modules usable in the global namespace.
 CR: Datasource: Optimization when loading module resources
     - omission of the HEAD request
     - omission of XML error when the request receives an error page
