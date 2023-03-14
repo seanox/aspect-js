@@ -22,8 +22,13 @@ CR: SiteMap: Inactive by default
 CR: Expression: Extension of the syntax for elements and variables
     - support of the underscore at the beginning
     - support of complex element syntax #[...]
-CR: Expression: Optimization
+CR: Expression: Optimization (consequent new implementation)
     - complete new approach for parser and interpreter
+CR: Expression: Omission of automatic use of get and is methods for fields
+    - since getters and setters are available in JavaScript
+CR: Expression: omission of tolerance for undefined parts in object chains (like JSP EL)
+    - is too extensive in JavaScript with ReferenceError/TypeError/undefined/false/null/...
+    - is replaced by (?...), in case of error this syntax in the brackets will return false
 CR: Composite: Errors during rendering are output in the view
     Rendering does not abort.
     Errors are also logged as errors on the console.

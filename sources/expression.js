@@ -33,7 +33,7 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300309
+ * @version 1.6.0 202300314
  */
 (() => {
 
@@ -140,8 +140,8 @@
                     (match, placeholder) => "\r" + patches[placeholder] + "\n");
 
                 // masked quotation marks will be restored.
-                structure = structure.replaceAll("\r\\u0022\n", '"');
-                structure = structure.replaceAll("\r\\u0027\n", "'");
+                structure = structure.replaceAll("\r\\u0022\n", '\\"');
+                structure = structure.replaceAll("\r\\u0027\n", "\\'");
 
                 // splices still need to be made scriptable
                 structure = structure.replace(/(\n\r)+/g, " + ");
@@ -213,6 +213,29 @@
                     (match, group1, group2) =>
                         (group1 || "") + group2.toLowerCase());
 
+                // (?...) tolerates the enclosed code. If an error occurs there,
+                // the expression will be false, but will not cause the error
+                // itself. This is convenient if you want check/use references
+                // or variables that do not yet exist or errors of methods are
+                // to be suppressed.
+
+                // To avoid complicated parsing of round brackets, bracket
+                // expressions that have no other round bracket expressions are
+                // iteratively replaced by placeholders \t...\n. At the end
+                // there should be no more brackets.
+
+                if (expression.match(/\(\s*\?/)) {
+                    for (let counts = -1; counts < patches.length;) {
+                        counts = patches.length;
+                        expression = expression.replace(/(\([^\(\)]*\))/g, match => {
+                            match = match.replace(/^\( *\?+ *(.*?) *\)$/, (match, logic) =>
+                                "_tolerate(()=>(" + logic + "))");
+                            patches.push(_fill(match, patches));
+                            return "\t" + (patches.length -1) + "\n";
+                        });
+                    }
+                }
+
                 // element expressions are translated into JavaScript
                 //
                 //     #element   -> document.getElementById(element)
@@ -235,6 +258,13 @@
 
             default:
                 throw new Error("Unexpected script type");
+        }
+    };
+
+    const _tolerate = (invocation) => {
+        try {return invocation.call(window);
+        } catch (error) {
+            return false;
         }
     };
 })();
