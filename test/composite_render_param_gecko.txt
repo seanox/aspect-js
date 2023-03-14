@@ -1,21 +1,24 @@
+
     gecko
     ----
     expected expression, got ':'
 	:
     expected expression, got ':'
-	 :
+	:
     expected expression, got ':'
-	 : 
+	:
     expected expression, got ':'
-	:  
+	: 
     A:1: 
-    A:2: 
+    A:2: Hallo is not defined
+	Hallo
     A:3: Hallo
     <article id="AB">
       AA:1: Hallo
-      AB:1:    
+      AB:1: 
       AA:2: Hallo
-      AB:2: 
+      AB:2: Hallo is not defined
+	Hallo
       AA:3: Hallo
       AB:3: Welt
       AA:4: Hallo

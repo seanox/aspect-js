@@ -52,14 +52,14 @@
     {{n: }}
     {{n}}
   
-    A:1: {{globalA}}
+    A:1: {{(?globalA) || ''}}
     {{globalA:Hallo}}
     A:2: {{globalA}}
     {{globalA:'Hallo'}}
     A:3: {{globalA}}
     <article id="AB">
       AA:1: {{globalA}}
-      AB:1: {{globalAB}}   
+      AB:1: {{(?globalAB) || ''}}
       {{globalAB:Hallo}}
       AA:2: {{globalA}}
       AB:2: {{globalAB}}
