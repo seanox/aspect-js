@@ -15,37 +15,38 @@
 
         Test.activate();
 
-        const TestModel_1 = {};
-        TestModel_1.field_1 = "f1";
-        TestModel_1.field_2 = "f2";
-        TestModel_1.method_1 = () => {
-            return "m1";
-        };
-        TestModel_1.method_2 = (value_1) => {
-            return "m2" + value_1;
-        };
-        TestModel_1.getField_3 = () => {
-            return "f3";
-        };
-        TestModel_1.getField_11 = () => {
-            return [{x:{y:"f11[0]->x->y"}}];
-        };
-        TestModel_1.getField_12 = () => {
-            return [{x:[{y:"f12[0]->x->y"}]}];
+        const TestModel_1 = {
+            field_1: "f1",
+            field_2: "f2",
+            method_1() {
+                return "m1";
+            },
+            method_2(value_1) {
+                return "m2" + value_1;
+            },
+            get field_3() {
+                return "f3";
+            },
+            get field_11() {
+                return [{x:{y:"f11[0]->x->y"}}];
+            },
+            get field_12() {
+                return [{x:[{y:"f12[0]->x->y"}]}];
+            }
         };
 
         const timing = new Date().getTime();
         Test.create({test() {
             Assert.assertTrue((new Date().getTime() -timing) < 2500);
         }});
-        Test.create({timeout:500, test() {
+        Test.create({timeout:250, test() {
             let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
-            for (let loop = 0; loop < 1750; loop++)
+            for (let loop = 0; loop < 2500; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }});
-        Test.create({timeout:500, test() {
-                let expression = document.querySelector("script[type='text/expression']");
+        Test.create({timeout:250, test() {
+            let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (let loop = 0; loop < 25000; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
