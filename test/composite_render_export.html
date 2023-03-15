@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        const capture = new Capture();
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            capture.snap();
+            const count = capture.patterns().length;
+            if (capture.size() == count)
+                Test.start();
+            if (capture.size() > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
+        });
+
+        Test.create({test() {
+            capture.validate();
+        }});
+    </script>
+    <script type="text/test">
+      before import + export
+      ----
+      exampleE_A1: false
+      exampleE_A2: false
+      exampleE_A3: false
+      exampleE_A4: false
+      exampleE_B1: false
+      exampleE_B2: false
+      exampleE_B3: false
+      exampleE_B4: false
+      exampleE_C1: false
+      exampleE_C2: false
+      exampleE_C3: false
+      exampleE_C4: false
+      import + export
+      ----
+      after import + export
+      ----
+      exampleE_A1: {{(?exampleE_A1)}}
+      exampleE_A2: {{(?exampleE_A2)}}
+      exampleE_A3: {{(?exampleE_A3)}}
+      exampleE_A4: {{(?exampleE_A4)}}
+      exampleE_B1: {{(?exampleE_B1)}}
+      exampleE_B2: {{(?exampleE_B2)}}
+      exampleE_B3: {{(?exampleE_B3)}}
+      exampleE_B4: {{(?exampleE_B4)}}
+      exampleE_C1: {{(?exampleE_C1)}}
+      exampleE_C2: {{(?exampleE_C2)}}
+      exampleE_C3: {{(?exampleE_C3)}}
+      exampleE_C4: {{(?exampleE_C4)}}
+      X: ReferenceError: exampleE_C1 is not defined
+    </script>
+    <script type="text/test">
+      before import + export
+      ----
+      exampleE_A1: false
+      exampleE_A2: false
+      exampleE_A3: false
+      exampleE_A4: false
+      exampleE_B1: false
+      exampleE_B2: false
+      exampleE_B3: false
+      exampleE_B4: false
+      exampleE_C1: false
+      exampleE_C2: false
+      exampleE_C3: false
+      exampleE_C4: false
+      import + export
+      ----
+      after import + export
+      ----
+      exampleE_A1: {{(?exampleE_A1)}}
+      exampleE_A2: {{(?exampleE_A2)}}
+      exampleE_A3: {{(?exampleE_A3)}}
+      exampleE_A4: {{(?exampleE_A4)}}
+      exampleE_B1: {{(?exampleE_B1)}}
+      exampleE_B2: {{(?exampleE_B2)}}
+      exampleE_B3: {{(?exampleE_B3)}}
+      exampleE_B4: {{(?exampleE_B4)}}
+      exampleE_C1: {{(?exampleE_C1)}}
+      exampleE_C2: {{(?exampleE_C2)}}
+      exampleE_C3: {{(?exampleE_C3)}}
+      exampleE_C4: {{(?exampleE_C4)}}
+      X: ReferenceError: exampleE_C1 is not defined
+    </script>
+    <script type="text/test">
+      before import + export
+      ----
+      exampleE_A1: false
+      exampleE_A2: false
+      exampleE_A3: false
+      exampleE_A4: false
+      exampleE_B1: false
+      exampleE_B2: false
+      exampleE_B3: false
+      exampleE_B4: false
+      exampleE_C1: false
+      exampleE_C2: false
+      exampleE_C3: false
+      exampleE_C4: false
+      import + export
+      ----
+      after import + export
+      ----
+      exampleE_A1: {{(?exampleE_A1)}}
+      exampleE_A2: {{(?exampleE_A2)}}
+      exampleE_A3: {{(?exampleE_A3)}}
+      exampleE_A4: {{(?exampleE_A4)}}
+      exampleE_B1: {{(?exampleE_B1)}}
+      exampleE_B2: {{(?exampleE_B2)}}
+      exampleE_B3: {{(?exampleE_B3)}}
+      exampleE_B4: {{(?exampleE_B4)}}
+      exampleE_C1: {{(?exampleE_C1)}}
+      exampleE_C2: {{(?exampleE_C2)}}
+      exampleE_C3: {{(?exampleE_C3)}}
+      exampleE_C4: {{(?exampleE_C4)}}
+      X: ReferenceError: exampleE_C1 is not defined
+    </script>
+    <script type="text/test">
+      before import + export
+      ----
+      exampleE_A1: false
+      exampleE_A2: false
+      exampleE_A3: false
+      exampleE_A4: false
+      exampleE_B1: false
+      exampleE_B2: false
+      exampleE_B3: false
+      exampleE_B4: false
+      exampleE_C1: false
+      exampleE_C2: false
+      exampleE_C3: false
+      exampleE_C4: false
+      import + export
+      ----
+      after import + export
+      ----
+      exampleE_A1: A-AAA
+      exampleE_A2: [object Object]
+      exampleE_A3: () => {return "A-CCC";}
+      exampleE_A4: false
+      exampleE_B1: B-AAA
+      exampleE_B2: [object Object]
+      exampleE_B3: () => {return "B-CCC";}
+      exampleE_B4: false
+      exampleE_C1: false
+      exampleE_C2: false
+      exampleE_C3: false
+      exampleE_C4: false
+      X: ReferenceError: exampleE_C1 is not defined
+    </script>
+  </head>
+  <body>
+
+    before import + export
+    ----
+    exampleE_A1: {{(?exampleE_A1)}}
+    exampleE_A2: {{(?exampleE_A2)}}
+    exampleE_A3: {{(?exampleE_A3)}}
+    exampleE_A4: {{(?exampleE_A4)}}
+
+    exampleE_B1: {{(?exampleE_B1)}}
+    exampleE_B2: {{(?exampleE_B2)}}
+    exampleE_B3: {{(?exampleE_B3)}}
+    exampleE_B4: {{(?exampleE_B4)}}
+
+    exampleE_C1: {{(?exampleE_C1)}}
+    exampleE_C2: {{(?exampleE_C2)}}
+    exampleE_C3: {{(?exampleE_C3)}}
+    exampleE_C4: {{(?exampleE_C4)}}
+
+    import + export
+    ----
+    <div id="moduleExport" composite></div>
+
+    after import + export
+    ----
+    exampleE_A1: {{(?exampleE_A1)}}
+    exampleE_A2: {{(?exampleE_A2)}}
+    exampleE_A3: {{(?exampleE_A3)}}
+    exampleE_A4: {{(?exampleE_A4)}}
+
+    exampleE_B1: {{(?exampleE_B1)}}
+    exampleE_B2: {{(?exampleE_B2)}}
+    exampleE_B3: {{(?exampleE_B3)}}
+    exampleE_B4: {{(?exampleE_B4)}}
+
+    exampleE_C1: {{(?exampleE_C1)}}
+    exampleE_C2: {{(?exampleE_C2)}}
+    exampleE_C3: {{(?exampleE_C3)}}
+    exampleE_C4: {{(?exampleE_C4)}}
+  </body>
+</html>
