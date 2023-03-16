@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230305
+ * @version 1.6.0 20230316
  */
 (() => {
 
@@ -1192,12 +1192,12 @@
          * @param lock
          */
         render(selector, lock) {
-            
-            if (!selector)
-                return;
 
             Composite.render.queue = Composite.render.queue || [];
-            
+            if (!selector
+                    && Composite.render.queue.length <= 0)
+                return;
+
             // The lock locks concurrent render requests. Concurrent rendering
             // causes unexpected states due to manipulations at the DOM. HTML
             // elements that are currently being processed can be omitted or
@@ -1207,8 +1207,12 @@
                     && Composite.render.lock !== lock) {
                 if (!Composite.render.queue.includes(selector))
                     Composite.render.queue.push(selector);
+                Composite.asynchron(Composite.render);
                 return;
             }
+
+            if (!selector)
+                selector = Composite.render.queue[0];
 
             lock = Composite.lock(Composite.render, selector);
 
@@ -1919,7 +1923,7 @@
                 if (selector.nodeName.match(Composite.PATTERN_SCRIPT)) {
                     const type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                     if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
-                        try {_render_include_eval(selector.textContent);
+                        try {_render_macro_eval(selector.textContent);
                         } catch (exception) {
                             throw new Error("Composite JavaScript", exception);
                         }
@@ -1955,7 +1959,14 @@
                 if (origin instanceof Element)
                     origin.innerText = "Error: " + (exception.message.match(/(\{\{|\}\})/)
                         ? "Invalid expression" : exception.message);
+
             } finally {
+
+                // The queue is used to prevent elements from being registered for
+                // update multiple times during a render cycle when a lock exists.
+                // When the selector is rendered, any queued jobs are removed.
+                Composite.render.queue = Composite.render.queue.filter(entry => entry !== origin);
+
                 lock.release();
             }
         }
@@ -2341,7 +2352,7 @@
 
             const content = _render_cache[resource];
             if (resource.match(/\.js$/)) {
-                try {_render_include_eval(content);
+                try {_render_macro_eval(content);
                 } catch (exception) {
                     console.error(resource, exception.name + ": " + exception.message);
                     throw exception;
@@ -2391,48 +2402,116 @@
     };
 
     /**
-     * Executes the import of JavaScript und Composite JavaScript.
-     * As a special feature, Composite JavaScript supports meta-directives.
-     * 
+     * As a special feature, Composite JavaScript supports macros. Macros are a
+     * very weak implementation that does not consider literals, for example.
+     *
+     * Macros are based on a keyword starting with a hash symbol followed by
+     * arguments separated by spaces. Macros end with the next line break, a
+     * semicolon or with the end of the file.
+     *
+     *
      *     #import
      *     ----
      * Expects a space-separated list of composite modules whose path must be
-     * relative to the URL. 
-     * 
-     * Composite modules consist of the optional resources CSS, JS and HTML.
-     * The #import meta-directive can only load CSS and JS. The behavior is the
-     * same as when loading composites in the markup. The server status 404 does
-     * not cause an error, because all resources of a composite are optional,
-     * also JavaScript. Server states other than 200 and 404 cause an error. CSS
+     * relative to the URL.
+     *
+     *     #import io/api/connector and/much more
+     *
+     * Composite modules consist of the optional resources CSS, JS and HTML. The
+     * #import macro can only load CSS and JS. The behavior is the same as when
+     * loading composites in the markup. The server status 404 does not cause an
+     * error, because all resources of a composite are optional, also
+     * JavaScript. Server states other than 200 and 404 cause an error. CSS
      * resources are added to the HEAD and lead to an error if no HEAD element
      * exists in the DOM. Markup (HTML) is not loaded because no target can be
-     * set for the output. The meta directive can be used multiple times in the
-     * meta section of a Composite JavaScript.    
-     * 
-     * Meta directives can be used only at the beginning of the composite
-     * JavaScript. The meta-section ends with the first comment or JavaScript
-     * line.
+     * set for the output. The macro can be used multiple in the Composite
+     * JavaScript.
+     *
+     *
+     *     #export
+     *     ----
+     * Expects a space-separated list of exports. Export are variables or
+     * constants in a module that are made usable for the global namespace.
+     *
+     *     #export connector and much more
+     *
+     * Primarily, an export argument is the name of the variable or constant in
+     * the module. Optionally, the name can be extended by an @ symbol to
+     * include the destination in the global namespace.
+     *
+     *     #export connector@io.example
      */
-    const _render_include_eval = (script) => {
-        script = script.split(/[\r\n]+/);
-        while (script && script.length > 0) {
-            if (!script[0].match(/(^\s*(#import(\s+.*)*)*$)/))
-                break;
-            let line = script.shift();
-            if (!line.trim())
-                continue;
-            line = line.replace(/^\s*#import(\s+|$)/, "");
-            line.split(/\s+/).forEach((include) => {
-                if (!include.match(/^\w+(\/\w+)*$/))
-                    throw new Error("Invalid import" + (include ? ": " + include : ""));
-                _render_include(...(include.split(/\/+/)));
+    const _render_macro_eval = (script) => {
+
+        // (^|[^\w#])#+(import|export)(?:[ \t]+(.*?)\s*)?(?=[\r\n;]|$)
+        // (+-A----+)B+-C-----------++-D-------+-E-+--+-F------------+
+        //
+        // A lookbehind, non-word character to separate from preceding commands
+        // B macro marker
+        // C macro keyword
+        // D space(s) to separate the macro arguments
+        // E macro arguments
+        // F lookahead for end macro
+
+        script = script.replace(/(^|[^\w#])#+(import|export)(?:[ \t]+(.*?)\s*)?(?=[\r\n;]|$)/igm,
+            (match, group1 = "", group2 = "", group3 = "") => {
+
+                group2 = group2.toLowerCase();
+
+                if (!group3)
+                    throw new Error("Invalid " + group2);
+                group3 = group3.replace(/\s+/g, " ").trim();
+                const macro = "#" + group2 + " " + group3;
+
+                if (group2 === "import") {
+                    if (!group3.match(/^(\w+(\/\w+)*)(\s+(\w+(\/\w+)*))*$/))
+                        throw new Error("Invalid import: " + macro);
+                    const imports = [];
+                    group3.split(/\s+/).forEach(entry => imports.push("\"" + entry + "\""));
+                    return group1 + "_render_macro_import(...[" + imports.join(",") + "])";
+                }
+
+                const exports = [];
+                const pattern = /^([_a-z]\w*)(?:@((?:[_a-z]\w*)(?:\.[_a-z]\w*)*))?$/i;
+                group3.split(/\s+/).forEach(entry => {
+                    const match = entry.match(pattern);
+                    if (!match)
+                        throw new Error("Invalid export: " + macro);
+                    let parameters = [match[1], "\"" + match[1] + "\""];
+                    if (match[2])
+                        parameters.push("\"" + match[1] + "\"");
+                    exports.push("[" + parameters.join(",") + "]");
+                });
+                return group1 + "_render_macro_export(...[" + exports.join(",") + "])";
             });
-        }
-        script = script.join("\r\n").trim();
-        if (script)
+
+        if (script.trim())
             eval(script);
     };
-    
+
+    const _render_macro_import = (...imports) => {
+        // Because it is an internal method, an additional validation of the
+        // exports as data structure was omitted.
+        imports.forEach(include => _render_include(...include.split(/\/+/)));
+    };
+
+    const _render_macro_export = (...exports) => {
+        // Because it is an internal method, an additional validation of the
+        // exports as data structure was omitted.
+        exports.forEach(parameters => {
+            let context = window;
+            (parameters[2] ? parameters[2].split(/\./) : []).forEach(parameter => {
+                if (typeof context[parameter] === "undefined")
+                    context[parameter] = {};
+                context = context[parameter]
+            });
+            if (typeof context[parameters[1]] !== "undefined")
+                throw new Error("Context for export is already in use: "
+                    + parameters[1] + (parameters[2] ? "@" + parameters[2] : ""));
+            context[parameters[1]] = parameters[0];
+        });
+    }
+
     let _serial = 0;
     
     /**
