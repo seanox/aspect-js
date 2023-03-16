@@ -42,10 +42,10 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
-CR: Composite: Optimization meta directives
+CR: Composite: Optimization macros for Composite JavaScript
     - can now be used anywhere in the code, also in combination with conditions
     - can now also be separated from the next command with a semicolon
-CR: Composite: Added the #export meta directive for JavaScript modules
+CR: Composite: Added macro #export for Composite JavaScript
     Makes local variables and constants from modules usable in the global namespace.
 CR: Datasource: Optimization when loading module resources
     - omission of the HEAD request
@@ -168,7 +168,7 @@ BF: Modules: Optimization of JavaScript processing to support import and export
 BF: Composite Render: Optimization of JavaScript processing to support import and export
 BF: Composite Events: Correction of the callback of HTTP events  
 BF: Composite Mount: Correction to find event methods also in prototypes
-BF: Composite Modules: Correction of the script processing of the #import meta-directive
+BF: Composite Modules: Correction of the script processing of the #import macro
 BF: Composite MutationObserver: Correction for recognition of expressions in text nodes
 CR: MVC Path: Simplification of the syntax restrictions    
     The syntax is more consistently based on XML entities (DOM).
@@ -194,8 +194,8 @@ CR: Composite Render: Simplification of the syntax restrictions for custom tags
     The custom tag is based on a word (_ a-z A-Z 0-9) and additionally - characters
     and can now begin with any word character (_ a-z A-Z 0-9).
 CR: Composite Modules: Change so that the common composite is now loaded before the first rendering
-CR: Composite Modules: Added the meta directive #import to import additional composites/modules
-    Meta directives can be used only at the beginning of the Composite JavaScript.
+CR: Composite Modules: Added the macro #import to import additional composites/modules
+    Macros can be used only at the beginning of the Composite JavaScript.
     The meta-section ends with the first comment or JavaScript line.
 CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
 CR: DataSource Fetch: Omission of the parameter raw
