@@ -121,6 +121,9 @@
 
     compliant("Composite");
     compliant(null, window.Composite = {
+
+        // Against the trend, the constants of the composite are public so that
+        // they can be used by extensions.
             
         /** Path of the Composite for: modules (sub-directory of work path) */
         get MODULES() {return window.location.combine(window.location.pathcontext, "/modules");},
@@ -2378,6 +2381,7 @@
         // composite id or the object is an element object
         if (lookup === undefined
                 || lookup instanceof Element
+                || lookup instanceof HTMLCollection
                 || resource === "common")
             loading(context + ".js");
 
