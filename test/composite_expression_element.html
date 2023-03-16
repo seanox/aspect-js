@@ -20,10 +20,13 @@
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             capture.snap();
             capture.snap(document.querySelector("#InputTextA").getAttribute("value"));
-            if (capture.size() == 2)
+            if (capture.size() === 2)
                 document.querySelector("#InputTextA").typeValue("Hallo Berlin", true);
-            if (capture.size() == capture.patterns().length)
+            const count = capture.patterns().length;
+            if (capture.size() === count)
                 Test.start();
+            if (capture.size() > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
         });
 
         Test.create({test() {
