@@ -47,7 +47,7 @@
  * associated proxies when not in use.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230304
+ * @version 1.6.0 20230316
  */
 (() => {
 
@@ -266,10 +266,10 @@
                     // does not block unnecessarily.
                     Composite.asynchron((selector, target, key, notifications) => {
 
-                        // An update of the recipients is only performed outside
-                        // the rendering and if the key exists in the object.
-                        if (selector !== null
-                                || !target.hasOwnProperty(key))
+                        // Update only if the key exists in the object.
+                        // Recursions during rendering are prevented via the
+                        // queue and the lock in during rendering.
+                        if (!target.hasOwnProperty(key))
                             return;
 
                         const recipients = this.notifications.get(key) || new Map();

@@ -5,14 +5,16 @@ BF: Review: Optimization and corrections
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected when the module is included, an error is output.
 BF: Composite: Support of const for models also in combined with Namespace.create(...)
-BF: Composite: Validation with message and notification also work without model
-BF: Composite: Child elements in a condition are mounted
+BF: Composite: Correction of validation with message and notification without model
+BF: Composite: Correction of mounting of child elements in a condition
+BF: Composite: Correction of the queue during rendering when a lock exists
 BF: Test: Correction of wrong output of Element.prototype.toPlainString()
 BF: Reactive: Correction for the use of arrays
     The data type incorrectly changed from array to object.
 BF: Reactive: Correction/optimization for elements with iterate
     The renderer always updates the top element with iterate in the DOM so that
     temporary variables are available in the expressions.
+BF: Reactive: Correction of recursive triggered updates
 CR: Reactive: Optimization of object-model-view decoupling
 CR: Reactive: Refactoring to distinguish from frameworks with similar name
 CR: SiteMap: Inactive by default
