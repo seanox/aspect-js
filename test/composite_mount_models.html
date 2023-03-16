@@ -23,24 +23,24 @@
         const capture = new Capture();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             capture.snap();
-            if (capture.size() == 1)
+            if (capture.size() === 1)
                 Composite.asynchron(() => {
                     document.querySelector("#button_1_C").click();
                 });
-            else if (capture.size() == 3)
+            else if (capture.size() === 3)
                 Composite.asynchron(() => {
                     document.querySelector("#model_2_B\\:model_2_C\\:button_2_C\\@model_2_A").click();
                 });
-            else if (capture.size() == 5)
+            else if (capture.size() === 5)
                 Composite.asynchron(() => {
                     document.querySelector("#button_2_C").click();
                 });
-            else if (capture.size() == 7)
+            else if (capture.size() === 7)
                 Composite.asynchron(() => {
                     document.querySelector("#button_1_C\\@model_1_C").click();
                 });
             const count = capture.patterns().length;
-            if (capture.size() == count)
+            if (capture.size() === count)
                 Test.start();
             if (capture.size() > count)
                 Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);

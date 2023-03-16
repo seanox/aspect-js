@@ -30,7 +30,7 @@
             }
             if (snapshots.length < count)
                 Composite.asynchron(Composite.render, document.body);
-            if (snapshots.length == count)
+            if (snapshots.length === count)
                 Composite.asynchron(Test.start);
             if (snapshots.length > count)
                 Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);

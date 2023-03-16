@@ -20,11 +20,11 @@
             capture.snap();
             const count = capture.patterns().length;
             console.log(capture.size())
-            if (capture.size() == 1)
+            if (capture.size() === 1)
                 window.setTimeout(() =>  {
                     model.list[1].text = "D";
                 }, 500);
-            if (capture.size() == count)
+            if (capture.size() === count)
                 Test.start();
         });
 

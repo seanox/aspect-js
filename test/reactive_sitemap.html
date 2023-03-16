@@ -20,7 +20,7 @@
             capture.snap();
             if (document.querySelector("input"))
                 capture.snap(document.querySelector("input").value);
-            if (capture.size() == capture.patterns().length)
+            if (capture.size() === capture.patterns().length)
                 Test.start();
         });
 

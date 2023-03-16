@@ -23,7 +23,7 @@
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
-            if (snapshots.length == 1)
+            if (snapshots.length === 1)
                 Test.start();
             if (snapshots.length >= 1)
                 Assert.assertEquals("expected {1} steps but was {2}", 1, snapshots.length);

@@ -61,7 +61,7 @@
             capture.snap();
             if (capture.snapshots().length < capture.patterns().length)
                 Composite.asynchron(Composite.render, document.body);
-            if (capture.snapshots().length == capture.patterns().length)
+            if (capture.snapshots().length === capture.patterns().length)
                 Test.start();
             if (capture.snapshots().length > capture.size())
                 Assert.assertEquals("expected {1} steps but was {2}", 5, capture.patterns().length);

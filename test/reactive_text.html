@@ -18,7 +18,7 @@
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
             const count = document.querySelectorAll("script[type=\"text/test\"]").length;
-            if (snapshots.length == count)
+            if (snapshots.length === count)
                 Test.start();
             if (snapshots.length >= count)
                 Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);
