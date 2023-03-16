@@ -2407,7 +2407,8 @@
 
     /**
      * As a special feature, Composite JavaScript supports macros. Macros are a
-     * very weak implementation that does not consider literals, for example.
+     * very weak implementation that does not consider literals or comments, for
+     * example.
      *
      * Macros are based on a keyword starting with a hash symbol followed by
      * arguments separated by spaces. Macros end with the next line break, a
