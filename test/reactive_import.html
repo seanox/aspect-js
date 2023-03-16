@@ -10,21 +10,22 @@
       }
     </style>
     <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
     <script type="text/javascript">
         Test.activate();
 
-        const snapshots = [];
+        const capture = new Capture();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
-            const snapshot = document.body.textContent.trim();
-            snapshots.push(snapshot);
-            if (snapshots.length == 5)
+            capture.snap();
+            const count = capture.patterns().length;
+            if (capture.size() === count)
                 Test.start();
-            if (snapshots.length > 5)
-                Assert.assertEquals("expected {1} steps but was {2}", 5, snapshots.length);
+            if (capture.size() > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
         });
 
         Test.create({test() {
-            Assert.assertSameTo("script[type='text/test']", snapshots[4])
+            capture.validate();
         }});
 
         Test.create({test() {
@@ -35,6 +36,26 @@
             valueA: "hallo"
         }.reactive();
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000)
+    </script>
+    <script type="text/test">
+      _A_hallo_
+      Value of variable modelA.valueA: {{modelA.valueA}}
+    </script>
+    <script type="text/test">
+      _A_hallo_
+      Value of variable modelA.valueA: hallo
+    </script>
+    <script type="text/test">
+      _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: hallo
+    </script>
+    <script type="text/test">
+      _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: hallo
+    </script>
+    <script type="text/test">
+      _A_a2b4c6d8e0_
+      Value of variable modelA.valueA: a2b4c6d8e0
     </script>
     <script type="text/test">
       _A_a2b4c6d8e0_
