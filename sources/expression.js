@@ -33,7 +33,7 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300314
+ * @version 1.6.0 202300316
  */
 (() => {
 
@@ -246,7 +246,7 @@
                 expression = expression.replace(/#([_a-z]\w*)/ig,
                     (match, element) =>
                         "document.getElementById(\"" + element + "\")");
-                expression = expression.replace(/#\[([^\[\]]*)\]/ig,
+                expression = expression.replace(/#\[([^\[\]]*)\]/g,
                     (match, element) =>
                         "document.getElementById(\"" + element + "\")");
 
