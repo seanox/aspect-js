@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230314
+ * @version 1.6.0 20230317
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
@@ -367,9 +367,8 @@ compliant(null, Math.unique = (size) => {
  */
 (() => {
     compliant("Math.serial");
-    compliant(null, Math.serial = () => {
-        return _serial.toString();
-    });
+    compliant(null, Math.serial = () =>
+        _serial.toString());
     const _offset = -946684800000;
     const _serial = {timing:new Date().getTime() + _offset, number:0,
         toString() {
@@ -457,9 +456,9 @@ compliant(null, String.prototype.decodeHex = function() {
 compliant("String.prototype.encodeBase64");
 compliant(null, String.prototype.encodeBase64 = function() {
     try {
-        return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, code) => {
-            return String.fromCharCode("0x" + code);
-        }));
+        return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g,
+            (match, code) =>
+                String.fromCharCode("0x" + code)));
     } catch (error) {
         throw new Error("Malformed character sequence");
     }
@@ -472,9 +471,8 @@ compliant(null, String.prototype.encodeBase64 = function() {
 compliant("String.prototype.decodeBase64");
 compliant(null, String.prototype.decodeBase64 = function() {
     try {
-        return decodeURIComponent(atob(this).split("").map((code) => {
-            return "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2);
-        }).join(""));
+        return decodeURIComponent(atob(this).split("").map((code) =>
+            "%" + ("00" + code.charCodeAt(0).toString(16)).slice(-2)).join(""));
     } catch (error) {
         throw new Error("Malformed character sequence");
     }
@@ -555,8 +553,7 @@ Object.defineProperty(window.location, "pathcontext", {
  * The result will always start with a slash but ends without it.
  */
 compliant("window.location.combine");
-compliant(null, window.location.combine = (...paths) => {
-    return "/" + paths.join("/")
+compliant(null, window.location.combine = (...paths) =>
+    "/" + paths.join("/")
         .replace(/[\/\\]+/g, "/")
-        .replace(/(^\/+)|(\/+$)/g, "");
-});
+        .replace(/(^\/+)|(\/+$)/g, ""));

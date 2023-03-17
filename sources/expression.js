@@ -33,7 +33,7 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300316
+ * @version 1.6.0 202300317
  */
 (() => {
 
@@ -97,9 +97,8 @@
             + KEYWORDS.filter((keyword, index) => index % 2 === 0).join("|")
             + ")(?=[^\\w\\.]|$)", "ig");
 
-    const _fill = (expression, patches) => {
-        return expression.replace(/[\t\r](\d+)\n/g, (match, id) => patches[id]);
-    };
+    const _fill = (expression, patches) =>
+        expression.replace(/[\t\r](\d+)\n/g, (match, id) => patches[id]);
 
     /**
      * Analyzes and finds the components of an expression and creates a
