@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230316
+ * @version 1.6.0 20230317
  */
 (() => {
 
@@ -308,24 +308,21 @@
         
         /** Patterns with the supported events */
         get PATTERN_EVENT_FUNCTIONS() {return (() => {
-            const pattern = Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
-               return letter.toUpperCase();
-            });
+            const pattern = Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) =>
+               letter.toUpperCase());
             return new RegExp("^on(" + pattern.replace(/\s+/g, "|") + ")");
         })();},
         
         /** Patterns with the supported events as plain array */
         get PATTERN_EVENT_NAMES() {return (() => {
-            return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
-                return letter.toUpperCase();
-            }).split(/\s+/);
+            return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) =>
+                letter.toUpperCase()).split(/\s+/);
         })();},
         
         /** Patterns with the supported events as plain array (lower case) */
         get PATTERN_EVENT_FILTER() {return (() => {
-            return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) => {
-                return letter.toUpperCase();
-            }).toLowerCase().split(/\s+/);
+            return Composite.EVENTS.replace(/(?:\||\b)(\w)/g, (match, letter) =>
+                letter.toUpperCase()).toLowerCase().split(/\s+/);
         })();},
 
         /**
@@ -400,9 +397,8 @@
                                 
                                 // Mount all elements in a composite, including
                                 // the composite element itself
-                                nodes.forEach((node) => {
-                                    Composite.mount(node);
-                                });
+                                nodes.forEach((node) =>
+                                    Composite.mount(node));
                                 
                                 Composite.fire(Composite.EVENT_RENDER_END, this.selector);
                             } else if (context === Composite.mount) {
@@ -472,9 +468,8 @@
             if (!Array.isArray(listeners))
                 return;
             variants = [event, ...variants];
-            listeners.forEach((callback) => {
-                callback(...variants);
-            });        
+            listeners.forEach((callback) =>
+                callback(...variants));
         },
 
         /**
@@ -766,9 +761,8 @@
                     if (!selector)
                         return;
                     const nodes = document.querySelectorAll(selector);
-                    nodes.forEach((node) => {
-                        Composite.mount(node, lock.share());
-                    });
+                    nodes.forEach((node) =>
+                        Composite.mount(node, lock.share()));
                     return; 
                 }
 
@@ -1105,9 +1099,8 @@
                             object.statics[attribute] = element.getAttribute(attribute);
                         else object.statics[attribute] = null;
                     });
-                    Array.from(element.childNodes).forEach((node) => {
-                        scanning(node);        
-                    });
+                    Array.from(element.childNodes).forEach((node) =>
+                        scanning(node));
                 };
                 scanning(document.body);
                 return;
@@ -1228,9 +1221,8 @@
                     if (!selector)
                         return;
                     const nodes = document.querySelectorAll(selector);
-                    nodes.forEach((node) => {
-                        Composite.render(node, lock.share());
-                    });
+                    nodes.forEach((node) =>
+                        Composite.render(node, lock.share()));
                     return;
                 }
                 
@@ -1287,9 +1279,8 @@
                     // affect the implementation of the rendering.
                     // Example of the method call with an acceptor:
                     //     Composite.customize(function(element) {...});
-                    _acceptors.forEach((acceptor) => {
-                        acceptor.call(null, selector);
-                    });
+                    _acceptors.forEach((acceptor) =>
+                        acceptor.call(null, selector));
 
                     object = {serial, element:selector, attributes:{}};
                     _render_meta[serial] = object;
@@ -1621,9 +1612,8 @@
                             
                             // The new text nodes are inserted before the
                             // current element one.
-                            words.forEach((node) => {
-                                selector.parentNode.insertBefore(node, selector);
-                            });
+                            words.forEach((node) =>
+                                selector.parentNode.insertBefore(node, selector));
                             
                             // The current element will be removed.
                             selector.parentNode.removeChild(selector);
@@ -2548,8 +2538,8 @@
      * @throws An error occurs in case of invalid data types or syntax 
      */
     compliant("Object.use");
-    compliant(null, Object.use =
-        (...levels) => Namespace.use.apply(null, levels));
+    compliant(null, Object.use = (...levels) =>
+        Namespace.use.apply(null, levels));
 
     /**
      * Enhancement of the JavaScript API
@@ -2566,8 +2556,8 @@
      * @throws An error occurs in case of invalid data types or syntax
      */
     compliant("Object.lookup");
-    compliant(null, Object.lookup =
-        (...levels) => Namespace.lookup.apply(null, levels));
+    compliant(null, Object.lookup = (...levels) =>
+        Namespace.lookup.apply(null, levels));
 
     /**
      * Enhancement of the JavaScript API
@@ -2586,8 +2576,8 @@
      * @throws An error occurs in case of invalid data types or syntax
      */
     compliant("Object.exists");
-    compliant(null, Object.exists =
-        (...levels) => Namespace.exists.apply(null, levels));
+    compliant(null, Object.exists = (...levels) =>
+        Namespace.exists.apply(null, levels));
 
     /**
      * Enhancement of the JavaScript API
@@ -2596,8 +2586,8 @@
      * @return true is neither undefined nor null
      */
     compliant("Object.usable");
-    compliant(null, Object.usable =
-        object => object !== undefined && object !== null);
+    compliant(null, Object.usable = (object) =>
+        object !== undefined && object !== null);
 
     /**
      * Enhancement of the JavaScript API
@@ -2645,9 +2635,8 @@
     };
 
     // Listener when an error occurs and triggers a matching composite-event.
-    window.addEventListener("error", (event) => {
-        Composite.fire(Composite.EVENT_ERROR, event);
-    });
+    window.addEventListener("error", (event) =>
+        Composite.fire(Composite.EVENT_ERROR, event));
     
     // MutationObserver detects changes at the DOM and triggers (re)rendering
     // and (re)scanning and prevents manipulation of ATTRIBUTE_COMPOSITE.
@@ -2793,9 +2782,8 @@
                         const cleanup = (node) => {
                             // Clean up all the child elements first.
                             if (node.childNodes) {
-                                Array.from(node.childNodes).forEach((node) => {
-                                    cleanup(node);
-                                });
+                                Array.from(node.childNodes).forEach((node) =>
+                                    cleanup(node));
                             }
                             
                             // Composites/models must be undocked when they are
