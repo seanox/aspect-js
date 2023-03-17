@@ -92,7 +92,7 @@
  * the redirection and caching of console output.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230303
+ * @version 1.6.0 20230317
  */
 compliant("Test");
 compliant(null, window.Test = {
@@ -185,9 +185,8 @@ compliant(null, window.Test = {
                     return;
                 const listeners = _listeners.get(event.toLowerCase());
                 if (Array.isArray(listeners))
-                    listeners.forEach((callback) => {
-                        callback(event, status);
-                    });
+                    listeners.forEach(callback =>
+                        callback(event, status));
 
                 if (parent && parent !== window)
                     try {parent.Test.fire(event, status);
@@ -381,16 +380,14 @@ compliant(null, window.Test = {
                         Object.defineProperty(Test.start, "auto", {
                             value: true
                         });  
-                        window.addEventListener("load", () => {
-                            Test.start(meta);
-                        });
+                        window.addEventListener("load", () =>
+                            Test.start(meta));
                     }
                     return;
                 }
 
-                const numerical = (number, text) => {
-                    return `${number} ${text}${number !== 1 ? "s" : ""}`;
-                };
+                const numerical = (number, text) =>
+                    `${number} ${text}${number !== 1 ? "s" : ""}`;
 
                 Test.worker = {};
 
@@ -748,9 +745,8 @@ compliant(null, window.Test = {
                 _output[level] += Array.from(variants).join(", ");
                 if (output)
                     output(...variants);
-                _listeners.forEach((callback) => {
-                    callback(...([level, ...variants]));
-                });
+                _listeners.forEach((callback) =>
+                    callback(...([level, ...variants])));
                 if (!parent
                         || parent === window
                         || !parent.console
@@ -786,9 +782,7 @@ compliant(null, window.Test = {
             /** In case of an error, it is forwarded to the console. */
             window.addEventListener("error", (event) => {
                 if (parent && parent !== window)
-                    console.forward("error", ((...variants) => {
-                        return variants;
-                    })(event.message), null);
+                    console.forward("error", ((...variants) => variants)(event.message), null);
             });
         })();
 
