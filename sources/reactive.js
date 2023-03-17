@@ -47,7 +47,7 @@
  * associated proxies when not in use.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230316
+ * @version 1.6.0 20230317
  */
 (() => {
 
@@ -62,17 +62,14 @@
 
     let _selector = null;
 
-    Composite.listen(Composite.EVENT_RENDER_START, (event, selector) => {
-        _selector = selector;
-    });
+    Composite.listen(Composite.EVENT_RENDER_START, (event, selector) =>
+        _selector = selector);
 
-    Composite.listen(Composite.EVENT_RENDER_NEXT, (event, selector) => {
-        _selector = selector;
-    });
+    Composite.listen(Composite.EVENT_RENDER_NEXT, (event, selector) =>
+        _selector = selector);
 
-    Composite.listen(Composite.EVENT_RENDER_END, (event, selector) => {
-        _selector = null;
-    });
+    Composite.listen(Composite.EVENT_RENDER_END, (event, selector) =>
+        _selector = null);
 
     /**
      * Enhancement of the JavaScript API

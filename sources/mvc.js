@@ -99,7 +99,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230222
+ * @version 1.6.0 20230317
  */
 (() => {
 
@@ -610,28 +610,23 @@
             });
 
             _acceptors.clear();
-            acceptors.forEach((value) => {
-                _acceptors.add(value);
-            });
+            acceptors.forEach(value =>
+                _acceptors.add(value));
 
             _paths.clear();
-            paths.forEach((value, key) => {
-                _paths.set(key, value);
-            });
+            paths.forEach((value, key) =>
+                _paths.set(key, value));
 
             _facets.clear();
-            facets.forEach((value, key) => {
-                _facets.set(key, value);
-            });
+            facets.forEach((value, key) =>
+                _facets.set(key, value));
 
             _variables.clear();
             variables = Array.from(variables);
-            variables.sort((value1, value2) => {
-                return value1.localeCompare(value2);
-            });
-            variables.forEach((value) => {
-                _variables.add(value);
-            });
+            variables.sort((value1, value2) =>
+                value1.localeCompare(value2));
+            variables.forEach((value) =>
+                _variables.add(value));
         }
     });
 
