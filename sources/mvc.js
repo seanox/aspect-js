@@ -103,39 +103,39 @@
  */
 (() => {
 
+    /**
+     * Pattern for a valid face path:
+     * - Paths and path segments must always begin with a word character
+     * - Allowed are the word characters a-z _ 0-9 and additionally -
+     * - Character - always embedded between the characters: a-z _ 0-9, it
+     *   can not be used at the beginning and end
+     * - Character # is used to separate the path segments
+     * - After the separator # at least a word character is expected
+     * - Only # as root path is also allowed
+     */
+    const PATTERN_PATH_FACE = /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/;
+
+    /**
+     * Pattern for a valid facet path:
+     * - Paths and path segments must always begin with a word character
+     * - Allowed are the word characters a-z _ 0-9 and additionally -
+     * - Character - always embedded between the characters: a-z _ 0-9, it
+     *   can not be used at the beginning and end
+     * - Character # is used to separate the path segments
+     * - After the separator # at least a word character is expected
+     */
+    const PATTERN_PATH_FACET = /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/;
+
+    /**
+     * Pattern for a valid variable facet path:
+     * - Same conditions as for the pattern for a valid facet path
+     * - Every path must end with ...
+     * - Only ... as facet path is also allowed
+     */
+    const PATTERN_PATH_FACET_VARIABLE = /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/;
+
     compliant("SiteMap");
     compliant(null, window.SiteMap = {
-
-        /**
-         * Pattern for a valid face path:
-         * - Paths and path segments must always begin with a word character
-         * - Allowed are the word characters a-z _ 0-9 and additionally -
-         * - Character - always embedded between the characters: a-z _ 0-9, it
-         *   can not be used at the beginning and end
-         * - Character # is used to separate the path segments
-         * - After the separator # at least a word character is expected
-         * - Only # as root path is also allowed
-         */
-        get PATTERN_PATH_FACE() {return /(^((#\w[\-\w]+\w)|(#\w+))+$)|(^#$)/;},
-
-        /**
-         * Pattern for a valid facet path:
-         * - Paths and path segments must always begin with a word character
-         * - Allowed are the word characters a-z _ 0-9 and additionally -
-         * - Character - always embedded between the characters: a-z _ 0-9, it
-         *   can not be used at the beginning and end
-         * - Character # is used to separate the path segments
-         * - After the separator # at least a word character is expected
-         */
-        get PATTERN_PATH_FACET() {return /^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*$/;},
-
-        /**
-         * Pattern for a valid variable facet path:
-         * - Same conditions as for the pattern for a valid facet path
-         * - Every path must end with ...
-         * - Only ... as facet path is also allowed
-         */
-        get PATTERN_PATH_FACET_VARIABLE() {return /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/;},
 
         /**
          * Primarily, the root is always used when loading the page, since the
@@ -229,7 +229,7 @@
                 }
             }
             
-            if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
+            if (path.match(PATTERN_PATH_FUNCTIONAL))
                 return path;
 
             let paths = Array.from(_paths.keys());
@@ -528,21 +528,21 @@
             const paths = new Map();
             _paths.forEach((value, key) => {
                 if (typeof key === "string"
-                        && key.match(SiteMap.PATTERN_PATH_FACE))
+                        && key.match(PATTERN_PATH_FACE))
                 paths.set(key, value);
             });
 
             const facets = new Map();
             _facets.forEach((value, key) => {
                 if (typeof key === "string"
-                        && key.match(SiteMap.PATTERN_PATH_FACET))
+                        && key.match(PATTERN_PATH_FACET))
                     facets.set(key, value);
             });
 
             let variables = new Set();
             _variables.forEach((variable) => {
                 if (typeof variable === "string"
-                        && variable.match(SiteMap.PATTERN_PATH_FACE))
+                        && variable.match(PATTERN_PATH_FACE))
                     variables.add(variable);
             });
 
@@ -551,7 +551,7 @@
                 // A map entry is based on a path (datatype string beginning
                 // with #) and an array of String or null as value. 
                 if (typeof key !== "string"
-                        || !key.match(SiteMap.PATTERN_PATH_FACE))
+                        || !key.match(PATTERN_PATH_FACE))
                     return;
                 let value = map[key];
                 if (value !== null
@@ -579,8 +579,8 @@
                     if (typeof facet !== "string")
                         throw new TypeError("Invalid facet: " + typeof facet);
                     facet = facet.toLowerCase().trim();
-                    if (!facet.match(SiteMap.PATTERN_PATH_FACET)
-                            && !facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE))
+                    if (!facet.match(PATTERN_PATH_FACET)
+                            && !facet.match(PATTERN_PATH_FACET_VARIABLE))
                         throw new Error(`Invalid facet${facet ? ": " + facet : ""}`);
                     
                     // Variable paths are collected additionally, so that later
@@ -588,7 +588,7 @@
                     // not have to be searched for variable paths. Variable
                     // paths are also registered without ... at the end as
                     // normal paths.
-                    if (facet.match(SiteMap.PATTERN_PATH_FACET_VARIABLE)) {
+                    if (facet.match(PATTERN_PATH_FACET_VARIABLE)) {
                         // If the facet is only ..., it is registered as
                         // avariable face, otherwise as a variable facet.
                         facet = facet.replace(/\.+$/, "");
@@ -702,7 +702,7 @@
             return;
 
         let source = Path.normalize(SiteMap.location);
-        let locate = (event.newURL || "").replace(Path.PATTERN_URL, "$1");
+        let locate = (event.newURL || "").replace(PATTERN_URL, "$1");
         let target = SiteMap.locate(locate);
 
         // Indicator for initial rendering when the history is empty.
@@ -714,14 +714,14 @@
 
         // Initially, no function path is useful, and so in this case will be
         // forwarded to the root.
-        if (target.match(Path.PATTERN_PATH_FUNCTIONAL)
+        if (target.match(PATTERN_PATH_FUNCTIONAL)
                 && initial)
             target = "#";
         
         // For functional interaction paths, old paths are visually restored.
         // Rendering is not necessary because the face/facet does not change or
         // the called function has partially triggered rendering.
-        if (target.match(Path.PATTERN_PATH_FUNCTIONAL)) {
+        if (target.match(PATTERN_PATH_FUNCTIONAL)) {
             history.replaceState(null, document.title, SiteMap.location);
             return;
         }
@@ -832,150 +832,152 @@
             script = `${script || ""}{{SiteMap.accept("${path}")}}`;
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
-})();
 
-/**
- * Static component for the use of (virtual) paths. Paths are a reference to a
- * target in face flow. The target can be a face, a facet or a function. For
- * more details see method Path.normalize(variants).
- */
-compliant("Path");
-compliant(null, window.Path = {
-            
-    /** 
+    /**
      * Pattern for a valid path. The syntax is based on XML entities (DOM). A
      * path segment begins with a word character _ a-z 0-9, optionally more word
      * characters and additionally - can follow, but can not end with the -
      * character. Paths are separated by the # character.
      */
-    get PATTERN_PATH() {return /(^(\w(\-*\w)*)*((#+\w(\-*\w)*)+)#*$)|(^\w(\-*\w)*$)|(^#+$)|(^$)/;},
+    const PATTERN_PATH = /(^(\w(\-*\w)*)*((#+\w(\-*\w)*)+)#*$)|(^\w(\-*\w)*$)|(^#+$)|(^$)/;
 
     /** Pattern for an url path. */
-    get PATTERN_URL() {return /^\w+:\/.*?(#.*)*$/i;},
+    const PATTERN_URL = /^\w+:\/.*?(#.*)*$/i;
 
     /** Pattern for a functional path. */
-    get PATTERN_PATH_FUNCTIONAL() {return /^#{3,}$/;},
+    const PATTERN_PATH_FUNCTIONAL = /^#{3,}$/;
 
     /**
-     * Normalizes a path. Paths consist exclusively of word characters and
-     * underscores (based on composite IDs) and must begin with a word character
-     * and use the hash character as separator and root. Between the path
-     * segments, the hash character can also be used as a back jump (parent)
-     * directive. The back jump then corresponds to the number of additional
-     * hash characters.
-     * 
-     *     Note:
-     * Paths use lowercase letters. Upper case letters are automatically
-     * replaced by lower case letters when normalizing.
-     * 
-     * There are four types of paths:
-     * 
-     *     Functional paths:
-     *     ----
-     * The paths consists of three or more hash characters (###+) and are only
-     * temporary, they serve a function call without changing the current path
-     * (URL hash). If such a path is detected, the return value is always ###.
-     * 
-     *     Root paths:
-     *     ----
-     * These paths are empty or contain only one hash character. The return
-     * value is always the given root path or # if no root path was specified.
-     * 
-     *     Relative paths:
-     *     ----        
-     * These paths begin without hash or begin with two or more hash (##+)
-     * characters. Relative paths are prepended with the passed root.
-     * 
-     *     Absolute paths:
-     *     ----
-     * These paths begin with one hash characters. A possibly passed root is
-     * ignored.
-     * 
-     * All paths are balanced. The directive of two or more hash characters is
-     * resolved, each double hash means that the preceding path segment is
-     * skipped. If more than two hash characters are used, it extends the jump
-     * length.
-     *
-     * Examples (root #x#y#z):
-     *
-     *    #a#b#c#d#e##f   #a#b#c#d#f
-     *    #a#b#c#d#e###f  #a#b#c#f
-     *    ###f            #x#f
-     *    ####f           #f
-     *    empty           #x#y#z
-     *    #               #x#y#z
-     *    a#b#c           #x#y#z#a#b#c
-     * 
-     * Invalid roots and paths cause an exception.
-     * The method has the following various signatures:
-     *     function(root, path) 
-     *     function(path) 
-     * @param  root optional, otherwise # is used 
-     * @param  path to normalize (URL is also supported, only the hash is used
-     *     here and the URL itself is ignored)
-     * @return the normalize path
-     * @throws An error occurs in the following cases:
-     *     - if the root and/or the path is invalid
+     * Static component for the use of (virtual) paths. Paths are a reference to
+     * a target in face flow. The target can be a face, a facet or a function.
+     * For more details see method Path.normalize(variants).
      */
-    normalize(...variants) {
-        
-        if (variants.length <= 0)
-            return null;
-        if (variants.length > 0
-                && !Object.usable(variants[0]))
-            return null;
-        if (variants.length > 1
-                && !Object.usable(variants[1]))
-            return null;        
+    compliant("Path");
+    compliant(null, window.Path = {
 
-        if (variants.length > 1
-                && typeof variants[0] !== "string")
-            throw new TypeError("Invalid root: " + typeof variants[0]);
-        let root = "#";
-        if (variants.length > 1) {
-            root = variants[0];
-            try {root = Path.normalize(root);
-            } catch (exception) {
-                root = (root || "").trim();
-                throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
-            }        
+        /**
+         * Normalizes a path. Paths consist exclusively of word characters and
+         * underscores (based on composite IDs) and must begin with a word
+         * character and use the hash character as separator and root. Between
+         * the path segments, the hash character can also be used as a back jump
+         * (parent) directive. The back jump then corresponds to the number of
+         * additional hash characters.
+         *
+         *     Note:
+         * Paths use lowercase letters. Upper case letters are automatically
+         * replaced by lower case letters when normalizing.
+         *
+         * There are four types of paths:
+         *
+         *     Functional paths:
+         *     ----
+         * The paths consists of three or more hash characters (###+) and are
+         * only temporary, they serve a function call without changing the
+         * current path (URL hash). If such a path is detected, the return value
+         * is always ###.
+         *
+         *     Root paths:
+         *     ----
+         * These paths are empty or contain only one hash character. The return
+         * value is always the given root path or # if no root path was
+         * specified.
+         *
+         *     Relative paths:
+         *     ----
+         * These paths begin without hash or begin with two or more hash (##+)
+         * characters. Relative paths are prepended with the passed root.
+         *
+         *     Absolute paths:
+         *     ----
+         * These paths begin with one hash characters. A possibly passed root is
+         * ignored.
+         *
+         * All paths are balanced. The directive of two or more hash characters
+         * is resolved, each double hash means that the preceding path segment
+         * is skipped. If more than two hash characters are used, it extends the
+         * jump length.
+         *
+         * Examples (root #x#y#z):
+         *
+         *    #a#b#c#d#e##f   #a#b#c#d#f
+         *    #a#b#c#d#e###f  #a#b#c#f
+         *    ###f            #x#f
+         *    ####f           #f
+         *    empty           #x#y#z
+         *    #               #x#y#z
+         *    a#b#c           #x#y#z#a#b#c
+         *
+         * Invalid roots and paths cause an exception.
+         * The method has the following various signatures:
+         *     function(root, path)
+         *     function(path)
+         * @param  root optional, otherwise # is used
+         * @param  path to normalize (URL is also supported, only the hash is
+         *     used here and the URL itself is ignored)
+         * @return the normalize path
+         * @throws An error occurs in the following cases:
+         *     - if the root and/or the path is invalid
+         */
+        normalize(...variants) {
+
+            if (variants.length <= 0)
+                return null;
+            if (variants.length > 0
+                    && !Object.usable(variants[0]))
+                return null;
+            if (variants.length > 1
+                    && !Object.usable(variants[1]))
+                return null;
+
+            if (variants.length > 1
+                    && typeof variants[0] !== "string")
+                throw new TypeError("Invalid root: " + typeof variants[0]);
+            let root = "#";
+            if (variants.length > 1) {
+                root = variants[0];
+                try {root = Path.normalize(root);
+                } catch (exception) {
+                    root = (root || "").trim();
+                    throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
+                }
+            }
+
+            if (variants.length > 1
+                    && typeof variants[1] !== "string")
+                throw new TypeError("Invalid path: " + typeof variants[1]);
+            if (variants.length > 0
+                    && typeof variants[0] !== "string")
+                throw new TypeError("Invalid path: " + typeof variants[0]);
+            let path = "";
+            if (variants.length === 1)
+                path = variants[0];
+            if (variants.length === 1
+                    && path.match(PATTERN_URL))
+                path = path.replace(PATTERN_URL, "$1");
+            else if (variants.length > 1)
+                path = variants[1];
+            path = (path || "").trim();
+
+            if (!path.match(PATTERN_PATH))
+                throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
+
+            path = path.replace(/([^#])#$/, "$1");
+            path = path.replace(/^([^#])/, "#$1");
+
+            // Functional paths are detected.
+            if (path.match(PATTERN_PATH_FUNCTIONAL))
+                return "###";
+
+            path = root + path;
+            path = path.toLowerCase();
+
+            // Path will be balanced
+            const pattern = /#[^#]+#{2}/;
+            while (path.match(pattern))
+                path = path.replace(pattern, "#");
+            path = "#" + path.replace(/(^#+)|(#+)$/g, "");
+
+            return path;
         }
-        
-        if (variants.length > 1
-                && typeof variants[1] !== "string")
-            throw new TypeError("Invalid path: " + typeof variants[1]);
-        if (variants.length > 0
-                && typeof variants[0] !== "string")
-            throw new TypeError("Invalid path: " + typeof variants[0]);
-        let path = "";
-        if (variants.length === 1)
-            path = variants[0];
-        if (variants.length === 1
-                && path.match(Path.PATTERN_URL))
-            path = path.replace(Path.PATTERN_URL, "$1");
-        else if (variants.length > 1)
-            path = variants[1];
-        path = (path || "").trim();
-        
-        if (!path.match(Path.PATTERN_PATH))
-            throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
-        
-        path = path.replace(/([^#])#$/, "$1");
-        path = path.replace(/^([^#])/, "#$1");
-        
-        // Functional paths are detected.
-        if (path.match(Path.PATTERN_PATH_FUNCTIONAL))
-            return "###";
-
-        path = root + path;
-        path = path.toLowerCase();
-        
-        // Path will be balanced
-        const pattern = /#[^#]+#{2}/;
-        while (path.match(pattern))
-            path = path.replace(pattern, "#");
-        path = "#" + path.replace(/(^#+)|(#+)$/g, "");
-        
-        return path;
-    }
-});
+    });
+})();
