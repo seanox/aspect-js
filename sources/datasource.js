@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230305
+ * @version 1.6.0 20230317
  */
 (() => {
 
@@ -267,9 +267,8 @@
             } else collection = Array.from(variants);
             
             let hash = collector.hashCode() + ":" + collection.join().hashCode();
-            collection.forEach((entry) => {
-                hash += ":" + String(entry).hashCode();
-            });
+            collection.forEach((entry) =>
+                hash += ":" + String(entry).hashCode());
             if (_cache.hasOwnProperty(hash))
                 return _cache[hash].clone();
 
@@ -317,10 +316,10 @@
         if (language && !locale.includes(language[0]))
             locale.push(language[0]);
     });
-    locale = locale.map(language => language.trim().toLowerCase());
-    locale = locale.filter(function(item, index) {
-        return locale.indexOf(item) === index;
-    });
+    locale = locale.map((language) =>
+        language.trim().toLowerCase());
+    locale = locale.filter((item, index) =>
+        locale.indexOf(item) === index);
 
     if (locale.length <= 0)
         throw new Error("Locale not available");
