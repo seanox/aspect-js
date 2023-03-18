@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.6.0 20230318
  */
 (() => {
 
@@ -246,9 +246,10 @@
          * Pattern for an element id (e.g. name:qualifier...@model...)
          * - group 1: name
          * - group 2: qualifier(s) (optional)
-         * - group 3: (namespace+)model (optional)
+         * - group 3: unique identifier (optional)
+         * - group 4: (namespace+)model (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)((?::\w+)*)?(@[_a-z]\w*(?::[_a-z]\w*)*)?$/i;},
+        get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)((?::\w+)*)?(#\w+)?(@[_a-z]\w*(?::[_a-z]\w*)*)?$/i;},
 
         /** Pattern for a scope (custom tag, based on a word) */
         get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
@@ -2025,12 +2026,15 @@
      * 
      * Composite Element:
      *     {namespace, model, route, target}
+     *     {namespace, model, route, unique, target}
      *
      * namespace: namespace of the composite/model
      *            chain as array without the model or undefined if no chain
      * model:     corresponds to the enclosing composite
      * route:     fully qualified route to the target,
      *            starting with the module, ends with the target
+     * unique:    unique identifier
+     *            not part of the route and without effect on the logic
      * target:    final target in the chain
      *
      * A validation at object or JavaScript model level does not take place
@@ -2110,13 +2114,15 @@
         }
 
         serial = serial.match(Composite.PATTERN_ELEMENT_ID);
-        if (serial[3]) {
-            meta.namespace = serial[3].substring(1).split(/:/);
+        if (serial[4]) {
+            meta.namespace = serial[4].substring(1).split(/:/);
             meta.route = [meta.namespace[meta.namespace.length -1]];
         }
         meta.route.push(serial[1]);
         if (serial[2])
             meta.route.push(...serial[2].substring(1).split(/:/));
+        if (serial[3])
+            meta.unique = serial[3];
         meta.target = meta.route[meta.route.length -1];
         meta.model = meta.namespace.pop();
         if (meta.namespace.length <= 0)
