@@ -33,7 +33,7 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300317
+ * @version 1.6.0 202300319
  */
 (() => {
 
@@ -212,6 +212,24 @@
                     (match, group1 = "", group2 = "") =>
                         group1 + group2.toLowerCase());
 
+                // element expressions are translated into JavaScript
+                //
+                //     #[element] -> document.getElementById(element)
+                //     #element   -> document.getElementById(element)
+                //
+                // The version with square brackets is for more complex element
+                // IDs that do not follow the JavaScript syntax for variables.
+                //
+                // The order is important because the complex element ID, if the
+                // target uses unique identifiers, may contain a # that should
+                // not be misinterpreted.
+                expression = expression.replace(/#\[([^\[\]]*)\]/g,
+                    (match, element) =>
+                        "document.getElementById(" + _parse(TYPE_TEXT, element, patches) + ")");
+                expression = expression.replace(/#([_a-z]\w*)/ig,
+                    (match, element) =>
+                        "document.getElementById(" + _parse(TYPE_TEXT, element, patches) + ")");
+
                 // (?...) tolerates the enclosed code. If an error occurs there,
                 // the expression will be false, but will not cause the error
                 // itself. This is convenient if you want check/use references
@@ -234,20 +252,6 @@
                         });
                     }
                 }
-
-                // element expressions are translated into JavaScript
-                //
-                //     #element   -> document.getElementById(element)
-                //     #[element] -> document.getElementById(element)
-                //
-                // The version with square brackets is for more complex element
-                // IDs that do not follow the JavaScript syntax for variables.
-                expression = expression.replace(/#([_a-z]\w*)/ig,
-                    (match, element) =>
-                        "document.getElementById(\"" + element + "\")");
-                expression = expression.replace(/#\[([^\[\]]*)\]/g,
-                    (match, element) =>
-                        "document.getElementById(\"" + element + "\")");
 
                 // small optimization by merging spaces
                 expression = expression.replace(/ {2,}/g, " ");
