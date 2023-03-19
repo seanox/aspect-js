@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230318
+ * @version 1.6.0 20230319
  */
 (() => {
 
@@ -1898,6 +1898,19 @@
                             if (attribute.toLowerCase() === Composite.ATTRIBUTE_VALUE
                                     && Composite.ATTRIBUTE_VALUE in selector)
                                 selector.value = value;
+                            // @-ATTRIBUTE: These are attribute templates for
+                            // the renderer, which inserts attributes of the
+                            // same name to them without @. This feature can be
+                            // applied to all non-composite relevant attributes
+                            // and avoids that attributes are misinterpreted by
+                            // the browser before rendering, e.g. if the value
+                            // uses the expression language. Attributes created
+                            // from templates behave like other attributes,
+                            // which includes updating by the renderer.
+                            if (attribute.startsWith("@")) {
+                                selector.removeAttribute(attribute);
+                                attribute = attribute.replace(/^@+/, "");
+                            }
                             selector.setAttribute(attribute, value);
                         } else selector.removeAttribute(attribute);
                     });
