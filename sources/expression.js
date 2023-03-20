@@ -224,11 +224,15 @@
                 // target uses unique identifiers, may contain a # that should
                 // not be misinterpreted.
                 expression = expression.replace(/#\[([^\[\]]*)\]/g,
-                    (match, element) =>
-                        "document.getElementById(" + _parse(TYPE_TEXT, element, patches) + ")");
+                    (match, element) => {
+                        patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
+                        return "\r" + (patches.length -1) + "\n";
+                });
                 expression = expression.replace(/#([_a-z]\w*)/ig,
-                    (match, element) =>
-                        "document.getElementById(" + _parse(TYPE_TEXT, element, patches) + ")");
+                    (match, element) => {
+                        patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
+                        return "\r" + (patches.length -1) + "\n";
+                });
 
                 // (?...) tolerates the enclosed code. If an error occurs there,
                 // the expression will be false, but will not cause the error
@@ -245,7 +249,7 @@
                     for (let counts = -1; counts < patches.length;) {
                         counts = patches.length;
                         expression = expression.replace(/(\([^\(\)]*\))/g, match => {
-                            match = match.replace(/^\( *\?+ *(.*?) *\)$/, (match, logic) =>
+                            match = match.replace(/^\( *\?+ *(.*?) *\)$/s, (match, logic) =>
                                 "_tolerate(()=>(" + logic + "))");
                             patches.push(_fill(match, patches));
                             return "\t" + (patches.length -1) + "\n";
