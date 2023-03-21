@@ -10,14 +10,14 @@
       }
     </style>
     <script src="aspect-js.js"></script>
-    <script src="composite_expression.js"></script>
+    <script src="expression.js"></script>
     <script type="text/javascript">
     
         Test.activate();
 
         Test.create({test() {
             document.body.textContent = normalizeOutput(document.body.innerHTML);
-            const pattern = Test.read("composite_expression_syntax_" + navigator.engine + ".txt");
+            const pattern = Test.read("expression_syntax_" + navigator.engine + ".txt");
             Assert.assertSameText(pattern, document.body.textContent);
         }});
         Composite.listen(Composite.EVENT_RENDER_END, () => {
