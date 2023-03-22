@@ -33,7 +33,7 @@
  * language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300319
+ * @version 1.6.0 202300322
  */
 (() => {
 
@@ -84,10 +84,10 @@
     /** Cache (expression/script) */
     const _cache = new Map();
 
-    const TYPE_MIXED  = 0;
-    const TYPE_PHRASE = 1;
-    const TYPE_TEXT   = 2;
-    const TYPE_SCRIPT = 3;
+    const TYPE_MIXED   = 0;
+    const TYPE_LITERAL = 1;
+    const TYPE_TEXT    = 2;
+    const TYPE_SCRIPT  = 3;
 
     const KEYWORDS = ["and", "&&", "or", "||", "not", "!",
         "eq", "==", "eeq", "===", "ne", "!=", "nee", "!==", "lt", "<", "gt", ">", "le", "<=", "ge", ">=", "empty", "!",
@@ -141,6 +141,7 @@
                 // masked quotation marks will be restored.
                 structure = structure.replaceAll("\r\\u0022\n", '\\"');
                 structure = structure.replaceAll("\r\\u0027\n", "\\'");
+                structure = structure.replaceAll("\r\\u0060\n", "\\`");
 
                 // splices still need to be made scriptable
                 structure = structure.replace(/(\n\r)+/g, " + ");
@@ -153,13 +154,12 @@
                 return structure
 
             case TYPE_TEXT:
-            case TYPE_PHRASE:
 
-                // Text vs. Phrase -- because of the different delimiters, two
-                // different terms were needed
+                expression = "\"" + expression + "\"";
 
-                const symbol = ["\'", "\""][type -1];
-                patches.push(symbol + expression + symbol);
+            case TYPE_LITERAL:
+
+                patches.push(expression);
                 return "\r" + (patches.length -1) + "\n";
 
             case TYPE_SCRIPT:
@@ -173,23 +173,16 @@
                 // rule: search for an odd number of slashes followed by quotes
                 expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\")/g, "$1$2\r\\u0022\n");
                 expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\')/g, "$1$2\r\\u0027\n");
+                expression = expression.replace(/(^|[^\\])((?:\\{2})*)(\\\`)/g, "$1$2\r\\u0060\n");
 
-                // Replace all literals "..." / '...' with placeholders. This
-                // simplifies later analysis because text can contain anything
+                // Replace all literals "..." / '...' / `...` with placeholders.
+                // This simplifies analysis because text can contain anything
                 // and the parser would have to constantly distinguish between
                 // logic and text. If the literals are replaced by numeric
                 // placeholders, only logic remains. Important is a flexible
-                // processing, because the order of ' and " is not defined.
-                while (true) {
-                    const match = expression.match(/[\'\"]/);
-                    if (match == "\"") {
-                        expression = expression.replace(/\"(.*?)\"/gs,
-                            (match, text) => _parse(TYPE_TEXT, text, patches));
-                    } else if (match == "\'") {
-                        expression = expression.replace(/\'(.*?)\'/gs,
-                            (match, text) => _parse(TYPE_PHRASE, text, patches));
-                    } else break;
-                }
+                // processing, because the order of ', " and ` is not defined.
+                expression = expression.replace(/((['\"\`]).*?\2)/gs,
+                    (match, literal) => _parse(TYPE_LITERAL, literal, patches));
 
                 // without literals, tabs have no relevance and can be replaced
                 // by spaces, and we have and additional internal marker
