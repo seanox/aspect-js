@@ -29,7 +29,7 @@
  * the DOM via the MutationObserver and thus reacts recursively to changes in
  * the DOM.
  *
- * This is the static component for rendering and binding the view model.
+ * This is the static component for rendering and the view model binding.
  * Processing runs in the background and starts automatically when the page is
  * loaded.
  *
@@ -76,6 +76,14 @@
  * identifier can be extended by an additional unique qualifier separated by a
  * colon. Qualifiers behave like properties during view model binding and extend
  * the namespace.
+ *
+ *        unique
+ *        ----
+ * In some cases it is necessary that different things in the view refer to a
+ * target in the corresponding model. However, if these things must still be
+ * unique in the view, a unique identifier can be used in addition to the
+ * qualifier, separated by a hash. This identifier then has no influence on the
+ * composite logic and is used exclusively for the view.
  *
  *         composite
  *         ----
@@ -2415,9 +2423,7 @@
     };
 
     /**
-     * As a special feature, Composite JavaScript supports macros. Macros are a
-     * very weak implementation that does not consider literals or comments, for
-     * example.
+     * As a special feature, Composite JavaScript supports macros.
      *
      * Macros are based on a keyword starting with a hash symbol followed by
      * arguments separated by spaces. Macros end with the next line break, a
