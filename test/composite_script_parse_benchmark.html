@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        let source;
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            source = Test.read("composite_script_parse_benchmark.js");
+            Test.start();
+        });
+
+        Test.create({timeout:5000, test() {
+            document.body.innerText += "Start 2500 runs\n";
+            const timing = new Date().getTime();
+            for (let count = 0; count < 2500; count++) {
+                try {___render_macro_eval(source);
+                } catch (error) {
+                    Assert.fail(error.message);
+                }
+            }
+            document.body.innerText += "Timing " + (new Date().getTime() -timing) + "\n";
+        }});
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
