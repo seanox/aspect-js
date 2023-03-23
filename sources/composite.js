@@ -2578,7 +2578,11 @@
                     context[parameter] = {};
                 context = context[parameter]
             });
-            if (typeof context[parameters[1]] !== "undefined")
+
+            const lookup = context[parameters[1]];
+            if (typeof lookup !== "undefined"
+                    && !(lookup instanceof Element)
+                    && !(lookup instanceof HTMLCollection))
                 throw new Error("Context for export is already in use: "
                     + parameters[1] + (parameters[2] ? "@" + parameters[2] : ""));
             context[parameters[1]] = parameters[0];
