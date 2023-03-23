@@ -115,7 +115,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230319
+ * @version 1.6.0 20230323
  */
 (() => {
 
@@ -2457,59 +2457,112 @@
      */
     const _render_macro_eval = (script) => {
 
-        // (^|[^\w#])#+(import|export)(?:[ \t]+(.*?)\s*)?(?=[\r\n;]|$)
-        // (+-A----+)B+-C-----------++-D-------+-E-+--+-F------------+
-        //
-        // A lookbehind, non-word character to separate from preceding commands
-        // B macro marker
-        // C macro keyword
-        // D space(s) to separate the macro arguments
-        // E macro arguments
-        // F lookahead for end macro
+        // Performance is important here.
+        // The implementation parses and replaces macros in one pass.
 
-        script = script.replace(/(^|[^\w#])#+(import|export)(?:[ \t]+(.*?)\s*)?(?=[\r\n;]|$)/igm,
-            (match, group1 = "", group2 = "", group3 = "") => {
+        // It was important to exclude literals and comments.
+        // - ignore: /*...*/
+        // - ignore: //...([\r\n]|$)
+        // - ignore: '...'
+        // - ignore: "..."
+        // - ignore: `...`
+        // - detect: (^|\W)#(import|export)\s+...(\W|$)
 
-                group2 = group2.toLowerCase();
+        let pattern;
+        for (let cursor = 0; cursor < script.length; cursor++) {
+            let digit = script.charAt(cursor);
+            if (cursor >= script.length
+                    && !pattern)
+                continue;
 
-                if (!group3)
-                    throw new Error("Invalid " + group2);
-                group3 = group3.replace(/\s+/g, " ").trim();
-                const macro = "#" + group2 + " " + group3;
+            if (pattern) {
+                if (pattern === script.substring(cursor, cursor + pattern.length)
+                        || (pattern === "\n" && digit === "\r"))
+                    pattern = null;
+                continue;
+            }
 
-                if (group2 === "import") {
-                    if (!group3.match(/^(\w+(\/\w+)*)(\s+(\w+(\/\w+)*))*$/))
-                        throw new Error("Invalid import: " + macro);
-                    const imports = [];
-                    group3.split(/\s+/).forEach(entry => imports.push("\"" + entry + "\""));
-                    return group1 + "_render_macro_import(...[" + imports.join(",") + "])";
-                }
+            switch (digit) {
+                case "\\":
+                    cursor++
+                    continue;
 
-                const exports = [];
-                const pattern = /^([_a-z]\w*)(?:@((?:[_a-z]\w*)(?:\.[_a-z]\w*)*))?$/i;
-                group3.split(/\s+/).forEach(entry => {
-                    const match = entry.match(pattern);
-                    if (!match)
-                        throw new Error("Invalid export: " + macro);
-                    let parameters = [match[1], "\"" + match[1] + "\""];
-                    if (match[2])
-                        parameters.push("\"" + match[1] + "\"");
-                    exports.push("[" + parameters.join(",") + "]");
-                });
-                return group1 + "_render_macro_export(...[" + exports.join(",") + "])";
-            });
+                case "/":
+                    digit = script.charAt(cursor +1);
+                    if (digit === "/")
+                        pattern = "\n";
+                    if (digit === "*")
+                        pattern = "*/";
+                    continue;
+
+                case "\'":
+                case "\"":
+                case "\`":
+                    pattern = digit;
+                    continue;
+
+                case "#":
+                    let string = script.substring(cursor -1, cursor +10);
+                    let match = string.match(/(^|\W)(#(?:import|export))\s/);
+                    if (match) {
+                        let macro = match[2];
+                        for (let offset = cursor +macro.length; offset <= script.length; offset++) {
+                            string = script.charAt(offset);
+                            if (!string.match(/[;\r\n]/)
+                                    && offset < script.length)
+                                continue;
+
+                            let parameters = script.substring(cursor +macro.length, offset).trim();
+
+                            switch (macro) {
+                                case "#import":
+                                    if (!parameters.match(/^(\w+(\/\w+)*)(\s+(\w+(\/\w+)*))*$/))
+                                        throw new Error(("Invalid macro: #import " + parameters).trim());
+                                    const imports = [];
+                                    parameters.split(/\s+/).forEach(entry => imports.push("\"" + entry + "\""));
+                                    macro = "_import(...[" + imports.join(",") + "])";
+                                    break;
+
+                                case "#export":
+                                    const exports = [];
+                                    const pattern = /^([_a-z]\w*)(?:@((?:[_a-z]\w*)(?:\.[_a-z]\w*)*))?$/i;
+                                    parameters.split(/\s+/).forEach(entry => {
+                                        const match = entry.match(pattern);
+                                        if (!match)
+                                            throw new Error(("Invalid macro: #export " + parameters).trim());
+                                        parameters = [match[1], "\"" + match[1] + "\""];
+                                        if (match[2])
+                                            parameters.push("\"" + match[1] + "\"");
+                                        exports.push("[" + parameters.join(",") + "]");
+                                    });
+                                    macro = "_export(...[" + exports.join(",") + "])";
+                                    break;
+                            }
+
+                            script = script.substring(0, cursor -1) + (match[1] || "")
+                                + macro + script.substring(offset);
+                            cursor += macro.length;
+                            break;
+                        }
+                    }
+                    continue;
+
+                default:
+                    continue;
+            }
+        }
 
         if (script.trim())
             eval(script);
     };
 
-    const _render_macro_import = (...imports) => {
+    const _import = (...imports) => {
         // Because it is an internal method, an additional validation of the
         // exports as data structure was omitted.
         imports.forEach(include => _render_include(...include.split(/\/+/)));
     };
 
-    const _render_macro_export = (...exports) => {
+    const _export = (...exports) => {
         // Because it is an internal method, an additional validation of the
         // exports as data structure was omitted.
         exports.forEach(parameters => {
