@@ -1,4 +1,4 @@
-Namespace.create("reactiveX", {
+const reactiveX =  {
     valueA: 10000,
     valueB: {
         valueC: 20000,
@@ -8,9 +8,13 @@ Namespace.create("reactiveX", {
         }
     },
     valueG: null
-});
+};
 
-Namespace.create("reactiveA", reactiveX.reactive());
+#export reactiveX;
+
+const reactiveA = reactiveX.reactive();
+
+#export reactiveA;
 
 reactiveA.a = "-1-";
 reactiveX.a = "-2-";
