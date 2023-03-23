@@ -135,7 +135,7 @@
 
                 // placeholders must be filled, since they were created
                 // recursively, they do not have to be filled recursively
-                structure = structure.replaceAll(/(?:\r(\d+)\n)/g,
+                structure = structure.replace(/(?:\r(\d+)\n)/g,
                     (match, placeholder) => "\r" + patches[placeholder] + "\n");
 
                 // masked quotation marks will be restored.
