@@ -2,8 +2,14 @@ const exampleE_A1 = "A-AAA";
 const exampleE_A2 = {value: "A-BBB"};
 const exampleE_A3 = () => {return "A-CCC";};
 const exampleE_A4 = "A-DDD";
-
 #export exampleE_A1 exampleE_A2
+
+const exampleX_01 = "123\"" + 456 + "789\"";
+const exampleX_02 = "123\'" + 456 + "789\'";
+const exampleX_03 = "123\"" + 456 + "789\'";
+const exampleX_04 = "123\'" + 456 + "789\"";
+#export exampleX_01 exampleX_02 exampleX_03 exampleX_04
+
 if (true) #export exampleE_A3;
 if (false) #export exampleE_A4;
 #export exampleE_A1@a.b.c

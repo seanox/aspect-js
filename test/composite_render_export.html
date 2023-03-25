@@ -44,6 +44,10 @@
       exampleE_C2: false
       exampleE_C3: false
       exampleE_C4: false
+      exampleX_01: false
+      exampleX_02: false
+      exampleX_03: false
+      exampleX_04: false
       import + export
       ----
       after import + export
@@ -60,6 +64,10 @@
       exampleE_C2: {{(?exampleE_C2)}}
       exampleE_C3: {{(?exampleE_C3)}}
       exampleE_C4: {{(?exampleE_C4)}}
+      exampleX_01: {{(?exampleX_01)}}
+      exampleX_02: {{(?exampleX_02)}}
+      exampleX_03: {{(?exampleX_03)}}
+      exampleX_04: {{(?exampleX_04)}}
       X: ReferenceError: exampleE_C1 is not defined
     </script>
     <script type="text/test">
@@ -77,6 +85,10 @@
       exampleE_C2: false
       exampleE_C3: false
       exampleE_C4: false
+      exampleX_01: false
+      exampleX_02: false
+      exampleX_03: false
+      exampleX_04: false
       import + export
       ----
       after import + export
@@ -93,6 +105,10 @@
       exampleE_C2: {{(?exampleE_C2)}}
       exampleE_C3: {{(?exampleE_C3)}}
       exampleE_C4: {{(?exampleE_C4)}}
+      exampleX_01: {{(?exampleX_01)}}
+      exampleX_02: {{(?exampleX_02)}}
+      exampleX_03: {{(?exampleX_03)}}
+      exampleX_04: {{(?exampleX_04)}}
       X: ReferenceError: exampleE_C1 is not defined
     </script>
     <script type="text/test">
@@ -110,6 +126,10 @@
       exampleE_C2: false
       exampleE_C3: false
       exampleE_C4: false
+      exampleX_01: false
+      exampleX_02: false
+      exampleX_03: false
+      exampleX_04: false
       import + export
       ----
       after import + export
@@ -126,6 +146,10 @@
       exampleE_C2: {{(?exampleE_C2)}}
       exampleE_C3: {{(?exampleE_C3)}}
       exampleE_C4: {{(?exampleE_C4)}}
+      exampleX_01: {{(?exampleX_01)}}
+      exampleX_02: {{(?exampleX_02)}}
+      exampleX_03: {{(?exampleX_03)}}
+      exampleX_04: {{(?exampleX_04)}}
       X: ReferenceError: exampleE_C1 is not defined
     </script>
     <script type="text/test">
@@ -143,6 +167,10 @@
       exampleE_C2: false
       exampleE_C3: false
       exampleE_C4: false
+      exampleX_01: false
+      exampleX_02: false
+      exampleX_03: false
+      exampleX_04: false
       import + export
       ----
       after import + export
@@ -159,6 +187,10 @@
       exampleE_C2: false
       exampleE_C3: false
       exampleE_C4: false
+      exampleX_01: 123"456789"
+      exampleX_02: 123'456789'
+      exampleX_03: 123"456789'
+      exampleX_04: 123'456789"
       X: ReferenceError: exampleE_C1 is not defined
     </script>
   </head>
@@ -181,6 +213,11 @@
     exampleE_C3: {{(?exampleE_C3)}}
     exampleE_C4: {{(?exampleE_C4)}}
 
+    exampleX_01: {{(?exampleX_01)}}
+    exampleX_02: {{(?exampleX_02)}}
+    exampleX_03: {{(?exampleX_03)}}
+    exampleX_04: {{(?exampleX_04)}}
+
     import + export
     ----
     <div id="moduleM" composite></div>
@@ -201,5 +238,10 @@
     exampleE_C2: {{(?exampleE_C2)}}
     exampleE_C3: {{(?exampleE_C3)}}
     exampleE_C4: {{(?exampleE_C4)}}
+
+    exampleX_01: {{(?exampleX_01)}}
+    exampleX_02: {{(?exampleX_02)}}
+    exampleX_03: {{(?exampleX_03)}}
+    exampleX_04: {{(?exampleX_04)}}
   </body>
 </html>
