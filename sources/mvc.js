@@ -99,7 +99,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.6.0 20230325
  */
 (() => {
 
@@ -133,6 +133,8 @@
      * - Only ... as facet path is also allowed
      */
     const PATTERN_PATH_FACET_VARIABLE = /(^((\w[\-\w]+\w)|(\w+))(#((\w[\-\w]+\w)|(\w+)))*(\.){3}$)|(^\.{3}$)/;
+
+    let _sitemap_active = false;
 
     compliant("SiteMap");
     compliant(null, window.SiteMap = {
@@ -503,7 +505,7 @@
          */
         customize(...variants) {
 
-            SiteMap.customize.active = true;
+            _sitemap_active = true;
 
             if (variants.length > 1
                     && variants[0] instanceof RegExp) {
@@ -667,7 +669,7 @@
         // all other cases the Window-HashChange-Event does the same
         document.body.addEventListener("click", (event) => {
 
-            if (!SiteMap.customize.active)
+            if (!_sitemap_active)
                 return;
 
             if (event.target
@@ -697,7 +699,7 @@
     window.addEventListener("hashchange", (event) => {
 
         // Without a SiteMap no partially rendering can be initiated.
-        if (!SiteMap.customize.active
+        if (!_sitemap_active
                 || _paths.size <= 0)
             return;
 
@@ -800,7 +802,7 @@
      */
     Composite.customize((element) => {
 
-        if (!SiteMap.customize.active)
+        if (!_sitemap_active)
             return;
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))

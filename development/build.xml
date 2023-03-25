@@ -114,13 +114,13 @@
       <replaceregexp file="@{file}" flags="g" byline="false"
           match="\r\n" replace="&#x0A;"/>
 
-      <exec executable="cmd.exe" dir="compress">
+      <exec executable="cmd.exe" dir="${workspace}/compress">
         <arg value="/c npm link ."/>
       </exec>
-      <exec executable="cmd.exe" dir="compress">
+      <exec executable="cmd.exe" dir="${workspace}/compress">
         <arg value="/c uglifyjs @{file} -c -m -o @{file-min}"/>
       </exec>
-      <exec executable="cmd.exe" dir="compress">
+      <exec executable="cmd.exe" dir="${workspace}/compress">
         <arg value="/c npm uninstall -g uglify-js"/>
       </exec>
     </sequential>
