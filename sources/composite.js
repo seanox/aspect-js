@@ -576,10 +576,10 @@
             if (typeof selector.setCustomValidity === "function")
                 selector.setCustomValidity("");
             
-            // Explicit validation via HTML5
-            // If the validation fails, model validation and synchronization is
-            // not and rendering always performed. In this case the event and
-            // thus the default action of  the browser is cancelled.
+            // Explicit validation via HTML5. If the validation fails, model
+            // validation and synchronization is not and rendering always
+            // performed. In this case the event and thus the default action of
+            // the browser is cancelled.
             if (typeof selector.checkValidity === "function")
                 valid = selector.checkValidity();
 
@@ -587,13 +587,12 @@
             const meta = _mount_lookup(selector);
             if (meta instanceof Object) {
 
-                // Validation is a function at the model level
-                // If a composite consists of several model levels, the
-                // validation may have to be organized accordingly if necessary.
-                // Interactive composite elements are a property object.
-                // Therefore, they are primarily a property and the validation
-                // is located in the surrounding model and not in the property
-                // object itself.
+                // Validation is a function at the model level. If a composite
+                // consists of several model levels, the validation may have to
+                // be organized accordingly if necessary. Interactive composite
+                // elements are a property object. Therefore, they are primarily
+                // a property and the validation is located in the surrounding
+                // model and not in the property object itself.
                 
                 let value;
                 if (selector instanceof Element) {
@@ -607,11 +606,10 @@
                         value = selector[Composite.ATTRIBUTE_VALUE];
                 }        
                 
-                // Implicit validation via the model
-                // If a corresponding validate method has been implemented in
-                // the model. The declaration with ATTRIBUTE_VALIDATE is not
-                // required here. The validation through the model only works if
-                // the corresponding composite is active/present in the DOM!
+                // Implicit validation via the model, if a corresponding
+                // validate method is implemented. The validation through the
+                // model only works if the corresponding composite is
+                // active/present in the DOM!
                 if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_VALIDATE)
                         && valid === true
                         && lock !== true
@@ -629,9 +627,9 @@
             // The value of the ATTRIBUTE_MESSAGE is used as an error message if
             // the validation was not successful. To output the error message,
             // the browser function of the HTML5 form validation is used. This
-            // message is displayed via mouse-over.
-            // If ATTRIBUTE_NOTIFICATION is also used, a value is not expected,
-            // the message is output as overlay/notification/report.
+            // message is displayed via mouse-over. If ATTRIBUTE_NOTIFICATION is
+            // also used, a value is not expected, the message is output as
+            // overlay/notification/report.
             if (valid !== true) {
                 let message;
                 if (typeof valid === "string"
@@ -894,8 +892,15 @@
                             }
 
                             // In case of a failed validation, the event and the
-                            // default action of the browser will be canceled.
-                            if (valid === true) {
+                            // default action of the browser will be canceled,
+                            // if additionally ATTRIBUTE_STRICT is used. The use
+                            // of ATTRIBUTE_STRICT became necessary, because
+                            // otherwise invalid inputs are not passed on to the
+                            // model, which however it is desirable in some
+                            // cases, if in the view also erroneous is to be
+                            // reflected.
+                            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT)
+                                    || valid === true) {
         
                                 // Step 2: Synchronisation
                                 
@@ -2482,6 +2487,11 @@
                     && !pattern)
                 continue;
 
+            if (digit === "\\") {
+                cursor++
+                continue;
+            }
+
             if (pattern) {
                 if (pattern === script.substring(cursor, cursor + pattern.length)
                         || (pattern === "\n" && digit === "\r"))
@@ -2490,10 +2500,6 @@
             }
 
             switch (digit) {
-                case "\\":
-                    cursor++
-                    continue;
-
                 case "/":
                     digit = script.charAt(cursor +1);
                     if (digit === "/")

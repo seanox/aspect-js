@@ -4,7 +4,6 @@ BF: Review: Optimization and corrections
     Reduce the size of the releases.
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected when the module is included, an error is output.
-BF: Composite: Support of const for models also in combined with Namespace.create(...)
 BF: Composite: Correction of validation with message and notification without model
 BF: Composite: Correction of mounting of child elements in a condition
 BF: Composite: Correction of the queue during rendering when a lock exists
@@ -32,9 +31,9 @@ CR: Expression: omission of tolerance for undefined parts in object chains (like
     - is too extensive in JavaScript with ReferenceError/TypeError/undefined/false/null/...
     - is replaced by (?...), in case of error this syntax in the brackets will return false
 CR: Composite: Errors during rendering are output in the view
-    Rendering does not abort.
-    Errors are also logged as errors on the console.
-    Errors can also be subscribed as a composite event.
+    - Rendering does not abort
+    - Errors are also logged as errors on the console
+    - Errors can also be subscribed as a composite event
 CR: Composite: Renamed method Object.using(...) in Object.use(...)
 CR: Composite: Optimization when loading module resources
     - change of sequence to: JS, CSS, HTML (markup)
@@ -52,6 +51,9 @@ CR: Composite: Extension of the element ID with a unique identifier
     The unique identifier is for the view and business logic, but has no effect on composite.
 CR: Composite: Added @-attributes as attribute templates for elements
     Creates corresponding attributes, which is convenient if they use expressions as value.
+CR: Composite: Changing the behavior of the validation
+    Synchronization and function execution are no longer blocked by violations.
+    For the previous strict behavior, the attributes validate and strict must be combined.
 CR: Datasource: Optimization when loading module resources
     - omission of the HEAD request
     - omission of XML error when the request receives an error page
