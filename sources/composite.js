@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230323
+ * @version 1.6.0 20230325
  */
 (() => {
 
@@ -2362,8 +2362,9 @@
 
             // JavaScript is not inserted as an element, it is executed
             // directly. For this purpose eval is used. Since the method may
-            // form its own namespace for variables, it is important to
-            // initialize the global variable better with window[...].
+            // form its own scope for variables, it is important to use the
+            // macro #export to be able to use variables and/or constants in the
+            // global scope.
             
             // HTML/Markup is preloaded into the render cache if available. If
             // markup exists for the composite, ATTRIBUTE_IMPORT with the URL is
@@ -2409,16 +2410,16 @@
             loading(context + ".css");
 
         // CSS and HTML/Markup is only loaded if it is a known composite object
-        // and the element does not contain a markup (inner HTML) and
-        // ATTRIBUTE_IMPORT and output are not set. Thus is the assumption that
-        // for an empty element outsourced markup should exist.
-
+        // and the element does not contain a markup (inner HTML). For inserting
+        // HTML/markup ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT must not be set. It
+        // is assumed that an empty component/elements outsourced markup exists.
         if (!object
-                || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                 || composite.innerHTML.trim())
             return;
         loading(context + ".css");
+        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT))
+            return;
         loading(context + ".html");
     };
 
@@ -2451,13 +2452,13 @@
      *     #export
      *     ----
      * Expects a space-separated list of exports. Export are variables or
-     * constants in a module that are made usable for the global namespace.
+     * constants in a module that are made usable for the global scope.
      *
      *     #export connector and much more
      *
      * Primarily, an export argument is the name of the variable or constant in
      * the module. Optionally, the name can be extended by an @ symbol to
-     * include the destination in the global namespace.
+     * include the destination in the global scope.
      *
      *     #export connector@io.example
      */
