@@ -114,11 +114,11 @@
         }});
 
         Test.create({expected:/Invalid namespace at level 1: io\/moduleE/, test() {
-            ___render_include("io/moduleE");
+            Composite.include("io/moduleE");
         }});
 
         Test.create({expected:/Invalid namespace at level 1: io\/moduleY/, test() {
-            ___render_include("io/moduleY");
+            Composite.include("io/moduleY");
         }});
 
         Test.create({test() {
