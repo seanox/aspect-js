@@ -32,6 +32,12 @@
         Test.create({test() {
             capture.validate();
         }});
+
+        const moduleI = {x: false}.reactive();
+        window.setTimeout(() => {moduleI.x = !moduleI.x;}, 1000);
+        window.setTimeout(() => {moduleI.x = !moduleI.x;}, 1250);
+        window.setTimeout(() => {moduleI.x = !moduleI.x;}, 1500);
+        window.setTimeout(() => {moduleI.x = !moduleI.x;}, 1750);
     </script>
     <script type="text/test">
       Recursion detected for composite: compositeModuleA
@@ -49,6 +55,7 @@
       C-Error: Recursion detected for composite: compositeModuleC-C
       D-D-D
       hello
+      ____
     </script>
     <script type="text/test">
       hello
@@ -57,6 +64,7 @@
       C-Error: Recursion detected for composite: compositeModuleC-C
       D-D-D
       hello
+      ____
     </script>
     <script type="text/test">
       hello
@@ -65,6 +73,7 @@
       C-Error: Recursion detected for composite: compositeModuleC-C
       D-D-D
       hello
+      ____
     </script>
     <script type="text/test">
       hello
@@ -73,6 +82,43 @@
       C-Error: Recursion detected for composite: compositeModuleC-C
       D-D-D
       hello
+      ____
+    </script>
+    <script type="text/test">
+      hello
+      A-Error: Recursion detected for composite: compositeModuleA-A
+      B-Error: Recursion detected for composite: compositeModuleB-B
+      C-Error: Recursion detected for composite: compositeModuleC-C
+      D-D-D
+      hello
+      __I__
+    </script>
+    <script type="text/test">
+      hello
+      A-Error: Recursion detected for composite: compositeModuleA-A
+      B-Error: Recursion detected for composite: compositeModuleB-B
+      C-Error: Recursion detected for composite: compositeModuleC-C
+      D-D-D
+      hello
+      ____
+    </script>
+    <script type="text/test">
+      hello
+      A-Error: Recursion detected for composite: compositeModuleA-A
+      B-Error: Recursion detected for composite: compositeModuleB-B
+      C-Error: Recursion detected for composite: compositeModuleC-C
+      D-D-D
+      hello
+      __I__
+    </script>
+    <script type="text/test">
+      hello
+      A-Error: Recursion detected for composite: compositeModuleA-A
+      B-Error: Recursion detected for composite: compositeModuleB-B
+      C-Error: Recursion detected for composite: compositeModuleC-C
+      D-D-D
+      hello
+      ____
     </script>
   <head>
   <body>
@@ -82,5 +128,7 @@
     C-<div id="compositeModuleC" composite></div>-C
     D-<div id="compositeModuleD" composite>D</div>-D
     {{'hello'}}
+    __<div id="moduleI" composite condition="{{moduleI.x}}">
+    </div>__
   </body>
 </html>
