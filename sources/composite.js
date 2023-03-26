@@ -1403,7 +1403,7 @@
 
                         // Load modules/components/composite resources.
                         if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
-                            _render_include(selector);
+                            Composite.include(selector);
                     }
                 }
 
@@ -1465,9 +1465,9 @@
 
                     // Load modules/components/composite resources.
                     // That no resources are loaded more than once is taken care
-                    // of by the _render_include method.
+                    // of by the include method ot Composite.
                     if (attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
-                        _render_include(element);
+                        Composite.include(element);
 
                     selector.parentNode.insertBefore(element, selector);
 
@@ -1988,6 +1988,213 @@
 
                 lock.release();
             }
+        },
+        
+        /**
+         * Loads modules/components/composite resources. The assumption is, for
+         * components/composites, the resources are outsourced. JS and HTML are
+         * supported. Resources are stored in the module directory (./modules by
+         * default is relative to the page URL). The resources (response) are
+         * stored in the render cache, but only to detect and prevent repeated
+         * loading. The resources will only be requested once. If they do not
+         * exist (status 404), it is not tried again. Otherwise, an error is
+         * thrown if the request is not answered with status 200.
+         *
+         * The method also supports string arrays for resources with path. Then
+         * each path element is an array entry.
+         *
+         * Following rules apply to loading resources:
+         * - Composite ID / namespace / path must have a valid syntax
+         * - HTML is loaded only for elements when the elements have no content
+         * - CSS is only loaded when HTML is also loaded
+         * - JavaScript is loaded only if no corresponding JavaScript model 
+         *   exists
+         *
+         * @param composite
+         */
+        include(...composite) {
+
+            if (composite.length <= 0
+                    || (composite.length === 1
+                            && !(composite[0] instanceof Element)
+                            && typeof composite[0] !== "string"))
+                throw new TypeError("Invalid composite for include");
+            if (composite.length === 1
+                    && composite[0] instanceof Element)
+                composite = composite[0];
+
+            let resource = composite;
+
+            let object = null;
+            if (composite instanceof Element) {
+                if (!composite.hasAttribute(Composite.ATTRIBUTE_ID))
+                    throw new Error("Unknown composite without id");
+                object = _render_meta[composite.ordinal()];
+                if (!object)
+                    throw new Error("Unknown composite");
+                resource = composite.id;
+                if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
+                    resource = resource.uncapitalize();
+                const meta = _mount_locate(composite);
+                if (meta && meta.namespace)
+                    resource = meta.namespace.concat(resource);
+                else resource = [resource];
+            }
+
+            const context = Composite.MODULES + "/" + resource.join("/");
+
+            // Based on namespace and resource a corresponding JavaScript object
+            // is searched for. Therefore, here with invalid namespace/composite
+            // IDs an error occurs, which must be noticed however already
+            // before, it is to be ensured that only modules are loaded to valid
+            // composites (namespace + composite ID). Later, it is also decided
+            // whether JavaScript must be loaded. This is only necessary if
+            // lookup cannot determine a JavaScript model (undefined or
+            // element).
+
+            // Theoretically an error can occur during the lookup if namespace
+            // or composite ID are invalid, but this should already run on error
+            // before, so it is not done here -- otherwise this is a bug!
+
+            resource = resource.join(".");
+
+            const lookup = Object.lookup(resource);
+
+            const recursionDetection = (element) => {
+                const id = (element instanceof Element ? element.id || "" : "").trim();
+                const pattern = id.toLowerCase();
+                while (pattern && element instanceof Element) {
+                    element = element.parentNode;
+                    if (element instanceof Element
+                            && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                            && element.hasAttribute(Composite.ATTRIBUTE_ID)
+                            && (element.id || "").toLowerCase().trim() === pattern)
+                        throw new Error("Recursion detected for composite: " + id);
+                }
+            }
+
+            // If the module has already been loaded, it is only necessary to
+            // check whether the markup must be inserted. CSS should already
+            // exist in the head and the JavaScript will only be executed once.
+            if (_render_cache[context + ".composite"] !== undefined) {
+                if (_render_cache[context + ".html"] !== undefined) {
+                    if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                            && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
+                            && !composite.innerHTML.trim()) {
+                        recursionDetection(composite);
+                        if (composite instanceof Element)
+                            composite.innerHTML = _render_cache[context + ".html"];
+                    }
+                }
+                return;
+            }
+
+            _render_cache[context + ".composite"] = null;
+
+            // Internal method for loading a composite resource.
+            // Supports JS, CSS and HTML.
+            const loading = (resource) => {
+
+                const normalize = (path) => {
+                    const anchor = document.createElement("a");
+                    anchor.href = path;
+                    return anchor.pathname;
+                };
+
+                // JS and CSS are loaded only once
+                resource = normalize(resource);
+                if (resource in _render_cache
+                        && resource.match(/\.(js|css)$/i))
+                    return;
+
+                // Resource has already been requested, but with no useful
+                // response and unsuccessful requests will not be repeated
+                if (resource in _render_cache
+                        && _render_cache[resource] === undefined)
+                    return;
+
+                if (!(resource in _render_cache)) {
+                    _render_cache[resource] = undefined;
+                    const request = new XMLHttpRequest();
+                    request.overrideMimeType("text/plain");
+                    request.open("GET", resource, false);
+                    request.send();
+                    // Only server states 200 and 404 are supported, others will
+                    // cause an error and the requests are not repeated later
+                    if (request.status === 404)
+                        return;
+                    if (request.status !== 200)
+                        throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                    _render_cache[resource] = request.responseText.trim();
+                }
+
+                // CSS is inserted into the HEAD element as a style element.
+                // Without a head element, the inserting causes an error.
+
+                // JavaScript is not inserted as an element, it is executed
+                // directly. For this purpose eval is used. Since the method may
+                // form its own scope for variables, it is important to use the
+                // macro #export to be able to use variables and/or constants in
+                // the global scope.
+                
+                // HTML/Markup is preloaded into the render cache if available.
+                // If markup exists for the composite, ATTRIBUTE_IMPORT with the
+                // URL is added to the item. Inserting then takes over the
+                // import implementation, which then also accesses the render
+                // cache.
+
+                const content = _render_cache[resource];
+                if (resource.match(/\.js$/)) {
+                    try {_render_macro_eval(content);
+                    } catch (exception) {
+                        console.error(resource, exception.name + ": " + exception.message);
+                        throw exception;
+                    }
+                } else if (resource.match(/\.css$/)) {
+                    const head = document.querySelector("html head");
+                    if (!head)
+                        throw new Error("No head element found");
+                    const style = document.createElement("style");
+                    style.setAttribute("type", "text/css");
+                    style.textContent = content;
+                    head.appendChild(style);
+                } else if (resource.match(/\.html$/)) {
+                    recursionDetection(composite);
+                    if (composite instanceof Element)
+                        composite.innerHTML = content;
+                }
+            }
+
+            // The sequence of loading is strictly defined: JS, CSS, HTML
+
+            // JavaScript is only loaded if no corresponding object exists for
+            // the composite id or the object is an element object
+            if (lookup === undefined
+                    || lookup instanceof Element
+                    || lookup instanceof HTMLCollection
+                    || resource === "common")
+                loading(context + ".js");
+
+            // CSS and HTML are loaded only if they are resources to an element
+            // and the element is empty, excludes CSS for common. Since CSS
+            // resources are loaded only once, common.css can be requested again
+            // later.
+            if (resource === "common")
+                loading(context + ".css");
+
+            // CSS and HTML/Markup is only loaded if it is a known composite
+            // object and the element does not contain a markup (inner HTML).
+            // For inserting HTML/markup ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT
+            // must not be set. It is assumed that an empty component/elements
+            // outsourced markup exists.
+            if (!object
+                    || composite.innerHTML.trim())
+                return;
+            loading(context + ".css");
+            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                    || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT))
+                return;
+            loading(context + ".html");
         }
     });
 
@@ -2226,208 +2433,6 @@
     });
 
     /**
-     * Load modules/components/composite resources. For components/composites,
-     * it is assumed that resources have been outsourced. For outsourcing CSS,
-     * JS and HTML are supported. The resources are stored in the module
-     * directory (./modules by default is relative to the page URL). The
-     * resources (response) are stored in the render cache, but only to detect
-     * and prevent repeated loading. The resources will only be requested once.
-     * If they do not exist (status 404), it is not tried again. Otherwise, an
-     * error is thrown if the request is not answered with status 200.
-     *
-     * The method also supports string arrays for resources with path. Then each
-     * path element is an array entry.
-     *
-     * Following rules apply to loading resources:
-     * - Composite ID / namespace / path must have a valid syntax
-     * - HTML is loaded only for elements when the elements have no content
-     * - CSS is only loaded when HTML is also loaded
-     * - JavaScript is loaded only if no corresponding JavaScript model exists
-     *
-     * @param composite
-     */
-    const _render_include = (...composite) => {
-
-        if (composite.length <= 0
-                || (composite.length === 1
-                        && !(composite[0] instanceof Element)
-                        && typeof composite[0] !== "string"))
-            throw new TypeError("Invalid composite for include");
-        if (composite.length === 1
-                && composite[0] instanceof Element)
-            composite = composite[0];
-
-        let resource = composite;
-
-        let object = null;
-        if (composite instanceof Element) {
-            if (!composite.hasAttribute(Composite.ATTRIBUTE_ID))
-                throw new Error("Unknown composite without id");
-            object = _render_meta[composite.ordinal()];
-            if (!object)
-                throw new Error("Unknown composite");
-            resource = composite.id;
-            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
-                resource = resource.uncapitalize();
-            const meta = _mount_locate(composite);
-            if (meta && meta.namespace)
-                resource = meta.namespace.concat(resource);
-            else resource = [resource];
-        }
-
-        const context = Composite.MODULES + "/" + resource.join("/");
-
-        // Based on namespace and resource a corresponding JavaScript object is
-        // searched for. Therefore, here with invalid namespace / composite IDs
-        // an error occurs, which must be noticed however already before, it is
-        // to be ensured that only modules are loaded to valid composites
-        // (namespace + composite ID). Later, it is also decided whether
-        // JavaScript must be loaded. This is only necessary if lookup cannot
-        // determine a JavaScript model (undefined or element).
-
-        // Theoretically an error can occur during the lookup if namespace or
-        // composite ID are invalid, but this should already run on error
-        // before, so it is not done here -- otherwise this is a bug!
-
-        resource = resource.join(".");
-
-        const lookup = Object.lookup(resource);
-
-        const recursionDetection = (element) => {
-            const id = (element instanceof Element ? element.id || "" : "").trim();
-            const pattern = id.toLowerCase();
-            while (pattern && element instanceof Element) {
-                element = element.parentNode;
-                if (element instanceof Element
-                        && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
-                        && element.hasAttribute(Composite.ATTRIBUTE_ID)
-                        && (element.id || "").toLowerCase().trim() === pattern)
-                    throw new Error("Recursion detected for composite: " + id);
-            }
-        }
-
-        // If the module has already been loaded, it is only necessary to check
-        // whether the markup must be inserted. CSS should already exist in the
-        // head and the JavaScript will only be executed once.
-        if (_render_cache[context + ".composite"] !== undefined) {
-            if (_render_cache[context + ".html"] !== undefined) {
-                if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                        && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                        && !composite.innerHTML.trim()) {
-                    recursionDetection(composite);
-                    if (composite instanceof Element)
-                        composite.innerHTML = _render_cache[context + ".html"];
-                }
-            }
-            return;
-        }
-
-        _render_cache[context + ".composite"] = null;
-
-        // Internal method for loading a composite resource.
-        // Supports JS, CSS and HTML.
-        const loading = (resource) => {
-
-            const normalize = (path) => {
-                const anchor = document.createElement("a");
-                anchor.href = path;
-                return anchor.pathname;
-            };
-
-            // JS and CSS are loaded only once
-            resource = normalize(resource);
-            if (resource in _render_cache
-                    && resource.match(/\.(js|css)$/i))
-                return;
-
-            // Resource has already been requested, but with no useful response
-            // and unsuccessful requests will not be repeated
-            if (resource in _render_cache
-                    && _render_cache[resource] === undefined)
-                return;
-
-            if (!(resource in _render_cache)) {
-                _render_cache[resource] = undefined;
-                const request = new XMLHttpRequest();
-                request.overrideMimeType("text/plain");
-                request.open("GET", resource, false);
-                request.send();
-                // Only server states 200 and 404 are supported, all others will
-                // cause an error and the requests are not repeated later
-                if (request.status === 404)
-                    return;
-                if (request.status !== 200)
-                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-                _render_cache[resource] = request.responseText.trim();
-            }
-
-            // CSS is inserted into the HEAD element as a style element.
-            // Without a head element, the inserting causes an error.
-
-            // JavaScript is not inserted as an element, it is executed
-            // directly. For this purpose eval is used. Since the method may
-            // form its own scope for variables, it is important to use the
-            // macro #export to be able to use variables and/or constants in the
-            // global scope.
-            
-            // HTML/Markup is preloaded into the render cache if available. If
-            // markup exists for the composite, ATTRIBUTE_IMPORT with the URL is
-            // added to the item. Inserting then takes over the import
-            // implementation, which then also accesses the render cache.
-
-            const content = _render_cache[resource];
-            if (resource.match(/\.js$/)) {
-                try {_render_macro_eval(content);
-                } catch (exception) {
-                    console.error(resource, exception.name + ": " + exception.message);
-                    throw exception;
-                }
-            } else if (resource.match(/\.css$/)) {
-                const head = document.querySelector("html head");
-                if (!head)
-                    throw new Error("No head element found");
-                const style = document.createElement("style");
-                style.setAttribute("type", "text/css");
-                style.textContent = content;
-                head.appendChild(style);
-            } else if (resource.match(/\.html$/)) {
-                recursionDetection(composite);
-                if (composite instanceof Element)
-                    composite.innerHTML = content;
-            }
-        }
-
-        // The sequence of loading is strictly defined: JS, CSS, HTML
-
-        // JavaScript is only loaded if no corresponding object exists for the
-        // composite id or the object is an element object
-        if (lookup === undefined
-                || lookup instanceof Element
-                || lookup instanceof HTMLCollection
-                || resource === "common")
-            loading(context + ".js");
-
-        // CSS and HTML are loaded only if they are resources to an element and
-        // the element is empty, excludes CSS for common. Since CSS resources
-        // are loaded only once, common.css can be requested again later.
-        if (resource === "common")
-            loading(context + ".css");
-
-        // CSS and HTML/Markup is only loaded if it is a known composite object
-        // and the element does not contain a markup (inner HTML). For inserting
-        // HTML/markup ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT must not be set. It
-        // is assumed that an empty component/elements outsourced markup exists.
-        if (!object
-                || composite.innerHTML.trim())
-            return;
-        loading(context + ".css");
-        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT))
-            return;
-        loading(context + ".html");
-    };
-
-    /**
      * As a special feature, Composite JavaScript supports macros.
      *
      * Macros are based on a keyword starting with a hash symbol followed by
@@ -2571,7 +2576,7 @@
     const _import = (...imports) => {
         // Because it is an internal method, an additional validation of the
         // exports as data structure was omitted.
-        imports.forEach(include => _render_include(...include.split(/\/+/)));
+        imports.forEach(include => Composite.include(...include.split(/\/+/)));
     };
 
     const _export = (...exports) => {
@@ -2752,7 +2757,7 @@
         // initialize the single page application. It consists of common.js and
         // common.css. The configuration of the SiteMap and essential styles
         // can/should be stored here.
-        _render_include("common");
+        Composite.include("common");
 
         (new MutationObserver((records) => {
             records.forEach((record) => {
