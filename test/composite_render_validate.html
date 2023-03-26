@@ -199,10 +199,11 @@
                 Test.start();
             }, 1000);
         });
-        
+
         Test.create({test() {
+            document.body.innerHTML = "<pre>" + snapshots.join("\r\n") + "</pre>";
             Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
-        }});     
+        }});
         Test.create({test() {
             Assert.assertEquals("input_1|input_1_fill|input_2|input_2_fill|input_3|input_3_fill|input_4|input_4_fill"
                     + "|input_5|input_5_fill|input_6|input_6_fill|input_7|input_7_fill|input_8|input_8_fill|input_9|input_9_fill"
@@ -466,66 +467,66 @@ B:2
     <form id="model" composite
         method="GET" action="composite_render_validate_1.html" target="targetA">
       <input type="text" id="email" placeholder="email"
-          validate required pattern="{{EMAIL_PATTERN}}"
+          validate strict required pattern="{{EMAIL_PATTERN}}"
           message="{{EMAIL_MESSAGE}}"
           notification="on"
           events="input">
       <input type="text" id="password" placeholder="password"
-          validate required pattern="{{PASSWORD_PATTERN}}"
+          validate strict required pattern="{{PASSWORD_PATTERN}}"
           message="{{PASSWORD_MESSAGE}}"
           notification="on"
           events="input">
 
       <input type="text" id="input_1" placeholder="message: 1"
-          validate required
+          validate strict required
           message="1"
           notification="on"
           events="input">
       <input type="text" id="input_2" placeholder="message: 0"
-          validate required
+          validate strict required
           message="0"
           notification="on"
           events="input">
       <input type="text" id="input_3" placeholder="message: -1"
-          validate required
+          validate strict required
           message="-1"
           notification="on"
           events="input">
       <input type="text" id="input_4" placeholder="message: false"
-          validate required
+          validate strict required
           message="false"
           notification="on"
           events="input">
       <input type="text" id="input_5" placeholder="message: null"
-          validate required
+          validate strict required
           message="null"
           notification="on"
           events="input">
       <input type="text" id="input_6" placeholder="message: undefined"
-          validate required
+          validate strict required
           message="undefined"
           notification="on"
           events="input">
       <input type="text" id="input_7" placeholder="message: true"
-          validate required
+          validate strict required
           message="true"
           notification="on"
           events="input">
       <input type="text" id="input_8" placeholder="message: test"
-          validate required
+          validate strict required
           message="test"
           notification="on"
           events="input">
       <input type="text" id="input_9" placeholder="message: test"
-          validate required
+          validate strict required
           message=""
           notification="on"
           events="input">
 
-      <input type="submit" id="submit" value="Submit" validate>
-      <input type="button" id="button" value="Button" validate>
+      <input type="submit" id="submit" value="Submit" validate strict>
+      <input type="button" id="button" value="Button" validate strict>
       <a id="link" href="composite_render_validate_2.html" target="targetB"
-          validate events="click">Password forgotten?</a>
+          validate strict events="click">Password forgotten?</a>
       <input type="button" id="unsafe" value="Unsafe">
       <iframe name="targetA" src="about:blank"></iframe>
       <iframe name="targetB" src="about:blank"></iframe>
