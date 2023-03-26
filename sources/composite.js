@@ -1463,12 +1463,11 @@
                     const attributes = Object.assign({}, condition.attributes);
                     _render_meta[element.ordinal()] = {serial:element.ordinal(), element, attributes, condition};
 
-                    // Load modules/components/composite resources. Composites
-                    // with condition are only loaded with the first use.
-                    if (!condition.complete
-                            && attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
+                    // Load modules/components/composite resources.
+                    // That no resources are loaded more than once is taken care
+                    // of by the _render_include method.
+                    if (attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE))
                         _render_include(element);
-                    condition.complete = true;
 
                     selector.parentNode.insertBefore(element, selector);
 
