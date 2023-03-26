@@ -34,7 +34,7 @@ bundle, NoSQL datasource, test environment and much more.
 - Namespaces and domain concept  
   for better structuring of components, modules and business logic
 - Modularization (supports imports at the runtime)  
-  component concept for smart/automatic loading of composite resources
+  component concept for smart/automatic loading of composite resources at runtime
 - Event handling
 - Expression Language  
   meta-language extension with full JavaScript support
@@ -54,6 +54,8 @@ bundle, NoSQL datasource, test environment and much more.
   internationalization (i18n), localization (l10n) and text outsourcing 
 - NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
+- Micro Frontends  
+  Platform and framework for the implementation of micro-frontends
 - Test environment  
   for automated unit tests and integration tests
 - ... 
