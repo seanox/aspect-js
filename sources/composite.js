@@ -2549,7 +2549,7 @@
                                             throw new Error(("Invalid macro: #export " + parameters).trim());
                                         parameters = [match[1], "\"" + match[1] + "\""];
                                         if (match[2])
-                                            parameters.push("\"" + match[1] + "\"");
+                                            parameters.push("\"" + match[2] + "\"");
                                         exports.push("[" + parameters.join(",") + "]");
                                     });
                                     macro = "_export(...[" + exports.join(",") + "])";
