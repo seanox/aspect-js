@@ -36,6 +36,7 @@
       exampleE_A2: false
       exampleE_A3: false
       exampleE_A4: false
+      exampleE_A5: false
       exampleE_B1: false
       exampleE_B2: false
       exampleE_B3: false
@@ -48,6 +49,14 @@
       exampleX_02: false
       exampleX_03: false
       exampleX_04: false
+      a: false
+      a.b: false
+      a.b.c: false
+      a.b.c.exampleE_A1: false
+      b: false
+      b.c: false
+      b.c.d: false
+      b.c.d.exampleE_A5: false
       import + export
       ----
       after import + export
@@ -56,6 +65,7 @@
       exampleE_A2: {{(?exampleE_A2)}}
       exampleE_A3: {{(?exampleE_A3)}}
       exampleE_A4: {{(?exampleE_A4)}}
+      exampleE_A5: {{(?exampleE_A5)}}
       exampleE_B1: {{(?exampleE_B1)}}
       exampleE_B2: {{(?exampleE_B2)}}
       exampleE_B3: {{(?exampleE_B3)}}
@@ -68,6 +78,14 @@
       exampleX_02: {{(?exampleX_02)}}
       exampleX_03: {{(?exampleX_03)}}
       exampleX_04: {{(?exampleX_04)}}
+      a: {{(?a)}}
+      a.b: {{(?a.b)}}
+      a.b.c: {{(?a.b.c)}}
+      a.b.c.exampleE_A1: {{(?a.b.c.exampleE_A1)}}
+      b: {{(?b)}}
+      b.c: {{(?b.c)}}
+      b.c.d: {{(?b.c.d)}}
+      b.c.d.exampleE_A5: {{(?b.c.d.exampleE_A5)}}
       X: ReferenceError: exampleE_C1 is not defined
     </script>
     <script type="text/test">
@@ -77,6 +95,7 @@
       exampleE_A2: false
       exampleE_A3: false
       exampleE_A4: false
+      exampleE_A5: false
       exampleE_B1: false
       exampleE_B2: false
       exampleE_B3: false
@@ -89,6 +108,14 @@
       exampleX_02: false
       exampleX_03: false
       exampleX_04: false
+      a: false
+      a.b: false
+      a.b.c: false
+      a.b.c.exampleE_A1: false
+      b: false
+      b.c: false
+      b.c.d: false
+      b.c.d.exampleE_A5: false
       import + export
       ----
       after import + export
@@ -97,6 +124,7 @@
       exampleE_A2: {{(?exampleE_A2)}}
       exampleE_A3: {{(?exampleE_A3)}}
       exampleE_A4: {{(?exampleE_A4)}}
+      exampleE_A5: {{(?exampleE_A5)}}
       exampleE_B1: {{(?exampleE_B1)}}
       exampleE_B2: {{(?exampleE_B2)}}
       exampleE_B3: {{(?exampleE_B3)}}
@@ -109,6 +137,14 @@
       exampleX_02: {{(?exampleX_02)}}
       exampleX_03: {{(?exampleX_03)}}
       exampleX_04: {{(?exampleX_04)}}
+      a: {{(?a)}}
+      a.b: {{(?a.b)}}
+      a.b.c: {{(?a.b.c)}}
+      a.b.c.exampleE_A1: {{(?a.b.c.exampleE_A1)}}
+      b: {{(?b)}}
+      b.c: {{(?b.c)}}
+      b.c.d: {{(?b.c.d)}}
+      b.c.d.exampleE_A5: {{(?b.c.d.exampleE_A5)}}
       X: ReferenceError: exampleE_C1 is not defined
     </script>
     <script type="text/test">
@@ -118,6 +154,7 @@
       exampleE_A2: false
       exampleE_A3: false
       exampleE_A4: false
+      exampleE_A5: false
       exampleE_B1: false
       exampleE_B2: false
       exampleE_B3: false
@@ -130,6 +167,14 @@
       exampleX_02: false
       exampleX_03: false
       exampleX_04: false
+      a: false
+      a.b: false
+      a.b.c: false
+      a.b.c.exampleE_A1: false
+      b: false
+      b.c: false
+      b.c.d: false
+      b.c.d.exampleE_A5: false
       import + export
       ----
       after import + export
@@ -138,6 +183,7 @@
       exampleE_A2: {{(?exampleE_A2)}}
       exampleE_A3: {{(?exampleE_A3)}}
       exampleE_A4: {{(?exampleE_A4)}}
+      exampleE_A5: {{(?exampleE_A5)}}
       exampleE_B1: {{(?exampleE_B1)}}
       exampleE_B2: {{(?exampleE_B2)}}
       exampleE_B3: {{(?exampleE_B3)}}
@@ -150,6 +196,14 @@
       exampleX_02: {{(?exampleX_02)}}
       exampleX_03: {{(?exampleX_03)}}
       exampleX_04: {{(?exampleX_04)}}
+      a: {{(?a)}}
+      a.b: {{(?a.b)}}
+      a.b.c: {{(?a.b.c)}}
+      a.b.c.exampleE_A1: {{(?a.b.c.exampleE_A1)}}
+      b: {{(?b)}}
+      b.c: {{(?b.c)}}
+      b.c.d: {{(?b.c.d)}}
+      b.c.d.exampleE_A5: {{(?b.c.d.exampleE_A5)}}
       X: ReferenceError: exampleE_C1 is not defined
     </script>
     <script type="text/test">
@@ -159,6 +213,7 @@
       exampleE_A2: false
       exampleE_A3: false
       exampleE_A4: false
+      exampleE_A5: false
       exampleE_B1: false
       exampleE_B2: false
       exampleE_B3: false
@@ -171,6 +226,14 @@
       exampleX_02: false
       exampleX_03: false
       exampleX_04: false
+      a: false
+      a.b: false
+      a.b.c: false
+      a.b.c.exampleE_A1: false
+      b: false
+      b.c: false
+      b.c.d: false
+      b.c.d.exampleE_A5: false
       import + export
       ----
       after import + export
@@ -179,6 +242,7 @@
       exampleE_A2: [object Object]
       exampleE_A3: () => {return "A-CCC";}
       exampleE_A4: false
+      exampleE_A5: false
       exampleE_B1: B-AAA
       exampleE_B2: [object Object]
       exampleE_B3: () => {return "B-CCC";}
@@ -191,6 +255,14 @@
       exampleX_02: 123'456789'
       exampleX_03: 123"456789'
       exampleX_04: 123'456789"
+      a: [object Object]
+      a.b: [object Object]
+      a.b.c: [object Object]
+      a.b.c.exampleE_A1: A-AAA
+      b: [object Object]
+      b.c: [object Object]
+      b.c.d: [object Object]
+      b.c.d.exampleE_A5: A-EEE
       X: ReferenceError: exampleE_C1 is not defined
     </script>
   </head>
@@ -202,6 +274,7 @@
     exampleE_A2: {{(?exampleE_A2)}}
     exampleE_A3: {{(?exampleE_A3)}}
     exampleE_A4: {{(?exampleE_A4)}}
+    exampleE_A5: {{(?exampleE_A5)}}
 
     exampleE_B1: {{(?exampleE_B1)}}
     exampleE_B2: {{(?exampleE_B2)}}
@@ -217,6 +290,16 @@
     exampleX_02: {{(?exampleX_02)}}
     exampleX_03: {{(?exampleX_03)}}
     exampleX_04: {{(?exampleX_04)}}
+
+    a: {{(?a)}}
+    a.b: {{(?a.b)}}
+    a.b.c: {{(?a.b.c)}}
+    a.b.c.exampleE_A1: {{(?a.b.c.exampleE_A1)}}
+
+    b: {{(?b)}}
+    b.c: {{(?b.c)}}
+    b.c.d: {{(?b.c.d)}}
+    b.c.d.exampleE_A5: {{(?b.c.d.exampleE_A5)}}
 
     import + export
     ----
@@ -228,6 +311,7 @@
     exampleE_A2: {{(?exampleE_A2)}}
     exampleE_A3: {{(?exampleE_A3)}}
     exampleE_A4: {{(?exampleE_A4)}}
+    exampleE_A5: {{(?exampleE_A5)}}
 
     exampleE_B1: {{(?exampleE_B1)}}
     exampleE_B2: {{(?exampleE_B2)}}
@@ -243,5 +327,15 @@
     exampleX_02: {{(?exampleX_02)}}
     exampleX_03: {{(?exampleX_03)}}
     exampleX_04: {{(?exampleX_04)}}
+
+    a: {{(?a)}}
+    a.b: {{(?a.b)}}
+    a.b.c: {{(?a.b.c)}}
+    a.b.c.exampleE_A1: {{(?a.b.c.exampleE_A1)}}
+
+    b: {{(?b)}}
+    b.c: {{(?b.c)}}
+    b.c.d: {{(?b.c.d)}}
+    b.c.d.exampleE_A5: {{(?b.c.d.exampleE_A5)}}
   </body>
 </html>
