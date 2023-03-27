@@ -24,13 +24,14 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.6.0 20230326
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
 // manipulated in a controlled way. Controlled means that errors occur when
-// trying to overwrite existing objects and functions. The mechanism is
-// temporary and is removed after the page is loaded.
+// trying to overwrite existing objects and functions. Originally, the mechanism
+// was removed after loading the page, but the feature has proven to be
+// convenient for other modules and therefore remains.
 //
 // In the code, the method is used in an unconventional form.
 //
@@ -53,8 +54,6 @@ window.compliant = (context, payload) => {
         throw new Error("JavaScript incompatibility detected for: " + context);
     return eval(`${context} = payload`);
 };
-window.addEventListener("load",
-    event => delete window.compliant);
 
 /**
  * Comparable to packages in other programming languages, namespaces can be used
