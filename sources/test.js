@@ -92,7 +92,7 @@
  * the redirection and caching of console output.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.6.0 20230328
  */
 compliant("Test");
 compliant(null, window.Test = {
@@ -190,7 +190,7 @@ compliant(null, window.Test = {
 
                 if (parent && parent !== window)
                     try {parent.Test.fire(event, status);
-                    } catch (exception) {
+                    } catch (error) {
                     }
             },
             
@@ -710,7 +710,7 @@ compliant(null, window.Test = {
             };
 
             /** Clears the cache from the console output. */
-            console.output.clear = function() {
+            console.output.clear = () => {
                 _output.log   = "";
                 _output.warn  = "";
                 _output.error = "";

@@ -99,7 +99,7 @@
  * extension and is based on the Composite API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230325
+ * @version 1.6.0 20230328
  */
 (() => {
 
@@ -220,11 +220,11 @@
             };
             
             try {path = Path.normalize(...locate(path));
-            } catch (exception) {
+            } catch (error) {
                 while (true) {
                     path = path.replace(/(^[^#]+$)|(#[^#]*$)/, "");
                     try {path = Path.normalize(...locate(path));
-                    } catch (exception) {
+                    } catch (error) {
                         continue;
                     }
                     break;
@@ -909,7 +909,7 @@
          *    #               #x#y#z
          *    a#b#c           #x#y#z#a#b#c
          *
-         * Invalid roots and paths cause an exception.
+         * Invalid roots and paths cause an error.
          * The method has the following various signatures:
          *     function(root, path)
          *     function(path)
@@ -938,7 +938,7 @@
             if (variants.length > 1) {
                 root = variants[0];
                 try {root = Path.normalize(root);
-                } catch (exception) {
+                } catch (error) {
                     root = (root || "").trim();
                     throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
                 }
