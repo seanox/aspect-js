@@ -28,12 +28,12 @@
  * operators can be used.
  *
  * The expression language can be used from the HTML element BODY on in the
- * complete markup as free text, as well as in all ks. Exceptions are the HTML
- * elements STYLE and SCRIPT whose content is not supported by the expression
- * language.
+ * complete markup as free text, as well as in all attributes. Exceptions are
+ * the HTML elements STYLE and SCRIPT whose content is not supported by the
+ * expression language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300322
+ * @version 1.6.0 202300328
  */
 (() => {
 
@@ -42,7 +42,7 @@
 
         /**
          * Interprets the passed expression. In case of an error, the error is
-         * returned and no exception is thrown. A serial can be specified
+         * returned and no error is thrown. A serial can be specified
          * optionally. The serial is an alias for caching compiled expressions.
          * Without, the expressions are always compiled. The function uses
          * variable parameters and has the following signatures:
@@ -51,7 +51,7 @@
          * @param  serial
          * @param  expression
          * @return the return value of the interpreted expression or an error if
-         *     an error or exception has occurred
+         *     an error or error has occurred
          */
         eval(...variants) {
 
@@ -73,10 +73,10 @@
                 _cache.set(serial, script);
 
             try {return eval(script);
-            } catch (exception) {
-                exception.message += "\n\t" + script;
-                console.error(exception);
-                return exception.message;
+            } catch (error) {
+                error.message += "\n\t" + script;
+                console.error(error);
+                return error.message;
             }
         }
     });

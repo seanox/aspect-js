@@ -74,7 +74,7 @@
         /**
          * Changes the localization of the DataSource.
          * Only locales from locales.xml can be used, other values cause an
-         * exception.
+         * error.
          * @param  locale
          * @throws Error in the case of invalid locales
          */

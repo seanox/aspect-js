@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230325
+ * @version 1.6.0 20230328
  */
 (() => {
 
@@ -1943,8 +1943,8 @@
                     const type = (selector.getAttribute(Composite.ATTRIBUTE_TYPE) || "").trim();
                     if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
                         try {_render_macro_eval(selector.textContent);
-                        } catch (exception) {
-                            throw new Error("Composite JavaScript", exception);
+                        } catch (error) {
+                            throw new Error("Composite JavaScript", error);
                         }
                     }
                 }
@@ -1972,12 +1972,12 @@
                 if (selector.hasAttribute(Composite.ATTRIBUTE_RELEASE))
                     selector.removeAttribute(Composite.ATTRIBUTE_RELEASE);
 
-            } catch (exception) {
-                console.error(exception);
-                Composite.fire(Composite.EVENT_ERROR, exception);
+            } catch (error) {
+                console.error(error);
+                Composite.fire(Composite.EVENT_ERROR, error);
                 if (origin instanceof Element)
-                    origin.innerText = "Error: " + (exception.message.match(/(\{\{|\}\})/)
-                        ? "Invalid expression" : exception.message);
+                    origin.innerText = "Error: " + (error.message.match(/(\{\{|\}\})/)
+                        ? "Invalid expression" : error.message);
 
             } finally {
 
@@ -2146,9 +2146,9 @@
                 const content = _render_cache[resource];
                 if (resource.match(/\.js$/)) {
                     try {_render_macro_eval(content);
-                    } catch (exception) {
-                        console.error(resource, exception.name + ": " + exception.message);
-                        throw exception;
+                    } catch (error) {
+                        console.error(resource, error.name + ": " + error.message);
+                        throw error;
                     }
                 } else if (resource.match(/\.css$/)) {
                     const head = document.querySelector("html head");
@@ -2470,6 +2470,14 @@
      * include the destination in the global scope.
      *
      *     #export connector@io.example
+     *
+     * The macro #module is intended for debugging. It writes the following text
+     * as debug output to the console. The browser displays this output with
+     * source, which can then be used as an entry point for debugging.
+     *
+     *     #module console debug output
+     *
+     * The output is a string expression and supports the corresponding syntax.
      */
     const _render_macro_eval = (script) => {
 
@@ -2520,7 +2528,7 @@
 
                 case "#":
                     let string = script.substring(cursor -1, cursor +10);
-                    let match = string.match(/(^|\W)(#(?:import|export))\s/);
+                    let match = string.match(/(^|\W)(#(?:import|export|module))\s/);
                     if (match) {
                         let macro = match[2];
                         for (let offset = cursor +macro.length; offset <= script.length; offset++) {
@@ -2553,6 +2561,13 @@
                                         exports.push("[" + parameters.join(",") + "]");
                                     });
                                     macro = "_export(...[" + exports.join(",") + "])";
+                                    break;
+
+                                case "#module":
+                                    macro = parameters.replace(/\\/g, "\\\\")
+                                        .replace(/`/g, "\\`").trim();
+                                    if (macro)
+                                        macro = "console.debug(`Module: " + macro + "`)";
                                     break;
                             }
 
