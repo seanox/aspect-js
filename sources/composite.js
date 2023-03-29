@@ -2490,7 +2490,7 @@
         // - ignore: '...'
         // - ignore: "..."
         // - ignore: `...`
-        // - detect: (^|\W)#(import|export)\s+...(\W|$)
+        // - detect: (^|\W)#(import|export|module)\s+...(\W|$)
 
         let pattern;
         for (let cursor = 0; cursor < script.length; cursor++) {
