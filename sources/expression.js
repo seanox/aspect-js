@@ -33,7 +33,7 @@
  * expression language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 202300328
+ * @version 1.6.0 20230330
  */
 (() => {
 
@@ -72,7 +72,7 @@
             if (serial)
                 _cache.set(serial, script);
 
-            try {return eval(script);
+            try {return Scripting.run(script);
             } catch (error) {
                 error.message += "\n\t" + script;
                 console.error(error);
@@ -258,13 +258,6 @@
 
             default:
                 throw new Error("Unexpected script type");
-        }
-    };
-
-    const _tolerate = (invocation) => {
-        try {return invocation.call(window);
-        } catch (error) {
-            return false;
         }
     };
 })();

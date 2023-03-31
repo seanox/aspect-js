@@ -41,6 +41,7 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
+CR: Composite: Outsourcing and isolating the execution of Composite JavaScript
 CR: Composite: Optimization macros for Composite JavaScript
     - can now be used anywhere in the code, also in combination with conditions
     - can now also be separated from the next command with a semicolon
