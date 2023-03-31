@@ -47,6 +47,10 @@ CR: Composite: Optimization macros for Composite JavaScript
     - can now also be separated from the next command with a semicolon
 CR: Composite: Added macro #export for Composite JavaScript
     Makes local variables and constants from modules usable in the global namespace.
+CR: Composite: Added macro (?...) for Composite JavaScript
+    In case of an error the value of the enclosed logic is equivalent to false
+    without throwing an error, except for syntax errors.
+    except for syntax errors.
 CR: Composite: Extension of the element ID with a unique identifier
     format: name:qualifier...#identifier@namespace...:model
     The unique identifier is for the view and business logic, but has no effect on composite.

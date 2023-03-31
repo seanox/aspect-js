@@ -101,11 +101,24 @@
             // - detect: (^|\W)#(import|export|module)\s+...(\W|$)
 
             let pattern;
+            let brackets;
             for (let cursor = 0; cursor < script.length; cursor++) {
                 let digit = script.charAt(cursor);
                 if (cursor >= script.length
                         && !pattern)
                     continue;
+
+                if (brackets < 0) {
+                    if (digit === "?") {
+                        brackets = 1;
+                        let macro = "_tolerate(()=>";
+                        script = script.substring(0, cursor) + macro + script.substring(cursor +1);
+                        cursor += macro.length;
+                        continue;
+                    }
+                    if (digit !== " ")
+                        brackets = 0;
+                }
 
                 if (digit === "\\") {
                     cursor++
@@ -126,6 +139,22 @@
                             pattern = "\n";
                         if (digit === "*")
                             pattern = "*/";
+                        continue;
+
+                    case "(":
+                        if (brackets > 0)
+                            brackets++;
+                        else brackets = -1;
+                        continue;
+
+                    case ")":
+                        if (brackets <= 0)
+                            continue;
+                        if (--brackets > 0)
+                            continue;
+                        let macro = ")";
+                        script = script.substring(0, cursor) + macro + script.substring(cursor);
+                        cursor += macro.length;
                         continue;
 
                     case "\'":
