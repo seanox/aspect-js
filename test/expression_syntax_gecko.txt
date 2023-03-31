@@ -70,34 +70,21 @@
 
     invalid word boundaries:
     ----
-    trueandtrue is not defined
-	trueandtrue true
-    trueeqtrue is not defined
-	trueeqtrue true
-    identifier starts immediately after numeric literal
-	1le2 true
-    identifier starts immediately after numeric literal
-	1ne2 true
+    trueandtrue is not defined in trueandtrue true
+    trueeqtrue is not defined in trueeqtrue true
+    identifier starts immediately after numeric literal in 1le2 true
+    identifier starts immediately after numeric literal in 1ne2 true
 
     true true
-    identifier starts immediately after numeric literal
-	2ge1 true
-    identifier starts immediately after numeric literal
-	1lt2 true
+    identifier starts immediately after numeric literal in 2ge1 true
+    identifier starts immediately after numeric literal in 1lt2 true
     true true
-    unexpected token: string literal
-	notempty'x' true
+    unexpected token: string literal in notempty'x' true
 
-    identifier starts immediately after numeric literal
-	(25div5)eq5 unexpected token: identifier
-	(25 /5)eq5
-    identifier starts immediately after numeric literal
-	2gt1 true
-    identifier starts immediately after numeric literal
-	(10mod3)eq1 unexpected token: identifier
-	(10%3)eq1
-    trueorfalse is not defined
-	trueorfalse true
+    identifier starts immediately after numeric literal in (25div5)eq5 unexpected token: identifier in (25 /5)eq5
+    identifier starts immediately after numeric literal in 2gt1 true
+    identifier starts immediately after numeric literal in (10mod3)eq1 unexpected token: identifier in (10%3)eq1
+    trueorfalse is not defined in trueorfalse true
 
     lower / upper case:
     ----
@@ -123,50 +110,34 @@
     1
     -12
 
-    unknown is not defined
-	unknown
-    unknown is not defined
-	unknown + '123'
+    unknown is not defined in unknown
+    unknown is not defined in unknown + '123'
 
-    A1: Peter is not defined
-	Peter
-    A2: Peter is not defined
-	Peter.und.der.Wolf
-    A3: Peter is not defined
-	Peter.und.der()
+    A1: Peter is not defined in Peter
+    A2: Peter is not defined in Peter.und.der.Wolf
+    A3: Peter is not defined in Peter.und.der()
 
     B1: [object HTMLInputElement]
-    B2: document.getElementById(...).value is not a function
-	document.getElementById("HiddenField").value()
+    B2: document.getElementById(...).value is not a function in document.getElementById("HiddenField").value()
     B3: Test-HF
 
-    C1: private names aren't valid in this context
-	#document.getElementById("HiddenField")
-    C2: private names aren't valid in this context
-	#document.getElementById("HiddenField").value()
-    C3: private names aren't valid in this context
-	#document.getElementById("HiddenField").value()
+    C1: private names aren't valid in this context in #document.getElementById("HiddenField")
+    C2: private names aren't valid in this context in #document.getElementById("HiddenField").value()
+    C3: private names aren't valid in this context in #document.getElementById("HiddenField").value()
 
     D1:
 
-    E1: '#' not followed by identifier
-	#
-    E2: '#' not followed by identifier
-	# + #
+    E1: '#' not followed by identifier in #
+    E2: '#' not followed by identifier in # + #
 
-    F1: document.getElementById(...).value is not a function
-	'123' + document.getElementById("HiddenField").value() + 'abc'
+    F1: document.getElementById(...).value is not a function in '123' + document.getElementById("HiddenField").value() + 'abc'
     F2: 123Test-HFabc
 
     G1: [object HTMLInputElement]
-    G2: document.getElementById(...).document is undefined
-	document.getElementById("HiddenField_1").document.getElementById("HiddenField_1")
-    G3: document.getElementById(...).document is undefined
-	document.getElementById("HiddenField_1").document.getElementById("HiddenField_2")
-    G4: unexpected token: identifier
-	document.getElementById("HiddenField_1") document.getElementById("HiddenField_2")
-    G5: unexpected token: identifier
-	document.getElementById("HiddenField_1")document.getElementById("HiddenField_2")
+    G2: document.getElementById(...).document is undefined in document.getElementById("HiddenField_1").document.getElementById("HiddenField_1")
+    G3: document.getElementById(...).document is undefined in document.getElementById("HiddenField_1").document.getElementById("HiddenField_2")
+    G4: unexpected token: identifier in document.getElementById("HiddenField_1") document.getElementById("HiddenField_2")
+    G5: unexpected token: identifier in document.getElementById("HiddenField_1")document.getElementById("HiddenField_2")
 
     X0: <input type="hidden" id="HiddenField" value="Test-HF">
     X1: <input type="hidden" id="HiddenField_1" value="Test-HF_A">

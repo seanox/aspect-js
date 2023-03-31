@@ -37,7 +37,11 @@
 
         Test.create({test() {
             const pattern = Test.read("expression_parse_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.innerHTML);
+            try {Assert.assertSameText(pattern, document.body.innerHTML);
+            } catch (error) {
+                console.log(document.body.innerHTML);
+                throw error;
+            }
         }});
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();

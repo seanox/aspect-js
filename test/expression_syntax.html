@@ -18,7 +18,11 @@
         Test.create({test() {
             document.body.textContent = normalizeOutput(document.body.innerHTML);
             const pattern = Test.read("expression_syntax_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.textContent);
+            try {Assert.assertSameText(pattern, document.body.textContent);
+            } catch (error) {
+                console.log(document.body.textContent)
+                throw error;
+            }
         }});
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             Test.start();
