@@ -74,9 +74,8 @@
 
             try {return Scripting.run(script);
             } catch (error) {
-                error.message += "\n\t" + script;
-                console.error(error);
-                return error.message;
+                console.error(error.message + "\n\t" + script);
+                return error.message + " in " + script;
             }
         }
     });
