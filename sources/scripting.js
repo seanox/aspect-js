@@ -84,6 +84,14 @@
          * The output is a string expression and supports the corresponding
          * syntax.
          *
+         *     (?...)
+         *
+         * Tolerant expressions are also a macro, although with different
+         * syntax. The logic enclosed in the parenthesis with question marks is
+         * executed fault-tolerantly. In case of an error the logic corresponds
+         * to the value false without causing an error itself, except for syntax
+         * errors.
+         *
          * @param  script
          * @return the return value from the script
          */
@@ -99,6 +107,7 @@
             // - ignore: "..."
             // - ignore: `...`
             // - detect: (^|\W)#(import|export|module)\s+...(\W|$)
+            // - detect: \(\s*\?...\)
 
             let pattern;
             let brackets;
@@ -108,6 +117,11 @@
                         && !pattern)
                     continue;
 
+                // The macro for the tolerant logic is a bit more complicated,
+                // because round brackets have to be counted here. Therefore the
+                // parsing runs parallel to the other macros. In addition, the
+                // syntax is undefined by optional whitepsaces between ( and ?).
+
                 if (brackets < 0) {
                     if (digit === "?") {
                         brackets = 1;
@@ -116,7 +130,7 @@
                         cursor += macro.length;
                         continue;
                     }
-                    if (digit !== " ")
+                    if (!digit.match(/\s/))
                         brackets = 0;
                 }
 
