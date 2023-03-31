@@ -16,7 +16,7 @@
 
         let source;
         Composite.listen(Composite.EVENT_RENDER_END, () => {
-            source = Test.read("composite_script_parse_benchmark.js");
+            source = Test.read("scripting_parse_benchmark.js");
             Test.start();
         });
 
