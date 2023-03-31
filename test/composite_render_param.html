@@ -19,8 +19,12 @@
         }; 
     
         Test.create({test() {
-                const pattern = Test.read("composite_render_param_" + navigator.engine + ".txt");
-            Assert.assertSameText(pattern, document.body.innerHTML);           
+            const pattern = Test.read("composite_render_param_" + navigator.engine + ".txt");
+            try {Assert.assertSameText(pattern, document.body.innerHTML);
+            } catch (error) {
+                console.log(document.body.innerHTML);
+                throw error;
+            }
         }});
         
         Composite.listen(Composite.EVENT_RENDER_END, () => {
