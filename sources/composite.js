@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230330
+ * @version 1.6.0 20230401
  */
 (() => {
 
@@ -1573,7 +1573,7 @@
                                         word = Expression.eval(this.serial + ":" + Composite.ATTRIBUTE_VALUE, word);
                                     }
                                     this.value = word;
-                                    this.element.textContent = word;
+                                    this.element.textContent = word !== undefined ? word : "";
                                 }};
                                 const param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                                 if (param) {
@@ -2626,9 +2626,11 @@
                 // Manipulations are corrected/restored.
                 if (record.type === "characterData"
                         && record.target.nodeType === Node.TEXT_NODE) {
-                    if (object && object.hasOwnProperty(Composite.ATTRIBUTE_VALUE)
-                            && String(object.value || "") !== record.target.textContent)
-                        record.target.textContent = object.value || "";
+                    if (object && object.hasOwnProperty(Composite.ATTRIBUTE_VALUE)) {
+                        const value = object.value === undefined ? "" : String(object.value);
+                        if (value !== record.target.textContent)
+                            record.target.textContent = value;
+                    }
                     return;
                 }
                 

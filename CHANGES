@@ -7,6 +7,9 @@ BF: Composite: Added recursion detection for include of composite markup
 BF: Composite: Correction of validation with message and notification without model
 BF: Composite: Correction of mounting of child elements in a condition
 BF: Composite: Correction of the queue during rendering when a lock exists
+BF: Expression: Unification of the suppressed output
+    Only the value undefined but not the string "undefined" suppresses the output.
+    False and comparable non-true values are now output.
 BF: Test: Correction of wrong output of Element.prototype.toPlainString()
 BF: Reactive: Correction for the use of arrays
     The data type incorrectly changed from array to object.
