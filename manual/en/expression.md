@@ -102,22 +102,22 @@ new
 To simplify and formulate valid markup, the JavaScript syntax for the Expression
 Language has been extended of the following keywords:
 
-| Keyword | Function       |
-|---------|----------------|
-| `and`   | `&&`           |
-| `div`   | `/`            |
-| `empty` | `!`            |
-| `eeq`   | `===`          |
-| `eq`    | `==`           |
-| `ge`    | `>=`           |
-| `gt`    | `> `           |
-| `le`    | `<=`           |
-| `lt`    | `<`            |
-| `mod`   | `%`            |  
-| `ne`    | `!=`           |
-| `nee`   | `!==`          |
-| `not`   | `!`            |  
-| `or`    | `&#124;&#124;` |
+| Keyword | Function                  |
+|---------|---------------------------|
+| `and`   | `&&`                      |
+| `div`   | `/`                       |
+| `empty` | `!`                       |
+| `eeq`   | `===`                     |
+| `eq`    | `==`                      |
+| `ge`    | `>=`                      |
+| `gt`    | `> `                      |
+| `le`    | `<=`                      |
+| `lt`    | `<`                       |
+| `mod`   | `%`                       |  
+| `ne`    | `!=`                      |
+| `nee`   | `!==`                     |
+| `not`   | `!`                       |  
+| `or`    | <code>&#124;&#124;</code> |
 
 
 ### Value

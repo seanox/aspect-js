@@ -104,21 +104,21 @@ Zur Vereinfachung und Formulierung von validem Markup wurde die
 JavaScript-Syntax f&uuml;r die Expression Language um folgende Keywords
 erweitert:
 
-| Keyword | Funktion       |
-|---------|----------------|
-| `and`   | `&&`           |
-| `div`   | `/`            |
-| `empty` | `!`            |
-| `eeq`   | `===`          |
-| `eq`    | `==`           |
-| `ge`    | `>=`           |
-| `gt`    | `> `           |
-| `le`    | `<=`           |
-| `lt`    | `<`            |
-| `mod`   | `%`            |  
-| `ne`    | `!=`           |
-| `nee`   | `!==`          |
-| `not`   | `!`            |  
+| Keyword | Funktion                  |
+|---------|---------------------------|
+| `and`   | `&&`                      |
+| `div`   | `/`                       |
+| `empty` | `!`                       |
+| `eeq`   | `===`                     |
+| `eq`    | `==`                      |
+| `ge`    | `>=`                      |
+| `gt`    | `> `                      |
+| `le`    | `<=`                      |
+| `lt`    | `<`                       |
+| `mod`   | `%`                       |  
+| `ne`    | `!=`                      |
+| `nee`   | `!==`                     |
+| `not`   | `!`                       |  
 | `or`    | <code>&#124;&#124;</code> |
 
 
