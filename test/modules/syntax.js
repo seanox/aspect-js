@@ -3,16 +3,16 @@
 
 const x1 = () => {throw new Error("xxx");}
 
-const a1 = (?xxx.xxx.xxx);
-const a2 = (?x1());
+const _1 = (?xxx.xxx.xxx);
+const _2 = (?x1());
 
-#export a1 a2;
+#export _1 _2;
 
-const c1 = ( ?xxx.xxx.xxx);
-const c2 = ( ?x1());
-const c3 = (
+const _3 = ( ?xxx.xxx.xxx);
+const _4 = ( ?x1());
+const _5 = (
     ?xxx.xxx.xxx);
-const c4 = (
+const _6 = (
     ?x1());
 
-#export c1 c2 c3 c4;
+#export _3 _4 _5 _6;

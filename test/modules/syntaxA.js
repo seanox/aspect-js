@@ -3,7 +3,7 @@
 
 const x1 = () => {throw new Error("xxx");}
 
-const b1 = (?xxx.xxx.xxx);
-const b2 = (?x1());
+const a1 = (?xxx.xxx.xxx);
+const a2 = (?x1());
 
-#export b1 b2;
+#export a1 a2;
