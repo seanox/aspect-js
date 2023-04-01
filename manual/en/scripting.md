@@ -83,7 +83,14 @@ TODO:
 
 ### tolerate
 
-TODO:
+A very special macro is the tolerating syntax `(?...)`. Thus, in case of an
+error, the logic enclosed in the brackets will not cause an error and there will
+be no output in the browser console. Instead, the brackets will represent the
+value `false`. Syntax errors are excluded from this tolerating behavior.
+
+```javascript
+const value = (?object.that.does.not.exist());
+```
 
 
 ## Debugging

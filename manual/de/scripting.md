@@ -85,7 +85,15 @@ TODO:
 
 ### tolerate
 
-TODO:
+Ein ganz besonderes Makro ist die tolerierende Anweisung `(?...)`. So wird die
+in den Klammern eingeschlossene Logik im Fall eines Fehlers nicht zum Fehler
+f&uuml;hren und es wird keine Ausgabe in der Browserkonsole geben. Stattdessen
+wird die Klammer den Wert `false` repr&auml;sentieren. Von diesem tolerierenden
+Verhalten ausgenommen sind Syntaxfehler.
+
+```javascript
+const value = (?object.that.does.not.exist());
+```
 
 
 ## Debugging
