@@ -38,13 +38,14 @@ escape sequence `\{\{` and/or `\}\}`.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)
   * [Combination](#combination)
+  * [Tolerant syntax](#tolerant-syntax)
 * [Supplement](#supplement)
 
 
 ## Elements
 
 An expression is a set of words, where the words are classified according to
-their characteristics as part of a phrase.
+their characteristics as parts of a phrase.
 
 ```
 +-------------------------------------------------------------+
@@ -79,6 +80,7 @@ that supports the usual control characters and escape sequences.
 ```
 {{'Hello World!'}}
 {{"Hello World!"}}
+{{`Hello World!`}}
 ```
 
 
@@ -100,13 +102,22 @@ new
 To simplify and formulate valid markup, the JavaScript syntax for the Expression
 Language has been extended of the following keywords:
 
-```
-and &&        empty !         div /
-eq  ==        eeq   ===       ge  >=
-gt  >         le    <=        lt  <
-mod %         ne    !=        nee !==
-not !         or    ||
-```
+| Keyword | Function       |
+|---------|----------------|
+| `and`   | `&&`           |
+| `div`   | `/`            |
+| `empty` | `!`            |
+| `eeq`   | `===`          |
+| `eq`    | `==`           |
+| `ge`    | `>=`           |
+| `gt`    | `> `           |
+| `le`    | `<=`           |
+| `lt`    | `<`            |
+| `mod`   | `%`            |  
+| `ne`    | `!=`           |
+| `nee`   | `!==`          |
+| `not`   | `!`            |  
+| `or`    | `&#124;&#124;` |
 
 
 ### Value
@@ -114,8 +125,8 @@ not !         or    ||
 Anything that is not a literal and keyword is potentially a Value. Value
 represents the value of an object property or a variable. In the case of object
 properties, this is referred to directly or, if available, to a corresponding
-getter (get method). If neither an object property nor a variable can be
-determined, a method or other logic is assumed.
+getter. If neither an object property nor a variable can be determined, a method
+or other logic is assumed.
 
 
 ### Method
@@ -126,8 +137,8 @@ method can be determined, other logic is assumed.
 
 ### Logic
 
-Everything that is not literal, keyword, value and method is potentially logic.
-Other logic is executed directly.
+Everything that is not literal, keyword, value and method is potentially
+executable logic.
 
 
 ## Expressions
@@ -135,20 +146,21 @@ Other logic is executed directly.
 There are different types of expressions that can be combined. In the following
 these are explained with their differences and peculiarities.
 
+Expressions will always output all values, except for the value `undefined`. But
+this does not apply to the string `undefined`, which is interpreted as normal
+text.
+
 
 ### Value-Expression
 
 Anything that is not a literal and keyword is potentially a Value. Value
 represents the value of an object property or a variable. In the case of object
 properties, this is referred to directly or, if available, to a corresponding
-getter (get method).
+getter.
 
 ```
 {{Example.object.field}}
 ```
-
-The value expression is tolerant, if the value or object is not available, the
-return value is `undefined`.
 
 
 ### Method-Expression
@@ -158,9 +170,6 @@ Everything that is not literal, keyword and value is potentially a method
 ```
 {{Example.getData()}}
 ```
-
-The method expression is strict and causes an error if an object is not
-available.
 
 
 ### Element-Expression
@@ -173,6 +182,15 @@ the variable corresponds to `undefined`.
 {{#ExampleElement.value}}
 
 <input type="text" id="ExampleElement"/>
+```
+
+More complex IDs which do not only contain word characters (`_ a-z A-Z 0-9`) can
+be be enclosed in square brackets.
+
+```
+{{#[ExampleElement:1].value}}
+
+<input type="text" id="ExampleElement:1"/>
 ```
 
 
@@ -199,6 +217,23 @@ All types of expressions can be combined.
 
 ```
 {{foo:not empty Foo.data and not empty Foo.data.items ? String(Foo.data.items[0].fieldA).substring(2) : ''}}
+```
+
+
+### Tolerant syntax
+
+Expressions are executed like JavaScript and can lead to corresponding errors.
+In addition, object-based approaches often require checking the existence of
+specific object levels, which makes expressions unclear.
+
+For these cases the tolerant syntax `(?...)` can be used in the expressions. The
+logic enclosed in the brackets, in case of an error, will not cause an error and
+there will be no output to the browser console. Instead, the brackets will
+represent the value `false`. Syntax errors are excluded from this tolerant
+behavior.
+
+```
+{{"Expression with an error " + (?object.that.does.not.exist()) + "!"}}
 ```
 
 

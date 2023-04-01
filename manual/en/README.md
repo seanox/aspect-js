@@ -45,6 +45,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
     * [Combination](expression.md#combination)
+    * [Tolerant syntax](expression.md#tolerant-syntax)
   * [Supplement](expression.md#supplement)
 
 

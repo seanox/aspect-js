@@ -38,13 +38,14 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)
   * [Kombination](#kombination)
+  * [Tolerante Syntax](#tolerante-syntax)
 * [Erg&auml;nzung](#erg-nzung)
 
 
 ## Elemente
 
 Ein Ausdruck ist eine Reihe von W&ouml;rtern, wobei die W&ouml;rter als
-Bestandteil eines Satzes nach ihrer Eigenschaft klassifiziert werden. 
+Bestandteile eines Satzes nach ihrer Eigenschaft klassifiziert werden. 
 
 ```
 +-------------------------------------------------------------+
@@ -80,6 +81,7 @@ und Escape-Sequenzen unterst&uuml;tzt.
 ```
 {{'Hello World!'}}
 {{"Hello World!"}}
+{{`Hello World!`}}
 ```
 
 
@@ -102,23 +104,32 @@ Zur Vereinfachung und Formulierung von validem Markup wurde die
 JavaScript-Syntax f&uuml;r die Expression Language um folgende Keywords
 erweitert:
 
-```
-and &&        empty !         div /
-eq  ==        eeq   ===       ge  >=
-gt  >         le    <=        lt  <
-mod %         ne    !=        nee !==
-not !         or    ||
-```
+| Keyword | Funktion       |
+|---------|----------------|
+| `and`   | `&&`           |
+| `div`   | `/`            |
+| `empty` | `!`            |
+| `eeq`   | `===`          |
+| `eq`    | `==`           |
+| `ge`    | `>=`           |
+| `gt`    | `> `           |
+| `le`    | `<=`           |
+| `lt`    | `<`            |
+| `mod`   | `%`            |  
+| `ne`    | `!=`           |
+| `nee`   | `!==`          |
+| `not`   | `!`            |  
+| `or`    | `&#124;&#124;` |
 
 
 ### Value
 
-Alles was kein Literal und Keyword ist, ist potenziell ein Value. Value
-repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder einer
-Variablen. Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die
-Eigenschaft oder wenn vorhanden auf einen korrespondierenden Getter
-(get-Methode). Kann weder eine Objekt-Eigenschaft noch eine Variable ermittelt
-werden, wird von einer Methode oder sonstiger Logik ausgegangen.
+Alles was kein Literal und Keyword ist, ist potenziell ein Value, der den Wert
+einer Objekt-Eigenschaft (Property) oder einer Variablen repr&auml;sentiert. Bei
+Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder wenn
+vorhanden auf einen korrespondierenden Getter. Kann weder eine
+Objekt-Eigenschaft noch eine Variable ermittelt werden, wird von einer Methode
+oder sonstiger Logik ausgegangen.
 
 
 ### Methode
@@ -129,8 +140,8 @@ keine Methode ermittelt werden, wird von sonstiger Logik ausgegangen.
 
 ### Logik
 
-Alles was kein Literal, Keyword, Value und Methode ist, ist potenziell Logik.
-Sonstige Logik wird unver&auml;ndert ausgef&uuml;hrt.
+Alles was kein Literal, Keyword, Value und Methode ist, ist potenziell
+ausf&uuml;hrbare Logik.
 
 
 ## Expressions
@@ -138,21 +149,21 @@ Sonstige Logik wird unver&auml;ndert ausgef&uuml;hrt.
 Es gibt unterschiedliche Arten von Expressions, die kombinierbar sind und
 nachfolgend mit ihren Unterschieden und Eigenheiten erkl&auml;rt werden.
 
+Expressions werden immer alle Werte ausgeben, mit Ausnahme vom Wert
+`undefined`. Was aber nicht f&uuml;r den String "undefined" gilt, der als
+normaler Text behandelt wird.
+
 
 ### Value-Expression
 
-Alles was kein Literal und Keyword ist, ist potenziell ein Value. Value
-repr&auml;sentiert den Wert einer Objekt-Eigenschaft (Property) oder einer
-Variablen. Bei Objekt-Eigenschaften erfolgt der Verweis direkt auf die
-Eigenschaft oder wenn vorhanden auf einen korrespondierenden Getter
-(get-Methode).
+Alles was kein Literal und Keyword ist, ist potenziell ein Value, der den Wert
+einer Objekt-Eigenschaft (Property) oder einer Variablen repr&auml;sentiert. Bei
+Objekt-Eigenschaften erfolgt der Verweis direkt auf die Eigenschaft oder wenn
+vorhanden auf einen korrespondierenden Getter.
 
 ```
 {{Example.object.field}}
 ```
-
-Die Value-Expression ist tolerant, wenn der Wert oder das Objekt nicht
-verf&uuml;gbar sind, entspricht der R&uuml;ckgabewert `undefined`.
 
 
 ### Method-Expression
@@ -162,9 +173,6 @@ Alles was kein Literal, Keyword und Value ist, ist potenziell eine Methode.
 ```
 {{Example.getData()}}
 ```
-
-Die Method-Expression ist streng und f&uuml;hrt zu einem Fehler, wenn ein Objekt
-nicht verf&uuml;gbar ist.
 
 
 ### Element-Expression
@@ -177,6 +185,15 @@ gefunden werden, entspricht der Wert der Variablen `undefined`.
 {{#ExampleElement.value}}
 
 <input type="text" id="ExampleElement"/>
+```
+
+Komplexere IDs welche nicht nur Wortzeichen (`_ a-z A-Z 0-9`) enthalten, lassen
+sich in eckigen Klammern einfassen.
+
+```
+{{#[ExampleElement:1].value}}
+
+<input type="text" id="ExampleElement:1"/>
 ```
 
 
@@ -203,6 +220,25 @@ Alle der genannten Arten von Expressions lassen sich kombinieren.
 
 ```
 {{foo:not empty Foo.data and not empty Foo.data.items ? String(Foo.data.items[0].fieldA).substring(2) : ''}}
+```
+
+
+### Tolerante Syntax
+
+Expressions werden wie JavaScript ausgef&uuml;hrt und k&ouml;nnen zu
+entsprechenden Fehlern f&uuml;hren. Zudem ist bei objektbasierten Ans&auml;tzen
+&ouml;fters auch die Pr&uuml;fung der Existenz einzelner Objekt-Ebenen
+erforderlich, wodurch Expressions un&uuml;bersichtlich werden.
+
+F&uuml;r diese F&auuml;lle kann die tolerante Syntax `(?...)` in den Expressions
+verwendet werden. Die in den Klammern eingeschlossene Logik wird im Fall eines
+Fehlers nicht zum Fehler f&uuml;hren und es wird keine Ausgabe in der
+Browserkonsole geben. Stattdessen wird die Klammer den Wert `false`
+repr&auml;sentieren. Von diesem toleranten Verhalten ausgenommen sind
+Syntaxfehler.
+
+```
+{{"Expression with an error " + (?object.that.does.not.exist()) + "!"}}
 ```
 
 
