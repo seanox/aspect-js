@@ -40,16 +40,53 @@
       false
       false
       false
+      b1 is not defined in String(b1)
+      b2 is not defined in String(b2)
+      c1 is not defined in String(c1)
+      c2 is not defined in String(c2)
+      d1 is not defined in String(d1)
+      d2 is not defined in String(d2)
+      #import syntaxC;
+      Composite.render("body");
+    </script>
+    <script type="text/test">
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      false
+      #import syntaxC;
+      Composite.render("body");
     </script>
   </head>
   <body>
-    {{a1}}
-    {{a2}}
-    {{b1}}
-    {{b2}}
-    {{c1}}
-    {{c2}}
-    {{c3}}
-    {{c4}}
+    {{String(_1)}}
+    {{String(_2)}}
+    {{String(_3)}}
+    {{String(_4)}}
+    {{String(_5)}}
+    {{String(_6)}}
+
+    {{String(a1)}}
+    {{String(a2)}}
+    {{String(b1)}}
+    {{String(b2)}}
+    {{String(c1)}}
+    {{String(c2)}}
+    {{String(d1)}}
+    {{String(d2)}}
+    <script type="composite/javascript">
+      #import syntaxC;
+      Composite.render("body");
+    </script>
   </body>
 </html>
