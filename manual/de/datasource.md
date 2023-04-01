@@ -1,4 +1,4 @@
-[Markup](markup.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
+[Scripting](scripting.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
 - - -
 
 # DataSource
@@ -336,4 +336,4 @@ Die DataSource kann auch direkt im Markup mit den Attributen
 
 - - -
 
-[Markup](markup.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)
+[Scripting](scripting.md) | [Inhalt](README.md#datasource) | [Resource-Bundle](message.md)

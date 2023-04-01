@@ -1,4 +1,4 @@
-[Markup](markup.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
+[Scripting](scripting.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
 - - -
 
 # DataSource
@@ -333,4 +333,4 @@ The DataSource can also be used directly in the markup with the attributes
 
 - - -
 
-[Markup](markup.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
+[Scripting](scripting.md) | [TOC](README.md#datasource) | [Resource Bundle](message.md)
