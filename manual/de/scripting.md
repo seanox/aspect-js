@@ -54,7 +54,7 @@ diesen Link l&auml;sst sich auch der Quelltext der Module im Debugger
 &ouml;ffnen und gewohnt mit Break-Points nutzen.
 
 Daher sollten Module zum Debugging eine entsprechende Konsolen-Ausgabe erzeugen.
-Das kann manuell &uuml;ber das Objekt console oder alternativ mit dem Makro
+Das kann manuell &uuml;ber das `console` Objekt oder alternativ mit dem Makro
 [#module](#module) m&ouml;glich ist.
 
 ```javascript

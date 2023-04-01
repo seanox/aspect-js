@@ -54,8 +54,8 @@ the source code of the modules can also be opened in the debugger and used as
 usual with break points.
 
 Therefore, modules should generate appropriate console output for debugging.
-This can be done manually via the console object or alternatively with the macro
-[#module](#module).
+This can be done manually via the `console` object or alternatively with the
+macro [#module](#module).
 
 ```javascript
 #module example;
