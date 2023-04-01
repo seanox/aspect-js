@@ -1989,7 +1989,162 @@
                 lock.release();
             }
         },
-        
+
+
+        // Internal method for loading a composite resource.
+        // Supports JS, CSS and HTML.
+        load(resource, composite) {
+
+            const normalize = (path) => {
+                const anchor = document.createElement("a");
+                anchor.href = path;
+                return anchor.pathname;
+            };
+
+            // JS and CSS are loaded only once
+            resource = normalize(resource);
+            if (resource in _render_cache
+                    && resource.match(/\.(js|css)$/i))
+                return;
+
+            // Resource has already been requested, but with no useful
+            // response and unsuccessful requests will not be repeated
+            if (resource in _render_cache
+                    && _render_cache[resource] === undefined)
+                return;
+
+            if (!(resource in _render_cache)) {
+                _render_cache[resource] = undefined;
+                const request = new XMLHttpRequest();
+                request.overrideMimeType("text/plain");
+                request.open("GET", resource, false);
+                request.send();
+                // Only server states 200 and 404 are supported, others will
+                // cause an error and the requests are not repeated later
+                if (request.status === 404)
+                    return;
+                if (request.status !== 200)
+                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                _render_cache[resource] = request.responseText.trim();
+            }
+
+            // CSS is inserted into the HEAD element as a style element.
+            // Without a head element, the inserting causes an error.
+
+            // JavaScript is not inserted as an element, it is executed
+            // directly. For this purpose eval is used. Since the method may
+            // form its own scope for variables, it is important to use the
+            // macro #export to be able to use variables and/or constants in
+            // the global scope.
+
+            // HTML/Markup is preloaded into the render cache if available.
+            // If markup exists for the composite, ATTRIBUTE_IMPORT with the
+            // URL is added to the item. Inserting then takes over the
+            // import implementation, which then also accesses the render
+            // cache.
+
+            const content = _render_cache[resource];
+            if (resource.match(/\.js$/)) {
+                try {Scripting.eval(content);
+                } catch (error) {
+                    console.error(resource, error.name + ": " + error.message);
+                    throw error;
+                }
+            } else if (resource.match(/\.css$/)) {
+                const head = document.querySelector("html head");
+                if (!head)
+                    throw new Error("No head element found");
+                const style = document.createElement("style");
+                style.setAttribute("type", "text/css");
+                style.textContent = content;
+                head.appendChild(style);
+            } else if (resource.match(/\.html$/)) {
+                _recursion_detection(composite);
+                if (composite instanceof Element)
+                    composite.innerHTML = content;
+            }
+        },
+
+        /**
+         * Loads a resource (JS, CSS, HTML are supported).
+         * @param  resource
+         * @return the content when loading a HTML resource
+         */
+        load(resource) {
+
+            resource = (resource || "").trim();
+            if (!resource.match(/\.(js|css|html)(\?.*)?$/i))
+                throw new Error("Resource not supported" + (resource ? ": " + resource : ""))
+
+            const normalize = (path) => {
+                const anchor = document.createElement("a");
+                anchor.href = path;
+                return anchor.pathname.replaceAll(/\/{2,}/g, "/");
+            };
+
+            // JS and CSS are loaded only once
+            resource = normalize(resource);
+            if (!resource.startsWith(Composite.MODULES + "/"))
+                throw new Error("URL not supported: " + resource);
+            if (resource in _render_cache
+                    && resource.match(/\.(js|css)(\?.*)?$/i))
+                return;
+
+            // Resource has already been requested, but with no useful
+            // response and unsuccessful requests will not be repeated
+            if (resource in _render_cache
+                    && _render_cache[resource] === undefined)
+                return;
+
+            if (!(resource in _render_cache)) {
+                _render_cache[resource] = undefined;
+                const request = new XMLHttpRequest();
+                request.overrideMimeType("text/plain");
+                request.open("GET", resource, false);
+                request.send();
+                // Only server states 200 and 404 are supported, others will
+                // cause an error and the requests are not repeated later
+                if (request.status === 404)
+                    return;
+                if (request.status !== 200)
+                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                _render_cache[resource] = request.responseText.trim();
+            }
+
+            // CSS is inserted into the HEAD element as a style element.
+            // Without a head element, the inserting causes an error.
+
+            // JavaScript is not inserted as an element, it is executed
+            // directly. For this purpose eval is used. Since the method may
+            // form its own scope for variables, it is important to use the
+            // macro #export to be able to use variables and/or constants in
+            // the global scope.
+
+            // HTML/Markup is preloaded into the render cache if available.
+            // If markup exists for the composite, ATTRIBUTE_IMPORT with the
+            // URL is added to the item. Inserting then takes over the
+            // import implementation, which then also accesses the render
+            // cache.
+
+            const content = _render_cache[resource];
+            if (resource.match(/\.js(\?.*)?$/i)) {
+                try {Scripting.eval(content);
+                } catch (error) {
+                    console.error(resource, error.name + ": " + error.message);
+                    throw error;
+                }
+            } else if (resource.match(/\.css(\?.*)?$/i)) {
+                const head = document.querySelector("html head");
+                if (!head)
+                    throw new Error("No head element found");
+                const style = document.createElement("style");
+                style.setAttribute("type", "text/css");
+                style.textContent = content;
+                head.appendChild(style);
+            } else if (resource.match(/\.html(\?.*)?$/i))
+                return content;
+        },
+
         /**
          * Loads modules/components/composite resources. The assumption is, for
          * components/composites, the resources are outsourced. JS and HTML are
@@ -2060,19 +2215,6 @@
 
             const lookup = Object.lookup(resource);
 
-            const recursionDetection = (element) => {
-                const id = (element instanceof Element ? element.id || "" : "").trim();
-                const pattern = id.toLowerCase();
-                while (pattern && element instanceof Element) {
-                    element = element.parentNode;
-                    if (element instanceof Element
-                            && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
-                            && element.hasAttribute(Composite.ATTRIBUTE_ID)
-                            && (element.id || "").toLowerCase().trim() === pattern)
-                        throw new Error("Recursion detected for composite: " + id);
-                }
-            }
-
             // If the module has already been loaded, it is only necessary to
             // check whether the markup must be inserted. CSS should already
             // exist in the head and the JavaScript will only be executed once.
@@ -2081,7 +2223,7 @@
                     if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                             && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
                             && !composite.innerHTML.trim()) {
-                        recursionDetection(composite);
+                        _recursion_detection(composite);
                         if (composite instanceof Element)
                             composite.innerHTML = _render_cache[context + ".html"];
                     }
@@ -2091,80 +2233,6 @@
 
             _render_cache[context + ".composite"] = null;
 
-            // Internal method for loading a composite resource.
-            // Supports JS, CSS and HTML.
-            const loading = (resource) => {
-
-                const normalize = (path) => {
-                    const anchor = document.createElement("a");
-                    anchor.href = path;
-                    return anchor.pathname;
-                };
-
-                // JS and CSS are loaded only once
-                resource = normalize(resource);
-                if (resource in _render_cache
-                        && resource.match(/\.(js|css)$/i))
-                    return;
-
-                // Resource has already been requested, but with no useful
-                // response and unsuccessful requests will not be repeated
-                if (resource in _render_cache
-                        && _render_cache[resource] === undefined)
-                    return;
-
-                if (!(resource in _render_cache)) {
-                    _render_cache[resource] = undefined;
-                    const request = new XMLHttpRequest();
-                    request.overrideMimeType("text/plain");
-                    request.open("GET", resource, false);
-                    request.send();
-                    // Only server states 200 and 404 are supported, others will
-                    // cause an error and the requests are not repeated later
-                    if (request.status === 404)
-                        return;
-                    if (request.status !== 200)
-                        throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-                    _render_cache[resource] = request.responseText.trim();
-                }
-
-                // CSS is inserted into the HEAD element as a style element.
-                // Without a head element, the inserting causes an error.
-
-                // JavaScript is not inserted as an element, it is executed
-                // directly. For this purpose eval is used. Since the method may
-                // form its own scope for variables, it is important to use the
-                // macro #export to be able to use variables and/or constants in
-                // the global scope.
-                
-                // HTML/Markup is preloaded into the render cache if available.
-                // If markup exists for the composite, ATTRIBUTE_IMPORT with the
-                // URL is added to the item. Inserting then takes over the
-                // import implementation, which then also accesses the render
-                // cache.
-
-                const content = _render_cache[resource];
-                if (resource.match(/\.js$/)) {
-                    try {Scripting.eval(content);
-                    } catch (error) {
-                        console.error(resource, error.name + ": " + error.message);
-                        throw error;
-                    }
-                } else if (resource.match(/\.css$/)) {
-                    const head = document.querySelector("html head");
-                    if (!head)
-                        throw new Error("No head element found");
-                    const style = document.createElement("style");
-                    style.setAttribute("type", "text/css");
-                    style.textContent = content;
-                    head.appendChild(style);
-                } else if (resource.match(/\.html$/)) {
-                    recursionDetection(composite);
-                    if (composite instanceof Element)
-                        composite.innerHTML = content;
-                }
-            }
-
             // The sequence of loading is strictly defined: JS, CSS, HTML
 
             // JavaScript is only loaded if no corresponding object exists for
@@ -2173,14 +2241,14 @@
                     || lookup instanceof Element
                     || lookup instanceof HTMLCollection
                     || resource === "common")
-                loading(context + ".js");
+                this.load(context + ".js");
 
             // CSS and HTML are loaded only if they are resources to an element
             // and the element is empty, excludes CSS for common. Since CSS
             // resources are loaded only once, common.css can be requested again
             // later.
             if (resource === "common")
-                loading(context + ".css");
+                this.load(context + ".css");
 
             // CSS and HTML/Markup is only loaded if it is a known composite
             // object and the element does not contain a markup (inner HTML).
@@ -2190,11 +2258,16 @@
             if (!object
                     || composite.innerHTML.trim())
                 return;
-            loading(context + ".css");
+            this.load(context + ".css");
             if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
                     || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT))
                 return;
-            loading(context + ".html");
+            const content = this.load(context + ".html");
+            if (content === undefined)
+                return;
+            _recursion_detection(composite);
+            if (composite instanceof Element)
+                composite.innerHTML = content;
         }
     });
 
@@ -2247,6 +2320,19 @@
      * All docked models are included in the set.
      */
     const _models = new Set();
+
+    const _recursion_detection = (element) => {
+        const id = (element instanceof Element ? element.id || "" : "").trim();
+        const pattern = id.toLowerCase();
+        while (pattern && element instanceof Element) {
+            element = element.parentNode;
+            if (element instanceof Element
+                    && element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                    && element.hasAttribute(Composite.ATTRIBUTE_ID)
+                    && (element.id || "").toLowerCase().trim() === pattern)
+                throw new Error("Recursion detected for composite: " + id);
+        }
+    }
 
     /**
      * Determines the meta data for an element based on its position in the DOM
