@@ -38,7 +38,7 @@ escape sequence `\{\{` and/or `\}\}`.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)
   * [Combination](#combination)
-  * [Tolerant syntax](#tolerant-syntax)
+  * [tolerate](#tolerate)
 * [Supplement](#supplement)
 
 
@@ -220,16 +220,16 @@ All types of expressions can be combined.
 ```
 
 
-### Tolerant syntax
+### tolerate
 
 Expressions are executed like JavaScript and can lead to corresponding errors.
 In addition, object-based approaches often require checking the existence of
 specific object levels, which makes expressions unclear.
 
-For these cases the tolerant syntax `(?...)` can be used in the expressions. The
-logic enclosed in the brackets, in case of an error, will not cause an error and
-there will be no output to the browser console. Instead, the brackets will
-represent the value `false`. Syntax errors are excluded from this tolerant
+For these cases the tolerating syntax `(?...)` can be used in the expressions.
+The logic enclosed in the brackets, in case of an error, will not cause an
+error and there will be no output to the browser console. Instead, the brackets
+will represent the value `false`. Syntax errors are excluded from this tolerant
 behavior.
 
 ```

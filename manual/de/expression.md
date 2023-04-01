@@ -38,7 +38,7 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)
   * [Kombination](#kombination)
-  * [Tolerante Syntax](#tolerante-syntax)
+  * [tolerate](#tolerate)
 * [Erg&auml;nzung](#erg-nzung)
 
 
@@ -223,16 +223,16 @@ Alle der genannten Arten von Expressions lassen sich kombinieren.
 ```
 
 
-### Tolerante Syntax
+### tolerate
 
 Expressions werden wie JavaScript ausgef&uuml;hrt und k&ouml;nnen zu
 entsprechenden Fehlern f&uuml;hren. Zudem ist bei objektbasierten Ans&auml;tzen
 &ouml;fters auch die Pr&uuml;fung der Existenz einzelner Objekt-Ebenen
 erforderlich, wodurch Expressions un&uuml;bersichtlich werden.
 
-F&uuml;r diese F&auuml;lle kann die tolerante Syntax `(?...)` in den Expressions
-verwendet werden. Die in den Klammern eingeschlossene Logik wird im Fall eines
-Fehlers nicht zum Fehler f&uuml;hren und es wird keine Ausgabe in der
+F&uuml;r diese F&auuml;lle kann die tolerierende Syntax `(?...)` in den
+Expressions verwendet werden. Die in den Klammern eingeschlossene Logik wird im
+Fall eines Fehlers nicht zum Fehler f&uuml;hren und es wird keine Ausgabe in der
 Browserkonsole geben. Stattdessen wird die Klammer den Wert `false`
 repr&auml;sentieren. Von diesem toleranten Verhalten ausgenommen sind
 Syntaxfehler.
