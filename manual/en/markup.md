@@ -28,6 +28,7 @@ recursively to changes.
   * [release](#release)
   * [render](#render)
   * [validate](#validate)
+* [@-Attributes](#-attributes) 
 * [Expression Language](#expression-language)
 * [Scripting](#scripting)
 * [Customizing](#customizing)
@@ -834,6 +835,21 @@ is written into the attribute `title`, or in case of a valid value the content
 is deleted from the attribute `title`. Below the input field is the control
 output of the corresponding field in the JavaScript object (model). This field
 is only synchronized if the validate method return the value `true`.
+
+
+## @-Attributes
+
+Expressions are resolved only after the page is loaded by the renderer. For some
+HTML elements, this can be annoying if the attributes are already interpreted by
+the browser. For example, the src attribute for resources such as the img tag.
+For these cases @-attributes can be used. These work like templates for
+attributes. The renderer will resolve their value and then add the attributes of
+the same name to the element. After that, they behave like all other attributes,
+including being updated by the renderer if the attributes contain expressions.
+
+```html
+<img @src="{{...}}"/>
+```
 
 
 ## Expression Language

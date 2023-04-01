@@ -29,6 +29,7 @@ MutationObserver und funktioniert und reagiert rekursiv auf Ver&auml;nderungen.
   * [strict](#strict)
   * [render](#render)
   * [validate](#validate)
+* [@-Attribute](#-attribute)
 * [Expression Language](#expression-language)
 * [Scripting](#scripting)
 * [Customizing](#customizing)
@@ -863,6 +864,22 @@ vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
 JavaScript-Objekt (Model). Ohne das Attribut [strict](#strict) wird das Feld
 fortlaufend mit der Eingabe synchronisiert.
 
+
+## @-Attribute
+
+Expressions werden erst nach dem Laden der Seite durch den Renderer
+aufgel&ouml;st. Bei einigen HTML-Elementen kann das st&ouml;rend sein, wenn die
+Attribute bereits durch den Browser interpretiert werden. So z.B. das
+src-Attribute bei Ressourcen wie dem img-Tag. F&uuml;r diese F&auml;lle lassen
+sich @-Attribute nutzen. Diese funktionieren wie Templates f&uuml;r Attribute.
+Der Renderer wird deren Wert aufl&ouml;sen und dann die gleichnamigen Attribute
+zum Element hinzuf&uuml;gen. Danach verhalten sich diese wie alle anderen
+Attribute, inkl. dem Aktualisieren durch den Renderer, wenn die Attribute
+Expressions beinhalten.
+
+```html
+<img @src="{{...}}"/>
+```
 
 
 ## Expression Language
