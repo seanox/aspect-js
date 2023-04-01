@@ -30,11 +30,50 @@ TODO:
 
 ## Makros
 
-TODO:
+Makros sind eine einfache Meta-Syntax, die sich in die bestehende
+JavaScript-Syntax einf&uuml;gt. Im Kern sind es verk&uuml;rzte Schreibweisen
+oder Umschreibungen für g&auml;ngige JavaScript-Anweisungen.
 
 ### #export
 
-TODO:
+Composite-JavaScript, was auch die Module einschliesst, wird nicht als Element
+eingef&uuml;gt, sondern direkt mit der eval-Methode ausgef&uuml;hrt. Da hierzu
+ein isolierter und nicht der globale G&uuml;ltigkeitsbereich (Scope) verwendet
+wird, sind Variablen, Konstanten und Methoden nicht direkt global oder
+&uuml;bergreifend nutzbar.
+
+Hier lassen sich Variablen, Konstanten und Methoden mit dem Makro `#export`
+global nutzbar machen. Nach dem Namen des Makros werden bis zum Zeilenende oder
+bis zum n&auml;chsten Semikolon eine durch Leerzeichen getrennte Liste mit den
+Namen der Elemente erwartet, die &ouml;ffentlich zug&auml;nglich gemacht werden
+sollen.
+
+```javascript
+const connector = {
+    ...
+};
+
+const utilities = {
+    ...
+};
+
+#export connector utilities;
+```
+
+Die Namen der Elemente k&ouml;nnen f&uuml;r den Export um Namensr&auml;ume
+erweitert werden, damit diese explizit dort hinzugef&uuml;gt werden.
+
+```javascript
+const connector = {
+    ...
+};
+
+const utilities = {
+    ...
+};
+
+#export connector@io utilities@io;
+```
 
 ### #import
 

@@ -30,11 +30,48 @@ TODO:
 
 ## Macros
 
-TODO:
+Macros are a simple meta-syntax that fits into the existing JavaScript syntax.
+At their core, they are abbreviated notations or paraphrases for common
+JavaScript statements.
 
 ### #export
 
-TODO:
+Composite JavaScript, which includes the modules, is not inserted as an element,
+but executed directly with the eval method. Since an isolated scope and not the
+global scope is used for this, variables, constants and methods cannot be used
+directly globally or across scopes.
+
+Here variables, constants and methods can be made globally usable with the macro
+`#export`. After the name of the macro, a space-separated list with the names of
+the elements that are to be made publicly accessible is expected up to the end
+of the line or up to the next semicolon.
+
+```javascript
+const connector = {
+    ...
+};
+
+const utilities = {
+    ...
+};
+
+#export connector utilities;
+```
+
+The names of the elements can be extended by namespaces for export, so that they
+are explicitly added there.
+
+```javascript
+const connector = {
+    ...
+};
+
+const utilities = {
+    ...
+};
+
+#export connector@io utilities@io;
+```
 
 ### #import
 
