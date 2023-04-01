@@ -44,7 +44,7 @@
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
     * [Kombination](expression.md#kombination)
-    * [Tolerante Syntax](expression.md#tolerante-syntax)
+    * [tolerate](expression.md#tolerate)
   * [Erg&auml;nzung](expression.md#erg-nzung)
 
 
@@ -86,7 +86,7 @@
     * [#export](scripting.md#export)
     * [#import](scripting.md#import)
     * [#module](scripting.md#module)
-    * [Tolerante Syntax](scripting.md#tolerante-syntax)
+    * [tolerate](scripting.md#tolerate)
   * [Debugging](scripting.md#debugging)
 
 

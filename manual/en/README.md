@@ -46,7 +46,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [Element-Expression](expression.md#element-expression)
     * [Variable-Expression](expression.md#variable-expression)
     * [Combination](expression.md#combination)
-    * [Tolerant syntax](expression.md#tolerant-syntax)
+    * [tolerate](expression.md#tolerate)
   * [Supplement](expression.md#supplement)
 
 
@@ -88,7 +88,7 @@ Machine translation with [DeepL](https://deepl.com).
     * [#export](scripting.md#export)
     * [#import](scripting.md#import)
     * [#module](scripting.md#module)
-    * [Tolerant syntax](scripting.md#tolerant-syntax)
+    * [tolerate](scripting.md#tolerate)
   * [Debugging](scripting.md#debugging)
 
 
