@@ -82,6 +82,14 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### Scripting
 * [Scripting](scripting.md#scripting)
+  * [Embedded Composite-JavaScript](scripting.md#embedded-composite-javascript)
+  * [Moduls](scripting.md#moduls)
+  * [Macros](scripting.md#macros)
+    * [#export](scripting.md#export)
+    * [#import](scripting.md#import)
+    * [#module](scripting.md#module)
+    * [Tolerant syntax](scripting.md#tolerant-syntax)
+  * [Debugging](scripting.md#debugging)
 
 
 ### DataSource

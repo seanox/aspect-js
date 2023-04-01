@@ -8,7 +8,14 @@ TODO:
 
 ## Inhalt
 
-TODO:
+* [Eingebettetes Composite-JavaScript](#eingebettetes-composite-javascript)
+* [Module](#module)
+* [Makros](#makros)
+  * [#export](#export)
+  * [#import](#import)
+  * [#module](#module)
+  * [Tolerante Syntax](#tolerante-syntax)
+* [Debugging](#debugging)
 
 
 ## Eingebettetes Composite-JavaScript
@@ -25,19 +32,19 @@ TODO:
 
 TODO:
 
-## #export
+### #export
 
 TODO:
 
-## #import
+### #import
 
 TODO:
 
-## #module
+### #module
 
 TODO:
 
-## Tolerante Syntax
+### Tolerante Syntax
 
 TODO:
 
