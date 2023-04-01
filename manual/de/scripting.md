@@ -14,7 +14,7 @@ TODO:
   * [#export](#export)
   * [#import](#import)
   * [#module](#module)
-  * [Tolerante Syntax](#tolerante-syntax)
+  * [tolerate](#tolerate)
 * [Debugging](#debugging)
 
 
@@ -83,7 +83,7 @@ TODO:
 
 TODO:
 
-### Tolerante Syntax
+### tolerate
 
 TODO:
 
