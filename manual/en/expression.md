@@ -229,8 +229,8 @@ specific object levels, which makes expressions unclear.
 For these cases the tolerating syntax `(?...)` can be used in the expressions.
 The logic enclosed in the brackets, in case of an error, will not cause an
 error and there will be no output to the browser console. Instead, the brackets
-will represent the value `false`. Syntax errors are excluded from this tolerant
-behavior.
+will represent the value `false`. Syntax errors are excluded from this
+tolerating behavior.
 
 ```
 {{"Expression with an error " + (?object.that.does.not.exist()) + "!"}}
