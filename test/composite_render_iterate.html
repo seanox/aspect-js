@@ -33,7 +33,7 @@
         });
 
         Test.create({test() {
-            Assert.assertEquals("", OutputA1.textContent);            
+            Assert.assertEquals("false", OutputA1.textContent);
         }});
         Test.create({test() {
             Assert.assertEquals("a:0", window["a:0"].id);
@@ -54,7 +54,7 @@
             Assert.assertEquals("2: c of a,b,c", window["a:2"].value);
         }});
         Test.create({test() {
-            Assert.assertEquals("", OutputA2.textContent);            
+            Assert.assertEquals("false", OutputA2.textContent);
         }});
 
         Test.create({test() {
