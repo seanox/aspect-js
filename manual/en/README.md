@@ -8,6 +8,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [Introduction](#introduction)
 * [Expression Language](#expression-language)
 * [Markup](#markup)
+* [Scripting](#scripting)
 * [DataSource](#datasource)
 * [Resource Bundle](#resource-bundle-i18nl10n)
 * [Model View Controller](#model-view-controller)
@@ -76,6 +77,10 @@ Machine translation with [DeepL](https://deepl.com).
     * [Acceptor](markup.md#acceptor)
     * [Parameters](markup.md#parameters)
   * [Hardening](markup.md#hardening)
+
+
+### Scripting
+* [Scripting](scripting.md#scripting)
 
 
 ### DataSource
