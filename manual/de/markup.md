@@ -1,4 +1,4 @@
-[Expression Language](expression.md) | [Inhalt](README.md#markup) | [DataSource](datasource.md)
+[Expression Language](expression.md) | [Inhalt](README.md#markup) | [Scripting](scripting.md)
 - - -
 
 # Markup
@@ -66,7 +66,7 @@ Als Komponente setzen sich Composites aus verschiedenen [Ressourcen](
 (Composite-)ID in das Modul-Verzeichnis auslagern lassen und erst bei Bedarf zur
 Laufzeit nachgeladen werden.
 
-Composites sind auch Grundlage f&uuml;r das [View-Model-Binding](
+Composites sind auch die Grundlage f&uuml;r das [View-Model-Binding](
     mvc.md#view-model-binding), was die Verbindung von HTML-Elementen im Markup
 (View) mit korrespondierenden JavaScript-Objekten (Models) umfasst. Models sind
 statische JavaScript-Objekte, die vergleichbar mit managed Beans und DTOs (Data
@@ -93,7 +93,7 @@ permanent sichtbar ist.
 </article>
 ```
 
-Details zur Verwendung von Composites / modularen Komponente werden in den
+Details zur Verwendung von Composites / modularen Komponenten werden in den
 Abschnitten [Composites](composite.md) und [Model-View-Controller](mvc.md)
 beschrieben.
 
@@ -151,7 +151,7 @@ anderer HTML-Elemente (mehr dazu im Abschnitt [render](#render)).
 Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
 Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
 Attribut bzw. der Wert f&uuml;r das View-Model-Binding nur initial verarbeitet
-wird, solange HTML-Element im DOM existiert.
+wird, solange das HTML-Element im DOM existiert.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -183,9 +183,9 @@ const Model = {
 
 Beispiel zur Implementierung und kombinierten Verwendung der Attribute `events`
 und `validate`. In dem Beispiel wird der Eingabewert vom Composite-Feld _text1_
-nur dann in das gleichnamige Feld im JavaScript-Objekt &uuml;bernommen, wenn
-mindestens eines der Ereignisse: _Input_ oder _Change_ eintritt und die
-Validierung den Wert `true` zur&uuml;ckgibt.
+nur dann in das gleichnamige Feld im JavaScript-Objekt &uuml;bernommen und die
+Validierung durchgef&uuml;hrt, wenn mindestens eines der Ereignisse: _Input_
+oder _Change_ eintritt.
 
 
 ### id
@@ -199,7 +199,7 @@ f&uuml;r [Faces](mvc.md#face) und [Facets](mvc.md#facet) im [Face-Flow](
 Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
 Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
 Attribut bzw. der Wert f&uuml;r das View-Model-Binding nur initial verarbeitet
-wird, solange HTML-Element im DOM existiert.
+wird, solange das HTML-Element im DOM existiert.
 
 
 ### import
@@ -362,8 +362,8 @@ HTML-Element als iterativ deklariert, wird das innerer HTML als Vorlage
 verwendet, aus der mit jedem Iterationszyklus aktueller Inhalt erzeugt und als
 inneres HTML eingef&uuml;gt wird. Als Wert wird f&uuml;r das Attribut ein
 [Variablen-Ausdruck](expression.md#variable-expression) erwartet, zu dem ein
-Meta-Objekt erstellt werden kann, was in der Vorlage den Zugriff auf die
-Iteration erm&ouml;glicht. So erzeugt der Variablen-Ausdruck `iterate={{
+Meta-Objekt erstellt wird, was in der Vorlage den Zugriff auf die Iteration
+erm&ouml;glicht. So erzeugt der Variablen-Ausdruck `iterate={{
     tempA:Model.list}}` das Meta-Objekt `tempA = {item, index, data}`.
 
 ```javascript
@@ -690,21 +690,24 @@ Events: MouseUp KeyUp
 ```
 
 Das Beispiel enth&auml;lt 3 Eingabefelder mit unterschiedlichen Ereignissen
-(`events`) und Zielen (`render`), die jeweils sich hochz&auml;hlende
-Textausgaben darstellen und auf entsprechende Ereignisse reagieren.
+(`events`) und Zielen (`render`), die jeweils hochz&auml;hlende Textausgaben
+darstellen und auf entsprechende Ereignisse reagieren.
 
 __Alternativ kann auch das [reaktive Rendering](reactive.md) verwendet werden,
 wo &Auml;nderungen in den Datenobjekten eine partielle Aktualisierung der View
-ausl&aouml;sen.__
+ausl&ouml;sen.__
 
 
 ### strict
 
-Das Attribut wird in Kombination mit dem Attribut [composite](#composite)
-verwendet und legt fest, dass beim Laden der Ressourcen (JS, CSS, HTML) zu einer
-Komponente, der Dateiname in der originalen Schreibweise verwendet wird. Das
-Standardverhalten ohne das Attribut [strict](#strict) verwendet die Composite-Id
-mit einem Kleinbuchstaben am Anfang.
+Das Attribut ist mit den Attributen [composite](#composite) und [validate](
+    #validate) kombinierbar.
+
+In Kombination mit dem Attribut [composite](#composite) legt es fest, dass beim
+Laden der Ressourcen (JS, CSS, HTML) zu einer Komponente, der Dateiname in der
+originalen Schreibweise verwendet wird. Das Standardverhalten ohne das Attribut
+[strict](#strict) verwendet die Composite-Id mit einem Kleinbuchstaben am
+Anfang.
 
 Beispiel zum Standardverhalten:
 ```html
@@ -728,6 +731,34 @@ Beispiel mit dem Attribut [strict](#strict):
   - SmallExample.js
   - SmallExample.html
 - index.html
+```
+
+Die Kombination mit dem Attribut [validate](#validate) beeinflusst das
+Synchronisieren der Daten so, dass die Synchronisation nur ausgef&uuml;hrt wird,
+wenn die Validierung explizit true zur&uuml;ckgibt. In allen anderen F&auml;llen
+wird der Wert nicht synchronisiert. Womit im zu synchronisierenden Ziel nach
+einer Benutzereingabe nur zul&auml;ssige Werte vorhanden sind, was z.B. bei
+einem als erforderlich (required) deklarierten Eingabefeld beachtet werden muss,
+wenn der Benutzer die Eingabe zeichenweise l&ouml;scht. So bleibt in diesem
+konstruierten Beispiel das letzte Zeichen im zu synchronisierenden Ziel
+erhalten.
+
+```javascript
+const Model = {
+    validate(element, value) {
+        return !!value.trim();
+    },
+    text1: ""
+};
+```
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text"
+      validate strict events="input change"/>
+  <input type="submit" value="submit"
+      validate events="click"/>
+</form>
 ```
 
 
@@ -762,16 +793,17 @@ der Wert mit dem Modell synchronisiert.
 
 Die Validierung ist fehlgeschlagen und es wird ein Fehler angezeigt. Der
 R&uuml;ckgabewert gibt an, dass das Standard-Verhalten (action) vom Browser
-nicht ausgef&uuml;hrt werden soll und somit blockiert wird. In diesem Fall wird
-ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
+nicht ausgef&uuml;hrt werden soll und somit blockiert wird. Bei Kombination mit
+dem Attribut [strict](#strict), wird ein m&ouml;glicher Wert nicht mit dem
+Modell synchronisiert.
 
 
 #### text
 
 Die Validierung ist mit einer Fehlermeldung fehlgeschlagen. Sollte die
 Fehlermeldung leer sein, wird alternativ die Meldung vom message-Attribut
-verwendet. In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell
-synchronisiert.
+verwendet. Bei Kombination mit dem Attribut [strict](#strict), wird ein
+m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
 
 
 #### undefined/void
@@ -780,7 +812,8 @@ Die Validierung ist fehlgeschlagen und es wird ein Fehler angezeigt. Ohne einen
 R&uuml;ckgabewert wird das Standard-Verhalten (action) vom Browser
 ausgef&uuml;hrt. Dieses Verhalten ist z.B. f&uuml;r die Validierung von
 Eingabefeldern wichtig, damit die Eingabe zur Benutzeroberfl&auml;che gelangt.
-In diesem Fall wird ein m&ouml;glicher Wert nicht mit dem Modell synchronisiert.
+Bei Kombination mit dem Attribut [strict](#strict), wird ein m&ouml;glicher Wert
+nicht mit dem Modell synchronisiert.
 
 Eine allgemeine Strategie oder Standard-Implementierung zur Fehlerausgabe wird
 bewusst nicht bereitgestellt, da diese in den meisten F&auml;llen zu starr ist
@@ -827,8 +860,9 @@ fortlaufend bei der Eingabe &uuml;berpr&uuml;ft und bei einem ung&uuml;ltigen
 Wert wird eine Fehlermeldung in das Attribut `title` geschrieben, bzw. bei einem
 g&uuml;ltigen Wert wird der Inhalt vom Attribut `title` gel&ouml;scht. Unterhalb
 vom Eingabefeld ist die Kontrollausgabe vom korrespondierenden Feld im
-JavaScript-Objekt (Model). Dieses Feld wird nur synchronisiert, wenn die
-validate-Methode den Wert `true` zur&uuml;ckgibt.
+JavaScript-Objekt (Model). Ohne das Attribut [strict](#strict) wird das Feld
+fortlaufend mit der Eingabe synchronisiert.
+
 
 
 ## Expression Language
@@ -870,19 +904,8 @@ auch mit dem Attribut `condition` kombiniert werden.
 </script>
 ```
 
-JavaScript wird nicht als Element eingef&uuml;gt, sondern direkt mit der
-eval-Methode ausgef&uuml;hrt. Da hierbei ein eigener und nicht der globale
-Namenspace verwendet wird, m&uuml;ssen globale Variablen bewusst im globalen
-Namespace angelegt werden, wof&uuml;r das window- oder Namespace-API genutzt
-werden sollte.
-
-```html
-<script type="composite/javascript">
-    Namespace.create("foo", function() {
-        ...
-    }
-</script>
-```
+Details zur Verwendung vom Composite-JavaScript inkl. Modulen wird im Abschnitt
+[Scripting](scripting.md) beschrieben.
 
 
 ## Customizing
@@ -988,4 +1011,4 @@ Composite.customize("@attributes-statics", "method action");
 
 - - -
 
-[Expression Language](expression.md) | [Inhalt](README.md#markup) | [DataSource](datasource.md)
+[Expression Language](expression.md) | [Inhalt](README.md#markup) | [Scripting](scripting.md)

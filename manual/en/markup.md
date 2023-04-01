@@ -1,4 +1,4 @@
-[Expression Language](expression.md) | [TOC](README.md#markup) | [DataSource](datasource.md)
+[Expression Language](expression.md) | [TOC](README.md#markup) | [Scripting](scripting.md)
 - - -
 
 # Markup
@@ -88,8 +88,8 @@ makes a composite permanently visible as a face regardless of virtual paths.
 </article>
 ```
 
-Details on the use of composites / modular components are described in the
-chapter [Composites](composite.md) and [Model View Controller](mvc.md).
+Details on the use of composites / modular components are described in chapter
+[Composites](composite.md) and [Model View Controller](mvc.md).
 
 
 ### condition
@@ -128,8 +128,8 @@ not the browser.
 </script>
 ```
 
-Details about using embedded JavaScript are described in the chapter
-[Scripting](#scripting).
+Details about using embedded JavaScript are described in chapter [Scripting](
+    #scripting).
 
 
 ### events
@@ -177,7 +177,7 @@ const Model = {
 Example of the combined use of the attributes `events` and `validate`. In the
 example, the input value from the composite field _text1_ is transferred to the
 field of the same name in the JavaScript object only if at least one of the
-events: _Input_ or _Change_ occurs and the validation returns `true`.
+events: _Input_ or _Change_ occurs.
 
 
 ### id
@@ -349,7 +349,7 @@ Iterative output is based on lists, enumerations, and arrays. If an HTML element
 is declared as iterative, the inner HTML is used as a template from which
 updated content is generated and inserted with each interval cycle and inserted
 as inner HTML. As value for the attribute a [variable expression](
-    expression.md#variable-expression) is expected, for which a meta object can
+    expression.md#variable-expression) is expected, for which a meta object will
 be created, which allows access to the iteration in the template. Thus, the
 variable expression `iterate={{tempA:Model.list}}` creates the meta object
 `tempA = {item, index, data}`.
@@ -495,7 +495,7 @@ from the module directory.
 - index.html
 ```
 
-Details about namespaces are also described in the chapters
+Details about namespaces are also described in chapters 
 [Erweiterung - Namespace](extension.md#namespace) and [Composites - Namespace](
     composite.md#namespace).
 
@@ -680,11 +680,13 @@ the data objects trigger a partial update of the view.__
 
 ### strict
 
-The attribute is used in combination with the attribute [composite](#composite)
-and specifies that when loading the resources (JS, CSS, HTML) for a component,
-the file name is used in its original notation. The default behavior without the
-[strict](#strict) attribute uses the composite id with lower case at the
-beginning.
+The attribute can be combined with the attributes [composite](#composite) and
+[validate](#validate).
+
+In combination with the attribute [composite](#composite), it specifies that
+when loading the resources (JS, CSS, HTML) for a component, the filename is used
+in its original notation. The default behavior without the attribute [strict](
+    #strict) uses the composite id with a lowercase letter at the beginning.
 
 Example of standard behavior:
 ```html
@@ -708,6 +710,33 @@ Example with the attribute [strict](#strict):
   - SmallExample.js
   - SmallExample.html
 - index.html
+```
+
+The combination with the attribute [validate](#validate) affects the
+synchronization of the data in such a way that the synchronization is executed
+only if the validation explicitly returns `true`. In all other cases the value
+is not synchronized. Which means that only valid values are available in the
+target to be synchronized after a user input, which must be considered for an
+input field declared as required, for example, if the user deletes the input
+character by character. Thus, in this constructed example, the last character is
+kept in the target to be synchronized.
+
+```javascript
+const Model = {
+    validate(element, value) {
+        return !!value.trim();
+    },
+    text1: ""
+};
+```
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text"
+      validate strict events="input change"/>
+  <input type="submit" value="submit"
+      validate events="click"/>
+</form>
 ```
 
 
@@ -740,14 +769,16 @@ the browser is used. If possible the value is synchronized with the model.
 
 The validation failed and an error is shown. The return value indicates that the
 default behavior (action) should not be executed by the browser and is thus
-blocked. In this case, a possible value is not synchronized with the model.
+blocked. When combined with attribute [strict](#strict), a possible value will
+not be synchronized with the model.
 
 
 #### text
 
 The validation has failed with an error message. If the error message is empty,
-the message from the message attribute is used as an alternative. In this case a
-possible value is not synchronized with the model.
+the message from the message attribute is used as an alternative. When combined
+with attribute [strict](#strict), a possible value will not be synchronized with
+the model.
 
 
 #### undefined/void
@@ -755,7 +786,8 @@ possible value is not synchronized with the model.
 Validation failed and an error is shown. Without a return value, the default
 behavior (action) is executed by the browser. This behavior is important for
 validating input fields, for example, so that the input reaches the user
-interface. In this case, a possible value is not synchronized with the model.
+interface. When combined with attribute [strict](#strict), a possible value will
+not be synchronized with the model.
 
 A general strategy or standard implementation for error output is deliberately
 not provided, as this is too strict in most cases and can be implemented
@@ -820,8 +852,8 @@ and `import`.
 </article>
 ```
 
-Details about syntax and usage are described in the chapter
-[Expression Language](expression.md).
+Details about syntax and usage are described in chapter [Expression Language](
+    expression.md).
 
 
 ## Scripting
@@ -841,18 +873,8 @@ can also be combined with the `condition` attribute.
 </script>
 ```
 
-JavaScript is not inserted as an element, but executed directly with the eval
-method. Since this uses a custom namespace and not the global namespace, global
-variables must be deliberately created in the global namespace, for which the
-window or Namespace API should be used.
-
-```html
-<script type="composite/javascript">
-    Namespace.create("foo", function() {
-        ...
-    }
-</script>
-```
+Details about using composite JavaScript including modules are described in
+chapter [Scripting](scripting.md).
 
 
 ## Customizing
@@ -955,4 +977,4 @@ Composite.customize("@attributes-statics", "method action");
 
 - - -
 
-[Expression Language](expression.md) | [TOC](README.md#markup) | [DataSource](datasource.md)
+[Expression Language](expression.md) | [TOC](README.md#markup) | [Scripting](scripting.md)
