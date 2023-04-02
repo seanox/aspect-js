@@ -72,7 +72,7 @@ const utilities = {
     ...
 };
 
-#export connector@io utilities@io;
+#export connector@io.example utilities@io.example
 ```
 
 ### #import
