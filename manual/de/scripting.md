@@ -5,6 +5,13 @@
 
 TODO:
 
+Composite-JavaScript, was auch die Module einschliesst, wird nicht als Element
+eingef&uuml;gt, sondern direkt mit der eval-Methode ausgef&uuml;hrt. Da hierzu
+ein isolierter und nicht der globale G&uuml;ltigkeitsbereich (Scope) verwendet
+wird, sind Variablen, Konstanten und Methoden nicht direkt global oder
+&uuml;bergreifend nutzbar, weshalb u.a. das Composite-JavaScript mit [Makros](
+    #makros) angereichert wurde, welche solche Aufgaben &uuml;bernehmen.
+
 
 ## Inhalt
 
