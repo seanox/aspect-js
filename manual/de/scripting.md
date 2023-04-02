@@ -46,7 +46,39 @@ Composite-Attributen kombiniert und die Ausf&uuml;hrung damit gesteuert werden.
 
 ## Module
 
-TODO:
+Module sind ein fester Bestandteil des Composite-Konzepts. Bei diesem Konzept
+wird davon ausgegangen, dass die Ressourcen f&uuml;r ein Composite (JS, CSS,
+HTML) in das Modul-Verzeichnis ausgelagert sind und erst zur Laufzeit geladen
+werden. Was u.a. die Startzeit verk&uuml;rzen und das Linken bzw. Binden der
+Module zu einer Anwendungsdatei vermeiden soll, was sich an der Idee f&uuml;r
+Micro-Frontend orientiert, so dass sich Plattform und Module unabh&auml;ngig
+bereitstellen lassen.
+
+Auch ohne Composites lassen sich Module im JavaScript nutzen. Dazu wird die
+Logik ebenfalls in einzelnen Dateien im Modul-Verzeichnis und wenn erforderlich
+in weiteren Unterverzeichnissen abgelegt.
+
+```
++ modules
+  + example
+    - moduleE.js
+    - moduleF.js
+    - ...
+  - moduleA.js
+  - moduleB.js
+  - ...
+- index.html
+```
+
+Die Module werden dann programmatisch mit `Compoiste.include(...)`,
+`Compoiste.load(...)` oder bevorzugt mit dem Makro [#import](#import) geladen.
+
+__Beim Aufruf von Modulen wird auf die Dateiendung verzichtet.__
+
+```javascript
+#import moduleA moduleB
+#import example/moduleE example/moduleF
+```
 
 
 ## Makros

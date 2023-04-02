@@ -45,7 +45,38 @@ with other composite attributes to control execution.
 
 ## Moduls
 
-TODO:
+Modules are an integral part of the composite concept. This concept assumes that
+the resources for a composite (JS, CSS, HTML) are outsourced to the module
+directory and loaded at runtime. Which, among other things, should shorten the
+startup time and avoid linking or binding the modules to one application file,
+which is based on the idea for micro-frontend, so that platform and modules can
+be deployed independently.
+
+Modules can also be used in JavaScript without composites. For this purpose, the
+logic is also stored in individual files in the module directory and, if
+necessary, in further subdirectories.
+
+```
++ modules
+  + example
+    - moduleE.js
+    - moduleF.js
+    - ...
+  - moduleA.js
+  - moduleB.js
+  - ...
+- index.html
+```
+
+The modules are then loaded programmatically with `Compoiste.include(...)`,
+`Compoiste.load(...)` or preferably with the macro [#import](#import).
+
+__When calling modules, the file extension is omitted.__
+
+```javascript
+#import moduleA moduleB
+#import example/moduleE example/moduleF
+```
 
 
 ## Macros
