@@ -146,6 +146,17 @@
         Test.create({test() {
             Assert.assertEquals("Error: Invalid macro: #import", document.getElementById("moduleF").innerText);
         }});
+
+        Test.create({test() {
+            Assert.assertEquals(2, _error_collector.length);
+            Assert.assertNotEquals(_error_collector[0], _error_collector[1]);
+            Assert.assertTrue(_error_collector[0].startsWith("Error: HTTP status 404"));
+            Assert.assertTrue(_error_collector[0].endsWith("/modules/io/moduleY.js"));
+            Assert.assertTrue(_error_collector[1].startsWith("Error: HTTP status 404"));
+            Assert.assertTrue(_error_collector[1].endsWith("/modules/nix/nix/nix.js"));
+        }});
+
+        const _error_collector = [];
     </script>
     <script type="text/test">
       /modules/common.js 200 X
@@ -165,6 +176,10 @@
       /modules/moduleH.js 404 X
       /modules/moduleH.css 404 X
       /modules/moduleH.html 200 X
+      /modules/moduleJ.js 200 X
+      /modules/nix/nix/nix.js 404 X
+      /modules/moduleJ.css 404 X
+      /modules/moduleJ.html 404 X
       /resources/import_a.htmlx 200 X
       /resources/import_b.htmlx 200 X
       /resources/import_o.htmlx 404 XX
@@ -199,5 +214,10 @@
     <div id="moduleG" composite>moduleG</div>
     <div id="moduleH" composite></div>
     <div id="moduleH" composite></div>
+    <div id="moduleJ" composite></div>
+
+    <br>
+    _error_collector:
+    <pre>{{_error_collector.join("\n")}}</pre>
   </body>
 </html>
