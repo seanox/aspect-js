@@ -254,7 +254,7 @@
         // Because it is an internal method, an additional validation of the
         // exports as data structure was omitted.
         imports.forEach(include =>
-            Composite.load(Composite.MODULES + "/" + include + ".js"), true);
+            Composite.load(Composite.MODULES + "/" + include + ".js", true));
     };
 
     const _export = (...exports) => {
