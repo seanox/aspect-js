@@ -77,7 +77,36 @@ const utilities = {
 
 ### #import
 
-TODO:
+Das Makro l&auml;dt ein oder durch Leerzeichen getrennt mehrere
+(Composite)-JavaScript-Module aus dem Modul-Verzeichnis, wobei JavaScript-Module
+nur einmalig geladen werden, egal ob direkt &uuml;ber [#import](#import) oder
+indirekt als Ressource zu einem Composite.
+
+__Beim Aufruf von Modulen wird auf die Dateiendung verzichtet.__
+
+```javascript
+#import moduleA
+#import moduleA moduleB moduleC
+```
+
+Zu beachten ist, dass das Makro bei einem Server-Status abweichend 200 zu einem
+Fehler f&uuml;hrt. Da sich das Makro in die allgemeine JavaScript-Syntax
+einf&uuml;gt, kann der Fehler wie gewohnt mit try-catch gefangen werden.
+
+```javascript
+try {#import moduleA;
+} catch (error) {
+    ...    
+}    
+```
+
+Im Modul-Verzeichnis werden auch Unterverzeichnisse unterst&uuml;tzt, was in den
+Modulnamen durch das Slash repr&auml;sentiert wird.
+
+```javascript
+#import example/io/connector;
+```
+
 
 ### #module
 
