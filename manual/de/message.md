@@ -50,17 +50,50 @@ und kann im JavaScript direkt und im Markup per Expression Language verwendet
 werden.
 
 ```javascript
-Messages["contact.title"];
+const title = Messages["contact.title"];
 ```
-
+```javascript
+const title = messages.contact.title;
+```
 ```html
 <h1 output="{{Messages['contact.title']}}"/>
 ```
+```html
+<h1 output="{{messages.contact.title}}"/>
+```
 
-Zur Laufzeit kann die Sprache per JavaScript &uuml;ber das Gebietsschema
-ge&auml;ndert werden. Akzeptiert werden nur Gebietsschemen, die mit der
-DataSource verf&uuml;gbar sind, andere Angaben f&uuml;hren beim Methoden-Aufruf
-zu einem Fehler.
+Messages lassen sich zur Laufzeit mit der Methode `Messages.customize(label,
+    ...values)` auch individualisiert nutzen. Dazu wird das Label als Template
+mit Platzhaltern genutzt, die dann bef&uuml;llt werden. Die Werte werden als
+Liste in Form der Spread-Notation &uuml;bergeben. Die Platzhalter sind dann eine
+numerische Angabe mit Bezug auf die Position in der Werte-Liste, deren Wert dann
+f&uuml;r den Platzhalter eingef&uuml;gt wird.
+
+```xml
+<?xml version="1.0"?>
+<locales>
+  <en default="true">
+    <label key="welcome">
+      Welcome {0} {1}, you are logged in as {2}.    
+    </label>        
+  </en>
+</locales>
+```
+```html
+<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'administrator')}}"/>
+```
+```javascript
+const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", 'administrator');
+```
+
+Platzhalter lassen sich mehrfach verwenden. &Uuml;berz&auml;hlige, bzw.
+Platzhalter, zu denen kein Wert festgelegt wurde, werden aus der erzeugten
+Message entfernt.
+
+Des Weiteren lassen sich für Message die Sprache und Gebietsschema per
+JavaScript zur Laufzeit &auml;ndern. Akzeptiert werden dabei nur Gebietsschemen,
+die mit der DataSource verf&uuml;gbar sind, andere Angaben f&uuml;hren beim
+Methoden-Aufruf zu einem Fehler.
 
 ```javascript
 DataSource.localize("de");

@@ -47,16 +47,47 @@ After loading the application, Messages are available as an associative array
 and can be used in JavaScript directly and in the Markup as Expression Language.
 
 ```javascript
-Messages["contact.title"];
+const title = Messages["contact.title"];
 ```
-
+```javascript
+const title = messages.contact.title;
+```
 ```html
 <h1 output="{{Messages['contact.title']}}"/>
 ```
+```html
+<h1 output="{{messages.contact.title}}"/>
+```
 
-At runtime, the language can be changed via JavaScript with the locale. Only
-locales that are available with the DataSource are accepted. Other values cause
-an error when the method is called.
+Messages can also be customized at runtime using the `Messages.customize(label,
+    ...values)` method. For this purpose, the label is used as a template with
+placeholders, which are then filled. The values are passed as a list in the form
+of the spread notation. The placeholders are then a number with reference to the
+position in the value list, whose value is then inserted for the placeholder.
+
+```xml
+<?xml version="1.0"?>
+<locales>
+  <en default="true">
+    <label key="welcome">
+      Welcome {0} {1}, you are logged in as {2}.    
+    </label>        
+  </en>
+</locales>
+```
+```html
+<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'administrator')}}"/>
+```
+```javascript
+const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", 'administrator');
+```
+
+Placeholders can be used multiple times. Excess placeholders or placeholders for
+which no value has been specified are removed from the generated message.
+
+Furthermore, the language and locale for Message can be changed via JavaScript
+at runtime. Only locales that are available with the DataSource are accepted,
+other specifications cause an error when calling the method.
 
 ```javascript
 DataSource.localize("de");
