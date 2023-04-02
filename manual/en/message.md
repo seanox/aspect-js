@@ -76,10 +76,10 @@ position in the value list, whose value is then inserted for the placeholder.
 </locales>
 ```
 ```html
-<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'administrator')}}"/>
+<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'with extended user rights')}}"/>
 ```
 ```javascript
-const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", 'administrator');
+const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", "with extended user rights");
 ```
 
 Placeholders can be used multiple times. Excess placeholders or placeholders for

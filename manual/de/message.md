@@ -80,10 +80,10 @@ f&uuml;r den Platzhalter eingef&uuml;gt wird.
 </locales>
 ```
 ```html
-<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'administrator')}}"/>
+<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'with extended user rights')}}"/>
 ```
 ```javascript
-const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", 'administrator');
+const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", "with extended user rights");
 ```
 
 Platzhalter lassen sich mehrfach verwenden. &Uuml;berz&auml;hlige, bzw.
