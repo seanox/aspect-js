@@ -131,7 +131,22 @@ Modulnamen durch das Slash repr&auml;sentiert wird.
 
 ### #module
 
-TODO:
+Dieses Makro ist primär als Hilfe für das Debugging implementiert worden. Es
+erwartet Text bis zum Zeilenende oder bis zum n&auml;chsten Semikolon, der in
+der Browser-Konsole im Debug-Level ausgegeben wird.
+
+```javascript
+#module some text;
+```
+
+Als Besonderheit wird auch die Syntax der String-Expression von JavaScript
+unterst&uuml;tzt, was die Verwendung von Variablen erm&ouml;glicht.
+
+```javascript
+const value = "Hallo Welt!";
+#module some more complex text: ${value} ... ${1 + 2};
+```
+
 
 ### (?...) tolerate
 
