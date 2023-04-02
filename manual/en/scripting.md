@@ -14,7 +14,7 @@ TODO:
     * [#export](#export)
     * [#import](#import)
     * [#module](#module)
-    * [tolerate](#tolerate)
+    * [(?...) tolerate](#-tolerate)
 * [Debugging](#debugging)
 
 
@@ -110,7 +110,7 @@ in the module names by the slash.
 
 TODO:
 
-### tolerate
+### (?...) tolerate
 
 A very special macro is the tolerating syntax `(?...)`. Thus, in case of an
 error, the logic enclosed in the brackets will not cause an error and there will

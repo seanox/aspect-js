@@ -14,7 +14,7 @@ TODO:
   * [#export](#export)
   * [#import](#import)
   * [#module](#module)
-  * [tolerate](#tolerate)
+  * [(?...) tolerate](#-tolerate)
 * [Debugging](#debugging)
 
 
@@ -112,7 +112,7 @@ Modulnamen durch das Slash repr&auml;sentiert wird.
 
 TODO:
 
-### tolerate
+### (?...) tolerate
 
 Ein ganz besonderes Makro ist die tolerierende Anweisung `(?...)`. So wird die
 in den Klammern eingeschlossene Logik im Fall eines Fehlers nicht zum Fehler
