@@ -27,7 +27,21 @@ wird, sind Variablen, Konstanten und Methoden nicht direkt global oder
 
 ## Eingebettetes Composite-JavaScript
 
-TODO:
+Eingebettetes Scripting bringt einige Besonderheiten mit sich. Das
+Standard-Scripting wird vom Browser automatisch und unabh&auml;ngig vom
+Rendering ausgef&uuml;hrt. Daher wurde das Markup f&uuml;r das Rendering um den
+zus&auml;tzlichen Skript-Typ `composite/javascript` erweitert, der das normale
+JavaScript verwendet, im Vergleich zum Typ `text/javascript` vom Browser aber
+nicht erkannt und somit nicht direkt ausgef&uuml;hrt wird. Der Renderer hingegen
+erkennt den JavaScript-Code und f&uuml;hrt diesen mit jedem relevanten
+Renderzyklus aus. Auf diese Weise kann das SCRIPT-Element mit anderen
+Composite-Attributen kombiniert und die Ausf&uuml;hrung damit gesteuert werden.
+
+```html
+<script type="composite/javascript">
+    ...
+</script>
+```
 
 
 ## Module

@@ -27,7 +27,20 @@ things.
 
 ## Embedded Composite JavaScript
 
-TODO:
+Embedded scripting brings some peculiarity with it. The standard scripting is
+executed automatically by the browser and independently of the rendering.
+Therefore, markup for rendering has been extended by the additional script type
+`composite/javascript`, which uses the normal JavaScript but is not recognized
+by the browser in comparison to `text/javascript` and therefore not executed
+directly. But the renderer recognizes the JavaScript code and executes it in
+every relevant render cycle. In this way, the SCRIPT element can be combined
+with other composite attributes to control execution.
+
+```html
+<script type="composite/javascript">
+    ...
+</script>
+```
 
 
 ## Moduls
