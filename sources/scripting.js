@@ -29,7 +29,7 @@
  * internal methods and constants cannot be accessed unintentionally.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230401
+ * @version 1.6.0 20230402
  */
 (() => {
 
@@ -254,7 +254,7 @@
         // Because it is an internal method, an additional validation of the
         // exports as data structure was omitted.
         imports.forEach(include =>
-            Composite.load(Composite.MODULES + "/" + include + ".js"));
+            Composite.load(Composite.MODULES + "/" + include + ".js"), true);
     };
 
     const _export = (...exports) => {

@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230401
+ * @version 1.6.0 20230402
  */
 (() => {
 
@@ -1990,87 +1990,13 @@
             }
         },
 
-
-        // Internal method for loading a composite resource.
-        // Supports JS, CSS and HTML.
-        load(resource, composite) {
-
-            const normalize = (path) => {
-                const anchor = document.createElement("a");
-                anchor.href = path;
-                return anchor.pathname;
-            };
-
-            // JS and CSS are loaded only once
-            resource = normalize(resource);
-            if (resource in _render_cache
-                    && resource.match(/\.(js|css)$/i))
-                return;
-
-            // Resource has already been requested, but with no useful
-            // response and unsuccessful requests will not be repeated
-            if (resource in _render_cache
-                    && _render_cache[resource] === undefined)
-                return;
-
-            if (!(resource in _render_cache)) {
-                _render_cache[resource] = undefined;
-                const request = new XMLHttpRequest();
-                request.overrideMimeType("text/plain");
-                request.open("GET", resource, false);
-                request.send();
-                // Only server states 200 and 404 are supported, others will
-                // cause an error and the requests are not repeated later
-                if (request.status === 404)
-                    return;
-                if (request.status !== 200)
-                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-                _render_cache[resource] = request.responseText.trim();
-            }
-
-            // CSS is inserted into the HEAD element as a style element.
-            // Without a head element, the inserting causes an error.
-
-            // JavaScript is not inserted as an element, it is executed
-            // directly. For this purpose eval is used. Since the method may
-            // form its own scope for variables, it is important to use the
-            // macro #export to be able to use variables and/or constants in
-            // the global scope.
-
-            // HTML/Markup is preloaded into the render cache if available.
-            // If markup exists for the composite, ATTRIBUTE_IMPORT with the
-            // URL is added to the item. Inserting then takes over the
-            // import implementation, which then also accesses the render
-            // cache.
-
-            const content = _render_cache[resource];
-            if (resource.match(/\.js$/)) {
-                try {Scripting.eval(content);
-                } catch (error) {
-                    console.error(resource, error.name + ": " + error.message);
-                    throw error;
-                }
-            } else if (resource.match(/\.css$/)) {
-                const head = document.querySelector("html head");
-                if (!head)
-                    throw new Error("No head element found");
-                const style = document.createElement("style");
-                style.setAttribute("type", "text/css");
-                style.textContent = content;
-                head.appendChild(style);
-            } else if (resource.match(/\.html$/)) {
-                _recursion_detection(composite);
-                if (composite instanceof Element)
-                    composite.innerHTML = content;
-            }
-        },
-
         /**
          * Loads a resource (JS, CSS, HTML are supported).
          * @param  resource
+         * @param  strict
          * @return the content when loading a HTML resource
          */
-        load(resource) {
+        load(resource, strict) {
 
             resource = (resource || "").trim();
             if (!resource.match(/\.(js|css|html)(\?.*)?$/i))
@@ -2085,7 +2011,7 @@
             // JS and CSS are loaded only once
             resource = normalize(resource);
             if (!resource.startsWith(Composite.MODULES + "/"))
-                throw new Error("URL not supported: " + resource);
+                throw new Error("Resource not supported: " + resource);
             if (resource in _render_cache
                     && resource.match(/\.(js|css)(\?.*)?$/i))
                 return;
@@ -2102,9 +2028,11 @@
                 request.overrideMimeType("text/plain");
                 request.open("GET", resource, false);
                 request.send();
-                // Only server states 200 and 404 are supported, others will
-                // cause an error and the requests are not repeated later
-                if (request.status === 404)
+                // Only server states 200 and 404 (not in combination with the
+                // option strict) are supported, others will cause an error and
+                // the requests are not repeated later.
+                if (request.status === 404
+                        && !strict)
                     return;
                 if (request.status !== 200)
                     throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
