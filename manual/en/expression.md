@@ -38,7 +38,7 @@ escape sequence `\{\{` and/or `\}\}`.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)
   * [Combination](#combination)
-  * [tolerate](#tolerate)
+  * [(?...) tolerate](#-tolerate)
 * [Supplement](#supplement)
 
 
@@ -220,7 +220,7 @@ All types of expressions can be combined.
 ```
 
 
-### tolerate
+### (?...) tolerate
 
 Expressions are executed like JavaScript and can lead to corresponding errors.
 In addition, object-based approaches often require checking the existence of

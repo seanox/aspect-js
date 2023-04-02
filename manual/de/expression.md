@@ -38,7 +38,7 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Element-Expression](#element-expression)
   * [Variable-Expression](#variable-expression)
   * [Kombination](#kombination)
-  * [tolerate](#tolerate)
+  * [(?...) tolerate](#-tolerate)
 * [Erg&auml;nzung](#erg-nzung)
 
 
@@ -223,7 +223,7 @@ Alle der genannten Arten von Expressions lassen sich kombinieren.
 ```
 
 
-### tolerate
+### (?...) tolerate
 
 Expressions werden wie JavaScript ausgef&uuml;hrt und k&ouml;nnen zu
 entsprechenden Fehlern f&uuml;hren. Zudem ist bei objektbasierten Ans&auml;tzen
