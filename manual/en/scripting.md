@@ -9,7 +9,8 @@ Composite JavaScript, which includes the modules, is not inserted as an element,
 but executed directly with the eval method. Since an isolated and not the global
 scope is used for this, variables, constants and methods are not directly usable
 globally or across, which is why, among other things, the Composite-JavaScript
-was enriched with [macros](#macros) that take over such tasks.
+was enriched with [macros](#macros), which take over such tasks, among other
+things.
 
 
 ## Contents Overview
