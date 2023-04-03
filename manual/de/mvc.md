@@ -6,15 +6,16 @@
 Der Model-View-Controller (MVC) ist ein Entwurfsmuster zur Trennung von
 Interaktion, Daten und Darstellung. Hier muss zwischen I/O-Controller und
 Applikations-Controller unterschieden werden. Das reine MVC-Entwurfsmuster meint
-den I/O-Controller zur &Uuml;bermittlung der Interaktionen. Da dieser durch
-Betriebssystem und Browser bereitgestellt wird, bezieht sich der Controller in
-Seanox aspect-js vordergr&uuml;ndig auf den Applikations-Controller.
+den I/O-Controller zur &Uuml;bermittlung der Interaktionen. Da dies von
+Betriebssystem und Browser &uuml;bernommen wird, bezieht sich Seanox aspect-js
+vordergr&uuml;ndig auf den Applikations-Controller.
 
 ```
 +------------------------------------------+--------------+-----------------------+
 |  View                                    |  Controller  |  Model                |
 +------------------------------------------+--------------+-----------------------+
 |  Markup                                  |  Composite   |  JavaScript           |
+|                                          |  Reactive    |                       |
 |                                          |  Path        |                       |
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
@@ -32,11 +33,9 @@ Seanox aspect-js vordergr&uuml;ndig auf den Applikations-Controller.
 ## Controller
 
 Der (Applikations-)Controller steuert Abl&auml;ufe innerhalb einer Applikation
-(Face-Flow) und das Binding von Markup und JavaScript sowie die Steuerung vom
-Datenfluss zwischen View und Model was durch die Zusammenarbeit von Composite,
-Paths und SiteMap &uuml;bernommen wird. Womit hier auch von MVVM
-(Model-View-ViewModel) und MVCS (Model-View-Controller-Service) gesprochen
-werden kann.
+(Face-Flow) und &uuml;bernimmt mit dem View-Model-Binding den Datenfluss
+zwischen View und Model, wobei hier auch von MVVM (Model-View-ViewModel) und
+MVCS (Model-View-Controller-Service) gesprochen werden kann.
 
 
 ## Model
@@ -73,9 +72,9 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
     * [Page](#page)
     * [Face](#face)
     * [Facet](#facet)
-    * [Face Flow](#face-flow)
+    * [Face-Flow](#face-flow)
   * [Konfiguration](#konfiguration)
-    * [Face Flow](#face-flow-1)
+    * [Face-Flow](#face-flow-1)
     * [Permissions](#permissions)
     * [Acceptors](#acceptors)
   * [Navigation](#navigation)
@@ -93,6 +92,7 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
     * [Model](#model)
     * [Property](#property)
     * [Qualifier](#qualifier)
+    * [Unique Identifier](#unique-identifier)
     * [Composite](#composite)
     * [Composite-ID](#composite-id)
   * [Binding](#binding)
@@ -105,13 +105,14 @@ In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
 
 ## SiteMap
 
-Die Darstellung in Seanox aspect-js ist in Views organisiert, die Page, Faces
-sowie Facets nutzen und &uuml;ber virtuelle Pfade angesprochen werden. F&uuml;r
-diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
+Die Darstellung in Seanox aspect-js ist in Views organisiert, welche Pages,
+Faces sowie Facets nutzen und &uuml;ber virtuelle Pfade angesprochen werden.
+F&uuml;r diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
 Verf&uuml;gung, die auf den virtuellen Pfaden aller Views basiert. Die SiteMap
 steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Views --
-der sogenannten Face-Flow. Face-Flow und Visualisierung funktionieren resolut
-und verwenden das DOM zum Einf�gen und Entfernen der Views (Faces und Facets).
+der sogenannte Face-Flow. Face-Flow und Visualisierung funktionieren resolut und
+verwenden aktiv das DOM zum Einf&uuml;gen und Entfernen der Views (Faces und
+Facets).
 
 ```
 +-----------------------------------------------+
@@ -168,7 +169,7 @@ wie Article und/oder Section in einem Face. Sowohl Face als auch Facets sind
 umschliessende Face mit allen seinen &uuml;bergeordneten Faces angezeigt wird.
 
 
-#### Face Flow
+#### Face-Flow
 
 Face-Flow beschreibt die Zugriffssteuerung und die Visualisierung von Ansichten
 (Views). Die SiteMap stellt daf&uuml;r Schnittstellen f&uuml;r
@@ -180,11 +181,14 @@ weitergeleitet werden.
 
 ### Konfiguration
 
+Standardm&auml;ssig ist die SiteMap inaktiv und muss mit der Konfiguration
+aktiviert werden.
+
 F&uuml;r die Konfiguration der SiteMap wird die Methode
 `SiteMap.customize(....)`verwendet. Mit dieser Methode ist es m&ouml;glich, den
 Face-Flow (Pfade, Faces, Facets) sowie die Berechtigungen zu definieren und
-Akzeptoren zu registrieren, wof&uuml;r die die Methode unterschiedliche
-Signaturen bereitstellt.
+Akzeptoren zu registrieren, wof&uuml;r die Methode unterschiedliche Signaturen
+bereitstellt.
 
 Die Konfiguration kann mehrfach aufgerufen werden, auch zur Laufzeit. Die
 SiteMap sammelt alle Konfigurationen kumulativ. Alle Pfade, Faces und Facets
@@ -197,7 +201,7 @@ Die Konfiguration der SiteMap greift nur, wenn ein fehlerfreies Meta-Objekt
 &uuml;bergeben wird und keine Fehler bei der Verarbeitung auftreten.
 
 
-#### Face Flow
+#### Face-Flow
 
 Die Konfiguration basiert auf einem Meta-Objekt, das an die Methode
 `SiteMap.customize({meta})` &uuml;bergeben wird. Die Schl&uuml;ssel (string)
@@ -226,9 +230,9 @@ Ung&uuml;ltige Pfade werden basierend auf dem angeforderten Pfad zum n&auml;chst
 h&ouml;heren bekannten/berechtigten Pfad weitergeleitet.__
 
 __Ohne Face-Flow gibt es keine g&uuml;ltigen Pfade. Werden eine
-Benutzeroberfl&auml;che oder Komponenten ohne Face-Flow verwendet, m&uuml;ssen
-diese als _static_ gekennzeichnet werden, da die Komponenten sonst ausgeblendet
-(aus dem DOM entfernt) werden.__
+Benutzeroberfl&auml;che oder Komponenten bei aktivierte SiteMap ohne Face-Flow
+verwendet, m&uuml;ssen diese als _static_ gekennzeichnet werden, da die
+Komponenten sonst ausgeblendet (aus dem DOM entfernt) werden.__
 
 ```html
 <html>
@@ -244,7 +248,7 @@ diese als _static_ gekennzeichnet werden, da die Komponenten sonst ausgeblendet
 #### Permissions
 
 Das Berechtigungskonzept basiert auf einer oder mehreren permit-Methoden, die
-zusammen mit dem Face-Flow-Meta-Objekt &uuml;bergeben werden.
+zusammen mit dem Meta-Objekt zum Face-Flow &uuml;bergeben werden.
 
 ```javascript
 SiteMap.customize({...}, function(path) {...});
@@ -272,13 +276,13 @@ folgenden R&uuml;ckgabewerte erwartet:
 weitere permit-Methoden wird fortgesetzt. Wenn alle permit-Methoden wahr sind
 und damit den Pfad best&auml;tigen, wird er verwendet.
 
-`string` Die Validierung (Iteration &uuml;ber weitere permit-Merhoden) wird
-abgebrochen und es folgt einen Weiterleitung an die zur&uuml;ckgegebene
+`string` Die Validierung (Iteration &uuml;ber weitere permit-Methoden) wird
+abgebrochen und es folgt eine Weiterleitung an die zur&uuml;ckgegebene
 Zeichenkette. 
 
 `otherwise` Der Pfad gilt als ung&uuml;ltig/unautorisiert, die Validierung
-(Iteration &uuml;ber weitere permit-Merhoden) wird abgebrochen und an den
-urspr&uuml;nglichen Pfad weitergeleitet.
+(Iteration &uuml;ber weitere permit-Methoden) wird abgebrochen und es folgt eine
+Weiterleitung an den urspr&uuml;nglichen Pfad.
 
 
 #### Acceptors
@@ -474,7 +478,7 @@ k&ouml;nnen somit beliebig erweitert werden. Das Ziel ist in beiden F&auml;llen
 fest und die Anfragen werden von `#contact` bzw. `#project` verarbeitet. Die
 Erweiterung vom Pfad kann mit der Methode `SiteMap.lookup(path)` ermittelt
 werden. Das zur&uuml;ckgegebene Meta-Objekt enth&auml;lt bei variablen Pfaden
-mit erweiterten Pfaden diesen im data-Property. 
+den erweiterten Pfaden als data-Property. 
 
 ```
 SiteMap.lookup("#contact#support");
@@ -530,10 +534,10 @@ und dem Composite-API.
 
 #### Property
 
-Referenziert ein Element mit einer ID innerhalb vom DOM eines Composites und die
-korrespondierende Eigenschaft im Modell. Die Elemente der Properties nutzen
-einen relativen Bezeichner (ID). Der Namensraum basiert auf dem vom Composite
-und erweitert sich um ggf. weitere &uuml;bergeordnete Elemente mit IDs im DOM.
+Referenziert ein Element mit einer ID innerhalb vom DOM eines Composites mit
+einer korrespondierenden Eigenschaft im Modell. Der Namensraum basiert auf dem
+vom Composite und erweitert sich um ggf. weitere &uuml;bergeordnete Elemente mit
+IDs im DOM.
 
 ```javascript
 const model = {
@@ -585,6 +589,11 @@ beim View-Model-Binding wie Properties und verl&auml;ngern den Namensraum.
 ```
 
 
+#### Unique Identifier
+
+TODO:
+
+
 #### Composite
 
 Composite ist ein Konstrukt aus Markup (View), JavaScript-Objekt (Model), CSS
@@ -595,10 +604,9 @@ direkten Bezug auf die Darstellung.
 #### Composite-ID
 
 Die Composite-ID ist ein anwendungsweit eindeutiger Bezeichner. Sie ist eine
-Zeichenfolge, die aus Buchstaben, Zahlen und Unterstrichen besteht und optional
-auch das Minus-Zeichen unterst&uuml;tzt, wenn es nicht am Anfang oder am Ende
-benutzt wird. Eine Composite-ID ist mindestens ein Zeichen lang und wird durch
-die Kombination der Attribute `ID` und `Composite` gebildet.
+Zeichenfolge, die aus Buchstaben, Zahlen und Unterstrichen besteht. Eine
+Composite-ID ist mindestens ein Zeichen lang und wird durch die Kombination der
+Attribute `ID` und `Composite` gebildet.
 
 ```html
 <html>
@@ -619,7 +627,7 @@ Modelle/Komponenten zu identifizieren und zu kontrollieren.
 
 ### Binding
 
-In Seanox Aspect-js werden Komponenten auch Composites oder Module genannt, da
+In Seanox aspect-js werden Komponenten auch Composites oder Module genannt, da
 diese aus Markup (View), korrespondierendem JavaScript Objekt (Model) und mehr
 bestehen.
 
@@ -628,7 +636,7 @@ entsprechenden JavaScript-Objekt. Das Binding leitet Interaktionen und
 Status&auml;nderungen der View an das Model weiter und stellt eine Schnittstelle
 f&uuml;r Middleware-Funktionen und Services f&uuml;r die View bereit. Womit
 keine manuelle Implementierung und Deklaration von Ereignissen sowie die
-Synchronisation und Interaktion zwischen UI und Anwendungslogik erforderlich
+Synchronisation und Interaktion zwischen View und Anwendungslogik erforderlich
 ist.
 
 ```javascript
@@ -672,12 +680,12 @@ korrespondierenden Objektstruktur im JavaScript.
 Wenn ein Composite im DOM verwendet/eingef&uuml;gt wird, wird das entsprechende
 JavaScript-Objekt (Model) angedockt/verkn&uuml;pft und beim Entfernen aus dem
 DOM abgedockt/entkn&uuml;pft. In beiden F&auml;llen kann das Modell optional
-geeignete Methoden implementieren. Die Dock-Methode wird vor dem Rendern, vor
+geeignete Methoden implementieren. Die Methode `dock` wird vor dem Rendern, vor
 dem Einf&uuml;gen des Composites in das DOM oder nach dem Laden der Seite beim
 ersten Rendern ausgef&uuml;hrt und kann zur Vorbereitung der Darstellung
-verwendet werden. Die Undock-Methode wird ausgef&uuml;hrt, nachdem das Composite
-aus dem DOM entfernt wurde und kann zur Nachbereitung bzw. Bereinigung der
-Darstellung verwendet werden.
+verwendet werden. Die Methode `undock` wird ausgef&uuml;hrt, nachdem das
+Composite aus dem DOM entfernt wurde und kann zur Nachbereitung bzw. Bereinigung
+der Darstellung verwendet werden.
 
 ```javascript
 const model = {

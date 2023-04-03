@@ -7,14 +7,14 @@ The Model View Controller (MVC) is a design pattern for separating interaction,
 data and presentation. A distinction should be made between I/O controller and
 application controller. The pure MVC design pattern means the I/O controller for
 the transmission of interactions. Since this is provided by the operating system
-and browser, the controller in Seanox aspect-js primarily refers to the
-application controller.
+and browser, Seanox aspect-js ostensibly refers to the application controller.
 
 ```
 +------------------------------------------+--------------+-----------------------+
 |  View                                    |  Controller  |  Model                |
 +------------------------------------------+--------------+-----------------------+
 |  Markup                                  |  Composite   |  JavaScript           |
+|                                          |  Reactive    |                       |
 |                                          |  Path        |                       |
 |                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
@@ -31,11 +31,10 @@ application controller.
 
 ## Controller
 
-The (application)controller controls internal processes of an application (face
-flow) and the binding of markup and JavaScript as well as the control of the
-data flow between view and model, which is taken over by Composite, Paths and
-SiteMap. This means that we can also speak of MVVM (Model View ViewModel) and 
-MVCS (Model View Controller Service).
+The (application)controller controls internal processes within an application
+(face flow) and takes over the data flow between view and model with the
+view-model binding, whereby we can also speak of MVVM (Model-View-ViewModel) and
+MVCS (Model-View-Controller-Service) here.
 
 
 ## Model
@@ -92,6 +91,7 @@ In Seanox aspect-js the views are represented by the markup.
     * [Model](#model)
     * [Property](#property)
     * [Qualifier](#qualifier)
+    * [Unique Identifier](#unique-identifier)
     * [Composite](#composite)
     * [Composite-ID](#composite-id)
   * [Binding](#binding)
@@ -104,13 +104,13 @@ In Seanox aspect-js the views are represented by the markup.
 
 ## SiteMap
 
-The representation in Seanox aspect-js is multilayered and the views are
-organized as page, faces and facets which are accessed with virtual paths. For
-this purpose, SiteMap provides a hierarchical directory structure based on the
-virtual paths for all views. The SiteMap then controls the access and the
-visualization (show and hide) of the views, which is termed face-flow. Face-flow
-and visualization are resolute and uses the DOM to insert and remove the views
-(faces and facets).
+The representation in Seanox aspect-js is organized in views, which use pages,
+faces as well as facets and are addressed via virtual paths. For this purpose
+SiteMap provides a hierarchical directory structure based on the virtual paths
+of all views. SiteMap controls the access and visualization (show and hide) o
+the views -- which is termed face flow. Face flow and visualization work
+resolutely and actively use the DOM to insert and remove the views (faces and
+facets).
 
 ```
 +-----------------------------------------------+
@@ -175,6 +175,9 @@ paths/views can be stopped and/or redirected/forwarded with own logic.
 
 ### Configuration
 
+By default the SiteMap is inactive and has to be activated with the
+configuration.
+
 For the configuration of the SiteMap the method `SiteMap.customize(...)` is
 used. With this method it is possible to define and register the face-flow 
 (paths, faces, facets), the permissions and the acceptors, for which the method
@@ -218,8 +221,8 @@ paths are forwarded to the next higher known/permitted path, based on the
 requested path.__
 
 __Without a face flow there are no valid paths. If a user interface or
-components without face flow are used, they must be marked as _static_
-otherwise the components are hidden (removed from the DOM).__
+components without face flow and activated SiteMap are used, they must be marked
+as _static_ otherwise the components are hidden (removed from the DOM).__
 
 ```html
 <html>
@@ -235,7 +238,7 @@ otherwise the components are hidden (removed from the DOM).__
 #### Permissions
 
 The permission concept is based on permit method(s) that are passed together
-with the face-flow meta object.
+with meta object of the face-flow.
 
 ```javascript
 SiteMap.customize({...}, function(path) {...});
@@ -267,8 +270,8 @@ path, it is used.
 and it will be forwarded to the path corresponding to the string. 
 
 `otherwise` The path is regarded as invalid/unauthorized, the validation
-(iteration over further permit-methods) will be aborted and is forwarded to the
-original path.
+(iteration over further permit-methods) will be aborted and it follows a
+forwarding to the original path.
 
 
 #### Acceptors
@@ -454,8 +457,8 @@ The paths `#contact` and `#project` are variable in this example and can
 therefore be extended as required. The target is fixed in both cases and the
 requests are answered by `#contact` and `#project`. The extension of the path
 can be determined with the method `SiteMap.lookup(path)`. The returned meta
-object contains the extended path in the data property for variable paths with
-extended paths.
+object contains the extended path from the variable path as a data property.
+
 
 ```
 SiteMap.lookup("#contact#support");
@@ -513,10 +516,9 @@ Details about view-model binding are described in chapter
 
 #### Property
 
-Is a property in a static model (model component / component). It corresponds to
-an HTML element with the same ID in the same namespace. The ID of the property
-can be relative or use an absolute namespace. If the ID is relative, the
-namespace is defined by the parent composite element.
+References an element with an ID within the DOM of a composite with a
+corresponding property in the model. The namespace is based on that of the
+composite, which can be extended by parent elements with IDs in the DOM.
 
 ```javascript
 const model = {
@@ -568,6 +570,11 @@ the namespace.
 ```
 
 
+#### Unique Identifier
+
+TODO:
+
+
 #### Composite
 
 Composite is a construct of markup (view), JavaScript object (model), CSS and
@@ -577,8 +584,7 @@ relation to the representation.
 
 #### Composite-ID
 
-It is a character sequence consisting of letters, numbers and underscores and
-optionally supports the minus sign if it is not used at the beginning or end. A
+It is a character sequence consisting of letters, numbers and underscores. A
 composite ID is at least one character long and is composed by combining the
 attributes `ID` and `composite`.
 
@@ -600,15 +606,15 @@ control faces and facets and generally models/components.
 
 ### Binding
 
-In Seanox Aspect-js, components are also termed composites or modules because
+In Seanox aspect-js, components are also termed composites or modules because
 they consist of markup (view), corresponding JavaScript object (model) and more.
 
 The view model binding is about the connection of view/markup/HTML with the
 corresponding JavaScript object. The binding forwards interactions and status
 changes of the view to the model and established an interface for middleware
 functions and services for the view. This avoids a manual implementation and
-declaration of events as well as synchronization and interaction between UI and
-application logic.
+declaration of events as well as synchronization and interaction between view
+and application logic.
 
 ```javascript
 const model = {
@@ -650,9 +656,9 @@ in the DOM and a corresponding object structure in JavaScript.
 If a composite is used/inserted in the DOM, the corresponding model is
 docked/linked and when removing from the DOM, the corresponding model is
 undocked/unlinked. In both cases the model can optionally implement appropriate
-methods. The dock-method is executed before rendering, before inserting the
+methods. The method `dock` is executed before rendering, before inserting the
 composite into the DOM, or after loading the page during initial rendering, and
-can be used to prepare the view. The undock-method is executed after the
+can be used to prepare the view. The method `undock` is executed after the
 composite is removed from the DOM and can be used to postprocess/clean the view.
 
 ```javascript
