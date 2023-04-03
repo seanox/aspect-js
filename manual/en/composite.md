@@ -1,4 +1,4 @@
-[Model View Controller](mvc.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
+[Sitemap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
 - - -
 
 # Components
@@ -99,10 +99,10 @@ unchanged for the resources.
 ## Loading
 
 The loading of resources and the view model binding is done partially when the
-composite is needed in the UI, which controls the [SiteMap](sitemap.md) as a
+composite is needed in the view, which controls the [SiteMap](sitemap.md) as a
 central face flow management and thus minimizes the loading time considerably,
 because depending on the situation, only the resources of the actively used
-composites are loaded by the UI.
+composites are loaded by the view.
 
 The outsourcing and loading of resources at runtime is optional and can be used
 completely, partially or not at all. There is a fixed sequence for reloading and
@@ -113,7 +113,7 @@ this resource has not been outsourced. If requests are not answered with status
 200 or 404, an error is assumed.
 
 Resources are loaded only once with the first request of the component for the
-UI and the content is then cached.
+view and the content is then cached.
 
 
 ### CSS
@@ -448,4 +448,4 @@ TODO:
 
 - - -
 
-[Model View Controller](mvc.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
+[Sitemap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)

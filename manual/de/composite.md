@@ -1,4 +1,4 @@
-[Model-View-Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
+[Sitemap](sitemap.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
 - - -
 
 # Komponenten
@@ -104,8 +104,8 @@ die Composite-ID unver&auml;ndert f&uuml;r die Ressourcen verwendet werden.
 ## Laden
 
 Das Laden der Ressourcen und das View-Model-Binding erfolgt partiell, wenn das
-Composite im UI ben&ouml;tigt wird, was die [SiteMap](sitemap.md) als zentrales
-Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
+Composite in der View ben&ouml;tigt wird, was die [SiteMap](sitemap.md) als
+zentrales Face-Flow-Management steuert und so die Ladezeit stark minimiert, da
 situationsabh&auml;ngig vom UI nur die Ressourcen der aktiv verwendeten
 Composites geladen werden.
 
@@ -118,7 +118,7 @@ ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
 mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.
 
 Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente f&uuml;r das UI ausgef&uuml;hrt und der Inhalt dann
+Komponente f&uuml;r die View ausgef&uuml;hrt und der Inhalt dann
 zwischengespeichert.
 
 
@@ -482,4 +482,4 @@ TODO:
 
 - - -
 
-[Model-View-Controller](mvc.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
+[Sitemap](sitemap.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
