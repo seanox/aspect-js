@@ -16,8 +16,6 @@ vordergr&uuml;ndig auf den Applikations-Controller.
 +------------------------------------------+--------------+-----------------------+
 |  Markup                                  |  Composite   |  JavaScript           |
 |                                          |  Reactive    |                       |
-|                                          |  Path        |                       |
-|                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
 |  <form id="model" composite>             |  aspect-js   |  const model = {      |
 |    <input id="message" events="input"/>  |              |      message: "",     | 

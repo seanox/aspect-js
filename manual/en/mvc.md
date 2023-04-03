@@ -15,8 +15,6 @@ and browser, Seanox aspect-js ostensibly refers to the application controller.
 +------------------------------------------+--------------+-----------------------+
 |  Markup                                  |  Composite   |  JavaScript           |
 |                                          |  Reactive    |                       |
-|                                          |  Path        |                       |
-|                                          |  SiteMap     |                       |
 +------------------------------------------+--------------+-----------------------+
 |  <form id="model" composite>             |  aspect-js   |  const model = {      |
 |    <input id="message" events="input"/>  |              |      message: "",     | 
