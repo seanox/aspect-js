@@ -1,4 +1,4 @@
-[Resource Bundle](message.md) | [TOC](README.md#model-view-controller) | [Components](composite.md)
+[Resource Bundle](message.md) | [TOC](README.md#model-view-controller) | [SiteMap](sitemap.md)
 - - -
 
 # Model View Controller
@@ -355,4 +355,4 @@ const contact = {
 
 - - -
 
-[Resource Bundle](message.md) | [TOC](README.md#model-view-controller) | [Components](composite.md)
+[Resource Bundle](message.md) | [TOC](README.md#model-view-controller) | [SiteMap](sitemap.md)
