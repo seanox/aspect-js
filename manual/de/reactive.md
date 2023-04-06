@@ -123,12 +123,12 @@ objectB === objectC
 const objectD = ({objectA}).reactive();
 
 // Assertion
-objectD.objectA !== objectA
+objectD.objectA === objectA
 
 objectC.objectB = objectB;
 
 // Assertion
-objectC.objectB !== objectB
+objectC.objectB === objectB
 ```
 
 __Missverst&auml;ndnisse vorbeugen__
