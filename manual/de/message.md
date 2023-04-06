@@ -90,7 +90,7 @@ Platzhalter lassen sich mehrfach verwenden. &Uuml;berz&auml;hlige, bzw.
 Platzhalter, zu denen kein Wert festgelegt wurde, werden aus der erzeugten
 Message entfernt.
 
-Des Weiteren lassen sich für Message die Sprache und Gebietsschema per
+Des Weiteren lassen sich f&uuml;r Message die Sprache und Gebietsschema per
 JavaScript zur Laufzeit &auml;ndern. Akzeptiert werden dabei nur Gebietsschemen,
 die mit der DataSource verf&uuml;gbar sind, andere Angaben f&uuml;hren beim
 Methoden-Aufruf zu einem Fehler.

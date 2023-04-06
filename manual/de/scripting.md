@@ -85,7 +85,7 @@ __Beim Aufruf von Modulen wird auf die Dateiendung verzichtet.__
 
 Makros sind eine einfache Meta-Syntax, die sich in die bestehende
 JavaScript-Syntax einf&uuml;gt. Im Kern sind es verk&uuml;rzte Schreibweisen
-oder Umschreibungen für g&auml;ngige JavaScript-Anweisungen.
+oder Umschreibungen f&uuml;r g&auml;ngige JavaScript-Anweisungen.
 
 ### #export
 
@@ -163,7 +163,7 @@ Modulnamen durch das Slash repr&auml;sentiert wird.
 
 ### #module
 
-Dieses Makro ist primär als Hilfe für das Debugging implementiert worden. Es
+Dieses Makro ist als Hilfe f&uuml;r das Debugging implementiert worden. Es
 erwartet Text bis zum Zeilenende oder bis zum n&auml;chsten Semikolon, der in
 der Browser-Konsole im Debug-Level ausgegeben wird.
 

@@ -159,9 +159,9 @@ in the module names by the slash.
 
 ### #module
 
-This macro has been implemented primarily as an aid for debugging. It expects
-text to the end of the line or to the next semicolon, which is output in the
-browser console in the debug level.
+This macro has been implemented as an aid for debugging. It expects text to the
+end of the line or to the next semicolon, which is output in the browser
+console in the debug level.
 
 ```javascript
 #module some text;
