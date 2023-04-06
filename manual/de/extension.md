@@ -33,46 +33,46 @@ werden kann.
 Wie f&uuml;r die Bezeichner von Objekten typisch, verwenden auch Namespaces
 Buchstaben, Zahlen und Unterstriche, die durch einen Punkt getrennt werden. Als
 Besonderheit werden auch Arrays unterst&uuml;tzt. Nutzt eine Ebene im Namespace
-eine Ganzzahl, wird diese Ebene als Array verwendet.
+eine Ganzzahl, wird diese Ebene als Array interpretiert.
 
 
 ### Namespace.use
 
 Erstellt einen Namensraum zur &uuml;bergebenen Zeichenkette und gibt diesen als
-Objekt zur&uuml;ck. Ohne Argumente gibt die Methode den globalen Namensraum
+Objekt zur&uuml;ck. Ohne Argument gibt die Methode den globalen Namensraum
 `window` zur&uuml;ck.
 
 ```javascript
 Namespace.use("app.example");
-    creates window["app", {example: {}}]
-    returns window["app"] / {example: {}}
+// creates window["app", {example: {}}]
+// returns window["app"] / {example: {}}
 
 Namespace.use("app.example", "more");
-    creates window["app", {example: {more: {}}}]
-    returns window["app"] / {example: {more: {}}}
+// creates window["app", {example: {more: {}}}]
+// returns window["app"] / {example: {more: {}}}
 
 Namespace.use()
-    returns window
+// returns window
 ```
 
 
 ### Namespace.lookup
 
 L&ouml;st einen Namensraum auf und ermittelt das Objekt. Wenn der Namensraum
-nicht existiert, wird `undefined` zur&uuml;ckgegeben. Ohne Argumente gibt die
+nicht existiert, wird `undefined` zur&uuml;ckgegeben. Ohne Argument gibt die
 Methode den globale Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Namespace.use("app.example.more");
 
 Namespace.lookup("app.example.more")
-    returns object window["app"] / {example: {more: {}}}
+// returns object window["app"] / {example: {more: {}}}
 
 Namespace.lookup(app.example, "more")
-    returns object window["app"] / {example: {more: {}}}
+// returns object window["app"] / {example: {more: {}}}
 
 Namespace.lookup()
-    returns object window
+// returns object window
 ```
 
 
@@ -84,16 +84,16 @@ Pr&uuml;ft, ob ein Namensraum existiert.
 Namespace.use("app.example.more");
 
 Namespace.exists("app.example.more")
-    returns boolean true
+// returns boolean true
 
 Namespace.exists(app.example, "more")
-    returns boolean true
+// returns boolean true
 
 Namespace.exists(app.example, "nothing")
-    returns boolean false
+// returns boolean false
 
 Namespace.exists()
-    returns boolean true
+// returns boolean true
 ```
 
 
@@ -126,10 +126,10 @@ Einfluss auf die Qualit&auml;t der (U)UID hat.
 
 ```javascript
 Math.unique()
-    returns string e.g. "42X3IUW7622CKY02"
+// returns string e.g. "42X3IUW7622CKY02"
 
 Math.unique(32)
-    returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
+// returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
 
@@ -141,7 +141,7 @@ enth&auml;lt, wenn UIDs zeitgleich erstellt werden.
 
 ```javascript
 Math.serial()
-    returns string e.g. "89BFASDV910"
+// returns string e.g. "89BFASDV910"
 ```
 
 
@@ -149,7 +149,7 @@ Math.serial()
 
 ### Object.prototype.ordinal
 
-Git die ID eines Objekts zur&uuml;ck. Die ID wird kontinuierlich erstellt und
+Gibt die ID eines Objekts zur&uuml;ck. Die ID wird kontinuierlich erstellt und
 soll helfen, wenn zur Laufzeit eine eindeutige ID ben&ouml;tigt wird.
 
 ```javascript
@@ -182,16 +182,16 @@ const earth = {
 }
 
 Object.lookup("earth");
-    returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
+// returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
 
 Object.lookup("earth.europe.germany");
-    returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
+// returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
 
 Object.lookup("earth.europe.germany.countPopulation");
-    returns function window["earth.europe.germany.countPopulation"] / () => {return 83000000;}
+// returns function window["earth.europe.germany.countPopulation"] / () => {return 83000000;}
 
 Object.lookup("foo");
-    returns null
+// returns null
 ```
  
 
@@ -212,35 +212,34 @@ const earth = {
 }
 
 Object.exists("earth");
-    returns booelan true
+// returns booelan true
 
 Object.exists("earth.europe.germany");
-    returns booelan true
+// returns booelan true
 
 Object.exists("earth.europe.germany.countPopulation");
-    returns booelan true
+// returns booelan true
 
 Object.exists("foo");
-    returns booelan false
+// returns booelan false
 ```
 
 
 ### Object.use
 
 &Auml;quivalent zu [Namespace.use](#namespaceusing). Erstellt einen Namensraum
-zur &uuml;bergebenen Zeichenkette. Ohne Argumente gibt die Methode den globalen
+zur &uuml;bergebenen Zeichenkette. Ohne Argument gibt die Methode den globalen
 Namensraum `window` zur&uuml;ck.
 
 ```javascript
 Object.use("app.example");
-    returns object window["app.example"] / {}
+// returns object window["app.example"] / {}
 
 Object.use("app.example", "more");
-    returns object window["app.example.more"] / {}
-}
+// returns object window["app.example.more"] / {}
 
 Object.use()
-    returns object window
+// returns object window
 ```
 
 
@@ -253,7 +252,7 @@ Escape-Sequenzen im Text verlieren dadurch ihre Bedeutung.
 
 ```javascript
 RegExp.quote("only a text with a + b (as an example)");
-    returns string "only a text with a \+ b \(as an example\)"
+// returns string "only a text with a \+ b \(as an example\)"
 ```
 
 
@@ -265,7 +264,7 @@ Beginnt den String in Grossschreibung.
 
 ```javascript
 ("hello world").capitalize();
-    returns string "Hello world"
+// returns string "Hello world"
 ```
 
 
@@ -275,7 +274,7 @@ Beginnt den String in Kleinschreibung.
 
 ```javascript
 ("Hello World").capitalize();
-    returns string "hello World"
+// returns string "hello World"
 ```
 
 
@@ -285,7 +284,7 @@ Kodiert den String hexadezimal.
 
 ```javascript
 ("hello world").encodeHex();
-    returns string "0x68656C6C6F20776F726C64"
+// returns string "0x68656C6C6F20776F726C64"
 ```
 
 
@@ -295,7 +294,7 @@ Dekodiert den hexadezimalen String.
 
 ```javascript
 ("0x68656C6C6F20776F726C64").decodeHex();
-    returns string "hello world"
+// returns string "hello world"
 ```
 
 
@@ -305,7 +304,7 @@ Kodiert den String in Base64.
 
 ```javascript
 ("hello world").encodeBase64();
-    returns string "aGVsbG8gd29ybGQ="
+// returns string "aGVsbG8gd29ybGQ="
 ```
 
 
@@ -315,7 +314,7 @@ Dekodiert den Base64 kodierten String.
 
 ```javascript
 ("aGVsbG8gd29ybGQ=").decodeBase64();
-    returns string "hello world"
+// returns string "hello world"
 ```
 
 
@@ -325,7 +324,7 @@ Kodiert HTML-Zeichen im String.
 
 ```javascript
 ("<hello world> & abc").encodeHtml();
-    returns string "&lt;hello world&gt; &amp; abc"
+// returns string "&lt;hello world&gt; &amp; abc"
 ```
 
 
@@ -335,7 +334,7 @@ Berechnet einen alphanumerischen Hash-Wert f&uuml;r den String.
 
 ```javascript
 ("hello world").hashCode();
-    returns string "B1OQGUCARUTF1"
+// returns string "B1OQGUCARUTF1"
 ```
 
 
@@ -345,7 +344,7 @@ Dekodiert Slash-Sequences (Steuerzeichen) im String.
 
 ```javascript
 ("a\\tb").unescape();
-    returns string "a   b"
+// returns string "a   b"
 ```
 
 
@@ -357,7 +356,7 @@ Eigenschaft mit der UID f&uuml;r die Instanz vom window-Objekt.
 
 ```javascript
 window.serial
-    returns string e.g. "2YG490NMYY87TSF1I9R"
+// returns string e.g. "2YG490NMYY87TSF1I9R"
 ```
 
 
@@ -369,7 +368,7 @@ mit einem Slash, endet aber ohne diesen.
 
 ```javascript
 window.location.combine("a", "b", "c")
-    returns string "/a/b/c"
+// returns string "/a/b/c"
 ```
 
 
@@ -380,7 +379,7 @@ kann mit dem aktuellen Arbeitsverzeichnis verglichen werden.
 
 ```javascript
 window.location.pathcontext
-    returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
+// returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
 
@@ -403,11 +402,11 @@ Mit diesen kann zentral und anwendungsweit auf HTTP-Ereignisse reagiert werden.
 
 ```javascript
 Composite.listen(Composite.EVENT_HTTP_START, function(event, ...varargs) {
-    show spinner
+    // show spinner
 });
 
 Composite.listen(Composite.EVENT_HTTP_END, function(event, ...varargs) {
-    hide spinner
+    // hide spinner
 });
 ```
 

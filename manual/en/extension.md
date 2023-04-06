@@ -30,46 +30,46 @@ the object tree forms a namespace, which can also be considered a domain.
 
 As is typical for the identifiers of objects, namespaces also use letters,
 numbers and underscores separated by a dot. As a special feature, arrays are
-also supported. If a layer in the namespace uses an integer, this layer is used
-as an array.
+also supported. If a layer in the namespace uses an integer, this layer is
+interpreted as an array.
 
 
 ### Namespace.use
 
-Creates a namespace to pass string. Without arguments, the method returns the
+Creates a namespace to pass string. Without argument, the method returns the
 global namespace window.
 
 ```javascript
 Namespace.use("app.example");
-    creates window["app", {example: {}}]
-    returns window["app"] / {example: {}}
+// creates window["app", {example: {}}]
+// returns window["app"] / {example: {}}
 
 Namespace.use("app.example", "more");
-    creates window["app", {example: {more: {}}}]
-    returns window["app"] / {example: {more: {}}}
+// creates window["app", {example: {more: {}}}]
+// returns window["app"] / {example: {more: {}}}
 
 Namespace.use()
-    returns window
+// returns window
 ```
 
 
 ### Namespace.lookup
 
 Resolves a namespace and returns the determined object(-level). If the namespace
-does not exist, `undefined` is returned. Without arguments, the method returns
+does not exist, `undefined` is returned. Without argument, the method returns
 the global namespace `window`.
 
 ```javascript
 Namespace.use("app.example.more");
 
 Namespace.lookup("app.example.more")
-    returns app.example.more
+// returns app.example.more
 
 Namespace.lookup(app.example, "more")
-    returns app.example.more
+// returns app.example.more
 
 Namespace.lookup()
-    returns window
+// returns window
 ```
 
 
@@ -81,16 +81,16 @@ Checks whether a namespace exists.
 Namespace.use("app.example.more");
 
 Namespace.exists("app.example.more")
-    returns boolean true
+// returns boolean true
 
 Namespace.exists(app.example, "more")
-    returns boolean true
+// returns boolean true
 
 Namespace.exists(app.example, "nothing")
-    returns boolean false
+// returns boolean false
 
 Namespace.exists()
-    returns boolean true
+// returns boolean true
 ```
 
 
@@ -122,10 +122,10 @@ quality of the (U)UID.
 
 ```javascript
 Math.unique()
-    returns string e.g. "42X3IUW7622CKY02"
+// returns string e.g. "42X3IUW7622CKY02"
 
 Math.unique(32)
-    returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
+// returns string e.g. "SPH507D0C5SQ1EP5107HD3514K08T8H1"
 ```
 
 ### Math.serial
@@ -135,7 +135,7 @@ text and contains the time and a counter if UIDs are created at the same time.
 
 ```javascript
 Math.serial()
-    returns string e.g. "89BFASDV910"
+// returns string e.g. "89BFASDV910"
 ```
 
 
@@ -176,16 +176,16 @@ const earth = {
 }
 
 Object.lookup("earth");
-    returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
+// returns object window["earth"] / {europe: {germany: {countPopulation() {return 83000000;}}}}
 
 Object.lookup("earth.europe.germany");
-    returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
+// returns object window["earth.europe.germany"] / {countPopulation() {return 83000000;}}
 
 Object.lookup("earth.europe.germany.countPopulation");
-    returns function window["earth.europe.germany.countPopulation"] / () => {return 83000000;}
+// returns function window["earth.europe.germany.countPopulation"] / () => {return 83000000;}
 
 Object.lookup("foo");
-    returns null
+// returns null
 ```
  
 
@@ -206,35 +206,33 @@ const earth = {
 }
 
 Object.exists("earth");
-    returns booelan true
+// returns booelan true
 
 Object.exists("earth.europe.germany");
-    returns booelan true
+// returns booelan true
 
 Object.exists("earth.europe.germany.countPopulation");
-    returns booelan true
+// returns booelan true
 
 Object.exists("foo");
-    returns booelan false
+// returns booelan false
 ```
 
 
 ### Object.use
 
 Equivalent to [Namespace.use](#namespaceusing). Creates a namespace to the
-passed string. Without arguments, the method returns the global namespace
-window.
+passed string. Without argument, the method returns the global namespace window.
 
 ```javascript
 Object.use("app.example");
-    returns object window["app.example"] / {}
+// returns object window["app.example"] / {}
 
 Object.use("app.example", "more");
-    returns object window["app.example.more"] / {}
-}
+// returns object window["app.example.more"] / {}
 
 Object.use()
-    returns object window
+// returns object window
 ```
 
 
@@ -247,7 +245,7 @@ sequences in the text thus lose their meaning.
 
 ```javascript
 RegExp.quote("only a text with a + b (as an example)");
-    returns string "only a text with a \+ b \(as an example\)"
+// returns string "only a text with a \+ b \(as an example\)"
 ```
 
 
@@ -259,7 +257,7 @@ Capitalized the string.
 
 ```javascript
 ("hello world").capitalize();
-    returns string "Hello world"
+// returns string "Hello world"
 ```
 
 
@@ -269,7 +267,7 @@ Uncapitalized the string.
 
 ```javascript
 ("Hello World").capitalize();
-    returns string "hello World"
+// returns string "hello World"
 ```
 
 
@@ -279,7 +277,7 @@ Encodes the string hexadecimal.
 
 ```javascript
 ("hello world").encodeHex();
-    returns string "0x68656C6C6F20776F726C64"
+// returns string "0x68656C6C6F20776F726C64"
 ```
 
 
@@ -289,7 +287,7 @@ Decodes the hexadecimal string.
 
 ```javascript
 ("0x68656C6C6F20776F726C64").decodeHex();
-    returns string "hello world"
+// returns string "hello world"
 ```
 
 
@@ -299,7 +297,7 @@ Encodes the string in Base64.
 
 ```javascript
 ("hello world").encodeBase64();
-    returns string "aGVsbG8gd29ybGQ="
+// returns string "aGVsbG8gd29ybGQ="
 ```
 
 
@@ -309,7 +307,7 @@ Decodes the Base64 encoded string.
 
 ```javascript
 ("aGVsbG8gd29ybGQ=").decodeBase64();
-    returns string "hello world"
+// returns string "hello world"
 ```
 
 
@@ -319,7 +317,7 @@ Escapes HTML characters in the string.
 
 ```javascript
 ("<hello world> & abc").encodeHtml();
-    returns string "&lt;hello world&gt; &amp; abc"
+// returns string "&lt;hello world&gt; &amp; abc"
 ```
 
 
@@ -329,7 +327,7 @@ Calculates an alphanumeric hash value for the string.
 
 ```javascript
 ("hello world").hashCode();
-    returns string "B1OQGUCARUTF1"
+// returns string "B1OQGUCARUTF1"
 ```
 
 
@@ -339,7 +337,7 @@ Decodes slash sequences (control characters) in the string.
 
 ```javascript
 ("a\\tb").unescape();
-    returns string "a   b"
+// returns string "a   b"
 ```
 
 
@@ -351,7 +349,7 @@ Property to get the UID for the window instance.
 
 ```javascript
 window.serial
-    returns string e.g. "2YG490NMYY87TSF1I9R"
+// returns string e.g. "2YG490NMYY87TSF1I9R"
 ```
 
 
@@ -363,7 +361,7 @@ without it.
 
 ```javascript
 window.location.combine("a", "b", "c")
-    returns string "/a/b/c"
+// returns string "/a/b/c"
 ```
 
 
@@ -374,7 +372,7 @@ and can be compared with the current working directory.
 
 ```javascript
 window.location.pathcontext
-    returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
+// returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
 
@@ -397,11 +395,11 @@ These can be used to react centrally and application-wide at HTTP events.
 
 ```javascript
 Composite.listen(Composite.EVENT_HTTP_START, function(event, ...varargs) {
-    show spinner
+    // show spinner
 });
 
 Composite.listen(Composite.EVENT_HTTP_END, function(event, ...varargs) {
-    hide spinner
+    // hide spinner
 });
 ```
 
