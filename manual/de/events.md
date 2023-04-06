@@ -34,9 +34,10 @@ Laufzeitumgebung genutzt werden k&ouml;nnen.
 
 # Rendering
 
-Diese Ereignisse treten w&auml;hrend dem Rendering auf. Der Callback-Methode
-wird der aktuelle Selector &uuml;bergeben. Sie kann diesen und/oder das
-korrespondierende Element beeinflussen, nicht aber das Rendering.
+Die nachfolgenden Ereignisse treten w&auml;hrend dem Rendering auf. Der
+Callback-Methode wird dazu der aktuelle Selector &uuml;bergeben. Die Methode
+kann dann den Selector, wie auch das korrespondierende Element beeinflussen,
+nicht aber das Rendering.
 
 ```javascript
 Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
@@ -66,10 +67,10 @@ selbst endet vor dem Ereignis.
 
 # View-Model-Binding
 
-Diese Ereignisse treten w&auml;hrend dem View-Model-Binding auf. Der
-Callback-Methode wird der aktuelle Selector &uuml;bergeben. Sie kann diesen
-und/oder das korrespondierende Element beeinflussen, nicht aber das
-View-Model-Binding.
+Die nachfolgenden Ereignisse treten w&auml;hrend dem View-Model-Binding auf. Der
+Callback-Methode wird dazu der aktuelle Selector &uuml;bergeben. Die Methode
+kann den Selector wie auch das korrespondierende Element beeinflussen, nicht
+aber das View-Model-Binding.
 
 ```javascript
 Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {

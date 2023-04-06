@@ -33,9 +33,9 @@ framework and runtime environment.
 
 # Rendering
 
-These events occur during rendering. The callback method is passed the current
-selector. It can influence this and/or the corresponding element, but not the
-rendering.
+The following events occur during rendering. The current selector is passed to
+the callback method. The method can then influence the selector as well as the
+corresponding element, but not the rendering.
 
 ```javascript
 Composite.listen(Composite.EVENT_RENDER_***, function(event, selector) {
@@ -65,9 +65,9 @@ before the event.
 
 # View Model Binding
 
-These events occur during the view model binding. The callback method is passed
-the current selector. It can influence this and/or the corresponding element,
-but not the view model binding.
+The following events occur during the view model binding. The current selector
+is passed to the callback method. The method can influence the selector as well
+as the corresponding element, but not the view model binding.
 
 ```javascript
 Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
