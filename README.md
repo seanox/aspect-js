@@ -56,7 +56,7 @@ bundle, NoSQL datasource, test environment and much more.
 - NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
 - Micro Frontends  
-  Platform and framework for the implementation of micro-frontends
+  platform and framework for the implementation of micro-frontends
 - Test environment  
   for automated unit tests and integration tests
 - ... 
