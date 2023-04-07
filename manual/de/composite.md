@@ -1,4 +1,4 @@
-[Sitemap](sitemap.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
+[SiteMap](sitemap.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
 - - -
 
 # Komponenten
@@ -482,4 +482,4 @@ TODO:
 
 - - -
 
-[Sitemap](sitemap.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)
+[SiteMap](sitemap.md) | [Inhalt](README.md#komponenten) | [Reaktives Rendering](reactive.md)

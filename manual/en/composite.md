@@ -1,4 +1,4 @@
-[Sitemap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
+[SiteMap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
 - - -
 
 # Components
@@ -448,4 +448,4 @@ TODO:
 
 - - -
 
-[Sitemap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
+[SiteMap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
