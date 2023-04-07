@@ -3,11 +3,11 @@
 
 # Resource-Bundle (Messages/i18n/l10n)
 
-(Resource)Messages ist eine statische Erweiterung der
-[DataSource](datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung
-(l10n) sowie f&uuml;r Mandanten bezogene Texte. Die Implementierung basiert auf
-einer Menge von Schl&uuml;ssel-Wert-Paaren in Form von Label-Elementen, die in
-der Datei `locales.xml` im DataSource-Verzeichnis definiert werden.
+(Resource)Messages ist eine statische Erweiterung der [DataSource](
+    datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung (l10n)
+sowie f&uuml;r Mandanten bezogene Texte. Die Implementierung basiert auf einer
+Menge von Schl&uuml;ssel-Wert-Paaren in Form von Label-Elementen, die in der
+Datei `locales.xml` im DataSource-Verzeichnis definiert werden.
 
 ```
 + data
