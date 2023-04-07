@@ -13,7 +13,7 @@
 * [SiteMap](#sitemap)
 * [Komponenten](#komponenten)
 * [Reaktives Rendering](#reaktives-rendering)
-* [Erweiterung](#erweiterung)
+* [API-Erweiterungen](#api-erweiterungen)
 * [Ereignisse](#ereignisse)
 * [Test](#test)
 * [Entwicklung](#entwicklung)
@@ -182,9 +182,9 @@
 * [Reaktives Rendering](reactive.md#reaktives-rendering)
 
 
-### Erweiterung
+### API-Erweiterungen
 
-* [Erweiterung](extension.md#erweiterung)
+* [API-Erweiterungen](extension.md#api-erweiterungen)
   * [Namespace](extension.md#namespace)
   * [Element](extension.md#element)
   * [Math](extension.md#math)

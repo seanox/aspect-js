@@ -15,7 +15,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [SiteMap](#sitemap)
 * [Composite](#composite)
 * [Reactivity Rendering](#reactivity-rendering)
-* [Extension](#extension)
+* [API Extensions](#api-extensions)
 * [Events](#events)
 * [Test](#test)
 * [Development](#development)
@@ -184,9 +184,9 @@ Machine translation with [DeepL](https://deepl.com).
 * [Reactivity Rendering](reactive.md#reactivity-rendering)
 
 
-### Extension
+### API Extensions
 
-* [Extension](extension.md#extension)
+* [API Extensions](extension.md#api-extensions)
   * [Namespace](extension.md#namespace)
   * [Element](extension.md#element)
   * [Math](extension.md#math)
