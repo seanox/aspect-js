@@ -6,10 +6,11 @@
 The Test API supports the implementation and execution of integration tests and
 can be used for suites, scenarios and single test cases.
 
-As a modular component of Seanox aspect-js, the Test API is included in every
-release that can be easily removed. Because the Test API has some special
-features regarding error handling and console output, the Test API must be
-activated deliberately at runtime.
+As a modular part of Seanox aspect-js, the Test API is included in all releases
+except the core versions. Because the test API causes some special features in
+terms of error handling and console output, the test API has to be activated
+consciously at runtime.
+
 
 ```javascript
 Test.activate();
@@ -442,7 +443,7 @@ Test.start({monitor: {
 }});
 ```
 
-The current status is passed to all monitor methods as an meta-object. The
+The current status is passed to all monitor methods as an meta object. The
 status contains details of the current task and the queue. The details are
 read-only and cannot be changed.
 
@@ -489,7 +490,7 @@ read-only and cannot be changed.
 ## Output
 
 As a development tool, browsers provide console output that can be used to log
-information for which different channels or levels are supported:
+information, for which different channels or levels are supported:  
     _LOG_, _WARN_, _ERROR_, _INFO_
 
 ```javascript
@@ -514,9 +515,9 @@ Test API.
 
 ### Buffer
 
-If the Test API is activated, the console object is extended by the buffer
-output. The buffer contains caches for the levels: _LOG_, _WARN_, _ERROR_ and
-_INFO_ as well as methods for emptying.
+When the Test API is enabled, the console object of the JavaScript API is
+extended by the buffer _output_. The buffer contains caches for the levels:
+_LOG_, _WARN_, _ERROR_ and _INFO_ as well as methods for emptying.
 
 ```javascript
 const log   = console.output.log;
@@ -533,16 +534,16 @@ console.output.clear();
 Callback methods can be established as listeners for console output.
 
 ```javascript
-console.listen(function(level, message) {
-    message = Array.from(arguments).slice(1);
+console.listen(function(level, ...parameters) {
+    message = parameters[0];
     ...
 });
 ```
 
 The callback methods are then called at each console output and the log level is
 passed as the first parameter. The additional number of parameters is variable
-and depends on the initial call of the corresponding console methods. This often
-makes it easier to use `arguments`.
+and depends on the initial call of the corresponding console methods. Which
+often makes it easier to use the spread syntax `...`.
 
 
 ## Monitoring
@@ -593,9 +594,9 @@ The test run can be restarted with `Test.start()`.
 Test.status();
 ```
 
-Makes a snapshot of the status of the current test. The status contains details
-of the current task and the queue. The details are read-only and cannot be
-changed. If no test is executed, false is returned.
+Returns a snapshot of the status of the current test. The status contains
+details of the current task and the queue. The details are read-only and cannot
+be changed. If no test is executed, false is returned.
 
 ```javascript
 {
@@ -738,7 +739,7 @@ Default: false
 document.queryElement("#button").trigger("click", true);
 ```
 
-Method call with option bubbles and cancel. This determines whether the event
+Method call with options bubbles and cancel. This determines whether the event
 can be canceled.
 
 Default: true

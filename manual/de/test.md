@@ -4,11 +4,11 @@
 # Test
 
 Das Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
-Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und einzelne
-Testf&auml;lle (test case) verwendet werden.
+Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und
+einzelne Testf&auml;lle (test case) verwendet werden.
 
-Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
-enthalten, der sich ohne Probleme entfernen l&auml;sst. Da das Test-API einige
+Als modularer Bestandteil von Seanox aspect-js ist das Test-API, mit Ausnahme
+der core-Versionen, in allen Releases enthalten. Da das Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
 das Test-API zur Laufzeit bewusst aktiviert werden.
 
@@ -501,8 +501,8 @@ Details sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
 ## Output
 
 Als Entwicklungswerkzeug stellen Browser eine Konsolenausgabe bereit, die zur
-Protokollierung von Informationen verwendet werden kann, und dazu verschiedene
-Kan&auml;le bzw. Stufen (Level) unterst&uuml;tzt:
+Protokollierung von Informationen verwendet werden kann, wozu verschiedene
+Kan&auml;le bzw. Stufen (Level) unterst&uuml;tzt werden:  
     _LOG_, _WARN_, _ERROR_, _INFO_
 
 ```javascript
@@ -528,7 +528,7 @@ zug&auml;nglich.
 
 ### Buffer
 
-Bei aktiviertem Test-API wird die JavaScript-API vom console-Objekt um den
+Bei aktiviertem Test-API wird das console-Objekt des JavaScript-API um den
 Buffer _output_ erweitert. Der Buffer enth&auml;lt Zwischenspeicher f&uuml;r die
 Level: _LOG_, _WARN_, _ERROR_ und _INFO_ sowie eine Methode zum Leeren.
 
@@ -548,8 +548,8 @@ F&uuml;r die Konsolenausgabe k&ouml;nnen Callback-Methoden als Listener
 etabliert werden.
 
 ```javascript
-console.listen(function(level, message) {
-    message = Array.from(arguments).slice(1);
+console.listen(function(level, ...parameters) {
+    message = parameters[0];
     ...
 });
 ```
@@ -557,8 +557,8 @@ console.listen(function(level, message) {
 Die Callback-Methoden werden dann bei jeder Konsolenausgabe unter Angabe vom
 Log-Level, der als erster Parameter &uuml;bergeben wird, aufgerufen. Die weitere
 Anzahl von Parametern ist variabel und abh&auml;ngig vom initialen Aufruf der
-korrespondierenden console-Methoden. Womit es oft einfacher ist `arguments` zu
-verwenden.
+korrespondierenden console-Methoden. Womit es oft einfacher ist die Spread
+Syntax `...` zu verwenden.
 
 
 ## Monitoring
@@ -610,11 +610,10 @@ Tests. Der Testlauf kann mit `Test.start()` neu gestartet werden.
 Test.status();
 ```
 
-Macht eine Momentaufnahme des Status des aktuellen Tests.
-
-Der Status enth&auml;lt Details zum aktuellen Test und zur Warteschlange. Die
-Details sind schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden.
-Wenn kein Test ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
+R&uuml;ckgabe einer Momentaufnahme des Status des aktuellen Tests. Der Status
+enth&auml;lt Details zum aktuellen Test und zur Warteschlange. Die Details sind
+schreibgesch&uuml;tzt und k&ouml;nnen nicht ge&auml;ndert werden. Wenn kein Test
+ausgef&uuml;hrt wird, wird `false` zur&uuml;ckgegeben.
 
 ```javascript
 {
@@ -758,8 +757,8 @@ Standardwert: false
 document.queryElement("#button").trigger("click", true);
 ```
 
-Aufruf der Methode mit den Option bubbles und cancel. Damit wird festgelegt, ob
-das Ereignis abgebrochen werden kann.
+Aufruf der Methode mit den Optionen bubbles und cancel. Damit wird festgelegt,
+ob das Ereignis abgebrochen werden kann.
 
 Standardwert: true
 
