@@ -76,12 +76,13 @@ links views and models bidirectionally based on the composite IDsand so no
 manual implementation and declaration of events, interaction or synchronization
 is required.
 
-The [SiteMap](mvc.md#sitemap) uses composites as [faces](mvc.md#face) for the
-primary projection of JavaScript objects (models), which means that they can be
-used as targets for virtual paths in the [face flow](mvc.md#face-flow), which
-has a direct influence on the visibility of the composites. When SiteMap is
-active, composites can be marked with the attribute [static](#static), which
-makes a composite permanently visible as a face regardless of virtual paths.
+The [SiteMap](sitemap.md#sitemap) uses composites as [faces](sitemap.md#face)
+for the primary projection of JavaScript objects (models), which means that they
+can be used as targets for virtual paths in the [face flow](
+    sitemap.md#face-flow), which has a direct influence on the visibility of the
+composites. When SiteMap is active, composites can be marked with the attribute
+[static](#static), which makes a composite permanently visible as a face
+regardless of virtual paths.
 
 ```html
 <article id="example" composite static>
@@ -185,8 +186,9 @@ events: _Input_ or _Change_ occurs.
 
 The ID (identifier) has an elementary meaning in Seanox aspect-js. It is the
 basis for [view model binding](mvc.md#view-model-binding) and is used by
-[SiteMap](mvc.md#sitemap) for [faces](mvc.md#face) and [facets](mvc.md#facet) in
-the [face flow](mvc.md#face-flow) and thus as a destination for virtual paths.
+[SiteMap](sitemap.md#sitemap) for [faces](sitemap.md#face) and [facets](
+    sitemap.md#facet) in the [face flow](sitemap.md#face-flow) and thus as a
+destination for virtual paths.
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the view model binding,

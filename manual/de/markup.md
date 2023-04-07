@@ -80,13 +80,13 @@ Controller Views und Models auf Basis der Composite-IDs bidirektional, womit
 keine manuelle Implementierung und Deklaration von Ereignissen, Interaktion oder
 Synchronisation erforderlich ist.
 
-Von der [SiteMap](mvc.md#sitemap) werden Composites als [Faces](mvc.md#face) zur
-prim&auml;ren Projektion von JavaScript-Objekten (Models) genutzt, womit sich
-diese als Ziele f&uuml;r virtuelle Pfade im [Face-Flow](mvc.md#face-flow)
-verwenden lassen, was direkten Einfluss auf die Sichtbarkeit der Composites hat.
-Bei aktiver SiteMap lassen sich Composites mit dem Attribut [static](#static)
-kennzeichnen, womit ein Composite als Face unabh&auml;ngig von virtuellen Pfaden
-permanent sichtbar ist.
+Von der [SiteMap](sitemap.md#sitemap) werden Composites als [Faces](
+    sitemap.md#face) zur prim&auml;ren Projektion von JavaScript-Objekten
+(Models) genutzt, womit sich diese als Ziele f&uuml;r virtuelle Pfade im
+[Face-Flow](sitemap.md#face-flow) verwenden lassen, was direkten Einfluss auf
+die Sichtbarkeit der Composites hat. Bei aktiver SiteMap lassen sich Composites
+mit dem Attribut [static](#static) kennzeichnen, womit ein Composite als Face
+unabh&auml;ngig von virtuellen Pfaden permanent sichtbar ist.
 
 ```html
 <article id="example" composite static>
@@ -193,9 +193,9 @@ oder _Change_ eintritt.
 
 Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie
 bildet die Grundlage f&uuml;r das [View-Model-Binding](
-    mvc.md#view-model-binding) und wird von der [SiteMap](mvc.md#sitemap)
-f&uuml;r [Faces](mvc.md#face) und [Facets](mvc.md#facet) im [Face-Flow](
-    mvc.md#face-flow) und somit als Ziel f&uuml;r virtuelle Pfade verwendet.
+    mvc.md#view-model-binding) und wird von der [SiteMap](sitemap.md#sitemap)
+f&uuml;r [Faces](sitemap.md#face) und [Facets](sitemap.md#facet) im [Face-Flow](
+    sitemap.md#face-flow) und somit als Ziel f&uuml;r virtuelle Pfade verwendet.
 
 Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
 Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
