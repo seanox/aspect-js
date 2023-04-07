@@ -9,11 +9,11 @@
 Gepr&auml;gt durch die guten Erfahrungen mit JSF (Java Server Faces) in Bezug
 auf Funktion und einfache Integration ins Markup, entstand die Idee f&uuml;r
 eine &auml;hnliche client-seitige Full-Stack L&ouml;sung mit minimalistischem
-und leichtgewichtigem Ansatz zur Implementierung von Single-Page Applications
+und leichtgewichtigem Ansatz zur Implementierung von Single-Page-Applications
 (SPAs).
 
 Seanox aspect-js greift dazu den deklarativen Ansatz von HTML auf und erweitert
-ihn um Expression Language, reaktives Rendering, zus&auml;tzlichen Attributen,
+ihn um Expression Language, reaktives Rendering, zus&auml;tzliche Attribute,
 Model-View-Controller, View-Model-Binding, Resource-Bundle (i18n/l10n),
 NoSQL-Datasource, Testumgebung und vieles mehr.
 
@@ -42,13 +42,16 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   erschwert die Manipulation der Attribute im Markup  
   nicht sichtbare Komponenten werden aus dem DOM entfernt und erst bei
   Verwendung eingesetzt  
-* Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)  
-  unterst&uuml;tzt: Ereignisse, virtuelle Pfade, Sitemap, Berechtigungskonzept,
-  View-Model-Binding, ......
+* Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)
+  unterst&uuml;tzt  View-Model-Binding und Ereignisse
+* Sitemap zur Organisation der Darstellung in Pages, Faces und Facets  
+  unterst&uuml;tzt virtuelle Pfade und Berechtigungskonzepte
 * Resource-Bundle / Resource-Messages   
   Internationalisierung (i18n), Lokalisierung (l10n) und Text-Auslagerung
 * NoSQL-DataSource auf Basis von XML  
   leichtgewichtiges Datenmanagement f&uuml;r Aggregation / Projektion / Transformation
+* Micro Frontends  
+  Platform und Framework zur Implementierung von Micro-Frontends
 * Testumgebung  
   f&uuml;r automatisierte Unit- und Integration-Tests
 * ... 
@@ -77,16 +80,17 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 * [DataSource](#datasource)
 * [Resource-Bundle (Messages/i18n/l10n)](#resource-bundle-messages-i18n-l10n)
 * [Model-View-Controller](#model-view-controller)
-  * [Controller](#controller)
-  * [Model](#model)
-  * [View](#view)
 * [SiteMap](#sitemap)
+  * [Page](#page)
+  * [Face](#face)
+  * [Facet](#facet)
+  * [Face-Flow](#face-flow)
+  * [Navigation](#navigation)
+  * [Berechtigungskonzept](#berechtigungskonzept)
   * [Virtual Paths](#virtual-paths)
-  * [View-Model-Binding](#view-model-binding)
 * [Komponenten](#komponenten)
-  * [View-Model-Binding](#view-model-binding-1)
 * [Reaktives Rendering](#reaktives-rendering)
-* [Erweiterung](#erweiterung)
+* [API-Erweiterungen](#api-erweiterungen)
 * [Ereignisse](#ereignisse)
 * [Test](#test)
   * [Testfall](#testfall)
@@ -101,36 +105,37 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
 
 ## Erste Schritte
 
-Das Framework besteht aus einer JavaScript-Datei und wird &uuml;ber die URL
-eines Release-Channels eingebunden oder als Releases heruntergeladen.
+Das Framework besteht aus einer JavaScript-Datei, die &uuml;ber die URL eines
+Release-Channels eingebunden oder als Release heruntergeladen wird.
 
 Release-Channel stellen kontinuierlich die neuesten finalen Hauptversionen zur
-Verf&uuml;gung, die zur Hauptversion abw&auml;rtskompatibel sind. So ist Seanox
-aspect-js immer auf dem neuesten Stand.
+Verf&uuml;gung. So ist Seanox aspect-js immer auf dem neuesten Stand.
 
-Jedes Release besteht aus zwei Versionen. Die Entwickler-Version beinhaltet
-umfangreiche Kommentare zu Konzeption, Funktion, Arbeitsweise und Verwendung.
-Die Produktions-Version ist in der Gr&ouml;sse optimiert aber nicht verschleiert
-(obfuscated).
+Jedes Release besteht aus verschiedenen Versionen f&uuml;r unterschiedliche
+Einsatzzwecke. Diese Versionen gibt es zudem immer in zwei Varianten. Der
+Standard ist die komprimierte Version f&uuml;r den produktiven Einsatz. Optional
+ist auch die unkomprimierte und dokumentierte max-Variante f&uuml;r Entwicklung
+und Fehleranalyse verf&uuml;gbar.
 
-Erstelle eine HTML-Datei, z.B. _index.html_ und f&uuml;ge Seanox apect-js ein.
+Zu Beginn erstelle eine HTML-Datei, z.B. _index.html_ und f&uuml;ge Seanox
+apect-js ein.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js"></script>
 ```
 
 oder
 
 ```html
-<!-- production version, optimized in size but not obfuscated -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js"></script>
+<!-- production and minimized version -->
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
 ```
 
-__Das Framework ist zur Implementierung modularer und komponentenbasierter__
-__Single-Page-Applications entwickelt worden. Durch das automatische Laden__
-__von Ressourcen, Modulen und Daten ist die Verwendung eines Web-Servers__
-__erforderlich.__
+__Das Framework ist zur Implementierung modularer und komponentenbasierter
+Single-Page-Applications entwickelt worden. Durch das automatische Laden von
+Ressourcen, Modulen und Daten ist f&uuml;r die Verwendung ein Web-Server
+erforderlich.__
 
 
 ## Arbeitsbereich
@@ -151,9 +156,9 @@ Die Expression Language kann ab dem HTML-Element `BODY` im kompletten Markup als
 Freitext, sowie in allen Attributen verwendet werden. Ausgenommen sind die
 HTML-Elemente `STYLE` und `SCRIPT`, deren Inhalt von der Expression Language
 nicht unterst&uuml;tzt wird. Bei der Verwendung als Freitext wird als Ausgabe
-immer reiner Text (plain text) erzeugt. Das Hinzuf&uuml;gen von Markup,
-insbesondere von HTML-Code, ist so nicht m&ouml;glich und wird nur mit den
-Attributen `output` und `import` unterst&uuml;tzt.
+reiner Text (plain text) erzeugt. Das Hinzuf&uuml;gen von Markup, insbesondere
+HTML-Code, ist so nicht m&ouml;glich und wird nur mit den Attributen `output`
+und `import` unterst&uuml;tzt.
 
 ```html
 <body lang="{{DataSource.locale}}">
@@ -164,10 +169,11 @@ Attributen `output` und `import` unterst&uuml;tzt.
 </body>
 ```
 
-Die Expression Language ist zeitweise sichtbar, da der Renderer erst nach dem
-Laden der Page aktiv wird. Alternativ k&ouml;nnen die Attribute
-[output](markup.md#output) und [import](markup.md#import) verwendet werden,
-welche eine direkte Ausgabe in das innere HTML vom Element bewirken. 
+Expressions werden durch den Renderer interpretiert, der nach dem Laden der
+Seite startet. Somit k&ouml;nnen Expressions beim Laden der Seite sichtbar sein.
+Hier empfiehlt sich die Verwendung der Attribute [output](markup.md#output) und
+[import](markup.md#import), welche eine direkte Ausgabe in das innere HTML vom
+Element bewirken.  
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -175,8 +181,8 @@ welche eine direkte Ausgabe in das innere HTML vom Element bewirken.
 </p>
 ```
 
-Oder mit der Verwendung vom Attribut [release](markup.md#release) werden
-Elemente und Ausgabe erst mit Abschluss vom Rendering sichtbar.
+Oder die Verwendung vom Attribut [release](markup.md#release), welches
+HTML-Elemente und deren Inhalte erst nach dem Rendern sichtbar macht.
 
 ```html
 <p release>
@@ -213,12 +219,16 @@ aktualisiert.
 
 ### output
 
-Das Attribut setzt den Wert oder das Ergebnis seines Ausdrucks als inneren
-HTML-Code bei einem HTML-Element. Als Wert werden Text, ein Element oder mehrere
-Elemente als NodeList bzw. Array erwartet, welche dann direkt eingef&uuml;gt werden.
-Zudem wird auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt,
-womit ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-eingef&uuml;gt wird.
+Setzt beim HTML-Element den Wert oder das Ergebnis seines Ausdrucks als inneres
+HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [import](#import), nur
+erfolgt mit jedem Renderzyklus eine aktualisierte Ausgabe. Als Wert werden Text,
+ein oder mehrere Elemente als NodeList bzw. Array, sowie absolute oder relative
+URLs zu einer entfernten Ressource und auch die [DataSource-URL (locator)](
+datasource.md#locator) f&uuml;r transformierte Inhalte aus der [DataSource](
+datasource.md) unterst&uuml;tzt.
+
+Das output-Attribut l&auml;sst sich mit dem condition-Attribut kombinieren und
+wird dann erst ausgef&uuml;hrt, wenn die Bedingung `true` ist.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -239,15 +249,17 @@ eingef&uuml;gt wird.
 
 ### import
 
-Diese Deklaration l&auml;dt Inhalte dynamisch nach und ersetzt den inneren HTML-Code
-eines Elements. Wenn der Inhalt erfolgreich geladen wurde, wird das Attribut
-`import` entfernt. Das Attribut erwartet als Wert ein Element oder mehrere
-Elemente als NodeList bzw. Array, welche dann direkt eingef&uuml;gt werden. Auch die
-Verwendung einer absoluten oder relativen URL zu einer entfernten Ressource wird
-unterst&uuml;tzt, die per HTTP-Methode GET nachgeladen und eingef&uuml;gt wird. Zudem wird
-auch die [DataSource-URL (locator)](datasource.md#locator) unterst&uuml;tzt, womit
-ein Inhalt aus der [DataSource](datasource.md) geladen und transformiert
-eingef&uuml;gt wird.
+L&auml;dt den Inhalt f&uuml;r das HTML-Element zur Laufzeit und f&uuml;gt diesen
+als inneres HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [output](
+#output), nur erfolgt der Import einmalig und das import-Attribut wird nach
+dem erfolgreichen Laden entfernt. Als Wert werden ein oder mehrere Elemente als
+NodeList bzw. Array, sowie absolute oder relative URLs zu einer entfernten
+Ressource und auch die [DataSource-URL (locator)](datasource.md#locator)
+f&uuml;r transformierte Inhalte aus der [DataSource](datasource.md)
+unterst&uuml;tzt.
+
+Das import-Attribut l&auml;sst sich mit dem condition-Attribut kombinieren und
+wird dann erst ausgef&uuml;hrt, wenn die Bedingung `true` ist.
 
 ```html
 <p import="Today is {{new Date().toDateString()}}
@@ -272,12 +284,12 @@ eingef&uuml;gt wird.
 
 ### condition
 
-Das condition-Attribut legt fest, ob ein Element im DOM enthalten bleibt. Der
-mit dem Attribut angegebene Ausdruck muss explizit `true` zur&uuml;ckliefern,
-damit das Element im DOM erhalten bleibt. Bei abweichenden R&uuml;ckgabewerten
-wird das Element tempor&auml;r aus dem DOM entfernt und l&auml;sst sich
-sp&auml;ter durch das Auffrischen des __Eltern-Elements__ wieder einf&uuml;gen,
-wenn der Ausdruck `true` zur&uuml;ckliefert.
+Als Bedingung legt das Attribut fest, ob ein Element im DOM enthalten bleibt.
+Der als Wert angegebene Ausdruck muss explizit `true` zur&uuml;ckliefern, damit
+das Element erhalten bleibt. Bei abweichenden R&uuml;ckgabewerten wird das
+Element tempor&auml;r aus dem DOM entfernt und l&auml;sst sich sp&auml;ter durch
+das Auffrischen des __Eltern-Elements__ wieder einf&uuml;gen, wenn der Ausdruck
+`true` zur&uuml;ckliefert.
 
 ```html
 <article condition="{{Model.visible}}">
@@ -299,20 +311,18 @@ ist als Composite-JavaScript m&ouml;glich.
 
 ### interval
 
-Diese Deklaration aktiviert eine intervallgesteuerte Auffrischung eines
-HTML-Elements, ohne dass die Auffrischung aktiv angestossen werden muss.
-
-Als Wert wird ein Intervall in Millisekunden erwartet, der auch als Expression
-formuliert werden kann. Die Verarbeitung erfolgt nebenl&auml;ufig bzw. asynchron
-aber nicht parallel. Bedeutet, dass die Verarbeitung nach dem gesetzten
-Zeit-Intervall starten soll, diese aber erst beginnt, wenn eine zuvor begonnen
-JavaScript-Prozedur beendet wurde. Daher ist das Intervall als zeitnah, nicht 
-aber als exakt zu verstehen.
-
-Das interval-Attribut erwartet einen Wert in Millisekunden. Ein ung&uuml;ltiger
-Wert verursacht eine Konsolenausgabe. Das Intervall beginnt automatisch mit dem
-Auffrischen vom deklarierten HTML-Element und bleibt so lange aktiv, wie das
-Element im DOM existiert.
+Aktiviert eine intervallgesteuerte Auffrischung des HTML-Elements, ohne dass die
+Auffrischung aktiv angestossen werden muss. Das Intervall nutzt das innere HTML
+als Vorlage, aus der mit jedem Intervallzyklus aktueller Inhalt erzeugt und
+eingef&uuml;gt wird. Das Attribut erwartet als Wert Millisekunden, die auch als
+Expression formuliert werden k&ouml;nnen, wobei ung&uuml;ltige Werte eine
+Konsolenausgabe verursachen. Die Verarbeitung erfolgt nebenl&auml;ufig bzw.
+asynchron aber nicht parallel. Die Verarbeitung wird nach der vorgegebenen Zeit
+starten, wenn eine zuvor begonnene JavaScript-Prozedur beendet wurde. Daher ist
+das Intervall als zeitnah, nicht aber als exakt zu verstehen. Das Intervall
+beginnt mit dem Auffrischen automatisch und endet wenn:
+- das Element nicht mehr im DOM existiert
+- das condition-Attribut verwendet wird, dass nicht `true` ist
 
 ```html
 <p interval="1000">
@@ -346,16 +356,13 @@ ist als Composite-JavaScript m&ouml;glich.
 ### iterate
 
 Die iterative Ausgabe basiert auf Listen, Aufz&auml;hlungen und Arrays. Wird ein
-HTML-Element als iterativ deklariert, wird der initiale innerer HTML-Code als
-Vorlage verwendet und w&auml;hrend der Iteration der innere HTML-Code
-zun&auml;chst entfernt, die Vorlage mit jeder Iteration einzeln generiert und
-das Ergebnis dem inneren HTML-Code hinzugef&uuml;gt.
-
-Das iterate-Attribut erwartet einen [Variablen-Ausdruck](
-    expression.md#variable-expression), zu dem ein Meta-Objekt erstellt wird,
-dass den Zugriff auf die Iteration erm&ouml;glich. So erzeugt der
-Variablen-Ausdruck `iterate={{tempA:Model.list}}` das Meta-Objekt
-`tempA = {item, index, data}`.
+HTML-Element als iterativ deklariert, wird das innerer HTML als Vorlage
+verwendet, aus der mit jedem Iterationszyklus aktueller Inhalt erzeugt und als
+inneres HTML eingef&uuml;gt wird. Als Wert wird f&uuml;r das Attribut ein
+[Variablen-Ausdruck](expression.md#variable-expression) erwartet, zu dem ein
+Meta-Objekt erstellt wird, was in der Vorlage den Zugriff auf die Iteration
+erm&ouml;glicht. So erzeugt der Variablen-Ausdruck `iterate={{
+tempA:Model.list}}` das Meta-Objekt `tempA = {item, index, data}`.
 
 ```javascript
 const Model = {
@@ -376,37 +383,52 @@ const Model = {
 
 ### id
 
-Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie wird
-u.a. von der SiteMap als Faces und Facets, also als Ziel f&uuml;r virtuelle
-Pfade im Face-Flow sowie f&uuml;r das View-Model-Binding verwendet.
+Die ID (Bezeichner) hat in Seanox aspect-js eine elementare Bedeutung. Sie
+bildet die Grundlage f&uuml;r das [View-Model-Binding](
+sitemap.md#view-model-binding) und wird von der [SiteMap](sitemap.md#sitemap)
+f&uuml;r [Faces](sitemap.md#face) und [Facets](sitemap.md#facet) im [Face-Flow](
+sitemap.md#face-flow) und somit als Ziel f&uuml;r virtuelle Pfade verwendet.
 
-Wie bei allen Attributen ist hier die Expression-Language verwendbar, jedoch mit
-einer Besonderheit, da das Attribut nur initial verarbeitet wird.
-&Auml;nderungen zur Laufzeit an einem existierenden Element haben wegen dem
-View-Model-Binding keine Auswirkungen, solange es im DOM existiert.
+Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
+Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
+Attribut bzw. der Wert f&uuml;r das View-Model-Binding nur initial verarbeitet
+wird, solange das HTML-Element im DOM existiert.
 
 [Mehr erfahren](markup.md#id)
 
 
 ### composite
 
-Kennzeichnet im Markup ein Element als [Composite](composites.md). Composites
-sind modulare Komponente die in Seanox aspect-js eine elementare Bedeutung haben
-und die zwingend einen Bezeichner (ID) ben&ouml;tigen. Sie werden von der
-[SiteMap](mvc.md#sitemap) als Faces, also als Ziele f&uuml;r virtuelle Pfade im
-Face-Flow verwendet, was direkten Einfluss auf die Sichtbarkeit der Composites
-hat.
-
-Der [Model-View-Controller](mvc.md#sitemap) unterst&uuml;tzt f&uuml;r Composites
-ein automatisches [View-Model-Binding](composite.md#view-model-binding). Die
-Ressourcen (JS, CSS, Markup) lassen sich f&uuml;r Composites in das
-Modul-Verzeichnis auslagern und werden bei Bedarf automatisch nachgeladen. 
+Kennzeichnet im Markup ein Element als [Composite](composite.md). Composites
+sind essenzielle Bestandteile, die zwingend einen Bezeichner (ID / Composite-ID)
+ben&ouml;tigen.
 
 ```html
 <article id="example" composite>
   ...
 </article>
 ```
+
+Composites sind auch die Grundlage f&uuml;r das [View-Model-Binding](
+mvc.md#view-model-binding), was die Verbindung von HTML-Elementen im Markup
+(View) mit korrespondierenden JavaScript-Objekten (Models) umfasst. Models sind
+statische JavaScript-Objekte, die vergleichbar mit managed Beans und DTOs (Data
+Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die View
+bereitstellen. Die View als Pr&auml;sentationsfl&auml;che und
+Benutzer-Schnittstelle f&uuml;r Interaktionen und das Model sind prim&auml;r
+entkoppelt. F&uuml;r den MVVM (Model-View-ViewModel) Ansatz, als Erweiterung zum
+MVC ([Model-View-Controller](mvc.md#model-view-controller)), verbindet der
+Controller Views und Models auf Basis der Composite-IDs bidirektional, womit
+keine manuelle Implementierung und Deklaration von Ereignissen, Interaktion oder
+Synchronisation erforderlich ist.
+
+Von der [SiteMap](sitemap.md#sitemap) werden Composites als [Faces](
+    sitemap.md#face) zur prim&auml;ren Projektion von JavaScript-Objekten
+(Models) genutzt, womit sich diese als Ziele f&uuml;r virtuelle Pfade im
+[Face-Flow](sitemap.md#face-flow) verwenden lassen, was direkten Einfluss auf
+die Sichtbarkeit der Composites hat. Bei aktiver SiteMap lassen sich Composites
+mit dem Attribut [static](#static) kennzeichnen, womit ein Composite als Face
+unabh&auml;ngig von virtuellen Pfaden permanent sichtbar ist.
 
 Details zur Verwendung von Composites / modularen Komponente werden in den
 Abschnitten [Composites](composite.md) und [Model-View-Controller](mvc.md)
@@ -417,29 +439,37 @@ beschrieben.
 
 ### strict
 
-Das Attribut wird in Kombination mit dem Attribut [composite](#composite)
-verwendent und legt fest, dass beim Laden der Ressourcen (CSS, JS, HTML) zu
-einer Komponente der Dateiname in der originalen Schreibweise verwendet wird.
-Das Standardverhalten ohne das Attribut [strict](#strict) verwendet die
-Composite-Id mit einem Kleinbuchstaben am Anfang.
+Das Attribut ist mit den Attributen [composite](#composite) und [validate](
+#validate) kombinierbar.
+
+In Kombination mit dem Attribut [composite](#composite) legt es fest, dass beim
+Laden der Ressourcen (JS, CSS, HTML) zu einer Komponente, der Dateiname in der
+originalen Schreibweise verwendet wird. Das Standardverhalten ohne das Attribut
+[strict](#strict) verwendet die Composite-Id mit einem Kleinbuchstaben am
+Anfang.
 
 [Mehr erfahren](markup.md#strict)
 
 
 ### events
 
-Diese Deklaration bindet ein oder mehrere Ereignisse (siehe
-https://www.w3.org/TR/DOM-Level-3-Events) an ein HTML-Element. Ereignisse
-er&ouml;ffnen prim&auml;re Funktionen zur ereignisgesteuerten Auffrischung von
-anderen HTML-Elementen (mehr dazu im Abschnitt [render](#render)), sowie zur
-Validierung und Synchronisation von HTML-Elementen und dem korrespondierenden
-JavaScript-Objekt (Model) (mehr dazu im Abschnitt [validate](#validate)).
+Bindet ein oder mehrere [Ereignisse](https://www.w3.org/TR/DOM-Level-3-Events)
+an ein HTML-Element. Das erm&ouml;glicht die ereignisgesteuerte Synchronisation
+von HTML-Elementen mit korrespondierenden JavaScript-Objekten (Models), sowie
+die Validierung der zu synchronisierenden Daten (mehr dazu im Abschnitt
+[validate](#validate)) und das ereignisgesteuerte Ansteuern und Auffrischen
+anderer HTML-Elemente (mehr dazu im Abschnitt [render](#render)).
 
 ```html
 <span id="output1">{{#text1.value}}</span>
 <input id="text1" type="text"
     events="input change" render="#output1"/>
 ```
+
+Wie bei allen Attributen ist hier die Expression-Language anwendbar, mit der
+Besonderheit, dass &Auml;nderungen zur Laufzeit keine Auswirkungen haben, da das
+Attribut bzw. der Wert f&uuml;r das View-Model-Binding nur initial verarbeitet
+wird, solange das HTML-Element im DOM existiert.
 
 [Mehr erfahren](markup.md#events)
 
@@ -468,16 +498,19 @@ validierende Element in einem Composite eingebettet ist.
 </form>
 ```
 
+Die Synchronisation und das Standard-Verhalten (action) vom Browser werden durch
+die Validierung direkt beeinflusst, die dazu vier Zust&auml;nde als
+R&uuml;ckgabewert nutzen kann: `true`, `not true`, `text`, `undefined/void`.
+
 [Mehr erfahren](markup.md#validate)
 
 
 ### message
 
-Message ist ein optionaler Bestandteil der Validierung und wird zur
-Text-/Fehler-Ausgabe im Fall einer unbest&auml;tigten Validierung verwendet.
-
-Das Attribut erfordert die Kombination mit den Attributen `validate` und 
-`events`. 
+Message ist ein optionaler Bestandteil der [Validierung](#validate) und wird zur
+Text- bzw. Fehler-Ausgabe im Fall einer unbest&auml;tigten Validierung verwendet.
+Das Attribut erfordert die Kombination mit den Attributen [validate](#validate)
+und [events](#events).
 
 ```html
 <form id="Model" composite>
@@ -504,11 +537,11 @@ Das Attribut erfordert die Kombination mit den Attributen `validate` und
 
 ### notification
 
-Notification ist ein optionaler Bestandteil der Validierung und zeigt die
-Fehlerausgabe als Info-Box (Browser-Feature) am entsprechenden Element an.
-
-Das Attribut erfordert die Kombination mit den Attributes `validate`, `events`
-und `message`.
+Notification ist ein optionaler Bestandteil der [Validierung](#validate) und
+legt fest, dass der Inhalt vom message-Attribut als Info-Box (Browser-Feature)
+am entsprechenden Element angezeigt wird, wenn die Validierung nicht erfolgreich
+ist. Das Attribut erfordert die Kombination mit den Attributen [validate](
+#validate), [events](#events) und [message](#message).
 
 ```html
 <form id="Model" composite>
@@ -525,10 +558,11 @@ und `message`.
 
 ### render
 
-Das Attribut `render` erfordert die Kombination mit dem Attribut `events`.
-Zusammen definieren sie, welche Ziele mit welchen auftretenden Ereignissen
-aufgefrischt werden. Als Wert erwartet das `render` Attribut einen CSS-Selector
-bzw. Query-Selector welche die Ziele festlegen.
+Das Attribut erfordert die Kombination mit dem Attribut [events](#events).
+Zusammen definieren sie, welche Ziele mit welchen auftretenden [Ereignissen](
+https://www.w3.org/TR/DOM-Level-3-Events) vom Renderer aufgefrischt werden.
+Als Wert werden ein oder mehrere durch Leerzeichen getrennte CSS- bzw.
+Query-Selectoren erwartet, welche die Ziele festlegen.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -546,10 +580,10 @@ ausl&aouml;sen.__
 ### release
 
 Inverser Indikator daf&uuml;r, dass ein Element gerendert wurde. Der Renderer
-entfernt dieses Attribut, wenn ein Element gerendert wird. Dieser Effekt kann
-f&uuml;r CSS verwendet werden, um Elemente nur im gerenderten Zustand
+entfernt dieses Attribut, wenn ein HTML-Element gerendert wurde. Dieser Effekt
+kann f&uuml;r CSS verwendet werden, um HTML-Elemente nur im gerenderten Zustand
 anzuzeigen. Eine entsprechende CSS-Regel wird dem HEAD automatisch mit dem Laden
-der Seite hinzugef&uuml;gt. 
+der Seite hinzugef&uuml;gt.
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -563,9 +597,13 @@ der Seite hinzugef&uuml;gt.
 DataSource ist ein NoSQL-Ansatz zur Datenspeicherung auf Basis von XML-Daten in
 Kombination mit mehrsprachiger Datentrennung, optionaler Aggregation und
 Transformation. Es ist eine Kombination von Ans&auml;tzen einer
-read-only-Datenbank und einem CMS. Die DataSource basiert auf statischen Daten,
-die per XPath abgefragt werden und das Ergebnis verkettet, aggregiert und per
-XSLT transformiert werden kann.
+read-only-Datenbank und einem CMS.
+
+Die DataSource basiert auf statischen Daten. Daher verwendet die Implementierung
+einen Cache, um den Netzwerkzugriff zu minimieren.
+
+Die Daten werden per XPath abgefragt. Das Ergebnis kann verkettet, aggregiert
+und per XSLT transformiert werden.
 
 [Mehr erfahren](datasource.md#datasource)
 
@@ -573,7 +611,7 @@ XSLT transformiert werden kann.
 ## Resource-Bundle (Messages/i18n/l10n)
 
 (Resource)Messages ist eine statische Erweiterung der [DataSource](
-    datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung (l10n)
+datasource.md) f&uuml;r Internationalisierung (i18n), Lokalisierung (l10n)
 sowie f&uuml;r Mandanten bezogene Texte. Die Implementierung basiert auf einer
 Menge von Schl&uuml;ssel-Wert-Paaren in Form von Label-Elementen, die in der
 Datei `locales.xml` im DataSource-Verzeichnis definiert werden.
@@ -583,79 +621,18 @@ Datei `locales.xml` im DataSource-Verzeichnis definiert werden.
 
 ## Model-View-Controller
 
-Der Model-View-Controller (MVC) ist ein Entwurfsmuster zur Trennung von
-Interaktion, Daten und Darstellung.
-
-```
-+------------------------------------------+--------------+-----------------------+
-|  View                                    |  Controller  |  Model                |
-+------------------------------------------+--------------+-----------------------+
-|  Markup                                  |  Composite   |  JavaScript           |
-|                                          |  Path        |                       |
-|                                          |  SiteMap     |                       |
-+------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  const model = {      |
-|    <input id="message" events="input"/>  |              |      message: "",     | 
-|    <button id="submit"/>                 |              |      submit: {        |
-|  </form>                                 |              |          onClick() {  |
-|                                          |              |          }            |
-|                                          |              |      }                |
-|                                          |              |  }                    |
-+------------------------------------------+--------------+-----------------------+
-```
-
-[Mehr erfahren](mvc.md)
-
-
-### Controller
-
-Hier muss zwischen I/O-Controller und Applikations-Controller unterschieden
-werden. Das reine MVC-Entwurfsmuster meint den I/O-Controller zur
-&Uuml;bermittlung der Interaktionen. Da dieser durch Betriebssystem und Browser
-bereitgestellt wird, bezieht sich der Controller in Seanox aspect-js
-vordergr&uuml;ndig auf den Applikations-Controller, der Abl&auml;ufe innerhalb
-einer Applikation (Face-Flow) steuert und das Binding von Markup und JavaScript
-sowie die Steuerung vom Datenfluss zwischen View und Model &uuml;bernimmt.
-
-In Seanox aspect-js ist der Controller die Zusammenarbeit von Composite, Paths
-und SiteMap.
-
-
-### Model
-
-Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
-DTOs (Data Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die
-View bereitstellen. Als Singletons/Facades/Delegates k&ouml;nnen sie weitere
-Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
-ein Bindeglied zwischen Benutzeroberfl&auml;che und Middelware sein.
-
-Das erforderliche View-Model-Binding ist Bestandteil vom Model-View-Controller
-und dem Composite-API.
-
-Details zum View-Model-Binding werden im Abschnitt
-[Model-View-Controller - Binding](mvc.md#binding) beschrieben.
-
-
-### View
-
-Die View ist ausschliesslich f&uuml;r die Darstellung bzw. Projektion eines
-Modells verantwortlich. Projektion ist ein wichtiger Begriff, da die Art der
-Darstellung eines Modells nicht eingeschr&auml;nkt ist.
-
-In Seanox aspect-js werden die Views durch das Markup repr&auml;sentiert.
+TODO:
 
 
 ## SiteMap
 
-Die Darstellung in Seanox aspect-js ist mehrschichtig und die Ansichten (Views)
-sind als Page, Faces und Facets organisiert, auf die &uuml;ber virtuelle Pfade
-zugegriffen wird. Zu diesem Zweck stellt SiteMap eine hierarchische
-Verzeichnisstruktur zur Verf&uuml;gung, die auf den virtuellen Pfaden f&uuml;r
-alle Ansichten basiert. Die SiteMap steuert den Zugriff und die Visualisierung
-(Ein- und Ausblenden) der Ansichten, den sogenannten Face-Flow.
-
-Face-Flow und Visualisierung funktionieren resolut und verwenden das DOM zum
-Einf&uuml;gen und Entfernen der Ansichten (Faces und Facets).
+Die Darstellung der Page l&auml;sst sich in Seanox aspect-js mit der SiteMap in
+Faces sowie Facets organisieren und &uuml;ber virtuelle Pfade ansprechen. Zu
+diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur bereit, die
+auf den virtuellen Pfaden aller Faces und Facets basiert. Die SiteMap steuert
+den Zugriff und die Visualisierung (Ein- und Ausblenden) der Element -- der
+sogenannte Face-Flow. Face-Flow und Visualisierung funktionieren resolut und
+verwenden aktiv das DOM zum Einf&uuml;gen und Entfernen der Faces und Facets.
 
 ```
 +-----------------------------------------------+
@@ -682,9 +659,84 @@ Einf&uuml;gen und Entfernen der Ansichten (Faces und Facets).
 +-----------------------------------------------+
 ```
 
-Weitere Bestandteile der SiteMap sind die Navigation und ein Permission Concept.
+### Page
 
-[Mehr erfahren](mvc.md#sitemap)
+In einer Single-Page-Application bildet die Page den elementaren Rahmen und die
+Laufzeitumgebung der gesamten Anwendung.
+
+
+### Face
+
+Ein Face ist die prim&auml;re Projektion von Modellen/Komponenten/Inhalten.
+Diese Projektion kann zus&auml;tzliche Unterstrukturen in Form von Facets und
+Sub-Faces enthalten. So werden &uuml;bergeordnete Faces zu partiellen Faces,
+wenn sich der Pfad auf ein Sub-Face bezieht. In dem Fall werden alle
+&uuml;bergeordneten Faces teilweise/partiell angezeigt, also ohne deren evtl.
+enthaltenen Facets.
+
+
+### Facet
+
+Facets sind Teile eines Faces (Projektion) und meist keine eigenst&auml;ndige
+Darstellung. So k&ouml;nnen z.B. bei einem Such-Formular die Eingabemaske und
+die Ergebnistabelle separate Facets eines Faces sein. Sowohl Faces als auch
+Facets sind &uuml;ber virtuelle Pfade erreichbar. Der Pfad zu Facets bewirkt,
+dass das umschliessende Face mit all seinen &uuml;bergeordneten Faces angezeigt
+wird.
+
+
+### Face-Flow
+
+Face-Flow beschreibt die Zugriffssteuerung und die Abfolge von Faces und Facets.
+Die SiteMap stellt dazu Schnittstellen, Berechtigungskonzepte und Akzeptoren
+bereit, mit denen der Face-Flow kontrolliert und beeinflusst werden kann.
+
+[Mehr erfahren](sitemap.md#sitemap)
+
+
+## Navigation
+
+Die Navigation kann durch &Auml;nderung des URL-Hash im Browser (direkte
+Eingabe), durch Verwendung von Hash-Links und in JavaScript mit
+`window.location.hash`, `window.location.href`, `SiteMap.navigate(path)` und
+`SiteMap.forward(path)` erfolgen.
+
+```html
+<a href="#a#b#c">Goto root + a + b + c</a>
+<a href="##">Back to the parent</a>
+<a href="##x">Back to the parent + x</a>
+```
+```javascript
+SiteMap.navigate("#a#b#c");
+SiteMap.navigate("##");
+SiteMap.navigate("##x");
+```
+```javascript
+SiteMap.forward("#a#b#c");
+SiteMap.forward("##");
+SiteMap.forward("##x");
+```
+
+Im Unterschied zur navigate-Methode wird die Weiterleitung direkt
+ausgef&uuml;hrt, anstatt eine asynchrone Weiterleitung durch &Auml;nderung des
+Location-Hashes auszul&ouml;sen.
+
+Relative Pfade ohne Hash am Anfang sind m&ouml;glich, funktionieren aber nur mit
+`SiteMap.navigate(path)`.
+
+[Mehr erfahren](sitemap.md#navigation)
+
+
+## Berechtigungskonzept
+
+Das Berechtigungskonzept basiert auf permit-Methoden, die als Callback-Methoden
+mit der Konfiguration des Face-Flows definiert werden. Es k&ouml;nnen mehrere
+permit-Methoden definiert werden, die mit jedem angeforderten Pfad
+&uuml;berpr&uuml;ft werden. Nur wenn alle permit-Methoden den angeforderten Pfad
+mit `true` best&auml;tigen, wird er verwendet und der Renderer macht die
+abh&auml;ngigen Faces und Facets sichtbar.
+
+[Mehr erfahren](sitemap.md#berechtigungskonzept)
 
 
 ### Virtual Paths
@@ -702,125 +754,73 @@ In Anlehnung an das Dateisystem werden auch hier absolute, relative und
 zus&auml;tzlich funktionale Pfade unterst&uuml;tzt. Pfade bestehen
 ausschliesslich aus Wortzeichen, Unterstrichen und optional dem Minus-Zeichen
 (basierend auf zusammengesetzten IDs). Als Separator und Root wird das
-Hash-Zeichen verwendet.
+Hash-Zeichen verwendet. Leerzeichen werden nicht unterst&uuml;tzt.
 
-[Mehr erfahren](mvc.md#virtual-paths)
-
-
-### View-Model-Binding
-
-TODO:
+[Mehr erfahren](sitemap.md#virtual-paths)
 
 
 ## Komponenten
 
 TODO:
 
-Seanox aspect-js zielt auf eine modulare und auf Komponenten basierte
-Architektur. Das Framework unterst&uuml;tzt dazu eine deklarative Kennzeichnung
-von Komponenten im Markup, die Auslagerung und das automatische Laden von
-Ressourcen, sowie ein automatisches View-Model-Binding.
-
-Eine Komponente besteht im initialen Markup aus einem als Composite
-gekennzeichneten HTML-Element mit einer eindeutigen Id.
-
-```html
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <script src="aspect-js.js"></script>
-  </head>
-  <body>
-    <div id="example" composite></div>
-  </bod>
-</html>
-```
-
-Das innere Markup, CSS und JavaScript lassen sich ins Dateisystem auslagern.
-
-Das Standard-Verzeichnis `./modules` kann &uuml;ber die Eigenschaft
-`Composite.MODULES` ge&auml;ndert werden.
-
-```
-+ modules
-  - example.css
-  - example.js
-  - example.html
-- index.html
-```
-
-Das Laden der Ressourcen und das View-Model-Binding erfolgt partiell, wenn die
-Komponente im UI ben&ouml;tigt wird -- also mit der ersten Anzeige, was
-&uuml;ber die [SiteMap](sitemap.md) als zentrales Face-Flow-Management gesteuert
-wird und so die Ladezeit stark minimiert, da punktuell jeweils nur f&uuml;r die
-aktiven UI-Komponenten ben&ouml;tigten Ressourcen geladen werden.
-
-Das Auslagern und Laden der Ressourcen zur Laufzeit ist optional und l&auml;sst sich
-komplett, teilweise und nicht anwenden. Beim Nachladen und Einbinden gibt es
-eine feste Reihenfolge: JS, CSS, HTML/Markup.
-
-Wird die Anfrage einer Ressourcen mit Status 404 beantwortet, wird davon
-ausgegangen, dass diese Ressource nicht ausgelagert wurde. Werden Anfragen weder
-mit Status 200 oder 404 beantwortet wird von einem Fehler ausgegangen.
-
-Das Laden von Ressourcen wird nur einmalig mit der ersten Anforderung der
-Komponente f&uuml;r das UI ausgef&uuml;hrt.
-
-Konzeptionell sind f&uuml;r die Implementierung von Komponenten die
-Entwurfsmuster Fassade und Delegation angedacht, die intern weitere Komponenten
-und Abstraktion verwenden.
-
-[Mehr erfahren](composite.md)
-
-
-### View-Model-Binding
-
-TODO:
-
 
 ## Reaktives Rendering
 
-Beim reaktiven Ansatz l&ouml;sen &Auml;nderungen an den Datenobjekten (Model)
+Beim reaktiven Ansatz l&ouml;sen &Auml;nderungen an den Datenobjekten (Models)
 ein partielles Auffrischen der Konsumenten in der View aus. Konsumenten sind
 alle Ausdr&uuml;cke, die lesend auf den ge&auml;nderten Wert eines Datenobjekts
-zugreifen. Die Ausdr&uuml;cke k&ouml;nnen in Elementen und im Freitext verwendet
-werden. F&uuml;r das reaktive Rendering m&uuml;ssen die Datenobjekte den
-ReactProxy nutzen, wozu `ReactProxy.create(object)` oder
-`Object.prototype.toReactProxy()`, was jede Objekt-Instanz bereitstellt,
-verwendet werden.
+zugreifen. In der View lassen sich Ausdr&uuml;cke in den HTML-Elementen und im
+Freitext verwenden. Die Datenobjekte m&uuml;ssen dann f&uuml;r das reaktive
+Rendering `Reactive(object)` oder `Object.prototype.reactive()` nutzen.
 
 ```javascript
-let Model = {
+const Model = {
     value: ...
-}.toReactProxy();
+}.reactive();
 ```
 
-In diesem Beispiel wird der Renderer automatisch alle Elemente im DOM
-aktualisieren, was die Freitexte einschliesst, welche die Eigenschaft `value`
-vom Model direkt oder indirekt in einem Ausdruck verwenden, wenn sich der Wert
-der Eigenschaft `value` &auml;ndert oder genauer, wenn der Wert im Datenobjekt
-final gesetzt wurde. Was bei der Verwendung von Getter und Setter relevant sein
-kann.
+In diesem Beispiel aktualisiert der Renderer automatisch alle HTML-Elemente im
+DOM, was Freitexte einschliesst, welche die Eigenschaft `value` vom `Model`
+direkt oder indirekt in einem Ausdruck verwenden, wenn sich der Wert der
+Eigenschaft `value` &auml;ndert oder genauer, wenn ein ge&auml;nderter Wert im
+Datenobjekt final gesetzt wurde, was bei der Verwendung von Getter und Setter
+relevant sein kann.
 
-Der ReactProxy wirkt permanent rekursiv auf alle Objektebenen und auch auf die
-Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden, auch wenn diese
-Objekte nicht explizit den ReactProxy nutzen, werden f&uuml;r die referenzierten
-Objekte neue Instanzen gebildet.
+Reactive wirkt permanent rekursiv auf allen Objektebenen und auch auf die
+Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden. Auch wenn diese
+Objekte nicht explizit Reactive nutzen, werden f&uuml;r die referenzierten
+Objekte neue Instanzen gebildet. Initiierende Objekte und reaktive Models sind
+logisch entkoppelt und werden bidirektional synchronisiert. Im Unterschied dazu
+nutzen Views und reaktive Models, wie auch die Models intern, Proxies, die sich
+wie die initiierenden Originale verhalten und verwenden lassen. Jedoch sind
+Proxies eigenst&aumkl;ndige Instanzen, die kompatibel aber nicht identisch zum
+initiierenden Objekt sind. Notwendig ist diese logische Trennung, damit der
+Renderer bei Daten&auml;nderungen entsprechende Notifications erzeugen und damit
+die Konsumenten in der View aktualisieren kann.
 
 [Mehr erfahren](reactive.md)
 
 
-## Erweiterung
+## API-Erweiterungen
 
-Das JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine Funktionen
-erweitert.
+Das JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine
+Funktionen erweitert.
+
+- [Namespace](extension.md#namespace)
+- [Element](extension.md#element)
+- [Math](extension.md#math)
+- [Object](extension.md#object)
+- [RegExp](extension.md#regexp)
+- [String](extension.md#string)
+- [window](extension.md#window)
+- [XMLHttpRequest](extension.md#xmlhttprequest)
 
 [Mehr erfahren](extension.md)
 
 
 ## Ereignisse
 
-Seanox aspect-js stellt verschiede Ereignisse bereit, die u.a. zur
+Seanox aspect-js stellt verschiedene Ereignisse bereit, die u.a. zur
 Implementierung von Erweiterungen sowie als Benachrichtigung der Anwendung
 &uuml;ber bestimmte Betriebszust&auml;nde des Frameworks und der
 Laufzeitumgebung genutzt werden k&ouml;nnen.
@@ -832,10 +832,10 @@ Laufzeitumgebung genutzt werden k&ouml;nnen.
 
 Das Test-API unterst&uuml;tzt die Implementierung und Ausf&uuml;hrung von
 Integrationstests und kann f&uuml;r Suiten (suite), Szenarien (scenario) und
-einzelne Testf&auml;lle (case) verwendet werden.
+einzelne Testf&auml;lle (test case) verwendet werden.
 
-Als modularer Bestandteil von Seanox aspect-js ist das Test-API in jedem Release
-enthalten, der sich ohne Probleme entfernen l&auml;sst. Da das Test-API einige
+Als modularer Bestandteil von Seanox aspect-js ist das Test-API, mit Ausnahme
+der core-Versionen, in allen Releases enthalten. Da das Test-API einige
 Besonderheiten in Bezug auf Fehlerbehandlung und Konsolen-Ausgabe bewirkt, muss
 das Test-API zur Laufzeit bewusst aktiviert werden.
 
@@ -854,9 +854,10 @@ Test.start();
 
 ### Testfall
 
-Der kleinste Bestandteil in einem Integrationstest, der hier als "Task"
-verwendet wird, da "Case" ein Schl&uuml;sselwort im JavaScript ist. Es kann
-allein implementiert werden, wird aber immer in einem Szenario verwendet.
+Der kleinste Bestandteil in einem Integrationstest, der hier als _Task_
+verwendet wird, da _case_ ein Schl&uuml;sselwort im JavaScript ist. Tasks
+k&ouml;nnen allein implementiert werden, werden aber meist in einem Szenario
+verwendet.
 
 ```javascript
 Test.activate();
@@ -912,7 +913,7 @@ Eine Suite ist ein komplexes Paket aus verschiedenen Testf&auml;llen, Szenarien
 und anderen Suiten. In der Regel besteht eine Suite aus verschiedenen Dateien,
 die dann einen komplexen Test darstellen. Ein Beispiel f&uuml;r eine gute Suite
 ist eine Kaskade von verschiedenen Dateien und wo der Test in jeder Datei und an
-jedem Stelle gestartet werden kann. Dies erm&ouml;glicht einen Integrationstest
+jeder Stelle gestartet werden kann. Dies erm&ouml;glicht einen Integrationstest
 auf verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
 
 [Mehr erfahren](test.md#suite)
@@ -922,8 +923,8 @@ auf verschiedenen Ebenen und mit unterschiedlicher Komplexit&auml;t.
 
 Die Testf&auml;lle werden mit Behauptungen (Assertions) implementiert. Das
 Test-API bietet elementare Aussagen, die erweitert werden k&ouml;nnen. Die
-Funktion ist einfach. Wenn eine Behauptung nicht wahr ist, tritt ein Fehler
-auf.
+Funktionsweise ist einfach: Wenn eine Behauptung nicht wahr ist, tritt ein
+Fehler auf, optional mit einer individuellen Fehlermeldung.
 
 ```javascript
 Test.activate();
@@ -966,10 +967,9 @@ Test.start();
 
 ### Konfiguration
 
-Optional kann das Test-API mit jedem Start konfiguriert werden.
-
-Als Parameter wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration
-wird partiell &uuml;bernommen und unbekanntes wird ignoriert.
+Optional kann das Test-API mit jedem Start konfiguriert werden. Als Parameter
+wird ein Meta-Objekt erwartet. Die darin enthaltene Konfiguration wird partiell
+&uuml;bernommen und unbekanntes wird ignoriert.
 
 ```javascript
 Test.start({auto: boolean, ouput: {...}, monitor: {...}});
@@ -998,36 +998,12 @@ Test.start();
 Test.start({auto: boolean});
 ```
 
-Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden
-der Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter
-`auto` ignoriert und der Start sofort ausgef&uuml;hrt.
+Der Start kann manuell oder bei Verwendung von `auto = true` durch das Laden der
+Seite erfolgen. Wenn die Seite bereits geladen ist, wird der Parameter `auto`
+ignoriert und der Start sofort ausgef&uuml;hrt.
 
-```javascript
-Test.suspend();
-```
-
-Unterbricht die aktuelle Testausf&uuml;hrung, die mit `Test.resume()` vom
-aktuellen Test fortgesetzt werden kann.
-
-```javascript
-Test.resume();
-```
-
-Setzt die Testausf&uuml;hrung fort, wenn sie zuvor unterbrochen wurde.
-
-```javascript
-Test.interrupt();
-```
-
-Unterbricht die aktuelle Testausf&uuml;hrung und verwirft alle ausstehende
-Tests. Der Testlauf kann mit `Test.start()` neu gestartet werden.
-
-```javascript
-Test.status();
-```
-
-Macht eine Momentaufnahme des Status des aktuellen Tests. Der Status
-enth&auml;lt Details zum aktuellen Test und zur Warteschlange.
+Weitere Methoden zur Steuerung und Kontrolle der Testausf&uuml;hrung sind
+verf&uuml;gbar.
 
 [Mehr erfahren](test.md#control)
 
@@ -1040,15 +1016,7 @@ entsprechende Ereignisse beim Test-API registriert und funktionieren dann
 &auml;hnlich dem Monitor.
 
 ```javascript
-Test.listen(Test.EVENT_START, function(event, status) {
-    ...
-});
-
-Test.listen(Test.EVENT_PERFORM, function(event, status) {
-    ...
-});
-
-Test.listen(Test.EVENT_FINISH, function(event, status) {
+Test.listen(Test.EVENT_***, function(event, status) {
     ...
 });
 ```
