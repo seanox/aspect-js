@@ -3,13 +3,13 @@
 
 ## SiteMap
 
-The representation in Seanox aspect-js is organized in views, which use pages,
-faces as well as facets and are addressed via virtual paths. For this purpose
+The representation of the page can be organized in Seanox aspect-js with SiteMap
+into faces as well as facets and addressed via virtual paths. For this purpose
 SiteMap provides a hierarchical directory structure based on the virtual paths
-of all views. SiteMap controls the access and visualization (show and hide) o
-the views -- which is termed face flow. Face flow and visualization work
-resolutely and actively use the DOM to insert and remove the views (faces and
-facets).
+of all faces and facets. SiteMap controls the access and visualization (showing
+and hiding) of the element -- the so-called face flow. Face flow and
+visualization work resolutely and actively use the DOM to insert and remove the
+faces and facets.
 
 ```
 +-----------------------------------------------+
@@ -79,19 +79,18 @@ contained faces.
 
 ### Facet
 
-Facets are parts of a face (projection) and are not normally a standalone view.
-For example, the input mask and result table of a search can be separate facets
-of a face, as can articles or sections of a face. Both face and facet can be
-accessed via virtual paths. The path to facets causes the surrounding face with
-all its superordinate faces to be displayed.
+Facets are parts of a face (projection) and usually not an independent
+representation. For example, in a search form, the input mask and the result
+table can be separate faces of a face. Both faces and facets are accessible via
+virtual paths. The path to facets causes the enclosing face to be displayed with
+all its parent faces.
 
 
 ### Face Flow
 
-Face-flow described the control of access and the visualization of views. The
-SiteMap provides hooks for permission concepts and acceptors. With both things
-the face-flow can be controlled and influenced. This way, the access to
-paths/views can be stopped and/or redirected/forwarded with own logic.
+Face flow describes the access control and the sequence of faces and facets. The
+SiteMap provides interfaces, permission  concepts and acceptors with which the
+face flow can be controlled and influenced.
 
 
 ## Configuration
@@ -119,8 +118,8 @@ passed and no errors occur during processing.
 The configuration is based on a meta object that is passed to method
 `SiteMap.customize({meta})`. The keys (string) correspond to the paths and a
 path always has a existing face as its target, partial paths without face can be
-ignored. The values are arrays with the valid facets for a path/face. Facets do
-not need their own path, which is automatically derived/created.
+ignored. The values are arrays with the valid facets for a path or face. Facets
+do not need their own path because they are automatically derived and created.
 
 ```javascript
 SiteMap.customize({...});
@@ -141,9 +140,10 @@ __The navigation only accepts paths that are defined in the face-flow. Invalid
 paths are forwarded to the next higher known/permitted path, based on the
 requested path.__
 
-__Without a face flow there are no valid paths. If a user interface or
-components without face flow and activated SiteMap are used, they must be marked
-as _static_ otherwise the components are hidden (removed from the DOM).__
+__Without face flow there are no valid paths. If you want to use components
+without face flow in a page with activated SiteMap, you have to declare them as
+_static_, otherwise the components will be hidden and thus removed from the
+DOM.__
 
 ```html
 <html>

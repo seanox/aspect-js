@@ -3,14 +3,13 @@
 
 # SiteMap
 
-Die Darstellung in Seanox aspect-js ist in Views organisiert, welche Pages,
-Faces sowie Facets nutzen und &uuml;ber virtuelle Pfade angesprochen werden.
-F&uuml;r diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur zur
-Verf&uuml;gung, die auf den virtuellen Pfaden aller Views basiert. Die SiteMap
-steuert den Zugriff und die Visualisierung (Ein- und Ausblenden) der Views --
-der sogenannte Face-Flow. Face-Flow und Visualisierung funktionieren resolut und
-verwenden aktiv das DOM zum Einf&uuml;gen und Entfernen der Views (Faces und
-Facets).
+Die Darstellung der Page l&auml;sst sich in Seanox aspect-js mit der SiteMap in
+Faces sowie Facets organisieren und &uuml;ber virtuelle Pfade ansprechen. Zu
+diesen Zweck stellt SiteMap eine hierarchische Verzeichnisstruktur bereit, die
+auf den virtuellen Pfaden aller Faces und Facets basiert. Die SiteMap steuert
+den Zugriff und die Visualisierung (Ein- und Ausblenden) der Element -- der
+sogenannte Face-Flow. Face-Flow und Visualisierung funktionieren resolut und
+verwenden aktiv das DOM zum Einf&uuml;gen und Entfernen der Faces und Facets.
 
 ```
 +-----------------------------------------------+
@@ -81,22 +80,19 @@ enthaltenen Facets.
 
 ### Facet
 
-Facets sind Teile eines Faces (Projektion) und sind in der Regel keine
-eigenst&auml;ndige View. So k&ouml;nnen z.B. bei einem Such-Formular die
-Eingabemaske und die Ergebnistabelle separate Facets eines Faces sein, ebenso
-wie Article und/oder Section in einem Face. Sowohl Face als auch Facets sind
-&uuml;ber virtuelle Pfade erreichbar. Der Pfad zu Facets bewirkt, dass das
-umschliessende Face mit allen seinen &uuml;bergeordneten Faces angezeigt wird.
+Facets sind Teile eines Faces (Projektion) und meist keine eigenst&auml;ndige
+Darstellung. So k&ouml;nnen z.B. bei einem Such-Formular die Eingabemaske und
+die Ergebnistabelle separate Facets eines Faces sein. Sowohl Faces als auch
+Facets sind &uuml;ber virtuelle Pfade erreichbar. Der Pfad zu Facets bewirkt,
+dass das umschliessende Face mit all seinen &uuml;bergeordneten Faces angezeigt
+wird.
 
 
 ### Face-Flow
 
-Face-Flow beschreibt die Zugriffssteuerung und die Visualisierung von Ansichten
-(Views). Die SiteMap stellt daf&uuml;r Schnittstellen f&uuml;r
-Berechtigungskonzepte und Akzeptoren zur Verf&uuml;gung, mit denen der Face-Flow
-kontrolliert und beeinflusst werden kann. Auf diese Weise kann der Zugriff auf
-Pfade/Ansichten mit eigener Logik gestoppt und/oder umgeleitet bzw.
-weitergeleitet werden.
+Face-Flow beschreibt die Zugriffssteuerung und die Abfolge von Faces und Facets.
+Die SiteMap stellt dazu Schnittstellen, Berechtigungskonzepte und Akzeptoren
+bereit, mit denen der Face-Flow kontrolliert und beeinflusst werden kann.
 
 
 ## Konfiguration
@@ -127,8 +123,8 @@ Die Konfiguration basiert auf einem Meta-Objekt, das an die Methode
 `SiteMap.customize({meta})` &uuml;bergeben wird. Die Schl&uuml;ssel (string)
 entsprechen den Pfaden und ein Pfad hat immer ein existierendes Face als Ziel,
 Teilpfade ohne Face werden ignoriert. Die Werte sind Arrays mit den
-g&uuml;ltigen Facets f&uuml;r einen Pfad/Face. Facets ben&ouml;tigen keinen
-eigenen Pfad, da diese automatisch abgeleitet/erstellt werden.
+g&uuml;ltigen Facets f&uuml;r einen Pfad bzw. Face. Facets ben&ouml;tigen keinen
+eigenen Pfad, da diese automatisch abgeleitet und erstellt werden.
 
 ```javascript
 SiteMap.customize({...});
@@ -145,14 +141,14 @@ SiteMap.customize({
 });
 ```
 
-__Die Navigation akzeptiert nur Pfade, die im Face-Flow definiert sind.
+__Die Navigation akzeptiert nur Pfade die im Face-Flow definiert sind.
 Ung&uuml;ltige Pfade werden basierend auf dem angeforderten Pfad zum n&auml;chst
 h&ouml;heren bekannten/berechtigten Pfad weitergeleitet.__
 
-__Ohne Face-Flow gibt es keine g&uuml;ltigen Pfade. Werden eine
-Benutzeroberfl&auml;che oder Komponenten bei aktivierte SiteMap ohne Face-Flow
-verwendet, m&uuml;ssen diese als _static_ gekennzeichnet werden, da die
-Komponenten sonst ausgeblendet (aus dem DOM entfernt) werden.__
+__Ohne Face-Flow gibt es keine g&uuml;ltigen Pfade. Sollen bei aktivierter
+SiteMap in einer Page, Komponenten ohne Face-Flow verwendet werden, m&uuml;ssen
+diese als _static_ deklariert werden, da die Komponenten sonst ausgeblendet und
+somit aus dem DOM entfernt werden.__
 
 ```html
 <html>
@@ -189,7 +185,7 @@ SiteMap.customize({
 ```
 
 Alle angeforderten Pfade durchlaufen die registrierten permit-Methoden. Diese
-entscheiden, was mit dem Pfad passiert. Von jeder permit-Methode wird einer der
+entscheiden was mit dem Pfad passiert. Von jeder permit-Methode wird einer der
 folgenden R&uuml;ckgabewerte erwartet:
 
 `boolean true` Die Validierung ist erfolgreich und die Iteration &uuml;ber
@@ -270,7 +266,7 @@ Das Berechtigungskonzept basiert auf permit-Methoden, die als Callback-Methoden
 mit der Konfiguration des Face-Flows definiert werden. Es k&ouml;nnen mehrere
 permit-Methoden definiert werden, die mit jedem angeforderten Pfad
 &uuml;berpr&uuml;ft werden. Nur wenn alle permit-Methoden den angeforderten Pfad
-mit "wahr" best&auml;tigen, wird er verwendet und der Renderer macht die
+mit `true` best&auml;tigen, wird er verwendet und der Renderer macht die
 abh&auml;ngigen Faces und Facets sichtbar.
  
 Details werden im Abschnitt [Permissions](#permissions) beschrieben.
@@ -328,7 +324,7 @@ entspricht dann der Anzahl der zus&auml;tzlichen Hash-Zeichen.
 Die Navigation kann durch &Auml;nderung des URL-Hash im Browser (direkte
 Eingabe), durch Verwendung von Hash-Links und in JavaScript mit
 `window.location.hash`, `window.location.href`, `SiteMap.navigate(path)` und
-`SiteMap.forward(path)`. erfolgen.
+`SiteMap.forward(path)` erfolgen.
 
 Es gibt verschiedene Arten von Pfaden, die im Folgenden erl&auml;utert werden.
 
@@ -398,7 +394,7 @@ k&ouml;nnen somit beliebig erweitert werden. Das Ziel ist in beiden F&auml;llen
 fest und die Anfragen werden von `#contact` bzw. `#project` verarbeitet. Die
 Erweiterung vom Pfad kann mit der Methode `SiteMap.lookup(path)` ermittelt
 werden. Das zur&uuml;ckgegebene Meta-Objekt enth&auml;lt bei variablen Pfaden
-den erweiterten Pfaden als data-Property. 
+den erweiterten Pfad als data-Property. 
 
 ```
 SiteMap.lookup("#contact#support");
