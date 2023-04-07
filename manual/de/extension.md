@@ -360,6 +360,43 @@ window.serial
 ```
 
 
+### window.compliant
+
+Erstellt Variablen, Objekte oder Funktionen zu einem definierten Namensraum.
+Existiert dazu bereits ein gleichnamiger Eintrag in der API, wird die Methode zu
+einem Fehler f&uuml;hren.
+
+Urspr&uuml;nglich wurde die Methode als interner Helfer eingef&uuml;hrt, um
+sicherzustellen, dass Manipulationen und Erweiterungen des JavaScript-API
+konform sind und es keine Kollisionen mit existierenden API-Bestandteilen gibt.
+Da sich die Methode als allgemein hilfreich zur Entwicklung von Modulen erwiesen
+hat, wurde sie offiziell in das API von Seanox apect-js aufgenommen.
+
+```javascript
+window.compliant("example.variable", "...");
+```
+
+Erstellt die Variable `example.variable`. Die Methode f&uuml;hrt zu Fehlern,
+wenn das Basis-Objekt `example` nicht existiert oder das Objekt `example` schon
+einen Eintrag `variable` enth&auml;lt.
+
+```javascript
+window.compliant("example.object", {...});
+```
+
+Erstellt das Objekt `example.object`. Die Methode f&uuml;hrt zu Fehlern, wenn
+das Basis-Objekt `example` nicht existiert oder das Objekt `example` schon einen
+Eintrag `object` enth&auml;lt.
+
+```javascript
+window.compliant("example.function", (param1, param2, param3) => {...});
+```
+
+Erstellt die Methode `example.function`. Die Methode f&uuml;hrt zu Fehlern, wenn
+das Basis-Objekt `example` nicht existiert oder das Objekt `example` schon einen
+Eintrag `function` enth&auml;lt.
+
+
 ### window.location.combine
 
 Kombiniert Text-Elemente zu einem Pfad. Die Methode hat eine optimierende

@@ -353,6 +353,42 @@ window.serial
 ```
 
 
+### window.compliant
+
+Creates variables, objects or functions for a defined namespace. If an entry
+with the same name already exists in the API, the method will cause an error.
+
+Originally, the method was introduced as an internal helper to ensure that
+manipulations and extensions to the JavaScript API are compliant and that there
+are no collisions with existing API components. Since the method has proven to
+be generally helpful for developing modules, it has been officially added to the
+Seanox apect-js API.
+
+```javascript
+window.compliant("example.variable", "...");
+```
+
+Creates the variable `example.variable`. The method causes errors if the base
+object `example` does not exist or the object `example` already contains an
+entry `variable`.
+
+```javascript
+window.compliant("example.object", {...});
+```
+
+Creates the object `example.object`. The method causes errors if the base object
+`example` does not exist or the object `example` already contains an entry
+`object`.
+
+```javascript
+window.compliant("example.function", (param1, param2, param3) => {...});
+```
+
+Creates the method `example.function`. The method causes errors if the base
+object `example` does not exist or the object `example` already contains an
+entry `function`.
+
+
 ### window.location.combine
 
 Combines text elements to a path. The method has an optimizing effect in the use
