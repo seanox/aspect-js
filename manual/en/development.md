@@ -142,4 +142,4 @@ To use it, the [server](#server) must be started.
 
 - - -
 
-[Test](test.md) | [Inhalt](README.md#entwicklung)
+[Test](test.md) | [TOC](README.md#development)
