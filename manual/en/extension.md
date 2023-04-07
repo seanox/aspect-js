@@ -1,7 +1,7 @@
-[Reactivity Rendering](reactive.md) | [TOC](README.md#extension) | [Events](events.md)
+[Reactivity Rendering](reactive.md) | [TOC](README.md#api-extensions) | [Events](events.md)
 - - -
 
-# Extension
+# API Extensions
 
 The JavaScript API for Seanox aspect-js has been extended by some general
 functions.
@@ -409,4 +409,4 @@ called according to the order in which they were registered.
 
 - - -
 
-[Reactivity Rendering](reactive.md) | [TOC](README.md#extension) | [Events](events.md)
+[Reactivity Rendering](reactive.md) | [TOC](README.md#api-extensions) | [Events](events.md)

@@ -1,7 +1,7 @@
-[Reaktives Rendering](reactive.md) | [Inhalt](README.md#erweiterung) | [Ereignisse](events.md)
+[Reaktives Rendering](reactive.md) | [Inhalt](README.md#api-erweiterungen) | [Ereignisse](events.md)
 - - -
 
-# Erweiterung
+# API-Erweiterungen
 
 Das JavaScript-API wurde f&uuml;r Seanox aspect-js um einige allgemeine
 Funktionen erweitert.
@@ -416,4 +416,4 @@ dann entsprechend der Reihenfolge bei der Registrierung aufgerufen werden.
 
 - - -
 
-[Reaktives Rendering](reactive.md) | [Inhalt](README.md#erweiterung) | [Ereignisse](events.md)
+[Reaktives Rendering](reactive.md) | [Inhalt](README.md#api-erweiterungen) | [Ereignisse](events.md)
