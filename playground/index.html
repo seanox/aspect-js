@@ -11,7 +11,7 @@
     <script src="./sources/expression.js?latest"></script>
     <script src="./sources/composite.js?latest"></script>
     <script src="./sources/reactive.js?latest"></script>
-    <script src="./sources/mvc.js?latest"></script>
+    <script src="./sources/sitemap.js?latest"></script>
     <script src="./sources/test.js?latest"></script>
     <style>
       body {
@@ -21,13 +21,11 @@
     </style>
   </head>
   <body>
-    <p>
-      Playground should help during development to experiment and debug with the
-      current sources without having to build everything.
-    </p>
-    <p>
-      <b>Please disable the browser cache.</b><br/>
-      F12 (developer Tools): disable cache
-    </p>
+
+    <script type="composite/javascript">
+      const a = 123;
+      #module Hallo ${4+5} ${a};
+
+    </script>
   </body>
 </html>
