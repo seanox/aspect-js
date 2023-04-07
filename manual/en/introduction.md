@@ -12,9 +12,9 @@ client-side full-stack solution with a minimalistic and lightweight approach for
 the implementation of single-page applications (SPAs) was born.
 
 Seanox aspect-js takes the declarative approach of HTML and extends it with
-expression language, reactive rendering with additional attributes, model view
-controller, view model binding, resource bundle (i18n/l10n), NoSQL datasource,
-test environment and much more.
+expression language, reactive rendering, additional attributes,
+model-view-controller, view-model-binding, resource bundle (i18n/l10n),
+NoSQL-datasource, test environment and much more.
 
 
 # Features
@@ -22,12 +22,12 @@ test environment and much more.
   combinable with other JavaScript frameworks if they don't do the same thing do
   and use a different syntax
 * Lightweight implementation  
-  requires no additional frameworks)
+  requires no additional frameworks
 * Component based architecture
 * Namespaces and domain concept  
   for better structuring of components, modules and business logic
 * Modularization (supports imports at the runtime)  
-  component concept for smart/automatic loading of composite resources
+  component concept for smart/automatic loading of composite resources at runtime
 * Event handling
 * Expression Language  
   meta-language extension with full JavaScript support
@@ -39,17 +39,20 @@ test environment and much more.
   rendering, resources messages, validation, ...
 * Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
-  non-visible components are removed from the DOM and only reinserted when used  
+  non-visible components are removed from the DOM and only reinserted when used
 * Model View Controller (MVC) / Model View ViewModel (MVVM)  
-  supports: events, virtual paths, sitemap, permission concept, view model
-  binding, ...
+  supports view model binding and events
+* Sitemap for organizing the view into pages, faces and facets  
+  supports virtual paths and permission concepts
 * Resource Bundle / Resource Messages  
-  internationalization (i18n), localization (l10n) and text outsourcing 
+  internationalization (i18n), localization (l10n) and text outsourcing
 * NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
+* Micro Frontends  
+  platform and framework for the implementation of micro-frontends
 * Test environment  
   for automated unit tests and integration tests
-* ... 
+- ...
 
 
 ## Contents Overview
@@ -75,16 +78,17 @@ test environment and much more.
 * [DataSource](#datasource)
 * [Resource Bundle (Messages/i18n/l10n)](#resource-bundle-messages--i18n-l10n)
 * [Model View Controller](#model-view-controller)
-  * [Controller](#controller)
-  * [Model](#model)
-  * [View](#view)
 * [SiteMap](#sitemap)
+  * [Page](#page)
+  * [Face](#face)
+  * [Facet](#facet)
+  * [Face-Flow](#face-flow)
+  * [Navigation](#navigation)
+  * [Permission Concept](#permission-concept)
   * [Virtual Paths](#virtual-paths)
-  * [View Model Binding](#view-model-binding)
 * [Components](#components)
-  * [View Model Binding](#view-model-binding-1)
 * [Reactivity Rendering](#reactivity-rendering)
-* [Extension](#extension)
+* [API Extensions](#api-extensions)
 * [Events](#events-1)
 * [Test](#test)
   * [Task](#task)
@@ -99,35 +103,35 @@ test environment and much more.
 
 ## Getting Started
 
-The framework consists of one JavaScript file and is included via the URL of a
-release channel or downloaded as releases.
+The framework consists of one JavaScript file that can be included via the URL
+of a release channel or downloaded as a release.
 
-Release channels continuously provide the latest final main versions, which are
-backward compatible to the main version. This way Seanox aspect-js is always up
-to date.
+Release channels continuously provide the latest final major versions. This way,
+Seanox aspect-js is always up to date.
 
-Each release consists of two versions. The developer version includes extensive
-comments on design, function, operation and usage. The production version is
-optimized in size but not obfuscated.
+Each release consists of different versions for different purposes. These
+versions are also always available in two variants. The standard is the
+compressed version for productive use. Optionally, the uncompressed and
+documented max variant is also available for development and error analysis.
 
-Create an HTML file, such as _index.html_ and include Seanox apect-js via the
-release channel.
+To begin, create an HTML file, e.g. _index.html_ and insert Seanox apect-js.
 
 ```html
 <!-- development version, includes helpful comments -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js"></script>
 ```
 
 or
 
 ```html
-<!-- production version, optimized in size but not obfuscated -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js"></script>
+<!-- production and minimized version -->
+<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
 ```
 
-__The framework has been developed for the implementation of modular and__
-__component-based single-page applications. The automatic loading of__
-__resources, modules, and data requires the use of a web server.__
+
+__The framework has been developed for the implementation of modular and
+component-based single-page applications. Due to the automatic loading of
+resources, modules and data, a web server is required for use.__
 
 
 ## Scope
@@ -147,9 +151,9 @@ logical operators can be used.
 The expression language can be used from the HTML element `BODY` on in the
 complete markup as free text, as well as in all attributes. Exceptions are the
 HTML elements `STYLE` and `SCRIPT` whose content is not supported by the
-expression Language. When used as free text, pure text (plain text) is always
-generated as output. The addition of markup, especially HTML code, is not
-possible and is only supported with the attributes `output` and `import`.
+expression Language. When used as free text, plain text is generated as output.
+Adding markup, especially HTML code, is not possible this way and is only
+supported with the attributes `output` and `import`.
  
 ```html
 <body lang="{{DataSource.locale}}">
@@ -160,10 +164,11 @@ possible and is only supported with the attributes `output` and `import`.
 </body>
 ```
 
-The Expression Language is temporarily visible, since the renderer only becomes
-active after the page has been loaded. Alternatively, the attributes
-[output](markup.md#output) and [import](markup.md#import) can be used, which
-cause a direct output into the inner HTML of the element. 
+Expressions are interpreted by the renderer that starts after the page is
+loaded. Thus, expressions may be visible when the page is loaded. Here it is
+recommended to use the attributes [output](markup.md#output) and [import](
+    markup.md#import), which cause a direct output to the inner HTML of the
+element.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -171,8 +176,8 @@ cause a direct output into the inner HTML of the element.
 </p>
 ```
 
-Or by using the [release](markup.md#release) attribute, the element and output
-only become visible when the rendering is complete.
+Or the use of the attribute [release](markup.md#release), which makes HTML
+elements and their contents visible only after rendering.
 
 ```html
 <p release>
@@ -208,12 +213,15 @@ cycle) based on the initial expression.
 
 ### output
 
-The attribute output the value or result of its expression as an inner HTML code
-for an HTML element. As value are expected one element or more elements as
-NodeList or Array, which are then inserted directly.
+Sets for the HTML element the value or result of its expression as inner HTML.
+The behavior is similar to the [import](#import) attribute, except that the
+output is updated with each render cycle. Supported values are text, one or more
+elements as NodeList or Array, as well as absolute or relative URLs to a remote
+resource and also the [DataSource-URL (locator)](datasource.md#locator) for
+transformed content from the [DataSource](datasource.md).
 
-The [DataSource-URL (locator)](datasource.md#locator) is also supported, which
-loads and inserts transformed content from the [DataSource](datasource.md).
+The output attribute can be combined with the condition attribute and will then
+only be executed if the condition is `true`.
 
 ```html
 <p output="Today is {{new Date().toDateString()}}
@@ -234,14 +242,16 @@ loads and inserts transformed content from the [DataSource](datasource.md).
 
 ### import
 
-This declaration loads content dynamically and replaces the inner HTML code of
-an element. If the content was successfully loaded, the `import` attribute is
-removed. The attribute expects as value one element or more elements as NodeList
-or Array these are then inserted directly. Also supported is the use of an
-absolute or relative URL to a remote resource, which is reloaded and inserted by
-HTTP method GET. The [DataSource URL (locator)](datasource.md#locator) is also
-supported, which loads and inserts transformed content from the
+Loads the content for the HTML element at runtime and inserts it as inner HTML.
+The behavior is similar to the [output](#output) attribute, except that the
+import is done once and the import attribute is removed after successful
+loading. As value one or more elements are supported as NodeList or Array, as
+well as absolute or relative URLs to a remote resource and also the [DataSource
+    URL (locator)](datasource.md#locator) for transformed content from the
 [DataSource](datasource.md).
+
+The import attribute can be combined with the condition attribute and will then
+only be executed if the condition is `true`.
 
 ```html
 <p import="Today is {{new Date().toDateString()}}
@@ -266,11 +276,11 @@ supported, which loads and inserts transformed content from the
 
 ### condition
 
-The condition attribute decides whether an element is kept in the DOM. The
-expression specified with the attribute must explicitly return `true` for the
-element to be retained in the DOM. If the return value differs, the element is
-temporarily removed from the DOM and can be reinserted later by refreshing the
-__parent element__ if the expression returns `true`.
+As a condition, the attribute specifies whether an element remains contained in
+the DOM. The expression specified as the value must explicitly return `true` to
+retain the element. If the return value is different, the element is temporarily
+removed from the DOM and can be reinserted later by refreshing the __parent
+element__ if the expression returns `true`.
 
 ```html
 <article condition="{{Model.visible}}">
@@ -279,7 +289,9 @@ __parent element__ if the expression returns `true`.
 ```
 
 The use of the condition attribute in combination with embedded JavaScript is
-possible as composite JavaScript.
+possible as SCRIPT element with the type `composite/javascript` as Composite
+JavaScript, because here the renderer has control over the script execution and
+not the browser.
 
 ```html
 <script type="composite/javascript" condition="{{Model.visible}}">
@@ -292,16 +304,17 @@ possible as composite JavaScript.
 
 ### interval
 
-This declaration activates an interval-controlled refresh of an HTML element
-without having to trigger the refresh manually.
-As value an interval in milliseconds is expected, which can also be formulated
-as expression. Processing is concurrent or asynchronous, but not parallel. Means
-that the processing is to start after the set time interval, but this does not
-start until a JavaScript procedure started before has been completed. For this
-reason, the interval is to be understood as near real-time, but not as exact.
-The interval attribute expects a value in milliseconds. An invalid value causes
-console output. The interval starts automatically and is active as long as the
-element exists in the DOM.
+Activates an interval-controlled refresh of the HTML element without the need to
+actively trigger the refresh. The interval uses the inner HTML as a template
+from which updated content is generated and inserted with each interval cycle.
+The attribute expects milliseconds as value, which can also be formulated as
+expression, where invalid values cause console output. Processing is concurrent
+or asynchronous but not parallel. Processing will start after the specified time
+when a previously started JavaScript procedure has finished. Therefore, the
+interval should be understood as timely but not exact. The interval starts
+refreshing automatically and ends when:
+- the element no longer exists in the DOM
+- the condition attribute is used that is not true
 
 ```html
 <p interval="1000">
@@ -334,17 +347,14 @@ composite JavaScript.
 
 ### iterate
 
-The iterative output is based on lists, enumerations and arrays. If an HTML
-element is declared as iterative, the initial inner HTML code is used as
-template and during the iteration the inner HTML code is removed first, the
-template is generated individually with each iteration and the result is added
-to the inner HTML code.
-
-The iterate attribute expects a [variable expression](
-    expression.md#variable-expression), as well as a meta-object that allows
-access to the iteration. So the variable expression
-`iterate={tempA:Model.list}}` creates the meta-object `tempA = {item, index,
-    data}`.
+Iterative output is based on lists, enumerations, and arrays. If an HTML element
+is declared as iterative, the inner HTML is used as a template from which
+updated content is generated and inserted with each interval cycle and inserted
+as inner HTML. As value for the attribute a [variable expression](
+    expression.md#variable-expression) is expected, for which a meta object will
+be created, which allows access to the iteration in the template. Thus, the
+variable expression `iterate={{tempA:Model.list}}` creates the meta object
+`tempA = {item, index, data}`.
 
 ```javascript
 const Model = {
@@ -364,9 +374,11 @@ const Model = {
 
 ### id
 
-The ID (identifier) has an elementary meaning in Seanox aspect-js. It is used by
-the SiteMap as faces and facets, i.e. as targets for virtual paths in face flow
-and for the view model binding.
+The ID (identifier) has an elementary meaning in Seanox aspect-js. It is the
+basis for [view model binding](mvc.md#view-model-binding) and is used by
+[SiteMap](sitemap.md#sitemap) for [faces](sitemap.md#face) and [facets](
+sitemap.md#facet) in the [face flow](sitemap.md#face-flow) and thus as a
+destination for virtual paths.
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the view model binding,
@@ -378,16 +390,8 @@ the DOM.
 
 ### composite
 
-Marks an element in the markup as [Composite](composite.md). Composites are
-modular components that have an elementary meaning in Seanox aspect-js and
-necessarily require an identifier (ID). They are used by the [SiteMap](
-    mvc.md#sitemap) as faces, so as targets for virtual paths in the face-flow,
-which has a direct effect of the visibility of the composites.
-
-The [Model View Controller](mvc.md#sitemap) supports automatic
-[view model binding](composite.md#view-model-binding) for composites. The
-resources (JS, CSS, Markup) for composites can be outsourced to the module
-directory and are loaded automatically when necessary.
+Marks an element in the markup as a [Composite](composite.md). Composites are
+essential components that require an identifier (ID / Composite ID).
 
 ```html
 <article id="example" composite>
@@ -395,37 +399,66 @@ directory and are loaded automatically when necessary.
 </article>
 ```
 
-Details about using composites / modular components are described in
-[Composites](composite.md) and [Model View Controller](mvc.md).
+As a component, composites are composed of various [Ressourcen](
+    composite.md#ressourcen) (markup, CSS, JS) that can be outsourced to the
+module directory based on the (composite) ID and are only loaded at runtime when
+used.
+
+Composites are also the basis for [view model binding](
+    mvc.md#view-model-binding), which involves connecting HTML elements in the
+markup (view) with corresponding JavaScript objects (models). Models are static
+JavaScript objects that provide data, states, and functions for the view,
+similar to managed beans and DTOs (Data Transfer Objects). The view as
+presentation and user interface for interactions and the model are primarily
+decoupled. For the MVVM (Model-View-ViewModel) approach, as an extension to the
+MVC ([Model View Controller](mvc.md#model-view-controller)), the controller
+links views and models bidirectionally based on the composite IDsand so no
+manual implementation and declaration of events, interaction or synchronization
+is required.
+
+The [SiteMap](sitemap.md#sitemap) uses composites as [faces](sitemap.md#face)
+for the primary projection of JavaScript objects (models), which means that they
+can be used as targets for virtual paths in the [face flow](
+sitemap.md#face-flow), which has a direct influence on the visibility of the
+composites. When SiteMap is active, composites can be marked with the attribute
+[static](#static), which makes a composite permanently visible as a face
+regardless of virtual paths.
 
 [Learn more](markup.md#composite)
 
 
 ### strict
 
-The attribute is used in combination with the attribute [composite](#composite)
-and specifies that when loading the resources (CSS, JS, HTML) for a component,
-the file name is used in its original notation. The default behavior without
-the [strict](#strict) attribute uses the composite id with lower case at the
-beginning.
+The attribute can be combined with the attributes [composite](#composite) and
+[validate](#validate).
+
+In combination with the attribute [composite](#composite), it specifies that
+when loading the resources (JS, CSS, HTML) for a component, the filename is used
+in its original notation. The default behavior without the attribute [strict](
+#strict) uses the composite id with a lowercase letter at the beginning.
 
 [Learn more](markup.md#strict)
 
 
 ### events
 
-This declaration binds one or more events
-(see https://www.w3.org/TR/DOM-Level-3-Events) to an HTML element. Events
-provide primary functions for event-driven refreshing of other HTML elements
-(see [render](#render) for more information), and for validating and
-synchronizing and synchronization of HTML elements with the corresponding
-JavaScript objects (models) (see [validate](#validate) for more information).
+Binds one or more [events](https://www.w3.org/TR/DOM-Level-3-Events) to an HTML
+element. This allows event-driven synchronization of HTML elements with
+corresponding JavaScript objects (models), as well as validation of the data to
+be synchronized (see [validate](#validate) for more information) and
+event-driven control and refreshing of other HTML elements (see [render](
+#render) for more information).
 
 ```html
 <span id="output1">{{#text1.value}}</span>
 <input id="text1" type="text"
     events="input change" render="#output1"/>
 ```
+
+As with all attributes, the expression language is applicable here, with the
+difference that changes at runtime have no effect, since the attribute or the
+value for the view model binding is only processed initially as long as the HTML
+element exists in the DOM.
 
 [Learn more](markup.md#events)
 
@@ -441,8 +474,8 @@ The validation works in two steps and uses the standard HTML5 validation at the
 beginning. If this cannot determine deviations from the expected result or if no
 HTML5 validation is specified, the validation of the JavaScript object is used
 if the model provides a corresponding validate method
-`boolean validate(element, value)` and the element to be validated is
-embedded in a composite.
+`boolean validate(element, value)` and the element to be validated is embedded
+in a composite.
 
 ```html
 <form id="Model" composite>
@@ -453,14 +486,18 @@ embedded in a composite.
 </form>
 ```
 
+The synchronization and the default action of the browser are directly
+influenced by the validation. This can use for it four states as return values:
+`true`, `not true`, `text`, `undefined/void`.
+
 [Learn more](markup.md#validate)
 
 
 ### message
 
-Message is an optional part of [Validation](#validate) and is used for
-text/error output in case of an unconfirmed validation. This requires a
-combination with the attributes `validate` and `events`. 
+Message is an optional part of [Validation](#validate) and is used for text and
+error output in case of an unconfirmed validation. This requires a combination
+with the attributes [validate](#validate) and [events](#events).
 
 ```html
 <form id="Model" composite>
@@ -487,9 +524,11 @@ combination with the attributes `validate` and `events`.
 
 ### notification
 
-Notification is an optional part of [Validation](#validate) and displays the
-error output as an info box (browser feature) on the corresponding element. This
-requires a combination with the attributes `validate`, `events` and `message`.
+Notification is an optional part of [validation](#validate) and specifies that
+the content of the message attribute is displayed as an info box (browser
+feature) on the corresponding element if validation is not successful. The
+attribute requires the combination with the [validate](#validate), [events](
+    #events) and [message](#message) attributes.
 
 ```html
 <form id="Model" composite>
@@ -506,11 +545,10 @@ requires a combination with the attributes `validate`, `events` and `message`.
 
 ### render
 
-The `render` attribute requires the combination with the `events` attribute.
-Together they define which targets with which occurring events be refreshed.
-
-The `render` attribute expects a CSS selector or query selector as value.
-which sets the targets.
+The attribute requires the combination with the [events](#events) attribute.
+Together they define which targets are refreshed by the renderer with which
+occurring events. The expected value is one or more space-separated CSS or Query
+selectors that define the targets.
 
 ```html
 <span id="output1">{{#text1.value}}</span>
@@ -526,10 +564,10 @@ the data objects trigger a partial update of the view.__
 
 ### release
 
-Inverse indicator that an element was rendered. The renderer removes this
-attribute when an element is rendered. This effect can be used for CSS to
+Inverse indicator that an HTML element was rendered. The renderer removes this
+attribute when an HTML element is rendered. This effect can be used for CSS to
 display elements only in rendered state. A corresponding CSS rule is
-automatically added to the HEAD when the page is loaded. 
+automatically added to the HEAD when the page is loaded.
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -542,8 +580,12 @@ automatically added to the HEAD when the page is loaded.
 
 DataSource is a NoSQL approach to data storage based on XML data in combination
 with multilingual data separation, optional aggregation and transformation. A
-combination of the approaches of a read only database and a CMS. 
-The data is queried via XPath, the result can be concatenated and aggregated and
+combination of the approaches of a read only database and a CMS.
+
+DataSource is based on static data. Therefore, the implementation uses a cache
+to minimize network access.
+
+The data is queried via XPath. The result can be concatenated and aggregated and
 the result can be transformed with XSLT.
 
 [Learn more](datasource.md#datasource)
@@ -561,80 +603,18 @@ stored in the `locales.xml` in the DataSource directory.
 
 ## Model View Controller
 
-The Model View Controller (MVC) is a design pattern for separating interaction,
-data, and presentation.
-
-```
-+------------------------------------------+--------------+-----------------------+
-|  View                                    |  Controller  |  Model                |
-+------------------------------------------+--------------+-----------------------+
-|  Markup                                  |  Composite   |  JavaScript           |
-|                                          |  Path        |                       |
-|                                          |  SiteMap     |                       |
-+------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  const model = {      |
-|    <input id="message" events="input"/>  |              |      message: "",     | 
-|    <button id="submit"/>                 |              |      submit: {        |
-|  </form>                                 |              |          onClick() {  |
-|                                          |              |          }            |
-|                                          |              |      }                |
-|                                          |              |  }                    |
-+------------------------------------------+--------------+-----------------------+
-```
-
-[Learn more](mvd.md)
-
-
-### Controller
-
-For this we have to distinguish between I/O controller and application
-controller. The original MVC design pattern refers to the I/O controller for
-transmitting the interactions. Because this I/O controller is part of the
-operating system and the browser, the controller in Seanox aspect-js refers to
-the application controller. The application controller controls the flow within
-an application (face-flow) and takes over the binding of markup and JavaScript
-as well as the control of the data flow between view and model.
-
-In Seanox aspect-js the controller is the collaboration of Composite, Paths and
-SiteMap.
-
-
-### Model
-
-Models are representable/projectable static JavaScript objects that can provide
-and receive data, states and interactions for views, comparable to managed beans
-and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
-other components and abstractions, contain business logic themselves, and be a
-link between the user interface (view) and middleware (backend).
-
-The required view model binding is part of the Model View Controller and the
-Composite API.
-
-Details about view-model binding are described in chapter
-[Model-View-Controller - Binding](mvc.md#binding).
-
-
-### View
-
-The view is exclusively responsible for the presentation or projection of a 
-model. Projection is an important term because the way in which a model is
-presented is not restricted. In the context of Seanox aspect-js, terms face and
-factes are used for the visual representation/projection, which will be
-explained later.
-
-In Seanox aspect-js the views are represented by the markup.
+TODO:
 
 
 ## SiteMap
 
-The representation in Seanox aspect-js is multilayered and the views are
-organized as page, faces and facets which are accessed with virtual paths. For
-this purpose, SiteMap provides a hierarchical directory structure based on the
-virtual paths for all views. The SiteMap then controls the access and the
-visualization (show and hide) of the views, which is termed face-flow.
-
-Face-flow and visualization are resolute and uses the DOM to insert and remove
-the views (faces and facets).
+The representation of the page can be organized in Seanox aspect-js with SiteMap
+into faces as well as facets and addressed via virtual paths. For this purpose
+SiteMap provides a hierarchical directory structure based on the virtual paths
+of all faces and facets. SiteMap controls the access and visualization (showing
+and hiding) of the element -- the so-called face flow. Face flow and
+visualization work resolutely and actively use the DOM to insert and remove the
+faces and facets.
 
 ```
 +-----------------------------------------------+
@@ -661,9 +641,79 @@ the views (faces and facets).
 +-----------------------------------------------+
 ```
 
-Further components of the SiteMap are the navigation and a permission concept.
 
-[Learn more](mvc.md#sitemap)
+### Page
+
+In a single page application, the page is the elementary framework and runtime
+environment of the entire application.
+
+
+### Face
+
+A face is the primary projection of models/components/content. This projection
+can contain additional substructures in the form of faces and sub-faces. Thus,
+parent faces become partial faces if the path refers to a sub-face. In this
+case, all parent faces are displayed partially, i.e. without their possibly
+contained faces.
+
+
+### Facet
+
+Facets are parts of a face (projection) and usually not an independent
+representation. For example, in a search form, the input mask and the result
+table can be separate faces of a face. Both faces and facets are accessible via
+virtual paths. The path to facets causes the enclosing face to be displayed with
+all its parent faces.
+
+
+### Face Flow
+
+Face flow describes the access control and the sequence of faces and facets. The
+SiteMap provides interfaces, permission  concepts and acceptors with which the
+face flow can be controlled and influenced.
+
+[Learn more](sitemap.md#sitemap)
+
+
+## Navigation
+
+The navigation can be effected by changing the URL hash in the browser (direct
+input), by using hash links, and in JavaScript with `window.location.hash`,
+`window.location.href`, `SiteMap.navigate(path)` and `SiteMap.forward(path)`.
+
+```html
+<a href="#a#b#c">Goto root + a + b + c</a>
+<a href="##">Back to the parent</a>
+<a href="##x">Back to the parent + x</a>
+```
+
+```javascript
+SiteMap.navigate("#a#b#c");
+SiteMap.navigate("##");
+SiteMap.navigate("##x");
+```
+
+```javascript
+SiteMap.forward("#a#b#c");
+SiteMap.forward("##");
+SiteMap.forward("##x");
+```
+
+In difference to the navigate method, the forwarding is executed directly
+instead of triggering an asynchronous forwarding by changing the location hash.
+
+[Learn more](sitemap.md#navigation)
+
+
+## Permission Concept
+
+The permission concept is based on permit methods, which are defined as callback
+methods with the configuration of the face-flow. Several permit methods can be
+defined, which are verified with each requested path. Only if all permit methods
+confirm the requested path with `true`, it will be used and the renderer will
+render the dependent faces and facets and makes them visible.
+
+[Learn more](sitemap.md#permission-concept)
 
 
 ### Virtual Paths
@@ -681,73 +731,10 @@ paths are also supported here. Paths consist exclusively of word characters,
 underscores and optionally the minus character (based on combined) IDs. The hash
 character is used as separator and root. Spaces are not supported.
 
-[Learn more](mvc.md#virtual-paths)
-
-
-### View Model Binding
-
-TODO:
+[Learn more](sitemap.md#virtual-paths)
 
 
 ## Components
-
-TODO:
-
-Seanox aspect-js aims at a modular and component-based architecture. The
-framework supports declarative marking of components in the markup, outsourcing
-and automatic loading of resources, as well as automatic view model binding.
-
-The initial markup of a component consists of an HTML element marked as
-composite and with a unique ID.
-
-```html
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <script src="aspect-js.js"></script>
-  </head>
-  <body>
-    <div id="example" composite></div>
-  </bod>
-</html>
-```
-
-The inner markup, CSS and JavaScript can be stored in the file system.
-
-The default directory `./modules` can be changed with the property
-`Composite.MODULES`.
-
-```
-+ modules
-  - example.css
-  - example.js
-  - example.html
-- index.html
-```
-
-The loading of resources and the view model binding are partial if the component
-is required in the UI -- means with the first use, which is controlled via the
-[SiteMap](sitemap.md) as central face flow management and thus minimizes the
-loading time, because only resources required for the active UI components are
-loaded selectively.
-
-The outsourcing and loading of resources at runtime is optional and can be
-applied completely, partially and not at all. There is a fixed order for loading
-and embedding: JS, CSS, HTML/Markup. 
-
-If the request for a resource is answered with status 404, it is assumed that
-this resource has not been outsourced. If requests are not answered with status
-200 or 404, an error is assumed. The loading of resources is only executed once
-with the first request of the component for the UI.
-
-From the concept's point of view, the design patterns facade and delegation,
-which internally use additional components and abstraction, are considered for
-the implementation of components.
-
-[Learn more](composite.md)
-
-
-### View Model Binding
 
 TODO:
 
@@ -756,35 +743,49 @@ TODO:
 
 In the reactive approach, changes to the data objects (models) trigger a partial
 refresh of the consumers in the view. Consumers are all expressions that have
-read access to the changed value of a data object. The expressions can be used
-in elements and in free text. For reactive rendering, the data objects must use
-the ReactProxy, for which `ReactProxy.create(object)` or
-`Object.prototype.toReactProxy()`, which provides each object instance, are
-used.
+read access to the changed value of a data object. In the view, expressions can
+be used in the HTML elements and in the free text. The data objects must then
+use `Reactive(object)` or `Object.prototype.reactive()` for reactive rendering.
 
 ```javascript
 let Model = {
     value: ...
-}.toReactProxy();
+}.reactive();
 ```
 
-In this example, the renderer will automatically update all elements in the DOM,
-which includes free-text that uses the property value from the model directly or
-indirectly in an expression when the value of the property `value` changes or
-more exactly, if the value in the data object was set final, which can be
-relevant when using getters and setters.
+In this example, the renderer automatically updates all HTML elements in the
+DOM, which includes free-text that uses the value property from the model
+directly or indirectly in an expression when the value of the value property
+changes or, more precisely, when a changed value has been set final in the data
+object, which can be relevant when using getters and setters.
 
-The ReactProxy works permanently recursively on all object levels and also on
-objects that are added later as values, even if they do not explicitly use the
-ReactProxy, new instances are created for the referenced objects.
+Reactive works permanently recursively on all object levels and also on the
+objects which are added later as values. Even if these objects do not explicitly
+use Reactive, new instances are created for the referenced objects. Initiating
+objects and reactive models are logically decoupled and are synchronized
+bidirectionally. In contrast, views and reactive models, like models internally,
+use proxies that behave and can be used like the initiating originals. However,
+proxies are separate instances that are compatible but not identical to the
+initiating object. This logical separation is necessary so that the renderer can
+generate appropriate notifications when data changes and thus update the
+consumers in the view.
 
 [Learn more](reactive.md)
 
 
-## Extension
+## API Extensions
 
 The JavaScript API for Seanox aspect-js has been extended by some general
 functions.
+
+- [Namespace](extension.md#namespace)
+- [Element](extension.md#element)
+- [Math](extension.md#math)
+- [Object](extension.md#object)
+- [RegExp](extension.md#regexp)
+- [String](extension.md#string)
+- [window](extension.md#window)
+- [XMLHttpRequest](extension.md#xmlhttprequest)
 
 [Learn more](extension.md)
 
@@ -803,10 +804,10 @@ framework and runtime environment.
 The Test API supports the implementation and execution of integration tests and
 can be used for suites, scenarios and single test cases.
 
-As a modular component of Seanox aspect-js, the Test API is included in every
-release that can be easily removed. Because the Test API has some special
-features regarding error handling and console output, the Test API must be
-activated deliberately at runtime.
+As a modular part of Seanox aspect-js, the Test API is included in all releases
+except the core versions. Because the test API causes some special features in
+terms of error handling and console output, the test API has to be activated
+consciously at runtime.
 
 ```javascript
 Test.activate();

@@ -659,6 +659,7 @@ verwenden aktiv das DOM zum Einf&uuml;gen und Entfernen der Faces und Facets.
 +-----------------------------------------------+
 ```
 
+
 ### Page
 
 In einer Single-Page-Application bildet die Page den elementaren Rahmen und die
