@@ -259,7 +259,14 @@
 ### Entwicklung
 
 * [Entwicklung](development.md#entwicklung)
+  * [Server](development.md#server)
   * [Build](development.md#build)
   * [Test](development.md#test)
+    * [Firewall](development.md#firewall)
+    * [Browser zum Testen](development.md#browser-zum-testen)
+    * [Ablauf](development.md#ablauf)
   * [Release](development.md#release)
+    * [GitHub](development.md#github)
+    * [npmjs.com](development.md#npmjscom)
+    * [cdn.jsdelivr.net](development.md#cdnjsdelivrnet)
   * [Playground](development.md#playground)

@@ -261,7 +261,14 @@ Machine translation with [DeepL](https://deepl.com).
 ### Development
 
 * [Development](development.md#development)
+  * [Server](development.md#server)
   * [Build](development.md#build)
-  * [Testing](development.md#testing)
+  * [Test](development.md#test)
+    * [Firewall](development.md#firewall)
+    * [Browsers for Testing](development.md#browsers-for-testing)
+    * [Procedure](development.md#procedure)
   * [Release](development.md#release)
+    * [GitHub](development.md#github)
+    * [npmjs.com](development.md#npmjscom)
+    * [cdn.jsdelivr.net](development.md#cdnjsdelivrnet)
   * [Playground](development.md#playground)
