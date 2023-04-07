@@ -207,7 +207,7 @@ wird, solange das HTML-Element im DOM existiert.
 
 L&auml;dt den Inhalt f&uuml;r das HTML-Element zur Laufzeit und f&uuml;gt diesen
 als inneres HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [output](
-    #output), nur erfolgt der Import einmalig und das input-Attribut wird nach
+    #output), nur erfolgt der Import einmalig und das import-Attribut wird nach
 dem erfolgreichen Laden entfernt. Als Wert werden ein oder mehrere Elemente als
 NodeList bzw. Array, sowie absolute oder relative URLs zu einer entfernten
 Ressource und auch die [DataSource-URL (locator)](datasource.md#locator)
@@ -539,7 +539,7 @@ ist. Das Attribut erfordert die Kombination mit den Attributen [validate](
 ### output
 
 Setzt beim HTML-Element den Wert oder das Ergebnis seines Ausdrucks als inneres
-HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [input](#input), nur
+HTML ein. Das Verhalten ist vergleichbar mit dem Attribut [import](#import), nur
 erfolgt mit jedem Renderzyklus eine aktualisierte Ausgabe. Als Wert werden Text,
 ein oder mehrere Elemente als NodeList bzw. Array, sowie absolute oder relative
 URLs zu einer entfernten Ressource und auch die [DataSource-URL (locator)](

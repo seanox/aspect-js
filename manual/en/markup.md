@@ -198,11 +198,11 @@ the DOM.
 
 Loads the content for the HTML element at runtime and inserts it as inner HTML.
 The behavior is similar to the [output](#output) attribute, except that the
-import is done once and the input attribute is removed after successful loading.
-As value one or more elements are supported as NodeList or Array, as well as
-absolute or relative URLs to a remote resource and also the
-[DataSource URL (locator)](datasource.md#locator) for transformed content from
-the [DataSource](datasource.md).
+import is done once and the import attribute is removed after successful
+loading. As value one or more elements are supported as NodeList or Array, as
+well as absolute or relative URLs to a remote resource and also the [DataSource
+    URL (locator)](datasource.md#locator) for transformed content from the
+[DataSource](datasource.md).
 
 The import attribute can be combined with the condition attribute and will then
 only be executed if the condition is `true`.
@@ -523,8 +523,8 @@ attribute requires the combination with the [validate](#validate), [events](
 ### output
 
 Sets for the HTML element the value or result of its expression as inner HTML.
-The behavior is similar to the [input](#input) attribute, except that the output
-is updated with each render cycle. Supported values are text, one or more
+The behavior is similar to the [import](#import) attribute, except that the
+output is updated with each render cycle. Supported values are text, one or more
 elements as NodeList or Array, as well as absolute or relative URLs to a remote
 resource and also the [DataSource-URL (locator)](datasource.md#locator) for
 transformed content from the [DataSource](datasource.md).
