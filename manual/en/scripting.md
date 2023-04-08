@@ -3,7 +3,8 @@
 
 # Scripting
 
-TODO:
+Seanox aspect-js uses composite JavaScript. A dialect based on the browser
+JavaScript, enriched with [macros](#macros) -- a simple meta-syntax.
 
 Composite JavaScript, which includes the modules, is not inserted as an element,
 but executed directly with the eval method. Since an isolated and not the global
@@ -176,9 +177,16 @@ const value = "Hallo Welt!";
 #module some more complex text: ${value} ... ${1 + 2};
 ```
 
-### #used
+### #use
 
-TODO:
+The marko expects one or more space-separated namespaces to be created at the
+object level if they do not already exist.
+
+```javascript
+#use a
+#use a b c
+#use a.b.c d.e.f g.h.i
+```
 
 
 ### (?...) tolerate

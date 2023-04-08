@@ -3,7 +3,9 @@
 
 # Scripting
 
-TODO:
+Seanox aspect-js nutzt Composite-JavaScript. Ein Dialekt, basierend auf dem
+JavaScript des Browsers, das um Makros -- einer einfachen Meta-Syntax,
+angereichert wurde.
 
 Composite-JavaScript, was auch die Module einschliesst, wird nicht als Element
 eingef&uuml;gt, sondern direkt mit der eval-Methode ausgef&uuml;hrt. Da hierzu
@@ -181,9 +183,17 @@ const value = "Hallo Welt!";
 ```
 
 
-### #used
+### #use
 
-TODO:
+Das Marko erwartet einen oder mehrere durch Leerzeichen getrennte
+Namensr&auml;ume, die auf Objekt-Level erstellt werden, wenn diese noch nicht
+existieren.
+
+```javascript
+#use a
+#use a b c
+#use a.b.c d.e.f g.h.i
+```
 
 
 ### (?...) tolerate
