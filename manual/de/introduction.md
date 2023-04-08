@@ -89,6 +89,7 @@ NoSQL-Datasource, Testumgebung und vieles mehr.
   * [Berechtigungskonzept](#berechtigungskonzept)
   * [Virtual Paths](#virtual-paths)
 * [Komponenten](#komponenten)
+* [Scripting](#scripting)
 * [Reaktives Rendering](#reaktives-rendering)
 * [API-Erweiterungen](#api-erweiterungen)
 * [Ereignisse](#ereignisse)
@@ -762,7 +763,28 @@ Hash-Zeichen verwendet. Leerzeichen werden nicht unterst&uuml;tzt.
 
 ## Komponenten
 
-TODO:
+Seanox aspect-js ist auf eine modulare und komponentenbasierte Architektur
+ausgerichtet. Das Framework unterst&uuml;tzt dazu eine deklarative Kennzeichnung
+von Komponenten im Markup sowie automatische Mechanismen f&uuml;r das
+View-Model-Binding und das Laden von ausgelagerten Ressourcen zur Laufzeit.
+
+[Mehr erfahren](composite.md)
+
+
+## Scripting
+
+Seanox aspect-js nutzt Composite-JavaScript. Ein Dialekt, basierend auf dem
+JavaScript des Browsers, das um Makros -- einer einfachen Meta-Syntax,
+angereichert wurde.
+
+Composite-JavaScript, was auch die Module einschliesst, wird nicht als Element
+eingef&uuml;gt, sondern direkt mit der eval-Methode ausgef&uuml;hrt. Da hierzu
+ein isolierter und nicht der globale G&uuml;ltigkeitsbereich (Scope) verwendet
+wird, sind Variablen, Konstanten und Methoden nicht direkt global oder
+&uuml;bergreifend nutzbar, weshalb u.a. das Composite-JavaScript mit [Makros](
+#makros) angereichert wurde, welche u.a. solche Aufgaben &uuml;bernehmen.
+
+[Mehr erfahren](scripting.md)
 
 
 ## Reaktives Rendering

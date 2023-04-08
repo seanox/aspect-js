@@ -87,6 +87,7 @@ NoSQL-datasource, test environment and much more.
   * [Permission Concept](#permission-concept)
   * [Virtual Paths](#virtual-paths)
 * [Components](#components)
+* [Scripting](#scripting)
 * [Reactivity Rendering](#reactivity-rendering)
 * [API Extensions](#api-extensions)
 * [Events](#events-1)
@@ -739,7 +740,27 @@ character is used as separator and root. Spaces are not supported.
 
 ## Components
 
-TODO:
+Seanox aspect-js is designed for a modular and component-based architecture. For
+this purpose, the framework supports declarative marking of components in the
+markup as well as automatic mechanisms for view-model binding and loading of
+outsourced resources at runtime.
+
+[Learn more](composite.md)
+
+
+## Scripting
+
+Seanox aspect-js uses composite JavaScript. A dialect based on the browser
+JavaScript, enriched with [macros](#macros) -- a simple meta-syntax.
+
+Composite JavaScript, which includes the modules, is not inserted as an element,
+but executed directly with the eval method. Since an isolated and not the global
+scope is used for this, variables, constants and methods are not directly usable
+globally or across, which is why, among other things, the Composite-JavaScript
+was enriched with [macros](#macros), which take over such tasks, among other
+things.
+
+[Learn more](scripting.md)
 
 
 ## Reactivity Rendering
