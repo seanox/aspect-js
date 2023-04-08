@@ -21,6 +21,7 @@ wird, sind Variablen, Konstanten und Methoden nicht direkt global oder
   * [#export](#export)
   * [#import](#import)
   * [#module](#module)
+  * [#use](#use)
   * [(?...) tolerate](#-tolerate)
 * [Debugging](#debugging)
 
