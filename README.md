@@ -131,28 +131,43 @@ __The lite versions include everything with the exception of the test API.__
 
 
 # Changes
-## 1.5.1 20230107  
-BF: Release: Correction of the missing release directory for jsDelivr  
-CR: Release: New channel for lite version  
-
-## 1.5.0 20230105  
+## 1.6.0 2023xxxx (upcoming version)  
+BF: Composite: Added recursion detection for include of composite markup  
+BF: Composite: Correction of validation with message and notification without model  
+BF: Composite: Correction of mounting of child elements in a condition  
+BF: Composite: Correction of the queue during rendering when a lock exists  
+BF: Expression: Unification of the suppressed output  
+BF: Reactive: Correction for the use of arrays  
+BF: Reactive: Correction/optimization for elements with iterate  
+BF: Reactive: Correction of recursive triggered updates  
 BF: Review: Optimization and corrections  
-BF: Documentation: Correction of encoding  
-BF: Build: Optimization / correction of the release process  
-BF: Composite Events: Correction of the missing selector  
-BF: Test: Correction of the output of failed assertions  
-CR: Reactive: Added for a reactivity rendering  
-CR: Composite: Added a domain concept based on namespaces  
-CR: Composite: Aligned to the syntax for: COMPOSITE_ID / ELEMENT_ID / CUSTOMIZE_SCOPE  
-CR: Composite: Extension of the element id for an optional reference  
-CR: Composite Events: Extended of EVENT_RENDER_NEXT for generated text nodes  
-CR: NPM: Change to a package with scope (is also already in 1.4.0)  
-CR: Build: Releases are now only available on the release page  
-CR: Build: Switch to UglifyJS  
-CR: Server: Added Ant task to start and stop the web server  
-CR: Playground: Added as a playground for development  
-CR: Test: Update web server to version 5.5.x  
-CR: Test: Added Assert.assertUndefined(...) / Assert.assertNotUndefined(...)  
+BF: Test: Correction of wrong output of Element.prototype.toPlainString()  
+CR: Reactive: Optimization of object-model-view decoupling  
+CR: Reactive: Refactoring to distinguish from frameworks with similar name  
+CR: SiteMap: Inactive by default  
+CR: Expression: Extension of the syntax for elements and variables  
+CR: Expression: Optimization (consequent new implementation)  
+CR: Expression: Omission of automatic use of get and is methods for fields  
+CR: Expression: omission of tolerance for undefined parts in object chains (like JSP EL)  
+CR: Composite: Errors during rendering are output in the view  
+CR: Composite: Renamed method Object.using(...) in Object.use(...)  
+CR: Composite: Optimization when loading module resources  
+CR: Composite: Outsourcing and isolating the execution of Composite JavaScript  
+CR: Composite: Optimization macros for Composite JavaScript  
+CR: Composite: Added macro #export for Composite JavaScript  
+CR: Composite: Added macro (?...) for Composite JavaScript  
+CR: Composite: Extension of the element ID with a unique identifier  
+CR: Composite: Added @-attributes as attribute templates for elements  
+CR: Composite: Changing the behavior of the validation  
+CR: Datasource: Optimization when loading module resources  
+CR: Messages: Added messages as alternative object tree for associative array Messages  
+CR: Messages: Added Messages.customize(label, ...values) to fill placeholders with values  
+CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)  
+CR: Extension: Math.unique(...) replaces Math.uniqueId(...)  
+CR: Extension: Math.serial() replaces Math.uniqueSerialId(...)  
+CR: Release: Added the manual (de/en) to the release package (zip)  
+CR: Release: Channels with major number are omitted  
+CR: Release: Revision of the release channels  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
