@@ -46,7 +46,7 @@
     * [Variable-Expression](expression.md#variable-expression)
     * [Kombination](expression.md#kombination)
     * [(?...) tolerate](expression.md#-tolerate)
-  * [Erg&auml;nzung](expression.md#erg-nzung)
+  * [Erg&auml;nzung](expression.md#ergaumlnzung)
 
 
 ### Markup
@@ -101,7 +101,7 @@
   * [fetch](datasource.md#fetch)
   * [transform](datasource.md#transform)
   * [collect](datasource.md#collect)
-  * [Erg&auml;nzung](datasource.md#erg-nzung)
+  * [Erg&auml;nzung](datasource.md#ergaumlnzung)
 
 
 ### Resource-Bundle (i18n/l10n)
@@ -166,16 +166,9 @@
     * [CSS](composite.md#css)
     * [JavaScript](composite.md#javascript)
     * [HTML](composite.md#html)
-  * [Common Standard-Komponente](composite.md##common-standard-komponente) 
-  * [View-Model-Binding](composite.md#view-model-binding)
-    * [Namespace](composite.md#namespace)
-    * [Model](composite.md#model)
-    * [Property](composite.md#property)
-    * [Qualifier](composite.md#qualifier)
-    * [Binding](composite.md#binding)
-    * [Events](composite.md#events)
-    * [Synchronization](composite.md#synchronization)
-    * [Validation](composite.md#validation)
+  * [Common Standard-Komponente](composite.md#common-standard-komponente)
+  * [Namespace](composite.md#namespace)
+  * [Erg&auml;nzung](composite.md#ergaumlnzung)
 
 
 ### Reaktives Rendering
