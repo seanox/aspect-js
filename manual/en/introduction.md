@@ -702,6 +702,9 @@ SiteMap.forward("##x");
 In difference to the navigate method, the forwarding is executed directly
 instead of triggering an asynchronous forwarding by changing the location hash.
 
+Relative paths without hash at the beginning are possible, but only work with
+`SiteMap.navigate(path)`.
+
 [Learn more](sitemap.md#navigation)
 
 
@@ -748,7 +751,7 @@ be used in the HTML elements and in the free text. The data objects must then
 use `Reactive(object)` or `Object.prototype.reactive()` for reactive rendering.
 
 ```javascript
-let Model = {
+const Model = {
     value: ...
 }.reactive();
 ```
@@ -968,32 +971,7 @@ The start can be done manually or when using `auto = true`, by loading the
 page. If the page is already loaded, the parameter `auto` is ignored and the
 start is executed immediately.
 
-```javascript
-Test.suspend();
-```
-
-Suspends the current test execution, which can be continued from the current
-test with `Test.resume()`.
-
-```javascript
-Test.resume();
-```
-
-Continues the test execution if it was stopped before.
-
-```javascript
-Test.interrupt();
-```
-
-Interrupts the current test run and discards all outstanding tests.
-The test run can be restarted with `Test.start()`.
-
-```javascript
-Test.status();
-```
-
-Makes a snapshot of the status of the current test. The status contains details
-of the current task and the queue.
+Further methods for controlling and monitoring test execution are available.
 
 [Learn more](test.m#control)
 
