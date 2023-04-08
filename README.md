@@ -152,13 +152,13 @@ CR: Expression: omission of tolerance for undefined parts in object chains (like
 CR: Composite: Errors during rendering are output in the view  
 CR: Composite: Renamed method Object.using(...) in Object.use(...)  
 CR: Composite: Optimization when loading module resources  
-CR: Composite: Outsourcing and isolating the execution of Composite JavaScript  
-CR: Composite: Optimization macros for Composite JavaScript  
-CR: Composite: Added macro #export for Composite JavaScript  
-CR: Composite: Added macro (?...) for Composite JavaScript  
 CR: Composite: Extension of the element ID with a unique identifier  
 CR: Composite: Added @-attributes as attribute templates for elements  
 CR: Composite: Changing the behavior of the validation  
+CR: Scripting: Outsourcing and isolating the execution of Composite JavaScript  
+CR: Scripting: Optimization macros for Composite JavaScript  
+CR: Scripting: Added macro #export for Composite JavaScript  
+CR: Scripting: Added macro (?...) for Composite JavaScript  
 CR: Datasource: Optimization when loading module resources  
 CR: Messages: Added messages as alternative object tree for associative array Messages  
 CR: Messages: Added Messages.customize(label, ...values) to fill placeholders with values  
