@@ -44,16 +44,6 @@ CR: Composite: Optimization when loading module resources
     - CSS for modules is only loaded if HTML is also loaded
     - omission of the HEAD request
     Minimizes HTTP requests in the background and when loading the page.
-CR: Composite: Outsourcing and isolating the execution of Composite JavaScript
-CR: Composite: Optimization macros for Composite JavaScript
-    - can now be used anywhere in the code, also in combination with conditions
-    - can now also be separated from the next command with a semicolon
-CR: Composite: Added macro #export for Composite JavaScript
-    Makes local variables and constants from modules usable in the global namespace.
-CR: Composite: Added macro (?...) for Composite JavaScript
-    In case of an error the value of the enclosed logic is equivalent to false
-    without throwing an error, except for syntax errors.
-    except for syntax errors.
 CR: Composite: Extension of the element ID with a unique identifier
     format: name:qualifier...#identifier@namespace...:model
     The unique identifier is for the view and business logic, but has no effect on composite.
@@ -62,6 +52,16 @@ CR: Composite: Added @-attributes as attribute templates for elements
 CR: Composite: Changing the behavior of the validation
     Synchronization and function execution are no longer blocked by violations.
     For the previous strict behavior, the attributes validate and strict must be combined.
+CR: Scripting: Outsourcing and isolating the execution of Composite JavaScript
+CR: Scripting: Optimization macros for Composite JavaScript
+    - can now be used anywhere in the code, also in combination with conditions
+    - can now also be separated from the next command with a semicolon
+CR: Scripting: Added macro #export for Composite JavaScript
+    Makes local variables and constants from modules usable in the global namespace.
+CR: Scripting: Added macro (?...) for Composite JavaScript
+    In case of an error the value of the enclosed logic is equivalent to false
+    without throwing an error, except for syntax errors.
+    except for syntax errors.
 CR: Datasource: Optimization when loading module resources
     - omission of the HEAD request
     - omission of XML error when the request receives an error page
