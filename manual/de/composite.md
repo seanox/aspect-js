@@ -22,7 +22,7 @@ View-Model-Binding und das Laden von ausgelagerten Ressourcen zur Laufzeit.
   * [HTML](#html)
 * [Common Standard-Komponente](#common-standard-komponente)
 * [Namespace](#namespace)
-* [Erg&auml;nzung](#ergaumlnzung)
+* [Erg&auml;nzung](#erg%C3%A4nzung)
 
 
 ## Modul

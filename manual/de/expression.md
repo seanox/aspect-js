@@ -39,7 +39,7 @@ Escape-Sequenz `\{\{` bzw. `\}\}` verwendet werden.
   * [Variable-Expression](#variable-expression)
   * [Kombination](#kombination)
   * [(?...) tolerate](#-tolerate)
-* [Erg&auml;nzung](#ergaumlnzung)
+* [Erg&auml;nzung](#erg%C3%A4nzung)
 
 
 ## Elemente
