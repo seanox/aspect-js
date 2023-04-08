@@ -87,6 +87,7 @@
     * [#export](scripting.md#export)
     * [#import](scripting.md#import)
     * [#module](scripting.md#module)
+    * [#use](scripting.md#use)
     * [(?...) tolerate](scripting.md#-tolerate)
   * [Debugging](scripting.md#debugging)
 
