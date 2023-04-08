@@ -306,7 +306,7 @@ Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 - index.html
 ```
 
-# Erg&auml;nzung
+## Erg&auml;nzung
 
 Wegen der engen Verkn&auuml;pfung sei an dieser Stelle bewusst auf die
 weiterf&uuml;hrenden Abschnitte [Model-View-Controler](mvc.md) und
