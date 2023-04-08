@@ -310,7 +310,7 @@ Ressourcen angewendet und erweitern den Pfad ab dem Modul-Verzeichnis.
 
 Wegen der engen Verkn&auuml;pfung sei an dieser Stelle bewusst auf die
 weiterf&uuml;hrenden Abschnitte [Model-View-Controler](mvc.md) und
-[View-Model-Binding](mvc.md#view-model-binding) verwiesen .
+[View-Model-Binding](mvc.md#view-model-binding) verwiesen.
 
 
 - - -
