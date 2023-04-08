@@ -3,10 +3,10 @@
 
 # Components
 
-The implementation of Seanox aspect-js focuses on a modular and component-based
-architecture. The framework supports a declarative designation of components in
-the markup, the outsourcing and automatic loading of resources at runtime, as
-well as an automatic view model binding.
+Seanox aspect-js is designed for a modular and component-based architecture. For
+this purpose, the framework supports declarative marking of components in the
+markup as well as automatic mechanisms for view-model binding and loading of
+outsourced resources at runtime.
 
 
 ## Contents Overview
@@ -20,16 +20,9 @@ well as an automatic view model binding.
   * [CSS](#css)
   * [JavaScript](#javascript)
   * [HTML](#html)
-* [Common Standard Component](#common-standard-component) 
-* [View Model Binding](#view-model-binding)
-  * [Namespace](#namespace)
-  * [Model](#model)
-  * [Property](#property)
-  * [Qualifier](#qualifier)
-  * [Binding](#binding)
-  * [Events](#events)
-  * [Synchronization](#synchronization)
-  * [Validation](#validation)
+* [Common Standard Component](#common-standard-component)
+* [Namespace](#namespace)
+* [Supplement](#supplement)
 
 
 ## Module
@@ -40,26 +33,27 @@ as a program library.
 
 ## Component
 
-A component describes a functionally and/or technically independent part, which
-may consist of one or more modules, or a module may provide one or more components.
+A component refers to a functionally or technically independent part that can
+consist of one or more modules.
 
 
 ## Composite
 
 A composite is a functionally independent component that can consist of markup,
-CSS and JavaScript(-Model) and optionally other resources. In relation to the
-model-view-controller approach, a composite can provide model and view.
+CSS, JavaScript, and optionally other resources. In terms of the
+model-view-controller approach, a composite provides components for model and
+view.
 
-__This distinguishes the composite concept from the JavaScript module concept,__
-__which can also be used. Another important difference concerns the loading__
-__and execution of JavaScript. With composites it is done in a render cycle__
-__linear/sequential and therefore synchronous.__
+__This makes the composite concept different from the JavaScript module concept,
+which can also be used. Another important difference is in the loading and
+execution of JavaScript, which in composites is linear/sequential and thus
+synchronous in a render cycle.__
 
 
 ## Structure
 
-The initial markup of a component consists of an HTML element with a unique ID
-that is marked as composite.
+A component in markup consists of an HTML element marked as composite with a
+unique id.
 
 ```html
 <!DOCTYPE HTML>
@@ -77,10 +71,10 @@ that is marked as composite.
 ## Resources
 
 The inner markup, CSS and JavaScript of composites can be outsourced. The
-default directory `./modules` can be changed with the property
-`Composite.MODULES`. The file name of the outsourced resources is derived from
-the ID of the as composite marked HTML element. Which resources or parts of the
-component are swapped out can be decided individually for each component. 
+default directory `./modules` can be changed via the property
+`Composite.MODULES` . The file names of the outsourced resources are derived
+from the ID of the HTML element marked as composite. Which resources or parts of
+the component are swapped out can be decided individually for each component.
 
 ```
 + modules
@@ -90,72 +84,73 @@ component are swapped out can be decided individually for each component.
 - index.html
 ```
 
-The default behavior derives the name of the resources from the Composite ID and
-then uses it as the lower case at the beginning. This behavior can be changed
-with the attribute [strict](markup.md#strict) so that the Composite ID is used
-unchanged for the resources.
+In the default behavior, the name of the resources is derived from the composite
+ID and then uses it as the lower case at the beginning. This behavior can be
+changed with the attribute [strict](markup.md#strict) so that the composite ID
+is used unchanged for the resources.
 
 
 ## Loading
 
-The loading of resources and the view model binding is done partially when the
-composite is needed in the view, which controls the [SiteMap](sitemap.md) as a
-central face flow management and thus minimizes the loading time considerably,
-because depending on the situation, only the resources of the actively used
-composites are loaded by the view.
+The loading of the resources and the view model binding are done partially when
+the composite is needed in the view, which greatly minimizes the loading time,
+since only resources that are used at the moment of rendering are loaded
+depending on the situation.
 
-The outsourcing and loading of resources at runtime is optional and can be used
-completely, partially or not at all. There is a fixed sequence for reloading and
-including: CSS, JavaScript, HTML/Markup.
+Offloading and loading resources at runtime is optional and can be applied
+completely, partially and not. There is a fixed order for reloading and
+embedding: CSS, JavaScript, HTML/Markup.
 
-If the request of a resource with status 404 is answered, it is assumed that
-this resource has not been outsourced. If requests are not answered with status
-200 or 404, an error is assumed.
+If the request of a resource is responded with status 404, it is assumed that
+this resource has not been outsourced. Statuses other than 200 or 404 cause an
+error.
 
-Resources are loaded only once with the first request of the component for the
-view and the content is then cached.
+Resource loading is performed only once with the component's first request for
+the view, and the content is then cached.
 
 
 ### CSS
 
-CSS is inserted into the HEAD element as a style element. Without a HEAD
-element, the insertion causes an error.
+CSS is inserted as a style element in the HEAD element. Without a HEAD element,
+the insertion causes an error.
 
 
 ### JavaScript
 
-JavaScript is not inserted as an element, but executed directly with the eval
-method. Since this uses a custom namespace and not the global namespace, global
-variables must be deliberately created in the global namespace, for which the
-window or Namespace API should be used.
+JavaScript is not inserted as an element, instead it is executed directly with
+the eval method in an always fresh isolated scope. Since the constants,
+variables and methods created there are not globally available, these must be
+published e.g. with the macro [#export](scripting.md#export).
 
 ```javascript
-Namespace.create("login", {
+const login = {
     validate(element, value) {
     },
     logon: {
         onClick(event) {
         }
-    }
-}
+    }    
+};
+
+#export login;
 ```
 
 
 ### HTML
 
-HTML/Markup is only loaded for a composite if the HTML element of the component
-itself has no internal HTML and for which elements have not been declared with
-the attributes `import` or `output`. Only in this case an empty component with
-outsourced HTML/Markup is assumed.
+HTML/markup is loaded for a composite only if the HTML element of the component
+itself has no inner HTML and the attributes `import` or `output` have not been
+declared for the element. Only then is an empty component with outsourced
+HTML/markup assumed.
 
 
 ## Common Standard Component
 
 When the page is loaded and the framework and application are initialized, the
-commons component is automatically loaded in the module directory, which can
-consist of the JavaScript file `common.js` and/or the CSS stylesheet
+Commons component in the modules directory is also loaded automatically, which
+can consist of the JavaScript file `common.js` and/or the CSS stylesheet
 `common.css`. Both files are intended for storing initial and application-wide
-logic or styles.
+logic and styles, respectively.
 
 ```
 + modules
@@ -166,10 +161,7 @@ logic or styles.
 ```
 
 
-## View Model Binding
-
-
-#### Namespace
+## Namespace
 
 Comparable to packages in other programming languages, namespaces can be used
 for hierarchical structuring of components, resources and business logic.
@@ -178,41 +170,22 @@ Although packages are not a feature of JavaScript, they can be mapped at the
 object level by concatenating objects into an object tree. Here, each level of
 the object tree forms a namespace, which can also be considered a domain.
 
-Seanox aspect-js extends the JavaScript API with the Namespace API for this
-purpose.
-
-```javascript
-Namespace.use(...);
-Namespace.create(...);
-Namespace.lookup(...);
-Namespace.exists(...);
-```
-
 As is typical for the identifiers of objects, namespaces also use letters,
 numbers and underscores separated by a dot. As a special feature, arrays are
-also supported. If a layer in the namespace uses an integer, this layer is used
-as an array.
+also supported. If a layer in the namespace uses an integer, this layer is
+interpreted as an array.
 
 Composites or their data objects (models) are comparable with static managed
 beans that use the global namespace as singletons/facades/delegates. In order to
 structure these data objects and implement domain concepts, corresponding
 namespaces are required.
 
-__If namespaces reflect the IDs of composites and thus HTML elements use the IDs
-as ID attributes, the browser will create the HTML elements as variables in the
-global namespace for these IDs. Interestingly, the browser ignores constants of
-the same name and overwrites them with the HTML elements. Therefore, namespaces
-should be created after the HTML element `BODY` in JavaScript or better use the
-namespace API that uses the global namespace of window that the browser does not
-overwrite.__
-
-__Also for modules and JavaScript resources that are reloaded at runtime, using
-the namespace API is the easiest way. Since reloading uses its own namespaces,
-variables that are to be used across the board must consciously use the global
-namespace, which the namespace API takes care of.__
+__For modules, the use of the macro [#export](scripting.md#export) is
+recommended here as well, since this can also contain a namespace as a target in
+addition to the JavaScript element to be published.__
 
 ```javascript
-Namespace.create("masterdata", {
+const masterdata = {
     regions: {
         ...
     },
@@ -220,15 +193,27 @@ Namespace.create("masterdata", {
         ...
     }
 };
+
+#use example.administration;
+#export masterdata@example.administration;
 ```
+
+The example creates the namespace `example.administration` with [#use](
+    scripting.md#use) if it does not already exist, and then exports to
+`example.administration.masterdata` with [#export](scripting.md#export)
+masterdata.
 
 In markup, namespaces are formed from the IDs of nested composites if they use
 the attribute `namespace`.
 
 ```html
-<div id="masterdata" composite namespace>
-  <div id="regions" composite namespace>
-    Namespace: masterdata.regions
+<div id="example" composite namespace>
+  <div id="administration" composite namespace>
+    <div id="masterdata" composite namespace>
+      <div id="regions" composite namespace>
+        Namespace: masterdata.regions
+      </div>
+    </div>
   </div>
 </div>
 ```
@@ -237,15 +222,19 @@ If there are other elements with an ID between the composites, they have no
 effect.
 
 ```html
-<div id="masterdata" composite namespace>
-  <section id="section">
-    <form id="form">
-      <div id="regions" composite namespace>
-        Namespace: masterdata.regions
-        Elements section and form are ignored 
-      </div>
-    </form>
-  </section>
+<div id="example" composite namespace>
+  <div id="administration" composite namespace>
+    <div id="masterdata" composite namespace>
+      <section id="section">
+        <form id="form">
+          <div id="regions" composite namespace>
+            Namespace: masterdata.regions
+            Elements section and form are ignored 
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
 </div>
 ```
 
@@ -256,23 +245,23 @@ independent of parent namespaces.
 
 ```html
 <div id="Imprint" composite namespace>
-  namespace: Imprint
+  Namespace: Imprint
   <div id="Contact" composite>
-    namespace: Contact
+    Namespace: Contact
     <div id="Support" composite namespace>
-      namespace: Support
+      Namespace: Support
       <div id="Mail" composite namespace>
-        namespace: Support.Mail
+        Namespace: Support.Mail
       </div>
       <div id="Channel" composite namespace>
-        namespace: Support.Channel
+        Namespace: Support.Channel
       </div>
       ...
     </div>
     <div id="Community" composite namespace>
-      namespace: Community
+      Namespace: Community
       <div id="Channel" composite namespace>
-        namespace: Community.Channel
+        Namespace: Community.Channel
       </div>
       ...
     </div>
@@ -291,7 +280,32 @@ checked in the markup. If this is valid, the namespaces are applied directly to
 the path of modules and their resources and extend the path from the module
 directory.
 
+```
++ modules
+  - common.css
+  - common.js
+  + community
+    - channel.css
+    - channel.html
+    - channel.js
+    - ...
+  - imprint.css
+  - imprint.html
+  - imprint.js
+  + support
+    - mail.css
+    - mail.html
+    - mail.js
+    - ...
+  - ...
+- index.html
+```
 
+# Supplement
+
+Because of the close connection, we deliberately refer to the more detailed
+chapters [Model-View-Controler](mvc.md) and [View-Model-Binding](
+    mvc.md#view-model-binding).
 
 
 - - -
