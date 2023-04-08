@@ -29,7 +29,7 @@
  * internal methods and constants cannot be accessed unintentionally.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230402
+ * @version 1.6.0 20230408
  */
 (() => {
 
@@ -79,10 +79,24 @@
          * text as debug output to the console. The browser displays this output
          * with source, which can then be used as an entry point for debugging.
          *
+         *
+         *     #module
+         *     ----
+         * Expected a space-separated list of words to be output in the debug
+         * level of the browser console. The output is a string expression and
+         * supports the corresponding syntax.
+         *
          *     #module console debug output
          *
-         * The output is a string expression and supports the corresponding
-         * syntax.
+         *
+         *     #use
+         *     ----
+         * Expected to see a space-separated list of namespaces to create if
+         * they don't already exist.
+         *
+         *     #use namespaces to be created
+         *
+         *
          *
          *     (?...)
          *
@@ -179,7 +193,7 @@
 
                     case "#":
                         let string = script.substring(cursor -1, cursor +10);
-                        let match = string.match(/(^|\W)(#(?:import|export|module))\s/);
+                        let match = string.match(/(^|\W)(#(?:import|export|module|use))\s/);
                         if (match) {
                             let macro = match[2];
                             for (let offset = cursor +macro.length; offset <= script.length; offset++) {
@@ -194,8 +208,7 @@
                                     case "#import":
                                         if (!parameters.match(/^(\w+(\/\w+)*)(\s+(\w+(\/\w+)*))*$/))
                                             throw new Error(("Invalid macro: #import " + parameters).trim());
-                                        const imports = [];
-                                        parameters.split(/\s+/).forEach(entry => imports.push("\"" + entry + "\""));
+                                        const imports = parameters.split(/\s+/).map(entry => "\"" + entry + "\"");
                                         macro = "_import(...[" + imports.join(",") + "])";
                                         break;
 
@@ -219,6 +232,13 @@
                                             .replace(/`/g, "\\`").trim();
                                         if (macro)
                                             macro = "console.debug(`Module: " + macro + "`)";
+                                        break;
+
+                                    case "#use":
+                                        if (!parameters.match(/^([_a-z]\w*)(\.[_a-z]\w*)*(\s+([_a-z]\w*)(\.[_a-z]\w*)*)*$/i))
+                                            throw new Error(("Invalid macro: #use " + parameters).trim());
+                                        const uses = parameters.split(/\s+/).map(entry => "\"" + entry + "\"");
+                                        macro = "_use(...[" + uses.join(",") + "])";
                                         break;
                                 }
 
@@ -276,6 +296,10 @@
                     + parameters[1] + (parameters[2] ? "@" + parameters[2] : ""));
             context[parameters[1]] = parameters[0];
         });
+    }
+
+    const _use = (...uses) => {
+        uses.forEach(use => Namespace.use(use));
     }
 
     const _tolerate = (invocation) => {

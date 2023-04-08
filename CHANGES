@@ -58,6 +58,8 @@ CR: Scripting: Optimization macros for Composite JavaScript
     - can now also be separated from the next command with a semicolon
 CR: Scripting: Added macro #export for Composite JavaScript
     Makes local variables and constants from modules usable in the global namespace.
+CR: Scripting: Added macro #use for Composite JavaScript
+    Creates namespaces if they do not already exist.
 CR: Scripting: Added macro (?...) for Composite JavaScript
     In case of an error the value of the enclosed logic is equivalent to false
     without throwing an error, except for syntax errors.
