@@ -38,6 +38,7 @@
       false
       false
       false
+      ----
       false
       false
       b1 is not defined in b1
@@ -46,7 +47,13 @@
       c2 is not defined in c2
       d1 is not defined in d1
       d2 is not defined in d2
+      ----
+      undefined
+      false
+      false
+      ----
       #import syntaxC;
+      #use u1.u2.u3;
       Composite.render("body");
     </script>
     <script type="text/test">
@@ -56,6 +63,7 @@
       false
       false
       false
+      ----
       false
       false
       false
@@ -64,7 +72,13 @@
       false
       false
       false
+      ----
+      object
+      object
+      object
+      ----
       #import syntaxC;
+      #use u1.u2.u3;
       Composite.render("body");
     </script>
   </head>
@@ -75,7 +89,7 @@
     {{_4}}
     {{_5}}
     {{_6}}
-
+    ----
     {{a1}}
     {{a2}}
     {{b1}}
@@ -84,8 +98,14 @@
     {{c2}}
     {{d1}}
     {{d2}}
+    ----
+    {{(?typeof u1)}}
+    {{(?typeof u1.u2)}}
+    {{(?typeof u1.u2.u3)}}
+    ----
     <script type="composite/javascript">
       #import syntaxC;
+      #use u1.u2.u3;
       Composite.render("body");
     </script>
   </body>
