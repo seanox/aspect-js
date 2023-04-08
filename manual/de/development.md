@@ -71,7 +71,7 @@ Browser-Engines und Szenarien. Dennoch sind &uuml;ber 21000 Behauptungen
 - Remote Port: all
 - Remote IP Address: subnet
 
-Creation of the rule via command line:
+Erstellung der Regel &uuml;ber die Kommandozeile:
 
 ```
 set rule_name=Seanox Development TCP 8000
@@ -82,7 +82,7 @@ netsh advfirewall firewall add rule^
     remoteip=localsubnet profile=any action=allow
 ```
 
-For more details see here:
+Mehr erfahren:
 
 ```
 netsh advfirewall firewall delete rule -?
@@ -97,7 +97,7 @@ netsh advfirewall firewall delete rule -?
 | Goanna | https://www.palemoon.org/download.shtml                             |
 | WebKit | not available, native integration required<br>e.g. Safari iOS/MacOS |
 
-Übersicht über die Browser-Engines  
+&Uuml;bersicht &uuml;ber die Browser-Engines  
 https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 ### Ablauf
@@ -125,7 +125,7 @@ TODO:
   e.g. `npm deprecate seanox/aspect-js@"< 1.4.0" "WARNING: This version has been updated to 1.4.0."`
 
 ### cdn.jsdelivr.net
-Hier muss nichts geändert werden, der Inhalt wird mit npmjs.com synchronisiert.
+Hier muss nichts ge&auml;ndert werden, der Inhalt wird mit npmjs.com synchronisiert.
 
 
 ## Playground
