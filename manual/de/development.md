@@ -97,7 +97,7 @@ netsh advfirewall firewall delete rule -?
 | Goanna | https://www.palemoon.org/download.shtml                             |
 | WebKit | not available, native integration required<br>e.g. Safari iOS/MacOS |
 
-Overview of engines  
+Übersicht über die Browser-Engines  
 https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 ### Ablauf
@@ -125,7 +125,7 @@ TODO:
   e.g. `npm deprecate seanox/aspect-js@"< 1.4.0" "WARNING: This version has been updated to 1.4.0."`
 
 ### cdn.jsdelivr.net
-Nothing needs to be changed here, the content is synchronized with npmjs.com.
+Hier muss nichts geändert werden, der Inhalt wird mit npmjs.com synchronisiert.
 
 
 ## Playground
