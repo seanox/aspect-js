@@ -27,14 +27,6 @@ and browser, Seanox aspect-js ostensibly refers to the application controller.
 ```
 
 
-## Controller
-
-The (application)controller controls internal processes within an application
-(face flow) and takes over the data flow between view and model with the
-view-model binding, whereby we can also speak of MVVM (Model-View-ViewModel) and
-MVCS (Model-View-Controller-Service) here.
-
-
 ## Model
 
 Models are representable/projectable static JavaScript objects that can provide
@@ -59,11 +51,19 @@ represented is not restricted.
 In Seanox aspect-js the views are represented by the markup.
 
 
+## Controller
+
+The (application)controller controls internal processes within an application
+(face flow) and takes over the data flow between view and model with the
+view-model binding, whereby we can also speak of MVVM (Model-View-ViewModel) and
+MVCS (Model-View-Controller-Service) here.
+
+
 ## Contents Overview
 
-* [Controller](#controller)
 * [Model](#model)
 * [View](#view)
+* [Controller](#controller)
 * [View Model Binding](#view-model-binding)
   * [Composite](#composite)
   * [Binding](#binding)

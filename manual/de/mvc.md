@@ -28,14 +28,6 @@ vordergr&uuml;ndig auf den Applikations-Controller.
 ```
 
 
-## Controller
-
-Der (Applikations-)Controller steuert Abl&auml;ufe innerhalb einer Applikation
-(Face-Flow) und &uuml;bernimmt mit dem View-Model-Binding den Datenfluss
-zwischen View und Model, wobei hier auch von MVVM (Model-View-ViewModel) und
-MVCS (Model-View-Controller-Service) gesprochen werden kann.
-
-
 ## Model
 
 Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
@@ -55,11 +47,19 @@ Projektion eine gute Beschreibung ist, da die Art der Darstellung eines Modells
 nicht eingeschr&auml;nkt ist.
 
 
+## Controller
+
+Der (Applikations-)Controller steuert Abl&auml;ufe innerhalb einer Applikation
+(Face-Flow) und &uuml;bernimmt mit dem View-Model-Binding den Datenfluss
+zwischen View und Model, wobei hier auch von MVVM (Model-View-ViewModel) und
+MVCS (Model-View-Controller-Service) gesprochen werden kann.
+
+
 ## Inhalt
 
-* [Controller](#controller)
 * [Model](#model)
 * [View](#view)
+* [Controller](#controller)
 * [View-Model-Binding](#view-model-binding)
   * [Composite](#composite)
   * [Binding](#binding)
