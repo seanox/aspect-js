@@ -182,16 +182,45 @@ const model = {
 };
 ```
 
-TODO:
 
 ### Dock
 
-TODO:
+If a composite is used/inserted in the DOM, the corresponding model is
+docked/linked and when removing from the DOM, the corresponding model is
+undocked/unlinked. In both cases the model can optionally implement appropriate
+methods. The method `dock` is executed before rendering, before inserting the
+composite into the DOM, or after loading the page during initial rendering, and
+can be used to prepare the view. The method `undock` is executed after the
+composite is removed from the DOM and can be used to postprocess/clean the view.
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+```javascript
+const model = {
+    dock() {
+        ...
+    },
+    undock() {
+        ...
+    }
+};
+```
+
+For  composites in combination with a [condition](markup.md#condition), the call
+of the methods depends on the result of the condition.
 
 
 ### Undock
 
-TODO:
+More details can be found in chapter [Dock](#undock)
 
 
 ### Synchronization

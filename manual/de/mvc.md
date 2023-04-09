@@ -170,12 +170,6 @@ Interaktion zwischen View und Anwendungslogik erforderlich ist.
 ```javascript
 const model = {
     message: "Hello", 
-    dock() {
-        ...
-    },
-    undock() {
-        ...
-    },
     submit: {
         onClick(event) {
             ...
@@ -184,16 +178,48 @@ const model = {
 };
 ```
 
-TODO:
 
 ### Dock
 
-TODO:
+Wird ein Composite im DOM verwendet/eingef&uuml;gt, wird das entsprechende
+JavaScript-Objekt (Model) angedockt/verkn&uuml;pft und beim Entfernen aus dem
+DOM abgedockt/entkn&uuml;pft. In beiden F&auml;llen kann das Modell optional
+geeignete Methoden implementieren. Die Methode `dock` wird vor dem Rendern, vor
+dem Einf&uuml;gen des Composites in das DOM oder nach dem Laden der Seite beim
+ersten Rendern ausgef&uuml;hrt und kann zur Vorbereitung der Darstellung
+verwendet werden. Die Methode `undock` wird ausgef&uuml;hrt, nachdem das
+Composite aus dem DOM entfernt wurde und kann zur Nachbereitung bzw. Bereinigung
+der Darstellung verwendet werden.
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
+```javascript
+const model = {
+    dock() {
+        ...
+    },
+    undock() {
+        ...
+    }
+};
+```
+
+Bei Composites, die mit dem Attribut [condition](markup.md#condition) deklariert
+werden, h&auml;ngt der Aufruf der Methoden vom Ergebnis der Bedingung ab.
 
 
 ### Undock
 
-TODO:
+Details werden im Abschnitt [Dock](#undock) beschrieben.
+
 
 
 ### Synchronization
