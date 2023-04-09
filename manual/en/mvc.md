@@ -76,9 +76,6 @@ MVCS (Model-View-Controller-Service) here.
 
 ## View Model Binding
 
-
-## View-Model-Binding
-
 The view-model binding takes over the bidirectional linking of the HTML elements
 of the view with the models as static JavaScript objects and thus organizes the
 data flow, communicates events as well as states and binds functions.
