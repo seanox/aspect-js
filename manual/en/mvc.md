@@ -65,14 +65,7 @@ In Seanox aspect-js the views are represented by the markup.
 * [Model](#model)
 * [View](#view)
 * [View Model Binding](#view-model-binding)
-  * [Terms](#terms)
-    * [Namespace](#namespace)
-    * [Model](#model)
-    * [Property](#property)
-    * [Qualifier](#qualifier)
-    * [Unique Identifier](#unique-identifier)
-    * [Composite](#composite)
-    * [Composite-ID](#composite-id)
+  * [Composite](#composite)
   * [Binding](#binding)
   * [Dock](#dock)
   * [Undock](#undock)
@@ -83,56 +76,116 @@ In Seanox aspect-js the views are represented by the markup.
 
 ## View Model Binding
 
-View model binding is about linking HTML elements with corresponding existing
-static JavaScript objects (models), which in Seanox aspect-js is a part of the
-Model View Controller and the Composite API.
 
-SiteMap is an extension and is based on the Composite API. For a better
-understanding, the functionality is described here in the Model View Controller.
+## View-Model-Binding
 
-
-### Terms
+The view-model binding takes over the bidirectional linking of the HTML elements
+of the view with the models as static JavaScript objects and thus organizes the
+data flow, communicates events as well as states and binds functions.
 
 
-#### Namespace
+### Composite
 
-TODO:
+The basis for view-model binding is formed by composites, which are functionally
+independent components consisting of markup, CSS, JavaScript, and optionally
+other resources. All components are bound via, the also called Composite ID, ID
+of the HTML construct, the model with the same name in JavaScript and the ID
+corresponding to the HTML in CSS.
 
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="aspect-js.js"></script>
+  </head>
+  <body>
+    <div id="example" composite></div>
+  </bod>
+</html>
+```
 
-#### Model
+```javascript
+const example = {
+    ...    
+}
+```
 
-TODO:
+```css
+#example {
+  ...    
+}
+```
 
+The Composite ID is thus a unique identifier within the application. It is a
+string of letters, numbers, and underscores that is at least one character long,
+begins with an underscore or a letter, and is formed by combining the id and
+composite attributes on an HTML element.
 
-#### Property
+Composites, or better their composite ID, define the point in the global object
+tree where the corresponding JavaScript model is located. All HTML elements with
+an ID enclosed by a composite are then reflected as branches in the
+corresponding JavaScript model if they are implemented accordingly in the model.
 
-TODO:
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      <input type="text" id="message"/>
+      <input type="submit" id="submit"/>
+      ...
+    </form>
+  </body>
+</html>
+```
 
-
-#### Qualifier
-
-TODO:
-
-
-#### Unique Identifier
-
-TODO:
-
-
-#### Composite
-
-TODO:
-
-
-#### Composite-ID
-
-TODO:
+```javascript
+const model = {
+    message: "Hello", 
+    submit: {
+        ...    
+    }
+};
+```
 
 
 ### Binding
 
-TODO:
+View-model binding is about linking markup/HTML (view) to the corresponding
+JavaScript object (model). The binding passes interactions and state changes of
+the view to the model and provides an interface for middleware functions and
+services for the view. In this way, no manual implementation of events,
+synchronization and interaction between view and application logic is required.
 
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="submit" id="submit"/>
+      ...
+    </form>
+  </body>
+</html>
+```
+
+```javascript
+const model = {
+    message: "Hello", 
+    dock() {
+        ...
+    },
+    undock() {
+        ...
+    },
+    submit: {
+        onClick(event) {
+            ...
+        }
+    }
+};
+```
+
+TODO:
 
 ### Dock
 
