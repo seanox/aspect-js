@@ -39,8 +39,8 @@ consist of one or more modules.
 
 ## Composite
 
-A composite is a functionally independent component that can consist of markup,
-CSS, JavaScript, and optionally other resources. In terms of the
+A composite is a functionally independent component that consist of markup, CSS,
+JavaScript, and optionally other resources. In terms of the
 model-view-controller approach, a composite provides components for model and
 view.
 
@@ -65,6 +65,24 @@ unique id.
     <div id="example" composite></div>
   </bod>
 </html>
+```
+
+In JavaScript, the ID from the HTML element which was declared as a composite is
+used as the name for the corresponding model.
+
+```javascript
+const example = {
+    ...    
+}
+```
+
+And also in CSS the ID from the HTML element of the composite is used as
+mapping.
+
+```css
+#example {
+  ...    
+}
 ```
 
 

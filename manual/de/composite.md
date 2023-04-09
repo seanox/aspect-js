@@ -41,8 +41,8 @@ Bestandteil, der aus einem oder mehreren Modulen bestehen kann.
 
 Ein Composite bezeichnet eine funktional eigenst&auml;ndige Komponente die sich
 aus Markup, CSS und JavaScript sowie optional aus weiteren Ressourcen
-zusammensetzen kann. Im Hinblick auf den Model-View-Controller-Ansatz, stellt
-ein Composite Komponenten f&uuml;r Model und View bereit.
+zusammensetzen. Im Hinblick auf den Model-View-Controller-Ansatz stellt ein
+Composite Komponenten f&uuml;r Model und View bereit.
 
 __Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,
 dsa aber ebenfalls verwendet werden kann. Ein anderer wichtiger Unterschied
@@ -65,6 +65,24 @@ HTML-Element mit einer eindeutigen Id.
     <div id="example" composite></div>
   </bod>
 </html>
+```
+
+Im JavaScript wird die ID vom HTML-Element, das als Composite deklariert wurde,
+als Name f&uuml;r das korrespondierende Model verwendet.
+
+```javascript
+const example = {
+    ...    
+}
+```
+
+Und auch im CSS wird die ID vom HTML-Element des Composites als Zuordnung
+verwendet.
+
+```css
+#example {
+  ...    
+}
 ```
 
 
