@@ -109,13 +109,13 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
   `ant -f ./develpoment/build.xml test`
 - Starten vom Websever
   `ant -f ./develpoment/build.xml start`
-- Zu testende URLs
+- Zu testende URLs  
   http://127.0.0.1:8000  
   http://127.0.0.1:8000/index.html  
   http://127.0.0.1:8000/test  
-  http://127.0.0.1:8000/test/index.html
-  http://127.0.0.1:8000/tutorial
-- Zu testende URLs
+  http://127.0.0.1:8000/test/index.html  
+  http://127.0.0.1:8000/tutorial  
+- Zu testende URLs  
   MS Edge, Google Chrome, Firefox, Palemoon, Safari iOS, Safari MacOS
 
 

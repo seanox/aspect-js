@@ -110,11 +110,11 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
   `ant -f ./develpoment/build.xml start`
 - URLs to be tested
   http://127.0.0.1:8000  
-  http://127.0.0.1:8000/index.html  
+  http://127.0.0.1:8000/index.html    
   http://127.0.0.1:8000/test  
-  http://127.0.0.1:8000/test/index.html
-  http://127.0.0.1:8000/tutorial
-- Broweser to be tested
+  http://127.0.0.1:8000/test/index.html  
+  http://127.0.0.1:8000/tutorial  
+- Broweser to be tested  
   MS Edge, Google Chrome, Firefox, Palemoon, Safari iOS, Safari MacOS
 
 
