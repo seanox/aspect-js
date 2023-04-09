@@ -3,8 +3,6 @@
 
 # Entwicklung
 
-TODO:
-
 
 ## Inhalt
 
@@ -52,7 +50,12 @@ greifen sofort und der Webserver startet automatisch neu.
 
 ## Build
 
-TODO:
+Das Release wird per Ant-Skript direkt aus dem Wurzelverzeichnis vom Projekt
+erstellt.
+
+```
+ant -f ./develpoment/build.xml test
+```
 
 
 ## Test
@@ -102,19 +105,30 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 ### Ablauf
 
-TODO:
+- Erstellen vom Release
+  `ant -f ./develpoment/build.xml test`
+- Starten vom Websever
+  `ant -f ./develpoment/build.xml start`
+- Zu testende URLs
+  http://127.0.0.1:8000  
+  http://127.0.0.1:8000/index.html  
+  http://127.0.0.1:8000/test  
+  http://127.0.0.1:8000/test/index.html
+  http://127.0.0.1:8000/tutorial
+- Zu testende URLs
+  MS Edge, Google Chrome, Firefox, Palemoon, Safari iOS, Safari MacOS
 
 
 ## Release
 
 ### GitHub
-- Check that all ToDo's are done
-- Run all tests in all Engines (Blink, Gecko, Goanna, WebKit)
-- Finalize `CHANGES` and `README.md`
-- Create a release
-- Publish the release with a tag
-- Create a release in GitHub for the tag
-- Update the tutorial and create a release there too
+- Überprüfen, ob alle Aufgaben (TODOs) erledigt sind
+- Alle Tests in allen Engines durchführen (Blink, Gecko, Goanna, WebKit)
+- Finalisieren von `CHANGES` und `README.md`
+- Finales Release erstellen
+- Release per Tag ver&ouml;ffentlichen
+- Erstellen vom Release in GitHub, basierens auf dem Tag
+- Aktualisieren der Version vom Tutorial
 
 ### npmjs.com
 - Go to the project directory
