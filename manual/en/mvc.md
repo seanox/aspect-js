@@ -33,13 +33,10 @@ Models are representable/projectable static JavaScript objects that can provide
 and receive data, states and interactions for views, comparable to managed beans
 and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
 other components and abstractions, contain business logic themselves, and be a
-link between the user interface (view) and middleware (backend).
-
-The required view model binding is part of the Model View Controller and the
-Composite API.
-
-Details about view-model binding are described in chapter
-[Model-View-Controller - Binding](mvc.md#binding).
+link between the user interface (view) and middleware (backend). The required
+view model binding is part of the Model View Controller and the Composite API.
+Details about view-model binding are described in chapter [Model-View-Controller
+    - Binding](mvc.md#binding).
 
 
 ## View
