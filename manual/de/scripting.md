@@ -186,7 +186,7 @@ const value = "Hallo Welt!";
 ### #use
 
 Das Marko erwartet einen oder mehrere durch Leerzeichen getrennte
-Namensr&auml;ume, die auf Objekt-Level erstellt werden, wenn diese noch nicht
+Namensr&auml;ume, die auf Objektebene erstellt werden, wenn diese noch nicht
 existieren.
 
 ```javascript
