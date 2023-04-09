@@ -42,9 +42,9 @@ Models sind statische JavaScript-Objekte, die vergleichbar mit managed Beans und
 DTOs (Data Transfer Objects) Daten, Zust&auml;nde und Funktionen f&uuml;r die
 View bereitstellen. Als Singletons/Facades/Delegates k&ouml;nnen sie weitere
 Komponenten und Abstraktionen nutzen, selbst Gesch&auml;ftslogik enthalten und
-sind ein Bindeglied zwischen View und Middelware. Das erforderliche
+sind ein Bindeglied zwischen View und Middleware. Das erforderliche
 View-Model-Binding ist Bestandteil vom Composite-API, was im Abschnitt
-[Model-View-Controller - Binding](mvc.md#binding) detailierter beschrieben wird.
+[Model-View-Controller - Binding](mvc.md#binding) detailliert beschrieben wird.
 
 
 ## View
@@ -61,14 +61,7 @@ nicht eingeschr&auml;nkt ist.
 * [Model](#model)
 * [View](#view)
 * [View-Model-Binding](#view-model-binding)
-  * [Begriffe](#begriffe)
-    * [Namespace](#namespace)
-    * [Model](#model)
-    * [Property](#property)
-    * [Qualifier](#qualifier)
-    * [Unique Identifier](#unique-identifier)
-    * [Composite](#composite)
-    * [Composite-ID](#composite-id)
+  * [Composite](#composite)
   * [Binding](#binding)
   * [Dock](#dock)
   * [Undock](#undock)
@@ -85,75 +78,111 @@ organisiert so den Datenfluss, kommuniziert Ereignisse sowie Zust&auml;nde und
 bindet Funktionen an.
 
 
-### Begriffe
+### Composite
+
+Die Grundlage für das View-Model-Binding bilden Composites, was funktional
+eigenst&auml;ndige Komponenten sind, die sich aus Markup, CSS und JavaScript
+sowie optional aus weiteren Ressourcen zusammensetzen. Die Bindung alle
+Bestandteile erfolgt &uuml;ber die auch als Composite-ID bezeichnete ID vom
+HTML-Konstrukt, dem namensgleichen Model im JavaScript sowie der zum HTML 
+korrespondierenden ID im CSS.
+
+```html
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="aspect-js.js"></script>
+  </head>
+  <body>
+    <div id="example" composite></div>
+  </bod>
+</html>
+```
+
+```javascript
+const example = {
+    ...    
+}
+```
+
+```css
+#example {
+  ...    
+}
+```
+
+Die Composite-ID ist somit ein eindeutiger Bezeichner innerhalb der Anwendung.
+Sie ist eine Zeichenfolge, die aus Buchstaben, Zahlen und Unterstrichen besteht,
+mindestens ein Zeichen lang ist, mit einem Unterstrich oder einem Buchstaben
+beginnt und sich durch die Kombination der Attribute `id` und `composite` bei
+einem HTML-Element bildet.
+
+Composites oder besser deren Composite-ID, definieren den Punkt im globalen
+Objektbaum, wo sich das korrespondierende JavaScript-Model befindet. Alle von
+einem Composite eingeschlossenen HTML-Elemente mit einer ID werden dann im
+korrespondierenden JavaScript-Model als Zweige reflektiert, wenn diese im Model
+entsprechend implementiert sind.
 
 
-#### Composite
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      <input type="text" id="message"/>
+      <input type="submit" id="submit"/>
+      ...
+    </form>
+  </body>
+</html>
+```
 
-TODO:
-
-
-#### Namespace
-
-TODO:
-
-
-#### Model
-
-TODO:
-
-
-#### Property
-
-TODO:
-
-
-#### Qualifier
-
-TODO:
-
-
-#### Unique Identifier
-
-TODO:
-
-
-#### Composite
-
-TODO:
-
-
-#### Composite-ID
-
-TODO:
+```javascript
+const model = {
+    message: "Hello", 
+    submit: {
+        ...    
+    }
+};
+```
 
 
 ### Binding
 
-TODO:
+Beim View-Model-Binding geht es um die Verbindung von Markup/HTML (View) mit dem
+entsprechenden JavaScript-Objekt (Model). Das Binding leitet Interaktionen und
+Status&auml;nderungen der View an das Model weiter und stellt eine
+Schnittstelle f&uuml;r Middleware-Funktionen und Services für die View bereit.
+Womit keine manuelle Implementierung von Ereignissen, Synchronisation und
+Interaktion zwischen View und Anwendungslogik erforderlich ist.
 
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="submit" id="submit"/>
+      ...
+    </form>
+  </body>
+</html>
+```
 
-### Dock
-
-TODO:
-
-
-### Undock
-
-TODO:
-
-
-### Synchronization
-
-TODO:
-
-
-### Validation
-
-TODO:
-
-
-### Events
+```javascript
+const model = {
+    message: "Hello", 
+    dock() {
+        ...
+    },
+    undock() {
+        ...
+    },
+    submit: {
+        onClick(event) {
+            ...
+        }
+    }
+};
+```
 
 TODO:
 
