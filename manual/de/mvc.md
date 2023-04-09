@@ -159,7 +159,7 @@ Interaktion zwischen View und Anwendungslogik erforderlich ist.
 <html>
   <body>
     <form id="model" composite>
-      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="text" id="message" value="{{model.message}}" events="change"/>
       <input type="submit" id="submit"/>
       ...
     </form>
@@ -183,6 +183,30 @@ const model = {
     }
 };
 ```
+
+TODO:
+
+### Dock
+
+TODO:
+
+
+### Undock
+
+TODO:
+
+
+### Synchronization
+
+TODO:
+
+
+### Validation
+
+TODO:
+
+
+### Events
 
 TODO:
 

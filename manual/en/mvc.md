@@ -160,7 +160,7 @@ synchronization and interaction between view and application logic is required.
 <html>
   <body>
     <form id="model" composite>
-      <input type="text" id="message" value="{{model.text.value}}" events="change"/>
+      <input type="text" id="message" value="{{model.message}}" events="change"/>
       <input type="submit" id="submit"/>
       ...
     </form>
