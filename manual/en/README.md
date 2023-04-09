@@ -115,9 +115,9 @@ Machine translation with [DeepL](https://deepl.com).
 ### Model View Controller
 
 * [Model View Controller](mvc.md#model-view-controller)
-  * [Controller](mvc.md#controller)
   * [Model](mvc.md#model)
   * [View](mvc.md#view)
+  * [Controller](mvc.md#controller)
   * [View Model Binding](mvc.md#view-model-binding)
     * [Composite](mvc.md#composite)
     * [Binding](mvc.md#binding)
