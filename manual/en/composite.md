@@ -53,7 +53,7 @@ synchronous in a render cycle.__
 ## Structure
 
 A component in markup consists of an HTML element marked as composite with a
-unique id.
+unique ID, which is also called Composite ID.
 
 ```html
 <!DOCTYPE HTML>

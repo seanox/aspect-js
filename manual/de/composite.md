@@ -41,7 +41,7 @@ Bestandteil, der aus einem oder mehreren Modulen bestehen kann.
 
 Ein Composite bezeichnet eine funktional eigenst&auml;ndige Komponente die sich
 aus Markup, CSS und JavaScript sowie optional aus weiteren Ressourcen
-zusammensetzen. Im Hinblick auf den Model-View-Controller-Ansatz stellt ein
+zusammensetzt. Im Hinblick auf den Model-View-Controller-Ansatz stellt ein
 Composite Komponenten f&uuml;r Model und View bereit.
 
 __Damit unterscheidet sich das Composite-Konzept vom JavaScript-Modul-Konzept,
@@ -53,7 +53,7 @@ einem Renderzyklus linear/sequenziell und somit synchron erfolgt.__
 ## Aufbau
 
 Eine Komponente besteht im Markup aus einem als Composite gekennzeichneten
-HTML-Element mit einer eindeutigen Id.
+HTML-Element mit einer eindeutigen ID, die als Composite-ID bezeichnet wird.
 
 ```html
 <!DOCTYPE HTML>
