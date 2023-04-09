@@ -123,6 +123,15 @@ tree where the corresponding JavaScript model is located. All HTML elements with
 an ID enclosed by a composite are then reflected as branches in the
 corresponding JavaScript model if they are implemented accordingly in the model.
 
+```javascript
+const model = {
+    message: "Hello", 
+    submit: {
+        ...    
+    }
+};
+```
+
 ```html
 <html>
   <body>
@@ -135,15 +144,6 @@ corresponding JavaScript model if they are implemented accordingly in the model.
 </html>
 ```
 
-```javascript
-const model = {
-    message: "Hello", 
-    submit: {
-        ...    
-    }
-};
-```
-
 
 ### Binding
 
@@ -152,18 +152,6 @@ JavaScript object (model). The binding passes interactions and state changes of
 the view to the model and provides an interface for middleware functions and
 services for the view. In this way, no manual implementation of events,
 synchronization and interaction between view and application logic is required.
-
-```html
-<html>
-  <body>
-    <form id="model" composite>
-      <input type="text" id="message" value="{{model.message}}" events="change"/>
-      <input type="submit" id="submit"/>
-      ...
-    </form>
-  </body>
-</html>
-```
 
 ```javascript
 const model = {
@@ -182,6 +170,18 @@ const model = {
 };
 ```
 
+```html
+<html>
+  <body>
+    <form id="model" composite>
+      <input type="text" id="message" value="{{model.message}}" events="change"/>
+      <input type="submit" id="submit"/>
+      ...
+    </form>
+  </body>
+</html>
+```
+
 
 ### Dock
 
@@ -193,16 +193,6 @@ composite into the DOM, or after loading the page during initial rendering, and
 can be used to prepare the view. The method `undock` is executed after the
 composite is removed from the DOM and can be used to postprocess/clean the view.
 
-```html
-<html>
-  <body>
-    <div id="model" composite>
-      ...
-    </div>
-  </body>
-</html>
-```
-
 ```javascript
 const model = {
     dock() {
@@ -212,6 +202,16 @@ const model = {
         ...
     }
 };
+```
+
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
 ```
 
 For  composites in combination with a [condition](markup.md#condition), the call
@@ -225,17 +225,64 @@ More details can be found in chapter [Dock](#undock)
 
 ### Synchronization
 
-TODO:
+In addition to the static linking and assignment of HTML elements to JavaScript
+objects (models), the view model binding also includes the synchronization of
+values between the HTML elements and the fields of the JavaScript object. The
+synchronization depends on events that are declared for the HTML element with
+the attribute [events](markup.md#events) and so the synchronization is executed
+only when one of the defined events occurs.
+
+More details about the usage can be found in chapter [events](
+    markup.md#events).
 
 
 ### Validation
 
-TODO:
+The synchronization of values between view (HTML elements) and the fields of
+JavaScript models can be monitored and controlled by validation. Validation is
+declared in HTML via the [validate](markup.md#validate) attribute in combination
+with the [events](markup.md#events) attribute and requires a corresponding
+validation method in the JavaScript object (model).
+
+More details about the usage can be found in chapter [validate](
+    markup.md#validate).
 
 
 ### Events
 
-TODO:
+Events, more precisely the interaction between view and model, are also
+considered during view model binding. The methods for interaction will be
+implemented only in the model. In the markup itself, no declaration is required.
+The view model binding knows the available events for HTML. During binding, the
+model is searched for corresponding methods that will be registered as event
+listeners.
+
+```javascript
+const contact = {
+    mail: {
+        onClick(event) {
+          const mail = "mailto:mail@local?subject=Test&body=Greetings";
+            document.location.href = mail;
+            return false;
+        }
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="contact" composite static>
+      <p>
+        Example for use of events.
+      </p>
+      <button id="mail">
+        Click Me!
+      </button>
+    </div>
+  </body>
+</html>
+```
 
 
 - - -

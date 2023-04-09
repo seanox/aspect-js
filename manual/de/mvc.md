@@ -123,6 +123,14 @@ einem Composite eingeschlossenen HTML-Elemente mit einer ID werden dann im
 korrespondierenden JavaScript-Model als Zweige reflektiert, wenn diese im Model
 entsprechend implementiert sind.
 
+```javascript
+const model = {
+    message: "Hello", 
+    submit: {
+        ...    
+    }
+};
+```
 
 ```html
 <html>
@@ -136,15 +144,6 @@ entsprechend implementiert sind.
 </html>
 ```
 
-```javascript
-const model = {
-    message: "Hello", 
-    submit: {
-        ...    
-    }
-};
-```
-
 
 ### Binding
 
@@ -154,6 +153,17 @@ Status&auml;nderungen der View an das Model weiter und stellt eine
 Schnittstelle f&uuml;r Middleware-Funktionen und Services für die View bereit.
 Womit keine manuelle Implementierung von Ereignissen, Synchronisation und
 Interaktion zwischen View und Anwendungslogik erforderlich ist.
+
+```javascript
+const model = {
+    message: "Hello", 
+    submit: {
+        onClick(event) {
+            ...
+        }
+    }
+};
+```
 
 ```html
 <html>
@@ -165,17 +175,6 @@ Interaktion zwischen View und Anwendungslogik erforderlich ist.
     </form>
   </body>
 </html>
-```
-
-```javascript
-const model = {
-    message: "Hello", 
-    submit: {
-        onClick(event) {
-            ...
-        }
-    }
-};
 ```
 
 
@@ -191,16 +190,6 @@ verwendet werden. Die Methode `undock` wird ausgef&uuml;hrt, nachdem das
 Composite aus dem DOM entfernt wurde und kann zur Nachbereitung bzw. Bereinigung
 der Darstellung verwendet werden.
 
-```html
-<html>
-  <body>
-    <div id="model" composite>
-      ...
-    </div>
-  </body>
-</html>
-```
-
 ```javascript
 const model = {
     dock() {
@@ -212,6 +201,16 @@ const model = {
 };
 ```
 
+```html
+<html>
+  <body>
+    <div id="model" composite>
+      ...
+    </div>
+  </body>
+</html>
+```
+
 Bei Composites, die mit dem Attribut [condition](markup.md#condition) deklariert
 werden, h&auml;ngt der Aufruf der Methoden vom Ergebnis der Bedingung ab.
 
@@ -221,20 +220,68 @@ werden, h&auml;ngt der Aufruf der Methoden vom Ergebnis der Bedingung ab.
 Details werden im Abschnitt [Dock](#undock) beschrieben.
 
 
-
 ### Synchronization
 
-TODO:
+Das View-Model-Binding umfasst neben der statischen Verkn&uuml;pfung und
+Zuordnung von HTML-Elementen (View) zum JavaScript-Objekt (Model) auch die
+Synchronisation von Werten zwischen den HTML-Elementen und den Feldern im
+JavaScript-Objekt. Die Synchronisation h&auml;ngt von Ereignissen ab, die
+f&uuml;r das HTML-Element mit dem Attribut [events](markup.md#events) deklariert
+sind und wird nur ausgef&uuml;hrt, wenn eines der definierten Ereignisse
+eintritt.
+
+Details zur Funktionsweise werden im Abschnitt [events](markup.md#events)
+beschrieben.
 
 
 ### Validation
 
-TODO:
+Die Synchronisation der Werte zwischen den HTML-Elementen (View) und den Feldern
+vom JavaScript-Objekt (Model) kann durch Validierung &uuml;berwacht und
+gesteuert werden. Die Validierung wird in HTML durch die Kombination der
+Attribute [validate](markup.md#validate) und [events](markup.md#events)
+deklariert und erfordert eine entsprechende Validierungsmethode im
+JavaScript-Objekt.
+
+Details zur Funktionsweise werden im Abschnitt [validate](markup.md#validate)
+beschrieben.
 
 
 ### Events
 
-TODO:
+Ereignisse, genauer gesagt die Interaktion zwischen View und Modell, werden beim
+View-Model-Binding ebenfalls ber&uuml;cksichtigt. Die Methoden zur Interaktion
+werden nur im Model implementiert. Im Markup selbst ist keine Deklaration
+erforderlich. Das View-Model-Binding kennt die verf&uuml;gbaren Ereignisse im
+HTML und so wird beim Binding das Model nach entsprechenden Methoden durchsucht,
+die dann als Event-Listener registriert werden.
+
+```javascript
+const contact = {
+    mail: {
+        onClick(event) {
+            const mail = "mailto:mail@local?subject=Test&body=Greetings";
+            document.location.href = mail;
+            return false;
+        }
+    }
+};
+```
+
+```html
+<html>
+  <body>
+    <div id="contact" composite>
+      <p>
+        Example for use of events.
+      </p>
+      <button id="mail">
+        Click Me!
+      </button>
+    </div>
+  </body>
+</html>
+```
 
 
 - - -
