@@ -83,6 +83,18 @@
     <replaceregexp file="${workspace}/README.md"
         match="(?si)(?&lt;=\(C\)\s)\d{4}\b" flags="g" byline="true"
         replace="${now.year}"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="^(\s*#+\s*version\s+)\d+(\.\d)+\s*$" flags="gi" byline="true"
+        replace="\1${release.version}"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="\d+(?:\.\d)+(\.zip)" flags="gi" byline="false"
+        replace="${release.version}\1"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="(download/)\d+(?:\.\d)+" flags="gi" byline="false"
+        replace="\1${release.version}"/>
+    <replaceregexp file="${workspace}/README.md"
+        match="(aspect-js )\d+(?:\.\d)+" flags="gi" byline="false"
+        replace="\1${release.version}"/>
   </target>
 
   <macrodef name="file-minimize">
