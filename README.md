@@ -90,8 +90,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.6.0.1](https://github.com/seanox/aspect-js/releases/download/1.6.0.1/aspect-js-1.6.0.1.zip)  
-[Seanox aspect-js 1.6.0.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.6.0.1.zip)
+[Seanox aspect-js 1.6.1](https://github.com/seanox/aspect-js/releases/download/1.6.1/aspect-js-1.6.1.zip)  
+[Seanox aspect-js 1.6.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.6.1.zip)
 
 <p>
   <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
@@ -106,7 +106,7 @@ specific language governing permissions and limitations under the License.
 The release channels continuously provide the latest final versions, so Seanox
 aspect-js is always up to date.
 
-## Version 1.6.0.1
+## Version 1.6.1
 
 ### Standard: Contains all minimized
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
@@ -154,7 +154,7 @@ aspect-js is always up to date.
 
 
 # Changes
-## 1.6.0.1 20230410  
+## 1.6.1 20230410  
 BF: Composite: Added recursion detection for include of composite markup  
 BF: Composite: Correction of validation with message and notification without model  
 BF: Composite: Correction of mounting of child elements in a condition  
