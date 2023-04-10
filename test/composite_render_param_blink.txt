@@ -1,24 +1,18 @@
 
     blink
     ----
-    Unexpected token ':'
-	:
-    Unexpected token ':'
-	:
-    Unexpected token ':'
-	:
-    Unexpected token ':'
-	: 
-    A:1: 
-    A:2: Hallo is not defined
-	Hallo
+    Unexpected token ':' in :
+    Unexpected token ':' in :
+    Unexpected token ':' in :
+    Unexpected token ':' in :
+    A:1:
+    A:2: Hallo is not defined in Hallo
     A:3: Hallo
     <article id="AB">
       AA:1: Hallo
       AB:1:
       AA:2: Hallo
-      AB:2: Hallo is not defined
-	Hallo
+      AB:2: Hallo is not defined in Hallo
       AA:3: Hallo
       AB:3: Welt
       AA:4: Hallo
