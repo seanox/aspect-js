@@ -1,3 +1,6 @@
+1.6.0.1 20230410
+NT: npm.com: incorrect version in registry.npmjs.org :-|
+
 1.6.0 20230410
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected when the module is included, an error is output.
