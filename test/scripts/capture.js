@@ -31,6 +31,8 @@ class Capture {
     validate() {
         this._snapshots.forEach((snapshot, index) => {
             console.log(`Test based on script #${index +1}`);
+            // WebKit: Can't find variable X -> X is not defined
+            snapshot = snapshot.replace(/(Can't find variable:\s+)(\w+)/ig, "$2 is not defined");
             try {Assert.assertSameText(this._patterns[index], snapshot);
             } catch (error) {
                 this.output(index);
