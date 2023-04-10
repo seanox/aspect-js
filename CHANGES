@@ -1,4 +1,4 @@
-1.6.0 2023xxxx
+1.6.0 20230410
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected when the module is included, an error is output.
 BF: Composite: Correction of validation with message and notification without model
@@ -82,22 +82,22 @@ CR: Release: Revision of the release channels
       for test and deployment
     - standard-max: contains all
       not minimized and with comments
-      for development, test
+      for development and testing
     - core: contains all minimized, except the Test API
       for deployment
     - core-max: contains all minimized, except the Test API
       not minimized and with comments
-      for development, test
+      for development and testing
     - micro: contains all minimized, except SiteMap, minimized
-      for development, test and deployment of micro frontends without face-flow
+      for development and testing and deployment of micro frontends without face-flow
     - micro-max: contains all minimized, except SiteMap
       not minimized and with comments
-      for development, test of micro frontends without face-flow
+      for development and testing of micro frontends without face-flow
     - micro-core: contains all minimized, except the Test API and SiteMap
       for deployment of micro frontends without face-flow
     - micro-core-max: contains all minimized, except the test API and SiteMap
       not minimized and with comments
-      for development, test of micro frontends without face-flow
+      for development and testing of micro frontends without face-flow
 
 1.5.1 20230107
 BF: Release: Correction of the missing release directory for jsDelivr

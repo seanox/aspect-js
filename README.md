@@ -90,8 +90,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.5.1](https://github.com/seanox/aspect-js/releases/download/1.5.1/aspect-js-1.5.1.zip)  
-[Seanox aspect-js 1.5.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.5.1.zip)
+[Seanox aspect-js 1.6.0](https://github.com/seanox/aspect-js/releases/download/1.6.0/aspect-js-1.6.0.zip)  
+[Seanox aspect-js 1.6.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.6.0.zip)
 
 <p>
   <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
@@ -103,23 +103,46 @@ specific language governing permissions and limitations under the License.
 
 # Release Channels
 
-## Latest Release
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js)  
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-min.js)
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite.js)  
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-lite-min.js)
+The release channels continuously provide the latest final versions, so Seanox
+aspect-js is always up to date.
 
-## Latest Release of Major Version 1.x
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x.js)  
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-min.js)
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite.js)  
-[https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite-min.js](https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-1.x-lite-min.js)
+## Version 1.6.0
 
-The release channels continuously provide the newest final major versions, which
-are downward compatible to the major version. Seanox aspect-js is always up to
-date when using the release channels.
+### Standard: Contains all minimized
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
+  for testing and deployment
 
-__The lite versions include everything with the exception of the test API.__
+### Standard Max: Contains all
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js  
+  not minimized and with comments  
+  for development and testing
+
+### Core: Contains all minimized, except the Test API
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core.js  
+  for deployment without Test API
+
+### Core Max: Contains all minimized, except the Test API
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core-max.js  
+  not minimized and with comments  
+  for deployment without Test API
+
+### Micro: Contains all minimized, except SiteMap, minimized
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro.js  
+  for testing and deployment of micro frontends without face-flow
+
+### Micro Max: Contains all minimized, except SiteMap
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-core.js  
+  not minimized and with comments  
+  for development and testing of micro frontends without face-flow
+
+### Micro Core: Contains all minimized, except the Test API and SiteMap
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-core-max.js  
+  for deployment of micro frontends without face-flow and without Test API
+
+### Micro Core Max: Contains all minimized, except the test API and SiteMap
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-max.js  
+  not minimized and with comments  
+  for development of micro frontends without face-flow and without Test API
 
 
 # Manuals
@@ -131,7 +154,7 @@ __The lite versions include everything with the exception of the test API.__
 
 
 # Changes
-## 1.6.0 2023xxxx (upcoming version)  
+## 1.6.0 20230410  
 BF: Composite: Added recursion detection for include of composite markup  
 BF: Composite: Correction of validation with message and notification without model  
 BF: Composite: Correction of mounting of child elements in a condition  
@@ -158,6 +181,7 @@ CR: Composite: Changing the behavior of the validation
 CR: Scripting: Outsourcing and isolating the execution of Composite JavaScript  
 CR: Scripting: Optimization macros for Composite JavaScript  
 CR: Scripting: Added macro #export for Composite JavaScript  
+CR: Scripting: Added macro #use for Composite JavaScript  
 CR: Scripting: Added macro (?...) for Composite JavaScript  
 CR: Datasource: Optimization when loading module resources  
 CR: Messages: Added messages as alternative object tree for associative array Messages  
