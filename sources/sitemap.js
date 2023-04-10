@@ -571,7 +571,7 @@
                 // In the next step, the facets for a path are determined.
                 // These are added to the path in the path map if these do not
                 // already exist there.
-                // Additional a facet map object will be created:
+                // Additionally, a facet map object will be created:
                 //     {#facet-path:{path:#path, facet:facet}, ...}
                 value = value || [];
                 value.forEach((facet) => {
@@ -592,13 +592,13 @@
                     // normal paths.
                     if (facet.match(PATTERN_PATH_FACET_VARIABLE)) {
                         // If the facet is only ..., it is registered as
-                        // avariable face, otherwise as a variable facet.
+                        // available face, otherwise as a variable facet.
                         facet = facet.replace(/\.+$/, "");
                         const variable = facet ? key.replace(/#+$/, "") + "#" + facet : key;
                         if (!variables.has(variable))
                             variables.add(variable);
                         // If the face is only ..., it is registered as a face.
-                        // Therefore nothing needs to be done now.
+                        // Therefore, nothing needs to be done now.
                         if (!facet)
                             return;
                     }
