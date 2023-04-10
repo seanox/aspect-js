@@ -131,7 +131,7 @@ aspect-js is always up to date.
   for testing and deployment of micro frontends without face-flow
 
 ### Micro Max: Contains all minimized, except SiteMap
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-core.js  
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-max.js  
   not minimized and with comments  
   for development and testing of micro frontends without face-flow
 
