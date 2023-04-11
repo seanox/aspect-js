@@ -1,1 +1,1 @@
-Namespace.use("ns4");
+#use ns4;

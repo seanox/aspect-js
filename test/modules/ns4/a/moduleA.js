@@ -1,1 +1,1 @@
-Namespace.use("ns4.a.moduleA");
+#use ns4.a.moduleA;
