@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230402
+ * @version 1.7.0 20230412
  */
 (() => {
 
@@ -159,9 +159,6 @@
 
         /** Constant for attribute message */
         get ATTRIBUTE_MESSAGE() {return "message";},
-
-        /** Constant for attribute namespace */
-        get ATTRIBUTE_NAMESPACE() {return "namespace";},
 
         /** Constant for attribute notification */
         get ATTRIBUTE_NOTIFICATION() {return "notification";},
@@ -199,7 +196,7 @@
          * that is cached in the meta-object. Other attributes are only cached
          * if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|namespace|notification|output|release|render|strict|validate)$/i;},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|strict|validate)$/i;},
         
         /**
          * Pattern for all static attributes.
@@ -247,11 +244,15 @@
          */
         get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
-        /** Pattern for a composite id (based on a word) */
-        get PATTERN_COMPOSITE_ID() {return /^[_a-z]\w*$/i;},
+        /**
+         * Pattern for a composite id (based on a word e.g. name@namespace:...)
+         * - group 1: name
+         * - group 2: namespace (optional)
+         */
+        get PATTERN_COMPOSITE_ID() {return /^([_a-z]\w*)(?:@([_a-z]\w*(?::[_a-z]\w*)*))?$/i;},
 
-        /** 
-         * Pattern for an element id (e.g. name:qualifier...@model...)
+        /**
+         * Pattern for an element id (e.g. name:qualifier...@model:...)
          * - group 1: name
          * - group 2: qualifier(s) (optional)
          * - group 3: unique identifier (optional)
@@ -1184,11 +1185,11 @@
          * The following attributes and elements are supported:
          *
          * - Attributes:
-         *     COMPOSITE    INTERVAL        OUTPUT
-         *     CONDITION    ITERATE         RELEASE
-         *     EVENTS       MESSAGE         RENDER
-         *     ID           NAMESPACE       VALIDATE
-         *     IMPORT       NOTIFICATION
+         *     COMPOSITE    INTERVAL        RELEASE
+         *     CONDITION    ITERATE         RENDER
+         *     EVENTS       MESSAGE         VALIDATE
+         *     ID           NOTIFICATION
+         *     IMPORT       OUTPUT
          *
          * - Expression Language
          * - Scripting
@@ -1648,10 +1649,11 @@
                 // excludes markers of conditions as text nodes.
                 if (selector instanceof Element
                         && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                    let model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
-                    if (!model.match(Composite.PATTERN_COMPOSITE_ID))
-                        throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
-
+                    const locate = _mount_locate(selector);
+                    if (!locate.namespace)
+                        locate.namespace = [];
+                    locate.namespace.push(locate.model);
+                    let model = locate.namespace.join(".");
                     if (!_models.has(model)) {
                         _models.add(model);
                         model = Object.lookup(model);
@@ -2115,13 +2117,11 @@
                 object = _render_meta[composite.ordinal()];
                 if (!object)
                     throw new Error("Unknown composite");
-                resource = composite.id;
-                if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
-                    resource = resource.uncapitalize();
                 const meta = _mount_locate(composite);
-                if (meta && meta.namespace)
-                    resource = meta.namespace.concat(resource);
-                else resource = [resource];
+                if (!meta.namespace)
+                    meta.namespace = [];
+                meta.namespace.push(meta.model);
+                resource = meta.namespace;
             }
 
             const context = Composite.MODULES + "/" + resource.join("/");
@@ -2294,52 +2294,30 @@
      * or no enclosing composite was used, null is returned.
      * 
      * @param  element
-     * @param  namespace
      * @return determined meta-object for the passed element, otherwise null
      * @throws An error occurs in the following cases:
      *     - in the case of an invalid composite ID
      *     - in the case of an invalid element ID
      */
-    const _mount_locate = (element, namespace = false) => {
+    const _mount_locate = (element) => {
 
         if (!(element instanceof Element))
             return null;
 
+        // A composite stops the determination. Composites are static
+        // components, comparable to managed beans or named beans, and therefore
+        // normally have no superordinate object levels. But the Composite-ID
+        // can contain a namespace, which is then taken into consideration.
+
         let serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
         if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
-            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+            const composite = serial.match(Composite.PATTERN_COMPOSITE_ID);
+            if (!composite)
                 throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-
-            // Option namespace restricts the analysis to composites with
-            // ATTRIBUTE_NAMESPACE. If a composite is found without one, the
-            // current namespace is terminated and the found composite is
-            // outside the current namespace.
-
-            const object = _render_meta[element.ordinal()];
-            if (!object || !object.attributes
-                    || !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
-                return !namespace ? {model:serial} : null;
-
-            // Determine from namespace by parent composite elements with
-            // ATTRIBUTE_ID and ATTRIBUTE_NAMESPACE. The prerequisite is that
-            // the direct composite from the model uses ATTRIBUTE_NAMESPACE.
-            // Without the attribute, the composites and thus the models are
-            // without namespace. Thus, there can also be decoupled composites
-            // and thus models in a nested markup.
-
-            const locate = _mount_locate(element.parentNode, true);
-            if (!locate)
-                return {model:serial};
-            if (locate.namespace)
-                locate.namespace.push(locate.model);
-            else locate.namespace = [locate.model];
-            return {namespace:locate.namespace, model:serial};
+            if (!composite[2])
+                return {model:composite[1]};
+            return {namespace:composite[2].split(/:+/), model:composite[1]};
         }
-
-        const object = _render_meta[element.ordinal()];
-        if (object && object.attributes
-                && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
-            throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
 
         const locate = _mount_locate(element.parentNode);
         if (!element.hasAttribute(Composite.ATTRIBUTE_ID))

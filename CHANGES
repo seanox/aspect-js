@@ -1,3 +1,13 @@
+1.7.0 2023xxxx
+BF: Composite: Correction from mounting (dock/undock) composites with namespace
+CR: Composite: Omission of the attribute namespace
+    Replaced by extended composite ID name@namespace (separated by colon).
+    e.g. model@a:b:c -> ./modules/a/b/c/model.js -> a.b.c.model
+    The approach with the attribute namespace was not practical.
+CR: Composite: Omission of attributes strict in combination with composite
+    The combination of the attribute strict was not practicable for namespaces.
+    The notation for the module files is now used 1:1.
+
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup
     If a recursion is detected when the module is included, an error is output.
