@@ -1,1 +1,1 @@
-#use ns4;
+throw new Error("The wrong namespace or better no namespace was used!");
