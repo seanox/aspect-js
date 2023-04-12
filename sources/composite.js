@@ -279,6 +279,9 @@
         get EVENT_MOUNT_NEXT() {return "MountNext";},
         get EVENT_MOUNT_END() {return "MountEnd";},
 
+        /** Constants of events when using modules */
+        get EVENT_MODUL_LOAD() {return "ModulLoad";},
+
         /** Constants of events when using HTTP */
         get EVENT_HTTP_START() {return "HttpStart";},
         get EVENT_HTTP_PROGRESS() {return "HttpProgress";},
@@ -2159,6 +2162,8 @@
                 return;
             }
 
+            if (_render_cache[context + ".composite"] === undefined)
+                Composite.fire(Composite.EVENT_MODUL_LOAD, context);
             _render_cache[context + ".composite"] = null;
 
             // The sequence of loading is strictly defined: JS, CSS, HTML
