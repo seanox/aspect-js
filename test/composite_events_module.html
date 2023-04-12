@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            Test.start();
+        });
+
+        Test.create({test() {
+            Assert.assertEquals(3, calls.length);
+        }});
+
+        Test.create({test() {
+            Assert.assertEquals("/modules/common,/modules/nsX/a,/modules/nsX/b", String(calls));
+        }});
+
+        const calls = [];
+        Composite.listen(Composite.EVENT_MODUL_LOAD,
+            (event, module) => calls.push(module));
+    </script>
+  </head>
+  <body>
+    <div id="a@nsX" composite></div>
+    <div id="a@nsX" composite></div>
+    <div id="a@nsX" composite></div>
+
+    <div id="b@nsX" composite>1</div>
+    <div id="b@nsX" composite>2</div>
+    <div id="b@nsX" composite>3</div>
+
+    <section iterate="{{entry:[1,2,3]}}">
+      <div id="a@nsX" composite></div>
+    </section>
+
+    {{calls}}
+  </body>
+</html>
