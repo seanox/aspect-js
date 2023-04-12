@@ -594,47 +594,14 @@ ausl&ouml;sen.__
 ### strict
 
 Das Attribut ist mit den Attributen [composite](#composite) und [validate](
-    #validate) kombinierbar.
-
-In Kombination mit dem Attribut [composite](#composite) legt es fest, dass beim
-Laden der Ressourcen (JS, CSS, HTML) zu einer Komponente, der Dateiname in der
-originalen Schreibweise verwendet wird. Das Standardverhalten ohne das Attribut
-[strict](#strict) verwendet die Composite-Id mit einem Kleinbuchstaben am
-Anfang.
-
-Beispiel zum Standardverhalten:
-```html
-<div id="SmallExample" composite>
-```
-```
-+ modules
-  - smallExample.css
-  - smallExample.js
-  - smallExample.html
-- index.html
-```
-
-Beispiel mit dem Attribut [strict](#strict):
-```html
-<div id="SmallExample" composite strict>
-```
-```
-+ modules
-  - SmallExample.css
-  - SmallExample.js
-  - SmallExample.html
-- index.html
-```
-
-Die Kombination mit dem Attribut [validate](#validate) beeinflusst das
-Synchronisieren der Daten so, dass die Synchronisation nur ausgef&uuml;hrt wird,
-wenn die Validierung explizit true zur&uuml;ckgibt. In allen anderen F&auml;llen
-wird der Wert nicht synchronisiert. Womit im zu synchronisierenden Ziel nach
-einer Benutzereingabe nur zul&auml;ssige Werte vorhanden sind, was z.B. bei
-einem als erforderlich (required) deklarierten Eingabefeld beachtet werden muss,
-wenn der Benutzer die Eingabe zeichenweise l&ouml;scht. So bleibt in diesem
-konstruierten Beispiel das letzte Zeichen im zu synchronisierenden Ziel
-erhalten.
+    #validate) kombinierbar und beeinflusst das Synchronisieren der Daten so,
+dass die Synchronisation nur ausgef&uuml;hrt wird, wenn die Validierung explizit
+`true` zur&uuml;ckgibt. In allen anderen F&auml;llen wird der Wert nicht
+synchronisiert. Womit im zu synchronisierenden Ziel nach einer Benutzereingabe
+nur zul&auml;ssige Werte vorhanden sind, was z.B. bei einem als erforderlich
+(required) deklarierten Eingabefeld beachtet werden muss, wenn der Benutzer die
+Eingabe zeichenweise l&ouml;scht. So bleibt in diesem konstruierten Beispiel das
+letzte Zeichen im zu synchronisierenden Ziel erhalten.
 
 ```javascript
 const Model = {

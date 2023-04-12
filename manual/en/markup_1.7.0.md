@@ -579,45 +579,13 @@ the data objects trigger a partial update of the view.__
 ### strict
 
 The attribute can be combined with the attributes [composite](#composite) and
-[validate](#validate).
-
-In combination with the attribute [composite](#composite), it specifies that
-when loading the resources (JS, CSS, HTML) for a component, the filename is used
-in its original notation. The default behavior without the attribute [strict](
-    #strict) uses the composite id with a lowercase letter at the beginning.
-
-Example of standard behavior:
-```html
-<div id="SmallExample" composite>
-```
-```
-+ modules
-  - smallExample.css
-  - smallExample.js
-  - smallExample.html
-- index.html
-```
-
-Example with the attribute [strict](#strict):
-```html
-<div id="SmallExample" composite strict>
-```
-```
-+ modules
-  - SmallExample.css
-  - SmallExample.js
-  - SmallExample.html
-- index.html
-```
-
-The combination with the attribute [validate](#validate) affects the
-synchronization of the data in such a way that the synchronization is executed
-only if the validation explicitly returns `true`. In all other cases the value
-is not synchronized. Which means that only valid values are available in the
-target to be synchronized after a user input, which must be considered for an
-input field declared as required, for example, if the user deletes the input
-character by character. Thus, in this constructed example, the last character is
-kept in the target to be synchronized.
+[validate](#validate) and affects the synchronization of the data in such a way
+that the synchronization is executed only if the validation explicitly returns
+`true`. In all other cases the value is not synchronized. Which means that only
+valid values are available in the target to be synchronized after a user input,
+which must be considered for an input field declared as required, for example,
+if the user deletes the input character by character. Thus, in this constructed
+example, the last character is kept in the target to be synchronized.
 
 ```javascript
 const Model = {
