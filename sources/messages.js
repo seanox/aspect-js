@@ -54,7 +54,11 @@
  * The language is selected automatically on the basis of the language setting
  * of the browser. If the language set there is not supported, the language
  * declared as 'default' is used.
- * 
+ *
+ * If the locales contain a key more than once, the first one is used. Messages
+ * principally cannot be overwritten. What should be noted in the following
+ * description also for the modules.
+ *
  * After loading the application, Messages are available as an associative
  * array and can be used directly in JavaScript and Markup via Expression
  * Language.
@@ -73,8 +77,12 @@
  *
  * Both objects are only available if there are also labels.
  *
+ * Extension for modules: These can also provide locales/messages in the module
+ * directory, which are loaded in addition to the locales/messages from the data
+ * directory -- even at runtime. Again, existing keys cannot be overwritten.
+ *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230304
+ * @version 1.7.0 20230413
  */
 (() => {
 
@@ -83,7 +91,41 @@
     compliant("Messages");
     compliant(null, window.Messages = {});
 
+    const _datasource = [DataSource.data];
+
     const _localize = DataSource.localize;
+
+    const _load = (data) => {
+        const map = new Map();
+        const xpath = "/locales/" + DataSource.locale + "/label";
+        const result = data.evaluate(xpath, data, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+        for (let node = result.iterateNext(); node; node = result.iterateNext()) {
+            const key = (node.getAttribute("key") || "").trim();
+            if (!map.has(key)) {
+                const value = ((node.getAttribute("value") || "").trim()
+                    || (node.textContent || "").trim()).unescape();
+                map.set(key, value);
+            }
+        }
+        new Map([...map.entries()].sort()).forEach((value, key) => {
+            const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\w+)$/);
+            if (match) {
+                // In order for the object tree to branch from each level, each
+                // level must be an object. Therefore, an anonymous object is
+                // used for the level, which returns the actual text via
+                // Object.prototype.toString().
+                const namespace = "messages" + (match[1] ? "." + match[1] : "");
+                if (!Namespace.exists(namespace, match[2]))
+                    Object.defineProperty(Namespace.use(namespace), match[2], {
+                        value: {toString() {return value;}}
+                    });
+                if (!Namespace.exists("Messages", key))
+                    Object.defineProperty(Namespace.use("Messages"), key, {
+                        value
+                    });
+            }
+        });
+    };
 
     DataSource.localize = (locale) => {
 
@@ -101,29 +143,7 @@
             }
         }
 
-        const map = new Map();
-        const xpath = "/locales/" + DataSource.locale + "/label";
-        const result = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-        for (let node = result.iterateNext(); node; node = result.iterateNext())
-            map.set((node.getAttribute("key") || "").trim(),
-                ((node.getAttribute("value") || "").trim()
-                    || (node.textContent || "").trim()).unescape());
-        new Map([...map.entries()].sort()).forEach((value, key) => {
-            const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\w+)$/);
-            if (match) {
-                // In order for the object tree to branch from each level, each
-                // level must be an object. Therefore, an anonymous object is
-                // used for the level, which returns the actual text via
-                // Object.prototype.toString().
-                const namespace = "messages" + (match[1] ? "." + match[1] : "");
-                Object.defineProperty(Namespace.use(namespace), match[2], {
-                    value: {toString() {return value;}}
-                });
-                Object.defineProperty(Namespace.use("Messages"), key, {
-                    value
-                });
-            }
-        });
+        _datasource.forEach(data => _load(data));
     };
 
     // Messages are based on DataSources. To initialize, DataSource.localize()
@@ -133,4 +153,15 @@
             && DataSource.locales
             && DataSource.locales.includes(DataSource.locale))
         DataSource.localize(DataSource.locale);
+
+    Composite.listen(Composite.EVENT_MODUL_LOAD, (event, context, module) => {
+        const request = new XMLHttpRequest();
+        request.open("GET", Composite.MODULES + "/" + module + ".xml", false);
+        request.send();
+        if (request.status !== 200)
+            return;
+        const data = new DOMParser().parseFromString(request.responseText,"application/xml");
+        _datasource.push(data);
+        _load(data)
+   });
 })();

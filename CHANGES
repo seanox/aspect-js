@@ -9,6 +9,12 @@ CR: Composite: Omission of attributes strict in combination with composite
     The notation for the module files is now used 1:1.
 CR: Composite: Added EVENT_MODUL_LOAD when a module is loaded
     Is called once per module.
+CR: Messages: Change in case of multiple keys, the first one wins
+    Overwriting messages at runtime is generally not possible.
+CR: Messages: Added locales/messages for modules
+    Locales/messages are loaded with the module from the module directory.
+    Modules can extend messages but not change/overwrite them.
+    Locales/messages for modules are used as global locales/messages, no difference in use.
 
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup
