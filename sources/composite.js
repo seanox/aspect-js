@@ -2142,9 +2142,7 @@
             // or composite ID are invalid, but this should already run on error
             // before, so it is not done here -- otherwise this is a bug!
 
-            resource = resource.join(".");
-
-            const lookup = Object.lookup(resource);
+            const lookup = Object.lookup(resource.join("."));
 
             // If the module has already been loaded, it is only necessary to
             // check whether the markup must be inserted. CSS should already
@@ -2162,8 +2160,9 @@
                 return;
             }
 
+            resource = resource.join("/");
             if (_render_cache[context + ".composite"] === undefined)
-                Composite.fire(Composite.EVENT_MODUL_LOAD, context);
+                Composite.fire(Composite.EVENT_MODUL_LOAD, composite, resource);
             _render_cache[context + ".composite"] = null;
 
             // The sequence of loading is strictly defined: JS, CSS, HTML
