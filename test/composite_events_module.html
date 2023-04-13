@@ -22,12 +22,13 @@
         }});
 
         Test.create({test() {
-            Assert.assertEquals("/common,/nsX/a,/nsX/b", String(calls));
+            Assert.assertEquals(String(calls),
+                "common,common,[object HTMLDivElement],nsX/a,[object HTMLDivElement],nsX/b");
         }});
 
         const calls = [];
         Composite.listen(Composite.EVENT_MODUL_LOAD,
-            (event, module) => calls.push(module));
+            (event, context, module) => calls.push([context, module]));
     </script>
   </head>
   <body>
