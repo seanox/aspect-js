@@ -179,7 +179,7 @@
          * object or map with parameters for the XSLTProcessor can be passed.
          * When using the transformation, the return type changes to a
          * DocumentFragment.
-         * @param  locators  locator
+         * @param  locator   locator
          * @param  transform locator of the transformation style
          *     With the boolean true, the style is derived from the locator by
          *     using the file extension xslt.
