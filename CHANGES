@@ -7,7 +7,7 @@ CR: Composite: Omission of the attribute namespace
 CR: Composite: Omission of attributes strict in combination with composite
     The combination of the attribute strict was not practicable for namespaces.
     The notation for the module files is now used 1:1.
-CR: Composite: Added EVENT_MODUL_LOAD when a module is loaded
+CR: Composite: Added EVENT_MODULE_LOAD when a module is loaded
     Is called once per module.
 CR: Messages: Change in case of multiple keys, the first one wins
     Overwriting messages at runtime is generally not possible.
