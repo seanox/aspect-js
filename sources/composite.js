@@ -2149,55 +2149,58 @@
 
             const lookup = Object.lookup(resource.join("."));
 
+            // Is only required if the composite has no content and will not be
+            // filled with the attributes ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT.
+            const markup = composite instanceof Element
+                    && !composite.innerHTML.trim()
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT);
+
+            const style = composite instanceof Element
+                    && !composite.innerHTML.trim();
+
+            // Was the module already loaded?
+            const exists = _render_cache[context + ".composite"] !== undefined;
+
             // If the module has already been loaded, it is only necessary to
             // check whether the markup must be inserted. CSS should already
             // exist in the head and the JavaScript will only be executed once.
-            if (_render_cache[context + ".composite"] !== undefined) {
-                if (_render_cache[context + ".html"] !== undefined) {
-                    if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                            && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-                            && !composite.innerHTML.trim()) {
-                        _recursion_detection(composite);
-                        if (composite instanceof Element)
-                            composite.innerHTML = _render_cache[context + ".html"];
-                    }
-                }
+            if (exists && !markup)
                 return;
-            }
 
             resource = resource.join("/");
-            if (_render_cache[context + ".composite"] === undefined)
+
+            if (!exists) {
                 Composite.fire(Composite.EVENT_MODULE_LOAD, composite, resource);
-            _render_cache[context + ".composite"] = null;
+                _render_cache[context + ".composite"] = null;
 
-            // The sequence of loading is strictly defined: JS, CSS, HTML
+                // The sequence of loading is strictly defined: JS, CSS, HTML
 
-            // JavaScript is only loaded if no corresponding object exists for
-            // the composite id or the object is an element object
-            if (lookup === undefined
-                    || lookup instanceof Element
-                    || lookup instanceof HTMLCollection
-                    || resource === "common")
-                this.load(context + ".js");
+                // JavaScript is only loaded if no corresponding object exists
+                // for the composite id or the object is an element object
+                if (lookup === undefined
+                        || lookup instanceof Element
+                        || lookup instanceof HTMLCollection
+                        || resource === "common")
+                    this.load(context + ".js");
 
-            // CSS and HTML are loaded only if they are resources to an element
-            // and the element is empty, excludes CSS for common. Since CSS
-            // resources are loaded only once, common.css can be requested again
-            // later.
-            if (resource === "common")
-                this.load(context + ".css");
+                // CSS and HTML are loaded only if they are resources to an
+                // element and the element is empty, excludes CSS for common.
+                // Since CSS resources are loaded only once, common.css can be
+                // requested again later.
+                if (resource === "common")
+                    this.load(context + ".css");
 
-            // CSS and HTML/Markup is only loaded if it is a known composite
-            // object and the element does not contain a markup (inner HTML).
-            // For inserting HTML/markup ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT
-            // must not be set. It is assumed that an empty component/elements
-            // outsourced markup exists.
-            if (!object
-                    || composite.innerHTML.trim())
-                return;
-            this.load(context + ".css");
-            if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                    || object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT))
+                // CSS and HTML/Markup is only loaded if it is a known composite
+                // object and the element does not contain a markup (inner
+                // HTML). For inserting HTML/markup ATTRIBUTE_IMPORT and
+                // ATTRIBUTE_OUTPUT must not be set. It is assumed that an empty
+                // component/elements outsourced markup exists.
+                if (style)
+                    this.load(context + ".css");
+            }
+
+            if (!markup)
                 return;
             const content = this.load(context + ".html");
             if (content === undefined)
