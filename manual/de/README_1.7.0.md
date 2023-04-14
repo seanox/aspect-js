@@ -195,6 +195,8 @@
     * [Composite.EVENT_MOUNT_END](events.md#compositeevent_mount_end)
   * [Module](events.md#module)
     * [Composite.EVENT_MODULE_LOAD](events.md#compositeevent_module_load)
+    * [Composite.EVENT_MODULE_DOCK](events.md#compositeevent_module_dock)
+    * [Composite.EVENT_MODULE_UNDOCK](events.md#compositeevent_module_undock)
   * [HTTP](events.md#http)
     * [Composite.EVENT_HTTP_START](events.md#compositeevent_http_start)
     * [Composite.EVENT_HTTP_PROGRESS](events.md#compositeevent_http_progress)

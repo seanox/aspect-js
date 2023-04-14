@@ -21,6 +21,8 @@ Laufzeitumgebung genutzt werden k&ouml;nnen.
   * [Composite.EVENT_MOUNT_END](#compositeevent_mount_end)
 * [Modules](#modules)
   * [Composite.EVENT_MODULE_LOAD](#compositeevent_module_load)
+  * [Composite.EVENT_MODULE_DOCK](#compositeevent_module_dock)
+  * [Composite.EVENT_MODULE_UNDOCK](#compositeevent_module_undock)
 * [HTTP](#http)
   * [Composite.EVENT_HTTP_START](#compositeevent_http_start)
   * [Composite.EVENT_HTTP_PROGRESS](#compositeevent_http_progress)
@@ -103,7 +105,13 @@ Verarbeitung selbst endet vor dem Ereignis.
 # Module
 
 Die nachfolgenden Ereignisse treten w&auml;hrend der Verwendung von Modulen auf.
-Der Callback-Methode werden dazu der Ausl&ouml;ser und das ermittelte Modul
+
+
+## Composite.EVENT_MODULE_LOAD
+
+Tritt auf, wenn ein Modul initial geladen wird. Wird ein Modul zur Laufzeit
+mehrfach geladen und entladen, wird dieses Ereignis nur einmalig auftreten. Der
+Callback-Methode werden der Ausl&ouml;ser und das ermittelte Modul
 &uuml;bergeben. Auslöser k&ouml;nnen HTML-Elemente sein, wenn Module &uuml;ber
 das Markup angesprochen werden, oder es k&ouml;nnen Strings sein, wenn Module im
 JavaScript programmatisch angesprochen werden.
@@ -115,10 +123,30 @@ Composite.listen(Composite.EVENT_MODULE_***, function(event, context, module) {
 ```
 
 
-## Composite.EVENT_MODULE_LOAD
+## EVENT_MODULE_DOCK
 
-Tritt auf, wenn ein Modul initial geladen wird. Wird ein Modul zur Laufzeit
-mehrfach geladen und entladen, wird dieses Ereignis nur einmalig auftreten. 
+Tritt auf, nachdem das Markup eines Moduls dem DOM hinzugef&uuml;gt und die
+dock-Methode ausgef&uuml;hrt wurde. Der Callback-Methode werden dabei das
+Ereignis und ein Meta-Objekt mit Informationen zum Modul &uuml;bergeben.
+
+```javascript
+Composite.listen(Composite.EVENT_MODULE_DOCK, function(event, meta) {
+    ...
+});
+```
+
+
+## EVENT_MODULE_UNDOCK
+
+Tritt auf, nachdem das Markup eines Moduls aus dem DOM entfernt und die
+undock-Methode ausgef&uuml;hrt wurde. Der Callback-Methode werden dabei das
+Ereignis und ein Meta-Objekt mit Informationen zum Modul &uuml;bergeben.
+
+```javascript
+Composite.listen(Composite.EVENT_MODULE_UNDOCK, function(event, context, module) {
+    ...
+});
+```
 
 
 # HTTP
