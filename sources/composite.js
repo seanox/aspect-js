@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230412
+ * @version 1.7.0 20230414
  */
 (() => {
 
@@ -280,7 +280,9 @@
         get EVENT_MOUNT_END() {return "MountEnd";},
 
         /** Constants of events when using modules */
-        get EVENT_MODUL_LOAD() {return "ModulLoad";},
+        get EVENT_MODULE_LOAD() {return "ModuleLoad";},
+        get EVENT_MODULE_DOCK() {return "ModuleDock";},
+        get EVENT_MODULE_UNDOCK() {return "ModuleUndock";},
 
         /** Constants of events when using HTTP */
         get EVENT_HTTP_START() {return "HttpStart";},
@@ -1660,8 +1662,11 @@
                     if (!_models.has(model)) {
                         _models.add(model);
                         model = Object.lookup(model);
-                        if (model && typeof model.dock === "function")
+                        if (model && typeof model.dock === "function") {
                             model.dock.call(model);
+                            const meta = _mount_lookup(selector);
+                            Composite.fire(Composite.EVENT_MODULE_DOCK, meta);
+                        }
                     }
                 }
 
@@ -2162,7 +2167,7 @@
 
             resource = resource.join("/");
             if (_render_cache[context + ".composite"] === undefined)
-                Composite.fire(Composite.EVENT_MODUL_LOAD, composite, resource);
+                Composite.fire(Composite.EVENT_MODULE_LOAD, composite, resource);
             _render_cache[context + ".composite"] = null;
 
             // The sequence of loading is strictly defined: JS, CSS, HTML
@@ -2730,8 +2735,10 @@
                                 if (meta && meta.meta && meta.meta.model && meta.model
                                         && _models.has(meta.meta.model)) {
                                     _models.delete(meta.meta.model);
-                                    if (typeof meta.model.undock === "function")
+                                    if (typeof meta.model.undock === "function") {
                                         meta.model.undock.call(meta.model);
+                                        Composite.fire(Composite.EVENT_MODULE_UNDOCK, meta);
+                                    }
                                 }
                             }
                             
