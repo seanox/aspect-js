@@ -1655,10 +1655,7 @@
                 if (selector instanceof Element
                         && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                     const locate = _mount_locate(selector);
-                    if (!locate.namespace)
-                        locate.namespace = [];
-                    locate.namespace.push(locate.model);
-                    let model = locate.namespace.join(".");
+                    let model = (locate.namespace || []).concat(locate.model).join(".");
                     if (!_models.has(model)) {
                         _models.add(model);
                         model = Object.lookup(model);
@@ -2735,12 +2732,14 @@
                             const object = _render_meta[serial];
                             if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                                 const meta = _mount_lookup(node);
-                                if (meta && meta.meta && meta.meta.model && meta.model
-                                        && _models.has(meta.meta.model)) {
-                                    _models.delete(meta.meta.model);
-                                    if (typeof meta.model.undock === "function") {
-                                        meta.model.undock.call(meta.model);
-                                        Composite.fire(Composite.EVENT_MODULE_UNDOCK, meta);
+                                if (meta && meta.meta && meta.meta.model && meta.model) {
+                                    const model = (meta.meta.namespace || []).concat(meta.meta.model).join(".");
+                                    if (_models.has(model)) {
+                                        _models.delete(meta.meta.model);
+                                        if (typeof meta.model.undock === "function") {
+                                            meta.model.undock.call(meta.model);
+                                            Composite.fire(Composite.EVENT_MODULE_UNDOCK, meta);
+                                        }
                                     }
                                 }
                             }
