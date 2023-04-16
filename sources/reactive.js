@@ -47,7 +47,7 @@
  * associated proxies when not in use.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.7.0 20230416
  */
 (() => {
 
@@ -148,7 +148,10 @@
                     // Proxies are only used for objects, other data types are
                     // returned directly.
                     if (typeof value !== "object"
-                            || value === null)
+                            || value === null
+                            || value instanceof Node
+                            || value instanceof NodeList
+                            || value instanceof HTMLCollection)
                         return value;
 
                     // Proxy remains proxy

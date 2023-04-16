@@ -3,6 +3,7 @@ BF: Composite: Correction from mounting (dock/undock) composites with namespace
 BF: Composite: Correction when inserting markup into composites
     If the markup for a composite was removed from the DOM,
     content was not inserted when the composite was reinserted into the DOM.
+BF: Reactive: Correction of incorrect creation of proxies for HTML elements
 CR: Composite: Omission of the attribute namespace
     Replaced by extended composite ID name@namespace (separated by colon).
     e.g. model@a:b:c -> ./modules/a/b/c/model.js -> a.b.c.model
