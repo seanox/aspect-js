@@ -3,6 +3,9 @@ BF: Composite: Correction from mounting (dock/undock) composites with namespace
 BF: Composite: Correction when inserting markup into composites
     If the markup for a composite was removed from the DOM,
     content was not inserted when the composite was reinserted into the DOM.
+BF: Composite: Correction when loading CSS modules
+    If a module is first requested programmatically by name, the CSS was not
+    loaded when the module was later loaded as an element.
 BF: Reactive: Correction of incorrect creation of proxies for HTML elements
 CR: Composite: Omission of the attribute namespace
     Replaced by extended composite ID name@namespace (separated by colon).
@@ -18,8 +21,8 @@ CR: Messages: Change in case of multiple keys, the first one wins
     Overwriting messages at runtime is generally not possible.
 CR: Messages: Added locales/messages for modules
     Locales/messages are loaded with the module from the module directory.
-    Modules can extend messages but not change/overwrite them.
-    Locales/messages for modules are used as global locales/messages, no difference in use.
+    Modules can extend messages but not change/overwrite them. Locales/messages
+    for modules are used as global locales/messages, no difference in use.
 
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup
