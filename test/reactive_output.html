@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="scripts/capture.js"></script>
+    <script type="text/javascript">
+        Test.activate();
+
+        const capture = new Capture();
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            capture.snap();
+            const count = capture.patterns().length;
+            if (capture.size() === count)
+                Test.start();
+            if (capture.size() > count)
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
+        });
+
+        Test.create({test() {
+            capture.validate();
+        }});
+
+        const model = Reactive({
+            get markup() {
+                const markup = "<table><tr><td>A</td><td>B</td></tr></table>";
+                const template = document.createElement("template");
+                template.innerHTML = markup;
+                return template.content.firstChild;
+            }
+        });
+    </script>
+    <script type="text/test">
+      AB
+    </script>
+  </head>
+  <body>
+    <div output="{{model.markup}}"></div>
+  </body>
+</html>

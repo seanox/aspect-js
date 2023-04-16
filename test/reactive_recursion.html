@@ -19,7 +19,6 @@
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             capture.snap();
             const count = capture.patterns().length;
-            console.log(capture.size())
             if (capture.size() === 1)
                 window.setTimeout(() =>  {
                     model.list[1].text = "D";
