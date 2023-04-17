@@ -123,6 +123,7 @@
       z2: b_
       z3: c
       z4: d
+      H
     </script>
     <script type="text/test">
       A1AA
@@ -190,6 +191,7 @@
       z2: b___
       z3: c
       z4: d
+      H
     </script>
     <script type="text/test">
       A1AA
@@ -256,6 +258,7 @@
       z2: b_____
       z3: c
       z4: d
+      H
     </script>
   </head>
   <body>
@@ -315,5 +318,11 @@
     z3: {{z3}}
     {{z4:z4+'_'}}
     z4: {{z4}}
+
+    <!--
+      after removing from the DOM, the markup must also be reloaded when
+      inserting again
+    -->
+    <div id="moduleH" composite condition="{{Model.onE}}"></div>
   </body>
 </html>
