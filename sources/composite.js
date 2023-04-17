@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230416
+ * @version 1.7.0 20230417
  */
 (() => {
 
@@ -1771,9 +1771,8 @@
                     } else if (value instanceof Node)
                         selector.appendChild(value.cloneNode(true), true);
                     else if (value instanceof NodeList)
-                        Array.from(value).forEach(function(node, index) {
-                            selector.appendChild(node.cloneNode(true), index === 0);
-                        });
+                        Array.from(value).forEach((node, index) =>
+                            selector.appendChild(node.cloneNode(true), index === 0));
                     else selector.innerHTML = String(value);
                 }
 
