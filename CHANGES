@@ -23,6 +23,9 @@ CR: Messages: Added locales/messages for modules
     Locales/messages are loaded with the module from the module directory.
     Modules can extend messages but not change/overwrite them. Locales/messages
     for modules are used as global locales/messages, no difference in use.
+CR: Datasource: Optimization of language selection
+    Alternatively, the languages of the browser without tags are considered.
+    RFC5646: lang-tag-tag-... -> lang
 
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup

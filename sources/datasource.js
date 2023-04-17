@@ -40,7 +40,7 @@
  * aggregated and the result can be transformed with XSLT. 
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.7.0 20230417
  */
 (() => {
 
@@ -359,9 +359,9 @@
         throw new Error("Locale not available");
 
     locale.push(DataSource.locales[0]);
-    locale = locale.filter(function(locale) {
-        return DataSource.locales.includes(locale);
-    });  
+    locale = locale.filter((locale) =>
+        DataSource.locales.includes(locale)
+            || DataSource.locales.includes(locale.replace(/-.*$/, "")));
     
     DataSource.locales.selection = locale.length ? locale[0] : DataSource.locales[0];
 })();
