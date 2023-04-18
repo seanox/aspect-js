@@ -307,21 +307,16 @@
         value: [], enumerable: true
     });    
     
-    let locale = [];
-    locale = locale.concat(navigator.language);
-    if (navigator.languages !== undefined)
-        locale = locale.concat(navigator.languages);
-    Array.from(locale).forEach((language) => {
-        language = language.match(/^[a-z]+/i, "");
-        if (language && !locale.includes(language[0]))
-            locale.push(language[0]);
+    let locales = [];
+    [navigator.language].concat(navigator.languages || []).forEach(language => {
+        language = language.toLowerCase().trim();
+        locales.push(language);
+        language = language.replace(/-.*$/, "");
+        if (!locales.includes(language))
+            locales.push(language);
     });
-    locale = locale.map((language) =>
-        language.trim().toLowerCase());
-    locale = locale.filter((item, index) =>
-        locale.indexOf(item) === index);
 
-    if (locale.length <= 0)
+    if (locales.length <= 0)
         throw new Error("Locale not available");
     
     const request = new XMLHttpRequest();
@@ -358,10 +353,9 @@
     if (DataSource.locales.length <= 0)
         throw new Error("Locale not available");
 
-    locale.push(DataSource.locales[0]);
-    locale = locale.filter((locale) =>
-        DataSource.locales.includes(locale)
-            || DataSource.locales.includes(locale.replace(/-.*$/, "")));
+    locales.push(DataSource.locales[0]);
+    locales = locales.filter((locale) =>
+        DataSource.locales.includes(locale));
     
-    DataSource.locales.selection = locale.length ? locale[0] : DataSource.locales[0];
+    DataSource.locales.selection = locales.length ? locales[0] : DataSource.locales[0];
 })();
