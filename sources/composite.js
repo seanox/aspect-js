@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230417
+ * @version 1.7.0 20230422
  */
 (() => {
 
@@ -2577,6 +2577,42 @@
         // can/should be stored here.
         Composite.include("common");
 
+        const _cleanup = (node) => {
+            // Clean up all the child elements first.
+            if (node.childNodes)
+                Array.from(node.childNodes).forEach((node) =>
+                    _cleanup(node));
+
+            // Composites and models must be undocked when they are removed from
+            // the DOM independent of whether a condition exists. For composites
+            // with condition, it must be noted that the composite is initially
+            // replaced by a marker. During replacement, the initial composite
+            // is removed, which can cause an unwanted undocking. The logic is
+            // based on the assumption that each composite has a meta-object.
+            // When replacing a composite, the corresponding meta-object is also
+            // deleted, so that the MutationObserver detects the composite to be
+            // removed in the DOM, but undocking is not performed without the
+            // matching meta-object.
+
+            const serial = node.ordinal();
+            const object = _render_meta[serial];
+            if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                const meta = _mount_lookup(node);
+                if (meta && meta.meta && meta.meta.model && meta.model) {
+                    const model = (meta.meta.namespace || []).concat(meta.meta.model).join(".");
+                    if (_models.has(model)) {
+                        _models.delete(model);
+                        if (typeof meta.model.undock === "function") {
+                            meta.model.undock.call(meta.model);
+                            Composite.fire(Composite.EVENT_MODULE_UNDOCK, meta);
+                        }
+                    }
+                }
+            }
+
+            delete _render_meta[node.ordinal()];
+        };
+
         (new MutationObserver((records) => {
             records.forEach((record) => {
 
@@ -2677,63 +2713,18 @@
                 // are then replaced by a marker in the case of a condition. The
                 // MutationObserver does not run parallel, so it is called after
                 // the rendering with obsolete nodes.
-                if (record.addedNodes) {
-                    record.addedNodes.forEach((node) => {
-                        if ((node instanceof Element
-                                || (node instanceof Node
-                                        && node.nodeType === Node.TEXT_NODE))
-                                && !_render_meta[node.ordinal()]
-                                && document.body.contains(node))
-                            Composite.render(node);
-                    });
-                }
-                
+                (record.addedNodes || []).forEach((node) => {
+                    if ((node instanceof Element
+                            || (node instanceof Node
+                                    && node.nodeType === Node.TEXT_NODE))
+                            && !_render_meta[node.ordinal()]
+                            && document.body.contains(node))
+                        Composite.render(node);
+                });
+
                 // All removed elements are cleaned and if necessary the undock
                 // method is called if a view model binding exists.
-                if (record.removedNodes) {
-                    record.removedNodes.forEach((node) => {
-                        const cleanup = (node) => {
-                            // Clean up all the child elements first.
-                            if (node.childNodes) {
-                                Array.from(node.childNodes).forEach((node) =>
-                                    cleanup(node));
-                            }
-                            
-                            // Composites/models must be undocked when they are
-                            // removed from the DOM independent of whether a
-                            // condition exists. For composites with condition,
-                            // it must be noted that the composite is initially
-                            // replaced by a marker. During replacement, the
-                            // initial composite is removed, which can cause an
-                            // unwanted undocking. Therefore, the logic is based
-                            // on the assumption that each composite has a
-                            // meta-object. When replacing the original
-                            // composite, the corresponding meta-object is also
-                            // deleted, so that the MutationObserver detects the
-                            // composite to be removed in the DOM, but undocking
-                            // is not performed without the matching meta-object.
-
-                            const serial = node.ordinal();
-                            const object = _render_meta[serial];
-                            if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-                                const meta = _mount_lookup(node);
-                                if (meta && meta.meta && meta.meta.model && meta.model) {
-                                    const model = (meta.meta.namespace || []).concat(meta.meta.model).join(".");
-                                    if (_models.has(model)) {
-                                        _models.delete(model);
-                                        if (typeof meta.model.undock === "function") {
-                                            meta.model.undock.call(meta.model);
-                                            Composite.fire(Composite.EVENT_MODULE_UNDOCK, meta);
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            delete _render_meta[node.ordinal()];
-                        };
-                        cleanup(node);
-                    });
-                }                
+                (record.removedNodes || []).forEach((node) => _cleanup(node));
             });
         })).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
 
