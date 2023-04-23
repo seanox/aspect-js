@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230326
+ * @version 1.7.0 20230423
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
@@ -324,16 +324,18 @@ window.compliant = (context, payload) => {
     Element.prototype.appendChild = function(node, exclusive) {
         if (exclusive)
             this.innerHTML = "";
-        if (node instanceof Node) {
-            _appendChild.call(this, node);
-        } else if (Array.isArray(node)
+        if (node instanceof Node)
+            return _appendChild.call(this, node);
+        if (Array.isArray(node)
                 || node instanceof NodeList
                 || (Symbol && Symbol.iterator
                         && node && typeof node[Symbol.iterator])) {
             node = Array.from(node);
             for (let loop = 0; loop < node.length; loop++)
                 _appendChild.call(this, node[loop]);
-        } else _appendChild.call(this, node);
+            return node;
+        }
+        return _appendChild.call(this, node);
    };
 })();
 
