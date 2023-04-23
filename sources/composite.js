@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230422
+ * @version 1.7.0 20230423
  */
 (() => {
 
@@ -1809,7 +1809,12 @@
                 // 2. A global variable is required for the iteration. If this
                 //    variable already exists, the existing variable is saved
                 //    and restored at the end of the iteration.
-                // 3. Variable with meta information about the iteration is used
+                // 3. The variable with the partial meta object is added at th
+                //    beginning of each iteration block as a value expression,
+                //    so that no problems with the temporary variable occur
+                //    later during partial rendering. This way the block keeps th
+                //    meta information it is built on.
+                // 4. Variable with meta information about the iteration is used
                 //    within the iteration:
                 //    e.g iterate={{tempA:Model.list}}
                 //            -> tempA = {item, index, data}
@@ -1820,59 +1825,71 @@
                         const match = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                         if (!match)
                             throw new Error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
-                        object.iterate = {name:match[1].trim(), expression:"{{" + match[2].trim() + "}}"};
+                        object.iterate = {name:match[1].trim(), expression:"{{" + match[2].trim() + "}}", items:[]};
                         object.template = selector.cloneNode(true);
+                        selector.innerHTML = "";
                     }
 
                     // A temporary global variable is required for the
                     // iteration. If this variable already exists, the existing
                     // is cached and restored at the end of the iteration.
-                    const variable = window[object.iterate.name];
-                    try {
-                        selector.innerHTML = "";
-                        const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
-                        let iterate = Expression.eval(context, object.iterate.expression);
-                        if (iterate) {
-                            if (iterate instanceof XPathResult) {
-                                const meta = {entry: null, array: [], iterate};
-                                while (meta.entry = meta.iterate.iterateNext())
-                                    meta.array.push(meta.entry);
-                                iterate = meta.array;
-                            } else iterate = Array.from(iterate);
+
+                    const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
+                    let iterate = Expression.eval(context, object.iterate.expression);
+                    if (iterate) {
+                        delete object.iterate.variable;
+                        if (eval("typeof " + object.iterate.name + " !== \"undefined\""))
+                            object.iterate.variable = eval(object.iterate.name);
+                        if (iterate instanceof XPathResult) {
+                            const meta = {entry: null, array: [], iterate};
+                            while (meta.entry = meta.iterate.iterateNext())
+                                meta.array.push(meta.entry);
+                            iterate = meta.array;
+                        } else iterate = Array.from(iterate);
+
+                        object.iterate.update = object.iterate.items.length !== iterate.length;
+                        if (object.iterate.update) {
+                            selector.innerHTML = "";
+                            object.iterate.items = Array.from(iterate);
                             iterate.forEach((item, index, array) => {
                                 const meta = {};
                                 Object.defineProperty(meta, "item", {
-                                    value: item,
-                                    enumerable: true
+                                    enumerable:true, value:item
                                 });
                                 Object.defineProperty(meta, "index", {
-                                    value: index,
-                                    enumerable: true
+                                    enumerable:true, value:index
                                 });
                                 Object.defineProperty(meta, "data", {
-                                    value: array,
-                                    enumerable: true
+                                    enumerable:true, value:array
                                 });
-                                window[object.iterate.name] = meta;
+                                object.iterate.items[index] = meta
+                                const data = "{{___(\"" + object.iterate.name + "\", " + serial + ", " + index + ")}}";
+                                const node = document.createTextNode(data);
+                                selector.appendChild(node);
+                                Composite.render(node, lock.share());
                                 // For whatever reason, if forEach is used on
                                 // the NodeList, each time it is appended to the
-                                // DOM, the elements are removed from the
+                                // DOM the elements are removed from the
                                 // NodeList piece by piece.
                                 Array.from(object.template.cloneNode(true).childNodes).forEach(node => {
                                     selector.appendChild(node);
                                     Composite.render(node, lock.share());
                                 });
                             });
+                            // The expression to reset the temporary variable is
+                            // created and inserted at the end of the iteration,
+                            // which resets the variable to the previous value.
+                            // This resets the variable to the previous value
+                            // and thus simulates the effect of own scopes.
+                            const data = "{{___(\"" + object.iterate.name + "\", " + serial + ")}}";
+                            const node = document.createTextNode(data);
+                            selector.appendChild(node);
+                            Composite.render(node, lock.share());
                         }
-                    } finally {
-                        // If necessary, restore the temporary variable.
-                        delete window[object.iterate.name];
-                        if (variable !== undefined)
-                            window[object.iterate.name] = variable;
                     }
-                    // The content is finally rendered, the enclosing
-                    // container element itself, or more precisely the
-                    // attributes, still needs to be updated.
+                    // The content is finally rendered, the enclosing container
+                    // element itself, or more precisely the attributes, still
+                    // needs to be updated.
                 }
                 
                 // EXPRESSION: The expression in the attributes is interpreted.
@@ -1964,7 +1981,8 @@
                 // This is intercepted by the MutationObserver.
                 if (selector.childNodes
                         && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                        && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))) {
+                        && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)
+                                && object.iterate.update)) {
                     Array.from(selector.childNodes).forEach((node) => {
                         // The rendering is recursive, if necessary the node is
                         // then no longer available. For example, if a condition
@@ -2242,6 +2260,23 @@
      * All docked models are included in the set.
      */
     const _models = new Set();
+
+    // Internal method for controlling temporary variables for expression
+    // rendering, such as for ATTRIBUTE_ITERATE. The goal is for the method to
+    // simulate a separate scope for temporary variables. For this purpose,
+    // global variables are created as expressions and removed again at the end
+    // of the scope or reset to a possible previously existing value.
+    compliant("___");
+    compliant(null, ___ = (variable, serial, index) => {
+        let object = _render_meta[serial];
+        if (object && object.iterate) {
+            if (index === undefined) {
+                if ("variable" in object.iterate)
+                    eval(variable + " = object.iterate.variable");
+                else eval("delete " + variable);
+            } else eval(variable + " = object.iterate.items[" + index + "]");
+        }
+    });
 
     const _recursion_detection = (element) => {
         const id = (element instanceof Element ? element.id || "" : "").trim();
@@ -2610,6 +2645,8 @@
                 }
             }
 
+            // meta object assigned to the element must be deleted, because it
+            // is an indicator for existence and presence of composites/models
             delete _render_meta[node.ordinal()];
         };
 
@@ -2724,7 +2761,8 @@
 
                 // All removed elements are cleaned and if necessary the undock
                 // method is called if a view model binding exists.
-                (record.removedNodes || []).forEach((node) => _cleanup(node));
+                (record.removedNodes || []).forEach((node) =>
+                    _cleanup(node));
             });
         })).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
 
