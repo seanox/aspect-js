@@ -33,7 +33,7 @@
  * expression language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230330
+ * @version 1.7.0 20230423
  */
 (() => {
 
@@ -75,7 +75,7 @@
             try {return Scripting.run(script);
             } catch (error) {
                 console.error(error.message + "\n\t" + script);
-                return error.message + " in " + script;
+                return new Error(error.message + " in " + script);
             }
         }
     });

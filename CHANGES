@@ -29,6 +29,8 @@ CR: Messages: Added locales/messages for modules
 CR: Datasource: Optimization of language selection
     Alternatively, the languages of the browser without tags are considered.
     RFC 5646: lang-tag-tag-... -> lang
+CR: Expression: Optimization of the return of errors
+    Errors are returned as error objects instead of text.
 
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup
