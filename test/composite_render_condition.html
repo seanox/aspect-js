@@ -124,6 +124,7 @@
       z3: c
       z4: d
       H
+      Error: expected expression, got end of script in Model.onE(
     </script>
     <script type="text/test">
       A1AA
@@ -155,6 +156,7 @@
       z2: b__
       z3: c
       z4: d
+      Error: expected expression, got end of script in Model.onE(
     </script>
     <script type="text/test">
       A1AA
@@ -192,6 +194,7 @@
       z3: c
       z4: d
       H
+      Error: expected expression, got end of script in Model.onE(
     </script>
     <script type="text/test">
       A1AA
@@ -223,6 +226,7 @@
       z2: b____
       z3: c
       z4: d
+      Error: expected expression, got end of script in Model.onE(
     </script>
     <script type="text/test">
       A1AA
@@ -259,6 +263,7 @@
       z3: c
       z4: d
       H
+      Error: expected expression, got end of script in Model.onE(
     </script>
   </head>
   <body>
@@ -324,5 +329,7 @@
       inserting again
     -->
     <div id="moduleH" composite condition="{{Model.onE}}"></div>
+
+    <div condition="{{Model.onE(}}"></div>
   </body>
 </html>
