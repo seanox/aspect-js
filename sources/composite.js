@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230423
+ * @version 1.7.0 20230424
  */
 (() => {
 
@@ -1440,7 +1440,9 @@
                     // The condition must be explicitly true, otherwise the
                     // output is removed from the DOM and the rendering ends.
                     // The cleanup will be done by the MutationObserver.
-                    if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition.expression) !== true) {
+                    const expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition.expression);
+                    selector.nodeValue = expression instanceof Error ? expression : "";
+                    if (expression !== true) {
                         // Because a condition can consist of two elements
                         // (marker and conditional element), it can happen that
                         // when rendering a NodeList, the marker is hit first,
@@ -1836,6 +1838,8 @@
 
                     const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
                     let iterate = Expression.eval(context, object.iterate.expression);
+                    if (iterate instanceof Error)
+                        throw iterate;
                     if (iterate) {
                         delete object.iterate.variable;
                         if (eval("typeof " + object.iterate.name + " !== \"undefined\""))

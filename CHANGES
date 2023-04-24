@@ -20,6 +20,8 @@ CR: Composite: Added EVENT_MODULE_DOCK/EVENT_MODULE_UNDOCK
 CR: Composite Render Iterate: Optimization for updating markup
     If the array does not change in length, the existing markup is only updated
     without replacing it completely.
+CR: Composite Render Iterate: Optimization of the error output in the view
+CR: Composite Render Condition: Optimization of the error output in the view
 CR: Messages: Change in case of multiple keys, the first one wins
     Overwriting messages at runtime is generally not possible.
 CR: Messages: Added locales/messages for modules
