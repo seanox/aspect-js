@@ -103,11 +103,11 @@ objectA.value === objectB.value
 ```
 
 Von einer bestehenden Reactive-Instanz kann keine neue Reactive-Instanz
-erstellt werden. `ReactProxy.prototype.reactive()` wird immer eine Referenz
-auf sich selbst zur&uuml;ckgeben. Etwas anders verh&auml;lt es sich, wenn einer
-bestehenden ReactProxy-Instanz ein anderes ReactProxy-Objekt als Wert
-hinzugef&uuml;gt wird. Dann wird auf Basis vom urspr&uuml;nglichen Objekt, das
-als ReactProxy-Objekt hinzugef&uuml;gt werden soll, eine neue ReactProxy-Instanz
+erstellt werden. `Object.prototype.reactive()` und `Reactive(...)` werden immer
+eine Referenz auf sich selbst zur&uuml;ckgeben. Etwas anders verh&auml;lt es
+sich, wenn einer bestehenden Reactive-Instanz ein anderes Reactive-Objekt als
+Wert hinzugef&uuml;gt wird. Dann wird auf Basis vom urspr&uuml;nglichen Objekt,
+das als Reactive-Objekt hinzugef&uuml;gt werden soll, eine neue Reactive-Instanz
 erstellt.
 
 ```javascript
@@ -133,15 +133,21 @@ objectC.objectB === objectB
 
 __Missverst&auml;ndnisse vorbeugen__
 
-Der ReactProxy selbst hat keinen direkten Einfluss auf die View, sondern fordert
-den Renderer auf, einzelne konsumierende HTML-Elemente zu aktualisieren, was
+Reactive hat selbst keinen direkten Einfluss auf die View, sondern fordert den
+Renderer auf, einzelne konsumierende HTML-Elemente zu aktualisieren, was
 besonders dann beachtet werden muss, wenn Ausdr&uuml;cke tempor&auml;re
-Variablen nutzen, wie sie z.B. beim Attribut `iterate` verwendet werden.
+Variablen nutzen, wie sie z.B. beim Attribut `iterate` verwendet werden, was
+bereits automatisch ber&uuml;cksichtigt wird.
 
-HTML-Elemente mit dem Attribut`iterate` werden automatisch ber&uuml;cksichtigt
-und so wird in diesem Fall immer das oberste HTML-Element mit dem Attribut
-`iterate` aktualisiert, damit die tempor&auml;ren Variablen in allen
-Ausdr&uuml;cken verf&uuml;gbar sind.
+Eine weitere Besonderheit betrifft die Nutzung vom Proxy-Objekt. Zur logischen
+Trennung von Datenobjekten und View nutzt Reactive selbst Proxies, damit die
+Datenobjekte nicht mit den Mechanismen für die View angereichert werden
+m&uuml;ssen. Bei der Zuweisung von Objekten, zu einem mit Reactive verwendeten
+Datenobjekt, werden immer die zugrundeliegenden Objekte verwendet. Das
+sp&auml;tere Hinzuf&uuml;gen von Proxies auf bestehende Objektebenen hat daher
+keinen Effekt. Um Proxies nutzen zu k&ouml;nnen, m&uuml;ssen diese vor der
+Verwendung von Reactive eingerichtet werden.
+
 
 
 - - -

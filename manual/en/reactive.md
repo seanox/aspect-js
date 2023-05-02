@@ -98,10 +98,10 @@ objectA.value === objectB.value
 ```
 
 From an existing Reactive instance no new Reactive instance can be created.
-`ReactProxy.prototype.reactive()` will always return a reference to itself. It
-is slightly different when another ReactProxy object is added as a value to an
-existing ReactProxy instance. Then a new ReactProxy instance is created based on
-the original object to be added as ReactProxy object.
+`Object.prototype.reactive()` and `Reactive(...)` always return a reference to
+themselves. It is slightly different when another Reactive object is added as a
+value to an existing Reactive instance. Then a new Reactive instance is created
+based on the original object to be added as Reactive object.
 
 ```javascript
 const objectA = ({}).reactive();
@@ -126,14 +126,18 @@ objectC.objectB === objectB
 
 __Prevent misunderstandings__
 
-The ReactProxy itself has no direct influence on the view, instead it requests
-the renderer to update specific consuming HTML elements, which is especially
-important to note when expressions use temporary variables, such as those used
-with the attribute `iterate`.
+Reactive itself has no direct influence on the view, but prompts the renderer to
+update individual consuming HTML elements, which must be taken into account
+especially when expressions use temporary variables, such as those used in the
+attribute `iterate`, which is already taken into account automatically.
 
-HTML elements with the attribute `iterate` are automatically considered and so
-in this case the HTML element at the top with the attribute `iterate` is always
-updated so that the temporary variables are available in all expressions.
+Another particularity concerns the use of the proxy object. For the logical
+separation of data objects and view, Reactive itself uses proxies, so that the
+data objects do not have to be enriched with the mechanisms for the view. When
+assigning objects, to a data object used with Reactive, the underlying objects
+are always used. Therefore, adding proxies to existing object layers later has
+no effect. In order to use proxies, they must be set up before using Reactive.
+
 
 
 - - -
