@@ -84,7 +84,8 @@ objectF.text === "C"
 
 __Reactive is a substitute for another object and controls access to the
 original object. Even though Reactive and the object are independent instances,
-Reactive is tightly bound to the original object and yet decoupled.__
+Reactive is tightly bound to the original object but decoupled and thus
+logically separated.__
 
 ```javascript
 const objectA = {};
@@ -134,9 +135,9 @@ attribute `iterate`, which is already taken into account automatically.
 Another particularity concerns the use of the proxy object. For the logical
 separation of data objects and view, Reactive itself uses proxies, so that the
 data objects do not have to be enriched with the mechanisms for the view. When
-assigning objects, to a data object used with Reactive, the underlying objects
-are always used. Therefore, adding proxies to existing object layers later has
-no effect. In order to use proxies, they must be set up before using Reactive.
+assigning objects, to a data object used with Reactive, the original objects are
+always used. Therefore, adding proxies to existing object layers later has no
+effect. In order to use proxies, they must be set up before using Reactive.
 
 
 

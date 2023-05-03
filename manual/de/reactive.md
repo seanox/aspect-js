@@ -87,9 +87,9 @@ objectF.text === "C"
 ```
 
 __Reactive ist ein Stellvertreter (Substitute) f&uuml;r ein anderes Objekt und
-kontrolliert den Zugriff auf das urspr&uuml;ngliche Objekt. Auch wenn Reactive
-und das Objekt eigenst&auml;ndige Instanzen sind, ist Reactive fest an das
-urspr&uuml;ngliche Objekt gebunden und dennoch entkoppelt.__
+kontrolliert den Zugriff auf das zugrundeliegende Objekt. Auch wenn Reactive und
+das Objekt eigenst&auml;ndige Instanzen sind, ist Reactive fest an das
+zugrundeliegende Objekt gebunden aber entkoppelt und somit logisch getrennt.__
 
 ```javascript
 const objectA = {};
@@ -106,7 +106,7 @@ Von einer bestehenden Reactive-Instanz kann keine neue Reactive-Instanz
 erstellt werden. `Object.prototype.reactive()` und `Reactive(...)` werden immer
 eine Referenz auf sich selbst zur&uuml;ckgeben. Etwas anders verh&auml;lt es
 sich, wenn einer bestehenden Reactive-Instanz ein anderes Reactive-Objekt als
-Wert hinzugef&uuml;gt wird. Dann wird auf Basis vom urspr&uuml;nglichen Objekt,
+Wert hinzugef&uuml;gt wird. Dann wird auf Basis vom zugrundeliegenden Objekt,
 das als Reactive-Objekt hinzugef&uuml;gt werden soll, eine neue Reactive-Instanz
 erstellt.
 
