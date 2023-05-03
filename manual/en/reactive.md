@@ -30,6 +30,49 @@ inserted at runtime. Thus, Reactive must always exist before the consumers.__
 Reactive rendering can be stopped by selectively deleting reactive instances
 with the `delete` method.
 
+__Reactive is a substitute for another object and controls access to the
+original object. Even though Reactive and the object are independent instances,
+Reactive is tightly bound to the original object but decoupled and thus
+logically separated.__
+
+```javascript
+const objectA = {};
+const objectB = objectA.reactive();
+objectB.value = "B";
+
+// Assertions
+typeof objectA.value === "string"
+typeof objectB.value === "string"
+objectA.value === objectB.value
+```
+
+From an existing Reactive instance no new Reactive instance can be created.
+`Object.prototype.reactive()` and `Reactive(...)` always return a reference to
+themselves. It is slightly different when another Reactive object is added as a
+value to an existing Reactive instance. Then a new Reactive instance is created
+based on the original object to be added as Reactive object.
+
+```javascript
+const objectA = ({}).reactive();
+const objectB = objectA.reactive();
+const objectC = Reactive(objectA);
+
+// Assertions
+objectA === objectB
+objectA === objectC
+objectB === objectC
+
+const objectD = ({objectA}).reactive();
+
+// Assertion
+objectD.objectA === objectA
+
+objectC.objectB = objectB;
+
+// Assertion
+objectC.objectB === objectB
+```
+
 Reactive works permanently recursively on all object levels and also on the
 objects which are added later as values. Even if these objects do not explicitly
 use Reactive, new instances are created for the referenced objects. Initiating
@@ -80,49 +123,6 @@ objectE.text = "C";
 objectE.text === "C"
 objectF.text === "C"
 
-```
-
-__Reactive is a substitute for another object and controls access to the
-original object. Even though Reactive and the object are independent instances,
-Reactive is tightly bound to the original object but decoupled and thus
-logically separated.__
-
-```javascript
-const objectA = {};
-const objectB = objectA.reactive();
-objectB.value = "B";
-
-// Assertions
-typeof objectA.value === "string"
-typeof objectB.value === "string"
-objectA.value === objectB.value
-```
-
-From an existing Reactive instance no new Reactive instance can be created.
-`Object.prototype.reactive()` and `Reactive(...)` always return a reference to
-themselves. It is slightly different when another Reactive object is added as a
-value to an existing Reactive instance. Then a new Reactive instance is created
-based on the original object to be added as Reactive object.
-
-```javascript
-const objectA = ({}).reactive();
-const objectB = objectA.reactive();
-const objectC = Reactive(objectA);
-
-// Assertions
-objectA === objectB
-objectA === objectC
-objectB === objectC
-
-const objectD = ({objectA}).reactive();
-
-// Assertion
-objectD.objectA === objectA
-
-objectC.objectB = objectB;
-
-// Assertion
-objectC.objectB === objectB
 ```
 
 __Prevent misunderstandings__

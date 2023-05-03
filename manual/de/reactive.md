@@ -33,6 +33,51 @@ wird. Somit muss Reactive immer vor den Konsumenten existieren.__
 Beenden l&auml;sst sich das reaktive Rendering durch das gezielte L&ouml;schen
 von Reactive-Instanzen mit der `delete` Methode.
 
+__Reactive ist ein Stellvertreter (Substitute) f&uuml;r ein anderes Objekt und
+kontrolliert den Zugriff auf das zugrundeliegende Objekt. Auch wenn Reactive und
+das Objekt eigenst&auml;ndige Instanzen sind, ist Reactive fest an das
+zugrundeliegende Objekt gebunden aber entkoppelt und somit logisch getrennt.__
+
+```javascript
+const objectA = {};
+const objectB = objectA.reactive();
+objectB.value = "B";
+
+// Assertions
+typeof objectA.value === "string"
+typeof objectB.value === "string"
+objectA.value === objectB.value
+```
+
+Von einer bestehenden Reactive-Instanz kann keine neue Reactive-Instanz
+erstellt werden. `Object.prototype.reactive()` und `Reactive(...)` werden immer
+eine Referenz auf sich selbst zur&uuml;ckgeben. Etwas anders verh&auml;lt es
+sich, wenn einer bestehenden Reactive-Instanz ein anderes Reactive-Objekt als
+Wert hinzugef&uuml;gt wird. Dann wird auf Basis vom zugrundeliegenden Objekt,
+das als Reactive-Objekt hinzugef&uuml;gt werden soll, eine neue Reactive-Instanz
+erstellt.
+
+```javascript
+const objectA = ({}).reactive();
+const objectB = objectA.reactive();
+const objectC = Reactive(objectA);
+
+// Assertions
+objectA === objectB
+objectA === objectC
+objectB === objectC
+
+const objectD = ({objectA}).reactive();
+
+// Assertion
+objectD.objectA === objectA
+
+objectC.objectB = objectB;
+
+// Assertion
+objectC.objectB === objectB
+```
+
 Reactive wirkt permanent rekursiv auf allen Objektebenen und auch auf die
 Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden. Auch wenn diese
 Objekte nicht explizit Reactive nutzen, werden f&uuml;r die referenzierten
@@ -84,51 +129,6 @@ objectE.text = "C";
 objectE.text === "C"
 objectF.text === "C"
 
-```
-
-__Reactive ist ein Stellvertreter (Substitute) f&uuml;r ein anderes Objekt und
-kontrolliert den Zugriff auf das zugrundeliegende Objekt. Auch wenn Reactive und
-das Objekt eigenst&auml;ndige Instanzen sind, ist Reactive fest an das
-zugrundeliegende Objekt gebunden aber entkoppelt und somit logisch getrennt.__
-
-```javascript
-const objectA = {};
-const objectB = objectA.reactive();
-objectB.value = "B";
-
-// Assertions
-typeof objectA.value === "string"
-typeof objectB.value === "string"
-objectA.value === objectB.value
-```
-
-Von einer bestehenden Reactive-Instanz kann keine neue Reactive-Instanz
-erstellt werden. `Object.prototype.reactive()` und `Reactive(...)` werden immer
-eine Referenz auf sich selbst zur&uuml;ckgeben. Etwas anders verh&auml;lt es
-sich, wenn einer bestehenden Reactive-Instanz ein anderes Reactive-Objekt als
-Wert hinzugef&uuml;gt wird. Dann wird auf Basis vom zugrundeliegenden Objekt,
-das als Reactive-Objekt hinzugef&uuml;gt werden soll, eine neue Reactive-Instanz
-erstellt.
-
-```javascript
-const objectA = ({}).reactive();
-const objectB = objectA.reactive();
-const objectC = Reactive(objectA);
-
-// Assertions
-objectA === objectB
-objectA === objectC
-objectB === objectC
-
-const objectD = ({objectA}).reactive();
-
-// Assertion
-objectD.objectA === objectA
-
-objectC.objectB = objectB;
-
-// Assertion
-objectC.objectB === objectB
 ```
 
 __Missverst&auml;ndnisse vorbeugen__
