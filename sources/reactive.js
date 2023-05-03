@@ -47,7 +47,7 @@
  * associated proxies when not in use.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230416
+ * @version 1.7.0 20230403
  */
 (() => {
 
@@ -240,6 +240,14 @@
             },
 
             set(target, key, value) {
+
+                // Proxy is implemented exotically, cannot be inherited and has
+                // no prototype. Therefore, this unconventional way with a
+                // secret simulated property that is used as an indicator for
+                // existing reactive object instances and also contains a
+                // reference to the original object and that can't be changed.
+                if (key === _secret)
+                    return target;
 
                 // To decouple object, proxy and view, the original objects are
                 // always used as value and never the proxies.
