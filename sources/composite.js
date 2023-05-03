@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230424
+ * @version 1.7.0 20230503
  */
 (() => {
 
@@ -935,11 +935,11 @@
                                 if (accept(meta.target)) {
                                     meta.target = value;
                                 } else if (typeof meta.target === "object") {
-                                    if (accept(meta.target["value"]))
-                                        meta.target["value"] = value;
+                                    if (accept(meta.target[Composite.ATTRIBUTE_VALUE]))
+                                        meta.target[Composite.ATTRIBUTE_VALUE] = value;
                                 } else if (meta.target === undefined) {
-                                    if (accept(meta.model["value"]))
-                                        meta.model["value"] = value;                                
+                                    if (accept(meta.model[Composite.ATTRIBUTE_VALUE]))
+                                        meta.model[Composite.ATTRIBUTE_VALUE] = value;
                                 }
                                 
                                 // Step 3: Invocation
@@ -1003,6 +1003,22 @@
                         }
                     });
                 });
+
+                // The current value in the model must be set in the HTML
+                // element if the element has a corresponding value property.
+                // model -> view
+                if (meta && meta.target) {
+                    let value = meta.target;
+                    if (meta.target instanceof Object)
+                        value = Composite.ATTRIBUTE_VALUE in meta.target ? meta.target.value : undefined;
+                    if (value !== undefined) {
+                        if (selector.tagName.match(/^input$/i)
+                                && selector.type.match(/^radio|checkbox/i))
+                            selector.checked = value;
+                        else if (Composite.ATTRIBUTE_VALUE in selector)
+                            selector[Composite.ATTRIBUTE_VALUE] = value;
+                    }
+                }
             } finally {
                 lock.release();
             }        

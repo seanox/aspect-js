@@ -6,6 +6,8 @@ BF: Composite: Correction when inserting markup into composites
 BF: Composite: Correction when loading CSS modules
     If a module is first requested programmatically by name, the CSS was not
     loaded when the module was later loaded as an element.
+BF: Composite: Correction of the view model binding
+    Initial values of modules were not set in the corresponding HTML elements.
 BF: Reactive: Correction of incorrect creation of proxies for HTML elements
 CR: Composite: Omission of the attribute namespace
     Replaced by extended composite ID name@namespace (separated by colon).
