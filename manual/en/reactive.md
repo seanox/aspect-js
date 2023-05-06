@@ -73,6 +73,38 @@ objectC.objectB = objectB;
 objectC.objectB === objectB
 ```
 
+As already described, Reactive is a proxy and uses a logical separation to the
+original object, which is to be considered as a scheme for bidirectional
+synchronization when initiated. In detail, bidirectional synchronization is
+monodirectional Set and Get driven. Thus, from the point of view of the Reactive
+instance, Get synchronizes from the original object to the Reactive instance
+(object -> reactive) and Set synchronizes from the Reactive instance to the
+original object (reactive -> object). This means that changes to the original
+object are taken into account when accessing data, without this having any
+effect on the view.
+
+```javascript
+const object = {valueA:1};
+const model = Reactive(object);
+window.setTimeout(() =>
+    object.valueB = 2, 1000);
+window.setTimeout(() =>
+    console.log(model.valueB), 2000);
+window.setTimeout(() =>
+    object.valueA = 3, 3000);
+window.setTimeout(() =>
+    console.log(model.valueA), 4000);
+window.setTimeout(() =>
+    console.log(model.valueB), 5000);
+window.setTimeout(() =>
+    model.valueA = 5, 6000);
+```
+
+In this example, after approx. 5 seconds, where `model` has read access to the
+original object as a reactive instance, the `valueB` is taken over and after
+approx. 6 seconds the update of the view is triggered by the write access to
+`model`.
+
 Reactive works permanently recursively on all object levels and also on the
 objects which are added later as values. Even if these objects do not explicitly
 use Reactive, new instances are created for the referenced objects. Initiating
@@ -131,14 +163,6 @@ Reactive itself has no direct influence on the view, but prompts the renderer to
 update individual consuming HTML elements, which must be taken into account
 especially when expressions use temporary variables, such as those used in the
 attribute `iterate`, which is already taken into account automatically.
-
-Another particularity concerns the use of the proxy object. For the logical
-separation of data objects and view, Reactive itself uses proxies, so that the
-data objects do not have to be enriched with the mechanisms for the view. When
-assigning objects, to a data object used with Reactive, the original objects are
-always used. Therefore, adding proxies to existing object layers later has no
-effect. In order to use proxies, they must be set up before using Reactive.
-
 
 
 - - -

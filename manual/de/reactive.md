@@ -78,6 +78,38 @@ objectC.objectB = objectB;
 objectC.objectB === objectB
 ```
 
+Wie schon beschrieben ist Reactive ein Proxy und nutzt eine logische Trennung
+zum zugrundeliegenden Objekt, welches bei der Initiierung als Schema f&uuml;r
+die bidirektionale Synchronisation zu betrachten ist. Die bidirektionale
+Synchronisation ist im Detail betrachtet monodirektional Set und Get getrieben.
+Somit wird aus Sicht der Reactive-Instanz beim Get vom zugrundeliegenden Objekt
+zur Reactive-Instanz (object -> reactive) und beim Set von der Reactive-Instanz
+zum zugrundeliegenden Objekt (reactive -> object) synchronisiert. Damit werden
+Ver&auml;nderungen beim zugrundeliegenden Objekt beim Datenzugriff
+ber&uuml;cksichtigt, ohne dass dies Auswirkung auf die View hat.
+
+```javascript
+const object = {valueA:1};
+const model = Reactive(object);
+window.setTimeout(() =>
+    object.valueB = 2, 1000);
+window.setTimeout(() =>
+    console.log(model.valueB), 2000);
+window.setTimeout(() =>
+    object.valueA = 3, 3000);
+window.setTimeout(() =>
+    console.log(model.valueA), 4000);
+window.setTimeout(() =>
+    console.log(model.valueB), 5000);
+window.setTimeout(() =>
+    model.valueA = 5, 6000);
+```
+
+In diesem Beispiel wird nach ca. 5 Sekunden, wo `model` als Reactive-Instanz
+lesend auf das zugrundeliegende Objekt zugreift, der `valueB` &uuml;bernommen
+und nach ca. 6 Sekunden durch den schreibenden Zugriff auf `model` die
+Aktualisierung der View angestossen.
+
 Reactive wirkt permanent rekursiv auf allen Objektebenen und auch auf die
 Objekte welche sp&auml;ter als Wert hinzugef&uuml;gt werden. Auch wenn diese
 Objekte nicht explizit Reactive nutzen, werden f&uuml;r die referenzierten
@@ -138,16 +170,6 @@ Renderer auf, einzelne konsumierende HTML-Elemente zu aktualisieren, was
 besonders dann beachtet werden muss, wenn Ausdr&uuml;cke tempor&auml;re
 Variablen nutzen, wie sie z.B. beim Attribut `iterate` verwendet werden, was
 bereits automatisch ber&uuml;cksichtigt wird.
-
-Eine weitere Besonderheit betrifft die Nutzung vom Proxy-Objekt. Zur logischen
-Trennung von Datenobjekten und View nutzt Reactive selbst Proxies, damit die
-Datenobjekte nicht mit den Mechanismen für die View angereichert werden
-m&uuml;ssen. Bei der Zuweisung von Objekten, zu einem mit Reactive verwendeten
-Datenobjekt, werden immer die zugrundeliegenden Objekte verwendet. Das
-sp&auml;tere Hinzuf&uuml;gen von Proxies auf bestehende Objektebenen hat daher
-keinen Effekt. Um Proxies nutzen zu k&ouml;nnen, m&uuml;ssen diese vor der
-Verwendung von Reactive eingerichtet werden.
-
 
 
 - - -
