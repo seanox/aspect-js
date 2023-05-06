@@ -112,9 +112,9 @@ Die nachfolgenden Ereignisse treten w&auml;hrend der Verwendung von Modulen auf.
 Tritt auf, wenn ein Modul initial geladen wird. Wird ein Modul zur Laufzeit
 mehrfach geladen und entladen, wird dieses Ereignis nur einmalig auftreten. Der
 Callback-Methode werden der Ausl&ouml;ser und das ermittelte Modul
-&uuml;bergeben. Auslöser k&ouml;nnen HTML-Elemente sein, wenn Module &uuml;ber
-das Markup angesprochen werden, oder es k&ouml;nnen Strings sein, wenn Module im
-JavaScript programmatisch angesprochen werden.
+&uuml;bergeben. Ausl&ouml;ser k&ouml;nnen HTML-Elemente sein, wenn Module
+&uuml;ber das Markup angesprochen werden, oder es k&ouml;nnen Strings sein, wenn
+Module im JavaScript programmatisch angesprochen werden.
 
 ```javascript
 Composite.listen(Composite.EVENT_MODULE_***, function(event, context, module) {

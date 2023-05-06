@@ -122,8 +122,8 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 ## Release
 
 ### GitHub
-- Überprüfen, ob alle Aufgaben (TODOs) erledigt sind
-- Alle Tests in allen Engines durchführen (Blink, Gecko, Goanna, WebKit)
+- &uuml;berpr&uuml;fen, ob alle Aufgaben (TODOs) erledigt sind
+- Alle Tests in allen Engines durchf&uuml;hren (Blink, Gecko, Goanna, WebKit)
 - Finalisieren von `CHANGES` und `README.md`
 - Finales Release erstellen
 - Release per Tag ver&ouml;ffentlichen

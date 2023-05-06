@@ -702,7 +702,7 @@ bindet Funktionen an.
 
 #### Composite
 
-Die Grundlage für das View-Model-Binding bilden Composites, was funktional
+Die Grundlage f&uuml;r das View-Model-Binding bilden Composites, was funktional
 eigenst&auml;ndige Komponenten sind, die sich aus Markup, CSS und JavaScript
 sowie optional aus weiteren Ressourcen zusammensetzen. Die Bindung alle
 Bestandteile erfolgt &uuml;ber die auch als Composite-ID bezeichnete ID vom
@@ -774,9 +774,9 @@ const model = {
 Beim View-Model-Binding geht es um die Verbindung von Markup/HTML (View) mit dem
 entsprechenden JavaScript-Objekt (Model). Das Binding leitet Interaktionen und
 Status&auml;nderungen der View an das Model weiter und stellt eine
-Schnittstelle f&uuml;r Middleware-Funktionen und Services für die View bereit.
-Womit keine manuelle Implementierung von Ereignissen, Synchronisation und
-Interaktion zwischen View und Anwendungslogik erforderlich ist.
+Schnittstelle f&uuml;r Middleware-Funktionen und Services f&uuml;r die View
+bereit. Womit keine manuelle Implementierung von Ereignissen, Synchronisation
+und Interaktion zwischen View und Anwendungslogik erforderlich ist.
 
 ```javascript
 const model = {
