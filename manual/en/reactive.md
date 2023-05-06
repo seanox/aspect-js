@@ -157,6 +157,21 @@ objectF.text === "C"
 
 ```
 
+Another important point concerns the use of further proxies in combination with
+Reactive instances. Due to the logical separation, the Reactive instances always
+act on the level of the original objects and do so recursively. Thus, adding
+proxies on the object levels of the Reactive instances has no effect, since they
+are not addressed. Proxies should therefore exist before the creation of the
+Reactive instance or can be placed around the Reactive instance later, so that
+the proxy and not the Reactive instance then form the model.
+
+```javascript
+const object = {a:{valueA:1}};
+const model = new Proxy(Reactive(object), {
+    ...
+});
+```
+
 __Prevent misunderstandings__
 
 Reactive itself has no direct influence on the view, but prompts the renderer to

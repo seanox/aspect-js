@@ -163,6 +163,22 @@ objectF.text === "C"
 
 ```
 
+Ein anderer wichtiger Punkt betrifft die Verwendung weiterer Proxies in
+Kombination mit Reactive-Instanzen. Durch die logische Trennung wird in den
+Reactive-Instanzen immer auf Ebene der zugrundeliegenden Objekte agiert und das
+rekursiv. Somit hat das Hinzuf&uuml;gen von Proxies auf den Objektebenen der
+Reactive-Instanzen keinen Effekt, da diese nicht angesprochen werden. Proxies
+sollten daher vor der Erstellung der Reactive-Instanz existieren oder
+k&ouml;nnen sp&auml;ter um die Reactive-Instanz gelegt werden, womit dann der
+Proxy und nicht die Reactive-Instanz das Model bilden.
+
+```javascript
+const object = {a:{valueA:1}};
+const model = new Proxy(Reactive(object), {
+    ...
+});
+```
+
 __Missverst&auml;ndnisse vorbeugen__
 
 Reactive hat selbst keinen direkten Einfluss auf die View, sondern fordert den
