@@ -18,7 +18,7 @@ CR: Composite: Omission of attributes strict in combination with composite
     The notation for the module files is now used 1:1.
 CR: Composite: Added EVENT_MODULE_LOAD when a module is loaded
     Is called once per module.
-CR: Composite: Added EVENT_MODULE_DOCK/EVENT_MODULE_UNDOCK
+CR: Composite: Added EVENT_MODULE_DOCK/EVENT_MODULE_READY/EVENT_MODULE_UNDOCK
 CR: Composite Render Iterate: Optimization for updating markup
     If the array does not change in length, the existing markup is only updated
     without replacing it completely.

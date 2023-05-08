@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230503
+ * @version 1.7.0 20230508
  */
 (() => {
 
@@ -282,6 +282,7 @@
         /** Constants of events when using modules */
         get EVENT_MODULE_LOAD() {return "ModuleLoad";},
         get EVENT_MODULE_DOCK() {return "ModuleDock";},
+        get EVENT_MODULE_READY() {return "ModuleReady";},
         get EVENT_MODULE_UNDOCK() {return "ModuleUndock";},
 
         /** Constants of events when using HTTP */
@@ -1668,26 +1669,26 @@
                     return;
                 }
 
+                if (!(selector instanceof Element))
+                    return;
+
                 // Only composites are mounted based on their model. This
                 // excludes markers of conditions as text nodes.
-                if (selector instanceof Element
-                        && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+                if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
                     const locate = _mount_locate(selector);
                     let model = (locate.namespace || []).concat(locate.model).join(".");
                     if (!_models.has(model)) {
                         _models.add(model);
                         model = Object.lookup(model);
                         if (model && typeof model.dock === "function") {
-                            model.dock.call(model);
                             const meta = _mount_lookup(selector);
                             Composite.fire(Composite.EVENT_MODULE_DOCK, meta);
+                            model.dock.call(model);
+                            Composite.fire(Composite.EVENT_MODULE_READY, meta);
                         }
                     }
                 }
 
-                if (!(selector instanceof Element))
-                    return;
-                
                 // The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
                 // ATTRIBUTE_RENDER are processed in Composite.mount(selector)
                 // the view model binding and are only mentioned here for

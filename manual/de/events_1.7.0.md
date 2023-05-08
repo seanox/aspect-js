@@ -22,6 +22,7 @@ Laufzeitumgebung genutzt werden k&ouml;nnen.
 * [Modules](#modules)
   * [Composite.EVENT_MODULE_LOAD](#compositeevent_module_load)
   * [Composite.EVENT_MODULE_DOCK](#compositeevent_module_dock)
+  * [Composite.EVENT_MODULE_READY](#compositeevent_module_ready)
   * [Composite.EVENT_MODULE_UNDOCK](#compositeevent_module_undock)
 * [HTTP](#http)
   * [Composite.EVENT_HTTP_START](#compositeevent_http_start)
@@ -134,6 +135,10 @@ Composite.listen(Composite.EVENT_MODULE_DOCK, function(event, meta) {
     ...
 });
 ```
+
+
+##  EVENT_MODULE_READY
+TODO:
 
 
 ## EVENT_MODULE_UNDOCK
