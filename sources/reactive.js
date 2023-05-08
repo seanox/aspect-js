@@ -89,7 +89,7 @@
      * defined with the start of the application.
      * https://stackoverflow.com/questions/37714787/can-i-extend-proxy-with-an-es2015-class
      */
-    const _secret = Math.serial();
+    const TARGET = Math.serial();
 
     /**
      * Weak map with the assignment of objects to proxies. The object is the key
@@ -106,7 +106,7 @@
             return object;
 
         // Proxy remains proxy
-        if (object[_secret] !== undefined)
+        if (object[TARGET] !== undefined)
             return object;
 
         // For all objects, a proxy must be created. Also for proxies, even if
@@ -131,7 +131,7 @@
                     // a secret simulated property that is used as an indicator
                     // for existing reactive object instances and also contains
                     // a reference to the original object.
-                    if (key === _secret)
+                    if (key === TARGET)
                         return target;
 
                     let value;
@@ -155,7 +155,7 @@
                         return value;
 
                     // Proxy remains proxy
-                    if (value[_secret] !== undefined)
+                    if (value[TARGET] !== undefined)
                         return value;
 
                     // A proxy always returns proxies for objects. To decouple
@@ -246,15 +246,15 @@
                 // secret simulated property that is used as an indicator for
                 // existing reactive object instances and also contains a
                 // reference to the original object and that can't be changed.
-                if (key === _secret)
+                if (key === TARGET)
                     return target;
 
                 // To decouple object, proxy and view, the original objects are
                 // always used as value and never the proxies.
                 if (typeof value === "object"
                         && value !== null
-                        && value[_secret] !== undefined)
-                    value = value[_secret];
+                        && value[TARGET] !== undefined)
+                    value = value[TARGET];
 
                 // To be economical with resources, proxies are not created for
                 // objects immediately, but only when they are explicitly
