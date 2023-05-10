@@ -24,6 +24,8 @@ CR: Composite Render Iterate: Optimization for updating markup
     without replacing it completely.
 CR: Composite Render Iterate: Optimization of the error output in the view
 CR: Composite Render Condition: Optimization of the error output in the view
+CR: Composite Render: Optimization of IDs before rendering
+    Possible expressions at initial IDs are already resolved before rendering.
 CR: Messages: Change in case of multiple keys, the first one wins
     Overwriting messages at runtime is generally not possible.
 CR: Messages: Added locales/messages for modules

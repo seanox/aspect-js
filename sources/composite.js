@@ -123,7 +123,7 @@
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230508
+ * @version 1.7.0 20230510
  */
 (() => {
 
@@ -1246,6 +1246,17 @@
 
             if (!selector)
                 selector = Composite.render.queue[0];
+
+            // even before rendering, possible expressions in the initial ID
+            // should be resolved
+            if (selector instanceof Element
+                    && !_render_meta.includes(selector.ordinal())) {
+                let id = selector.getAttribute(Composite.ATTRIBUTE_ID) || "";
+                if (id.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+                    id = Expression.eval(selector.ordinal() + ":" + Composite.ATTRIBUTE_ID, id);
+                    selector.setAttribute(Composite.ATTRIBUTE_ID, id);
+                }
+            }
 
             lock = Composite.lock(Composite.render, selector);
 
