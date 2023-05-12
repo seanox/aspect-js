@@ -258,7 +258,7 @@
          * - group 3: unique identifier (optional)
          * - group 4: (namespace+)model (optional)
          */
-        get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)((?::\w+)*)?(#\w+)?(@[_a-z]\w*(?::[_a-z]\w*)*)?$/i;},
+        get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)(?::(\w+(?::\w+)*))?(?:#(\w+))?(?:@([_a-z]\w*(?::[_a-z]\w*)*))?$/i;},
 
         /** Pattern for a scope (custom tag, based on a word) */
         get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
@@ -1250,7 +1250,7 @@
             // even before rendering, possible expressions in the initial ID
             // should be resolved
             if (selector instanceof Element
-                    && !_render_meta.includes(selector.ordinal())) {
+                    && !_render_meta[selector.ordinal()]) {
                 let id = selector.getAttribute(Composite.ATTRIBUTE_ID) || "";
                 if (id.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     id = Expression.eval(selector.ordinal() + ":" + Composite.ATTRIBUTE_ID, id);
@@ -2400,12 +2400,12 @@
 
         serial = serial.match(Composite.PATTERN_ELEMENT_ID);
         if (serial[4]) {
-            meta.namespace = serial[4].substring(1).split(/:/);
+            meta.namespace = serial[4].split(/:/);
             meta.route = [meta.namespace[meta.namespace.length -1]];
         }
         meta.route.push(serial[1]);
         if (serial[2])
-            meta.route.push(...serial[2].substring(1).split(/:/));
+            meta.route.push(...serial[2].split(/:/));
         if (serial[3])
             meta.unique = serial[3];
         meta.target = meta.route[meta.route.length -1];
