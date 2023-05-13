@@ -37,6 +37,8 @@ CR: Datasource: Optimization of language selection
     RFC 5646: lang-tag-tag-... -> lang
 CR: Expression: Optimization of the return of errors
     Errors are returned as error objects instead of text.
+CR: Expression: Extension of the element expression by //...// for embedding logic
+    e.g. {{#[element://index+1//]}} when index is a variable
 
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup

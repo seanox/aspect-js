@@ -33,7 +33,7 @@
  * expression language.
  *
  * @author  Seanox Software Solutions
- * @version 1.7.0 20230423
+ * @version 1.7.0 20230513
  */
 (() => {
 
@@ -206,8 +206,9 @@
 
                 // element expressions are translated into JavaScript
                 //
+                //     #element -> document.getElementById(element)
                 //     #[element] -> document.getElementById(element)
-                //     #element   -> document.getElementById(element)
+                //     #[element//expression//] -> document.getElementById(element + expression)
                 //
                 // The version with square brackets is for more complex element
                 // IDs that do not follow the JavaScript syntax for variables.
@@ -217,6 +218,7 @@
                 // not be misinterpreted.
                 expression = expression.replace(/#\[([^\[\]]*)\]/g,
                     (match, element) => {
+                        element = element.replaceAll(/\/{2}(.*?)\/{2}/g, "\"+$1+\"");
                         patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
                         return "\r" + (patches.length -1) + "\n";
                 });
