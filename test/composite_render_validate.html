@@ -453,7 +453,7 @@ B:2
     </script>
   </head>
   <body>
-    <!-- 
+    <!--
         invalid e-mail / password (HTML5 pattern):
         - value should not be synchronized</li>
         - link should not work</li>
@@ -477,17 +477,18 @@ B:2
           notification="on"
           events="input">
 
-      <input type="text" id="input_1" placeholder="message: 1"
+      <!-- id with expression must work, but the id is only resolved initially -->
+      <input type="text" id="input_{{1+0}}" placeholder="message: 1"
           validate strict required
           message="1"
           notification="on"
           events="input">
-      <input type="text" id="input_2" placeholder="message: 0"
+      <input type="text" id="input_{{1+1}}" placeholder="message: 0"
           validate strict required
           message="0"
           notification="on"
           events="input">
-      <input type="text" id="input_3" placeholder="message: -1"
+      <input type="text" id="input_{{1+2}}" placeholder="message: -1"
           validate strict required
           message="-1"
           notification="on"

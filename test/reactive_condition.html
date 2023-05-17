@@ -398,12 +398,12 @@
       count: _80_ / _80_
       _80_ / _80_
       [object HTMLDivElement]
-      104
-      104
+      109
+      109
       1
       [object HTMLButtonElement]
-      122
-      122
+      127
+      127
     </script>
     <script type="text/test">
       _A_456_
@@ -415,12 +415,12 @@
       count: _80_ / _80_
       _80_ / _80_
       [object HTMLDivElement]
-      104
-      104
+      109
+      109
       1
       [object HTMLButtonElement]
-      122
-      122
+      127
+      127
     </script>
     <script type="text/test">
       _A_456_
@@ -432,12 +432,12 @@
       count: _80_ / _80_
       _80_ / _80_
       [object HTMLDivElement]
-      104
-      104
+      109
+      109
       1
       [object HTMLButtonElement]
-      122
-      122
+      127
+      127
     </script>
     <script type="text/test">
       _A_456_
@@ -449,12 +449,12 @@
       count: _80_ / _80_
       _80_ / _80_
       [object HTMLDivElement]
-      104
-      104
+      109
+      109
       1
       [object HTMLButtonElement]
-      122
-      122
+      127
+      127
     </script>
     <script type="text/test">
       _A_456_
@@ -466,12 +466,12 @@
       count: _80_ / _80_
       _80_ / _80_
       [object HTMLDivElement]
-      104
-      104
+      109
+      109
       1
       [object HTMLButtonElement]
-      122
-      122
+      127
+      127
     </script>
     <script type="text/test">
       _A_456_
@@ -537,12 +537,12 @@
       count: _80_ / _80_
       _80_ / _80_
       [object HTMLDivElement]
-      162
-      162
+      170
+      170
       2
       [object HTMLButtonElement]
-      180
-      180
+      188
+      188
     </script>
   </head>
   <body>
@@ -566,9 +566,10 @@
       {{modelA.count(#_condition.serial)}}
       <button id="button@modelA" event="click">
         {{modelA.button.ticks}}
-        {{#[button@modelA]}}
-        {{#[button@modelA].serial}}
-        {{#[button@modelA].ordinal()}}
+        <!-- Element expression with logic #[element//logic//] -->
+        {{#[button@model//String('A')//]}}
+        {{#[button@model//String('A')//].serial}}
+        {{#[button@model//String('A')//].ordinal()}}
         <!--
           Creates an infinite loop during rendering and must be caught in code.
           But it is not a bug in aspect-js!

@@ -32,10 +32,13 @@
         }});
 
         Test.create({test() {
-            Assert.assertEquals(values[0], values[1]);
+            Assert.assertEquals("hallo", values[0]);
+            Assert.assertEquals("hallo", values[1]);
+            Assert.assertNotEquals("hallo", values[2]);
+            Assert.assertNotEquals("hallo", values[3]);
+            Assert.assertNotEquals("hallo", values[4]);
             Assert.assertEquals(values[2], values[3]);
-            Assert.assertNotEquals(values[1], values[2]);
-            Assert.assertTrue(values[1] < values[2]);
+            Assert.assertEquals(values[2], values[4]);
         }});
 
         const modelA = {

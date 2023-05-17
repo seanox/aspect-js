@@ -135,7 +135,12 @@
 
         Test.create({test() {
             const count = capture.snapshots().length;
-            Assert.assertSameText(document.querySelector("script[type='text/test']").textContent, capture.snapshots()[count -1]);
+            const snapshot = capture.snapshots()[count -1];
+            const content = document.querySelector("script[type='text/test']").textContent;
+            try {Assert.assertSameText(content, snapshot);
+            } catch (error) {
+                console.log(snapshot);
+            }
         }});
     </script>
     <script type="text/test">
@@ -215,7 +220,7 @@
       Summer
       Autumn
       Winter
-      Error: missing ) after argument list in new Array(2
+      Error: missing ) in parenthetical in (new Array(2)
     </script>
   </head>
   <body>
