@@ -132,10 +132,17 @@
                 if (!structure.match(/^(\r(\d+)\n)*$/))
                     throw Error("Error in the expression structure\n\t" + expression);
 
+                const mixed = !expression.startsWith("{{")
+                        || !expression.endsWith("}}")
+                        || expression.substring(2).includes("{{")
+                        || expression.substring(0, expression.length -2).includes("}}");
+
                 // placeholders must be filled, since they were created
                 // recursively, they do not have to be filled recursively
                 structure = structure.replace(/(?:\r(\d+)\n)/g,
-                    (match, placeholder) => "\r" + patches[placeholder] + "\n");
+                    (match, placeholder) => mixed
+                        ? "\r(" + patches[placeholder] + ")\n"
+                        : "\r" + patches[placeholder] + "\n");
 
                 // masked quotation marks will be restored.
                 structure = structure.replaceAll("\r\\u0022\n", '\\"');
@@ -218,7 +225,7 @@
                 // not be misinterpreted.
                 expression = expression.replace(/#\[([^\[\]]*)\]/g,
                     (match, element) => {
-                        element = element.replaceAll(/\/{2}(.*?)\/{2}/g, "\"+$1+\"");
+                        element = element.replaceAll(/\/{2}(.*?)\/{2}/gs, "\"+($1)+\"");
                         patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
                         return "\r" + (patches.length -1) + "\n";
                 });
