@@ -9,6 +9,7 @@ BF: Composite: Correction when loading CSS modules
 BF: Composite: Correction of the view model binding
     Initial values of modules were not set in the corresponding HTML elements.
 BF: Reactive: Correction of incorrect creation of proxies for HTML elements
+BF: Reactive: Correction of unwanted rendering when docking modules
 CR: Composite: Omission of the attribute namespace
     Replaced by extended composite ID name@namespace (separated by colon).
     e.g. model@a:b:c -> ./modules/a/b/c/model.js -> a.b.c.model
@@ -26,12 +27,6 @@ CR: Composite Render Iterate: Optimization of the error output in the view
 CR: Composite Render Condition: Optimization of the error output in the view
 CR: Composite Render: Optimization of IDs before rendering
     Possible expressions at initial IDs are already resolved before rendering.
-CR: Messages: Change in case of multiple keys, the first one wins
-    Overwriting messages at runtime is generally not possible.
-CR: Messages: Added locales/messages for modules
-    Locales/messages are loaded with the module from the module directory.
-    Modules can extend messages but not change/overwrite them. Locales/messages
-    for modules are used as global locales/messages, no difference in use.
 CR: Datasource: Optimization of language selection
     Alternatively, the languages of the browser without tags are considered.
     RFC 5646: lang-tag-tag-... -> lang
@@ -39,6 +34,14 @@ CR: Expression: Optimization of the return of errors
     Errors are returned as error objects instead of text.
 CR: Expression: Extension of the element expression by //...// for embedding logic
     e.g. {{#[element://index+1//]}} when index is a variable
+CR: Expression: Optimization when interpreting in combination with text
+    e.g. <input id="file_{{index +1}}"/> previously brackets had to be used
+CR: Messages: Change in case of multiple keys, the first one wins
+    Overwriting messages at runtime is generally not possible.
+CR: Messages: Added locales/messages for modules
+    Locales/messages are loaded with the module from the module directory.
+    Modules can extend messages but not change/overwrite them. Locales/messages
+    for modules are used as global locales/messages, no difference in use.
 
 1.6.1 20230410
 BF: Composite: Added recursion detection for include of composite markup

@@ -61,15 +61,22 @@
     });
 
     let _selector = null;
-
     Composite.listen(Composite.EVENT_RENDER_START, (event, selector) =>
         _selector = selector);
-
     Composite.listen(Composite.EVENT_RENDER_NEXT, (event, selector) =>
         _selector = selector);
-
     Composite.listen(Composite.EVENT_RENDER_END, (event, selector) =>
         _selector = null);
+
+    let _selector_cache = null;
+    Composite.listen(Composite.EVENT_MODULE_DOCK, (event, selector) => {
+        _selector_cache = _selector;
+        _selector = null;
+    });
+    Composite.listen(Composite.EVENT_MODULE_READY, (event, selector) => {
+        _selector = _selector_cache;
+        _selector_cache = null;
+    });
 
     /**
      * Enhancement of the JavaScript API
