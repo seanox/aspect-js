@@ -8,6 +8,7 @@ BF: Composite: Correction when loading CSS modules
     loaded when the module was later loaded as an element.
 BF: Composite: Correction of the view model binding
     Initial values of modules were not set in the corresponding HTML elements.
+BF: Composite Mount Events: Correction of the unwanted assignment of child elements
 BF: Reactive: Correction of incorrect creation of proxies for HTML elements
 BF: Reactive: Correction of unwanted rendering when docking modules
 CR: Composite: Omission of the attribute namespace

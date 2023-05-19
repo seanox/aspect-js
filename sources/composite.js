@@ -801,6 +801,8 @@
                 // that are rendered later.
                 if (!(object instanceof Object))
                     return;
+
+                const identifier = object.attributes[Composite.ATTRIBUTE_ID];
                 
                 // The explicit events are declared by ATTRIBUTE_EVENTS. The
                 // model can, but does not have to, implement the corresponding
@@ -815,13 +817,17 @@
                 
                 // There must be a corresponding model.
                 const meta = _mount_lookup(selector);
-                if (meta instanceof Object) {
+                if (meta instanceof Object
+                        && identifier) {
                     
                     // The implicit assignment is based on the on-event-methods
                     // implemented in the model. These are determined and added
                     // to the list of events if the events have not yet been
-                    // explicitly declared.
-                    
+                    // explicitly declared. But this is only useful for elements
+                    // with an ID. Since mounting is performed recursively on
+                    // the child nodes, it should be prevented that child nodes
+                    // are assigned the events of the parents.
+
                     // Events are possible for composites and their interactive
                     // elements. For this purpose, composites define the scope
                     // with their model. Interactive composite elements are an
@@ -1007,8 +1013,11 @@
 
                 // The current value in the model must be set in the HTML
                 // element if the element has a corresponding value property.
-                // model -> view
-                if (meta && meta.target) {
+                //     model -> view
+                // This is only useful for elements with an ID. Because mounting
+                // is performed recursively on the child nodes, it should be
+                // prevented that child nodes are assigned.
+                if (meta && meta.target && identifier) {
                     let value = meta.target;
                     if (meta.target instanceof Object)
                         value = Composite.ATTRIBUTE_VALUE in meta.target ? meta.target.value : undefined;
