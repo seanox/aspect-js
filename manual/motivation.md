@@ -1,4 +1,5 @@
-[TOC](README.md) | [Introduction](introduction.md)
+&#9665; [Table of Contents](README.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Introduction](introduction.md) &#9655;
 - - -
 
 # Motivation
@@ -19,6 +20,7 @@ and as an experiment to understand reactive rendering, expression language and
 performance.
 
 
-- - -
 
-[TOC](README.md) | [Introduction](introduction.md)
+- - -
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md)
+&nbsp;&nbsp;&nbsp;&nbsp; [Introduction](introduction.md) &#9655;

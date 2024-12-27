@@ -1,4 +1,6 @@
-[Components](composite.md) | [TOC](README.md#reactivity-rendering) | [Extension](extension.md)
+&#9665; [Components](composite.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#reactivity-rendering)
+&nbsp;&nbsp;&nbsp;&nbsp; [Extension](extension.md) &#9655;
 - - -
 
 # Reactivity Rendering
@@ -180,6 +182,8 @@ especially when expressions use temporary variables, such as those used in the
 attribute `iterate`, which is already taken into account automatically.
 
 
-- - -
 
-[Components](composite.md) | [TOC](README.md#reactivity-rendering) | [Extension](extension.md)
+- - -
+&#9665; [Components](composite.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#reactivity-rendering)
+&nbsp;&nbsp;&nbsp;&nbsp; [Extension](extension.md) &#9655;

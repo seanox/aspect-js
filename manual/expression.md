@@ -1,4 +1,6 @@
-[Introduction](introduction.md) | [TOC](README.md#expression-language) | [Markup](markup.md)
+&#9665; [Introduction](introduction.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#expression-language)
+&nbsp;&nbsp;&nbsp;&nbsp; [Markup](markup.md) &#9655;
 - - -
 
 # Expression Language
@@ -271,6 +273,8 @@ h1:after {
 ```
 
 
-- - -
 
-[Introduction](introduction.md) | [TOC](README.md#expression-language) | [Markup](markup.md)
+- - -
+&#9665; [Introduction](introduction.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#expression-language)
+&nbsp;&nbsp;&nbsp;&nbsp; [Markup](markup.md) &#9655;

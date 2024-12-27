@@ -1,4 +1,6 @@
-[Extension](extension.md) | [TOC](README.md#events) | [Test](test.md)
+&#9665; [Extension](extension.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#events)
+&nbsp;&nbsp;&nbsp;&nbsp; [Test](test.md) &#9655;
 - - -
 
 # Events
@@ -235,5 +237,8 @@ The error event is triggered for unhandled runtime errors. Syntax errors that
 prevent JavaScript from being executed generally cannot trigger the error event.
 
 
+
 - - -
-[Extension](extension.md) | [TOC](README.md#events) | [Test](test.md)
+&#9665; [Extension](extension.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#events)
+&nbsp;&nbsp;&nbsp;&nbsp; [Test](test.md) &#9655;

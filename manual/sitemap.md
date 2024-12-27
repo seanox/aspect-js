@@ -1,4 +1,4 @@
-[Model-View-Controller](mvc.md) | [TOC](README.md#sitemap) | [Components](composite.md)
+[Model-View-Controller](mvc.md) | [Table of Contents](README.md#sitemap) | [Components](composite.md)
 - - -
 
 ## SiteMap
@@ -404,4 +404,4 @@ mail in the background.
 
 - - -
 
-[Model-View-Controller](mvc.md) | [TOC](README.md#sitemap) | [Components](composite.md)
+[Model-View-Controller](mvc.md) | [Table of Contents](README.md#sitemap) | [Components](composite.md)

@@ -1,4 +1,6 @@
-[SiteMap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
+&#9665; [SiteMap](sitemap.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#components)
+&nbsp;&nbsp;&nbsp;&nbsp; [Reactivity Rendering](reactive.md) &#9655;
 - - -
 
 # Components
@@ -302,6 +304,8 @@ chapters [Model-View-Controler](mvc.md) and [View-Model-Binding](
     mvc.md#view-model-binding).
 
 
-- - -
 
-[SiteMap](sitemap.md) | [TOC](README.md#components) | [Reactivity Rendering](reactive.md)
+- - -
+&#9665; [SiteMap](sitemap.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#components)
+&nbsp;&nbsp;&nbsp;&nbsp; [Reactivity Rendering](reactive.md) &#9655;

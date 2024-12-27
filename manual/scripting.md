@@ -1,4 +1,4 @@
-[Markup](markup.md) | [TOC](README.md#scripting) | [DataSource](datasource.md)
+[Markup](markup.md) | [Table of Contents](README.md#scripting) | [DataSource](datasource.md)
 - - -
 
 # Scripting
@@ -224,4 +224,4 @@ macro [#module](#module).
 
 - - -
 
-[Markup](markup.md) | [TOC](README.md#scripting) | [DataSource](datasource.md)
+[Markup](markup.md) | [Table of Contents](README.md#scripting) | [DataSource](datasource.md)

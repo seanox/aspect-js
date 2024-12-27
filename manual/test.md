@@ -1,4 +1,4 @@
-[Events](events.md) | [TOC](README.md#test) | [Development](development.md)
+[Events](events.md) | [Table of Contents](README.md#test) | [Development](development.md)
 - - -
 
 # Test
@@ -801,4 +801,4 @@ Output:
 
 - - -
 
-[Events](events.md) | [TOC](README.md#test) | [Development](development.md)
+[Events](events.md) | [Table of Contents](README.md#test) | [Development](development.md)

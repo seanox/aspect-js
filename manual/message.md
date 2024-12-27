@@ -1,4 +1,6 @@
-[DataSource](datasource.md) | [TOC](README.md#resource-bundle-i18nl10n) | [Model View Controller](mvc.md)
+&#9665; [DataSource](datasource.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#resource-bundle-i18nl10n)
+&nbsp;&nbsp;&nbsp;&nbsp; [Model View Controller](mvc.md) &#9655;
 - - -
 
 # Resource Bundle (Messages/i18n/l10n)
@@ -98,6 +100,8 @@ available languages are returned by `DataSource.locales` as an array that starts
 with the as default declared language.
 
 
-- - -
 
-[DataSource](datasource.md) | [TOC](README.md#resource-bundle) | [Model View Controller](mvc.md)
+- - -
+&#9665; [DataSource](datasource.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#resource-bundle)
+&nbsp;&nbsp;&nbsp;&nbsp; [Model View Controller](mvc.md) &#9655;

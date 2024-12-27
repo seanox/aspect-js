@@ -1,4 +1,6 @@
-[Resource Bundle](message.md) | [TOC](README.md#model-view-controller) | [SiteMap](sitemap.md)
+&#9665; [Resource Bundle](message.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#model-view-controller)
+&nbsp;&nbsp;&nbsp;&nbsp; [SiteMap](sitemap.md) &#9655;
 - - -
 
 # Model View Controller
@@ -282,6 +284,8 @@ const contact = {
 ```
 
 
-- - -
 
-[Resource Bundle](message.md) | [TOC](README.md#model-view-controller) | [SiteMap](sitemap.md)
+- - -
+&#9665; [Resource Bundle](message.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#model-view-controller)
+&nbsp;&nbsp;&nbsp;&nbsp; [SiteMap](sitemap.md) &#9655;

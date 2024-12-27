@@ -1,4 +1,6 @@
-[Motivation](motivation.md) | [TOC](README.md#introduction) | [Expression Language](expression.md)
+&#9665; [Motivation](motivation.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#introduction)
+&nbsp;&nbsp;&nbsp;&nbsp; [Expression Language](expression.md) &#9655;
 - - -
 
 # Introduction
@@ -1297,6 +1299,8 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 [Learn more](test.m#events)
 
 
-- - -
 
-[Motivation](motivation.md) | [TOC](README.md#introduction) | [Expression Language](expression.md)
+- - -
+&#9665; [Motivation](motivation.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#introduction
+&nbsp;&nbsp;&nbsp;&nbsp; [Expression Language](expression.md) &#9655;

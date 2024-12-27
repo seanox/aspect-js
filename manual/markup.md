@@ -1,4 +1,6 @@
-[Expression Language](expression.md) | [TOC](README.md#markup) | [Scripting](scripting.md)
+&#9665; [Expression Language](expression.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#markup)
+&nbsp;&nbsp;&nbsp;&nbsp; [Scripting](scripting.md) &#9655;
 - - -
 
 # Markup
@@ -856,6 +858,8 @@ Composite.customize("@attributes-statics", "method action");
 ```
 
 
-- - -
 
-[Expression Language](expression.md) | [TOC](README.md#markup) | [Scripting](scripting.md)
+- - -
+&#9665; [Expression Language](expression.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#markup)
+&nbsp;&nbsp;&nbsp;&nbsp; [Scripting](scripting.md) &#9655;

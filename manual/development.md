@@ -1,4 +1,5 @@
-[Test](test.md) | [TOC](README.md#development)
+&#9665; [Test](test.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#development)
 - - -
 
 # Development
@@ -152,6 +153,7 @@ http://127.0.0.1:8000/playground
 To use it, the [server](#server) must be started.
 
 
-- - -
 
-[Test](test.md) | [TOC](README.md#development)
+- - -
+&#9665; [Test](test.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#development)

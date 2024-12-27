@@ -1,4 +1,6 @@
-[Reactivity Rendering](reactive.md) | [TOC](README.md#api-extensions) | [Events](events.md)
+&#9665; [Reactivity Rendering](reactive.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#api-extensions)
+&nbsp;&nbsp;&nbsp;&nbsp; [Events](events.md) &#9655;
 - - -
 
 # API Extensions
@@ -443,6 +445,8 @@ For each event, multiple callback methods can be registered, which are then
 called according to the order in which they were registered.
 
 
-- - -
 
-[Reactivity Rendering](reactive.md) | [TOC](README.md#api-extensions) | [Events](events.md)
+- - -
+&#9665; [Reactivity Rendering](reactive.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#api-extensions)
+&nbsp;&nbsp;&nbsp;&nbsp; [Events](events.md) &#9655;
