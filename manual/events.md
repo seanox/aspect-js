@@ -18,6 +18,11 @@ framework and runtime environment.
   * [Composite.EVENT_MOUNT_START](#compositeevent_mount_start)
   * [Composite.EVENT_MOUNT_NEXT](#compositeevent_mount_next)
   * [Composite.EVENT_MOUNT_END](#compositeevent_mount_end)
+* [Modules]
+  * [Composite.EVENT_MODULE_LOAD](#compositeevent_module_load)
+  * [Composite.EVENT_MODULE_DOCK](#compositeevent_module_dock)
+  * [Composite.EVENT_MODULE_READY](#compositeevent_module_ready)
+  * [Composite.EVENT_MODULE_UNDOCK](#compositeevent_module_undock)
 * [HTTP](#http)
   * [Composite.EVENT_HTTP_START](#compositeevent_http_start)
   * [Composite.EVENT_HTTP_PROGRESS](#compositeevent_http_progress)
@@ -93,6 +98,60 @@ itself does not start until after the event.
 
 The event occurs with the final end of the view model binding. The processing
 itself ends before the event.
+
+
+# Modules
+
+The following events occur during the use of modules.
+
+
+## Composite.EVENT_MODULE_LOAD
+
+Occurs when a module is initially loaded. If a module is loaded and unloaded
+multiple times at runtime, this event will occur only once. The callback method
+is passed the trigger and the determined module. Triggers can be HTML elements,
+if modules are addressed via markup, or they can be strings, if modules are
+addressed programmatically in JavaScript.
+
+```javascript
+Composite.listen(Composite.EVENT_MODULE_***, function(event, context, module) {
+    ...
+});
+```
+
+
+## Composite.EVENT_MODULE_DOCK
+
+Occurs after the markup of a module is added to the DOM and the dock method is
+executed. The callback method is passed the event and a meta object with
+information about the module.
+
+```javascript
+Composite.listen(Composite.EVENT_MODULE_DOCK, function(event, meta) {
+    ...
+});
+```
+
+
+## Composite.EVENT_MODULE_READY
+TODO:
+
+
+## Composite.EVENT_MODULE_UNDOCK
+
+Occurs after the markup of a module is removed from the DOM and the undock
+method is executed. The callback method is passed the event and a meta object
+with information about the module.
+
+```javascript
+Composite.listen(Composite.EVENT_MODULE_UNDOCK, function(event, context, module) {
+    ...
+});
+```
+
+
+
+
 
 
 # HTTP

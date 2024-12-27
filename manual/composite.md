@@ -221,14 +221,15 @@ The example creates the namespace `example.administration` with [#use](
 `example.administration.masterdata` with [#export](scripting.md#export)
 masterdata.
 
-In markup, namespaces are formed from the IDs of nested composites if they use
-the attribute `namespace`.
+In the markup, namespaces are formed from the composite IDs. The nesting of
+composites therefore has no effect, because composites are always considered as
+independent, comparable to managed or named beans.
 
 ```html
-<div id="example" composite namespace>
-  <div id="administration" composite namespace>
-    <div id="masterdata" composite namespace>
-      <div id="regions" composite namespace>
+<div id="example" composite>
+  <div id="administration@example" composite>
+    <div id="masterdata@example:administration" composite>
+      <div id="regions@example:administration:masterdata" composite>
         Namespace: masterdata.regions
       </div>
     </div>
@@ -236,67 +237,42 @@ the attribute `namespace`.
 </div>
 ```
 
-If there are other elements with an ID between the composites, they have no
-effect.
-
-```html
-<div id="example" composite namespace>
-  <div id="administration" composite namespace>
-    <div id="masterdata" composite namespace>
-      <section id="section">
-        <form id="form">
-          <div id="regions" composite namespace>
-            Namespace: masterdata.regions
-            Elements section and form are ignored 
-          </div>
-        </form>
-      </section>
-    </div>
-  </div>
-</div>
-```
-
-Even more special in a namespace chain are composites without the attribute
-`namespace.` These composites have a decoupling effect and have no namespace
-themselves. New namespaces can then be started within these composites,
-independent of parent namespaces.
-
-```html
-<div id="Imprint" composite namespace>
-  Namespace: Imprint
-  <div id="Contact" composite>
-    Namespace: Contact
-    <div id="Support" composite namespace>
-      Namespace: Support
-      <div id="Mail" composite namespace>
-        Namespace: Support.Mail
-      </div>
-      <div id="Channel" composite namespace>
-        Namespace: Support.Channel
-      </div>
-      ...
-    </div>
-    <div id="Community" composite namespace>
-      Namespace: Community
-      <div id="Channel" composite namespace>
-        Namespace: Community.Channel
-      </div>
-      ...
-    </div>
-  </div>
-</div>
-```
-
-This behavior was introduced with the idea of micro-frontends, which use their
-own domains and are to be reused in various places. This way, domain-related
+Namespaces were introduced with the idea of micro-frontends, which use their own
+domains and should be reusable in different places. This way, domain-related
 components can be implemented in the static world of Seanox aspect-js.
 
-Namespaces also have effects on resources and modules. Thus, namespaces in the
-markup initially have only a textual character and can also exist and be used
+Namespaces also have effects on resources and modules. Namespaces in the markup
+have only a textual character for the time being and can also exist and be used
 without a corresponding JavaScript object. Only the syntax of the namespaces is
 checked in the markup. If this is valid, the namespaces are applied directly to
 the path of modules and their resources and extend the path from the module
 directory.
+
+```html
+<div id="imprint" composite>
+  Namespace: Imprint
+  <div id="contact" composite>
+    Namespace: Contact
+    <div id="support" composite>
+      Namespace: support
+      <div id="mail@support" composite>
+        Namespace: support.mail
+      </div>
+      <div id="channel@support" composite>
+        Namespace: support.channel
+      </div>
+      ...
+    </div>
+    <div id="community" composite>
+      Namespace: community
+      <div id="channel@community" composite>
+        Namespace: community.channel
+      </div>
+      ...
+    </div>
+  </div>
+</div>
+```
 
 ```
 + modules

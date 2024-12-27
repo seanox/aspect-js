@@ -22,7 +22,6 @@ recursively to changes.
   * [interval](#interval)
   * [iterate](#iterate)
   * [message](#message)
-  * [namespace](#namespace)
   * [notification](#notification)
   * [output](#output)
   * [release](#release)
@@ -399,110 +398,6 @@ with the attributes [validate](#validate) and [events](#events).
 ```
 
 
-### namespace
-
-Comparable to packages in other programming languages, namespaces can be used
-for hierarchical structuring of components, resources and business logic.
-
-Although packages are not a feature of JavaScript, they can be used at the
-object level by concatenating objects in an object tree. Each level of the
-object tree forms a namespace, which can also be considered a domain.
-
-In markup, namespaces are formed from the IDs of nested composites if they use
-the attribute `namespace`.
-
-```html
-<div id="masterdata" composite namespace>
-  <div id="regions" composite namespace>
-    namespace: masterdata.regions
-  </div>    
-</div>
-```
-
-If there are other elements with an ID between the composites, they have no
-effect.
-
-```html
-<div id="masterdata" composite namespace>
-  <section id="section">
-    <form id="form">
-      <div id="regions" composite namespace>
-        namespace: masterdata.regions
-        elements section and form are ignored 
-      </div>
-    </form>
-  </section>  
-</div>
-```
-
-Even more special in a namespace chain are composites without the attribute
-`namespace.` These composites have a decoupling effect and have no namespace
-themselves. New namespaces can then be started within these composites,
-independent of parent namespaces.
-
-```html
-<div id="Imprint" composite namespace>
-  namespace: Imprint
-  <div id="Contact" composite>
-    namespace: Contact
-    <div id="Support" composite namespace>
-      namespace: Support
-      <div id="Mail" composite namespace>
-        namespace: Support.Mail  
-      </div>
-      <div id="Channel" composite namespace>
-        namespace: Support.Channel
-      </div>
-      ...
-    </div>
-    <div id="Community" composite namespace>
-      namespace: Community
-      <div id="Channel" composite namespace>
-        namespace: Community.Channel
-      </div>
-      ...
-    </div>
-  </div>
-</div>
-```
-
-This behavior was introduced with the idea of micro-frontends, which use their
-own domains and are to be reused in various places. This way, domain-related
-components can be implemented in the static world of Seanox aspect-js.
-
-Namespaces also have effects on resources and modules. Thus, namespaces in the
-markup initially have only a textual character and can also exist and be used
-without a corresponding JavaScript object (model). Only the syntax of the
-namespaces is checked in the markup. If this is valid, the namespaces are
-applied directly to the path of modules and their resources and extend the path
-from the module directory.
-
-```
-+ modules
-  - common.css
-  - common.js
-  + community   
-    - channel.css
-    - channel.html
-    - channel.js
-    - ...
-  - imprint.css
-  - imprint.html
-  - imprint.js
-  + support
-    - mail.css
-    - mail.html
-    - mail.js
-    - ...
-  - ...
-- index.html
-```
-
-Details about namespaces are also described in chapters 
-[Erweiterung - Namespace](extension.md#namespace) and [Composites - Namespace](
-    composite.md#namespace).
-
-
 ### notification
 
 Notification is an optional part of [validation](#validate) and specifies that
@@ -684,45 +579,13 @@ the data objects trigger a partial update of the view.__
 ### strict
 
 The attribute can be combined with the attributes [composite](#composite) and
-[validate](#validate).
-
-In combination with the attribute [composite](#composite), it specifies that
-when loading the resources (JS, CSS, HTML) for a component, the filename is used
-in its original notation. The default behavior without the attribute [strict](
-    #strict) uses the composite id with a lowercase letter at the beginning.
-
-Example of standard behavior:
-```html
-<div id="SmallExample" composite>
-```
-```
-+ modules
-  - smallExample.css
-  - smallExample.js
-  - smallExample.html
-- index.html
-```
-
-Example with the attribute [strict](#strict):
-```html
-<div id="SmallExample" composite strict>
-```
-```
-+ modules
-  - SmallExample.css
-  - SmallExample.js
-  - SmallExample.html
-- index.html
-```
-
-The combination with the attribute [validate](#validate) affects the
-synchronization of the data in such a way that the synchronization is executed
-only if the validation explicitly returns `true`. In all other cases the value
-is not synchronized. Which means that only valid values are available in the
-target to be synchronized after a user input, which must be considered for an
-input field declared as required, for example, if the user deletes the input
-character by character. Thus, in this constructed example, the last character is
-kept in the target to be synchronized.
+[validate](#validate) and affects the synchronization of the data in such a way
+that the synchronization is executed only if the validation explicitly returns
+`true`. In all other cases the value is not synchronized. Which means that only
+valid values are available in the target to be synchronized after a user input,
+which must be considered for an input field declared as required, for example,
+if the user deletes the input character by character. Thus, in this constructed
+example, the last character is kept in the target to be synchronized.
 
 ```javascript
 const Model = {
