@@ -145,11 +145,9 @@ aspect-js is always up to date.
 
 
 # Manuals
-- [DE Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/de/introduction.md#einf&uuml;hrung)
-- [DE Manual](https://github.com/seanox/aspect-js/tree/master/manual/de#readme)
-- [EN Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/en/introduction.md#introduction)
-- [EN Manual](https://github.com/seanox/aspect-js/tree/master/manual/en#readme)
-- [EN Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
+- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/introduction.md#einf&uuml;hrung)
+- [Manual](https://github.com/seanox/aspect-js/tree/master/manual/#readme)
+- [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 
 # Changes
@@ -198,4 +196,4 @@ CR: Release: Revision of the release channels
 # Contact
 [Issues](https://github.com/seanox/aspect-js-tutorial/issues)  
 [Requests](https://github.com/seanox/aspect-js-tutorial/pulls)  
-[Mail](http://seanox.de/contact)
+[Mail](http://seanox.com/contact)
