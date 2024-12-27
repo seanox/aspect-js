@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="aspect-js" default="usage" basedir="..">
+<project name="aspect-js" default="usage" basedir="${ant.file}/../..">
   <target name="usage">
     <echo>Following targets are available:                               </echo>
     <echo>                                                               </echo>
@@ -264,6 +264,7 @@
   <target name="start">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
         dir="server" fork="true" spawn="false">
+      <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
       <arg value="start"/>
     </java>
   </target>
@@ -271,6 +272,7 @@
   <target name="stop">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
         dir="server" fork="true" spawn="false">
+      <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
       <arg value="stop"/>
       <arg value="127.0.0.1:8001"/>
     </java>
