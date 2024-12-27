@@ -1,4 +1,6 @@
-[Events](events.md) | [Table of Contents](README.md#test) | [Development](development.md)
+&#9665; [Events](events.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#test)
+&nbsp;&nbsp;&nbsp;&nbsp; [Development](development.md) &#9655;
 - - -
 
 # Test
@@ -799,6 +801,8 @@ Output:
 ```
 
 
-- - -
 
-[Events](events.md) | [Table of Contents](README.md#test) | [Development](development.md)
+- - -
+&#9665; [Events](events.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#test)
+&nbsp;&nbsp;&nbsp;&nbsp; [Development](development.md) &#9655;

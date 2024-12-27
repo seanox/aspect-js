@@ -1,4 +1,6 @@
-[Markup](markup.md) | [Table of Contents](README.md#scripting) | [DataSource](datasource.md)
+&#9665; [Markup](markup.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#scripting)
+&nbsp;&nbsp;&nbsp;&nbsp; [DataSource](datasource.md) &#9655;
 - - -
 
 # Scripting
@@ -222,6 +224,8 @@ macro [#module](#module).
 ```
 
 
-- - -
 
-[Markup](markup.md) | [Table of Contents](README.md#scripting) | [DataSource](datasource.md)
+- - -
+&#9665; [Markup](markup.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#scripting)
+&nbsp;&nbsp;&nbsp;&nbsp; [DataSource](datasource.md) &#9655;

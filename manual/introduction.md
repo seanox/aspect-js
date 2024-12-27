@@ -1302,5 +1302,5 @@ Test.listen(Test.EVENT_FINISH, function(event, status) {
 
 - - -
 &#9665; [Motivation](motivation.md)
-&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#introduction
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#introduction)
 &nbsp;&nbsp;&nbsp;&nbsp; [Expression Language](expression.md) &#9655;

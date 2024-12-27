@@ -1,5 +1,5 @@
-&#9665; [Table of Contents](README.md)
-&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Introduction](introduction.md) &#9655;
+&#8801; [Table of Contents](README.md)
+&nbsp;&nbsp;&nbsp;&nbsp; [Introduction](introduction.md) &#9655;
 - - -
 
 # Motivation
@@ -22,5 +22,5 @@ performance.
 
 
 - - -
-&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md)
+&#8801; [Table of Contents](README.md)
 &nbsp;&nbsp;&nbsp;&nbsp; [Introduction](introduction.md) &#9655;

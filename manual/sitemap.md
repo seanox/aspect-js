@@ -1,4 +1,6 @@
-[Model-View-Controller](mvc.md) | [Table of Contents](README.md#sitemap) | [Components](composite.md)
+&#9665; [Model-View-Controller](mvc.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#sitemap)
+&nbsp;&nbsp;&nbsp;&nbsp; [Components](composite.md) &#9655;
 - - -
 
 ## SiteMap
@@ -402,6 +404,8 @@ mail in the background.
 ```
 
 
-- - -
 
-[Model-View-Controller](mvc.md) | [Table of Contents](README.md#sitemap) | [Components](composite.md)
+- - -
+&#9665; [Model-View-Controller](mvc.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#sitemap)
+&nbsp;&nbsp;&nbsp;&nbsp; [Components](composite.md) &#9655;
