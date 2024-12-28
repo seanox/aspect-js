@@ -24,7 +24,7 @@
  * General extension of the JavaScript API.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230326
+ * @version 1.7.0 20230423
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
@@ -323,16 +323,18 @@ window.compliant = (context, payload) => {
 	Element.prototype.appendChild = function(node, exclusive) {
 		if (exclusive)
 			this.innerHTML = "";
-		if (node instanceof Node) {
-			_appendChild.call(this, node);
-		} else if (Array.isArray(node)
+		if (node instanceof Node)
+			return _appendChild.call(this, node);
+		if (Array.isArray(node)
 				|| node instanceof NodeList
 				|| (Symbol && Symbol.iterator
 						&& node && typeof node[Symbol.iterator])) {
 			node = Array.from(node);
 			for (let loop = 0; loop < node.length; loop++)
 				_appendChild.call(this, node[loop]);
-		} else _appendChild.call(this, node);
+			return node;
+		}
+		return _appendChild.call(this, node);
    };
 })();
 
@@ -563,7 +565,7 @@ compliant("window.location.combine", (...paths) =>
  * aggregated and the result can be transformed with XSLT.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.7.0 20230417
  */
 (() => {
 
@@ -701,7 +703,7 @@ compliant("window.location.combine", (...paths) =>
 		 * object or map with parameters for the XSLTProcessor can be passed.
 		 * When using the transformation, the return type changes to a
 		 * DocumentFragment.
-		 * @param  locators  locator
+		 * @param  locator   locator
 		 * @param  transform locator of the transformation style
 		 *     With the boolean true, the style is derived from the locator by
 		 *     using the file extension xslt.
@@ -828,21 +830,16 @@ compliant("window.location.combine", (...paths) =>
 		value: [], enumerable: true
 	});
 
-	let locale = [];
-	locale = locale.concat(navigator.language);
-	if (navigator.languages !== undefined)
-		locale = locale.concat(navigator.languages);
-	Array.from(locale).forEach((language) => {
-		language = language.match(/^[a-z]+/i, "");
-		if (language && !locale.includes(language[0]))
-			locale.push(language[0]);
+	let locales = [];
+	[navigator.language].concat(navigator.languages || []).forEach(language => {
+		language = language.toLowerCase().trim();
+		locales.push(language);
+		language = language.replace(/-.*$/, "");
+		if (!locales.includes(language))
+			locales.push(language);
 	});
-	locale = locale.map((language) =>
-		language.trim().toLowerCase());
-	locale = locale.filter((item, index) =>
-		locale.indexOf(item) === index);
 
-	if (locale.length <= 0)
+	if (locales.length <= 0)
 		throw new Error("Locale not available");
 
 	const request = new XMLHttpRequest();
@@ -879,125 +876,11 @@ compliant("window.location.combine", (...paths) =>
 	if (DataSource.locales.length <= 0)
 		throw new Error("Locale not available");
 
-	locale.push(DataSource.locales[0]);
-	locale = locale.filter(function(locale) {
-		return DataSource.locales.includes(locale);
-	});
+	locales.push(DataSource.locales[0]);
+	locales = locales.filter((locale) =>
+		DataSource.locales.includes(locale));
 
-	DataSource.locales.selection = locale.length ? locale[0] : DataSource.locales[0];
-})();
-
-/**
- * (Resource)Messages is a static DataSource extension for internationalization
- * and localization. The implementation is based on a set of key-value or
- * label-value data which is stored in the locales.xml of the DataSource.
- *
- *     + data
- *       + de
- *       + en
- *       - locales.xml
- *     + modules
- *     + resources
- *     - index.html
- *
- * The elements for the supported languages are organized in locales in this
- * file. Locales is a set of supported country codes. In each country code, the
- * key values are recorded as label entries.
- *
- *     <?xml version="1.0"?>
- *     <locales>
- *       <de>
- *         <label key="contact.title" value="Kontakt"/>
- *         <label key="contact.development.title">Entwicklung</label>
- *         ...
- *       </de>
- *       <en default="true">
- *         <label key="contact.title" value="Contact"/>
- *         <label key="contact.development.title">Development</label>
- *         ...
- *       </en>
- *     </locales>
- *
- * The language is selected automatically on the basis of the language setting
- * of the browser. If the language set there is not supported, the language
- * declared as 'default' is used.
- *
- * After loading the application, Messages are available as an associative
- * array and can be used directly in JavaScript and Markup via Expression
- * Language.
- *
- *     Messages["contact.title"];
- *
- *     <h1 output="{{Messages['contact.title']}}"/>
- *
- * In addition, the object message is also provided. Unlike Messages, message is
- * an object tree analogous to the keys from Messages. The dot in the keys is
- * the indicator of the levels in the tree.
- *
- *     messages.contact.title;
- *
- *     <h1 output="{{messages.contact.title}}"/>
- *
- * Both objects are only available if there are also labels.
- *
- * @author  Seanox Software Solutions
- * @version 1.6.0 20230304
- */
-(() => {
-
-	compliant("messages", {});
-	compliant("Messages", {});
-
-	const _localize = DataSource.localize;
-
-	DataSource.localize = (locale) => {
-
-		_localize(locale);
-
-		delete window.messages;
-		delete window.Messages;
-
-		window.Messages = {
-			customize(label, ...values) {
-				let text = Messages[label] || "";
-				for (let index = 0; index < values.length; index++)
-					text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);
-				return text.replace(/\{\d+\}/g, "");
-			}
-		}
-
-		const map = new Map();
-		const xpath = "/locales/" + DataSource.locale + "/label";
-		const result = DataSource.data.evaluate(xpath, DataSource.data, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-		for (let node = result.iterateNext(); node; node = result.iterateNext())
-			map.set((node.getAttribute("key") || "").trim(),
-				((node.getAttribute("value") || "").trim()
-					|| (node.textContent || "").trim()).unescape());
-		new Map([...map.entries()].sort()).forEach((value, key) => {
-			const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\w+)$/);
-			if (match) {
-				// In order for the object tree to branch from each level, each
-				// level must be an object. Therefore, an anonymous object is
-				// used for the level, which returns the actual text via
-				// Object.prototype.toString().
-				const namespace = "messages" + (match[1] ? "." + match[1] : "");
-				Object.defineProperty(Namespace.use(namespace), match[2], {
-					value: {toString() {return value;}}
-				});
-				Object.defineProperty(Namespace.use("Messages"), key, {
-					value
-				});
-			}
-		});
-	};
-
-	// Messages are based on DataSources. To initialize, DataSource.localize()
-	// must be overwritten and loading of the key-value pairs is embedded.
-	if (DataSource.data
-			&& DataSource.locale
-			&& DataSource.locales
-			&& DataSource.locales.includes(DataSource.locale))
-		DataSource.localize(DataSource.locale);
+	DataSource.locales.selection = locales.length ? locales[0] : DataSource.locales[0];
 })();
 
 /**
@@ -1302,7 +1185,7 @@ compliant("window.location.combine", (...paths) =>
  * expression language.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230330
+ * @version 1.7.0 20230513
  */
 (() => {
 
@@ -1343,7 +1226,7 @@ compliant("window.location.combine", (...paths) =>
 			try {return Scripting.run(script);
 			} catch (error) {
 				console.error(error.message + "\n\t" + script);
-				return error.message + " in " + script;
+				return new Error(error.message + " in " + script);
 			}
 		}
 	});
@@ -1400,10 +1283,17 @@ compliant("window.location.combine", (...paths) =>
 				if (!structure.match(/^(\r(\d+)\n)*$/))
 					throw Error("Error in the expression structure\n\t" + expression);
 
+				const mixed = !expression.startsWith("{{")
+						|| !expression.endsWith("}}")
+						|| expression.substring(2).includes("{{")
+						|| expression.substring(0, expression.length -2).includes("}}");
+
 				// placeholders must be filled, since they were created
 				// recursively, they do not have to be filled recursively
 				structure = structure.replace(/(?:\r(\d+)\n)/g,
-					(match, placeholder) => "\r" + patches[placeholder] + "\n");
+					(match, placeholder) => mixed
+						? "\r(" + patches[placeholder] + ")\n"
+						: "\r" + patches[placeholder] + "\n");
 
 				// masked quotation marks will be restored.
 				structure = structure.replaceAll("\r\\u0022\n", '\\"');
@@ -1474,8 +1364,9 @@ compliant("window.location.combine", (...paths) =>
 
 				// element expressions are translated into JavaScript
 				//
+				//     #element -> document.getElementById(element)
 				//     #[element] -> document.getElementById(element)
-				//     #element   -> document.getElementById(element)
+				//     #[element//expression//] -> document.getElementById(element + expression)
 				//
 				// The version with square brackets is for more complex element
 				// IDs that do not follow the JavaScript syntax for variables.
@@ -1485,6 +1376,7 @@ compliant("window.location.combine", (...paths) =>
 				// not be misinterpreted.
 				expression = expression.replace(/#\[([^\[\]]*)\]/g,
 					(match, element) => {
+						element = element.replaceAll(/\/{2}(.*?)\/{2}/gs, "\"+($1)+\"");
 						patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
 						return "\r" + (patches.length -1) + "\n";
 				});
@@ -1631,7 +1523,7 @@ compliant("window.location.combine", (...paths) =>
  * nesting of the DOM must match.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230402
+ * @version 1.7.0 20230510
  */
 (() => {
 
@@ -1666,9 +1558,6 @@ compliant("window.location.combine", (...paths) =>
 
 		/** Constant for attribute message */
 		get ATTRIBUTE_MESSAGE() {return "message";},
-
-		/** Constant for attribute namespace */
-		get ATTRIBUTE_NAMESPACE() {return "namespace";},
 
 		/** Constant for attribute notification */
 		get ATTRIBUTE_NOTIFICATION() {return "notification";},
@@ -1706,7 +1595,7 @@ compliant("window.location.combine", (...paths) =>
 		 * that is cached in the meta-object. Other attributes are only cached
 		 * if they contain an expression.
 		 */
-		get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|namespace|notification|output|release|render|strict|validate)$/i;},
+		get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|strict|validate)$/i;},
 
 		/**
 		 * Pattern for all static attributes.
@@ -1754,17 +1643,21 @@ compliant("window.location.combine", (...paths) =>
 		 */
 		get PATTERN_COMPOSITE_SCRIPT() {return /^composite\/javascript$/i;},
 
-		/** Pattern for a composite id (based on a word) */
-		get PATTERN_COMPOSITE_ID() {return /^[_a-z]\w*$/i;},
+		/**
+		 * Pattern for a composite id (based on a word e.g. name@namespace:...)
+		 * - group 1: name
+		 * - group 2: namespace (optional)
+		 */
+		get PATTERN_COMPOSITE_ID() {return /^([_a-z]\w*)(?:@([_a-z]\w*(?::[_a-z]\w*)*))?$/i;},
 
 		/**
-		 * Pattern for an element id (e.g. name:qualifier...@model...)
+		 * Pattern for an element id (e.g. name:qualifier...@model:...)
 		 * - group 1: name
 		 * - group 2: qualifier(s) (optional)
 		 * - group 3: unique identifier (optional)
 		 * - group 4: (namespace+)model (optional)
 		 */
-		get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)((?::\w+)*)?(#\w+)?(@[_a-z]\w*(?::[_a-z]\w*)*)?$/i;},
+		get PATTERN_ELEMENT_ID() {return /^([_a-z]\w*)(?::(\w+(?::\w+)*))?(?:#(\w+))?(?:@([_a-z]\w*(?::[_a-z]\w*)*))?$/i;},
 
 		/** Pattern for a scope (custom tag, based on a word) */
 		get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
@@ -1784,6 +1677,12 @@ compliant("window.location.combine", (...paths) =>
 		get EVENT_MOUNT_START() {return "MountStart";},
 		get EVENT_MOUNT_NEXT() {return "MountNext";},
 		get EVENT_MOUNT_END() {return "MountEnd";},
+
+		/** Constants of events when using modules */
+		get EVENT_MODULE_LOAD() {return "ModuleLoad";},
+		get EVENT_MODULE_DOCK() {return "ModuleDock";},
+		get EVENT_MODULE_READY() {return "ModuleReady";},
+		get EVENT_MODULE_UNDOCK() {return "ModuleUndock";},
 
 		/** Constants of events when using HTTP */
 		get EVENT_HTTP_START() {return "HttpStart";},
@@ -2302,6 +2201,8 @@ compliant("window.location.combine", (...paths) =>
 				if (!(object instanceof Object))
 					return;
 
+				const identifier = object.attributes[Composite.ATTRIBUTE_ID];
+
 				// The explicit events are declared by ATTRIBUTE_EVENTS. The
 				// model can, but does not have to, implement the corresponding
 				// method. Explicit events are mainly used to synchronize view
@@ -2315,12 +2216,16 @@ compliant("window.location.combine", (...paths) =>
 
 				// There must be a corresponding model.
 				const meta = _mount_lookup(selector);
-				if (meta instanceof Object) {
+				if (meta instanceof Object
+						&& identifier) {
 
 					// The implicit assignment is based on the on-event-methods
 					// implemented in the model. These are determined and added
 					// to the list of events if the events have not yet been
-					// explicitly declared.
+					// explicitly declared. But this is only useful for elements
+					// with an ID. Since mounting is performed recursively on
+					// the child nodes, it should be prevented that child nodes
+					// are assigned the events of the parents.
 
 					// Events are possible for composites and their interactive
 					// elements. For this purpose, composites define the scope
@@ -2436,11 +2341,11 @@ compliant("window.location.combine", (...paths) =>
 								if (accept(meta.target)) {
 									meta.target = value;
 								} else if (typeof meta.target === "object") {
-									if (accept(meta.target["value"]))
-										meta.target["value"] = value;
+									if (accept(meta.target[Composite.ATTRIBUTE_VALUE]))
+										meta.target[Composite.ATTRIBUTE_VALUE] = value;
 								} else if (meta.target === undefined) {
-									if (accept(meta.model["value"]))
-										meta.model["value"] = value;
+									if (accept(meta.model[Composite.ATTRIBUTE_VALUE]))
+										meta.model[Composite.ATTRIBUTE_VALUE] = value;
 								}
 
 								// Step 3: Invocation
@@ -2504,6 +2409,25 @@ compliant("window.location.combine", (...paths) =>
 						}
 					});
 				});
+
+				// The current value in the model must be set in the HTML
+				// element if the element has a corresponding value property.
+				//     model -> view
+				// This is only useful for elements with an ID. Because mounting
+				// is performed recursively on the child nodes, it should be
+				// prevented that child nodes are assigned.
+				if (meta && meta.target && identifier) {
+					let value = meta.target;
+					if (meta.target instanceof Object)
+						value = Composite.ATTRIBUTE_VALUE in meta.target ? meta.target.value : undefined;
+					if (value !== undefined) {
+						if (selector.tagName.match(/^input$/i)
+								&& selector.type.match(/^radio|checkbox/i))
+							selector.checked = value;
+						else if (Composite.ATTRIBUTE_VALUE in selector)
+							selector[Composite.ATTRIBUTE_VALUE] = value;
+					}
+				}
 			} finally {
 				lock.release();
 			}
@@ -2691,11 +2615,11 @@ compliant("window.location.combine", (...paths) =>
 		 * The following attributes and elements are supported:
 		 *
 		 * - Attributes:
-		 *     COMPOSITE    INTERVAL        OUTPUT
-		 *     CONDITION    ITERATE         RELEASE
-		 *     EVENTS       MESSAGE         RENDER
-		 *     ID           NAMESPACE       VALIDATE
-		 *     IMPORT       NOTIFICATION
+		 *     COMPOSITE    INTERVAL        RELEASE
+		 *     CONDITION    ITERATE         RENDER
+		 *     EVENTS       MESSAGE         VALIDATE
+		 *     ID           NOTIFICATION
+		 *     IMPORT       OUTPUT
 		 *
 		 * - Expression Language
 		 * - Scripting
@@ -2730,6 +2654,17 @@ compliant("window.location.combine", (...paths) =>
 
 			if (!selector)
 				selector = Composite.render.queue[0];
+
+			// even before rendering, possible expressions in the initial ID
+			// should be resolved
+			if (selector instanceof Element
+					&& !_render_meta[selector.ordinal()]) {
+				let id = selector.getAttribute(Composite.ATTRIBUTE_ID) || "";
+				if (id.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
+					id = Expression.eval(selector.ordinal() + ":" + Composite.ATTRIBUTE_ID, id);
+					selector.setAttribute(Composite.ATTRIBUTE_ID, id);
+				}
+			}
 
 			lock = Composite.lock(Composite.render, selector);
 
@@ -2941,7 +2876,9 @@ compliant("window.location.combine", (...paths) =>
 					// The condition must be explicitly true, otherwise the
 					// output is removed from the DOM and the rendering ends.
 					// The cleanup will be done by the MutationObserver.
-					if (Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition.expression) !== true) {
+					const expression = Expression.eval(serial + ":" + Composite.ATTRIBUTE_CONDITION, condition.expression);
+					selector.nodeValue = expression instanceof Error ? expression : "";
+					if (expression !== true) {
 						// Because a condition can consist of two elements
 						// (marker and conditional element), it can happen that
 						// when rendering a NodeList, the marker is hit first,
@@ -3151,24 +3088,25 @@ compliant("window.location.combine", (...paths) =>
 					return;
 				}
 
+				if (!(selector instanceof Element))
+					return;
+
 				// Only composites are mounted based on their model. This
 				// excludes markers of conditions as text nodes.
-				if (selector instanceof Element
-						&& object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-					let model = String(object.attributes[Composite.ATTRIBUTE_ID] || "").trim();
-					if (!model.match(Composite.PATTERN_COMPOSITE_ID))
-						throw new Error(`Invalid composite id${model ? ": " + model : ""}`);
-
+				if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+					const locate = _mount_locate(selector);
+					let model = (locate.namespace || []).concat(locate.model).join(".");
 					if (!_models.has(model)) {
 						_models.add(model);
 						model = Object.lookup(model);
-						if (model && typeof model.dock === "function")
+						if (model && typeof model.dock === "function") {
+							const meta = _mount_lookup(selector);
+							Composite.fire(Composite.EVENT_MODULE_DOCK, meta);
 							model.dock.call(model);
+							Composite.fire(Composite.EVENT_MODULE_READY, meta);
+						}
 					}
 				}
-
-				if (!(selector instanceof Element))
-					return;
 
 				// The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
 				// ATTRIBUTE_RENDER are processed in Composite.mount(selector)
@@ -3271,9 +3209,8 @@ compliant("window.location.combine", (...paths) =>
 					} else if (value instanceof Node)
 						selector.appendChild(value.cloneNode(true), true);
 					else if (value instanceof NodeList)
-						Array.from(value).forEach(function(node, index) {
-							selector.appendChild(node.cloneNode(true), index === 0);
-						});
+						Array.from(value).forEach((node, index) =>
+							selector.appendChild(node.cloneNode(true), index === 0));
 					else selector.innerHTML = String(value);
 				}
 
@@ -3310,7 +3247,12 @@ compliant("window.location.combine", (...paths) =>
 				// 2. A global variable is required for the iteration. If this
 				//    variable already exists, the existing variable is saved
 				//    and restored at the end of the iteration.
-				// 3. Variable with meta information about the iteration is used
+				// 3. The variable with the partial meta object is added at th
+				//    beginning of each iteration block as a value expression,
+				//    so that no problems with the temporary variable occur
+				//    later during partial rendering. This way the block keeps th
+				//    meta information it is built on.
+				// 4. Variable with meta information about the iteration is used
 				//    within the iteration:
 				//    e.g iterate={{tempA:Model.list}}
 				//            -> tempA = {item, index, data}
@@ -3321,59 +3263,73 @@ compliant("window.location.combine", (...paths) =>
 						const match = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
 						if (!match)
 							throw new Error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
-						object.iterate = {name:match[1].trim(), expression:"{{" + match[2].trim() + "}}"};
+						object.iterate = {name:match[1].trim(), expression:"{{" + match[2].trim() + "}}", items:[]};
 						object.template = selector.cloneNode(true);
+						selector.innerHTML = "";
 					}
 
 					// A temporary global variable is required for the
 					// iteration. If this variable already exists, the existing
 					// is cached and restored at the end of the iteration.
-					const variable = window[object.iterate.name];
-					try {
-						selector.innerHTML = "";
-						const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
-						let iterate = Expression.eval(context, object.iterate.expression);
-						if (iterate) {
-							if (iterate instanceof XPathResult) {
-								const meta = {entry: null, array: [], iterate};
-								while (meta.entry = meta.iterate.iterateNext())
-									meta.array.push(meta.entry);
-								iterate = meta.array;
-							} else iterate = Array.from(iterate);
+
+					const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
+					let iterate = Expression.eval(context, object.iterate.expression);
+					if (iterate instanceof Error)
+						throw iterate;
+					if (iterate) {
+						delete object.iterate.variable;
+						if (eval("typeof " + object.iterate.name + " !== \"undefined\""))
+							object.iterate.variable = eval(object.iterate.name);
+						if (iterate instanceof XPathResult) {
+							const meta = {entry: null, array: [], iterate};
+							while (meta.entry = meta.iterate.iterateNext())
+								meta.array.push(meta.entry);
+							iterate = meta.array;
+						} else iterate = Array.from(iterate);
+
+						object.iterate.update = object.iterate.items.length !== iterate.length;
+						if (object.iterate.update) {
+							selector.innerHTML = "";
+							object.iterate.items = Array.from(iterate);
 							iterate.forEach((item, index, array) => {
 								const meta = {};
 								Object.defineProperty(meta, "item", {
-									value: item,
-									enumerable: true
+									enumerable:true, value:item
 								});
 								Object.defineProperty(meta, "index", {
-									value: index,
-									enumerable: true
+									enumerable:true, value:index
 								});
 								Object.defineProperty(meta, "data", {
-									value: array,
-									enumerable: true
+									enumerable:true, value:array
 								});
-								window[object.iterate.name] = meta;
+								object.iterate.items[index] = meta
+								const data = "{{___(\"" + object.iterate.name + "\", " + serial + ", " + index + ")}}";
+								const node = document.createTextNode(data);
+								selector.appendChild(node);
+								Composite.render(node, lock.share());
 								// For whatever reason, if forEach is used on
 								// the NodeList, each time it is appended to the
-								// DOM, the elements are removed from the
+								// DOM the elements are removed from the
 								// NodeList piece by piece.
 								Array.from(object.template.cloneNode(true).childNodes).forEach(node => {
 									selector.appendChild(node);
 									Composite.render(node, lock.share());
 								});
 							});
+							// The expression to reset the temporary variable is
+							// created and inserted at the end of the iteration,
+							// which resets the variable to the previous value.
+							// This resets the variable to the previous value
+							// and thus simulates the effect of own scopes.
+							const data = "{{___(\"" + object.iterate.name + "\", " + serial + ")}}";
+							const node = document.createTextNode(data);
+							selector.appendChild(node);
+							Composite.render(node, lock.share());
 						}
-					} finally {
-						// If necessary, restore the temporary variable.
-						delete window[object.iterate.name];
-						if (variable !== undefined)
-							window[object.iterate.name] = variable;
 					}
-					// The content is finally rendered, the enclosing
-					// container element itself, or more precisely the
-					// attributes, still needs to be updated.
+					// The content is finally rendered, the enclosing container
+					// element itself, or more precisely the attributes, still
+					// needs to be updated.
 				}
 
 				// EXPRESSION: The expression in the attributes is interpreted.
@@ -3465,7 +3421,8 @@ compliant("window.location.combine", (...paths) =>
 				// This is intercepted by the MutationObserver.
 				if (selector.childNodes
 						&& !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-						&& !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))) {
+						&& !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)
+								&& object.iterate.update)) {
 					Array.from(selector.childNodes).forEach((node) => {
 						// The rendering is recursive, if necessary the node is
 						// then no longer available. For example, if a condition
@@ -3622,13 +3579,11 @@ compliant("window.location.combine", (...paths) =>
 				object = _render_meta[composite.ordinal()];
 				if (!object)
 					throw new Error("Unknown composite");
-				resource = composite.id;
-				if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT))
-					resource = resource.uncapitalize();
 				const meta = _mount_locate(composite);
-				if (meta && meta.namespace)
-					resource = meta.namespace.concat(resource);
-				else resource = [resource];
+				if (!meta.namespace)
+					meta.namespace = [];
+				meta.namespace.push(meta.model);
+				resource = meta.namespace;
 			}
 
 			const context = Composite.MODULES + "/" + resource.join("/");
@@ -3646,63 +3601,53 @@ compliant("window.location.combine", (...paths) =>
 			// or composite ID are invalid, but this should already run on error
 			// before, so it is not done here -- otherwise this is a bug!
 
-			resource = resource.join(".");
+			const lookup = Object.lookup(resource.join("."));
 
-			const lookup = Object.lookup(resource);
+			resource = resource.join("/");
 
-			// If the module has already been loaded, it is only necessary to
-			// check whether the markup must be inserted. CSS should already
-			// exist in the head and the JavaScript will only be executed once.
-			if (_render_cache[context + ".composite"] !== undefined) {
-				if (_render_cache[context + ".html"] !== undefined) {
-					if (object && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-							&& !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)
-							&& !composite.innerHTML.trim()) {
-						_recursion_detection(composite);
-						if (composite instanceof Element)
-							composite.innerHTML = _render_cache[context + ".html"];
-					}
-				}
-				return;
-			}
-
+			// Was the module already loaded?
+			// Initially EVENT_MODULE_LOAD is triggered.
+			if (_render_cache[context + ".composite"] === undefined)
+				Composite.fire(Composite.EVENT_MODULE_LOAD, composite, resource);
 			_render_cache[context + ".composite"] = null;
 
 			// The sequence of loading is strictly defined: JS, CSS, HTML
 
 			// JavaScript is only loaded if no corresponding object exists for
-			// the composite id or the object is an element object
+			// the Composite ID or the object is an element object
 			if (lookup === undefined
 					|| lookup instanceof Element
 					|| lookup instanceof HTMLCollection
 					|| resource === "common")
 				this.load(context + ".js");
 
-			// CSS and HTML are loaded only if they are resources to an element
-			// and the element is empty, excludes CSS for common. Since CSS
-			// resources are loaded only once, common.css can be requested again
-			// later.
+			// CSS and HTML are loaded once and only if they are resources to an
+			// element and the element is empty, excludes CSS for common.
 			if (resource === "common")
 				this.load(context + ".css");
 
-			// CSS and HTML/Markup is only loaded if it is a known composite
+			// CSS and HTML/markup is only loaded if it is a known composite
 			// object and the element does not contain a markup (inner HTML).
 			// For inserting HTML/markup ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT
 			// must not be set. It is assumed that an empty component/elements
 			// outsourced markup exists.
-			if (!object
-					|| composite.innerHTML.trim())
-				return;
-			this.load(context + ".css");
-			if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-					|| object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT))
-				return;
-			const content = this.load(context + ".html");
-			if (content === undefined)
-				return;
-			_recursion_detection(composite);
-			if (composite instanceof Element)
-				composite.innerHTML = content;
+			if (composite instanceof Element
+					&& !composite.innerHTML.trim())
+				this.load(context + ".css");
+
+			// Is only required if the composite has no content and will not be
+			// filled with the attributes ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT.
+			if (composite instanceof Element
+					&& !composite.innerHTML.trim()
+					&& !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+					&& !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
+				const content = this.load(context + ".html");
+				if (content === undefined)
+					return;
+				_recursion_detection(composite);
+				if (composite instanceof Element)
+					composite.innerHTML = content;
+			}
 		}
 	});
 
@@ -3756,6 +3701,22 @@ compliant("window.location.combine", (...paths) =>
 	 */
 	const _models = new Set();
 
+	// Internal method for controlling temporary variables for expression
+	// rendering, such as for ATTRIBUTE_ITERATE. The goal is for the method to
+	// simulate a separate scope for temporary variables. For this purpose,
+	// global variables are created as expressions and removed again at the end
+	// of the scope or reset to a possible previously existing value.
+	compliant("___", (variable, serial, index) => {
+		let object = _render_meta[serial];
+		if (object && object.iterate) {
+			if (index === undefined) {
+				if ("variable" in object.iterate)
+					eval(variable + " = object.iterate.variable");
+				else eval("delete " + variable);
+			} else eval(variable + " = object.iterate.items[" + index + "]");
+		}
+	});
+
 	const _recursion_detection = (element) => {
 		const id = (element instanceof Element ? element.id || "" : "").trim();
 		const pattern = id.toLowerCase();
@@ -3801,52 +3762,30 @@ compliant("window.location.combine", (...paths) =>
 	 * or no enclosing composite was used, null is returned.
 	 *
 	 * @param  element
-	 * @param  namespace
 	 * @return determined meta-object for the passed element, otherwise null
 	 * @throws An error occurs in the following cases:
 	 *     - in the case of an invalid composite ID
 	 *     - in the case of an invalid element ID
 	 */
-	const _mount_locate = (element, namespace = false) => {
+	const _mount_locate = (element) => {
 
 		if (!(element instanceof Element))
 			return null;
 
+		// A composite stops the determination. Composites are static
+		// components, comparable to managed beans or named beans, and therefore
+		// normally have no superordinate object levels. But the Composite-ID
+		// can contain a namespace, which is then taken into consideration.
+
 		let serial = (element.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
 		if (element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)) {
-			if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
+			const composite = serial.match(Composite.PATTERN_COMPOSITE_ID);
+			if (!composite)
 				throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-
-			// Option namespace restricts the analysis to composites with
-			// ATTRIBUTE_NAMESPACE. If a composite is found without one, the
-			// current namespace is terminated and the found composite is
-			// outside the current namespace.
-
-			const object = _render_meta[element.ordinal()];
-			if (!object || !object.attributes
-					|| !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
-				return !namespace ? {model:serial} : null;
-
-			// Determine from namespace by parent composite elements with
-			// ATTRIBUTE_ID and ATTRIBUTE_NAMESPACE. The prerequisite is that
-			// the direct composite from the model uses ATTRIBUTE_NAMESPACE.
-			// Without the attribute, the composites and thus the models are
-			// without namespace. Thus, there can also be decoupled composites
-			// and thus models in a nested markup.
-
-			const locate = _mount_locate(element.parentNode, true);
-			if (!locate)
-				return {model:serial};
-			if (locate.namespace)
-				locate.namespace.push(locate.model);
-			else locate.namespace = [locate.model];
-			return {namespace:locate.namespace, model:serial};
+			if (!composite[2])
+				return {model:composite[1]};
+			return {namespace:composite[2].split(/:+/), model:composite[1]};
 		}
-
-		const object = _render_meta[element.ordinal()];
-		if (object && object.attributes
-				&& object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAMESPACE))
-			throw new Error(`Namespace without composite${serial ? " for: " + serial : ""}`);
 
 		const locate = _mount_locate(element.parentNode);
 		if (!element.hasAttribute(Composite.ATTRIBUTE_ID))
@@ -3868,12 +3807,12 @@ compliant("window.location.combine", (...paths) =>
 
 		serial = serial.match(Composite.PATTERN_ELEMENT_ID);
 		if (serial[4]) {
-			meta.namespace = serial[4].substring(1).split(/:/);
+			meta.namespace = serial[4].split(/:/);
 			meta.route = [meta.namespace[meta.namespace.length -1]];
 		}
 		meta.route.push(serial[1]);
 		if (serial[2])
-			meta.route.push(...serial[2].substring(1).split(/:/));
+			meta.route.push(...serial[2].split(/:/));
 		if (serial[3])
 			meta.unique = serial[3];
 		meta.target = meta.route[meta.route.length -1];
@@ -4107,6 +4046,44 @@ compliant("window.location.combine", (...paths) =>
 		// can/should be stored here.
 		Composite.include("common");
 
+		const _cleanup = (node) => {
+			// Clean up all the child elements first.
+			if (node.childNodes)
+				Array.from(node.childNodes).forEach((node) =>
+					_cleanup(node));
+
+			// Composites and models must be undocked when they are removed from
+			// the DOM independent of whether a condition exists. For composites
+			// with condition, it must be noted that the composite is initially
+			// replaced by a marker. During replacement, the initial composite
+			// is removed, which can cause an unwanted undocking. The logic is
+			// based on the assumption that each composite has a meta-object.
+			// When replacing a composite, the corresponding meta-object is also
+			// deleted, so that the MutationObserver detects the composite to be
+			// removed in the DOM, but undocking is not performed without the
+			// matching meta-object.
+
+			const serial = node.ordinal();
+			const object = _render_meta[serial];
+			if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
+				const meta = _mount_lookup(node);
+				if (meta && meta.meta && meta.meta.model && meta.model) {
+					const model = (meta.meta.namespace || []).concat(meta.meta.model).join(".");
+					if (_models.has(model)) {
+						_models.delete(model);
+						if (typeof meta.model.undock === "function") {
+							meta.model.undock.call(meta.model);
+							Composite.fire(Composite.EVENT_MODULE_UNDOCK, meta);
+						}
+					}
+				}
+			}
+
+			// meta object assigned to the element must be deleted, because it
+			// is an indicator for existence and presence of composites/models
+			delete _render_meta[node.ordinal()];
+		};
+
 		(new MutationObserver((records) => {
 			records.forEach((record) => {
 
@@ -4207,64 +4184,168 @@ compliant("window.location.combine", (...paths) =>
 				// are then replaced by a marker in the case of a condition. The
 				// MutationObserver does not run parallel, so it is called after
 				// the rendering with obsolete nodes.
-				if (record.addedNodes) {
-					record.addedNodes.forEach((node) => {
-						if ((node instanceof Element
-								|| (node instanceof Node
-										&& node.nodeType === Node.TEXT_NODE))
-								&& !_render_meta[node.ordinal()]
-								&& document.body.contains(node))
-							Composite.render(node);
-					});
-				}
+				(record.addedNodes || []).forEach((node) => {
+					if ((node instanceof Element
+							|| (node instanceof Node
+									&& node.nodeType === Node.TEXT_NODE))
+							&& !_render_meta[node.ordinal()]
+							&& document.body.contains(node))
+						Composite.render(node);
+				});
 
 				// All removed elements are cleaned and if necessary the undock
 				// method is called if a view model binding exists.
-				if (record.removedNodes) {
-					record.removedNodes.forEach((node) => {
-						const cleanup = (node) => {
-							// Clean up all the child elements first.
-							if (node.childNodes) {
-								Array.from(node.childNodes).forEach((node) =>
-									cleanup(node));
-							}
-
-							// Composites/models must be undocked when they are
-							// removed from the DOM independent of whether a
-							// condition exists. For composites with condition,
-							// it must be noted that the composite is initially
-							// replaced by a marker. During replacement, the
-							// initial composite is removed, which can cause an
-							// unwanted undocking. Therefore, the logic is based
-							// on the assumption that each composite has a
-							// meta-object. When replacing the original
-							// composite, the corresponding meta-object is also
-							// deleted, so that the MutationObserver detects the
-							// composite to be removed in the DOM, but undocking
-							// is not performed without the matching meta-object.
-
-							const serial = node.ordinal();
-							const object = _render_meta[serial];
-							if (object && object.attributes.hasOwnProperty(Composite.ATTRIBUTE_COMPOSITE)) {
-								const meta = _mount_lookup(node);
-								if (meta && meta.meta && meta.meta.model && meta.model
-										&& _models.has(meta.meta.model)) {
-									_models.delete(meta.meta.model);
-									if (typeof meta.model.undock === "function")
-										meta.model.undock.call(meta.model);
-								}
-							}
-
-							delete _render_meta[node.ordinal()];
-						};
-						cleanup(node);
-					});
-				}
+				(record.removedNodes || []).forEach((node) =>
+					_cleanup(node));
 			});
 		})).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
 
 		Composite.render(document.body);
 	});
+})();
+
+/**
+ * (Resource)Messages is a static DataSource extension for internationalization
+ * and localization. The implementation is based on a set of key-value or
+ * label-value data which is stored in the locales.xml of the DataSource.
+ *
+ *     + data
+ *       + de
+ *       + en
+ *       - locales.xml
+ *     + modules
+ *     + resources
+ *     - index.html
+ *
+ * The elements for the supported languages are organized in locales in this
+ * file. Locales is a set of supported country codes. In each country code, the
+ * key values are recorded as label entries.
+ *
+ *     <?xml version="1.0"?>
+ *     <locales>
+ *       <de>
+ *         <label key="contact.title" value="Kontakt"/>
+ *         <label key="contact.development.title">Entwicklung</label>
+ *         ...
+ *       </de>
+ *       <en default="true">
+ *         <label key="contact.title" value="Contact"/>
+ *         <label key="contact.development.title">Development</label>
+ *         ...
+ *       </en>
+ *     </locales>
+ *
+ * The language is selected automatically on the basis of the language setting
+ * of the browser. If the language set there is not supported, the language
+ * declared as 'default' is used.
+ *
+ * If the locales contain a key more than once, the first one is used. Messages
+ * principally cannot be overwritten. What should be noted in the following
+ * description also for the modules.
+ *
+ * After loading the application, Messages are available as an associative
+ * array and can be used directly in JavaScript and Markup via Expression
+ * Language.
+ *
+ *     Messages["contact.title"];
+ *
+ *     <h1 output="{{Messages['contact.title']}}"/>
+ *
+ * In addition, the object message is also provided. Unlike Messages, message is
+ * an object tree analogous to the keys from Messages. The dot in the keys is
+ * the indicator of the levels in the tree.
+ *
+ *     messages.contact.title;
+ *
+ *     <h1 output="{{messages.contact.title}}"/>
+ *
+ * Both objects are only available if there are also labels.
+ *
+ * Extension for modules: These can also provide locales/messages in the module
+ * directory, which are loaded in addition to the locales/messages from the data
+ * directory -- even at runtime. Again, existing keys cannot be overwritten.
+ *
+ * @author  Seanox Software Solutions
+ * @version 1.7.0 20230413
+ */
+(() => {
+
+	compliant("messages", {});
+	compliant("Messages", {});
+
+	const _datasource = [DataSource.data];
+
+	const _localize = DataSource.localize;
+
+	const _load = (data) => {
+		const map = new Map();
+		const xpath = "/locales/" + DataSource.locale + "/label";
+		const result = data.evaluate(xpath, data, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+		for (let node = result.iterateNext(); node; node = result.iterateNext()) {
+			const key = (node.getAttribute("key") || "").trim();
+			if (!map.has(key)) {
+				const value = ((node.getAttribute("value") || "").trim()
+					|| (node.textContent || "").trim()).unescape();
+				map.set(key, value);
+			}
+		}
+		new Map([...map.entries()].sort()).forEach((value, key) => {
+			const match = key.match(/^(?:((?:\w+\.)*\w+)\.)*(\w+)$/);
+			if (match) {
+				// In order for the object tree to branch from each level, each
+				// level must be an object. Therefore, an anonymous object is
+				// used for the level, which returns the actual text via
+				// Object.prototype.toString().
+				const namespace = "messages" + (match[1] ? "." + match[1] : "");
+				if (!Namespace.exists(namespace, match[2]))
+					Object.defineProperty(Namespace.use(namespace), match[2], {
+						value: {toString() {return value;}}
+					});
+				if (!Namespace.exists("Messages", key))
+					Object.defineProperty(Namespace.use("Messages"), key, {
+						value
+					});
+			}
+		});
+	};
+
+	DataSource.localize = (locale) => {
+
+		_localize(locale);
+
+		delete window.messages;
+		delete window.Messages;
+
+		window.Messages = {
+			customize(label, ...values) {
+				let text = Messages[label] || "";
+				for (let index = 0; index < values.length; index++)
+					text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);
+				return text.replace(/\{\d+\}/g, "");
+			}
+		}
+
+		_datasource.forEach(data => _load(data));
+	};
+
+	// Messages are based on DataSources. To initialize, DataSource.localize()
+	// must be overwritten and loading of the key-value pairs is embedded.
+	if (DataSource.data
+			&& DataSource.locale
+			&& DataSource.locales
+			&& DataSource.locales.includes(DataSource.locale))
+		DataSource.localize(DataSource.locale);
+
+	Composite.listen(Composite.EVENT_MODULE_LOAD, (event, context, module) => {
+		const request = new XMLHttpRequest();
+		request.open("GET", Composite.MODULES + "/" + module + ".xml", false);
+		request.send();
+		if (request.status !== 200)
+			return;
+		const data = new DOMParser().parseFromString(request.responseText,"application/xml");
+		_datasource.push(data);
+		_load(data)
+   });
 })();
 
 /**
@@ -4294,7 +4375,7 @@ compliant("window.location.combine", (...paths) =>
  * associated proxies when not in use.
  *
  * @author  Seanox Software Solutions
- * @version 1.6.0 20230317
+ * @version 1.7.0 20230403
  */
 (() => {
 
@@ -4307,15 +4388,22 @@ compliant("window.location.combine", (...paths) =>
 	});
 
 	let _selector = null;
-
 	Composite.listen(Composite.EVENT_RENDER_START, (event, selector) =>
 		_selector = selector);
-
 	Composite.listen(Composite.EVENT_RENDER_NEXT, (event, selector) =>
 		_selector = selector);
-
 	Composite.listen(Composite.EVENT_RENDER_END, (event, selector) =>
 		_selector = null);
+
+	let _selector_cache = null;
+	Composite.listen(Composite.EVENT_MODULE_DOCK, (event, selector) => {
+		_selector_cache = _selector;
+		_selector = null;
+	});
+	Composite.listen(Composite.EVENT_MODULE_READY, (event, selector) => {
+		_selector = _selector_cache;
+		_selector_cache = null;
+	});
 
 	/**
 	 * Enhancement of the JavaScript API
@@ -4334,7 +4422,7 @@ compliant("window.location.combine", (...paths) =>
 	 * defined with the start of the application.
 	 * https://stackoverflow.com/questions/37714787/can-i-extend-proxy-with-an-es2015-class
 	 */
-	const _secret = Math.serial();
+	const TARGET = Math.serial();
 
 	/**
 	 * Weak map with the assignment of objects to proxies. The object is the key
@@ -4351,7 +4439,7 @@ compliant("window.location.combine", (...paths) =>
 			return object;
 
 		// Proxy remains proxy
-		if (object[_secret] !== undefined)
+		if (object[TARGET] !== undefined)
 			return object;
 
 		// For all objects, a proxy must be created. Also for proxies, even if
@@ -4376,7 +4464,7 @@ compliant("window.location.combine", (...paths) =>
 					// a secret simulated property that is used as an indicator
 					// for existing reactive object instances and also contains
 					// a reference to the original object.
-					if (key === _secret)
+					if (key === TARGET)
 						return target;
 
 					let value;
@@ -4393,11 +4481,14 @@ compliant("window.location.combine", (...paths) =>
 					// Proxies are only used for objects, other data types are
 					// returned directly.
 					if (typeof value !== "object"
-							|| value === null)
+							|| value === null
+							|| value instanceof Node
+							|| value instanceof NodeList
+							|| value instanceof HTMLCollection)
 						return value;
 
 					// Proxy remains proxy
-					if (value[_secret] !== undefined)
+					if (value[TARGET] !== undefined)
 						return value;
 
 					// A proxy always returns proxies for objects. To decouple
@@ -4483,12 +4574,20 @@ compliant("window.location.combine", (...paths) =>
 
 			set(target, key, value) {
 
+				// Proxy is implemented exotically, cannot be inherited and has
+				// no prototype. Therefore, this unconventional way with a
+				// secret simulated property that is used as an indicator for
+				// existing reactive object instances and also contains a
+				// reference to the original object and that can't be changed.
+				if (key === TARGET)
+					return target;
+
 				// To decouple object, proxy and view, the original objects are
 				// always used as value and never the proxies.
 				if (typeof value === "object"
 						&& value !== null
-						&& value[_secret] !== undefined)
-					value = value[_secret];
+						&& value[TARGET] !== undefined)
+					value = value[TARGET];
 
 				// To be economical with resources, proxies are not created for
 				// objects immediately, but only when they are explicitly

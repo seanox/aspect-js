@@ -1,4 +1,4 @@
-1.7.0 2023xxxx
+1.7.0 20241228
 BF: Composite: Correction from mounting (dock/undock) composites with namespace
 BF: Composite: Correction when inserting markup into composites
     If the markup for a composite was removed from the DOM,

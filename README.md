@@ -67,7 +67,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der Apache License.
 
-Copyright (C) 2023 Seanox Software Solutions
+Copyright (C) 2024 Seanox Software Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -89,8 +89,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox aspect-js 1.6.1](https://github.com/seanox/aspect-js/releases/download/1.6.1/aspect-js-1.6.1.zip)  
-[Seanox aspect-js 1.6.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.6.1.zip)
+[Seanox aspect-js 1.7.0](https://github.com/seanox/aspect-js/releases/download/1.7.0/aspect-js-1.7.0.zip)  
+[Seanox aspect-js 1.7.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.7.0.zip)
 
 <p>
   <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
@@ -105,7 +105,7 @@ specific language governing permissions and limitations under the License.
 The release channels continuously provide the latest final versions, so Seanox
 aspect-js is always up to date.
 
-## Version 1.6.1
+## Version 1.7.0
 
 ### Standard: Contains all minimized
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
@@ -151,44 +151,30 @@ aspect-js is always up to date.
 
 
 # Changes
-## 1.6.1 20230410  
-BF: Composite: Added recursion detection for include of composite markup  
-BF: Composite: Correction of validation with message and notification without model  
-BF: Composite: Correction of mounting of child elements in a condition  
-BF: Composite: Correction of the queue during rendering when a lock exists  
-BF: Expression: Unification of the suppressed output  
-BF: Reactive: Correction for the use of arrays  
-BF: Reactive: Correction/optimization for elements with iterate  
-BF: Reactive: Correction of recursive triggered updates  
-BF: Review: Optimization and corrections  
-BF: Test: Correction of wrong output of Element.prototype.toPlainString()  
-CR: Reactive: Optimization of object-model-view decoupling  
-CR: Reactive: Refactoring to distinguish from frameworks with similar name  
-CR: SiteMap: Inactive by default  
-CR: Expression: Extension of the syntax for elements and variables  
-CR: Expression: Optimization (consequent new implementation)  
-CR: Expression: Omission of automatic use of get and is methods for fields  
-CR: Expression: omission of tolerance for undefined parts in object chains (like JSP EL)  
-CR: Composite: Errors during rendering are output in the view  
-CR: Composite: Renamed method Object.using(...) in Object.use(...)  
-CR: Composite: Optimization when loading module resources  
-CR: Composite: Extension of the element ID with a unique identifier  
-CR: Composite: Added @-attributes as attribute templates for elements  
-CR: Composite: Changing the behavior of the validation  
-CR: Scripting: Outsourcing and isolating the execution of Composite JavaScript  
-CR: Scripting: Optimization macros for Composite JavaScript  
-CR: Scripting: Added macro #export for Composite JavaScript  
-CR: Scripting: Added macro #use for Composite JavaScript  
-CR: Scripting: Added macro (?...) for Composite JavaScript  
-CR: Datasource: Optimization when loading module resources  
-CR: Messages: Added messages as alternative object tree for associative array Messages  
-CR: Messages: Added Messages.customize(label, ...values) to fill placeholders with values  
-CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)  
-CR: Extension: Math.unique(...) replaces Math.uniqueId(...)  
-CR: Extension: Math.serial() replaces Math.uniqueSerialId(...)  
-CR: Release: Added the manual (de/en) to the release package (zip)  
-CR: Release: Channels with major number are omitted  
-CR: Release: Revision of the release channels  
+## 1.7.0 20241228  
+BF: Composite: Correction from mounting (dock/undock) composites with namespace  
+BF: Composite: Correction when inserting markup into composites  
+BF: Composite: Correction when loading CSS modules  
+BF: Composite: Correction of the view model binding  
+BF: Composite Mount Events: Correction of the unwanted assignment of child elements  
+BF: Reactive: Correction of incorrect creation of proxies for HTML elements  
+BF: Reactive: Correction of unwanted rendering when docking modules  
+CR: Composite: Omission of the attribute namespace  
+CR: Composite: Omission of attributes strict in combination with composite  
+CR: Composite: Added EVENT_MODULE_LOAD when a module is loaded  
+CR: Composite: Added EVENT_MODULE_DOCK/EVENT_MODULE_READY/EVENT_MODULE_UNDOCK  
+CR: Composite Render Iterate: Optimization for updating markup  
+CR: Composite Render Iterate: Optimization of the error output in the view  
+CR: Composite Render Condition: Optimization of the error output in the view  
+CR: Composite Render: Optimization of IDs before rendering  
+CR: Datasource: Optimization of language selection  
+CR: Documentation: Reduction to English  
+CR: Expression: Optimization of the return of errors  
+CR: Expression: Extension of the element expression by //...// for embedding logic  
+CR: Expression: Optimization when interpreting in combination with text  
+CR: Messages: Change in case of multiple keys, the first one wins  
+CR: Messages: Added locales/messages for modules  
+CR: Test: Update web server to version 5.7.1  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
