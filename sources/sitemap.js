@@ -357,7 +357,7 @@
             path = path.replace(/(#.*?)#*$/, "$1");
 
             // The current path is determined and it is determined whether it is
-            // a face or a facet. In both cases, a meta object is created:
+            // a face or a facet. In both cases, a meta-object is created:
             //     {path:#path, facet:...}
             const location = SiteMap.lookup(Path.normalize(SiteMap.location));
             if (!location)
@@ -396,7 +396,7 @@
         
         /**
          * Configures the SiteMap individually. The configuration is passed as a
-         * meta object. The keys (string) correspond to the paths, the values
+         * meta-object. The keys (string) correspond to the paths, the values
          * are arrays with the valid facets for a path.
          * 
          *     sitemap = {
@@ -424,15 +424,15 @@
          *     SiteMap.customize({meta}, function(path) {...});
          *     SiteMap.customize(RegExp, function(path) {...});
          *    
-         *     SiteMap as meta object:
+         *     SiteMap as meta-object:
          *     ----
-         * The first configuration describes the SiteMap as a meta object. The
-         * meta object defines all available paths and facets for the face flow.    
+         * The first configuration describes the SiteMap as a meta-object. The
+         * meta-object defines all available paths and facets for the face flow.    
          *     
-         *     SiteMap as meta object and permit function:
+         *     SiteMap as meta-object and permit function:
          *     ----
          * In the second example, a permit method is passed in addition to the 
-         * SiteMap as a meta object. This method is used to implement permission
+         * SiteMap as a meta-object. This method is used to implement permission
          * concepts and can be used to check and manipulate paths. Several
          * permit methods can be registered. All requested paths pass through
          * the permit method(s). This can decide what happens to the path. From
@@ -454,9 +454,9 @@
          * (iteration over further permit-methods) will be aborted and is
          * forwarded to the original path.
          * 
-         * A permit method for paths can optionally be passed to each meta
-         * object. This is interesting for modules that want to register and
-         * validate their own paths.
+         * A permit method for paths can optionally be passed to each
+         * meta-object. This is interesting for modules that want to register
+         * and validate their own paths.
          * 
          *     Acceptor:
          *     ----
@@ -489,7 +489,7 @@
          * metadata was registered with which permit methods is not possible.
          * 
          * The configuration of the SiteMap is only applied if an error-free
-         * meta object is passed and no errors occur during processing.
+         * meta-object is passed and no errors occur during processing.
          * 
          * The method uses variable parameters as and according to the previous
          * description.

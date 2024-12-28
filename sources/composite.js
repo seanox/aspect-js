@@ -113,8 +113,8 @@
  * Attributes of elements are elementary and immutable even if they contain an
  * expression.
  *
- * Clean Code Rendering - The aspect-js relevant attributes are stored in meta
- * objects to each element and are removed in the markup. The following
+ * Clean Code Rendering - The aspect-js relevant attributes are stored in
+ * meta-objects to each element and are removed in the markup. The following
  * attributes are essential: COMPOSITE, ID -- they are cached and remain at the
  * markup, these cannot be changed. the MutationObserver will restore them.
  *
@@ -1199,12 +1199,12 @@
          * concurrent execution of rendering works sequentially in the order of
          * the method call.
          * 
-         *     Element Meta Object
+         *     Element meta-object
          *     ---- 
-         * With the processed HTML elements and text nodes, simplified meta
-         * objects are created. The serial, the reference on the HTML element
-         * and the initial attributes (which are required for rendering) are
-         * stored there.
+         * With the processed HTML elements and text nodes, simplified
+         * meta-objects are created. The serial, the reference on the HTML
+         * element and the initial attributes (which are required for rendering)
+         * are stored there.
          * 
          *     Serial
          *     ----
@@ -1848,7 +1848,7 @@
                 // 2. A global variable is required for the iteration. If this
                 //    variable already exists, the existing variable is saved
                 //    and restored at the end of the iteration.
-                // 3. The variable with the partial meta object is added at th
+                // 3. The variable with the partial meta-object is added at th
                 //    beginning of each iteration block as a value expression,
                 //    so that no problems with the temporary variable occur
                 //    later during partial rendering. This way the block keeps th
@@ -2486,7 +2486,7 @@
     const _render_cache = {};
 
     /**
-     * Associative array for element-related meta objects, those which are
+     * Associative array for element-related meta-objects, those which are
      * created during rendering: (key:serial, value:meta)
      */
     const _render_meta = [];
@@ -2686,7 +2686,7 @@
                 }
             }
 
-            // meta object assigned to the element must be deleted, because it
+            // meta-object assigned to the element must be deleted, because it
             // is an indicator for existence and presence of composites/models
             delete _render_meta[node.ordinal()];
         };

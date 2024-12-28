@@ -98,7 +98,7 @@
         /**
          * Transforms an XMLDocument based on a passed stylesheet.
          * The data and the stylesheet can be passed as Locator, XMLDocument an
-         * in mix. The result as a DocumentFragment. Optionally, a meta object
+         * in mix. The result as a DocumentFragment. Optionally, a meta-object
          * or a map with parameters for the XSLTProcessor can be passed.
          * @param  xml   locator or XMLDocument
          * @param  style locator or XMLDocument 
@@ -174,11 +174,10 @@
         },
         
         /**
-         * Fetch the data to a locator as XMLDocument.
-         * Optionally the data can be transformed via XSLT, for which a meta
-         * object or map with parameters for the XSLTProcessor can be passed.
-         * When using the transformation, the return type changes to a
-         * DocumentFragment.
+         * Fetch the data to a locator as XMLDocument. Optionally the data can
+         * be transformed via XSLT, for which a meta-object or map with
+         * parameters for the XSLTProcessor can be passed. When using the
+         * transformation, the return type changes to a DocumentFragment.
          * @param  locator   locator
          * @param  transform locator of the transformation style
          *     With the boolean true, the style is derived from the locator by

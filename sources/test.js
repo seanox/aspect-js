@@ -164,7 +164,7 @@ compliant(null, window.Test = {
              * object. If an error occurs when calling the current object,
              * the parent object is not triggered.
              * @param event  see Test.EVENT_***
-             * @param status meta object with information about the test
+             * @param status meta-object with information about the test
              *     execution
              */
             fire(event, status) {
@@ -258,10 +258,10 @@ compliant(null, window.Test = {
 
             /**
              * Starts the test run. The execution of the tests can optionally be
-             * configured with the start by passing a meta object. The
-             * parameters in the meta object are optional and cannot be changed
+             * configured with the start by passing a meta-object. The
+             * parameters in the meta-object are optional and cannot be changed
              * when the test are running. Only with the next start can new
-             * parameters be passed as meta objects.
+             * parameters be passed as meta-objects.
              * 
              *     Test.start({auto: boolean, output: {...}, monitor: {...}});
              *     
