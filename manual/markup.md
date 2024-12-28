@@ -28,6 +28,7 @@ recursively to changes.
   * [output](#output)
   * [release](#release)
   * [render](#render)
+  * [strict](#strict)
   * [validate](#validate)
 * [@-Attributes](#-attributes) 
 * [Expression Language](#expression-language)
