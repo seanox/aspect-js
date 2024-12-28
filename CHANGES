@@ -270,11 +270,11 @@ CR: Composite Events: Renaming of EVENT_AJAX... in EVENT_HTTP...
 CR: DataSource Fetch: Omission of the parameter raw
     When using the transformation a NodeList is always returned.
 CR: DataSource Fetch: Added optional parameters for the transformation
-    The parameters are passed to the XSLTProcessor as meta object or map.
+    The parameters are passed to the XSLTProcessor as meta-object or map.
 CR: DataSource Transform: Omission of the parameter raw
     When using the transformation a NodeList is always returned.
 CR: DataSource Transform: Added optional parameters for the transformation
-    The parameters are passed to the XSLTProcessor as meta object or map.
+    The parameters are passed to the XSLTProcessor as meta-object or map.
 CR: DataSource Transform: Change of return value from NodeList to DocumentFragment
     
 1.2.0 20191231
@@ -299,7 +299,7 @@ CR: Test: Optimization of console forwarding
 CR: Test: Extension of console forwarding by listeners
 CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames 
 CR: Test: Extension for central catching of errors with activated Test-AP
-CR: Test: Optimization for using readonly meta objects for return values
+CR: Test: Optimization for using readonly meta-objects for return values
 CR: Test Suite: Optimization of error output
 CR: Test: Omission of the method Test.configure(...), function is taken over by Test.start(...)
 CR: Composite Object Lookup: Added support now for arrays (also associative)
@@ -310,7 +310,7 @@ CR: Composite Render: Extension with the attribute 'release' as an indicator tha
     CSS: *[release] {display:none;}      
 CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)    
 CR: Composite Render Iterate: Correction/Optimization in general
-CR: Composite Render Iterate: Optimization for using readonly meta object
+CR: Composite Render Iterate: Optimization for using readonly meta-object
 CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
     The deletion is only temporary, the renderer still knows the attribute and checks it again in each render cycle.
 CR: Composite Scan: Omission of the intermediate step between render and mount
@@ -363,7 +363,7 @@ CR: MVC SiteMap: Added the forward method
 CR: DataSource Locales: As standard marked are at the beginning
 CR: Extension Uncapitalize: Adds a uncapitalize function to the String objects
 CR: Extension: Added Math.uniqueSerialId to create serial (U)UIDs
-CR: Extension: Optimization for using readonly meta objects for return values
+CR: Extension: Optimization for using readonly meta-objects for return values
 CR: Extension Namespace: Optimization and extension
     - new methods: Namespace.lookup(...), Namespace.exists(...)
     - strict use of the dot, alternative slash is omitted
