@@ -364,9 +364,9 @@ Iterative output is based on lists, enumerations, and arrays. If an HTML element
 is declared as iterative, the inner HTML is used as a template from which
 updated content is generated and inserted with each interval cycle and inserted
 as inner HTML. As value for the attribute a [variable expression](
-    expression.md#variable-expression) is expected, for which a meta object will
+    expression.md#variable-expression) is expected, for which a meta-object will
 be created, which allows access to the iteration in the template. Thus, the
-variable expression `iterate={{tempA:Model.list}}` creates the meta object
+variable expression `iterate={{tempA:Model.list}}` creates the meta-object
 `tempA = {item, index, data}`.
 
 ```javascript
@@ -1141,7 +1141,7 @@ Test.create({test() {
 Test.start();
 ```
 
-Task is primarily a meta object.
+Task is primarily a meta-object.
 
 ```
 {name:..., test:..., timeout:..., expected:..., ignore:...}
@@ -1238,7 +1238,7 @@ Test.start();
 ### Configuration
 
 Optionally, the Test API can be configured with each start. 
-A meta object is expected as parameter. The configuration contained in it is
+A meta-object is expected as parameter. The configuration contained in it is
 partially adopted and the unknown is ignored.
 
 ```javascript

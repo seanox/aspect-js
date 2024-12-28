@@ -125,7 +125,7 @@ Composite.listen(Composite.EVENT_MODULE_***, function(event, context, module) {
 ## Composite.EVENT_MODULE_DOCK
 
 Occurs after the markup of a module is added to the DOM and the dock method is
-executed. The callback method is passed the event and a meta object with
+executed. The callback method is passed the event and a meta-object with
 information about the module.
 
 ```javascript
@@ -142,7 +142,7 @@ TODO:
 ## Composite.EVENT_MODULE_UNDOCK
 
 Occurs after the markup of a module is removed from the DOM and the undock
-method is executed. The callback method is passed the event and a meta object
+method is executed. The callback method is passed the event and a meta-object
 with information about the module.
 
 ```javascript

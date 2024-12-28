@@ -111,13 +111,13 @@ summarized, acceptors and permit methods are collected in the order of their
 registration. Because the configuration always uses a cumulative state, it is
 later not comprehensible how the configuration was created.
 
-The configuration of the SiteMap is only applied if an error-free meta object is
+The configuration of the SiteMap is only applied if an error-free meta-object is
 passed and no errors occur during processing.
 
 
 ### Face Flow
 
-The configuration is based on a meta object that is passed to method
+The configuration is based on a meta-object that is passed to method
 `SiteMap.customize({meta})`. The keys (string) correspond to the paths and a
 path always has a existing face as its target, partial paths without face can be
 ignored. The values are arrays with the valid facets for a path or face. Facets
@@ -161,7 +161,7 @@ DOM.__
 ### Permissions
 
 The permission concept is based on permit method(s) that are passed together
-with meta object of the face-flow.
+with meta-object of the face-flow.
 
 ```javascript
 SiteMap.customize({...}, function(path) {...});
@@ -379,8 +379,9 @@ SiteMap.customize({
 The paths `#contact` and `#project` are variable in this example and can
 therefore be extended as required. The target is fixed in both cases and the
 requests are answered by `#contact` and `#project`. The extension of the path
-can be determined with the method `SiteMap.lookup(path)`. The returned meta
-object contains the extended path from the variable path as a data property.
+can be determined with the method `SiteMap.lookup(path)`. The returned
+meta-object contains the extended path from the variable path as a data
+property.
 
 
 ```

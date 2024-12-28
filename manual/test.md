@@ -77,7 +77,7 @@ Test.create({test() {
 Test.start();
 ```
 
-Task is primarily a meta object.
+Task is primarily a meta-object.
 
 ```
 {name:..., test:..., timeout:..., expected:..., ignore:...}
@@ -366,7 +366,7 @@ Test.start();
 
 ## Configuration
 
-Optionally, the Test API can be configured with each start. A meta object is
+Optionally, the Test API can be configured with each start. A meta-object is
 expected as parameter. The configuration contained in it is partially adopted
 and the unknown is ignored.
 
@@ -445,7 +445,7 @@ Test.start({monitor: {
 }});
 ```
 
-The current status is passed to all monitor methods as an meta object. The
+The current status is passed to all monitor methods as an meta-object. The
 status contains details of the current task and the queue. The details are
 read-only and cannot be changed.
 
