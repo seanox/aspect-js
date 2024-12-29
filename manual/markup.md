@@ -28,7 +28,7 @@ recursively to changes.
   * [output](#output)
   * [release](#release)
   * [render](#render)
-  * [strict](#strict)
+  * [state](#state)
   * [validate](#validate)
 * [@-Attributes](#-attributes) 
 * [Expression Language](#expression-language)
@@ -579,34 +579,9 @@ __Alternatively, [reactive rendering](reactive.md) can be used, where changes in
 the data objects trigger a partial update of the view.__
 
 
-### strict
+### state
 
-The attribute can be combined with the attributes [composite](#composite) and
-[validate](#validate) and affects the synchronization of the data in such a way
-that the synchronization is executed only if the validation explicitly returns
-`true`. In all other cases the value is not synchronized. Which means that only
-valid values are available in the target to be synchronized after a user input,
-which must be considered for an input field declared as required, for example,
-if the user deletes the input character by character. Thus, in this constructed
-example, the last character is kept in the target to be synchronized.
-
-```javascript
-const Model = {
-    validate(element, value) {
-        return !!value.trim();
-    },
-    text1: ""
-};
-```
-
-```html
-<form id="Model" composite>
-  <input id="text1" type="text"
-      validate strict events="input change"/>
-  <input type="submit" value="submit"
-      validate events="click"/>
-</form>
-```
+TODO:
 
 
 ### validate
@@ -638,16 +613,16 @@ the browser is used. If possible the value is synchronized with the model.
 
 The validation failed and an error is shown. The return value indicates that the
 default behavior (action) should not be executed by the browser and is thus
-blocked. When combined with attribute [strict](#strict), a possible value will
-not be synchronized with the model.
+blocked. With the strict default behaviour of Seanox aspect-js, the invalid
+value is not synchronized with the model.
 
 
 #### text
 
 The validation has failed with an error message. If the error message is empty,
-the message from the message attribute is used as an alternative. When combined
-with attribute [strict](#strict), a possible value will not be synchronized with
-the model.
+the message from the message attribute is used as an alternative. With the
+strict default behaviour of Seanox aspect-js, the invalid value is not
+synchronized with the model.
 
 
 #### undefined/void
@@ -655,8 +630,8 @@ the model.
 Validation failed and an error is shown. Without a return value, the default
 behavior (action) is executed by the browser. This behavior is important for
 validating input fields, for example, so that the input reaches the user
-interface. When combined with attribute [strict](#strict), a possible value will
-not be synchronized with the model.
+interface. With the strict default behaviour of Seanox aspect-js, the invalid
+value is not synchronized with the model.
 
 A general strategy or standard implementation for error output is deliberately
 not provided, as this is too strict in most cases and can be implemented
@@ -703,6 +678,23 @@ is written into the attribute `title`, or in case of a valid value the content
 is deleted from the attribute `title`. Below the input field is the control
 output of the corresponding field in the JavaScript object (model). This field
 is only synchronized if the validate method return the value `true`.
+
+__Validation works strictly by default. This means that the validation must
+explicitly be `true` and only then is the input data of the HTML elements
+synchronized with the model. This protects against invalid data in the models
+which may then be reflected in the view. If attribute `validate` is declared as
+`optional`, this behaviour can be specifically deactivated and the input data is
+then always synchronized with the model. The effects of validation are then only
+optional.__
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate="optional" events="input change" render="#Model"/>
+  Model.text1: {{Model.text1}}
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
 
 
 ## @-Attributes

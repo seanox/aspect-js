@@ -175,8 +175,8 @@
         /** Constant for attribute release */
         get ATTRIBUTE_RELEASE() {return "release";},
 
-        /** Constant for attribute strict */
-        get ATTRIBUTE_STRICT() {return "strict";},
+        /** Constant for attribute state */
+        get ATTRIBUTE_STRICT() {return "state";},
 
         /** Constant for attribute text */
         get ATTRIBUTE_TEXT() {return "text";},
@@ -196,7 +196,7 @@
          * that is cached in the meta-object. Other attributes are only cached
          * if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|strict|validate)$/i;},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|state|validate)$/i;},
         
         /**
          * Pattern for all static attributes.
@@ -904,15 +904,17 @@
                                     value = target[Composite.ATTRIBUTE_VALUE];
                             }
 
-                            // In case of a failed validation, the event and the
-                            // default action of the browser will be canceled,
-                            // if additionally ATTRIBUTE_STRICT is used. The use
-                            // of ATTRIBUTE_STRICT became necessary, because
-                            // otherwise invalid inputs are not passed on to the
-                            // model, which however it is desirable in some
-                            // cases, if in the view also erroneous is to be
-                            // reflected.
-                            if (!object.attributes.hasOwnProperty(Composite.ATTRIBUTE_STRICT)
+                            // Validation works strictly by default. This means
+                            // that the value must explicitly be true and only
+                            // then is the input data synchronized with the
+                            // model via the HTML elements. This protects
+                            // against invalid data in the models which may then
+                            // be reflected in the view. If ATTRIBUTE_VALIDATE
+                            // is declared as optional, this behaviour can be
+                            // specifically deactivated and the input data is
+                            // then always synchronized with the model. The
+                            // effects of validation are then only optional.
+                            if (String(object.attributes[Composite.ATTRIBUTE_VALIDATE]).toLowerCase() === "optional"
                                     || valid === true) {
         
                                 // Step 2: Synchronisation

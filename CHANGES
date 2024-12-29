@@ -1,5 +1,10 @@
 1.8.0 2025xxxx
 BF: Review: Corrections and optimization
+CR: Composite: Validation works strictly by default
+    The validation must explicitly return true so that the input data of the
+    HTML elements is synchronized with the models. The behavior can be
+    deactivated with the declaration: validate="optional", which was the
+    previous default behavior. The attribute strict is therefore omitted.
 
 1.7.0 20241228
 BF: Composite: Correction from mounting (dock/undock) composites with namespace
@@ -238,14 +243,14 @@ BF: DataSource Fetch: Optimization of the language determination
 BF: MVC SiteMap: Optimization to focus from the current target after changing the path
 BF: Modules: Optimization of JavaScript processing to support import and export
 BF: Composite Render: Optimization of JavaScript processing to support import and export
-BF: Composite Events: Correction of the callback of HTTP events  
+BF: Composite Events: Correction of the callback of HTTP events
 BF: Composite Mount: Correction to find event methods also in prototypes
 BF: Composite Modules: Correction of the script processing of the #import macro
 BF: Composite MutationObserver: Correction for recognition of expressions in text nodes
-CR: MVC Path: Simplification of the syntax restrictions    
+CR: MVC Path: Simplification of the syntax restrictions
     The syntax is more consistently based on XML entities (DOM).
     A path can now begin with any word character (_ a-z A-Z 0-9).
-CR: DataSource Locator: Simplification of the syntax restrictions    
+CR: DataSource Locator: Simplification of the syntax restrictions
     The syntax is more consistently based on URL syntax.
     A locator can use any word characters (_ a-z A-Z 0-9) and additionally the - character.
     This means that the DataSource can also be used better for mandators and detailed locales (e.g. en_us).
@@ -279,12 +284,12 @@ CR: DataSource Transform: Omission of the parameter raw
 CR: DataSource Transform: Added optional parameters for the transformation
     The parameters are passed to the XSLTProcessor as meta-object or map.
 CR: DataSource Transform: Change of return value from NodeList to DocumentFragment
-    
+
 1.2.0 20191231
-BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments 
+BF: Composite: Wrapper of XMLHttpRequest.open correction for using all passed arguments
 BF: Composite Asynchron: Corection of passed arguments
 BF: Composite Events: Composite.EVENT_RENDER_END now includes the mounting of models
-BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox 
+BF: Composite Mount Synchronization: Correction for the input-elements: select, radio, checkbox
 BF: Composite Render Condition: Exclusive use of the placeholder
     Output now delegates consistently to the placeholder.
 BF: Composite Render Include: Optimization/correction of the strategy
@@ -300,7 +305,7 @@ CR: Test: (Re)Move of Assert.assertEqualsTo as Assert.assertSameTo in /test/modu
 CR: Test: Enhancement of console output monitoring
 CR: Test: Optimization of console forwarding
 CR: Test: Extension of console forwarding by listeners
-CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames 
+CR: Test: Extension for passing events (Test + Console) to the enclosing object when using frames
 CR: Test: Extension for central catching of errors with activated Test-AP
 CR: Test: Optimization for using readonly meta-objects for return values
 CR: Test Suite: Optimization of error output
@@ -310,8 +315,8 @@ CR: Composite Object Lookup: Added support now for arrays (also associative)
     e.g. model.array:1 / model.object:property
 CR: Composite Render: Extension with the attribute 'release' as an indicator that an element was rendered.
     Can be used to control visibility so that only final rendered output/content is visible.
-    CSS: *[release] {display:none;}      
-CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)    
+    CSS: *[release] {display:none;}
+CR: Composite Render: Support of expressions for all composite / render attributes (new ID and EVENTS)
 CR: Composite Render Iterate: Correction/Optimization in general
 CR: Composite Render Iterate: Optimization for using readonly meta-object
 CR: Composite Render Attributes: undefined as return value of an expression deletes an attribute
@@ -357,7 +362,7 @@ CR: MVC SiteMap: Omission of autofocus, since the use scrollIntoView can be too 
                 }
             }
         }
-    }); 
+    });
 CR: MVC SiteMap: Added variable paths for faces and facets
     The character sequence ... at the end of a facet in the SiteMap configuration defines a variable path for a face(t).
     The path can be of any length and can be used to pass parameters and is comparable to PATH_INFO in CGI.
@@ -373,12 +378,12 @@ CR: Extension Namespace: Optimization and extension
     - additional support of arrays
     - more tolerant use of word characters
 CR: Messages: Update to use constant key/value pairs
-CR: Build: Optimization of target 'changes'      
+CR: Build: Optimization of target 'changes'
 CR: Build: Additional compression via javascript-minifier.com
-    Less than 64kB are reached 
+    Less than 64kB are reached
 
 1.1.0 20190530
-BF: Build: Optimization/correction when creating releases 
+BF: Build: Optimization/correction when creating releases
 BF: DataSource: Correction if no DataSource exists
 BF: Messages: Correction if no DataSource exists
 CR: DataSource: Added the changing of localization via DataSource.localize(locale)
@@ -386,4 +391,4 @@ CR: Messages: Added the changing of localization via DataSource.localize(locale)
 CR: Project: Added support for jsdelivr.com
 
 1.0.0 20190515
-NT: Release is available 
+NT: Release is available
