@@ -81,9 +81,9 @@
     true true
     Error: missing ; before statement in notempty'x' true
 
-    Error: identifier starts immediately after numeric literal in (25div5)eq5 missing ; before statement in (25 /5)eq5
+    Error: identifier starts immediately after numeric literal in (25div5)eq5 Error: missing ; before statement in (25 /5)eq5
     Error: identifier starts immediately after numeric literal in 2gt1 true
-    Error: identifier starts immediately after numeric literal in (10mod3)eq1 missing ; before statement in (10%3)eq1
+    Error: identifier starts immediately after numeric literal in (10mod3)eq1 Error: missing ; before statement in (10%3)eq1
     Error: trueorfalse is not defined in trueorfalse true
 
     lower / upper case:
@@ -121,9 +121,9 @@
     B2: Error: document.getElementById(...).value is not a function in document.getElementById("HiddenField").value()
     B3: Test-HF
 
-    C1: Error: ~~~Error_1~ in #document.getElementById("HiddenField")
-    C2: Error: ~~~Error_1~ in #document.getElementById("HiddenField").value()
-    C3: Error: ~~~Error_1~ in #document.getElementById("HiddenField").value()
+    C1: Error: #document is not defined in #document.getElementById("HiddenField")
+    C2: Error: #document is not defined in #document.getElementById("HiddenField").value()
+    C3: Error: #document is not defined in #document.getElementById("HiddenField").value()
 
     D1:
 

@@ -81,9 +81,9 @@
     true true
     Error: Unexpected string in notempty'x' true
 
-    Error: ~~~Error_1~ in (25div5)eq5 Unexpected identifier 'eq5' in (25 /5)eq5
+    Error: ~~~Error_1~ in (25div5)eq5 Error: Unexpected identifier 'eq5' in (25 /5)eq5
     Error: ~~~Error_1~ in 2gt1 true
-    Error: ~~~Error_1~ in (10mod3)eq1 Unexpected identifier 'eq1' in (10%3)eq1
+    Error: ~~~Error_1~ in (10mod3)eq1 Error: Unexpected identifier 'eq1' in (10%3)eq1
     Error: trueorfalse is not defined in trueorfalse true
 
     lower / upper case:

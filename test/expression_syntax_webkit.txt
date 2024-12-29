@@ -81,9 +81,9 @@
     true true
     Error: Unexpected string literal 'x' in notempty'x' true
 
-    Error: No identifiers allowed directly after numeric literal in (25div5)eq5 Unexpected identifier 'eq5'. Parse error. in (25 /5)eq5
+    Error: No identifiers allowed directly after numeric literal in (25div5)eq5 Error: Unexpected identifier 'eq5' in (25 /5)eq5
     Error: No identifiers allowed directly after numeric literal in 2gt1 true
-    Error: No identifiers allowed directly after numeric literal in (10mod3)eq1 Unexpected identifier 'eq1'. Parse error. in (10%3)eq1
+    Error: No identifiers allowed directly after numeric literal in (10mod3)eq1 Error: Unexpected identifier 'eq1' in (10%3)eq1
     Error: Can't find variable: trueorfalse in trueorfalse true
 
     lower / upper case:
@@ -145,7 +145,7 @@
     X3: <input type="hidden" id="HiddenField_3" value="Test-HF_C">
 
     O1: <span>undefined</span>
-    O2: <span>function xa() {
+    O2: <span>xa() {
                 return 122;
             }</span>
     O3: <span>122</span>
