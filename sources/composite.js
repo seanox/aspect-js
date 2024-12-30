@@ -632,36 +632,53 @@
             // purpose, the browser function of HTML5 form validation is used,
             // which shows  the message as a browser validation tooltip/message.
             //
-            // The browser validation tooltip/message can be redirected to the
-            // title attribute of the validated element if the message begins
-            // with the prefix //, which includes the return value per
-            // expression. This function can be helpful if a custom error
-            // concept needs to be implemented.
+            // The browser validation tooltip/message can be redirected to an
+            // attribute of the validated element if the message begins with the
+            // prefix '@<attribute>:', which includes the return value of
+            // expressions. Redirection to static and protected attributes is
+            // ignored and the message is suppressed for these destinations.
+            // This redirection can be helpful if a custom error concept needs
+            // to be implemented.
 
-            if (valid !== true) {
-                let message;
-                if (typeof valid === "string"
-                        && valid.trim())
-                    message = valid.trim();
-                if (typeof message !== "string") {
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE))
-                        message = String(object.attributes[Composite.ATTRIBUTE_MESSAGE] || "");
-                    if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
-                        message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
+            if (typeof selector.setCustomValidity === "function") {
+
+                if (valid === true
+                        && Object.usable(object.message)
+                        && Object.usable(object.message.attribute))
+                    selector.removeAttribute(object.message.attribute);
+
+                if (valid !== true) {
+                    let message;
+                    if (typeof valid === "string"
+                            && valid.trim())
+                        message = valid.trim();
+                    if (typeof message !== "string") {
+                        if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_MESSAGE))
+                            message = String(object.attributes[Composite.ATTRIBUTE_MESSAGE] || "");
+                        if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
+                            message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
+                    }
+
+                    if (Object.usable(message)) {
+                        const PATTERN_MESSAGE_REDIRECT = /^@([_a-z](?:[\w-]*\w)?):\s*(.*?)\s*$/i;
+                        const redirect = message.match(PATTERN_MESSAGE_REDIRECT);
+                        if (redirect) {
+                            const attribute = redirect[1];
+                            if (!(object.statics || {}).hasOwnProperty(attribute.toLowerCase())
+                                    && !Composite.PATTERN_ATTRIBUTE_STATIC.test(attribute)) {
+                                object.message = {attribute:attribute};
+                                selector.setAttribute(attribute, redirect[2]);
+                            }
+                            selector.setCustomValidity(redirect[2]);
+                        } else {
+                            selector.setCustomValidity(message);
+                            if (typeof selector.reportValidity === "function")
+                                selector.reportValidity();
+                        }
+                    }
                 }
+            }
 
-                const PATTERN_REDIRECT_MESSAGE = /^\s*\/{2,}\s*(.*?)\s*/;
-                const redirect = PATTERN_REDIRECT_MESSAGE.test(message);
-                message = message.replace(PATTERN_REDIRECT_MESSAGE, "$1");
-
-                if (typeof selector.setCustomValidity === "function"
-                        && Object.usable(message)) {
-                    selector.setCustomValidity(message);
-                    if (!redirect && typeof selector.reportValidity === "function")
-                        selector.reportValidity();
-                }
-            }     
-            
             if (valid === undefined)
                 return;
             return valid; 

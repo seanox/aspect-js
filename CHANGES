@@ -6,8 +6,11 @@ CR: Composite: Validation works strictly by default
     deactivated with the declaration: validate="optional", which was the
     previous default behavior. In the markup, the attribute strict is therefore
     omitted.
-CR: Composite: Validation message is shown by default as a native browser tooltip
+CR: Composite: Validation message is shown by default as native browser tooltip
     In the markup, the attribute notification is therefore omitted.
+CR: Composite: Validation message added redirection to an attribute
+    If a message begin with @<attribut>:, which includes the return values of
+    express, these are redirected to the attribute declared in this way.
 
 1.7.0 20241228
 BF: Composite: Correction from mounting (dock/undock) composites with namespace
