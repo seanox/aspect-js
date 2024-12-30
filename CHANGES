@@ -9,7 +9,7 @@ CR: Composite: Validation works strictly by default
 CR: Composite: Validation message is shown by default as native browser tooltip
     In the markup, the attribute notification is therefore omitted.
 CR: Composite: Validation message added redirection to an attribute
-    If a message begin with @<attribut>:, which includes the return values of
+    If a message begin with @<attribute>:, which includes the return values of
     express, these are redirected to the attribute declared in this way.
 
 1.7.0 20241228
