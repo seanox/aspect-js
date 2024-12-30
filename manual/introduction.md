@@ -70,11 +70,10 @@ NoSQL-datasource, test environment and much more.
   * [iterate](#iterate)
   * [id](#id)
   * [composite](#composite)
-  * [strict](#strict)
+  * [state](#state)
   * [events](#events)
   * [validate](#validate)
   * [message](#message)
-  * [notification](#notification)
   * [render](#render)
   * [release](#release)
 * [DataSource](#datasource)
@@ -440,17 +439,11 @@ regardless of virtual paths.
 [Learn more](markup.md#composite)
 
 
-### strict
+### state
 
-The attribute can be combined with the attributes [composite](#composite) and
-[validate](#validate).
+TODO:
 
-In combination with the attribute [composite](#composite), it specifies that
-when loading the resources (JS, CSS, HTML) for a component, the filename is used
-in its original notation. The default behavior without the attribute [strict](
-#strict) uses the composite id with a lowercase letter at the beginning.
-
-[Learn more](markup.md#strict)
+[Learn more](markup.md#state)
 
 
 ### events
@@ -533,27 +526,6 @@ with the attributes [validate](#validate) and [events](#events).
 ```
 
 [Learn more](markup.md#message)
-
-
-### notification
-
-Notification is an optional part of [validation](#validate) and specifies that
-the content of the message attribute is displayed as an info box (browser
-feature) on the corresponding element if validation is not successful. The
-attribute requires the combination with the [validate](#validate), [events](
-    #events) and [message](#message) attributes.
-
-```html
-<form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
-      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
-      validate message="Valid e-mail address required" notification
-      events="input change" render="#Model"/>
-  <input type="submit" value="submit" validate events="click"/>
-</form>
-```
-
-[Learn more](markup.md#notification)
 
 
 ### render

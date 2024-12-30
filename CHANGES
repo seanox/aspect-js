@@ -1,10 +1,13 @@
 1.8.0 2025xxxx
 BF: Review: Corrections and optimization
 CR: Composite: Validation works strictly by default
-    The validation must explicitly return true so that the input data of the
-    HTML elements is synchronized with the models. The behavior can be
+    The validation must explicitly return true so that the input data from the
+    HTML elements is synchronized to the models. The behavior can be
     deactivated with the declaration: validate="optional", which was the
-    previous default behavior. The attribute strict is therefore omitted.
+    previous default behavior. In the markup, the attribute strict is therefore
+    omitted.
+CR: Composite: Validation message is shown by default as a native browser tooltip
+    In the markup, the attribute notification is therefore omitted.
 
 1.7.0 20241228
 BF: Composite: Correction from mounting (dock/undock) composites with namespace

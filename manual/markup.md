@@ -24,7 +24,6 @@ recursively to changes.
   * [interval](#interval)
   * [iterate](#iterate)
   * [message](#message)
-  * [notification](#notification)
   * [output](#output)
   * [release](#release)
   * [render](#render)
@@ -395,25 +394,6 @@ with the attributes [validate](#validate) and [events](#events).
   <input id="email" type="text" placeholder="email address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="{{Messages['Model.email.validation.message']}}"
-      events="input change" render="#Model"/>
-  <input type="submit" value="submit" validate events="click"/>
-</form>
-```
-
-
-### notification
-
-Notification is an optional part of [validation](#validate) and specifies that
-the content of the message attribute is displayed as an info box (browser
-feature) on the corresponding element if validation is not successful. The
-attribute requires the combination with the [validate](#validate), [events](
-    #events) and [message](#message) attributes.
-
-```html
-<form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
-      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
-      validate message="Valid e-mail address required" notification
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>

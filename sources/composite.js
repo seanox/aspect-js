@@ -160,9 +160,6 @@
         /** Constant for attribute message */
         get ATTRIBUTE_MESSAGE() {return "message";},
 
-        /** Constant for attribute notification */
-        get ATTRIBUTE_NOTIFICATION() {return "notification";},
-
         /** Constant for attribute name */
         get ATTRIBUTE_NAME() {return "name";},
 
@@ -196,7 +193,7 @@
          * that is cached in the meta-object. Other attributes are only cached
          * if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|notification|output|release|render|state|validate)$/i;},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|output|release|render|state|validate)$/i;},
         
         /**
          * Pattern for all static attributes.
@@ -628,15 +625,19 @@
                 }            
             }
 
-            // ATTRIBUTE_VALIDATE can be combined with ATTRIBUTE_MESSAGE and
-            // ATTRIBUTE_NOTIFICATION. However, ATTRIBUTE_MESSAGE and
-            // ATTRIBUTE_NOTIFICATION have no effect without ATTRIBUTE_VALIDATE.
-            // The value of the ATTRIBUTE_MESSAGE is used as an error message if
-            // the validation was not successful. To output the error message,
-            // the browser function of the HTML5 form validation is used. This
-            // message is displayed via mouse-over. If ATTRIBUTE_NOTIFICATION is
-            // also used, a value is not expected, the message is output as
-            // overlay/notification/report.
+            // ATTRIBUTE_VALIDATE can be supplemented with ATTRIBUTE_MESSAGE.
+            // However, ATTRIBUTE_MESSAGE has no effect without
+            // ATTRIBUTE_VALIDATE. The value of ATTRIBUTE_MESSAGE is used as an
+            // error message if the validation was not successful. For this
+            // purpose, the browser function of HTML5 form validation is used,
+            // which shows  the message as a browser validation tooltip/message.
+            //
+            // The browser validation tooltip/message can be redirected to the
+            // title attribute of the validated element if the message begins
+            // with the prefix //, which includes the return value per
+            // expression. This function can be helpful if a custom error
+            // concept needs to be implemented.
+
             if (valid !== true) {
                 let message;
                 if (typeof valid === "string"
@@ -648,11 +649,15 @@
                     if ((message || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         message = String(Expression.eval(serial + ":" + Composite.ATTRIBUTE_MESSAGE, message));
                 }
+
+                const PATTERN_REDIRECT_MESSAGE = /^\s*\/{2,}\s*(.*?)\s*/;
+                const redirect = PATTERN_REDIRECT_MESSAGE.test(message);
+                message = message.replace(PATTERN_REDIRECT_MESSAGE, "$1");
+
                 if (typeof selector.setCustomValidity === "function"
                         && Object.usable(message)) {
                     selector.setCustomValidity(message);
-                    if (object.attributes.hasOwnProperty(Composite.ATTRIBUTE_NOTIFICATION)
-                            && typeof selector.reportValidity === "function")
+                    if (!redirect && typeof selector.reportValidity === "function")
                         selector.reportValidity();
                 }
             }     
@@ -1218,11 +1223,11 @@
          * The following attributes and elements are supported:
          *
          * - Attributes:
-         *     COMPOSITE    INTERVAL        RELEASE
-         *     CONDITION    ITERATE         RENDER
-         *     EVENTS       MESSAGE         VALIDATE
-         *     ID           NOTIFICATION
-         *     IMPORT       OUTPUT
+         *     COMPOSITE    INTERVAL    RENDER
+         *     CONDITION    ITERATE     STATE
+         *     EVENTS       MESSAGE     VALIDATE
+         *     ID           OUTPUT
+         *     IMPORT       RELEASE
          *
          * - Expression Language
          * - Scripting
