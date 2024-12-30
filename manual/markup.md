@@ -613,20 +613,44 @@ validating input fields, for example, so that the input reaches the user
 interface. With the strict default behaviour of Seanox aspect-js, the invalid
 value is not synchronized with the model.
 
+__Validation works strictly by default. This means that the validation must
+explicitly be `true` and only then is the input data of the HTML elements
+synchronized with the model. This protects against invalid data in the models
+which may then be reflected in the view. If attribute `validate` is declared as
+`optional`, this behaviour can be specifically deactivated and the input data is
+then always synchronized with the model. The effects of validation are then only
+optional.__
+
+```html
+<form id="Model" composite>
+  <input id="text1" type="text" placeholder="e-mail address"
+      validate="optional" events="input change" render="#Model"/>
+  Model.text1: {{Model.text1}}
+  <input type="submit" value="submit" validate events="click"/>
+</form>
+```
+
+By default, validation message are shown displayed as a native browser toolbox
+for the input element. The corresponding message is set via the attribute of the
+same name. If custom validation and output need to be implemented, this behavior
+can be changed by redirecting the message to an attribute of the input element.
+For this purpose, the message, which at this point also includes the return
+value of expressions, must begin as follows: `@<attribute>:`.
+
 A general strategy or standard implementation for error output is deliberately
 not provided, as this is too strict in most cases and can be implemented
 individually as a central solution with little effort.
 
 ```css
-input[type='text']:not([title]) {
+input[type='text']:not([fault]) {
     background:#EEEEFF;
     border-color:#7777AA;
 }
-input[type='text'][title=''] {
+input[type='text'][fault=''] {
     background:#EEFFEE;
     border-color:#77AA77;
 }
-input[type='text'][title]:not([title='']) {
+input[type='text'][fault]:not([fault='']) {
     background:#FFEEEE;
     border-color:#AA7777;
 }
@@ -646,7 +670,8 @@ const Model = {
 ```html
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
-      validate events="input change" render="#Model"/>
+      validate message="@fault:Wrong e-mail address"
+      events="input change" render="#Model"/>
   Model.text1: {{Model.text1}}
   <input type="submit" value="submit" validate events="click"/>
 </form>
@@ -654,27 +679,11 @@ const Model = {
 
 In this example, the input field expects an e-mail address. The value is checked
 continuously during the input and in case of an invalid value an error message
-is written into the attribute `title`, or in case of a valid value the content
-is deleted from the attribute `title`. Below the input field is the control
+is written into the attribute `fault`, or in case of a valid value the content
+is deleted from the attribute `fault`. Below the input field is the control
 output of the corresponding field in the JavaScript object (model). This field
 is only synchronized if the validate method return the value `true`.
 
-__Validation works strictly by default. This means that the validation must
-explicitly be `true` and only then is the input data of the HTML elements
-synchronized with the model. This protects against invalid data in the models
-which may then be reflected in the view. If attribute `validate` is declared as
-`optional`, this behaviour can be specifically deactivated and the input data is
-then always synchronized with the model. The effects of validation are then only
-optional.__
-
-```html
-<form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
-      validate="optional" events="input change" render="#Model"/>
-  Model.text1: {{Model.text1}}
-  <input type="submit" value="submit" validate events="click"/>
-</form>
-```
 
 
 ## @-Attributes
