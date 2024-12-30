@@ -647,7 +647,7 @@ const Model = {
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       validate events="input change" render="#Model"/>
-  Model.text1: {{Model.text1}}
+  Model.text1: {{Model.text1.value}}
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
@@ -671,7 +671,7 @@ optional.__
 <form id="Model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       validate="optional" events="input change" render="#Model"/>
-  Model.text1: {{Model.text1}}
+  Model.text1: {{Model.text1.value}}
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
