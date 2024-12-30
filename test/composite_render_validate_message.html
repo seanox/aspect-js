@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      form {
+        white-space: pre;
+      }
+      form * + * {
+        margin-top: 1em;
+      }
+      iframe {
+        height: 4em;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+      Test.activate();
+
+      const snapshots = [];
+      Composite.listen(Composite.EVENT_RENDER_END, () => {
+          if (snapshots.length > 0)
+              return;
+          const snapshot = () => {
+              const content = document.querySelector("#text1").outerHTML
+                      + " " + Model.text1;
+              snapshots.push(content);
+          };
+          snapshot();
+          document.querySelector("#text1").typeValue("xxx", true);
+          snapshot();
+          document.querySelector("#text1").typeValue("@", false);
+          snapshot();
+          document.querySelector("#text1").typeValue("xxx", false);
+          snapshot();
+          document.body.innerHTML = "<pre>" + snapshots.join("\r\n").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</pre>";
+          Test.start();
+      });
+
+      Test.create({test() {
+          document.body.innerHTML = "<pre>" + snapshots.join("\r\n")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;") + "</pre>";
+          Assert.assertSameTo("script[type='text/test']", snapshots.join("\r\n"));
+      }});
+
+      const Model = {
+        text1: ""
+      }
+    </script>
+    <script type="text/test">
+      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change">
+      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" new_attr="wrong email"> xxx
+      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" new_attr="wrong email"> xxx@
+      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change"> xxx@xxx
+    </script>
+  </head>
+  <body>
+    <form id="Model" composite>
+      <input id="text1" type="text" placeholder="e-mail address"
+          pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
+          message="@new_attr:wrong email"
+          validate="optional" events="input change" render="#Model"/>
+      Model.text1: {{Model.text1}}
+      <input type="submit" value="submit" validate events="click"/>
+    </form>
+  </body>
+</html>
