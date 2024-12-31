@@ -172,9 +172,6 @@
         /** Constant for attribute release */
         get ATTRIBUTE_RELEASE() {return "release";},
 
-        /** Constant for attribute state */
-        get ATTRIBUTE_STRICT() {return "state";},
-
         /** Constant for attribute text */
         get ATTRIBUTE_TEXT() {return "text";},
 
@@ -193,7 +190,7 @@
          * that is cached in the meta-object. Other attributes are only cached
          * if they contain an expression.
          */
-        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|output|release|render|state|validate)$/i;},
+        get PATTERN_ATTRIBUTE_ACCEPT() {return /^(composite|condition|events|id|import|interval|iterate|message|output|release|render|validate)$/i;},
         
         /**
          * Pattern for all static attributes.
@@ -1241,8 +1238,8 @@
          *
          * - Attributes:
          *     COMPOSITE    INTERVAL    RENDER
-         *     CONDITION    ITERATE     STATE
-         *     EVENTS       MESSAGE     VALIDATE
+         *     CONDITION    ITERATE     VALIDATE
+         *     EVENTS       MESSAGE
          *     ID           OUTPUT
          *     IMPORT       RELEASE
          *
