@@ -179,7 +179,7 @@
     <concat destfile="${release.file.core.max}" append="false">
       <filelist dir="${workspace.sources}">
         <file name="${release.file.micro.core.max}"/>
-        <file name="sitemap.js"/>
+        <file name="routing.js"/>
       </filelist>
     </concat>
     <replaceregexp file="${release.file.core.max}" flags="g" byline="false"
