@@ -190,14 +190,13 @@
 
         /**
          * Determines the real existing path according to the SiteMap. The
-         * methods distinguish between absolute, relative and functional paths.
-         * The functionalities remain unchanged. Absolute and relative paths are
-         * balanced. Relative paths are balanced on the basis of the current
-         * location. All paths are checked against the SiteMap. Invalid paths
-         * are searched for a valid partial path. To do this, the path is
-         * shortened piece by piece. If no valid partial path can be found, the
-         * root is returned. Without passing a path, the current location is
-         * returned.
+         * methods distinguish between absolute and relative paths. Absolute and
+         * relative paths are balanced. Relative paths are balanced on the basis
+         * of the current location. All paths are checked against the SiteMap.
+         * Invalid paths are searched for a valid partial path. To do this, the
+         * path is shortened piece by piece. If no valid partial path can be
+         * found, the root is returned. Without passing a path, the current
+         * location is returned.
          * @param  path to check - optional (URL is also supported, only the
          *     hash is used here and the URL itself is ignored)
          * @return the real path determined in the SiteMap, or the unchanged
@@ -693,8 +692,7 @@
     /**
      * Establishes a listener that detects changes to the URL hash. The method
      * corrects invalid and unauthorized paths by forwarding them to next valid
-     * path, restores the facet of functional paths, and organizes partial
-     * rendering.
+     * path and organizes partial rendering.
      */
     window.addEventListener("hashchange", (event) => {
 
@@ -857,47 +855,30 @@
     compliant("Path");
     compliant(null, window.Path = {
 
+        get PATTERN_PATH() {return /^#[\x21-\x7E]*$/},
+
+        get PATTERN_ASCII() {return /^[\x21-\x7E]*$/},
+
+        get location() {
+            if (window.location.href.indexOf("#") < 0)
+                return null;
+            return window.location.hash
+        },
+
         /**
-         * Normalizes a path. Paths consist exclusively of word characters and
-         * underscores (based on composite IDs) and must begin with a word
-         * character and use the hash character as separator and root. Between
-         * the path segments, the hash character can also be used as a back jump
-         * (parent) directive. The back jump then corresponds to the number of
-         * additional hash characters.
+         * Normalizes a path. Paths consist of words that only use 7-bit ASCII
+         * characters above the space character. The words are separated by the
+         * hash character (#). There are absolute and relative paths:
          *
-         *     Note:
-         * Paths use lowercase letters. Upper case letters are automatically
-         * replaced by lower case letters when normalizing.
+         * - Absolute Paths start with the root, represented by a leading
+         *   hash sign (#).
          *
-         * There are four types of paths:
+         * - Relative Paths are based on the current path and begin with either
+         *   a word or a return. Return jumps also use the hash sign, whereby
+         *   the number of repetitions indicates the number of return jumps.
          *
-         *     Functional paths:
-         *     ----
-         * The paths consists of three or more hash characters (###+) and are
-         * only temporary, they serve a function call without changing the
-         * current path (URL hash). If such a path is detected, the return value
-         * is always ###.
-         *
-         *     Root paths:
-         *     ----
-         * These paths are empty or contain only one hash character. The return
-         * value is always the given root path or # if no root path was
-         * specified.
-         *
-         *     Relative paths:
-         *     ----
-         * These paths begin without hash or begin with two or more hash (##+)
-         * characters. Relative paths are prepended with the passed root.
-         *
-         *     Absolute paths:
-         *     ----
-         * These paths begin with one hash characters. A possibly passed root is
-         * ignored.
-         *
-         * All paths are balanced. The directive of two or more hash characters
-         * is resolved, each double hash means that the preceding path segment
-         * is skipped. If more than two hash characters are used, it extends the
-         * jump length.
+         * The return value is always a balanced canonical path, starting with
+         * the root.
          *
          * Examples (root #x#y#z):
          *
@@ -912,6 +893,7 @@
          * Invalid roots and paths cause an error.
          * The method has the following various signatures:
          *     function(root, path)
+         *     function(root, path, ...)
          *     function(path)
          * @param  root optional, otherwise # is used
          * @param  path to normalize (URL is also supported, only the hash is
@@ -922,58 +904,56 @@
          */
         normalize(...variants) {
 
-            if (variants.length <= 0)
-                return null;
-            if (variants.length > 0
-                    && !Object.usable(variants[0]))
-                return null;
-            if (variants.length > 1
-                    && !Object.usable(variants[1]))
+            if (variants == null
+                    || variants.length <= 0)
                 return null;
 
-            if (variants.length > 1
-                    && typeof variants[0] !== "string")
-                throw new TypeError("Invalid root: " + typeof variants[0]);
-            let root = "#";
-            if (variants.length > 1) {
-                root = variants[0];
-                try {root = Path.normalize(root);
-                } catch (error) {
-                    root = (root || "").trim();
-                    throw new TypeError(`Invalid root${root ? ": " + root : ""}`);
-                }
-            }
-
-            if (variants.length > 1
-                    && typeof variants[1] !== "string")
-                throw new TypeError("Invalid path: " + typeof variants[1]);
-            if (variants.length > 0
-                    && typeof variants[0] !== "string")
-                throw new TypeError("Invalid path: " + typeof variants[0]);
-            let path = "";
-            if (variants.length === 1)
-                path = variants[0];
             if (variants.length === 1
-                    && path.match(PATTERN_URL))
-                path = path.replace(PATTERN_URL, "$1");
-            else if (variants.length > 1)
-                path = variants[1];
-            path = (path || "").trim();
+                    && variants[0] == null)
+                return null;
 
-            if (!path.match(PATTERN_PATH))
+            variants.forEach(variant => {
+                if (variant !== null
+                        && variant !== undefined
+                        && typeof variant !== "string")
+                    throw new Error(`Invalid path element type: ${typeof variant}`);
+            });
+
+            variants = variants.filter((item, index) =>
+                item != null && item.trim() !== "" && !(index > 0 && item === "#"));
+
+            variants.forEach(item => {
+                if (!Path.PATTERN_ASCII.test(item))
+                    throw new Error(`Invalid path element: ${item}`)});
+
+            variants = ((paths) =>
+                paths.map((item, index) => {
+                    item = item == null ? "" : item.trim()
+                    item = item.replace(/([^#])#$/, '$1');
+                    if (index > 0 && item.startsWith('#'))
+                        return item.substring(1);
+                    return item;
+                })
+            )(variants);
+
+            let location = Path.location;
+            if (Path.location == null
+                    || Path.location.trim() === "")
+                location = "#";
+            if (variants.length > 0
+                    && variants[0] == null)
+                variants[0] = location;
+            if (variants.length > 0
+                    && !variants[0].startsWith('#'))
+                variants.unshift(location);
+            if (variants.length <= 0)
+                variants.unshift(location);
+
+            let path = variants.join("#");
+
+            if (!path.match(Path.PATTERN_PATH))
                 throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
 
-            path = path.replace(/([^#])#$/, "$1");
-            path = path.replace(/^([^#])/, "#$1");
-
-            // Functional paths are detected.
-            if (path.match(PATTERN_PATH_FUNCTIONAL))
-                return "###";
-
-            path = root + path;
-            path = path.toLowerCase();
-
-            // Path will be balanced
             const pattern = /#[^#]+#{2}/;
             while (path.match(pattern))
                 path = path.replace(pattern, "#");

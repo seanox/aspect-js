@@ -57,8 +57,6 @@ faces and facets.
   * [Root Path](#root-path)
   * [Relative Path](#relative-path)
   * [Absolute Path](#absolute-path)
-  * [Variable Path](#variable-path)
-  * [Functional Path](#functional-path)
 
 
 ## Terms
@@ -276,33 +274,26 @@ More details can be found in chapter [Acceptors](#acceptors).
 
 ## Virtual Paths
 
-Virtual paths are used for navigation and control of face-flow. The target can
-be a face, a facet or a function. For SPAs (Single-Page-Applications) the anchor
-part of the URL is used for the paths.
+Virtual paths are used for navigation, routing and controlling the view flow.
+The target can be a view or a function. For SPAs (single-page applications), the
+anchor part of the URL is used for navigation and routes.
 
 ```
 https://example.local/example/#path
 ```
 
-According to the file system, absolute, relative and additionally functional
-paths are also supported here. Paths consist exclusively of word characters,
-underscores and optionally the minus character (based on combined) IDs. The hash
-character is used as separator and root. Spaces are not supported.
+Similar to a file system, absolute and relative paths are also supported here.
+Paths consist of case-sensitive words that only use 7-bit ASCII characters above
+the space character. Characters outside this range are URL encoded. The words
+are separated by the hash character (`#`). 
 
 ```
 #a#b#c#d
 ```
 
-Paths use as lowercase letters. Upper case letters are automatically replaced by
-lower case letters when normalizing.
-
-```
-#a#b#c#d == #A#b#C#d
-```
-
-Between the path segments, the hash character (`#`) can also be used as a
-back/parent jump directive. The back jump then corresponds to the number of
-additional hash characters.
+Repeated use of the separator (`#`) allows jumps back in the path to be mapped.
+The number of repetitions indicates the number of returns in the direction of
+the root.
 
 ```
 #a#b#c#d##x   -> #a#b#c#x
@@ -328,8 +319,9 @@ These paths are empty or contain only one hash character.
 
 ### Relative Path
 
-These paths begin without hash or begin with two or more hash characters (`##+`)
-and are relative to the current path.
+Relative Paths are based on the current path and begin with either a word or a
+return. Return jumps also use the hash sign, whereby the number of repetitions
+indicates the number of return jumps.
 
 ```html
 <a href="##">Back to the parent</a>
@@ -346,63 +338,16 @@ SiteMap.navigate("x#y#z");
 
 ### Absolute Path
 
-These paths begin with one hash characters. All paths will be balanced, meaning
-the directives with multiple hash characters are resolved.
+Absolute Paths start with the root, represented by a leading hash sign (#).
 
 ```html
 <a href="#">Back to the root</a>
 <a href="#a#b#c">Back to the root + a + b + c</a>
 ```
 
-
-### Variable Path
-
-Variable paths are a mapping from virtual to physical paths. This explanation
-sounds a bit confusing in the context of the SiteMap and its virtual paths.
-Here, it means another additional virtual mapping of paths inside of the
-SiteMap. A path of the SiteMap represents a fixed target, which can be Face and
-Facet. The path can now be extended without changing the target. The target can
-then use the extended path, for example, to pass parameters, which is comparable
-to `PATH_TRANSLATED` and `PATH_INFO` in CGI. 
-
-To configure variable paths, the character string `...` is used, which can
-follow a facet or be used directly as a facet.
-
-```javascript
-SiteMap.customize({
-    "#": ["home", "projects", "about", "contact..."],
-    "#project": ["..."],
-    ...
-});
-```
-
-The paths `#contact` and `#project` are variable in this example and can
-therefore be extended as required. The target is fixed in both cases and the
-requests are answered by `#contact` and `#project`. The extension of the path
-can be determined with the method `SiteMap.lookup(path)`. The returned
-meta-object contains the extended path from the variable path as a data
-property.
-
-
-```
-SiteMap.lookup("#contact#support");
-    returns {path:"#contact#support", face:"#", facet:"contact", data:"#support"}
-
-SiteMap.lookup("#project#a#b#c");
-    returns {path:"#contact#support", face:"#project", facet:"", data:"#a#b#c"}
-```
-
-
-### Functional Path
-
-The path consists of three or more hash characters (`###+`) and are only 
-temporary, they serve a function call without changing the current path (URL 
-hash). This is useful for functional links, e.g. to open a popup or to send a
-mail in the background.
-
-```html
-<a href="###">Do something, the logic is in the model</a>
-```
+TODO: Description of paths with parameters
+TODO: Description of the path dynamic in terms of the matching view as the
+      target (PATH_INFO / PATH_TRANSLATED)
 
 
 
