@@ -401,19 +401,19 @@ compliant(null, window.Test = {
                 Test.worker.monitor = meta ? meta.monitor : null;
                 Test.worker.monitor = Test.worker.monitor || {
                     start(status) {
-                        Test.worker.output.log(Test.TIMESTAMP + " Test is started"
+                        Test.worker.output.log(`${Test.TIMESTAMP} Test is started`
                                 + `, ${numerical(status.queue.size, "task")} in the queue`);
                     },
                     suspend(status) {
-                        Test.worker.output.log(Test.TIMESTAMP + " Test is suspended"
+                        Test.worker.output.log(`${Test.TIMESTAMP} Test is suspended`
                                 + `, ${numerical(status.queue.length, "task")} still outstanding`);
                     },
                     resume(status) {
-                        Test.worker.output.log(Test.TIMESTAMP + " Test is continued"
+                        Test.worker.output.log(`${Test.TIMESTAMP} Test is continued`
                                 + `, ${numerical(status.queue.size, "task")} in the queue`);
                     },
                     interrupt(status) {
-                        Test.worker.output.log(Test.TIMESTAMP + " Test is interrupted"
+                        Test.worker.output.log(`${Test.TIMESTAMP} Test is interrupted`
                                 + `\n\t${numerical(status.queue.size -status.queue.progress, "task")} still outstanding`
                                 + `\n\t${numerical(status.queue.faults, "fault")} were detected`
                                 + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
@@ -427,7 +427,7 @@ compliant(null, window.Test = {
                         else Test.worker.output.log(`${Test.TIMESTAMP} Test task ${status.task.title} was successful (${timing} ms)`);
                     },
                     finish(status) {
-                        Test.worker.output.log(Test.TIMESTAMP + "Test is finished"
+                        Test.worker.output.log(`${Test.TIMESTAMP} Test is finished`
                                 + `\n\t${numerical(status.queue.size, "task")} were performed`
                                 + `\n\t${numerical(status.queue.faults, "fault")} were detected`
                                 + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
