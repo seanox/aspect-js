@@ -66,7 +66,6 @@ Machine translation with [DeepL](https://deepl.com).
     * [output](markup.md#output)
     * [release](markup.md#release)
     * [render](markup.md#render)
-    * [state](markup.md#state)
     * [validate](markup.md#validate)
   * [@-Attributes](markup.md#-attributes)
   * [Expression Language](markup.md#expression-language)
@@ -145,8 +144,6 @@ Machine translation with [DeepL](https://deepl.com).
     * [Root Path](sitemap.md#root-path)
     * [Relative Path](sitemap.md#relative-path)
     * [Absolute Path](sitemap.md#absolute-path)
-    * [Variable Path](sitemap.md#variable-path)
-    * [Functional Path](sitemap.md#functional-path)
 
 
 ### Composite
