@@ -16,6 +16,7 @@ CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
     - Omission of functional paths, the existing acceptors is the better way
     - Omission of variable path, becomes obsolete with the new dynamic routing
+    - Optimization of the path for routing
 CR: Test: Change the start to ant -f development/build.xml run
 
 1.7.0 20241228
