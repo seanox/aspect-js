@@ -261,7 +261,7 @@
         match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
   </target>
 
-  <target name="start">
+  <target name="run">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
         dir="server" fork="true" spawn="false">
       <jvmarg value="-Dfile.encoding=ISO-8859-1"/>

@@ -27,7 +27,7 @@ and also terminated most simply by command line from the project directory with
 the included Ant script.
 
 ```
-ant -f ./development/build.xml start
+ant -f ./development/build.xml run
 ```
 ```
 ant -f ./development/build.xml stop
@@ -108,7 +108,7 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 - Create a release
   `ant -f ./develpoment/build.xml test`
 - Start the server
-  `ant -f ./develpoment/build.xml start`
+  `ant -f ./develpoment/build.xml run`
 - URLs to be tested
   http://127.0.0.1:8000  
   http://127.0.0.1:8000/index.html    

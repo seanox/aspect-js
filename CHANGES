@@ -11,9 +11,10 @@ CR: Composite: Validation message is shown by default as native browser tooltip
 CR: Composite: Validation message added redirection to an attribute
     If a message begin with @<attribute>:, which includes the return values of
     express, these are redirected to the attribute declared in this way.
-BF: SiteMap: Review, refactoring, corrections and optimization
+CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
-
+    - Omission of functional paths, the existing acceptors is the better way
+CR: Test: Starting test environment changed to ant -f development/build.xml run
 
 1.7.0 20241228
 BF: Composite: Correction from mounting (dock/undock) composites with namespace
