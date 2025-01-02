@@ -347,7 +347,7 @@
          * @param  path
          * @return true if the (sub)path is currently used, otherwise false
          */
-        accept(path) {
+        approve(path) {
             
             // Only valid paths can be confirmed.
             path = (path || "").trim().toLowerCase();
@@ -825,11 +825,11 @@
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                 script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                     match = match.substring(2, match.length -2).trim();
-                    return `{{SiteMap.accept("${path}") and (${match})}}`;
+                    return `{{SiteMap.approve("${path}") and (${match})}}`;
                 });
         }
         if (!script)
-            script = `${script || ""}{{SiteMap.accept("${path}")}}`;
+            script = `{{SiteMap.approve("${path}")}}`;
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
 
@@ -855,14 +855,39 @@
     compliant("Path");
     compliant(null, window.Path = {
 
+        // Pattern for a valid path in the 7-bit ASCII range
         get PATTERN_PATH() {return /^#[\x21-\x7E]*$/},
 
+        // Pattern for a string in the 7-bit ASCII range
         get PATTERN_ASCII() {return /^[\x21-\x7E]*$/},
 
+        /**
+         * Returns the current working path. This assumes that the URL contains
+         * at least one hash, otherwise the method returns null.
+         * @returns {string|null} the current path, otherwise null
+         */
         get location() {
             if (window.location.href.indexOf("#") < 0)
                 return null;
             return window.location.hash
+        },
+
+        /**
+         * Checks whether the specified path is covered by the current working
+         * path. Covered means that the specified path must be contained from
+         * the root of the current working path. This assumes that the URL
+         * contains at least one hash, otherwise the method returns false.
+         * @param   {string} path to be checked
+         * @returns {boolean} true if the path is covered by the current path
+         */
+        covers(path) {
+            path = Path.normalize(path);
+            if (path == null
+                    || path.trim() === "")
+                return false;
+            if (path === "#")
+                return Path.location != null;
+            return (Path.location + "#").startsWith(path + "#")
         },
 
         /**
@@ -875,7 +900,9 @@
          *
          * - Relative Paths are based on the current path and begin with either
          *   a word or a return. Return jumps also use the hash sign, whereby
-         *   the number of repetitions indicates the number of return jumps.
+         *   the number of repetitions indicates the number of return jumps. If
+         *   the URL does not contain at least one hash and therefore has no
+         *   working path, the root path is used as the working path.
          *
          * The return value is always a balanced canonical path, starting with
          * the root.
@@ -895,9 +922,8 @@
          *     function(root, path)
          *     function(root, path, ...)
          *     function(path)
-         * @param  root optional, otherwise # is used
-         * @param  path to normalize (URL is also supported, only the hash is
-         *     used here and the URL itself is ignored)
+         * @param  root optional, otherwise the current location is used
+         * @param  path to normalize
          * @return the normalize path
          * @throws An error occurs in the following cases:
          *     - if the root and/or the path is invalid
