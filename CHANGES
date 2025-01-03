@@ -12,6 +12,8 @@ CR: Composite: Validation message is shown by default as native browser tooltip
 CR: Composite: Validation message added redirection to an attribute
     If a message begin with @<attribute>:, which includes the return values of
     express, these are redirected to the attribute declared in this way.
+CR: Composite: Added Composite.lookup(selector)
+    Determines the corresponding meta-object for the passed selector.
 CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
     - Omission of functional paths, the existing acceptors is the better way

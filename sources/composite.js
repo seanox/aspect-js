@@ -494,6 +494,35 @@
                 invoke(...variants);
             }, 0, task, ...variants);
         },
+
+        /**
+         * Determines the corresponding meta-object for the passed selector.
+         * @param   {Element|string} selector, as DOM element or a string
+         * @returns {object|null} the determined meta-object or null
+         * @throws  {Error} If the selector is not unique (several nodes found).
+         */
+        lookup(selector) {
+
+            if (selector == null)
+                return null;
+
+            if (typeof selector === "string") {
+                const nodes = document.querySelectorAll(selector.trim());
+                if (nodes.length <= 0)
+                    return null;
+                if (nodes.length > 1)
+                    throw new Error("Selector is not unique");
+                return Composite.lookup(nodes[0]);
+            }
+
+            if (!(selector instanceof Element))
+                return null;
+
+            const lookup = _mount_lookup(selector);
+            if (lookup !== null)
+                delete lookup.target;
+            return lookup;
+        },
         
         /**
          * Validates the as selector passed element(s), if the element(s) are
