@@ -34,8 +34,7 @@
     // Array with the path history (optimized)
     const _history = new Array();
 
-    compliant("Routing");
-    compliant(null, window.Routing = {
+    const Browser = {
 
         /**
          * Returns the current working path. This assumes that the URL contains
@@ -43,7 +42,22 @@
          * @returns {string|null} the current path, otherwise null
          */
         get location() {
-            return Path.location;
+            if (window.location.hash !== "")
+                return window.location.hash;
+            return window.location.href.indexOf("#") >= 0 ? "#" : null;
+        }
+    }
+
+    compliant("Routing");
+    compliant(null, window.Routing = {
+
+        /**
+         * Returns the current working path normalized. This assumes that the
+         * URL contains at least one hash, otherwise the method returns null.
+         * @returns {string|null} the current path, otherwise null
+         */
+        get location() {
+            return Path.normalize(Browser.location);
         },
 
         /**
@@ -57,10 +71,10 @@
         route(path) {
             path = Path.normalize(path);
             if (path === null
-                    || path === Path.location)
+                    || path === Browser.location)
                 return;
             Composite.asynchron((path) => {
-                window.location.hash = path;
+                window.location.href = path;
             }, path);
         },
         
@@ -76,7 +90,7 @@
         forward(path) {
             path = Path.normalize(path);
             if (path === null
-                    || path === Path.location)
+                    || path === Browser.location)
                 return;
             const event = new Event("hashchange",{bubbles:false, cancelable:true})
             event.newURL = path;
@@ -123,7 +137,7 @@
             if (typeof approval === "string"
                     && Path.PATTERN_PATH.test(approval)) {
                 Composite.asynchron((path) => {
-                    window.location.hash = path;
+                    window.location.href = path;
                 }, path);
                 return false;
             }
@@ -148,13 +162,13 @@
         // activated. The decision was deliberate, so that interpretations such
         // as route=“off” do not cause false expectations and misunderstandings.
         _routing_active = document.body.hasAttribute("route")
-            && document.body.getAttribute("route") === null;
+            && document.body.getAttribute("route") === "";
 
         // Without path, is forwarded to the root. The fact that the interface
         // can be called without a path if it wants to use the routing must be
         // taken into account in the declaration of the markup and in the
         // implementation. This logic is not included here!
-        if (Path.location === null)
+        if (!Browser.location)
             Routing.route("#");
     });
 
@@ -168,9 +182,9 @@
         if (!_routing_active)
             return;
 
-        const location = Path.location || "#";
-        if (location !== window.location.hash) {
-            window.location.replace(location ? location : "#");
+        const location = Routing.location || "#";
+        if (location !== Browser.location) {
+            window.location.replace(location);
             return;
         }
 
@@ -253,17 +267,6 @@
         get PATTERN_ASCII() {return /^[\x21-\x7E]*$/},
 
         /**
-         * Returns the current working path. This assumes that the URL contains
-         * at least one hash, otherwise the method returns null.
-         * @returns {string|null} the current path, otherwise null
-         */
-        get location() {
-            if (window.location.href.indexOf("#") < 0)
-                return null;
-            return window.location.hash
-        },
-
-        /**
          * Checks whether the specified path is covered by the current working
          * path. Covered means that the specified path must be contained from
          * the root of the current working path. This assumes that the URL
@@ -273,12 +276,13 @@
          */
         covers(path) {
             path = Path.normalize(path);
-            if (path == null
+            if (!Routing.location
+                    || path == null
                     || path.trim() === "")
                 return false;
             if (path === "#")
-                return Path.location != null;
-            return (Path.location + "#").startsWith(path + "#")
+                return true;
+            return (Routing.location + "#").startsWith(path + "#");
         },
 
         /**
@@ -353,9 +357,9 @@
                 })
             )(variants);
 
-            let location = Path.location;
-            if (Path.location == null
-                    || Path.location.trim() === "")
+            let location = Browser.location;
+            if (location == null
+                    || location.trim() === "")
                 location = "#";
             if (variants.length > 0
                     && variants[0] == null)
