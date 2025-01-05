@@ -27,7 +27,6 @@
 
     let _routing_active = undefined;
 
-    // TODO
     // Map with all supported acceptors
     const _acceptors = new Map();
 
@@ -59,6 +58,13 @@
         get location() {
             return Path.normalize(Browser.location);
         },
+
+        // TODO:
+        get history() {
+            return _history;
+        },
+
+        // TODO: method to get path + parameters (+ URL decoding of the parameters)
 
         /**
          * Routes to the given path. TODO:
@@ -142,6 +148,15 @@
                 return false;
             }
             return approval === true;
+        },
+
+        customize(path, acceptor) {
+            path = Path.normalize(path);
+            if (!path)
+                throw new Error(`Invalid acceptor path: ${path}`);
+            if (typeof acceptor !== "function")
+                throw new Error(`Invalid acceptor`);
+            _acceptors.set(path, acceptor);
         }
     });
 
@@ -188,6 +203,12 @@
             window.location.replace(location);
             return;
         }
+
+        // TODO: Acceptors
+        // - no entry in history
+        // - restore the path before (without redirect, only replace)
+        //   history.replaceState(null, null, new URL(event.oldURL).hash || "#");
+        // - then exit function and do nothing
 
         // Maintaining the history.
         // For recursions, the history is discarded after the first occurrence.
