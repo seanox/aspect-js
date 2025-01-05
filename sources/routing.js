@@ -25,7 +25,7 @@
  */
 (() => {
 
-    let _routing_active = false;
+    let _routing_active = undefined;
 
     // TODO
     // Map with all supported acceptors
@@ -129,7 +129,7 @@
 
             const selector = "#" + path.split("#").pop();
             const object = Composite.lookup(selector);
-            if (!(typeof object.permit === "function"))
+            if (!(typeof object?.permit === "function"))
                 return Path.covers(path);
             const approval = object.permit();
             if (approval === undefined)
@@ -151,26 +151,27 @@
      */
     Composite.customize("@ATTRIBUTES-STATICS", "static");
 
-    /**
-     * Established a listener that listens when the page loads. The method
-     * initiates the initial usage of the routing and paths.
-     */
-    window.addEventListener("load", () => {
+    const _lookup = (path) => {
+        path = path.split(/(?=#)/);
+        do {
+            let selector = `${path.join(" ")}[${Composite.ATTRIBUTE_COMPOSITE}]`;
+            selector = document.querySelector(selector);
+            if (selector instanceof Element)
+                return selector;
+            path.pop();
+        } while (path.length > 0);
+        return document.body;
+    };
 
-        // Activates routing at startup via the boolean attribute route. It must
-        // not have a value, otherwise it is ignored and routing is not
-        // activated. The decision was deliberate, so that interpretations such
-        // as route=“off” do not cause false expectations and misunderstandings.
-        _routing_active = document.body.hasAttribute("route")
-            && document.body.getAttribute("route") === "";
-
-        // Without path, is forwarded to the root. The fact that the interface
-        // can be called without a path if it wants to use the routing must be
-        // taken into account in the declaration of the markup and in the
-        // implementation. This logic is not included here!
-        if (!Browser.location)
-            Routing.route("#");
-    });
+    const _render = (element, focus = false) => {
+        Composite.render(element);
+        if (focus) {
+            Composite.asynchron((element) => {
+                if (typeof element.focus === "function")
+                    element.focus();
+            }, element);
+        }
+    };
 
     /**
      * Establishes a listener that detects changes to the URL hash. The method
@@ -195,29 +196,84 @@
             _history.length = index;
         _history.push(location);
 
-        // Initiate rendering
-        const selector = location.replace(/(?=#)/g, " ");
-        const target = location === "#"
-            ? document.body : document.querySelector(selector);
-        Composite.render(target);
+        // Decision matrix
+        // - invalid path(s) / undefined, then do nothing
+        // - no path match / null, then render body and focus
+        // - Composite old and new are the same, then render and focus new
+        // - Composite old and new are not equal and one is body, then render
+        //   body and focus new
+        // - Composite old includes new, then render old and focus new
+        // - Composite new includes old, then render new and focus new
+        // - Composite old and new unequal, then render old, then render new and
+        //   focus new
 
-        // Focusing after rendering
-        Composite.asynchron((target) => {
-            if (typeof target.focus === "function")
-                target.focus();
-        }, target);
+        const locationOld = Path.normalize(new URL(event.oldURL).hash);
+        const locationNew = Path.normalize(new URL(event.newURL).hash);
+        const locationMatch = Path.matches(locationOld, locationNew);
+        if (locationMatch === undefined)
+            return;
+        if (locationMatch === null) {
+            _render(document.body, true);
+            return;
+        }
+        const locationOldElement = _lookup(locationOld);
+        const locationNewElement = _lookup(locationNew);
+        if (locationOldElement === locationNewElement) {
+            _render(locationNewElement, true);
+            return;
+        }
+        if (locationOldElement === document.body
+                || locationNewElement === document.body) {
+            _render(document.body);
+            Composite.asynchron((element) => {
+                if (typeof element.focus === "function")
+                    element.focus();
+            }, locationNewElement);
+            return;
+        }
+        if (locationOldElement.contains(locationNewElement)) {
+            _render(locationOldElement);
+            Composite.asynchron((element) => {
+                if (typeof element.focus === "function")
+                    element.focus();
+            }, locationNewElement);
+            return;
+        }
+        if (locationNewElement.contains(locationOldElement)) {
+            _render(locationNewElement, true);
+            return;
+        }
+        _render(locationOldElement);
+        _render(locationnewElement, true);
     });
 
     /**
+     * TODO:
      * Rendering filter for all composite elements. The filter causes that for
      * each composite element determined by the renderer, an additional
-     * condition is added to the SiteMap. This condition is used to show or hide
+     * condition is added to the Routing. This condition is used to show or hide
      * the composite elements in the DOM to the corresponding virtual paths. The
-     * elements are identified by the serial. The SiteMap uses a map
-     * (serial/element) as cache for fast access. The cleaning of the cache is
-     * done by a MutationObserver.
+     * elements are identified by the serial.
      */
     Composite.customize((element) => {
+
+        if (_routing_active === undefined) {
+            // Activates routing during the initial rendering via the boolean
+            // attribute route. It must not have a value, otherwise it is
+            // ignored and routing is not activated. The decision was
+            // deliberate, so that interpretations such as route=“off” do not
+            // cause false expectations and misunderstandings.
+            _routing_active = document.body.hasAttribute("route")
+                    && document.body.getAttribute("route") === "";
+
+            // Without path, is forwarded to the root. The fact that the
+            // interface can be called without a path if it wants to use the
+            // routing must be taken into account in the declaration of the
+            // markup and in the implementation. This logic is not included
+            // here!
+            if (!Browser.location)
+                Routing.route("#");
+        }
 
         if (!_routing_active)
             return;
@@ -244,11 +300,11 @@
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                 script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                     match = match.substring(2, match.length -2).trim();
-                    return `{{SiteMap.approve("${path}") and (${match})}}`;
+                    return `{{Routing.approve("${path}") and (${match})}}`;
                 });
         }
         if (!script)
-            script = `{{SiteMap.approve("${path}")}}`;
+            script = `{{Routing.approve("${path}")}}`;
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
 
@@ -265,6 +321,30 @@
 
         // Pattern for a string in the 7-bit ASCII range
         get PATTERN_ASCII() {return /^[\x21-\x7E]*$/},
+
+        /**
+         * TODO:
+         * @param   {string} path
+         * @param   {string} compare
+         * @returns {undefined|null|string}
+         */
+        matches(path, compare) {
+            if (path == null
+                    || path.length <= 0
+                    || compare == null
+                    || compare.length <= 0)
+                return;
+            path = path.split(/(?=#)/);
+            compare = compare.split(/(?=#)/);
+            const length = Math.min(path.length, compare.length);
+            for (let index = 0; index < length; index++) {
+                if (path[index] !== compare[index]) {
+                    path.length = index;
+                    break;
+                }
+            }
+            return path.join("") || null;
+        },
 
         /**
          * Checks whether the specified path is covered by the current working
