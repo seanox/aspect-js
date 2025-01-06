@@ -27,8 +27,8 @@
 
     let _routing_active = undefined;
 
-    // Map with all supported acceptors
-    const _acceptors = new Map();
+    // Map with all supported interceptors
+    const _interceptors = new Array();
 
     // Array with the path history (optimized)
     const _history = new Array();
@@ -150,13 +150,16 @@
             return approval === true;
         },
 
-        customize(path, acceptor) {
-            path = Path.normalize(path);
-            if (!path)
-                throw new Error(`Invalid acceptor path: ${path}`);
-            if (typeof acceptor !== "function")
-                throw new Error(`Invalid acceptor`);
-            _acceptors.set(path, acceptor);
+        customize(path, actor) {
+            if (typeof path !== "string"
+                    && !(path instanceof RegExp))
+                throw new Error("Invalid interceptor path type");
+            if (typeof path === "string"
+                    && !Path.normalize(path))
+                throw new Error("Invalid interceptor path");
+            if (typeof actor !== "function")
+                throw new Error("Invalid interceptor actor type");
+            _interceptors.push({path:path, actor:actor});
         }
     });
 
@@ -204,11 +207,25 @@
             return;
         }
 
-        // TODO: Acceptors
+        // Interceptors
+        // - order of execution corresponds to the order of registration
+        // - all interceptors are always checked and executed if they match
         // - no entry in history
-        // - restore the path before (without redirect, only replace)
-        //   history.replaceState(null, null, new URL(event.oldURL).hash || "#");
-        // - then exit function and do nothing
+        // - can change the new hash/path, but please use replace
+        // - following interceptors use the possibly changed hash/path
+        // - on the first explicit false, terminates the logic in hashchange
+        for (const interceptor in _interceptors) {
+            if (typeof interceptor.path === "string") {
+                if (!Path.covers(interceptor.path))
+                    continue;
+            } else if (interceptor.path instanceof RegExp) {
+                if (!interceptor.path.test(Routing.location))
+                    continue;
+            } else continue;
+            if (typeof interceptor.actor === "function"
+                    && interceptor.actor(new URL(event.oldURL).hash, Browser.location) === false)
+                return;
+        }
 
         // Maintaining the history.
         // For recursions, the history is discarded after the first occurrence.
@@ -284,8 +301,10 @@
             // ignored and routing is not activated. The decision was
             // deliberate, so that interpretations such as route=“off” do not
             // cause false expectations and misunderstandings.
-            _routing_active = document.body.hasAttribute("route")
-                    && document.body.getAttribute("route") === "";
+            _routing_active = document.body.hasAttribute("route");
+            if (document.body.hasAttribute("route")
+                    && document.body.getAttribute("route") !== "")
+                console.warn("Ignore value for route attribute")
 
             // Without path, is forwarded to the root. The fact that the
             // interface can be called without a path if it wants to use the
