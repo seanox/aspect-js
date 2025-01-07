@@ -12,6 +12,7 @@
     <script src="aspect-js.js"></script>
     <script src="scripts/capture.js"></script>
     <script type="text/javascript">
+
         Test.activate();
 
         const values = [];
@@ -28,29 +29,15 @@
             capture.validate();
         }});
 
-        SiteMap.customize({
-            "#": ["modelA"],
-            "#modelA": []
-        });
         modelA = {
             valueA: "hallo"
         }.reactive();
 
         window.setTimeout(() => {modelA.valueA = "a2b4c6d8e0";}, 1000);
-        window.setTimeout(() => {window.location.href = "#modela";}, 2000);
+        window.setTimeout(() => {window.location.href = "#modelA";}, 2000);
         window.setTimeout(() => {modelA.valueA = "b4c6d8e0a2";}, 3000);
         window.setTimeout(() => {window.location.href = "#";}, 4000);
         window.setTimeout(() => {modelA.valueA = "c6d8e0f2g4";}, 5000);
-    </script>
-    <script type="text/test">
-      _A_hallo_
-      _C_HALLO_
-      _D_o_
-    </script>
-    <script type="text/test">
-      _A_hallo_
-      _C_HALLO_
-      _D_o_
     </script>
     <script type="text/test">
       _A_hallo_
@@ -161,7 +148,7 @@
       _D_e0f2g4_
     </script>
   </head>
-  <body>
+  <body route>
     _A_{{modelA.valueA}}_
     <p id="modelA" composite>
       <input type="text" id="valueA" events="input" value="{{modelA.valueA}}">
