@@ -1,7 +1,7 @@
 {
   "name": "@seanox/aspect-js",
   "version": "0.0.0",
-  "description": "full stack JavaScript framework for SPAs incl. reactivity rendering, mvc / mvvm, models, expression language, datasource, virtual paths, unit test and some more",
+  "description": "full stack JavaScript framework for SPAs incl. reactivity rendering, mvc / mvvm, models, expression language, datasource, routing, paths, unit test and some more",
   "main": "release/aspect-js.js",
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
     "micro frontend",
     "nonsql",
     "datasource",
-    "virtual paths",
+    "routing",
+    "paths",
     "unit test"
   ],
   "author": "Seanox Software Solutions",
