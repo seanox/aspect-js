@@ -127,19 +127,19 @@ Machine translation with [DeepL](https://deepl.com).
 
 ### Routing
 
-* [Routing](routing#routing)
-  * [Terms](routing#terms)
-    * [Page](routing#page)
-    * [View](routing#view)
-    * [View Flow](routing#view-flow)
-  * [Navigation](routing#navigation)
-  * [View Flow](routing#view-flow-1)
-  * [Permission Concept](routing#permission-concept)
-  * [Interceptors](routing#interceptors)
-  * [Paths](routing#paths)
-    * [Root Path](routing#root-path)
-    * [Relative Path](routing#relative-path)
-    * [Absolute Path](routing#absolute-path)
+* [Routing](routing.md#routing)
+  * [Terms](routing.md#terms)
+    * [Page](routing.md#page)
+    * [View](routing.md#view)
+    * [View Flow](routing.md#view-flow)
+  * [Navigation](routing.md#navigation)
+  * [View Flow](routing.md#view-flow-1)
+  * [Permission Concept](routing.md#permission-concept)
+  * [Interceptors](routing.md#interceptors)
+  * [Paths](routing.md#paths)
+    * [Root Path](routing.md#root-path)
+    * [Relative Path](routing.md#relative-path)
+    * [Absolute Path](routing.md#absolute-path)
 
 
 ### Composite
