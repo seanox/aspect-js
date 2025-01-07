@@ -44,8 +44,8 @@ NoSQL-datasource, test environment and much more.
   non-visible components are removed from the DOM and only reinserted when used
 * Model View Controller (MVC) / Model View ViewModel (MVVM)  
   supports view model binding and events
-* Sitemap for organizing the view into pages, faces and facets  
-  supports virtual paths and permission concepts
+* Routing to organize the page into views  
+  supports paths (routes), interceptors and permission concepts
 * Resource Bundle / Resource Messages  
   internationalization (i18n), localization (l10n) and text outsourcing
 * NoSQL datasource based on XML  
@@ -70,7 +70,6 @@ NoSQL-datasource, test environment and much more.
   * [iterate](#iterate)
   * [id](#id)
   * [composite](#composite)
-  * [state](#state)
   * [events](#events)
   * [validate](#validate)
   * [message](#message)
@@ -89,14 +88,14 @@ NoSQL-datasource, test environment and much more.
     * [Synchronization](#synchronization)
     * [Validation](#validation)
     * [Events](#events)
-* [SiteMap](#sitemap)
+* [Routing](#routing)
   * [Page](#page)
-  * [Face](#face)
-  * [Facet](#facet)
-  * [Face-Flow](#face-flow)
+  * [View](#view)
+  * [View-Flow](#view-flow)
   * [Navigation](#navigation)
   * [Permission Concept](#permission-concept)
-  * [Virtual Paths](#virtual-paths)
+  * [Interceptors](#interceptors)
+  * [Paths](#paths)
 * [Components](#components)
 * [Scripting](#scripting)
 * [Reactivity Rendering](#reactivity-rendering)
@@ -388,9 +387,8 @@ const Model = {
 
 The ID (identifier) has an elementary meaning in Seanox aspect-js. It is the
 basis for [view model binding](mvc.md#view-model-binding) and is used by
-[SiteMap](sitemap.md#sitemap) for [faces](sitemap.md#face) and [facets](
-sitemap.md#facet) in the [face flow](sitemap.md#face-flow) and thus as a
-destination for virtual paths.
+[Routing](routing.md#routing) for [views](routing.md#view) in the [view flow](
+    routing.md#view-flow) and thus as a destination for paths.
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the view model binding,
@@ -428,13 +426,12 @@ links views and models bidirectionally based on the composite IDsand so no
 manual implementation and declaration of events, interaction or synchronization
 is required.
 
-The [SiteMap](sitemap.md#sitemap) uses composites as [faces](sitemap.md#face)
+The [Routing](routing.md#routing) uses composites as [views](routing.md#view)
 for the primary projection of JavaScript objects (models), which means that they
-can be used as targets for virtual paths in the [face flow](
-sitemap.md#face-flow), which has a direct influence on the visibility of the
-composites. When SiteMap is active, composites can be marked with the attribute
-[static](#static), which makes a composite permanently visible as a face
-regardless of virtual paths.
+can be used as targets for paths in the [view flow](routing.md#view-flow), which
+has a direct influence on the visibility of the composites. When Routing is
+active, composites can be marked with the attribute [static](#static), which
+makes a composite permanently visible as a face regardless of paths.
 
 [Learn more](markup.md#composite)
 
@@ -858,37 +855,27 @@ const contact = {
 [Learn more](mvc.md#events)
 
 
-## SiteMap
+## Routing
 
-The representation of the page can be organized in Seanox aspect-js with SiteMap
-into faces as well as facets and addressed via virtual paths. For this purpose
-SiteMap provides a hierarchical directory structure based on the virtual paths
-of all faces and facets. SiteMap controls the access and visualization (showing
-and hiding) of the element -- the so-called face flow. Face flow and
-visualization work resolutely and actively use the DOM to insert and remove the
-faces and facets.
+The presentation of the page can be organized in Seanox aspect-js in views,
+which are addressed via paths (routes). For this purpose, the routing supports a
+hierarchical directory structure based on the IDs of the nested composites in
+the markup. The routing then controls the visibility and permission for
+accessing the views via paths - the so-called view flow. For the view flow and
+the permission, the routing actively uses the DOM to insert and remove the views
+depending on the situation.
 
 ```
 +-----------------------------------------------+
-|  Page                                         |
+|  Page (#)                                     |
 |  +-----------------------------------------+  |
-|  |  Face A / Partial Face A                |  |
-|  |  +-------------+       +-------------+  |  |
-|  |  |  Facet A1   |  ...  |  Facet An   |  |  |
-|  |  +-------------+       +-------------+  |  |
-|  |                                         |  |
+|  |  View A (#A)                            |  |
 |  |  +-----------------------------------+  |  |
-|  |  |  Face AA                          |  |  |
-|  |  |  +-----------+     +-----------+  |  |  |
-|  |  |  | Facet AA1 | ... | Facet AAn |  |  |  |
-|  |  |  +-----------+     +-----------+  |  |  |
+|  |  |  View B (#A#B)                    |  |  |
+|  |  |  +-----------------------------+  |  |  |
+|  |  |  |  View C (#A#B#C)            |  |  |  |
+|  |  |  +-----------------------------+  |  |  |
 |  |  +-----------------------------------+  |  |
-|  |  ...                                    |  |
-|  +-----------------------------------------+  |
-|  ...                                          |
-|  +-----------------------------------------+  |
-|  |  Face n                                 |  |
-|  |  ...                                    |  |
 |  +-----------------------------------------+  |
 +-----------------------------------------------+
 ```
@@ -900,38 +887,29 @@ In a single page application, the page is the elementary framework and runtime
 environment of the entire application.
 
 
-### Face
+### View
 
-A face is the primary projection of models/components/content. This projection
-can contain additional substructures in the form of faces and sub-faces. Thus,
-parent faces become partial faces if the path refers to a sub-face. In this
-case, all parent faces are displayed partially, i.e. without their possibly
-contained faces.
-
-
-### Facet
-
-Facets are parts of a face (projection) and usually not an independent
-representation. For example, in a search form, the input mask and the result
-table can be separate faces of a face. Both faces and facets are accessible via
-virtual paths. The path to facets causes the enclosing face to be displayed with
-all its parent faces.
+A view is the primary projection of models/components/content. This projection
+can contain additional substructures in the form of views and sub-views. Views
+can be static or path-controlled. Paths address the complete chain of nested
+views and display the parent views in addition to the target view.
 
 
-### Face Flow
+### View Flow
 
-Face flow describes the access control and the sequence of faces and facets. The
-SiteMap provides interfaces, permission  concepts and acceptors with which the
-face flow can be controlled and influenced.
+View flow describes the access control and the sequence of views. The routing
+provides interfaces, events, permission concepts and interceptors with which the
+view flow can be controlled and influenced.
 
-[Learn more](sitemap.md#sitemap)
+[Learn more](routing.md#routing)
 
 
 ## Navigation
 
-The navigation can be effected by changing the URL hash in the browser (direct
-input), by using hash links, and in JavaScript with `window.location.hash`,
-`window.location.href`, `SiteMap.navigate(path)` and `SiteMap.forward(path)`.
+Navigation is based on paths that use the hash in the URL. It is effected by
+changing the URL hash in the browser (direct input), by using hash links and in
+JavaScript with `window.location.hash`, `window.location.href`,
+`Routing.route(path)` and `Routing.forward(path)`.
 
 ```html
 <a href="#a#b#c">Goto root + a + b + c</a>
@@ -940,53 +918,62 @@ input), by using hash links, and in JavaScript with `window.location.hash`,
 ```
 
 ```javascript
-SiteMap.navigate("#a#b#c");
-SiteMap.navigate("##");
-SiteMap.navigate("##x");
+Routing.route("#a#b#c");
+Routing.route("##");
+Routing.route("##x");
 ```
 
 ```javascript
-SiteMap.forward("#a#b#c");
-SiteMap.forward("##");
-SiteMap.forward("##x");
+Routing.forward("#a#b#c");
+Routing.forward("##");
+Routing.forward("##x");
 ```
 
 In difference to the navigate method, the forwarding is executed directly
 instead of triggering an asynchronous forwarding by changing the location hash.
 
 Relative paths without hash at the beginning are possible, but only work with
-`SiteMap.navigate(path)`.
+`Routing.route(path)` and `Routing.forward(path)`.
 
-[Learn more](sitemap.md#navigation)
+```javascript
+Routing.route("x#y#z");
+Routing.forward("x#y#z");
+```
+
+[Learn more](routing.md#navigation)
 
 
 ## Permission Concept
 
-The permission concept is based on permit methods, which are defined as callback
-methods with the configuration of the face-flow. Several permit methods can be
-defined, which are verified with each requested path. Only if all permit methods
-confirm the requested path with `true`, it will be used and the renderer will
-render the dependent faces and facets and makes them visible.
+The permission concept is based on permit methods in the models, which are
+called each (re-)rendering if the model has implemented the permit method.
 
-[Learn more](sitemap.md#permission-concept)
+[Learn more](routing.md#permission-concept)
 
 
-### Virtual Paths
+## Interceptors
 
-Virtual paths are used for navigation and control of face-flow. The target can
-be a face, a facet or a function. For SPAs (Single-Page-Applications) the anchor
-part of the URL is used for the paths.
+TODO:
+
+[Learn more](routing.md#interceptors)
+
+
+### Paths
+
+Paths are used for navigation, routing and controlling the view flow. The target
+can be a view or a function if using interceptors. For SPAs (single-page
+applications), the anchor part of the URL is used for navigation and routes.
 
 ```
 https://example.local/example/#path
 ```
 
-According to the file system, absolute, relative and additionally functional
-paths are also supported here. Paths consist exclusively of word characters,
-underscores and optionally the minus character (based on combined) IDs. The hash
-character is used as separator and root. Spaces are not supported.
+Similar to a file system, absolute and relative paths are also supported here.
+Paths consist of case-sensitive words that only use 7-bit ASCII characters above
+the space character. Characters outside this range are URL encoded. The words
+are separated by the hash character (`#`).
 
-[Learn more](sitemap.md#virtual-paths)
+[Learn more](routing.md#virtual-paths)
 
 
 ## Components
