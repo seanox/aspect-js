@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+
+        const logging = (message) => {
+            document.body.innerHTML += "\r\n" + message;
+            document.body.innerHTML = document.body.innerHTML.trim();
+        };
+
+        const _targets = [
+          "C #",
+
+          "A #a#b#c#d",
+          "A ##",
+          "A #a#b#c#d",
+          "A ###x",
+          "A y#z",
+          "A ####c",
+          "A #a#b#c#d",
+          "A ####b",
+
+          "B #a#b#c#d",
+          "B ##",
+          "B #a#b#c#d",
+          "B ###x",
+          "B #a#b#x#y#z",
+          "B ####c",
+          "B #a#b#c#d",
+          "B ####b",
+
+          "C #a#b#c#d",
+          "C ##",
+          "C #a#b#c#d",
+          "C ###x",
+          // special case y#z -> #y#z
+          // browser automatically adds the # at the beginning
+          "C y#z",
+          "C ####c",
+          "C #a#b#c#d",
+          "C ####b",
+
+          "C #"
+        ];
+
+        const _now = Date.now();
+
+        window.addEventListener("load", () => {
+            Composite.asynchron(() => {
+                window.location.href = "#" + _now;
+            });
+        });
+
+        let _test_active = false;
+        window.addEventListener("hashchange", (event) => {
+            let new_location_hash = new URL(event.newURL).hash;
+            if (!new_location_hash)
+                new_location_hash = event.newURL.match(/#+/);
+            if (new_location_hash === "#" + _now) {
+                _test_active = true;
+                document.body.innerHTML = "";
+            }
+            if (!_test_active)
+                return;
+            if (_targets.length <= 0) {
+                Test.start();
+                return;
+            }
+
+            if (new_location_hash !== "#" + _now)
+                logging("=: " + new_location_hash);
+
+            if ((/^(#{2,}|[^#])/).test(new_location_hash))
+                return;
+
+            const target = _targets.shift();
+            Composite.asynchron((target) => {
+                const mode = String(target.match(/^[A-Z]/));
+                target = target.substring(2);
+                logging(mode + ": " + target);
+                if (mode === "A")
+                    Routing.route(target);
+                else if (mode === "B")
+                    window.location.href = target;
+                else if (mode === "C")
+                    window.location.hash = target;
+            }, target);
+        });
+        
+        Test.create({test() {
+            let content = document.body.innerHTML;
+            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
+            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
+            content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");   
+            document.body.textContent = content;
+            Assert.assertSameTo("script[type='text/test']", content);            
+        }});
+        
+        let errors = "";
+        Composite.listen(Composite.EVENT_ERROR, (event, error) => {
+            errors += "\r\n" + error.message;
+            errors = errors.trim();          
+        });
+        Test.create({test() {
+            Assert.assertEquals("", errors);
+        }});      
+    </script>
+    <script type="text/test">
+      A: #a#b#c#d
+      =: #a#b#c#d
+      A: ##
+      =: #a#b#c
+      A: #a#b#c#d
+      =: #a#b#c#d
+      A: ###x
+      =: #a#b#x
+      A: y#z
+      =: #a#b#x#y#z
+      A: ####c
+      =: #a#b#c
+      A: #a#b#c#d
+      =: #a#b#c#d
+      A: ####b
+      =: #a#b
+      B: #a#b#c#d
+      =: #a#b#c#d
+      B: ##
+      =: ##
+      =: #a#b#c
+      B: ##x
+      =: ##x
+      =: #a#b#x
+      B: #a#b#x#y#z
+      =: #a#b#x#y#z
+      B: ####c
+      =: ####c
+      =: #a#b#c
+      B: #a#b#c#d
+      =: #a#b#c#d
+      B: ####b
+      =: ####b
+      =: #a#b
+      C: #a#b#c#d
+      =: #a#b#c#d
+      C: ##
+      =: ##
+      =: #a#b#c
+      C: #a#b#c#d
+      =: #a#b#c#d
+      C: ###x
+      =: ###x
+      =: #a#b#x
+      C: y#z
+      =: #y#z
+      C: ####c
+      =: ####c
+      =: #c
+      C: #a#b#c#d
+      =: #a#b#c#d
+      C: ####b
+      =: ####b
+      =: #a#b
+    </script>
+  </head>
+  <body route>
+  </body>
+</html>
