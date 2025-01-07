@@ -16,6 +16,8 @@ CR: Composite: Added Composite.lookup(selector)
     Determines the corresponding meta-object for the passed selector.
 CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
+    - Omission of predefined paths like SiteMap.customize(...), replaced by
+      dynamic paths based on the nested composites
     - Omission of functional paths, the existing acceptors is the better way
     - Omission of variable path, becomes obsolete with the new dynamic routing
     - Optimization of the path for routing
