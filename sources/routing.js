@@ -307,7 +307,7 @@
      * Rendering filter for all composite elements. The filter causes that for
      * each composite element determined by the renderer, an additional
      * condition is added to the Routing. This condition is used to show or hide
-     * the composite elements in the DOM to the corresponding virtual paths. The
+     * the composite elements in the DOM to the corresponding paths. The
      * elements are identified by the serial.
      */
     Composite.customize((element) => {
