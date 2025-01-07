@@ -12,7 +12,7 @@ Machine translation with [DeepL](https://deepl.com).
 * [DataSource](#datasource)
 * [Resource Bundle](#resource-bundle-i18nl10n)
 * [Model View Controller](#model-view-controller)
-* [SiteMap](#sitemap)
+* [Routing](#routing)
 * [Composite](#composite)
 * [Reactivity Rendering](#reactivity-rendering)
 * [API Extensions](#api-extensions)
@@ -125,25 +125,21 @@ Machine translation with [DeepL](https://deepl.com).
     * [Events](mvc.md#events)
 
 
-### SiteMap
+### Routing
 
-* [SiteMap](sitemap.md#sitemap)
-  * [Terms](sitemap.md#terms)
-    * [Page](sitemap.md#page)
-    * [Face](sitemap.md#face)
-    * [Facet](sitemap.md#facet)
-    * [Face Flow](sitemap.md#face-flow)
-  * [Configuration](sitemap.md#configuration)
-    * [Face Flow](sitemap.md#face-flow-1)
-    * [Permissions](sitemap.md#permissions)
-    * [Acceptors](sitemap.md#acceptors)
-  * [Navigation](sitemap.md#navigation)
-  * [Permission Concept](sitemap.md#permission-concept)
-  * [Acceptors](sitemap.md#acceptors)
-  * [Virtual Paths](sitemap.md#virtual-paths)
-    * [Root Path](sitemap.md#root-path)
-    * [Relative Path](sitemap.md#relative-path)
-    * [Absolute Path](sitemap.md#absolute-path)
+* [Routing](routing#routing)
+  * [Terms](routing#terms)
+    * [Page](routing#page)
+    * [View](routing#view)
+    * [View Flow](routing#view-flow)
+  * [Navigation](routing#navigation)
+  * [View Flow](routing#view-flow-1)
+  * [Permission Concept](routing#permission-concept)
+  * [Interceptors](routing#interceptors)
+  * [Paths](routing#paths)
+    * [Root Path](routing#root-path)
+    * [Relative Path](routing#relative-path)
+    * [Absolute Path](routing#absolute-path)
 
 
 ### Composite
