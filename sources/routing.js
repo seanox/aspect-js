@@ -25,6 +25,7 @@
  */
 (() => {
 
+    // TODO:
     let _routing_active = undefined;
 
     // Map with all supported interceptors
@@ -43,8 +44,15 @@
         get location() {
             if (window.location.hash !== "")
                 return window.location.hash;
-            return window.location.href.indexOf("#") >= 0 ? "#" : null;
+            return _locate(window.location.href);
         }
+    }
+
+    const _locate = (location) => {
+        if (location instanceof URL)
+            location = location.href;
+        const match = location.match(/#.*$/);
+        return match ? match[0] : null;
     }
 
     compliant("Routing");
@@ -56,7 +64,15 @@
          * @returns {string|null} the current path, otherwise null
          */
         get location() {
-            return Path.normalize(Browser.location);
+            let location = Browser.location;
+            if (location != null
+                    && (/^(#{2,}|[^#])/).test(location)) {
+                let parent = "#";
+                if (_history.length > 0)
+                    parent = _history[_history.length -1];
+                return Path.normalize(parent, location);
+            }
+            return Path.normalize(location);
         },
 
         // TODO:
@@ -99,6 +115,7 @@
                     || path === Browser.location)
                 return;
             const event = new Event("hashchange",{bubbles:false, cancelable:true})
+            event.oldURL = Browser.location;
             event.newURL = path;
             window.dispatchEvent(event);
         },
@@ -223,7 +240,7 @@
                     continue;
             } else continue;
             if (typeof interceptor.actor === "function"
-                    && interceptor.actor(new URL(event.oldURL).hash, Browser.location) === false)
+                    && interceptor.actor(_locate(event.oldURL), Browser.location) === false)
                 return;
         }
 
@@ -245,8 +262,8 @@
         // - Composite old and new unequal, then render old, then render new and
         //   focus new
 
-        const locationOld = Path.normalize(new URL(event.oldURL).hash);
-        const locationNew = Path.normalize(new URL(event.newURL).hash);
+        const locationOld = Path.normalize(_locate(event.oldURL));
+        const locationNew = Path.normalize(_locate(event.newURL));
         const locationMatch = Path.matches(locationOld, locationNew);
         if (locationMatch === undefined)
             return;
@@ -491,6 +508,8 @@
                 variants.unshift(location);
 
             let path = variants.join("#");
+            if (path.startsWith("##"))
+                path = location + path;
 
             if (!path.match(Path.PATTERN_PATH))
                 throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
