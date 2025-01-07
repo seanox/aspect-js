@@ -100,9 +100,6 @@
         
         Test.create({test() {
             let content = document.body.innerHTML;
-            content = content.replace(/^(.|[\r\n])*?[\r\n](?=A:)/, "");
-            content = content.replace(/(\w+:\/{2,}).*\//mg, "$1.../");
-            content = content.replace(/(\shttp)s(:\/\/)/g, "$1$2");   
             document.body.textContent = content;
             Assert.assertSameTo("script[type='text/test']", content);            
         }});
@@ -117,6 +114,8 @@
         }});      
     </script>
     <script type="text/test">
+      C: #
+      =: #
       A: #a#b#c#d
       =: #a#b#c#d
       A: ##
