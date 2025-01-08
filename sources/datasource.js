@@ -45,7 +45,7 @@
 (() => {
 
     /** Path of the DataSource for: data (sub-directory of work path) */
-    const DATA = window.location.combine(window.location.pathcontext, "/data");
+    const DATA = window.location.combine(window.location.contextPath, "/data");
 
     /**
      * Pattern for a DataSource locator, based on the URL syntax but only
