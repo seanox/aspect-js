@@ -48,8 +48,8 @@ bundle, NoSQL datasource, test environment and much more.
   non-visible components are removed from the DOM and only reinserted when used  
 - Model View Controller (MVC) / Model View ViewModel (MVVM)  
   supports view model binding and events
-- Sitemap for organizing the view into pages, faces and facets  
-  supports virtual paths and permission concepts
+- Routing to organize the page into views  
+  supports paths (routes), interceptors and permission concepts
 - Resource Bundle / Resource Messages  
   internationalization (i18n), localization (l10n) and text outsourcing 
 - NoSQL datasource based on XML  
@@ -84,13 +84,10 @@ specific language governing permissions and limitations under the License.
 # System Requirement
 - ECMAScript 6 support or higher (normally the current browsers)  
   Engines (tested): Blink, Gecko, Goanna, WebKit, ...  
-  Browsers used for testing: Basilisk, Firefox, Microsoft Edge, Google Chrome, Safari (MacOS/iOS) 
 - Web server for hosting
 
 
 # Downloads
-[Seanox aspect-js 1.7.0](https://github.com/seanox/aspect-js/releases/download/1.7.0/aspect-js-1.7.0.zip)  
-[Seanox aspect-js 1.7.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.7.0.zip)
 
 <p>
   <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
@@ -98,6 +95,9 @@ specific language governing permissions and limitations under the License.
   <img src="https://img.shields.io/badge/Goanna-tested-green?style=for-the-badge">
   <img src="https://img.shields.io/badge/WebKit-tested-green?style=for-the-badge">
 </p>
+
+[Seanox aspect-js 1.7.0](https://github.com/seanox/aspect-js/releases/download/1.7.0/aspect-js-1.7.0.zip)  
+[Seanox aspect-js 1.7.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.7.0.zip)
 
 
 # Release Channels
