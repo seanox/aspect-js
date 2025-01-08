@@ -543,8 +543,8 @@ Object.defineProperty(window, "serial", {
  * The context path is a part of the request URI and can be compared with the
  * current working directory.
  */
-compliant("window.location.pathcontext");
-Object.defineProperty(window.location, "pathcontext", {
+compliant("window.location.contextPath");
+Object.defineProperty(window.location, "contextPath", {
     value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
 });
 
