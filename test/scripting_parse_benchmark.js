@@ -7,14 +7,14 @@
 // Imports the mock-up tools with which the application behaves more realistic
 #import benchmark/mockup;
 
-const API_HOST_URL = window.location.pathcontext + "/api/" + DataSource.locale;
+const API_HOST_URL = window.location.contextPath + "/api/" + DataSource.locale;
 const API_LIST_MARKET_URL = API_HOST_URL + "/listMarket";
 const API_LIST_DATATYPES_URL = API_HOST_URL + "/listDatatype";
 const API_SEARCH_NEWS_URL = API_HOST_URL + "/searchNews";
-const API_SEND_NEWSLETTER_URL = window.location.pathcontext + "/api/sendNewsletter";
-const API_MEDIA_IMAGES_URL = window.location.pathcontext + "/api/media/";
+const API_SEND_NEWSLETTER_URL = window.location.contextPath + "/api/sendNewsletter";
+const API_MEDIA_IMAGES_URL = window.location.contextPath + "/api/media/";
 
-const PIAAS_URL = window.location.pathcontext + "/";
+const PIAAS_URL = window.location.contextPath + "/";
 
 const DATATYPE_BRANDS_ID = 1;
 const DATATYPE_PRODUCT_GROUPS = 2;
