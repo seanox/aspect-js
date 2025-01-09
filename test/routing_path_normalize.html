@@ -93,16 +93,16 @@
             Assert.assertEquals("#f", Path.normalize("httpx://local#x#y#z", "httpx://local######f"));
         }});
 
-        Test.create({expected:/\bInvalid path element type: object/i, test() {
+        Test.create({expected:/\bInvalid data type/i, test() {
             Path.normalize({});
         }});
-        Test.create({expected:/\bInvalid path element type: boolean/i, test() {
+        Test.create({expected:/\bInvalid data type/i, test() {
             Path.normalize(true);
         }});
-        Test.create({expected:/\bInvalid path element type: object/i, test() {
+        Test.create({expected:/\bInvalid data type/i, test() {
             Path.normalize({}, "#");
         }});
-        Test.create({expected:/\bInvalid path element type: boolean/i, test() {
+        Test.create({expected:/\bInvalid data type/i, test() {
             Path.normalize(true, "#");
         }});
 
