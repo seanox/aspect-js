@@ -16,6 +16,8 @@ CR: Composite: Validation message added redirection to an attribute
 CR: Composite: Added Composite.lookup(selector)
     Determines the corresponding meta-object for the passed selector.
 CR: Extension: Renamed window.location.pathcontext in window.location.contextPath
+CR: Release: Omission of the micro version without routing
+    This unnecessarily inflated the number of release (channels).
 CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
     - Change to activation of routing to the attribute boolean route in the body

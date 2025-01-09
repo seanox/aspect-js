@@ -145,41 +145,20 @@
     <property name="release.file" value="${workspace.release}/${ant.project.name}.js"/>
     <property name="release.file.core.max" value="${workspace.release}/${ant.project.name}-core-max.js"/>
     <property name="release.file.core" value="${workspace.release}/${ant.project.name}-core.js"/>
-    <property name="release.file.micro.max" value="${workspace.release}/${ant.project.name}-micro-max.js"/>
-    <property name="release.file.micro" value="${workspace.release}/${ant.project.name}-micro.js"/>
-    <property name="release.file.micro.core.max" value="${workspace.release}/${ant.project.name}-micro-core-max.js"/>
-    <property name="release.file.micro.core" value="${workspace.release}/${ant.project.name}-micro-core.js"/>
 
     <delete dir="${workspace.release}"/>
     <mkdir dir="${workspace.release}"/>
 
-    <concat destfile="${release.file.micro.core.max}" append="false">
+    <concat destfile="${release.file.core.max}" append="false">
       <filelist dir="${workspace.sources}">
-        <file name="extension.js"/>
         <file name="arguments.js"/>
+        <file name="extension.js"/>
         <file name="datasource.js"/>
         <file name="scripting.js"/>
         <file name="expression.js"/>
         <file name="composite.js"/>
         <file name="messages.js"/>
         <file name="reactive.js"/>
-      </filelist>
-    </concat>
-    <replaceregexp file="${release.file.micro.core.max}" flags="g" byline="false"
-        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
-
-    <concat destfile="${release.file.micro.max}" append="false">
-      <filelist dir="${workspace.sources}">
-        <file name="${release.file.micro.core.max}"/>
-        <file name="test.js"/>
-      </filelist>
-    </concat>
-    <replaceregexp file="${release.file.micro.max}" flags="g" byline="false"
-        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
-
-    <concat destfile="${release.file.core.max}" append="false">
-      <filelist dir="${workspace.sources}">
-        <file name="${release.file.micro.core.max}"/>
         <file name="routing.js"/>
       </filelist>
     </concat>
@@ -197,8 +176,6 @@
 
     <file-minimize file="${release.file.max}" file-min="${release.file}"/>
     <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>
-    <file-minimize file="${release.file.micro.max}" file-min="${release.file.micro}"/>
-    <file-minimize file="${release.file.micro.core.max}" file-min="${release.file.micro.core}"/>
 
     <mkdir dir="${workspace.release.temp}"/>
     <copy todir="${workspace.release.temp}">
@@ -207,10 +184,6 @@
         <include name="${ant.project.name}.js"/>
         <include name="${ant.project.name}-core-max.js"/>
         <include name="${ant.project.name}-core.js"/>
-        <include name="${ant.project.name}-micro-max.js"/>
-        <include name="${ant.project.name}-micro.js"/>
-        <include name="${ant.project.name}-micro-core-max.js"/>
-        <include name="${ant.project.name}-micro-core.js"/>
       </fileset>
     </copy>
     <copy todir="${workspace.release.temp}">
