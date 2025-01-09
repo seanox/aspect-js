@@ -1,6 +1,7 @@
 1.8.0 2025xxxx
 BF: Review: Corrections and optimization
 BF: Test: Correction for the output of messages with timestamp
+CR: Arguments: Added component to better handle arguments in functions
 CR: Composite: Validation works strictly by default
     The validation must explicitly return true so that the input data from the
     HTML elements is synchronized to the models. The behavior can be
@@ -14,6 +15,7 @@ CR: Composite: Validation message added redirection to an attribute
     express, these are redirected to the attribute declared in this way.
 CR: Composite: Added Composite.lookup(selector)
     Determines the corresponding meta-object for the passed selector.
+CR: Extension: Renamed window.location.pathcontext in window.location.contextPath
 CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
     - Change to activation of routing to the attribute boolean route in the body
