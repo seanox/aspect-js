@@ -49,8 +49,6 @@
     }
 
     const _locate = (location) => {
-        if (location instanceof URL)
-            location = location.href;
         const match = location.match(/#.*$/);
         return match ? match[0] : null;
     }
@@ -91,6 +89,9 @@
          * @param {string} path TODO
          */    
         route(path) {
+            if (path != null
+                    && typeof path !== "string")
+                throw new TypeError("Invalid data type");
             path = Path.normalize(path);
             if (path === null
                     || path === Browser.location)
@@ -110,6 +111,9 @@
          * @param {string} path TODO
          */  
         forward(path) {
+            if (path != null
+                    && typeof path !== "string")
+                throw new TypeError("Invalid data type");
             path = Path.normalize(path);
             if (path === null
                     || path === Browser.location)
@@ -144,6 +148,10 @@
          */
         approve(path) {
 
+            if (path != null
+                    && typeof path !== "string")
+                throw new TypeError("Invalid data type");
+
             // Only valid paths of composites can be approved.
             path = Path.normalize(path);
             if (path === null
@@ -168,14 +176,13 @@
         },
 
         customize(path, actor) {
-            if (typeof path !== "string"
-                    && !(path instanceof RegExp))
-                throw new Error("Invalid interceptor path type");
-            if (typeof path === "string"
-                    && !Path.normalize(path))
-                throw new Error("Invalid interceptor path");
-            if (typeof actor !== "function")
-                throw new Error("Invalid interceptor actor type");
+            if (path == null
+                    || typeof path !== "string")
+                throw new TypeError("Invalid data type");
+            if (actor == null
+                    || typeof actor !== "object"
+                    || !(actor instanceof RegExp))
+                throw new TypeError("Invalid object type");
             _interceptors.push({path:path, actor:actor});
         }
     });
@@ -386,6 +393,14 @@
          * @returns {undefined|null|string}
          */
         matches(path, compare) {
+
+            if (path != null
+                    && typeof path !== "string")
+                throw new TypeError("Invalid data type");
+            if (compare != null
+                    && typeof compare !== "string")
+                throw new TypeError("Invalid data type");
+
             if (path == null
                     || path.length <= 0
                     || compare == null
@@ -412,6 +427,11 @@
          * @returns {boolean} true if the path is covered by the current path
          */
         covers(path) {
+
+            if (path != null
+                    && typeof path !== "string")
+                throw new TypeError("Invalid data type");
+
             path = Path.normalize(path);
             if (!Routing.location
                     || path == null
@@ -454,11 +474,12 @@
          *     function(root, path)
          *     function(root, path, ...)
          *     function(path)
-         * @param  root optional, otherwise the current location is used
-         * @param  path to normalize
-         * @return the normalize path
-         * @throws An error occurs in the following cases:
-         *     - if the root and/or the path is invalid
+         *
+         * @param   {string} [root] optional, otherwise current location is used
+         * @param   {string} path to normalize
+         * @returns {string} the normalize path
+         * @throws  {Error} An error occurs in the following cases:
+         *     - Invalid root and/or path
          */
         normalize(...variants) {
 
@@ -470,15 +491,17 @@
                     && variants[0] == null)
                 return null;
 
-            variants.forEach(variant => {
-                if (variant !== null
-                        && variant !== undefined
-                        && typeof variant !== "string")
-                    throw new Error(`Invalid path element type: ${typeof variant}`);
+            variants.every(item => {
+                if (typeof item === "string"
+                        || item == null)
+                    return true;
+                throw new TypeError("Invalid data type");
             });
 
             variants = variants.filter((item, index) =>
-                item != null && item.trim() !== "" && !(index > 0 && item === "#"));
+                item != null
+                    && item.trim() !== ""
+                    && !(index > 0 && item === "#"));
 
             variants.forEach(item => {
                 if (!Path.PATTERN_ASCII.test(item))
