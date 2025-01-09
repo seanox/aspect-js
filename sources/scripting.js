@@ -97,19 +97,22 @@
          *     #use namespaces to be created
          *
          *
-         *
          *     (?...)
-         *
+         *     ----
          * Tolerant expressions are also a macro, although with different
          * syntax. The logic enclosed in the parenthesis with question marks is
          * executed fault-tolerantly. In case of an error the logic corresponds
          * to the value false without causing an error itself, except for syntax
          * errors.
          *
-         * @param  script
-         * @return the return value from the script
+         * @param {string} script
+         * @returns {*} the return value from the script
          */
         eval(script) {
+
+            if (script == null
+                    || typeof script !== "string")
+                throw new TypeError("Invalid data type");
 
             // Performance is important here.
             // The implementation parses and replaces macros in one pass.
@@ -261,10 +264,13 @@
         /**
          * Executes a script isolated in this context, so that no unwanted
          * access to internals is possible.
-         * @param  script
-         * @return return value of the script, if available
+         * @param {string} script
+         * @returns {*} return value of the script, if available
          */
         run(script) {
+            if (script == null
+                    || typeof script !== "string")
+                throw new TypeError("Invalid data type");
             if (script.trim())
                 return eval(script);
         }
