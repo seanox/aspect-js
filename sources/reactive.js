@@ -50,7 +50,7 @@
 
     compliant("Reactive");
     compliant(null, window.Reactive = (object) => {
-        if (object == nul
+        if (object == null
                 || typeof object !== "object")
             throw new TypeError("Invalid object type");
         return _reactive(object);
