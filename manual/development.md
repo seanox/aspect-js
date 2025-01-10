@@ -60,10 +60,8 @@ ant -f ./develpoment/build.xml test
 
 ## Test
 
-Before a release, an estimated 500 000 individual tests must run successfully.
-The high number results from the combination of the different browser engines
-and scenarios. Nevertheless, over 21000 assertions are implemented in real
-terms.
+Before a release, all tests in all relevant browser engines must run
+successfully.
 
 
 ### Firewall
