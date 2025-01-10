@@ -19,7 +19,7 @@
             let responseURL = event.target.responseURL;
             let sourceLocation = window.location.protocol + "//" + window.location.host + "/";
             if (responseURL.startsWith(sourceLocation)) {
-                const filter = new RegExp("^.*?" + RegExp.quote(window.location.pathcontext));
+                const filter = new RegExp("^.*?" + RegExp.quote(window.location.contextPath));
                 responseURL = ("/" + responseURL.substring(sourceLocation.length -1).replace(filter, "")).replace(/^\/{2,}/, "/");
             }
             const key = responseURL + " " + event.target.status;
