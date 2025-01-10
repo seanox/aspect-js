@@ -53,10 +53,9 @@
 
     compliant("Reactive");
     compliant(null, window.Reactive = (object) => {
-        if (typeof object !== "object")
-            throw new TypeError(`Invalid object type: ${typeof object}`);
-        if (object == null)
-            throw new TypeError(`Invalid data type: ${String(object)}`);
+        if (object == nul
+                || typeof object !== "object")
+            throw new TypeError("Invalid object type");
         return _reactive(object);
     });
 

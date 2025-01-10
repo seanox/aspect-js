@@ -89,8 +89,9 @@
          * @param {string} path TODO
          */    
         route(path) {
-            if (path != null
-                    && typeof path !== "string")
+            if (path === undefined
+                    || (typeof path !== "string"
+                            && path !== null))
                 throw new TypeError("Invalid data type");
             path = Path.normalize(path);
             if (path === null
@@ -111,8 +112,9 @@
          * @param {string} path TODO
          */  
         forward(path) {
-            if (path != null
-                    && typeof path !== "string")
+            if (path === undefined
+                    || (typeof path !== "string"
+                            && path !== null))
                 throw new TypeError("Invalid data type");
             path = Path.normalize(path);
             if (path === null
@@ -143,13 +145,14 @@
          * This method assumes that the URL contains at least one hash,
          * otherwise the method returns false.
          *
-         * @param   {string} path TODO
+         * @param {string} path TODO
          * @returns {boolean} if the composite is approved, true or false
          */
         approve(path) {
 
-            if (path != null
-                    && typeof path !== "string")
+            if (path === undefined
+                    || (typeof path !== "string"
+                            && path !== null))
                 throw new TypeError("Invalid data type");
 
             // Only valid paths of composites can be approved.
@@ -176,8 +179,8 @@
         },
 
         customize(path, actor) {
-            if (path == null
-                    || typeof path !== "string")
+            if (typeof path !== "string"
+                    && !(path instanceof RegExp))
                 throw new TypeError("Invalid data type");
             if (actor == null
                     || typeof actor !== "object"
@@ -388,17 +391,18 @@
 
         /**
          * TODO:
-         * @param   {string} path
-         * @param   {string} compare
+         * @param {string} path
+         * @param {string} compare
          * @returns {undefined|null|string}
          */
         matches(path, compare) {
 
-            if (path != null
-                    && typeof path !== "string")
-                throw new TypeError("Invalid data type");
-            if (compare != null
-                    && typeof compare !== "string")
+            if (path === undefined
+                    || (typeof path !== "string"
+                            && path !== null)
+                    || compare === undefined
+                    || (typeof compare !== "string")
+                            && compare !== null)
                 throw new TypeError("Invalid data type");
 
             if (path == null
@@ -423,13 +427,14 @@
          * path. Covered means that the specified path must be contained from
          * the root of the current working path. This assumes that the URL
          * contains at least one hash, otherwise the method returns false.
-         * @param   {string} path to be checked
+         * @param {string} path to be checked
          * @returns {boolean} true if the path is covered by the current path
          */
         covers(path) {
 
-            if (path != null
-                    && typeof path !== "string")
+            if (path === undefined
+                    || (typeof path !== "string")
+                            && path !== null)
                 throw new TypeError("Invalid data type");
 
             path = Path.normalize(path);
@@ -475,10 +480,10 @@
          *     function(root, path, ...)
          *     function(path)
          *
-         * @param   {string} [root] optional, otherwise current location is used
-         * @param   {string} path to normalize
+         * @param {string} [root] optional, otherwise current location is used
+         * @param {string} path to normalize
          * @returns {string} the normalize path
-         * @throws  {Error} An error occurs in the following cases:
+         * @throws {Error} An error occurs in the following cases:
          *     - Invalid root and/or path
          */
         normalize(...variants) {
@@ -492,8 +497,8 @@
                 return null;
 
             variants.every(item => {
-                if (typeof item === "string"
-                        || item == null)
+                if (item == null
+                        || typeof item === "string")
                     return true;
                 throw new TypeError("Invalid data type");
             });
@@ -535,7 +540,7 @@
                 path = location + path;
 
             if (!path.match(Path.PATTERN_PATH))
-                throw new TypeError(`Invalid path${String(path).trim() ? ": " + path : ""}`);
+                throw new Error(`Invalid path${String(path).trim() ? ": " + path : ""}`);
 
             const pattern = /#[^#]+#{2}/;
             while (path.match(pattern))

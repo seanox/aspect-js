@@ -110,8 +110,7 @@
          */
         eval(script) {
 
-            if (script == null
-                    || typeof script !== "string")
+            if (typeof script !== "string")
                 throw new TypeError("Invalid data type");
 
             // Performance is important here.
@@ -268,8 +267,7 @@
          * @returns {*} return value of the script, if available
          */
         run(script) {
-            if (script == null
-                    || typeof script !== "string")
+            if (typeof script !== "string")
                 throw new TypeError("Invalid data type");
             if (script.trim())
                 return eval(script);

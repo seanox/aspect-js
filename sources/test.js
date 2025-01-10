@@ -131,23 +131,20 @@ compliant(null, window.Test = {
                             
             /**
              * Registers a callback function for test events.
-             * @param  event    see Test.EVENT_***
-             * @param  callback callback function
-             * @throws An error occurs in the following cases:
+             * @param {string} event see Test.EVENT_***
+             * @param {function} callback callback function
+             * @throws {Error} An error occurs in the following cases:
              *     - event is not valid or is not supported
              *     - callback function is not implemented correctly
              *       or does not exist
              */
             listen(event, callback) {
                 
-                if (typeof event !== "string")
-                    throw new TypeError("Invalid event: " + typeof event);
-                if (typeof callback !== "function"
-                        && callback !== null
-                        && callback !== undefined)
-                    throw new TypeError("Invalid callback: " + typeof callback);
+                if (typeof event !== "string"
+                        || typeof callback !== "function")
+                    throw new TypeError("Invalid data type");
                 if (!event.match(Test.PATTERN_EVENT))
-                    throw new Error(`Invalid event${event.trim() ? ": " + event : ""}`);
+                    throw new Error("Invalid event");
                 
                 event = event.toLowerCase();
                 if (!_listeners.has(event)
@@ -157,15 +154,15 @@ compliant(null, window.Test = {
             },
             
             /**
-             * Internal method to trigger an event. All callback functions
-             * for this event are called. If the script is in a frame, at
-             * the parent object it will also try to trigger this method.
-             * The parent object is always triggered after the current
-             * object. If an error occurs when calling the current object,
-             * the parent object is not triggered.
-             * @param event  see Test.EVENT_***
-             * @param status meta-object with information about the test
-             *     execution
+             * Internal method to trigger an event. All callback functions for
+             * this event are called. If the script is in a frame, at the parent
+             * object it will also try to trigger this method. The parent object
+             * is always triggered after the current object. If an error occurs
+             * when calling the current object, the parent object is not
+             * triggered.
+             * @param {string} event  see Test.EVENT_***
+             * @param {Object} status meta-object with information about the
+             *     test execution
              */
             fire(event, status) {
                 
@@ -234,12 +231,15 @@ compliant(null, window.Test = {
              *         Assert.assertTrue(true);
              *     }});
              * 
-             * @param meta
+             * @param {Object} meta
              */
             create(meta) {
                 
-                if (typeof meta !== "object"
-                        || typeof meta.test !== "function")
+                if (typeof meta == null
+                        || typeof meta !== "object")
+                    throw new TypeError("Invalid object type");
+
+                if (typeof meta.test !== "function")
                     return;
                 
                 if (meta.ignore !== undefined
@@ -366,7 +366,7 @@ compliant(null, window.Test = {
              *                 is waiting
              * queue.faults    number of detected faults
              * 
-             * @param meta  
+             * @param {Object} [meta]
              */
             start(meta) {
                 
@@ -393,12 +393,12 @@ compliant(null, window.Test = {
 
                 // Test.worker.output
                 // Output to be used for all messages and errors
-                Test.worker.output = meta ? meta.output : null;
+                Test.worker.output = meta?.output ?? null;
                 Test.worker.output = Test.worker.output || console;
                 
                 // Test.worker.monitor
                 // Monitoring of test processing
-                Test.worker.monitor = meta ? meta.monitor : null;
+                Test.worker.monitor = meta?.monitor ?? null;
                 Test.worker.monitor = Test.worker.monitor || {
                     start(status) {
                         Test.worker.output.log(`${Test.TIMESTAMP} Test is started`
@@ -546,7 +546,7 @@ compliant(null, window.Test = {
             /**
              * Suspends the current test run, which can be continued from the
              * current test with Test.resume().
-             * @throws An error occurs in the following cases:
+             * @throws {Error} An error occurs in the following cases:
              *     - No worker is present or cannot be suspended
              */
             suspend() {
@@ -557,7 +557,7 @@ compliant(null, window.Test = {
             
             /** 
              * Continues the test run if it was previously suspended.
-             * @throws An error occurs in the following cases:
+             * @throws {Error} An error occurs in the following cases:
              *     - No worker is present or cannot be resumed
              */
             resume() {
@@ -570,7 +570,7 @@ compliant(null, window.Test = {
             /**
              * Interrupts the current test run and discards all outstanding
              * tests. The test run can be restarted with Test.start().
-             * @throws An error occurs in the following cases:
+             * @throws {Error} An error occurs in the following cases:
              *     - No worker is present or cannot be interrupted
              */
             interrupt() {
@@ -612,7 +612,7 @@ compliant(null, window.Test = {
              *                 is waiting
              * queue.faults    number of detected faults 
              * 
-             * @return an object with status information, otherwise false
+             * @returns {object} an object with status information, otherwise false
              */
             status() {
 
@@ -722,26 +722,32 @@ compliant(null, window.Test = {
 
             /**
              * Registers a callback function for console output.
-             * Expected method signatures:
-             *     function(level)
-             *     function(level, ...)
-             * @param callback callback function
+             * @param {function} callback callback function
              */
             console.listen = function(callback) {
+                if (typeof callback !== "function")
+                    throw new TypeError("Invalid data type");
                 _listeners.add(callback);
             };
 
             /**
-             * General method for redirecting console levels. If the script is in a
-             * frame, at the parent object it will also try to trigger this method.
-             * The parent object is always triggered after the current object. If an
-             * error occurs when calling the current object, the parent object is
-             * not triggered.
-             * @param level
-             * @param variants
-             * @param output
+             * General method for redirecting console levels. If the script is
+             * in a frame, at the parent object it will also try to trigger this
+             * method. The parent object is always triggered after the current
+             * object. If an error occurs when calling the current object, the
+             * parent object is not triggered.
+             * @param {string} level
+             * @param {Array} variants
+             * @param {Object} [output]
              */
-            console.forward = function(level, variants, output) {
+            console.forward = function(level, variants, output = null) {
+
+                if (typeof level !== "string")
+                    throw new TypeError("Invalid data type");
+                if (output != null
+                        && typeof output !== "function")
+                    throw new TypeError("Invalid data type");
+
                 _output[level] += Array.from(variants).join(", ");
                 if (output)
                     output(...variants);
@@ -790,11 +796,18 @@ compliant(null, window.Test = {
          * Enhancement of the JavaScript API
          * The following events are triggered during simulation:
          *     focus, keydown, keyup, change
-         * @param value simulated input value
-         * @param clear option false suppresses emptying before input
+         * @param {string} value simulated input value
+         * @param {boolean} [clear] false suppresses emptying before input
          */
         compliant("Element.prototype.typeValue");
-        compliant(null, Element.prototype.typeValue = function(value, clear) {
+        compliant(null, Element.prototype.typeValue = function(value, clear = true) {
+
+            if (value != null
+                    && typeof value !== "string")
+                throw new TypeError("Invalid data type");
+            if (typeof clear !== "boolean")
+                throw new TypeError("Invalid data type");
+
             this.focus();
             if (clear !== false)
                 this.value = "";
@@ -810,7 +823,8 @@ compliant(null, window.Test = {
 
         /**
          * Enhancement of the JavaScript API
-         * Adds a method that creates a plain string for an Element.
+         * Adds a method that creates a plain string for an element.
+         * @returns {string} plain string for an element
          */
         compliant("Element.prototype.toPlainString");
         compliant(null, Element.prototype.toPlainString = function() {
@@ -819,7 +833,8 @@ compliant(null, window.Test = {
 
         /**
          * Enhancement of the JavaScript API
-         * Adds a method that creates a plain string for a Node.
+         * Adds a method that creates a plain string for a node.
+         * @returns {string} plain string for a node
          */
         compliant("Node.prototype.toPlainString");
         compliant(null, Node.prototype.toPlainString = function() {
@@ -828,11 +843,12 @@ compliant(null, window.Test = {
 
         /**
          * Enhancement of the JavaScript API
-         * Adds a method that creates a plain string for an Object.
+         * Adds a method that creates a plain string for an object.
+         * @returns {string} plain string for an object
          */
         compliant("Object.prototype.toPlainString");
         compliant(null, Object.prototype.toPlainString = function() {
-            if (this !== null
+            if (this != null
                     && typeof this[Symbol.iterator] === 'function')
                 return JSON.stringify([...this]);
             return JSON.stringify(this);
@@ -841,13 +857,19 @@ compliant(null, window.Test = {
         /**
          * Enhancement of the JavaScript API
          * Adds a method to trigger an event for elements.
-         * @param event   type of event
-         * @param bubbles deciding whether the event should bubble up
-         *     through the event chain or not
-         * @param cancel  defining whether the event can be canceled
+         * @param {string} event type of event
+         * @param {boolean} [bubbles] deciding whether the event should bubble
+         *     up through the event chain or not
+         * @param {boolean} [cancel] defining whether the event can be canceled
          */
         compliant("Element.prototype.trigger");
         compliant(null, Element.prototype.trigger = function(event, bubbles = false, cancel = true) {
+
+            if (typeof event !== "string"
+                    || typeof bubbles !== "boolean"
+                    || typeof cancel !== "boolean")
+                throw new TypeError("Invalid data type");
+
             this.dispatchEvent(new Event(event, {bubbles:bubbles, cancelable:cancel}));
         });
 
@@ -864,10 +886,13 @@ compliant(null, window.Test = {
              * Creates a new assertion based on an array of variant parameters.
              * Size defines the number of test values. If more parameters are
              * passed, the first must be the message.
-             * @param parameters
-             * @param size
+             * @param {*} parameters
+             * @param {number} size
              */
             create(parameters, size) {
+
+                if (typeof size !== "number")
+                    throw new TypeError("nvalid data type");
 
                 const assert = {message:null, values:[], error(...variants) {
                     variants.forEach((parameter, index, array) => {
@@ -897,7 +922,7 @@ compliant(null, window.Test = {
                     return new Error(message);
                 }};
 
-                parameters = Array.from(parameters);
+                parameters = Array.from(parameters ?? []);
                 if (parameters.length > size)
                     assert.message = parameters.shift();
                 while (parameters.length > 0)
@@ -911,9 +936,10 @@ compliant(null, window.Test = {
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
-             *     function(value) 
-             * @param message
-             * @param value
+             *     function(value)
+             * @param {string} [message] message
+             * @param {*} value assertion value
+             * @throws {Error} If the assertion failed
              */       
             assertTrue(...variants) {
                 const assert = Assert.create(variants, 1);
@@ -927,9 +953,10 @@ compliant(null, window.Test = {
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
-             *     function(value) 
-             * @param message
-             * @param value
+             *     function(value)
+             * @param {string} [message] message
+             * @param {*} value assertion value
+             * @throws {Error} If the assertion failed
              */      
             assertFalse(...variants) {
                 const assert = Assert.create(variants, 1);
@@ -943,11 +970,12 @@ compliant(null, window.Test = {
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
-             *     function(message, expected, actual) 
-             *     function(expected, actual) 
-             * @param message
-             * @param expected
-             * @param actual
+             *     function(message, compare, actual)
+             *     function(compare, actual)
+             * @param {string} [message] message
+             * @param {*} compare unexpected assertion value
+             * @param {*} value unexpected assertion value
+             * @throws {Error} If the assertion failed
              */     
             assertEquals(...variants) {
                 const assert = Assert.create(variants, 2);
@@ -961,11 +989,12 @@ compliant(null, window.Test = {
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
-             *     function(message, unexpected, actual) 
-             *     function(unexpected, actual) 
-             * @param message
-             * @param unexpected
-             * @param actual
+             *     function(message, compare, actual)
+             *     function(compare, actual)
+             * @param {string} [message] message
+             * @param {*} compare unexpected assertion value
+             * @param {*} value unexpected assertion value
+             * @throws {Error} If the assertion failed
              */      
             assertNotEquals(...variants) {
                 const assert = Assert.create(variants, 2);
@@ -979,11 +1008,12 @@ compliant(null, window.Test = {
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
-             *     function(message, expected, actual) 
-             *     function(expected, actual) 
-             * @param message
-             * @param expected
-             * @param actual
+             *     function(message, compare, actual)
+             *     function(compare, actual)
+             * @param {string} [message] message
+             * @param {*} compare unexpected assertion value
+             * @param {*} value unexpected assertion value
+             * @throws {Error} If the assertion failed
              */      
             assertSame(...variants) {
                 const assert = Assert.create([], variants, 2);
@@ -997,12 +1027,13 @@ compliant(null, window.Test = {
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
-             *     function(message, unexpected, actual) 
-             *     function(unexpected, actual) 
-             * @param message
-             * @param unexpected
-             * @param actual
-             */      
+             *     function(message, compare, actual)
+             *     function(compare, actual)
+             * @param {string} [message] message
+             * @param {*} compare unexpected assertion value
+             * @param {*} value unexpected assertion value
+             * @throws {Error} If the assertion failed
+             */
             assertNotSame(...variants) {
                 const assert = Assert.create(variants, 2);
                 if (assert.values[0] !== assert.values[1])
@@ -1016,8 +1047,9 @@ compliant(null, window.Test = {
              * The method has the following various signatures:
              *     function(message, value)
              *     function(value)
-             * @param message
-             * @param value
+             * @param {string} [message] message
+             * @param {*} value assertion value
+             * @throws {Error} If the assertion failed
              */
             assertUndefined(...variants) {
                 const assert = Assert.create(variants, 1);
@@ -1032,8 +1064,9 @@ compliant(null, window.Test = {
              * The method has the following various signatures:
              *     function(message, value)
              *     function(value)
-             * @param message
-             * @param value
+             * @param {string} [message] message
+             * @param {*} value assertion value
+             * @throws {Error} If the assertion failed
              */
             assertNotUndefined(...variants) {
                 const assert = Assert.create(variants, 1);
@@ -1047,10 +1080,11 @@ compliant(null, window.Test = {
              * If the assertion is false, an error with message is thrown.
              * The method has the following various signatures:
              *     function(message, value) 
-             *     function(value) 
-             * @param message
-             * @param value
-             */    
+             *     function(value)
+             * @param {string} [message] message
+             * @param {*} value assertion value
+             * @throws {Error} If the assertion failed
+             */
             assertNull(...variants) {
                 const assert = Assert.create(variants, 1);
                 if (assert.values[0] === null)
@@ -1064,8 +1098,9 @@ compliant(null, window.Test = {
              * The method has the following various signatures:
              *     function(message, value) 
              *     function(value) 
-             * @param message
-             * @param value
+             * @param {string} [message] message
+             * @param {*} value assertion value
+             * @throws {Error} If the assertion failed
              */
             assertNotNull(...variants) {
                 const assert = Assert.create(variants, 1);
@@ -1079,12 +1114,13 @@ compliant(null, window.Test = {
              * The method has the following various signatures:
              *     function(message) 
              *     function() 
-             * @param message
+             * @param {*} [message] error message
+             * @throws {Error} Assertion failed
              */
             fail(message) {
-                if (message)
+                if (message != null)
                     message = String(message).trim();
-                throw new Error("Assert.fail" + (message ? ", " + message : ""));
+                throw new Error(`Assert.fail${message ? ", " + message : ""}`);
             }      
         });
     }
