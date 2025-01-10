@@ -31,9 +31,6 @@
  * complete markup as free text, as well as in all attributes. Exceptions are
  * the HTML elements STYLE and SCRIPT whose content is not supported by the
  * expression language.
- *
- * @author  Seanox Software Solutions
- * @version 1.7.0 20230513
  */
 (() => {
 

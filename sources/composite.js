@@ -121,9 +121,6 @@
  * Markup/DOM, object tree and virtual paths are analog/homogeneous.
  * Thus virtual paths, object structure in JavaScript (namespace) and the
  * nesting of the DOM must match.
- *
- * @author  Seanox Software Solutions
- * @version 1.7.0 20230510
  */
 (() => {
 

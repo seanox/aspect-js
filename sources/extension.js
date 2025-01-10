@@ -22,9 +22,6 @@
  *     DESCRIPTION
  *     ----
  * General extension of the JavaScript API.
- *
- * @author  Seanox Software Solutions
- * @version 1.7.0 20230423
  */
 
 // Compliant takes over the task that the existing JavaScript API can be
