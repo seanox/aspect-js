@@ -14,6 +14,7 @@ CR: Composite: Validation message added redirection to an attribute
     express, these are redirected to the attribute declared in this way.
 CR: Composite: Added Composite.lookup(selector)
     Determines the corresponding meta-object for the passed selector.
+CR: Composite: Conversion from acceptors to interceptors
 CR: Extension: Renamed window.location.pathcontext in window.location.contextPath
 CR: Release: Omission of the micro version without routing
     This unnecessarily inflated the number of release (channels).
