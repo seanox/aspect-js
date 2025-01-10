@@ -73,7 +73,7 @@ Machine translation with [DeepL](https://deepl.com).
   * [Customizing](markup.md#customizing)
     * [Tag](markup.md#tag)
     * [Selector](markup.md#selector)
-    * [Acceptor](markup.md#acceptor)
+    * [Interceptor](markup.md#interceptor)
     * [Parameters](markup.md#parameters)
   * [Hardening](markup.md#hardening)
 
