@@ -58,8 +58,8 @@ environment of the entire application.
 
 A view is the primary projection of models/components/content. This projection
 can contain additional substructures in the form of views and sub-views. Views
-can be static or path-controlled. Paths address the complete chain of nested
-views and display the parent views in addition to the target view.
+can be static, always shown, or path-controlled. Paths address the complete
+chain of nested views and shows the parent views in addition to the target view.
 
 
 ### View Flow
