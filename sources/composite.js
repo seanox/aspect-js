@@ -1111,15 +1111,15 @@
          * Macros and selectors are based on a text key. If this key is used
          * more than once, existing macros and selectors will be overwritten.    
          *     
-         *     Custom Acceptor
+         *     Custom Interceptor
          *     ---
-         * Acceptors are a very special way to customize. Unlike the other ways,
-         * here the rendering is not shifted into own implementations. With an
-         * acceptor, an element is manipulated before rendering and only if the
-         * renderer processes the element initially. This makes it possible to
-         * make individual changes to the attributes or the markup before the
-         * renderer processes them. This does not affect the implementation of
-         * the rendering.
+         * Interceptors are a very special way to customize. Unlike the other
+         * ways, here the rendering is not shifted into own implementations.
+         * With an interceptor, an element is manipulated before rendering and
+         * only if the renderer processes the element initially. This makes it
+         * possible to make individual changes to the attributes or the markup
+         * before the renderer processes them. This does not affect the
+         * implementation of the rendering.
          * 
          *     Composite.customize(function(element) {...});
          *     
@@ -1129,9 +1129,9 @@
          * composite. For this purpose, the parameter and the value are passed.
          * 
          *     Composite.customize(parameter:string, value);
-         *     
-         * Parameters start with @ and thereby differ from Acceptor/Selector/Tag.
-         *     
+         *
+         * Parameters start with @ in difference to Interceptor/Selector/Tag.
+         *
          *     @ATTRIBUTES-STATICS
          * Static attributes are a component of the hardening of the markup.
          * These attributes are observed by the renderer and manipulation is
@@ -1200,10 +1200,10 @@
             }
             
             // If only one argument of type function is passed, the method is
-            // registered as an acceptor.
+            // registered as an interceptor.
             if (typeof scope === "function"
                     && variants.length === 1) {
-                _acceptors.add(scope);
+                _interceptors.add(scope);
                 return;
             }
 
@@ -1272,7 +1272,7 @@
          * - Expression Language
          * - Scripting
          * - Customizing
-         *   Tag, Selector, Acceptor
+         *   Tag, Selector, Interceptor
          *
          * Details are described in the documentation:
          * https://github.com/seanox/aspect-js/blob/master/manual/en/markup.md#contents-overview           
@@ -1373,18 +1373,18 @@
                 let object = _render_meta[serial];
                 if (!object) {
 
-                    // Acceptors are a very special way to customize. Unlike the
-                    // other ways, here the rendering is not shifted into own
-                    // implementations. With an acceptor, an element is
+                    // Interceptors are a very special way to customize. Unlike
+                    // the other ways, here the rendering is not shifted into
+                    // own implementations. With an interceptor, an element is
                     // manipulated before rendering and only if the renderer
                     // processes the element initially. This makes it possible
                     // to make individual changes to the attributes or the
                     // markup before the renderer processes them. This does not
                     // affect the implementation of the rendering.
-                    // Example of the method call with an acceptor:
+                    // Example of the method call with an interceptor:
                     //     Composite.customize(function(element) {...});
-                    _acceptors.forEach((acceptor) =>
-                        acceptor.call(null, selector));
+                    _interceptors.forEach((interceptor) =>
+                        interceptor.call(null, selector));
 
                     object = {serial, element:selector, attributes:{}};
                     _render_meta[serial] = object;
@@ -2334,8 +2334,8 @@
     /** Map for custom selectors (key:hash, value:{selector, function}) */
     const _selectors = new Map();
 
-    /** Set with acceptor and their registered listeners */
-    const _acceptors = new Set();
+    /** Set with interceptor and their registered listeners */
+    const _interceptors = new Set();
 
     /** Map with events and their registered listeners */
     const _listeners = new Map();
