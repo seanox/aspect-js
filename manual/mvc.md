@@ -288,4 +288,4 @@ const contact = {
 - - -
 &#9665; [Resource Bundle](message.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#model-view-controller)
-&nbsp;&nbsp;&nbsp;&nbsp; [SiteMap](routing) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [SiteMap](routing.md) &#9655;
