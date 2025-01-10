@@ -45,9 +45,6 @@
  * bidirectionally. Managed these proxies are managed with a weak map where the
  * object is the key and the garbage collection can dispose of this objects with
  * associated proxies when not in use.
- *
- * @author  Seanox Software Solutions
- * @version 1.7.0 20230403
  */
 (() => {
 

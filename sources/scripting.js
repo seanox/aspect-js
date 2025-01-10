@@ -27,9 +27,6 @@
  * JavaScript scripts. Because in the end everything is based on a simple eval
  * command, it was important to isolate the execution of the scripts so that
  * internal methods and constants cannot be accessed unintentionally.
- *
- * @author  Seanox Software Solutions
- * @version 1.6.0 20230408
  */
 (() => {
 

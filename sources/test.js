@@ -90,9 +90,6 @@
  * This is necessary so that some enhancements to the JavaScript API that
  * are helpful for implementing test are not used productively. For example,
  * the redirection and caching of console output.
- *
- * @author  Seanox Software Solutions
- * @version 1.6.0 20230328
  */
 compliant("Test");
 compliant(null, window.Test = {

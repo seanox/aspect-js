@@ -80,9 +80,6 @@
  * Extension for modules: These can also provide locales/messages in the module
  * directory, which are loaded in addition to the locales/messages from the data
  * directory -- even at runtime. Again, existing keys cannot be overwritten.
- *
- * @author  Seanox Software Solutions
- * @version 1.7.0 20230413
  */
 (() => {
 
