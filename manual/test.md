@@ -697,6 +697,14 @@ The following events are triggered during simulation:
 document.querySelector("#inputText").typeValue("Hello World!");
 ```
 
+The method will overwrite an existing value in the element by default. However,
+if the simulated input is to be added, overwriting can be deactivated with the
+`clear` parameter.
+
+```javascript
+document.querySelector("#inputText").typeValue("Hello World!", false);
+```
+
 
 #### Element.prototype.toPlainString
 
