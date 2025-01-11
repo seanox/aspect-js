@@ -18,15 +18,15 @@ things.
 
 ## Contents Overview
 
-* [Embedded Composite-JavaScript](#embedded-composite-javascript)
-* [Moduls](#moduls)
-* [Macros](#macros)
-  * [#export](#export)
-  * [#import](#import)
-  * [#module](#module)
-  * [#use](#use)
-  * [(?...) tolerate](#-tolerate)
-* [Debugging](#debugging)
+- [Embedded Composite-JavaScript](#embedded-composite-javascript)
+- [Moduls](#moduls)
+- [Macros](#macros)
+  - [#export](#export)
+  - [#import](#import)
+  - [#module](#module)
+  - [#use](#use)
+  - [(?...) tolerate](#-tolerate)
+- [Debugging](#debugging)
 
 
 ## Embedded Composite JavaScript
