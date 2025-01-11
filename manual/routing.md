@@ -31,18 +31,18 @@ depending on the situation.
 
 ## Contents Overview
 
-* [Terms](#terms)
-  * [Page](#page)
-  * [View](#view)
-  * [View Flow](#view-flow)
-* [Navigation](#navigation)
-* [View Flow](#view-flow-1)
-* [Permission Concept](#permission-concept)
-* [Interceptors](#interceptors)
-* [Paths](#paths)
-  * [Root Path](#root-path)
-  * [Relative Path](#relative-path)
-  * [Absolute Path](#absolute-path)
+- [Terms](#terms)
+  - [Page](#page)
+  - [View](#view)
+  - [View Flow](#view-flow)
+- [Navigation](#navigation)
+- [View Flow](#view-flow-1)
+- [Permission Concept](#permission-concept)
+- [Interceptors](#interceptors)
+- [Paths](#paths)
+  - [Root Path](#root-path)
+  - [Relative Path](#relative-path)
+  - [Absolute Path](#absolute-path)
 
 
 ## Terms

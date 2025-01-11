@@ -16,11 +16,11 @@ Influenced by the good experiences from JSF (Java Server Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
 fullstack solution.
 
-Seanox aspect-js focuses on a minimalist approach to implementing
-Single-Page Applications (SPAs). This framework takes the declarative approach
-of HTML and extends this with expression language, reactivity rendering with
-additional attributes, Model View Controller, view model binding, resource
-bundle, NoSQL datasource, test environment and much more.
+Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
+Applications (SPAs). This framework takes the declarative approach of HTML and
+extends this with expression language, reactivity rendering with additional
+attributes, Model View Controller, view model binding, events, interceptors,
+resource bundle, NoSQL datasource, test environment and much more.
 
 
 # Features
@@ -41,13 +41,13 @@ bundle, NoSQL datasource, test environment and much more.
   rendering reacts to changes in data objects and triggers partial rendering on
   consumers
 - Markup rendering  
-  supports: conditions, custom tags, events, filter, interval, iterate,
-  rendering, resources messages, validation, ...
+  supports: conditions, custom tags, events, filter, interval, interceptors,
+  iterate, rendering, resources messages, validation, ...
 - Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used  
 - Model View Controller (MVC) / Model View ViewModel (MVVM)  
-  supports view model binding and events
+  supports view model binding, events and interceptors 
 - Routing to organize the page into views  
   supports paths (routes), interceptors and permission concepts
 - Resource Bundle / Resource Messages  

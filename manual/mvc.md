@@ -60,17 +60,17 @@ MVCS (Model-View-Controller-Service) here.
 
 ## Contents Overview
 
-* [Model](#model)
-* [View](#view)
-* [Controller](#controller)
-* [View Model Binding](#view-model-binding)
-  * [Composite](#composite)
-  * [Binding](#binding)
-  * [Dock](#dock)
-  * [Undock](#undock)
-  * [Synchronization](#synchronization)
-  * [Validation](#validation)
-  * [Events](#events)
+- [Model](#model)
+- [View](#view)
+- [Controller](#controller)
+- [View Model Binding](#view-model-binding)
+  - [Composite](#composite)
+  - [Binding](#binding)
+  - [Dock](#dock)
+  - [Undock](#undock)
+  - [Synchronization](#synchronization)
+  - [Validation](#validation)
+  - [Events](#events)
 
 
 ## View Model Binding
