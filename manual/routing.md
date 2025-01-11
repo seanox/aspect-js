@@ -1,5 +1,5 @@
 &#9665; [Model-View-Controller](mvc.md)
-&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#sitemap)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#routing)
 &nbsp;&nbsp;&nbsp;&nbsp; [Components](composite.md) &#9655;
 - - -
 
@@ -60,6 +60,34 @@ A view is the primary projection of models/components/content. This projection
 can contain additional substructures in the form of views and sub-views. Views
 can be static, always shown, or path-controlled. Paths address the complete
 chain of nested views and shows the parent views in addition to the target view.
+
+Static views use the boolean attribute `static`. This means that these views are
+always shown if their parent views are visible. The routing excludes all
+elements with the attribute `static`in the markup. These elements are therefore
+independent of paths and the internal permission concept of Routing.
+
+```html
+<body route>
+  <header id="header" composite static>
+    always shown, regardless of the path
+  </header>
+  <main>
+    <div id="a" composite static>
+      shown with path #a
+    </div>
+    <div id="b" composite static>
+      shown with path #b
+    </div>
+    <div id="c" composite static>
+      shown with path #c  
+    </div>
+  </main>
+  <footer id="footer" composite static>
+    always shown, regardless of the path
+  </footer>
+</body>
+
+```
 
 
 ### View Flow
@@ -187,7 +215,7 @@ the root.
 
 The navigation can be effected by changing the URL hash in the browser (direct
 input), by using hash links, and in JavaScript with `window.location.hash`,
-`window.location.href`, `SiteMap.navigate(path)` and `SiteMap.forward(path)`.
+`window.location.href`, `Routing.navigate(path)` and `Routing.forward(path)`.
 
 Relative paths without hash at the beginning are possible, but only work with
 `Routing.route(path)` and `Routing.forward(path)`.
@@ -248,5 +276,5 @@ Absolute Paths start with the root, represented by a leading hash sign (`#`).
 
 - - -
 &#9665; [Model-View-Controller](mvc.md)
-&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#sitemap)
+&nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#routing)
 &nbsp;&nbsp;&nbsp;&nbsp; [Components](composite.md) &#9655;
