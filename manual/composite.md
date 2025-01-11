@@ -79,9 +79,9 @@ mapping.
 ## Resources
 The inner markup, CSS and JavaScript of composites can be outsourced. The
 default directory `./modules` can be changed via the property
-`Composite.MODULES` . The file names of the outsourced resources are derived
-from the ID of the HTML element marked as composite. Which resources or parts of
-the component are swapped out can be decided individually for each component.
+`Composite.MODULES`. The file names of the outsourced resources are derived from
+the ID of the HTML element marked as composite. Which resources or parts of the
+component are swapped out can be decided individually for each component.
 
 ```
 + modules
@@ -90,11 +90,6 @@ the component are swapped out can be decided individually for each component.
   - example.html
 - index.html
 ```
-
-In the default behavior, the name of the resources is derived from the composite
-ID and then uses it as the lower case at the beginning. This behavior can be
-changed with the [value strict for attribute composite](markup.md#composite) so
-that the composite ID is used unchanged for the resources.
 
 ## Loading
 The loading of the resources and the view model binding are done partially when
