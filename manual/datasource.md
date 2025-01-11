@@ -4,7 +4,6 @@
 - - -
 
 # DataSource
-
 DataSource is a NoSQL approach to data storage based on XML data in combination
 with multilingual data separation, optional aggregation and transformation. A
 combination of the approaches of a read only database and a CMS.
@@ -22,9 +21,7 @@ an undefined data model and a command set that differs from SQL. There is no
 standard for NoSQL, but there is a data source that can be functionally used
 similar to SQL.
 
-
 ## Contents Overview
-
 - [Data Storage](#data-storage)
 - [Locales](#locales)
 - [Locator](#locator)
@@ -34,9 +31,7 @@ similar to SQL.
 - [collect](#collect)
 - [Supplement](#supplement)
 
-
 ## Data Storage
-
 By default, the data storage is located as `./data` relative to the application
 directory. The data storage contains the supported languages as subdirectories.
 Each language contains its own content. Redundant data/fields and more
@@ -63,9 +58,7 @@ files. Optionally, a transformation with XSLT is possible.
 
 The data storage can be changed via `DataSource.DATA`. 
 
-
 ## Locales
-
 The supported languages are organized in locales in the `locales.xml` file.
 
 ```xml
@@ -92,9 +85,7 @@ The currently used language can be retrieved via `DataSource.locale`. All
 available languages are returned by `DataSource.locales` as an array that starts
 with the as default declared language.
 
-
 ## Locator
-
 The data in the data storage is addressed with a locator. A locator is a URL
 (`xml://...` or `xslt://...`) that is used absolute or relative to the
 DataSource data storage, but does not contain a locale (language specification)
@@ -112,18 +103,14 @@ xsl://fileA -> ./data/en/fileA.xsl
 xml://foo/fileA -> ./data/en/foo/fileA.xml
 ```
 
-
 ## XPath
-
 XPath is used as a functional query language and for the transformation of
 dynamic content.
 
 For more information please read:
 [https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
 
-
 ## fetch
-
 The data is fetched with a locator through the fetch method. The return value
 is an XMLDocument that can then be used in detail with XPath.
 
@@ -151,9 +138,7 @@ DataSource.fetch("xml://paper", "xslt://article", true);
 More details about the special features of the transformation can be found in
 chapter [transform](#transform).
 
-
 ## transform
-
 The transformation via XSLT (1.0) of XML data provides an additional way for
 generating dynamically data and content and can already be done with the fetch
 method, which is based on locators. Sometimes it is necessary to work directly
@@ -222,9 +207,7 @@ case the automatic escaping is cancelled or undone.
 </article>
 ```
 
-
 ## collect
-
 Content from multiple XML files can be collected and concatenated into a new
 XMLDocument. The various contents are combined under one collector, whose name
 can be defined yourself.
@@ -308,9 +291,7 @@ DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
 </articles>
 ```
 
-
 ## Supplement
-
 The DataSource can also be used directly in the markup with the attributes
 [import](markup.md#import) and [output](markup.md#output).
 
