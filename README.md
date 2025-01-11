@@ -109,19 +109,19 @@ aspect-js is always up to date.
 
 ### Standard: Contains all minimized
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
-  for testing and deployment
+  for development and testing
 
 ### Standard Max: Contains all
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js  
-  for development and testing __not minimized and with comments__
+  for development and testing not minimized and with comments
 
 ### Core: Contains all minimized, except the Test API
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core.js  
-  for deployment without Test API
+  __for deployment without Test API__
 
 ### Core Max: Contains all, except the Test API
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core-max.js  
-  for deployment without Test API __not minimized and with comments__
+  __for deployment without Test API__ not minimized and with comments
 
 
 # Manuals
