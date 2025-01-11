@@ -20,7 +20,7 @@
             const pattern = Test.read("expression_syntax_" + navigator.engine + ".txt");
             try {Assert.assertSameText(pattern, document.body.textContent);
             } catch (error) {
-                console.log(document.body.textContent)
+                console.log(document.body.textContent);
                 throw error;
             }
         }});

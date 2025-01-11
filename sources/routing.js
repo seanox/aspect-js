@@ -331,7 +331,7 @@
             _routing_active = document.body.hasAttribute("route");
             if (document.body.hasAttribute("route")
                     && document.body.getAttribute("route") !== "")
-                console.warn("Ignore value for route attribute")
+                console.warn("Ignore value for route attribute");
 
             // Without path, is forwarded to the root. The fact that the
             // interface can be called without a path if it wants to use the

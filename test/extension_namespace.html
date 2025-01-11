@@ -89,10 +89,10 @@
             Namespace.use("x0001.a.b. .d");
         }});
         Test.create({expected:/Invalid namespace at level 1/, test() {
-            Namespace.use("x0002/a/b/?/d")
+            Namespace.use("x0002/a/b/?/d");
         }});
         Test.create({expected:/Invalid namespace at level 1/, test() {
-            Namespace.use("x0003\\a\\b\\*\\d")
+            Namespace.use("x0003\\a\\b\\*\\d");
         }});
         Test.create({expected:/Invalid namespace at level 2/, test() {
             Namespace.use("x0004.a/b.c.d");
@@ -217,7 +217,7 @@
             Namespace.exists("x0001.a.b. .d");
         }});
         Test.create({expected:/Invalid namespace at level 1/, test() {
-            Namespace.exists("x0002/a/b/?/d")
+            Namespace.exists("x0002/a/b/?/d");
         }});
         Test.create({expected:/Invalid namespace at level 3/, test() {
             Namespace.exists("x0004.a.b\\c.d");
@@ -250,7 +250,7 @@
             Namespace.lookup("x0001.a.b. .d");
         }});
         Test.create({expected:/Invalid namespace at level 1/, test() {
-            Namespace.lookup("x0002/a/b/?/d")
+            Namespace.lookup("x0002/a/b/?/d");
         }});
         Test.create({expected:/Invalid namespace at level 3/, test() {
             Namespace.lookup("x0004.a.b\\c.d");
