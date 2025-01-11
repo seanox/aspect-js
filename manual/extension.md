@@ -11,14 +11,14 @@ functions.
 
 ## Contents Overview
 
-* [Namespace](#namespace)
-* [Element](#element)
-* [Math](#math)
-* [Object](#object)
-* [RegExp](#regexp)
-* [String](#string)
-* [window](#window)
-* [XMLHttpRequest](#xmlhttprequest)
+- [Namespace](#namespace)
+- [Element](#element)
+- [Math](#math)
+- [Object](#object)
+- [RegExp](#regexp)
+- [String](#string)
+- [window](#window)
+- [XMLHttpRequest](#xmlhttprequest)
 
 
 ## Namespace
@@ -403,13 +403,13 @@ window.location.combine("a", "b", "c")
 ```
 
 
-### window.location.pathcontext
+### window.location.contextPath
 
 Property to get the context path. The context path is a part of the request URI
 and can be compared with the current working directory.
 
 ```javascript
-window.location.pathcontext
+window.location.contextPath
 // returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
