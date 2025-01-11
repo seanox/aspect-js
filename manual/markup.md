@@ -4,7 +4,6 @@
 - - -
 
 # Markup
-
 With Seanox aspect-js the declarative approach of HTML is taken up and extended.
 In addition to the expression language, the HTML elements are provided with
 additional attributes for functions and view model binding. The corresponding
@@ -12,35 +11,31 @@ renderer is included in the composite implementation and actively monitors the
 DOM starting from the BODY element via the MutationObserver and works and reacts
 recursively to changes.
 
-
 ## Contents Overview
-
-* [Attributes](#attributes)
-  * [composite](#composite)
-  * [condition](#condition)
-  * [events](#events)
-  * [id](#id)
-  * [import](#import)
-  * [interval](#interval)
-  * [iterate](#iterate)
-  * [message](#message)
-  * [output](#output)
-  * [release](#release)
-  * [render](#render)
-  * [state](#state)
-  * [validate](#validate)
-* [@-Attributes](#-attributes) 
-* [Expression Language](#expression-language)
-* [Scripting](#scripting)
-* [Customizing](#customizing)
-  * [Tag](#tag)
-  * [Selector](#selector)
-  * [Acceptor](#acceptor)
-* [Hardening](markup.md#hardening)
-
+- [Attributes](#attributes)
+  - [composite](#composite)
+  - [condition](#condition)
+  - [events](#events)
+  - [id](#id)
+  - [import](#import)
+  - [interval](#interval)
+  - [iterate](#iterate)
+  - [message](#message)
+  - [output](#output)
+  - [release](#release)
+  - [render](#render)
+  - [static](#static)
+  - [validate](#validate)
+- [@-Attributes](#-attributes) 
+- [Expression Language](#expression-language)
+- [Scripting](#scripting)
+- [Customizing](#customizing)
+  - [Tag](#tag)
+  - [Selector](#selector)
+  - [Interceptor](#interceptor)
+- [Hardening](markup.md#hardening)
 
 ## Attributes
-
 In Seanox aspect-js, the declarative approach is implemented with attributes
 that can be used and combined in all HTML elements starting from the HTML
 element `BODY`, which is included. The values of the attributes can be static or
@@ -48,9 +43,7 @@ dynamic with the use of the expression language. If an attribute contains an
 expression, the value is updated by the renderer with each refresh (render
 cycle) based on the initial expression.
 
-
 ### composite
-
 Marks an element in the markup as a [Composite](composite.md). Composites are
 essential components that require an identifier (ID / Composite ID).
 
@@ -77,13 +70,12 @@ links views and models bidirectionally based on the composite IDsand so no
 manual implementation and declaration of events, interaction or synchronization
 is required.
 
-The [SiteMap](sitemap.md#sitemap) uses composites as [faces](sitemap.md#face)
+The [Routing](routing.md#routing) uses composites as [views](routing.md#view)
 for the primary projection of JavaScript objects (models), which means that they
-can be used as targets for virtual paths in the [face flow](
-    sitemap.md#face-flow), which has a direct influence on the visibility of the
-composites. When SiteMap is active, composites can be marked with the attribute
-[static](#static), which makes a composite permanently visible as a face
-regardless of virtual paths.
+can be used as targets for paths in the [view flow](routing.md#view-flow), which
+has a direct influence on the visibility of the composites. When Routing is
+active, composites can be marked with the attribute [static](#static), which
+makes a composite permanently visible as a view regardless of paths.
 
 ```html
 <article id="example" composite static>
@@ -94,9 +86,7 @@ regardless of virtual paths.
 Details on the use of composites / modular components are described in chapter
 [Composites](composite.md) and [Model View Controller](mvc.md).
 
-
 ### condition
-
 As a condition, the attribute specifies whether an element remains contained in
 the DOM. The expression specified as the value must explicitly return `true` to
 retain the element. If the return value is different, the element is temporarily
@@ -134,9 +124,7 @@ not the browser.
 Details about using embedded JavaScript are described in chapter [Scripting](
     #scripting).
 
-
 ### events
-
 Binds one or more [events](https://www.w3.org/TR/DOM-Level-3-Events) to an HTML
 element. This allows event-driven synchronization of HTML elements with
 corresponding JavaScript objects (models), as well as validation of the data to
@@ -182,23 +170,18 @@ example, the input value from the composite field _text1_ is transferred to the
 field of the same name in the JavaScript object only if at least one of the
 events: _Input_ or _Change_ occurs.
 
-
 ### id
-
 The ID (identifier) has an elementary meaning in Seanox aspect-js. It is the
 basis for [view model binding](mvc.md#view-model-binding) and is used by
-[SiteMap](sitemap.md#sitemap) for [faces](sitemap.md#face) and [facets](
-    sitemap.md#facet) in the [face flow](sitemap.md#face-flow) and thus as a
-destination for virtual paths.
+[Routing](routing.md#routing) for [views](routing.md#view) in the [view flow](
+    routing.md#view-flow) and thus as a destination for paths.
 
 As with all attributes, the expression language can be used, with the difference
 that the attribute is only read at the beginning. Due to the view model binding,
 changes to an existing element at runtime have no effect as long as it exists in
 the DOM.
 
-
 ### import
-
 Loads the content for the HTML element at runtime and inserts it as inner HTML.
 The behavior is similar to the [output](#output) attribute, except that the
 import is done once and the import attribute is removed after successful
@@ -288,9 +271,7 @@ automatically changed to `composite/javascript` and only executed by the
 renderer. This ensures that the JavaScript is  executed depending on the
 enclosing condition attribute.
 
-
 ### interval
-
 Activates an interval-controlled refresh of the HTML element without the need to
 actively trigger the refresh. The interval uses the inner HTML as a template
 from which updated content is generated and inserted with each interval cycle.
@@ -346,9 +327,7 @@ JavaScript as a composite JavaScript.
 </script>
 ```
 
-
 ### iterate
-
 Iterative output is based on lists, enumerations, and arrays. If an HTML element
 is declared as iterative, the inner HTML is used as a template from which
 updated content is generated and inserted with each interval cycle and inserted
@@ -372,9 +351,7 @@ const Model = {
 </select>
 ```
 
-
 ### message
-
 Message is an optional part of [Validation](#validate) and is used for text and
 error output in case of an unconfirmed validation. This requires a combination
 with the attributes [validate](#validate) and [events](#events). 
@@ -399,9 +376,7 @@ with the attributes [validate](#validate) and [events](#events).
 </form>
 ```
 
-
 ### output
-
 Sets for the HTML element the value or result of its expression as inner HTML.
 The behavior is similar to the [import](#import) attribute, except that the
 output is updated with each render cycle. Supported values are text, one or more
@@ -490,9 +465,7 @@ automatically changed to `composite/javascript` and only executed by the
 renderer. This ensures that the JavaScript is only executed depending on the
 enclosing condition attribute.
 
-
 ### release
-
 Inverse indicator that an HTML element was rendered. The renderer removes this
 attribute when an HTML element is rendered. This effect can be used for CSS to
 display elements only in rendered state. A corresponding CSS rule is
@@ -502,9 +475,7 @@ automatically added to the HEAD when the page is loaded.
 <span release>{{'Show me after rendering.'}}</span>
 ```
 
-
 ### render
-
 The attribute requires the combination with the [events](#events) attribute.
 Together they define which targets are refreshed by the renderer with which
 occurring events. The expected value is one or more space-separated CSS or Query
@@ -558,14 +529,21 @@ corresponding events.
 __Alternatively, [reactive rendering](reactive.md) can be used, where changes in
 the data objects trigger a partial update of the view.__
 
+### static
+The attribute static marks elements so that they are excluded from path-based
+control and the internal permission concept of routing.
 
-### state
+> [!NOTE]
+> The static attribute is not a core attribute of the renderer. It is added as
+> a user-defined attribute by the [Routing](routing.md#view) and is listed here
+> for completeness.
 
+[Learn more](routing.md#view)
+
+### strict
 TODO:
 
-
 ### validate
-
 The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
 composite and the corresponding JavaScript object (model), where a property with
@@ -582,31 +560,23 @@ The synchronization and the default action of the browser are directly
 influenced by the validation. This can use for it four states as return values:
 `true`, `not true`, `text`, `undefined/void`.
 
-
 #### true
-
 The validation was successful. No error is displayed and the default action of
 the browser is used. If possible the value is synchronized with the model.
 
-
 #### not true and not undefined/void
-
 The validation failed and an error is shown. The return value indicates that the
 default behavior (action) should not be executed by the browser and is thus
 blocked. With the strict default behaviour of Seanox aspect-js, the invalid
 value is not synchronized with the model.
 
-
 #### text
-
 The validation has failed with an error message. If the error message is empty,
 the message from the message attribute is used as an alternative. With the
 strict default behaviour of Seanox aspect-js, the invalid value is not
 synchronized with the model.
 
-
 #### undefined/void
-
 Validation failed and an error is shown. Without a return value, the default
 behavior (action) is executed by the browser. This behavior is important for
 validating input fields, for example, so that the input reaches the user
@@ -684,10 +654,7 @@ is deleted from the attribute `fault`. Below the input field is the control
 output of the corresponding field in the JavaScript object (model). This field
 is only synchronized if the validate method return the value `true`.
 
-
-
 ## @-Attributes
-
 Expressions are resolved only after the page is loaded by the renderer. For some
 HTML elements, this can be annoying if the attributes are already interpreted by
 the browser. For example, the src attribute for resources such as the img tag.
@@ -700,9 +667,7 @@ including being updated by the renderer if the attributes contain expressions.
 <img @src="{{...}}"/>
 ```
 
-
 ## Expression Language
-
 The expression language can be used in the markup as free text and in the
 attributes of the HTML elements. JavaScript and CSS elements are excluded. The
 expression language is not supported here. When used as free text, pure text
@@ -720,9 +685,7 @@ and `import`.
 Details about syntax and usage are described in chapter [Expression Language](
     expression.md).
 
-
 ## Scripting
-
 Embedded scripting brings some peculiarity with it. The standard scripting is
 executed automatically by the browser and independently of the rendering.
 Therefore, markup for rendering has been extended by the additional script type
@@ -741,12 +704,9 @@ can also be combined with the `condition` attribute.
 Details about using composite JavaScript including modules are described in
 chapter [Scripting](scripting.md).
 
-
 ## Customizing
 
-
 ### Tag
-
 Custom HTML elements (tags) take over the complete rendering on their own
 responsibility. The return value determines whether the standard functions of
 the renderer are used or not. Only the return value `false` (not void, not
@@ -765,9 +725,7 @@ Composite.customize("foo", function(element) {
 </article>
 ```
 
-
 ### Selector
-
 Selectors work similar to custom tags. Compared to these, selectors use a CSS
 selector to recognize elements. This selector must address the element from the
 point of view of the parent element. Selectors are more flexible and
@@ -796,13 +754,12 @@ Composite.customize("a.foo", function(element) {
 </article>
 ```
 
-
-### Acceptor
-
-Acceptors are a special way of customizing the rendering. Compared to the other
-possibilities, this is about manipulating elements before rendering. This allows
-individual changes to attributes and/or the markup before the renderer processes
-them. Thus, an acceptor has no effect of the implementation of the rendering.
+### Interceptor
+Interceptors are a special way of customizing the rendering. Compared to the
+other possibilities, this is about manipulating elements before rendering. This
+allows individual changes to attributes and/or the markup before the renderer
+processes them. Thus, an interceptor has no effect of the implementation of the
+rendering.
 
 ```javascript
 Composite.customize(function(element) {
@@ -811,7 +768,6 @@ Composite.customize(function(element) {
 ```
 
 ## Hardening
-
 In Seanox aspect-js, a hardening of the markup is provided, which makes it
 difficult to manipulate the markup at runtime. On the one hand, hidden markup
 with a condition is physically removed from the DOM and on the other hand, the
