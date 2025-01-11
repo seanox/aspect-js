@@ -540,9 +540,6 @@ control and the internal permission concept of routing.
 
 [Learn more](routing.md#view)
 
-### strict
-TODO:
-
 ### validate
 The attribute `validate` requires the combination with the attribute `events`.
 Together they define and control the synchronization between the markup of a
