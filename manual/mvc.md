@@ -4,7 +4,6 @@
 - - -
 
 # Model View Controller
-
 The Model View Controller (MVC) is a design pattern for separating interaction,
 data and presentation. A distinction should be made between I/O controller and
 application controller. The pure MVC design pattern means the I/O controller for
@@ -28,9 +27,7 @@ and browser, Seanox aspect-js ostensibly refers to the application controller.
 +------------------------------------------+--------------+-----------------------+
 ```
 
-
 ## Model
-
 Models are representable/projectable static JavaScript objects that can provide
 and receive data, states and interactions for views, comparable to managed beans
 and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
@@ -40,26 +37,20 @@ view model binding is part of the Model View Controller and the Composite API.
 Details about view-model binding are described in chapter [Model-View-Controller
     - Binding](mvc.md#binding).
 
-
 ## View
-
 The view is exclusively responsible for the representation or projection of a
 model. Where projection is an important term because the way a model is
 represented is not restricted.
 
 In Seanox aspect-js the views are represented by the markup.
 
-
 ## Controller
-
 The (application)controller controls internal processes within an application
 (face flow) and takes over the data flow between view and model with the
 view-model binding, whereby we can also speak of MVVM (Model-View-ViewModel) and
 MVCS (Model-View-Controller-Service) here.
 
-
 ## Contents Overview
-
 - [Model](#model)
 - [View](#view)
 - [Controller](#controller)
@@ -72,16 +63,12 @@ MVCS (Model-View-Controller-Service) here.
   - [Validation](#validation)
   - [Events](#events)
 
-
 ## View Model Binding
-
 The view-model binding takes over the bidirectional linking of the HTML elements
 of the view with the models as static JavaScript objects and thus organizes the
 data flow, communicates events as well as states and binds functions.
 
-
 ### Composite
-
 The basis for view-model binding is formed by composites, which are functionally
 independent components consisting of markup, CSS, JavaScript, and optionally
 other resources. All components are bound via, the also called Composite ID, ID
@@ -143,9 +130,7 @@ const model = {
 </html>
 ```
 
-
 ### Binding
-
 View-model binding is about linking markup/HTML (view) to the corresponding
 JavaScript object (model). The binding passes interactions and state changes of
 the view to the model and provides an interface for middleware functions and
@@ -181,9 +166,7 @@ const model = {
 </html>
 ```
 
-
 ### Dock
-
 If a composite is used/inserted in the DOM, the corresponding model is
 docked/linked and when removing from the DOM, the corresponding model is
 undocked/unlinked. In both cases the model can optionally implement appropriate
@@ -216,14 +199,10 @@ const model = {
 For  composites in combination with a [condition](markup.md#condition), the call
 of the methods depends on the result of the condition.
 
-
 ### Undock
-
 More details can be found in chapter [Dock](#undock)
 
-
 ### Synchronization
-
 In addition to the static linking and assignment of HTML elements to JavaScript
 objects (models), the view model binding also includes the synchronization of
 values between the HTML elements and the fields of the JavaScript object. The
@@ -234,9 +213,7 @@ only when one of the defined events occurs.
 More details about the usage can be found in chapter [events](
     markup.md#events).
 
-
 ### Validation
-
 The synchronization of values between view (HTML elements) and the fields of
 JavaScript models can be monitored and controlled by validation. Validation is
 declared in HTML via the [validate](markup.md#validate) attribute in combination
@@ -246,9 +223,7 @@ validation method in the JavaScript object (model).
 More details about the usage can be found in chapter [validate](
     markup.md#validate).
 
-
 ### Events
-
 Events, more precisely the interaction between view and model, are also
 considered during view model binding. The methods for interaction will be
 implemented only in the model. In the markup itself, no declaration is required.

@@ -4,7 +4,6 @@
 - - -
 
 # Reactivity Rendering
-
 In the reactive approach, changes to the data objects (models) trigger a partial
 refresh of the consumers in the view. Consumers are all expressions that have
 read access to the changed value of a data object. In the view, expressions can

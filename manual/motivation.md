@@ -3,7 +3,6 @@
 - - -
 
 # Motivation
-
 The separation of web applications into frontend and backend as well as the use
 of browser-based rich clients and microservices is more than just a trend. In
 addition to the strict separation of components, scalability and modularization

@@ -4,7 +4,6 @@
 - - -
 
 # Resource Bundle (Messages/i18n/l10n)
-
 (Resource)Messages is a static [DataSource](datasource.md) extension for
 internationalization (i18n), localization (l10n) and client-related texts. The
 implementation is based on a set of key-value or label-value data which is
