@@ -1,46 +1,37 @@
-&#9665; [SiteMap](sitemap.md)
+&#9665; [Routing](routing.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#components)
 &nbsp;&nbsp;&nbsp;&nbsp; [Reactivity Rendering](reactive.md) &#9655;
 - - -
 
 # Components
-
 Seanox aspect-js is designed for a modular and component-based architecture. For
 this purpose, the framework supports declarative marking of components in the
 markup as well as automatic mechanisms for view-model binding and loading of
 outsourced resources at runtime.
 
-
 ## Contents Overview
-
-* [Module](#module)
-* [Component](#component)
-* [Composite](#composite)
-* [Structure](#structure)
-* [Resources](#resources)
-* [Loading](#loading)
-  * [CSS](#css)
-  * [JavaScript](#javascript)
-  * [HTML](#html)
-* [Common Standard Component](#common-standard-component)
-* [Namespace](#namespace)
-* [Supplement](#supplement)
-
+- [Module](#module)
+- [Component](#component)
+- [Composite](#composite)
+- [Structure](#structure)
+- [Resources](#resources)
+- [Loading](#loading)
+  - [CSS](#css)
+  - [JavaScript](#javascript)
+  - [HTML](#html)
+- [Common Standard Component](#common-standard-component)
+- [Namespace](#namespace)
+- [Supplement](#supplement)
 
 ## Module
-
 A module represents a closed functional program unit, which is usually provided
 as a program library.
 
-
 ## Component
-
 A component refers to a functionally or technically independent part that can
 consist of one or more modules.
 
-
 ## Composite
-
 A composite is a functionally independent component that consist of markup, CSS,
 JavaScript, and optionally other resources. In terms of the
 model-view-controller approach, a composite provides components for model and
@@ -51,9 +42,7 @@ which can also be used. Another important difference is in the loading and
 execution of JavaScript, which in composites is linear/sequential and thus
 synchronous in a render cycle.__
 
-
 ## Structure
-
 A component in markup consists of an HTML element marked as composite with a
 unique ID, which is also called Composite ID.
 
@@ -87,9 +76,7 @@ mapping.
 }
 ```
 
-
 ## Resources
-
 The inner markup, CSS and JavaScript of composites can be outsourced. The
 default directory `./modules` can be changed via the property
 `Composite.MODULES` . The file names of the outsourced resources are derived
@@ -106,12 +93,10 @@ the component are swapped out can be decided individually for each component.
 
 In the default behavior, the name of the resources is derived from the composite
 ID and then uses it as the lower case at the beginning. This behavior can be
-changed with the attribute [strict](markup.md#strict) so that the composite ID
-is used unchanged for the resources.
-
+changed with the [value strict for attribute composite](markup.md#composite) so
+that the composite ID is used unchanged for the resources.
 
 ## Loading
-
 The loading of the resources and the view model binding are done partially when
 the composite is needed in the view, which greatly minimizes the loading time,
 since only resources that are used at the moment of rendering are loaded
@@ -128,15 +113,11 @@ error.
 Resource loading is performed only once with the component's first request for
 the view, and the content is then cached.
 
-
 ### CSS
-
 CSS is inserted as a style element in the HEAD element. Without a HEAD element,
 the insertion causes an error.
 
-
 ### JavaScript
-
 JavaScript is not inserted as an element, instead it is executed directly with
 the eval method in an always fresh isolated scope. Since the constants,
 variables and methods created there are not globally available, these must be
@@ -155,17 +136,13 @@ const login = {
 #export login;
 ```
 
-
 ### HTML
-
 HTML/markup is loaded for a composite only if the HTML element of the component
 itself has no inner HTML and the attributes `import` or `output` have not been
 declared for the element. Only then is an empty component with outsourced
 HTML/markup assumed.
 
-
 ## Common Standard Component
-
 When the page is loaded and the framework and application are initialized, the
 Commons component in the modules directory is also loaded automatically, which
 can consist of the JavaScript file `common.js` and/or the CSS stylesheet
@@ -180,9 +157,7 @@ logic and styles, respectively.
 - index.html
 ```
 
-
 ## Namespace
-
 Comparable to packages in other programming languages, namespaces can be used
 for hierarchical structuring of components, resources and business logic.
 
@@ -298,7 +273,6 @@ directory.
 ```
 
 # Supplement
-
 Because of the close connection, we deliberately refer to the more detailed
 chapters [Model-View-Controler](mvc.md) and [View-Model-Binding](
     mvc.md#view-model-binding).
@@ -306,6 +280,6 @@ chapters [Model-View-Controler](mvc.md) and [View-Model-Binding](
 
 
 - - -
-&#9665; [SiteMap](sitemap.md)
+&#9665; [Routing](routing.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#components)
 &nbsp;&nbsp;&nbsp;&nbsp; [Reactivity Rendering](reactive.md) &#9655;

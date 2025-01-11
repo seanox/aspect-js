@@ -404,7 +404,7 @@ for the primary projection of JavaScript objects (models), which means that they
 can be used as targets for paths in the [view flow](routing.md#view-flow), which
 has a direct influence on the visibility of the composites. When Routing is
 active, composites can be marked with the attribute [static](#static), which
-makes a composite permanently visible as a face regardless of paths.
+makes a composite permanently visible as a view regardless of paths.
 
 [Learn more](markup.md#composite)
 
@@ -583,7 +583,7 @@ represented is not restricted.
 
 ### Controller
 The (application)controller controls internal processes within an application
-(face flow) and takes over the data flow between view and model with the
+(view flow) and takes over the data flow between view and model with the
 view-model binding, whereby we can also speak of MVVM (Model-View-ViewModel) and
 MVCS (Model-View-Controller-Service) here.
 
