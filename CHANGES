@@ -146,9 +146,9 @@ CR: Scripting: Added macro (?...) for Composite JavaScript
     without throwing an error, except for syntax errors.
     except for syntax errors.
 CR: Datasource: Optimization when loading module resources
-    - omission of the HEAD request
-    - omission of XML error when the request receives an error page
-    Minimizes HTTP requests in the background and when loading the page.
+    - Omission of the HEAD request
+    - Omission of XML error when the request receives an error page
+    - Minimizes HTTP requests in the background and when loading the page.
 CR: Messages: Added messages as alternative object tree for associative array Messages
 CR: Messages: Added Messages.customize(label, ...values) to fill placeholders with values
 CR: Namespace: Renamed method Namespace.using(...) in Namespace.use(...)
