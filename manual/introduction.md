@@ -66,7 +66,6 @@ datasource, test environment and much more.
   - [id](#id)
   - [composite](#composite)
   - [static](#static)
-  - [strict](#strict)
   - [events](#events)
   - [validate](#validate)
   - [message](#message)
@@ -410,11 +409,6 @@ makes a composite permanently visible as a face regardless of paths.
 [Learn more](markup.md#composite)
 
 ### static
-TODO:
-
-[Learn more](markup.md#state)
-
-### strict
 TODO:
 
 [Learn more](markup.md#state)
