@@ -4,7 +4,6 @@
 - - -
 
 # Routing
-
 The presentation of the page can be organized in Seanox aspect-js in views,
 which are addressed via paths (routes). For this purpose, the routing supports a
 hierarchical directory structure based on the IDs of the nested composites in
@@ -28,9 +27,7 @@ depending on the situation.
 +-----------------------------------------------+
 ```
 
-
 ## Contents Overview
-
 - [Terms](#terms)
   - [Page](#page)
   - [View](#view)
@@ -44,18 +41,13 @@ depending on the situation.
   - [Relative Path](#relative-path)
   - [Absolute Path](#absolute-path)
 
-
 ## Terms
 
-
 ### Page
-
 In a single page application, the page is the elementary framework and runtime
 environment of the entire application.
 
-
 ### View
-
 A view is the primary projection of models/components/content. This projection
 can contain additional substructures in the form of views and sub-views. Views
 can be static, always shown, or path-controlled. Paths address the complete
@@ -89,16 +81,12 @@ independent of paths and the internal permission concept of Routing.
 
 ```
 
-
 ### View Flow
-
 View flow describes the access control and the sequence of views. The routing
 provides interfaces, events, permission concepts and interceptors with which the
 view flow can be controlled and influenced.
 
-
 ## Navigation
-
 Navigation is based on paths that use the hash in the URL. It is effected by
 changing the URL hash in the browser (direct input), by using hash links and in
 JavaScript with `window.location.hash`, `window.location.href`,
@@ -144,9 +132,7 @@ components of the path are regarded as path parameters and can be used in the
 business logic of the views. If special characters are required for the
 parameters, these are URL-encoded.__
 
-
 ## Permission Concept
-
 The permission concept is based on permit methods in the models, which are
 called each (re-)rendering if the model has implemented the permit method. Then
 the following return values are possible:
@@ -178,14 +164,10 @@ const Model = {
 };
 ```
 
-
 ## Interceptors
-
 TODO:
 
-
 ## Paths
-
 Paths are used for navigation, routing and controlling the view flow. The target
 can be a view or a function if using interceptors. For SPAs (single-page
 applications), the anchor part of the URL is used for navigation and routes.
@@ -231,18 +213,14 @@ Routing.forward("x#y#z");
 
 There are different types of paths, which are explained below.
 
-
 ### Root Path
-
 These paths are empty or contain only one hash character.
 
 ```html
 <a href="#">Back to the root</a>
 ```
 
-
 ### Relative Path
-
 Relative Paths are based on the current path and begin with either a word or a
 return. Return jumps also use the hash sign, whereby the number of repetitions
 indicates the number of return jumps.
@@ -262,9 +240,7 @@ Routing.route("x#y#z");
 Routing.forward("x#y#z");
 ```
 
-
 ### Absolute Path
-
 Absolute Paths start with the root, represented by a leading hash sign (`#`).
 
 ```html

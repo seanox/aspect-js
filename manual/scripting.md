@@ -4,7 +4,6 @@
 - - -
 
 # Scripting
-
 Seanox aspect-js uses composite JavaScript. A dialect based on the browser
 JavaScript, enriched with [macros](#macros) -- a simple meta-syntax.
 
@@ -15,9 +14,7 @@ globally or across, which is why, among other things, the Composite-JavaScript
 was enriched with [macros](#macros), which take over such tasks, among other
 things.
 
-
 ## Contents Overview
-
 - [Embedded Composite-JavaScript](#embedded-composite-javascript)
 - [Moduls](#moduls)
 - [Macros](#macros)
@@ -28,9 +25,7 @@ things.
   - [(?...) tolerate](#-tolerate)
 - [Debugging](#debugging)
 
-
 ## Embedded Composite JavaScript
-
 Embedded scripting brings some peculiarity with it. The standard scripting is
 executed automatically by the browser and independently of the rendering.
 Therefore, markup for rendering has been extended by the additional script type
@@ -46,9 +41,7 @@ with other composite attributes to control execution.
 </script>
 ```
 
-
 ## Moduls
-
 Modules are an integral part of the composite concept. This concept assumes that
 the resources for a composite (JS, CSS, HTML) are outsourced to the module
 directory and loaded at runtime. Which, among other things, should shorten the
@@ -82,15 +75,12 @@ __When calling modules, the file extension is omitted.__
 #import example/moduleE example/moduleF
 ```
 
-
 ## Macros
-
 Macros are a simple meta-syntax that fits into the existing JavaScript syntax.
 At their core, they are abbreviated notations or paraphrases for common
 JavaScript statements.
 
 ### #export
-
 Composite JavaScript, which includes the modules, is not inserted as an element,
 but executed directly with the eval method. Since an isolated scope and not the
 global scope is used for this, variables, constants and methods cannot be used
@@ -129,7 +119,6 @@ const utilities = {
 ```
 
 ### #import
-
 The macro loads one or separated by spaces several (Composite-)JavaScript
 modules from the module directory. JavaScript modules are loaded only once, no
 matter if directly via [#import](#import) or indirectly as a resource to a
@@ -160,9 +149,7 @@ in the module names by the slash.
 #import example/io/connector;
 ```
 
-
 ### #module
-
 This macro has been implemented as an aid for debugging. It expects text to the
 end of the line or to the next semicolon, which is output in the browser
 console in the debug level.
@@ -180,7 +167,6 @@ const value = "Hallo Welt!";
 ```
 
 ### #use
-
 The marko expects one or more space-separated namespaces to be created at the
 object level if they do not already exist.
 
@@ -190,9 +176,7 @@ object level if they do not already exist.
 #use a.b.c d.e.f g.h.i
 ```
 
-
 ### (?...) tolerate
-
 A very special macro is the tolerating syntax `(?...)`. Thus, in case of an
 error, the logic enclosed in the brackets will not cause an error and there will
 be no output in the browser console. Instead, the brackets will represent the
@@ -202,9 +186,7 @@ value `false`. Syntax errors are excluded from this tolerating behavior.
 const value = (?object.that.does.not.exist());
 ```
 
-
 ## Debugging
-
 Since resources and modules, which includes JavaScript, are loaded only at
 runtime, the browser does not know the sources and so the modules are not
 displayed in the developer tools of the browsers, which is important for the use
