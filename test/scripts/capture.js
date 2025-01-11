@@ -52,7 +52,7 @@ class Capture {
             content += "\n<script type=\"text/test\">";
             snapshot.split(/\s*[\r\n]+\s*/).forEach(line => {
                 content += "\n  " + line;
-            })
+            });
             content += "\n</script>";
         });
         console.log(content.trim());
