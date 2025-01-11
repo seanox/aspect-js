@@ -32,7 +32,7 @@ bundle, NoSQL datasource, test environment and much more.
 - Component based architecture
 - Namespaces and domain concept  
   for better structuring of components, modules and business logic
-- Modularization (supports imports at the runtime)  
+- Modularization (supports macros and imports at the runtime)  
   component concept for smart/automatic loading of composite resources at runtime
 - Event handling
 - Expression Language  
@@ -67,7 +67,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der Apache License.
 
-Copyright (C) 2024 Seanox Software Solutions
+Copyright (C) 2025 Seanox Software Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -113,8 +113,7 @@ aspect-js is always up to date.
 
 ### Standard Max: Contains all
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js  
-  not minimized and with comments  
-  for development and testing
+  for development and testing __not minimized and with comments__
 
 ### Core: Contains all minimized, except the Test API
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core.js  
@@ -122,26 +121,7 @@ aspect-js is always up to date.
 
 ### Core Max: Contains all minimized, except the Test API
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core-max.js  
-  not minimized and with comments  
-  for deployment without Test API
-
-### Micro: Contains all minimized, except SiteMap, minimized
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro.js  
-  for testing and deployment of micro frontends without face-flow
-
-### Micro Max: Contains all minimized, except SiteMap
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-max.js  
-  not minimized and with comments  
-  for development and testing of micro frontends without face-flow
-
-### Micro Core: Contains all minimized, except the Test API and SiteMap
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-core.js  
-  for deployment of micro frontends without face-flow and without Test API
-
-### Micro Core Max: Contains all minimized, except the test API and SiteMap
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-micro-core-max.js  
-  not minimized and with comments  
-  for development of micro frontends without face-flow and without Test API
+  for deployment without Test API __not minimized and with comments__
 
 
 # Manuals
