@@ -57,7 +57,6 @@ Test.start();
 - [Extension](#extension)
 
 ## Task
-
 The smallest component in an integration test, used here as _task_, because
 _case_ is a keyword in JavaScript. It can be implemented alone, but is always
 used in a scenario.

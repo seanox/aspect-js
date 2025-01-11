@@ -88,7 +88,6 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-
 <p>
   <img src="https://img.shields.io/badge/Blink-tested-green?style=for-the-badge">
   <img src="https://img.shields.io/badge/Gecko-tested-green?style=for-the-badge">
@@ -101,7 +100,6 @@ specific language governing permissions and limitations under the License.
 
 
 # Release Channels
-
 The release channels continuously provide the latest final versions, so Seanox
 aspect-js is always up to date.
 
