@@ -331,7 +331,7 @@
             _routing_active = document.body.hasAttribute("route");
             if (document.body.hasAttribute("route")
                     && document.body.getAttribute("route") !== "")
-                console.warn("Ignore value for route attribute");
+                console.warn("Ignore value for attribute route");
 
             // Without path, is forwarded to the root. The fact that the
             // interface can be called without a path if it wants to use the
@@ -347,9 +347,12 @@
         if (!(element instanceof Element)
                 || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
             return;
-        if (element.hasAttribute("static"))
+        if (element.hasAttribute("static")) {
+            if (element.getAttribute("static") !== "")
+                console.warn("Ignore value for attribute static");
             return;
-        
+        }
+
         let path = "";
         for (let scope = element; scope; scope = scope.parentNode) {
             if (!(scope instanceof Element)
