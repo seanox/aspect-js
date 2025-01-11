@@ -15,6 +15,7 @@ CR: Composite: Validation message added redirection to an attribute
 CR: Composite: Added Composite.lookup(selector)
     Determines the corresponding meta-object for the passed selector.
 CR: Composite: Conversion from acceptors to interceptors
+CR: Compress: Update to uglify-js 3.19.3
 CR: Extension: Review, corrections and optimization
     - Renamed window.location.pathcontext in window.location.contextPath
 CR: Release: Omission of the micro version without routing
