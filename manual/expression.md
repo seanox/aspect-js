@@ -27,21 +27,21 @@ escape sequence `\{\{` and/or `\}\}`.
 
 ## Contents Overview
 
-* [Elements](#elements)
-  * [Text](#text)
-  * [Literal](#literal)
-  * [Keyword](#keyword)
-  * [Value](#value)
-  * [Method](#method)
-  * [Logic](#logic)
-* [Expressions](#expressions)
-  * [Value-Expression](#value-expression)
-  * [Method-Expression](#method-expression)
-  * [Element-Expression](#element-expression)
-  * [Variable-Expression](#variable-expression)
-  * [Combination](#combination)
-  * [(?...) tolerate](#-tolerate)
-* [Supplement](#supplement)
+- [Elements](#elements)
+  - [Text](#text)
+  - [Literal](#literal)
+  - [Keyword](#keyword)
+  - [Value](#value)
+  - [Method](#method)
+  - [Logic](#logic)
+- [Expressions](#expressions)
+  - [Value-Expression](#value-expression)
+  - [Method-Expression](#method-expression)
+  - [Element-Expression](#element-expression)
+  - [Variable-Expression](#variable-expression)
+  - [Combination](#combination)
+  - [(?...) tolerate](#-tolerate)
+- [Supplement](#supplement)
 
 
 ## Elements

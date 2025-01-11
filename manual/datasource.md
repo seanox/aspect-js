@@ -25,14 +25,14 @@ similar to SQL.
 
 ## Contents Overview
 
-* [Data Storage](#data-storage)
-* [Locales](#locales)
-* [Locator](#locator)
-* [XPath](#xpath)
-* [fetch](#fetch)
-* [transform](#transform)
-* [collect](#collect)
-* [Supplement](#supplement)
+- [Data Storage](#data-storage)
+- [Locales](#locales)
+- [Locator](#locator)
+- [XPath](#xpath)
+- [fetch](#fetch)
+- [transform](#transform)
+- [collect](#collect)
+- [Supplement](#supplement)
 
 
 ## Data Storage

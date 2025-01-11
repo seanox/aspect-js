@@ -7,17 +7,17 @@
 
 ## Contents Overview
 
-* [Server](#server)
-* [Build](#build)
-* [Test](#test)
-  * [Firewall](#firewall)
-  * [Browsers for Testing](#browsers-for-testing)
-  * [Procedure](#procedure)
-* [Release](#release)
-  * [GitHub](#github)
-  * [npmjs.com](#npmjscom)
-  * [cdn.jsdelivr.net](#cdnjsdelivrnet)
-* [Playground](#playground)
+- [Server](#server)
+- [Build](#build)
+- [Test](#test)
+  - [Firewall](#firewall)
+  - [Browsers for Testing](#browsers-for-testing)
+  - [Procedure](#procedure)
+- [Release](#release)
+  - [GitHub](#github)
+  - [npmjs.com](#npmjscom)
+  - [cdn.jsdelivr.net](#cdnjsdelivrnet)
+- [Playground](#playground)
 
 
 ## Server
