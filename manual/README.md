@@ -3,7 +3,6 @@
 Machine translation with [DeepL](https://deepl.com).
 
 ## Table Of Contents 
-
 - [Motivation](#motivation)
 - [Introduction](#introduction)
 - [Expression Language](#expression-language)
@@ -20,19 +19,13 @@ Machine translation with [DeepL](https://deepl.com).
 - [Test](#test)
 - [Development](#development)
 
-
 ### Motivation
-
 - [Motivation](motivation.md#motivation)
 
-
 ### Introduction
-
 - [Introduction](introduction.md#introduction)
 
-
 ### Expression Language
-
 - [Expression Language](expression.md#expression-language)
   - [Elements](expression.md#elements)
     - [Text](expression.md#Text)
@@ -50,9 +43,7 @@ Machine translation with [DeepL](https://deepl.com).
     - [(?...) tolerate](expression.md#-tolerate)
   - [Supplement](expression.md#supplement)
 
-
 ### Markup
-
 - [Markup](markup.md#markup)
   - [Attributes](markup.md#attributes)
     - [composite](markup.md#composite)
@@ -65,7 +56,8 @@ Machine translation with [DeepL](https://deepl.com).
     - [message](markup.md#message)
     - [output](markup.md#output)
     - [release](markup.md#release)
-    - [render](markup.md#render)
+    - [render](markup.md#render))
+    - [static](markup.md#static)
     - [validate](markup.md#validate)
   - [@-Attributes](markup.md#-attributes)
   - [Expression Language](markup.md#expression-language)
@@ -76,7 +68,6 @@ Machine translation with [DeepL](https://deepl.com).
     - [Interceptor](markup.md#interceptor)
     - [Parameters](markup.md#parameters)
   - [Hardening](markup.md#hardening)
-
 
 ### Scripting
 - [Scripting](scripting.md#scripting)
@@ -90,9 +81,7 @@ Machine translation with [DeepL](https://deepl.com).
     - [(?...) tolerate](scripting.md#-tolerate)
   - [Debugging](scripting.md#debugging)
 
-
 ### DataSource
-
 - [DataSource](datasource.md#datasource)
   - [Data Storage](datasource.md#data-storage)
   - [Locales](datasource.md#locales)
@@ -103,14 +92,10 @@ Machine translation with [DeepL](https://deepl.com).
   - [collect](datasource.md#collect)
   - [Supplement](datasource.md#supplement)
 
-
 ### Resource Bundle (i18n/l10n)
-
 - [Resource Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)
 
-
 ### Model View Controller
-
 - [Model View Controller](mvc.md#model-view-controller)
   - [Model](mvc.md#model)
   - [View](mvc.md#view)
@@ -124,9 +109,7 @@ Machine translation with [DeepL](https://deepl.com).
     - [Validation](mvc.md#validation)
     - [Events](mvc.md#events)
 
-
 ### Routing
-
 - [Routing](routing.md#routing)
   - [Terms](routing.md#terms)
     - [Page](routing.md#page)
@@ -141,9 +124,7 @@ Machine translation with [DeepL](https://deepl.com).
     - [Relative Path](routing.md#relative-path)
     - [Absolute Path](routing.md#absolute-path)
 
-
 ### Composite
-
 - [Composite](composite.md#composite)
   - [Module](#module)
   - [Component](#component)
@@ -158,13 +139,10 @@ Machine translation with [DeepL](https://deepl.com).
   - [Namespace](#namespace)
   - [Supplement](#supplement)
 
-
 ### Reactivity Rendering
 - [Reactivity Rendering](reactive.md#reactivity-rendering)
 
-
 ### API Extensions
-
 - [API Extensions](extension.md#api-extensions)
   - [Namespace](extension.md#namespace)
   - [Element](extension.md#element)
@@ -175,9 +153,7 @@ Machine translation with [DeepL](https://deepl.com).
   - [window](extension.md#window)
   - [XMLHttpRequest](extension.md#xmlhttprequest)
 
-
 ### Events
-
 - [Events](events.md#events)
   - [Rendering](events.md#rendering)
     - [Composite.EVENT_RENDER_START](events.md#compositeevent_render_start)
@@ -204,9 +180,7 @@ Machine translation with [DeepL](https://deepl.com).
   - [Error](events.md#error)
     - [Composite.EVENT_ERROR](events.md#compositeevent_error)
 
-
 ### Test
-
 - [Test](test.md#test)
   - [Task](test.md#task)
     - [name](test.md#name)
@@ -241,9 +215,7 @@ Machine translation with [DeepL](https://deepl.com).
   - [Events](test.md#events)
   - [Extension](test.md#extension)
 
-
 ### Development
-
 - [Development](development.md#development)
   - [Server](development.md#server)
   - [Build](development.md#build)
