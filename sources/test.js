@@ -169,10 +169,10 @@ compliant(null, window.Test = {
                 if (typeof Test.worker === "object"
                         && typeof Test.worker.monitor === "object"
                         && typeof Test.worker.monitor[event] === "function")
-                try {Test.worker.monitor[event](status);
-                } catch (error) {
-                    console.error(error);
-                }
+                    try {Test.worker.monitor[event](status);
+                    } catch (error) {
+                        console.error(error);
+                    }
 
                 event = (event || "").trim();
                 if (!event)

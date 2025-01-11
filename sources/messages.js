@@ -159,6 +159,6 @@
             return;
         const data = new DOMParser().parseFromString(request.responseText,"application/xml");
         _datasource.push(data);
-        _load(data)
+        _load(data);
    });
 })();

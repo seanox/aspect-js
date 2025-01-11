@@ -120,7 +120,7 @@
             if (path === null
                     || path === Browser.location)
                 return;
-            const event = new Event("hashchange",{bubbles:false, cancelable:true})
+            const event = new Event("hashchange",{bubbles:false, cancelable:true});
             event.oldURL = Browser.location;
             event.newURL = path;
             window.dispatchEvent(event);
