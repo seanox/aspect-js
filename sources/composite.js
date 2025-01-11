@@ -2696,7 +2696,7 @@
         // Initially the common-module is loaded.
         // The common-module is similar to an autostart, it is used to
         // initialize the single page application. It consists of common.js and
-        // common.css. The configuration of the SiteMap and essential styles
+        // common.css. The configuration of the Routing and essential styles
         // can/should be stored here.
         Composite.include("common");
 

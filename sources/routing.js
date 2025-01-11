@@ -376,9 +376,9 @@
     });
 
     /**
-     * Static component for the use of (virtual) paths. Paths are a reference to
-     * a target in face flow. The target can be a face, a facet or a function.
-     * For more details see method Path.normalize(variants).
+     * Static component for the use of paths (routes). Paths are used for
+     * navigation, routing and controlling the view flow. The target can be a
+     * view or a function if using interceptors.
      */
     compliant("Path");
     compliant(null, window.Path = {
