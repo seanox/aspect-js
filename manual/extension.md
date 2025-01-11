@@ -4,13 +4,10 @@
 - - -
 
 # API Extensions
-
 The JavaScript API for Seanox aspect-js has been extended by some general
 functions.
 
-
 ## Contents Overview
-
 - [Namespace](#namespace)
 - [Element](#element)
 - [Math](#math)
@@ -20,9 +17,7 @@ functions.
 - [window](#window)
 - [XMLHttpRequest](#xmlhttprequest)
 
-
 ## Namespace
-
 Comparable to packages in other programming languages, namespaces can be used
 for hierarchical structuring of components, resources and business logic.
 
@@ -35,9 +30,7 @@ numbers and underscores separated by a dot. As a special feature, arrays are
 also supported. If a layer in the namespace uses an integer, this layer is
 interpreted as an array.
 
-
 ### Namespace.use
-
 Creates a namespace to pass string. Without argument, the method returns the
 global namespace window.
 
@@ -54,9 +47,7 @@ Namespace.use()
 // returns window
 ```
 
-
 ### Namespace.lookup
-
 Resolves a namespace and returns the determined object(-level). If the namespace
 does not exist, `undefined` is returned. Without argument, the method returns
 the global namespace `window`.
@@ -74,9 +65,7 @@ Namespace.lookup()
 // returns window
 ```
 
-
 ### Namespace.exists
-
 Checks whether a namespace exists.
 
 ```javascript
@@ -95,11 +84,9 @@ Namespace.exists()
 // returns boolean true
 ```
 
-
 ## Element
 
 ### Element.prototype.appendChild
-
 Modifies the original method to support node and nodes as NodeList and Array.
 If the option `exclusive` is used, existing children will be removed first.
 
@@ -114,11 +101,9 @@ document.body.appendChild(nodes);
 document.body.appendChild(nodes, true);
 ```
 
-
 ## Math
 
 ### Math.unique
-
 Creates an alphanumeric (U)UID with fixed size, where the length influences the
 quality of the (U)UID. 
 
@@ -131,7 +116,6 @@ Math.unique(32)
 ```
 
 ### Math.serial
-
 Creates a time-based unique alphanumeric UID that is chronologically sortable as
 text and contains the time and a counter if UIDs are created at the same time.
 
@@ -140,11 +124,9 @@ Math.serial()
 // returns string e.g. "89BFASDV910"
 ```
 
-
 ## Object
 
 ### Object.prototype.ordinal
-
 Gets the serial ID to the objects. The ID is created continuously and should
 help if a unique ID is needed at runtime.
 
@@ -160,9 +142,7 @@ const element2 = element1.cloneNode(true);
 element1.ordinal() != element2.ordinal();
 ```
 
-
 ### Object.lookup
-
 Equivalent to [Namespace.lookup](#namespacelookup). Determines an object for a
 namespace.
 
@@ -189,10 +169,8 @@ Object.lookup("earth.europe.germany.countPopulation");
 Object.lookup("foo");
 // returns null
 ```
- 
 
 ### Object.exists
-
 equivalent to [namespace.exists](#namespaceexists). Determines whether an object
 exists in a namespace. object exists in a namespace.
 
@@ -220,9 +198,7 @@ Object.exists("foo");
 // returns booelan false
 ```
 
-
 ### Object.use
-
 Equivalent to [Namespace.use](#namespaceusing). Creates a namespace to the
 passed string. Without argument, the method returns the global namespace window.
 
@@ -237,11 +213,9 @@ Object.use()
 // returns object window
 ```
 
-
 ## RegExp
 
 ### RegExp.quote
-
 Creates a literal pattern for the specified text. Metacharacters or escape
 sequences in the text thus lose their meaning.
 
@@ -250,11 +224,9 @@ RegExp.quote("only a text with a + b (as an example)");
 // returns string "only a text with a \+ b \(as an example\)"
 ```
 
-
 ## String
 
 ### String.prototype.capitalize
-
 Capitalized the string.
 
 ```javascript
@@ -262,9 +234,7 @@ Capitalized the string.
 // returns string "Hello world"
 ```
 
-
 ### String.prototype.uncapitalize
-
 Uncapitalized the string.
 
 ```javascript
@@ -272,9 +242,7 @@ Uncapitalized the string.
 // returns string "hello World"
 ```
 
-
 ### String.prototype.encodeHex
-
 Encodes the string hexadecimal.
 
 ```javascript
@@ -282,9 +250,7 @@ Encodes the string hexadecimal.
 // returns string "0x68656C6C6F20776F726C64"
 ```
 
-
 ### String.prototype.decodeHex
-
 Decodes the hexadecimal string.
 
 ```javascript
@@ -292,9 +258,7 @@ Decodes the hexadecimal string.
 // returns string "hello world"
 ```
 
-
 ### String.prototype.encodeBase64
-
 Encodes the string in Base64.
 
 ```javascript
@@ -302,9 +266,7 @@ Encodes the string in Base64.
 // returns string "aGVsbG8gd29ybGQ="
 ```
 
-
 ### String.prototype.decodeBase64
-
 Decodes the Base64 encoded string.
 
 ```javascript
@@ -312,9 +274,7 @@ Decodes the Base64 encoded string.
 // returns string "hello world"
 ```
 
-
 ### String.prototype.encodeHtml
-
 Escapes HTML characters in the string.
 
 ```javascript
@@ -322,9 +282,7 @@ Escapes HTML characters in the string.
 // returns string "&lt;hello world&gt; &amp; abc"
 ```
 
-
 ### String.prototype.hashCode
-
 Calculates an alphanumeric hash value for the string.
 
 ```javascript
@@ -332,9 +290,7 @@ Calculates an alphanumeric hash value for the string.
 // returns string "B1OQGUCARUTF1"
 ```
 
-
 ### String.prototype.unescape
-
 Decodes slash sequences (control characters) in the string.
 
 ```javascript
@@ -342,11 +298,9 @@ Decodes slash sequences (control characters) in the string.
 // returns string "a   b"
 ```
 
-
 ## window
 
 ### window.serial
-
 Property to get the UID for the window instance.
 
 ```javascript
@@ -354,9 +308,7 @@ window.serial
 // returns string e.g. "2YG490NMYY87TSF1I9R"
 ```
 
-
 ### window.compliant
-
 Creates variables, objects or functions for a defined namespace. If an entry
 with the same name already exists in the API, the method will cause an error.
 
@@ -390,9 +342,7 @@ Creates the method `example.function`. The method causes errors if the base
 object `example` does not exist or the object `example` already contains an
 entry `function`.
 
-
 ### window.location.combine
-
 Combines text elements to a path. The method has an optimizing effect in the use
 of slash and backslash. The result will always start with a slash but ends
 without it.
@@ -402,9 +352,7 @@ window.location.combine("a", "b", "c")
 // returns string "/a/b/c"
 ```
 
-
 ### window.location.contextPath
-
 Property to get the context path. The context path is a part of the request URI
 and can be compared with the current working directory.
 
@@ -413,9 +361,7 @@ window.location.contextPath
 // returns string e.g. /apps/test for URL https://example.local/apps/test/index.html
 ```
 
-
 ## XMLHttpRequest
-
 XMLHttpRequest was indirectly extended by Composite HTTP events.
 
 ```javascript

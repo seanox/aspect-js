@@ -4,9 +4,7 @@
 
 # Development
 
-
 ## Contents Overview
-
 - [Server](#server)
 - [Build](#build)
 - [Test](#test)
@@ -19,9 +17,7 @@
   - [cdn.jsdelivr.net](#cdnjsdelivrnet)
 - [Playground](#playground)
 
-
 ## Server
-
 The project contains a completely preconfigured web server, which can be started
 and also terminated most simply by command line from the project directory with
 the included Ant script.
@@ -47,9 +43,7 @@ Logging is configured to use the command line for output.
 The web server is configured via `./server/devwex.ini`. Changes take effect
 immediately and the web server restarts automatically.
 
-
 ## Build
-
 The release is created by Ant script directly from the root directory of the
 project.
 
@@ -57,12 +51,9 @@ project.
 ant -f ./develpoment/build.xml test
 ```
 
-
 ## Test
-
 Before a release, all tests in all relevant browser engines must run
 successfully.
-
 
 ### Firewall
 - Windows Defender Firewall (add a rule)
@@ -90,7 +81,6 @@ netsh advfirewall firewall delete rule -?
 ```
 
 ### Browsers for Testing
-
 | Engine | Download                                                            |
 | ------ |---------------------------------------------------------------------| 
 | Blink  | https://portableapps.com/apps/internet/google_chrome_portable       |
@@ -102,7 +92,6 @@ Overview of engines
 https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 ### Procedure
-
 - Create a release
   `ant -f ./develpoment/build.xml test`
 - Start the server
@@ -115,7 +104,6 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
   http://127.0.0.1:8000/tutorial  
 - Broweser to be tested  
   MS Edge, Google Chrome, Firefox, Palemoon, Safari iOS, Safari MacOS
-
 
 ## Release
 
@@ -139,9 +127,7 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 ### cdn.jsdelivr.net
 Nothing needs to be changed here, the content is synchronized with npmjs.com.
 
-
 ## Playground
-
 Playground is used for quick testing and bug analysis with the current sources,
 even without creating a build, because the components are used individually as a
 link.

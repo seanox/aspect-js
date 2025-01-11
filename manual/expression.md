@@ -4,7 +4,6 @@
 - - -
 
 # Expression Language
-
 Expressions or the Expression Language (EL) is a simple access to the
 client-side JavaScript and thus to the models and components in Seanox
 aspect-js. In the expressions the complete JavaScript API is supported, which
@@ -24,9 +23,7 @@ The renderer interprets the expression syntax `{{...}}` hard and therefore the
 character sequence `{{` as well as `}}` must be used inside the expression via
 escape sequence `\{\{` and/or `\}\}`.
 
-
 ## Contents Overview
-
 - [Elements](#elements)
   - [Text](#text)
   - [Literal](#literal)
@@ -43,9 +40,7 @@ escape sequence `\{\{` and/or `\}\}`.
   - [(?...) tolerate](#-tolerate)
 - [Supplement](#supplement)
 
-
 ## Elements
-
 An expression is a set of words, where the words are classified according to
 their characteristics as parts of a phrase.
 
@@ -63,9 +58,7 @@ their characteristics as parts of a phrase.
 +--------+-----------+-----------+---------+----------+-------+
 ```
 
-
 ### Text
-
 Text is not a regular element of the expression. This occurs for attributes when
 the Expression Language is combined with text.
 
@@ -73,9 +66,7 @@ the Expression Language is combined with text.
 <p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}."></p>
 ```
 
-
 ### Literal
-
 Literals are text embedded in an expression via single or double quotation marks
 that supports the usual control characters and escape sequences.
 
@@ -85,9 +76,7 @@ that supports the usual control characters and escape sequences.
 {{`Hello World!`}}
 ```
 
-
 ### Keyword
-
 The following standard JavaScript syntax keywords are supported in the
 Expression Language:
 
@@ -121,30 +110,22 @@ Language has been extended of the following keywords:
 | `not`   | `!`                       |  
 | `or`    | <code>&#124;&#124;</code> |
 
-
 ### Value
-
 Anything that is not a literal and keyword is potentially a Value. Value
 represents the value of an object property or a variable. In the case of object
 properties, this is referred to directly or, if available, to a corresponding
 getter. If neither an object property nor a variable can be determined, a method
 or other logic is assumed.
 
-
 ### Method
-
 Everything that is not literal, keyword and value is potentially a method. If no
 method can be determined, other logic is assumed.
 
-
 ### Logic
-
 Everything that is not literal, keyword, value and method is potentially
 executable logic.
 
-
 ## Expressions
-
 There are different types of expressions that can be combined. In the following
 these are explained with their differences and peculiarities.
 
@@ -152,9 +133,7 @@ Expressions will always output all values, except for the value `undefined`. But
 this does not apply to the string `undefined`, which is interpreted as normal
 text.
 
-
 ### Value-Expression
-
 Anything that is not a literal and keyword is potentially a Value. Value
 represents the value of an object property or a variable. In the case of object
 properties, this is referred to directly or, if available, to a corresponding
@@ -164,18 +143,14 @@ getter.
 {{Example.object.field}}
 ```
 
-
 ### Method-Expression
-
 Everything that is not literal, keyword and value is potentially a method
 
 ```
 {{Example.getData()}}
 ```
 
-
 ### Element-Expression
-
 If a variable starts with `#` in an expression, this variable refers to an HTML
 element with the same ID. If no matching HTML element can be found, the value of
 the variable corresponds to `undefined`.
@@ -195,9 +170,7 @@ be be enclosed in square brackets.
 <input type="text" id="ExampleElement:1"/>
 ```
 
-
 ### Variable-Expression
-
 With the expression language, global variables can also be created and set at
 the runtime. The expression must begin with the name of a variable (identifier),
 which use the word characters `_ a-z A-Z 0-9` and is separated from the actual
@@ -212,18 +185,14 @@ Creates or sets the value for global variable `foo` with `6x hello`.
 The expression corresponds to the JavaScript syntax:
     `var foo = 1 +2 +3 + 'x hello';`
 
-
 ### Combination
-
 All types of expressions can be combined.
 
 ```
 {{foo:not empty Foo.data and not empty Foo.data.items ? String(Foo.data.items[0].fieldA).substring(2) : ''}}
 ```
 
-
 ### (?...) tolerate
-
 Expressions are executed like JavaScript and can lead to corresponding errors.
 In addition, object-based approaches often require checking the existence of
 specific object levels, which makes expressions unclear.
@@ -238,9 +207,7 @@ tolerating behavior.
 {{"Expression with an error " + (?object.that.does.not.exist()) + "!"}}
 ```
 
-
 ## Supplement
-
 Expressions are interpreted by the renderer that starts after loading the page.
 So expressions can be visible when loading the page. It is recommended to use
 the attribute [release](markup.md#release).
