@@ -13,103 +13,103 @@ functionality and easy integration into the markup, the idea for a similar
 client-side full-stack solution with a minimalistic and lightweight approach for
 the implementation of single-page applications (SPAs) was born.
 
-Seanox aspect-js takes the declarative approach of HTML and extends it with
-expression language, reactive rendering, additional attributes,
-model-view-controller, view-model-binding, resource bundle (i18n/l10n),
-NoSQL-datasource, test environment and much more.
+Seanox aspect-js takes the declarative approach of HTML and extends this with
+expression language, reactivity rendering with additional attributes, Model View
+Controller, view model binding, events, interceptors, resource bundle, NoSQL
+datasource, test environment and much more.
 
 
 # Features
-* Easy integration in markup and JavaScript (clean code)  
+- Easy integration in markup and JavaScript (clean code)  
   combinable with other JavaScript frameworks if they don't do the same thing do
   and use a different syntax
-* Lightweight implementation  
+- Lightweight implementation  
   requires no additional frameworks
-* Component based architecture
-* Namespaces and domain concept  
+- Component based architecture
+- Namespaces and domain concept  
   for better structuring of components, modules and business logic
-* Modularization (supports imports at the runtime)  
+- Modularization (supports macros and imports at the runtime)  
   component concept for smart/automatic loading of composite resources at runtime
-* Event handling
-* Expression Language  
+- Event handling
+- Expression Language  
   meta-language extension with full JavaScript support
-* Reactivity rendering  
+- Reactivity rendering  
   rendering reacts to changes in data objects and triggers partial rendering on
   consumers
-* Markup rendering  
-  supports: conditions, custom tags, events, filter, interval, iterate,
-  rendering, resources messages, validation, ...
-* Markup hardening  
+- Markup rendering  
+  supports: conditions, custom tags, events, filter, interval, interceptors,
+  iterate, rendering, resources messages, validation, ...
+- Markup hardening  
   makes it difficult to manipulate the attributes in the markup  
   non-visible components are removed from the DOM and only reinserted when used
-* Model View Controller (MVC) / Model View ViewModel (MVVM)  
-  supports view model binding and events
-* Routing to organize the page into views  
+- Model View Controller (MVC) / Model View ViewModel (MVVM)  
+  supports view model binding, events and interceptors
+- Routing to organize the page into views  
   supports paths (routes), interceptors and permission concepts
-* Resource Bundle / Resource Messages  
+- Resource Bundle / Resource Messages  
   internationalization (i18n), localization (l10n) and text outsourcing
-* NoSQL datasource based on XML  
+- NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
-* Micro Frontends  
+- Micro Frontends  
   platform and framework for the implementation of micro-frontends
-* Test environment  
+- Test environment  
   for automated unit tests and integration tests
 - ...
 
 
 ## Contents Overview
 
-* [Getting Started](#getting-started)
-* [Scope](#scope)
-* [Expression Language](#expression-language)
-* [Attributes](#attributes)
-  * [output](#output)
-  * [import](#import)
-  * [condition](#condition)
-  * [interval](#interval)
-  * [iterate](#iterate)
-  * [id](#id)
-  * [composite](#composite)
-  * [events](#events)
-  * [validate](#validate)
-  * [message](#message)
-  * [render](#render)
-  * [release](#release)
-* [DataSource](#datasource)
-* [Resource Bundle (Messages/i18n/l10n)](#resource-bundle-messages--i18n-l10n)
-* [Model View Controller](#model-view-controller)
-  * [Model](#model)
-  * [View](#view)
-  * [Controller](#controller)
-  * [View Model Binding](#view-model-binding)
-    * [Composite](#composite)
-    * [Binding](#binding)
-    * [Dock / Undock](#dock--undock)
-    * [Synchronization](#synchronization)
-    * [Validation](#validation)
-    * [Events](#events)
-* [Routing](#routing)
-  * [Page](#page)
-  * [View](#view)
-  * [View-Flow](#view-flow)
-  * [Navigation](#navigation)
-  * [Permission Concept](#permission-concept)
-  * [Interceptors](#interceptors)
-  * [Paths](#paths)
-* [Components](#components)
-* [Scripting](#scripting)
-* [Reactivity Rendering](#reactivity-rendering)
-* [API Extensions](#api-extensions)
-* [Events](#events-1)
-* [Test](#test)
-  * [Task](#task)
-  * [Scenario](#scenario)
-  * [Suite](#suite)
-  * [Assert](#assert)
-  * [Configuration](#configuration)
-  * [Monitoring](#monitoring)
-  * [Control](#control)
-  * [Events](#events-2)
+- [Getting Started](#getting-started)
+- [Scope](#scope)
+- [Expression Language](#expression-language)
+- [Attributes](#attributes)
+  - [output](#output)
+  - [import](#import)
+  - [condition](#condition)
+  - [interval](#interval)
+  - [iterate](#iterate)
+  - [id](#id)
+  - [composite](#composite)
+  - [events](#events)
+  - [validate](#validate)
+  - [message](#message)
+  - [render](#render)
+  - [release](#release)
+- [DataSource](#datasource)
+- [Resource Bundle (Messages/i18n/l10n)](#resource-bundle-messages--i18n-l10n)
+- [Model View Controller](#model-view-controller)
+  - [Model](#model)
+  - [View](#view)
+  - [Controller](#controller)
+  - [View Model Binding](#view-model-binding)
+    - [Composite](#composite)
+    - [Binding](#binding)
+    - [Dock / Undock](#dock--undock)
+    - [Synchronization](#synchronization)
+    - [Validation](#validation)
+    - [Events](#events)
+- [Routing](#routing)
+  - [Page](#page)
+  - [View](#view)
+  - [View-Flow](#view-flow)
+  - [Navigation](#navigation)
+  - [Permission Concept](#permission-concept)
+  - [Interceptors](#interceptors)
+  - [Paths](#paths)
+- [Components](#components)
+- [Scripting](#scripting)
+- [Reactivity Rendering](#reactivity-rendering)
+- [API Extensions](#api-extensions)
+- [Events](#events-1)
+- [Test](#test)
+  - [Task](#task)
+  - [Scenario](#scenario)
+  - [Suite](#suite)
+  - [Assert](#assert)
+  - [Configuration](#configuration)
+  - [Monitoring](#monitoring)
+  - [Control](#control)
+  - [Events](#events-2)
 
 
 ## Getting Started
