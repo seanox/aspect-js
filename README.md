@@ -1,13 +1,13 @@
 <p>
-  <a href="https://github.com/seanox/aspect-js/pulls">
-    <img src="https://img.shields.io/badge/development-active-green?style=for-the-badge">
-  </a>  
-  <a href="https://github.com/seanox/aspect-js/issues">
-    <img src="https://img.shields.io/badge/maintenance-active-green?style=for-the-badge">
-  </a>
-  <a href="http://seanox.de/contact">
-    <img src="https://img.shields.io/badge/support-active-green?style=for-the-badge">
-  </a>
+  <a href="https://github.com/seanox/aspect-js/pulls"
+    ><img src="https://img.shields.io/badge/development-active-green?style=for-the-badge"
+  ></a>  
+  <a href="https://github.com/seanox/aspect-js/issues"
+    ><img src="https://img.shields.io/badge/maintenance-active-green?style=for-the-badge"
+  ></a>
+  <a href="http://seanox.de/contact"
+    ><img src="https://img.shields.io/badge/support-active-green?style=for-the-badge"
+  ></a>
 </p>
 
 
