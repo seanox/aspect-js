@@ -892,7 +892,7 @@ Paths consist of case-sensitive words that only use 7-bit ASCII characters above
 the space character. Characters outside this range are URL encoded. The words
 are separated by the hash character (`#`).
 
-[Learn more](routing.md#virtual-paths)
+[Learn more](routing.md#paths)
 
 ## Components
 Seanox aspect-js is designed for a modular and component-based architecture. For
