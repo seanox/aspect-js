@@ -78,8 +78,6 @@
             return _history;
         },
 
-        // TODO: method to get path + parameters (+ URL decoding of the parameters)
-
         /**
          * Routes to the given path. TODO:
          *
@@ -127,6 +125,7 @@
         },
            
         /**
+         * TODO:
          * Checks the approval to keep or remove the composite through the
          * routing in the DOM. For approval, the model corresponding to a
          * composite can implement the approve method, which can use different
@@ -134,7 +133,6 @@
          *
          * TODO: true
          * TODO: false
-         * TODO: string
          * TODO: void/undefined
          *
          * Without a custom approve method, the default is applied and checked,
@@ -146,35 +144,43 @@
          * otherwise the method returns false.
          *
          * @param {string} path TODO
+         * @param {string} composite TODO
          * @returns {boolean} if the composite is approved, true or false
          */
-        approve(path) {
+        approve(path, composite) {
 
-            if (path === undefined
-                    || (typeof path !== "string"
-                            && path !== null))
+            if (path != null
+                    && typeof path !== "string")
+                throw new TypeError("Invalid data type");
+            if (composite != null
+                    && typeof composite !== "string")
                 throw new TypeError("Invalid data type");
 
-            // Only valid paths of composites can be approved.
             path = Path.normalize(path);
             if (path === null
                     || path === "#")
                 return false;
 
-            const selector = "#" + path.split("#").pop();
-            const object = Composite.lookup(selector);
+            composite = composite.match(Composite.PATTERN_COMPOSITE_ID);
+            if (!composite)
+                return false;
+
+            const model = (composite[1] ?? "").trim();
+            const namespace = (composite[2] ?? "").replace(":", ".");
+            const scope = namespace.length > 0 ? namespace + "." + model : model;
+            const object = (function(context, namespace) {
+                return namespace.split('.').reduce(function(scope, target) {
+                    return scope && scope[target];
+                }, context);
+            })(window, scope);
+
             if (!(typeof object?.permit === "function"))
-                return Path.covers(path);
+                return path !== undefined
+                    && Path.covers(path);
             const approval = object.permit();
             if (approval === undefined)
-                return Path.covers(path);
-            if (typeof approval === "string"
-                    && Path.PATTERN_PATH.test(approval)) {
-                Composite.asynchron((path) => {
-                    window.location.href = path;
-                }, path);
-                return false;
-            }
+                return path !== undefined
+                    && Path.covers(path);
             return approval === true;
         },
 
@@ -196,15 +202,31 @@
      */
     Composite.customize("@ATTRIBUTES-STATICS", "static");
 
-    const _lookup = (path) => {
-        path = path.split(/(?=#)/);
-        do {
-            let selector = `${path.join(" ")}[${Composite.ATTRIBUTE_COMPOSITE}]`;
-            selector = document.querySelector(selector);
-            if (selector instanceof Element)
-                return selector;
+    const _lookup = (lookup) => {
+
+        if (lookup instanceof Element) {
+            let path = "";
+            for (let element = lookup; element; element = element.parentElement) {
+                if (!element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                        || !element.hasAttribute(Composite.ATTRIBUTE_ID))
+                    continue;
+                const composite = element.getAttribute(Composite.ATTRIBUTE_ID);
+                const match = composite.match(Composite.PATTERN_COMPOSITE_ID);
+                if (!match)
+                    throw new Error(`Invalid composite id${composite ? ": " + composite : ""}`);
+                path = "#" + match[1] + path;
+            }
+            return path || undefined;
+        }
+
+        path = lookup.split("#").slice(1);
+        path = path.map(entry => `[id="${entry}"][composite],[id^="${entry}"][composite]`);
+        while (path.length > 0) {
+            const element = document.querySelector(path.join(">"));
+            if (element instanceof Element)
+                return element;
             path.pop();
-        } while (path.length > 0);
+        }
         return document.body;
     };
 
@@ -353,16 +375,8 @@
             return;
         }
 
-        let path = "";
-        for (let scope = element; scope; scope = scope.parentNode) {
-            if (!(scope instanceof Element)
-                    || !scope.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-                continue;
-            const serial = (scope.getAttribute(Composite.ATTRIBUTE_ID) || "").trim();
-            if (!serial.match(Composite.PATTERN_COMPOSITE_ID))
-                throw new Error(`Invalid composite id${serial ? ": " + serial : ""}`);
-            path = "#" + serial + path;
-        }
+        const composite = (element.getAttribute(Composite.ATTRIBUTE_ID) ?? '').trim();
+        const path = _lookup(element);
 
         let script = null;
         if (element.hasAttribute(Composite.ATTRIBUTE_CONDITION)) {
@@ -370,11 +384,11 @@
             if (script.match(Composite.PATTERN_EXPRESSION_CONTAINS))
                 script = script.replace(Composite.PATTERN_EXPRESSION_CONTAINS, (match) => {
                     match = match.substring(2, match.length -2).trim();
-                    return `{{Routing.approve("${path}") and (${match})}}`;
+                    return `{{Routing.approve("${path}", ${composite}") and (${match})}}`;
                 });
         }
         if (!script)
-            script = `{{Routing.approve("${path}")}}`;
+            script = `{{Routing.approve("${path}", "${composite}")}}`;
         element.setAttribute(Composite.ATTRIBUTE_CONDITION, script);
     });
 
