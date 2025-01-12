@@ -10,7 +10,6 @@
   ></a>
 </p>
 
-
 # Description
 Influenced by the good experiences from JSF (Java Server Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
@@ -21,7 +20,6 @@ Applications (SPAs). This framework takes the declarative approach of HTML and
 extends this with expression language, reactivity rendering with additional
 attributes, Model View Controller, view model binding, events, interceptors,
 resource bundle, NoSQL datasource, test environment and much more.
-
 
 # Features
 - Easy integration in markup and JavaScript (clean code)  
@@ -60,7 +58,6 @@ resource bundle, NoSQL datasource, test environment and much more.
   for automated unit tests and integration tests
 - ... 
 
-
 # Licence Agreement
 Seanox Software Solutions ist ein Open-Source-Projekt, im Folgenden
 Seanox Software Solutions oder kurz Seanox genannt.
@@ -80,12 +77,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
-
 # System Requirement
 - ECMAScript 6 support or higher (normally the current browsers)  
   Engines (tested): Blink, Gecko, Goanna, WebKit, ...  
 - Web server for hosting
-
 
 # Downloads
 <p>
@@ -97,7 +92,6 @@ specific language governing permissions and limitations under the License.
 
 [Seanox aspect-js 1.7.0](https://github.com/seanox/aspect-js/releases/download/1.7.0/aspect-js-1.7.0.zip)  
 [Seanox aspect-js 1.7.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.7.0.zip)
-
 
 # Release Channels
 The release channels continuously provide the latest final versions, so Seanox
@@ -121,12 +115,10 @@ aspect-js is always up to date.
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core-max.js  
   __for deployment without Test API__ not minimized and with comments
 
-
 # Manuals
 - [Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/introduction.md#einf&uuml;hrung)
 - [Manual](https://github.com/seanox/aspect-js/tree/master/manual/#readme)
 - [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
-
 
 # Changes
 ## 1.7.0 20241228  
@@ -155,7 +147,6 @@ CR: Messages: Added locales/messages for modules
 CR: Test: Update web server to version 5.7.1  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
-
 
 # Contact
 [Issues](https://github.com/seanox/aspect-js-tutorial/issues)  
