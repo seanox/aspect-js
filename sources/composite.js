@@ -117,10 +117,6 @@
  * meta-objects to each element and are removed in the markup. The following
  * attributes are essential: COMPOSITE, ID -- they are cached and remain at the
  * markup, these cannot be changed. the MutationObserver will restore them.
- *
- * Markup/DOM, object tree and virtual paths are analog/homogeneous.
- * Thus virtual paths, object structure in JavaScript (namespace) and the
- * nesting of the DOM must match.
  */
 (() => {
 
@@ -2380,9 +2376,9 @@
     }
 
     /**
-     * Determines the meta data for an element based on its position in the DOM
-     * with the corresponding model, the referenced route and target. The meta
-     * data is only determined as text information.
+     * Determines the metadata for an element based on its position in the DOM
+     * with the corresponding model, the referenced route and target. The
+     * metadata is only determined as text information.
      * 
      * Composite:
      *     {namespace, model}
