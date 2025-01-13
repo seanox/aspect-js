@@ -43,7 +43,7 @@
             if (capture.size() === count)
                 Test.start();
             if (capture.size() > count)
-                Assert.assertEquals("expected {1} steps but was {2}", count, snapshots.length);
+                Assert.assertEquals("expected {1} steps but was {2}", count, capture.size());
         });
 
         Test.create({test() {
