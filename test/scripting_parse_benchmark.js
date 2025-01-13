@@ -97,7 +97,7 @@ const news = Reactive({
                 // images must be made market related
                 json.forEach((record, index) => {
                     record.targetUrl = PIAAS_URL
-                        + news.datatype.text.replaceAll(/\s+/g, "-").toLowerCase()
+                        + news.datatype.text.replace(/\s+/g, "-").toLowerCase()
                         + "/" + record.id;
                     if (record.images)
                         record.images = record.images.map(image =>
