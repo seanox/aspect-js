@@ -2283,8 +2283,8 @@
             // filled with the attributes ATTRIBUTE_IMPORT and ATTRIBUTE_OUTPUT.
             if (composite instanceof Element
                     && !composite.innerHTML.trim()
-                    && !object?.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
-                    && !object?.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_IMPORT)
+                    && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_OUTPUT)) {
                 const content = this.load(context + ".html");
                 if (content === undefined)
                     return;
