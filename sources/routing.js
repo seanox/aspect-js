@@ -224,7 +224,9 @@
                 }, context);
             })(window, scope) || (Object.exists(scope) ? Object.use(scope) : undefined);
 
-            if (!(typeof object?.permit === "function"))
+            if (object == null
+                    || typeof object !== "object"
+                    || typeof object.permit !== "function")
                 return path !== undefined
                     && Path.covers(path);
             const approval = object.permit();
