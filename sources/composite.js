@@ -77,8 +77,8 @@
  * colon. Qualifiers behave like properties during view model binding and extend
  * the namespace.
  *
- *        unique
- *        ----
+ *         unique
+ *         ----
  * In some cases it is necessary that different things in the view refer to a
  * target in the corresponding model. However, if these things must still be
  * unique in the view, a unique identifier can be used in addition to the
