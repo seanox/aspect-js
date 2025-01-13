@@ -2113,7 +2113,7 @@
             const normalize = (path) => {
                 const anchor = document.createElement("a");
                 anchor.href = path;
-                return anchor.pathname.replaceAll(/\/{2,}/g, "/");
+                return anchor.pathname.replace(/\/{2,}/g, "/");
             };
 
             // JS and CSS are loaded only once
