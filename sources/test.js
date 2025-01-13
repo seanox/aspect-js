@@ -390,13 +390,11 @@ compliant(null, window.Test = {
 
                 // Test.worker.output
                 // Output to be used for all messages and errors
-                Test.worker.output = meta?.output ?? null;
-                Test.worker.output = Test.worker.output || console;
+                Test.worker.output = (meta && meta.output) || console;
                 
                 // Test.worker.monitor
                 // Monitoring of test processing
-                Test.worker.monitor = meta?.monitor ?? null;
-                Test.worker.monitor = Test.worker.monitor || {
+                Test.worker.monitor = (meta && meta.monitor) || {
                     start(status) {
                         Test.worker.output.log(`${Test.TIMESTAMP} Test is started`
                                 + `, ${numerical(status.queue.size, "task")} in the queue`);
