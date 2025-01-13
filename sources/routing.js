@@ -17,15 +17,68 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
- * 
+ *
+ *
  *     DESCRIPTION
  *     ----
- * TODO
+ *
+ * The presentation of the page can be organized in Seanox aspect-js in views,
+ * which are addressed via paths (routes). For this purpose, the routing
+ * supports a hierarchical directory structure based on the IDs of the nested
+ * composites in the markup. The routing then controls the visibility and
+ * permission for accessing the views via paths - the so-called view flow. For
+ * the view flow and the permission, the routing actively uses the DOM to insert
+ * and remove the views depending on the situation.
+ *
+ *
+ *     TERMS
+ *     ----
+ *
+ *         Page
+ *         ----
+ * In a single page application, the page is the elementary framework and
+ * runtime environment of the entire application.
+ *
+ *         View
+ *         ----
+ * A view is the primary projection of models/components/content. This
+ * projection can contain additional substructures in the form of views and
+ * sub-views. Views can be static, always shown, or path-controlled. Paths
+ * address the complete chain of nested views and shows the parent views in
+ * addition to the target view.
+ *
+ * Static views use the boolean attribute static. This means that these views
+ * are always shown if their parent views are visible. The routing excludes all
+ * elements with the attribute staticin the markup. These elements are therefore
+ * independent of paths and the internal permission concept of Routing.
+ *
+ *         View Flow
+ *         ----
+ * View flow describes the access control and the sequence of views. The routing
+ * provides interfaces, events, permission concepts and interceptors with which
+ * the view flow can be controlled and influenced.
+ *
+ *         Paths
+ *         ----
+ * Paths are used for navigation, routing and controlling the view flow. The
+ * target can be a view or a function if using interceptors. For SPAs
+ * (single-page applications), the anchor part of the URL is used for navigation
+ * and routes.
+ *
+ * Similar to a file system, absolute and relative paths are also supported
+ * here. Paths consist of case-sensitive words that only use 7-bit ASCII
+ * characters above the space character. Characters outside this range are URL
+ * encoded. The words are separated by the hash character (#).
+ *
+ * Repeated use of the separator (#) allows jumps back in the path to be mapped.
+ * The number of repetitions indicates the number of returns in the direction of
+ * the root.
  */
 (() => {
 
-    // TODO:
+    // Status of the activation of routing
+    // The status cannot be changed again after (de)activation and is only set
+    // initially when the page is loaded.
     let _routing_active = undefined;
 
     // Map with all supported interceptors
@@ -73,19 +126,23 @@
             return Path.normalize(location);
         },
 
-        // TODO:
+        /**
+         * Returns the current navigation history and automatically recognizes
+         * when there are jumps back to previous destinations. In such cases,
+         * all subsequent entries are removed to ensure that the history remains
+         * consistent and up to date.
+         * @returns {string[]} navigation history as array
+         */
         get history() {
             return _history;
         },
 
         /**
-         * Routes to the given path. TODO:
-         *
-         * In difference to the forward method, route is not executed directly,
-         * instead the change is triggered asynchronous by the location hash.
-         * 
-         * @param {string} path TODO
-         */    
+         * Routes to the given path. In difference to the forward method, route
+         * is not executed directly, instead the change is triggered
+         * asynchronous by the location hash.
+         * @param {string} path
+         */
         route(path) {
             if (path === undefined
                     || (typeof path !== "string"
@@ -101,14 +158,11 @@
         },
         
         /**
-         * Forwards to the given path. TODO:
-         *
-         * In difference to the route method, the forwarding is executed
-         * directly, instead the navigate method triggers asynchronous
-         * forwarding by changing the location hash.
-         * 
-         * @param {string} path TODO
-         */  
+         * Forwards to the given path. In difference to the route method, the
+         * forwarding is executed directly, instead the navigate method triggers
+         * asynchronous forwarding by changing the location hash.
+         * @param {string} path
+         */
         forward(path) {
             if (path === undefined
                     || (typeof path !== "string"
@@ -125,27 +179,22 @@
         },
            
         /**
-         * TODO:
          * Checks the approval to keep or remove the composite through the
          * routing in the DOM. For approval, the model corresponding to a
          * composite can implement the approve method, which can use different
-         * return values.
+         * return values: undefined, true and false.
          *
-         * TODO: true
-         * TODO: false
-         * TODO: void/undefined
+         * With the return values true and false, the permit method in the model
+         * makes the decision. Otherwise and even if the model does not
+         * implement a permit method, the decision is left to the routing, which
+         * checks the coverage of the path from the composite. Covered means
+         * that the specified path must be contained from the root of the
+         * current working path.
          *
-         * Without a custom approve method, the default is applied and checked,
-         * whether the current working path covers the path from the composite.
-         * Covered means that the specified path must be contained from the root
-         * of the current working path.
-         *
-         * This method assumes that the URL contains at least one hash,
-         * otherwise the method returns false.
-         *
-         * @param {string} path TODO
-         * @param {string} composite TODO
-         * @returns {boolean} if the composite is approved, true or false
+         * @param {string} path path of the composite
+         * @param {string} composite composite ID of the element in the markup
+         * @returns {boolean} true if the composite element is approved,
+         *     otherwise false
          */
         approve(path, composite) {
 
@@ -166,13 +215,14 @@
                 return false;
 
             const model = (composite[1] ?? "").trim();
-            const namespace = (composite[2] ?? "").replace(":", ".");
+            const namespace = (composite[2] ?? "").replace(/:/g, ".");
             const scope = namespace.length > 0 ? namespace + "." + model : model;
+
             const object = (function(context, namespace) {
                 return namespace.split('.').reduce(function(scope, target) {
                     return scope && scope[target];
                 }, context);
-            })(window, scope);
+            })(window, scope) || (Object.exists(scope) ? Object.use(scope) : undefined);
 
             if (!(typeof object?.permit === "function"))
                 return path !== undefined
@@ -189,8 +239,7 @@
                     && !(path instanceof RegExp))
                 throw new TypeError("Invalid data type");
             if (actor == null
-                    || typeof actor !== "object"
-                    || !(actor instanceof RegExp))
+                    || typeof actor !== "function")
                 throw new TypeError("Invalid object type");
             _interceptors.push({path:path, actor:actor});
         }
@@ -276,7 +325,7 @@
         // - can change the new hash/path, but please use replace
         // - following interceptors use the possibly changed hash/path
         // - on the first explicit false, terminates the logic in hashchange
-        for (const interceptor in _interceptors) {
+        for (const interceptor of _interceptors) {
             if (typeof interceptor.path === "string") {
                 if (!Path.covers(interceptor.path))
                     continue;
@@ -419,7 +468,11 @@
         get PATTERN_ASCII() {return /^[\x21-\x7E]*$/},
 
         /**
-         * TODO:
+         * Compares two paths and returns the common part. This method compares
+         * path and compare. If the paths match, the method returns the common
+         * part of the paths. If there is no match, null is returned. When
+         * trying with paths without content (null and empty string), the method
+         * will not return a value.
          * @param {string} path
          * @param {string} compare
          * @returns {undefined|null|string}
