@@ -214,8 +214,8 @@
             if (!composite)
                 return false;
 
-            const model = (composite[1] ?? "").trim();
-            const namespace = (composite[2] ?? "").replace(/:/g, ".");
+            const model = (composite[1] || "").trim();
+            const namespace = (composite[2] || "").replace(/:/g, ".");
             const scope = namespace.length > 0 ? namespace + "." + model : model;
 
             const object = (function(context, namespace) {
@@ -438,7 +438,7 @@
             return;
         }
 
-        const composite = (element.getAttribute(Composite.ATTRIBUTE_ID) ?? '').trim();
+        const composite = (element.getAttribute(Composite.ATTRIBUTE_ID) || '').trim();
         const path = _lookup(element);
 
         let script = null;
