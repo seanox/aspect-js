@@ -142,9 +142,9 @@
                         : "\r" + patches[placeholder] + "\n");
 
                 // masked quotation marks will be restored.
-                structure = structure.replaceAll("\r\\u0022\n", '\\"');
-                structure = structure.replaceAll("\r\\u0027\n", "\\'");
-                structure = structure.replaceAll("\r\\u0060\n", "\\`");
+                structure = structure.replace(/\r\\u0022\n/g, '\\"');
+                structure = structure.replace(/\r\\u0027\n/g, "\\'");
+                structure = structure.replace(/\r\\u0060\n/g, "\\`");
 
                 // splices still need to be made scriptable
                 structure = structure.replace(/(\n\r)+/g, " + ");
@@ -222,7 +222,7 @@
                 // not be misinterpreted.
                 expression = expression.replace(/#\[([^\[\]]*)\]/g,
                     (match, element) => {
-                        element = element.replaceAll(/\/{2}(.*?)\/{2}/gs, "\"+($1)+\"");
+                        element = element.replace(/\/{2}(.*?)\/{2}/gs, "\"+($1)+\"");
                         patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
                         return "\r" + (patches.length -1) + "\n";
                 });
