@@ -202,7 +202,20 @@
      */
     Composite.customize("@ATTRIBUTES-STATICS", "static");
 
-    const _lookup = (lookup) => {
+    /**
+     * The method accepts a path as a string and determines the corresponding
+     * element that is best covered by this path (Path-to-Element). The path can
+     * be longer than the actual target, similar to the concepts PATH_TRANSLATED
+     * and PATH_INFO in CGI.
+     *
+     * Alternatively, the method can accept a specific element and determine the
+     * corresponding path in the markup (Element-to-Path).
+     *
+     * @param {string|Element} lookup
+     * @returns {undefined|string|Element} the path as string or undefined for
+     *     Element-To-Path or the element for Path-to-Element
+     */
+     const _lookup = (lookup) => {
 
         if (lookup instanceof Element) {
             let path = "";
@@ -335,12 +348,11 @@
     });
 
     /**
-     * TODO:
      * Rendering filter for all composite elements. The filter causes that for
      * each composite element determined by the renderer, an additional
-     * condition is added to the Routing. This condition is used to show or hide
-     * the composite elements in the DOM to the corresponding paths. The
-     * elements are identified by the serial.
+     * condition is added to the Routing. This condition is used to show and
+     * hide the composite elements in the DOM. What happens by physically adding
+     * and removing. The elements are identified by the composite ID.
      */
     Composite.customize((element) => {
 
