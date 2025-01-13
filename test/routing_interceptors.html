@@ -61,6 +61,11 @@
         };
         toggle();
 
+        Test.create({test() {
+            const content = _snapshots.join("\r\n");
+            Assert.assertSameTo("script[type='text/test']", content);
+        }});
+
         Test.start({auto:true});
     </script>
     <script type="text/test">
