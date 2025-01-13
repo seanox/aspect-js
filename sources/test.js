@@ -917,7 +917,7 @@ compliant(null, window.Test = {
                     return new Error(message);
                 }};
 
-                parameters = Array.from(parameters ?? []);
+                parameters = Array.from(parameters || []);
                 if (parameters.length > size)
                     assert.message = parameters.shift();
                 while (parameters.length > 0)
