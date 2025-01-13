@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+
+        let permits = "";
+        const modelX = {
+            get counter() {
+                return _snapshots.length;
+            },
+            get permits() {
+                return permits;
+            }
+        }
+
+        Object.use("a.b.c");
+        a.b.c.modelA = {
+            permit() {
+                permits += "a";
+                return _snapshots.length < 3 || _snapshots.length > 7;
+            }
+        };
+
+        const modelB = {
+            permit() {
+                permits += "b";
+            }
+        };
+
+        const _snapshots = [];
+        const toggle = () => {
+            window.setTimeout(() => {
+                _snapshots.push(document.body.innerText.replace(/\s+/g, ""));
+                if (_snapshots.length === 0)
+                    Routing.route("#");
+                else if (_snapshots.length % 3 === 0)
+                    Routing.route("#modelC");
+                else if (_snapshots.length % 2 !== 0)
+                    Routing.route("#modelA");
+                else if (_snapshots.length % 2 === 0)
+                    Routing.route("#modelB");
+                if (_snapshots.length > 10) {
+                    document.body.innerText = _snapshots.join("\r\n");
+                    Test.start();
+                } else toggle();
+            }, 250);
+        };
+        toggle();
+
+        // Important are 5-9
+        // In which modelB.permit() finds decisions outside the path coverage
+        Test.create({test() {
+            const content = _snapshots.join("\r\n");
+            Assert.assertSameTo("script[type='text/test']", content);
+        }});
+    </script>
+    <script type="text/test">
+      0A
+      1abA
+      2ababAB
+      3ababab
+      4abababaB
+      5abababaab
+      6abababaaba
+      7abababaabaab
+      8abababaabaababAB
+      9abababaabaabababA
+      10abababaabaabababaAB
+    </script>
+  </head>
+  <body route>
+    {{_snapshots.length}}<br/>
+    {{modelX.permits}}<br/>
+    <div id="modelA@a:b:c" composite>
+      A
+    </div>
+    <div id="modelB" composite>
+      B
+    </div>
+  </body>
+</html>
