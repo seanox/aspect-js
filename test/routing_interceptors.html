@@ -65,24 +65,23 @@
             const content = _snapshots.join("\r\n");
             Assert.assertSameTo("script[type='text/test']", content);
         }});
-
-        Test.start({auto:true});
     </script>
     <script type="text/test">
-      !
-      !2
-      !2
-      !2
-      !2
-      !21113
-      !21113
-      !2111312
-      !2111312
-      !2111312
-      !2111312113
+      0!
+      1!2
+      1!2
+      1!2
+      1!2
+      5!21113
+      5!21113
+      7!2111312
+      7!2111312
+      7!2111312
+      10!2111312113
     </script>
   </head>
   <body route>
+    {{_snapshots.length}}
     {{modelX.actors}}
   </body>
 </html>
