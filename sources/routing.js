@@ -198,11 +198,9 @@
          */
         approve(path, composite) {
 
-            if (path != null
-                    && typeof path !== "string")
+            if (typeof path !== "string")
                 throw new TypeError("Invalid data type");
-            if (composite != null
-                    && typeof composite !== "string")
+            if (typeof composite !== "string")
                 throw new TypeError("Invalid data type");
 
             path = Path.normalize(path);
@@ -395,7 +393,7 @@
             return;
         }
         _render(locationOldElement);
-        _render(locationnewElement, true);
+        _render(locationNewElement, true);
     });
 
     /**
