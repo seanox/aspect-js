@@ -2354,6 +2354,8 @@
     compliant(null, ___ = (variable, serial, index) => {
         let object = _render_meta[serial];
         if (object && object.iterate) {
+            if (variable.match(/^[a-zA-Z_$][a-zA-Z0-9_$]*$/))
+                variable = `window["${variable}"]`;
             if (index === undefined) {
                 if ("variable" in object.iterate)
                     eval(variable + " = object.iterate.variable");
