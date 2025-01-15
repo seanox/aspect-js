@@ -10,10 +10,6 @@ let moduleC = {
     test: "C"
 };
 
-moduleE = {
-    test: "E"
-};
-
 window["moduleF"] = {
     test: "F"
 };
