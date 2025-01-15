@@ -23,6 +23,7 @@
  *     ----
  * General extension of the JavaScript API.
  */
+"use strict";
 
 // Compliant takes over the task that the existing JavaScript API can be
 // manipulated in a controlled way. Controlled means that errors occur when
@@ -50,7 +51,7 @@ window.compliant = (context, payload) => {
     if (new Function(`return typeof ${context}`)() !== "undefined")
         throw new Error("JavaScript incompatibility detected for: " + context);
     if (context.match(/^[a-zA-Z_$][a-zA-Z0-9_$]*$/))
-        return eval(`window["${context}"] = payload`);
+        context = `window["${context}"]`;
     return eval(`${context} = payload`);
 };
 
