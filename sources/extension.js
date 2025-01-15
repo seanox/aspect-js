@@ -49,6 +49,8 @@ window.compliant = (context, payload) => {
         return payload;
     if (new Function(`return typeof ${context}`)() !== "undefined")
         throw new Error("JavaScript incompatibility detected for: " + context);
+    if (context.match(/^[a-zA-Z_$][a-zA-Z0-9_$]*$/))
+        return eval(`window["${context}"] = payload`);
     return eval(`${context} = payload`);
 };
 
@@ -493,22 +495,19 @@ compliant(null, String.prototype.encodeHtml = function() {
  */
 compliant("String.prototype.hashCode");
 compliant(null, String.prototype.hashCode = function() {
-    if (this.hash !== undefined
-            && this.hash !== 0)
-        return this.hash;
-    this.hash = 0;
+    let hash = 0;
     let hops = 0;
     for (let loop = 0; loop < this.length; loop++) {
-        const temp = 31 *this.hash +this.charCodeAt(loop);
+        const temp = 31 *hash +this.charCodeAt(loop);
         if (!Number.isSafeInteger(temp)) {
             hops++;
-            this.hash = Number.MAX_SAFE_INTEGER -this.hash +this.charCodeAt(loop);
-        } else this.hash = temp;
+            hash = Number.MAX_SAFE_INTEGER -hash +this.charCodeAt(loop);
+        } else hash = temp;
     }
-    this.hash = Math.abs(this.hash).toString(36);
-    this.hash = this.hash.length.toString(36) + this.hash;
-    this.hash = (this.hash + hops.toString(36)).toUpperCase();
-    return this.hash;
+    hash = Math.abs(hash).toString(36);
+    hash = hash.length.toString(36) + hash;
+    hash = (hash + hops.toString(36)).toUpperCase();
+    return hash;
 });
 
 /**
