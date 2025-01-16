@@ -226,6 +226,18 @@
     <file-minimize file="${workspace.test}/${ant.project.name}.js" file-min="${workspace.test}/${ant.project.name}.js"/>
   </target>
 
+  <!--
+      In debug mode, for the internal variables window variants starting with
+      ___ are created so that they can be accessed during debugging. Otherwise
+      they cannot be accessed later from outside! For this to work, internal
+      variables must begin with _!
+
+      () => {
+          const _x = Math.serial();
+          will be replaced by:
+          const _x = window.___x = Math.serial();
+      }
+  -->
   <target name="debug" depends="release">
     <copy file="${release.file.max}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
     <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"

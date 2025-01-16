@@ -281,11 +281,8 @@
             return path || undefined;
         }
 
-        const path = lookup
-            .split("#")
-            .slice(1)
-            .map(entry =>
-                `[id="${entry}"][composite],[id^="${entry}"][composite]`);
+        const path = lookup.split("#").slice(1).map(entry =>
+            `[id="${entry}"][composite],[id^="${entry}"][composite]`);
         while (path.length > 0) {
             const element = document.querySelector(path.join(">"));
             if (element instanceof Element)
