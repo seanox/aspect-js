@@ -97,43 +97,53 @@
         replace="\1${release.version}"/>
   </target>
 
-  <macrodef name="file-minimize">
-    <attribute name="file"/>
-    <attribute name="file-min"/>
+  <macrodef name="file-es6">
+    <attribute name="input"/>
+    <attribute name="output"/>
     <sequential>
-      <replaceregexp file="@{file}" flags="g" byline="false"
+      <exec executable="cmd.exe" dir="${workspace}/optimize">
+        <arg value="/c npm install"/>
+      </exec>
+      <exec executable="cmd.exe" dir="${workspace}/optimize">
+        <arg value="/c npx babel @{input} -o @{output} --presets=@babel/preset-env"/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="file-minimize">
+    <attribute name="input"/>
+    <attribute name="output"/>
+    <sequential>
+      <replaceregexp file="@{input}" flags="g" byline="false"
           match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
-      <replaceregexp file="@{file}" flags="g" byline="false"
+      <replaceregexp file="@{input}" flags="g" byline="false"
           match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
-      <replaceregexp file="@{file}" flags="g" byline="false"
+      <replaceregexp file="@{input}" flags="g" byline="false"
           match=" +(\R)" replace="\1"/>
 
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="^(\t*)( ){24}" replace="\1&#x09;&#x09;&#x09;&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="^(\t*)( ){20}" replace="\1&#x09;&#x09;&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="^(\t*)( ){16}" replace="\1&#x09;&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="^(\t*)( ){12}" replace="\1&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="^(\t*)( ){8}" replace="\1&#x09;&#x09;"/>
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="^(\t*)( ){4}" replace="\1&#x09;"/>
 
-      <replaceregexp file="@{file}" flags="g" byline="true"
+      <replaceregexp file="@{input}" flags="g" byline="true"
           match="\s+$" replace=""/>
-      <replaceregexp file="@{file}" flags="g" byline="false"
+      <replaceregexp file="@{input}" flags="g" byline="false"
           match="\r\n" replace="&#x0A;"/>
 
-      <exec executable="cmd.exe" dir="${workspace}/compress">
-        <arg value="/c npm link ."/>
+      <exec executable="cmd.exe" dir="${workspace}/optimize">
+        <arg value="/c npm install"/>
       </exec>
-      <exec executable="cmd.exe" dir="${workspace}/compress">
-        <arg value="/c uglifyjs @{file} -c -m -o @{file-min}"/>
-      </exec>
-      <exec executable="cmd.exe" dir="${workspace}/compress">
-        <arg value="/c npm uninstall -g uglify-js"/>
+      <exec executable="cmd.exe" dir="${workspace}/optimize">
+        <arg value="/c npx uglifyjs @{input} -c -m -o @{output}"/>
       </exec>
     </sequential>
   </macrodef>
@@ -173,8 +183,10 @@
     <replaceregexp file="${release.file.max}" flags="g" byline="false"
         match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
 
-    <file-minimize file="${release.file.max}" file-min="${release.file}"/>
-    <file-minimize file="${release.file.core.max}" file-min="${release.file.core}"/>
+    <file-es6 input="${release.file.max}" output="${release.file.max}"/>
+    <file-minimize input="${release.file.max}" output="${release.file}"/>
+    <file-es6 input="${release.file.core.max}" output="${release.file.core.max}"/>
+    <file-minimize input="${release.file.core.max}" output="${release.file.core}"/>
 
     <mkdir dir="${workspace.release.temp}"/>
     <copy todir="${workspace.release.temp}">
@@ -223,7 +235,7 @@
   </target>
 
   <target name="test" depends="debug">
-    <file-minimize file="${workspace.test}/${ant.project.name}.js" file-min="${workspace.test}/${ant.project.name}.js"/>
+    <file-minimize input="${workspace.test}/${ant.project.name}.js" output="${workspace.test}/${ant.project.name}.js"/>
   </target>
 
   <!--
