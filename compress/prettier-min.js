@@ -1,1 +1,0 @@
-Found. Redirecting to /prettier@3.4.2/prettier.min.js
