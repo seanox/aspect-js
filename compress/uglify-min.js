@@ -1,1 +1,0 @@
-Found. Redirecting to /uglify-js@3.19.3/uglify-js.min.js
