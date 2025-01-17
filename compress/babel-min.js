@@ -1,1 +1,0 @@
-Found. Redirecting to /babel@6.23.0/babel.min.js
