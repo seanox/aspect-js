@@ -19,8 +19,30 @@ CR: Compress: Conversion to optimize
     - Added babel and prettier for ES6
 CR: Extension: Review, corrections and optimization
     - Renamed window.location.pathcontext in window.location.contextPath
-CR: Release: Omission of the micro version without routing
-    This unnecessarily inflated the number of release (channels).
+CR: Release: Review, corrections and optimization
+    - Omission of the micro version without routing
+      This unnecessarily inflated the number of release (channels).
+    - Reworked file structure:
+      - aspect-js.js
+        Deployment version, ES6 optimized, minimized and without testing API
+      - aspect-js-debug.js
+        Debugging version, ES6 optimized, minimized and without testing API
+      - aspect-js-debug-max.js
+        Debugging version, ES6 optimized and without testing API
+      - aspect-js-debug-testing.js
+        Debugging version, ES6 optimized, minimized and with testing API
+      - aspect-js-debug-testing-max.js
+        Debugging version, ES6 optimized and with testing API
+      - aspect-js-max.js
+        Deployment version, ES6 optimized and without testing API
+      - aspect-js-source.js
+        Source version without testing API
+      - aspect-js-source-testing.js
+        Source version with testing API
+      - aspect-js-testing.js
+        Testing version, ES6 optimized, minimized and with testing API
+      - aspect-js-testing-max.js
+        Testing version, ES6 optimized and with testing API
 CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
     - Change to activation of routing to the attribute boolean route in the body

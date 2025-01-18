@@ -23,10 +23,11 @@
   </target>
   
   <property name="workspace" value="${basedir}"/>
-  <property name="workspace.sources" value="${workspace}/sources"/>
-  <property name="workspace.test" value="${workspace}/test"/>
+  <property name="workspace.optimize" value="${workspace}/optimize"/>
   <property name="workspace.release" value="${workspace}/release"/>
   <property name="workspace.release.temp" value="${workspace.release}/temp"/>
+  <property name="workspace.sources" value="${workspace}/sources"/>
+  <property name="workspace.test" value="${workspace}/test"/>
 
   <macrodef name="release-locate">
     <sequential>
@@ -97,15 +98,33 @@
         replace="\1${release.version}"/>
   </target>
 
+  <macrodef name="file-compose">
+    <attribute name="output"/>
+    <element name="filelist" implicit="true"/>
+    <sequential>
+      <concat destfile="@{output}" append="false">
+        <filelist refid="@{filelist}"/>
+      </concat>
+      <replaceregexp file="@{output}" flags="g" byline="false"
+          match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
+      <replaceregexp file="@{output}" flags="g" byline="false"
+          match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
+      <replaceregexp file="@{output}" flags="g" byline="false"
+          match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
+      <replaceregexp file="@{output}" flags="g" byline="false"
+          match=" +(\R)" replace="\1"/>
+    </sequential>
+  </macrodef>
+
   <macrodef name="file-es6">
     <attribute name="input"/>
     <attribute name="output"/>
     <sequential>
-      <exec executable="cmd.exe" dir="${workspace}/optimize">
-        <arg value="/c npm install"/>
-      </exec>
-      <exec executable="cmd.exe" dir="${workspace}/optimize">
+      <exec executable="cmd.exe" dir="${workspace.optimize}">
         <arg value="/c npx babel @{input} -o @{output} --presets=@babel/preset-env"/>
+      </exec>
+      <exec executable="cmd.exe" dir="${workspace.optimize}">
+        <arg value="/c npx prettier --write --tab-width 2 --use-tabs @{output}"/>
       </exec>
     </sequential>
   </macrodef>
@@ -114,35 +133,7 @@
     <attribute name="input"/>
     <attribute name="output"/>
     <sequential>
-      <replaceregexp file="@{input}" flags="g" byline="false"
-          match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
-      <replaceregexp file="@{input}" flags="g" byline="false"
-          match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
-      <replaceregexp file="@{input}" flags="g" byline="false"
-          match=" +(\R)" replace="\1"/>
-
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="^(\t*)( ){24}" replace="\1&#x09;&#x09;&#x09;&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="^(\t*)( ){20}" replace="\1&#x09;&#x09;&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="^(\t*)( ){16}" replace="\1&#x09;&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="^(\t*)( ){12}" replace="\1&#x09;&#x09;&#x09;"/>
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="^(\t*)( ){8}" replace="\1&#x09;&#x09;"/>
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="^(\t*)( ){4}" replace="\1&#x09;"/>
-
-      <replaceregexp file="@{input}" flags="g" byline="true"
-          match="\s+$" replace=""/>
-      <replaceregexp file="@{input}" flags="g" byline="false"
-          match="\r\n" replace="&#x0A;"/>
-
-      <exec executable="cmd.exe" dir="${workspace}/optimize">
-        <arg value="/c npm install"/>
-      </exec>
-      <exec executable="cmd.exe" dir="${workspace}/optimize">
+      <exec executable="cmd.exe" dir="${workspace.optimize}">
         <arg value="/c npx uglifyjs @{input} -c -m -o @{output}"/>
       </exec>
     </sequential>
@@ -151,15 +142,38 @@
   <target name="release" depends="changes">
     <release-locate/>
 
-    <property name="release.file.max" value="${workspace.release}/${ant.project.name}-max.js"/>
+    <property name="release.file.source" value="${workspace.release}/${ant.project.name}-source.js"/>
+    <property name="release.file.source.testing" value="${workspace.release}/${ant.project.name}-source-testing.js"/>
     <property name="release.file" value="${workspace.release}/${ant.project.name}.js"/>
-    <property name="release.file.core.max" value="${workspace.release}/${ant.project.name}-core-max.js"/>
-    <property name="release.file.core" value="${workspace.release}/${ant.project.name}-core.js"/>
+    <property name="release.file.debug" value="${workspace.release}/${ant.project.name}-debug.js"/>
+    <property name="release.file.debug.max" value="${workspace.release}/${ant.project.name}-debug-max.js"/>
+    <property name="release.file.max" value="${workspace.release}/${ant.project.name}-max.js"/>
+    <property name="release.file.testing" value="${workspace.release}/${ant.project.name}-testing.js"/>
+    <property name="release.file.testing.max" value="${workspace.release}/${ant.project.name}-testing-max.js"/>
+    <property name="release.file.debug.testing" value="${workspace.release}/${ant.project.name}-debug-testing.js"/>
+    <property name="release.file.debug.testing.max" value="${workspace.release}/${ant.project.name}-debug-testing-max.js"/>
 
     <delete dir="${workspace.release}"/>
     <mkdir dir="${workspace.release}"/>
 
-    <concat destfile="${release.file.core.max}" append="false">
+    <exec executable="cmd.exe" dir="${workspace.optimize}">
+      <arg value="/c npm install"/>
+    </exec>
+
+    <!--
+      In the debug version, for the internal variables window variants starting
+      with ___ are created so that they can be accessed during debugging.
+      Otherwise they cannot be accessed later from outside! For this to work,
+      internal variables must begin with _!
+
+      () => {
+          const _x = Math.serial();
+          will be replaced by:
+          const _x = window.___x = Math.serial();
+      }
+    -->
+
+    <file-compose output="${release.file.source}">
       <filelist dir="${workspace.sources}">
         <file name="extension.js"/>
         <file name="datasource.js"/>
@@ -170,31 +184,41 @@
         <file name="reactive.js"/>
         <file name="routing.js"/>
       </filelist>
-    </concat>
-    <replaceregexp file="${release.file.core.max}" flags="g" byline="false"
-        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
+    </file-compose>
+    <file-es6 input="${release.file.source}" output="${release.file.max}"/>
+    <file-minimize input="${release.file.max}" output="${release.file}"/>
 
-    <concat destfile="${release.file.max}" append="false">
+    <copy file="${release.file.source}" tofile="${release.file.debug.max}"/>
+    <replaceregexp file="${release.file.debug.max}" flags="g" byline="false"
+        match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
+    <file-es6 input="${release.file.debug.max}" output="${release.file.debug.max}"/>
+    <file-minimize input="${release.file.debug.max}" output="${release.file.debug}"/>
+
+    <file-compose output="${release.file.source.testing}">
       <filelist dir="${workspace.sources}">
-        <file name="${release.file.core.max}"/>
+        <file name="${release.file.source}"/>
         <file name="test.js"/>
       </filelist>
-    </concat>
-    <replaceregexp file="${release.file.max}" flags="g" byline="false"
-        match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
+    </file-compose>
+    <file-es6 input="${release.file.source.testing}" output="${release.file.testing.max}"/>
+    <file-minimize input="${release.file.testing.max}" output="${release.file.testing}"/>
 
-    <file-es6 input="${release.file.max}" output="${release.file.max}"/>
-    <file-minimize input="${release.file.max}" output="${release.file}"/>
-    <file-es6 input="${release.file.core.max}" output="${release.file.core.max}"/>
-    <file-minimize input="${release.file.core.max}" output="${release.file.core}"/>
+    <copy file="${release.file.source.testing}" tofile="${release.file.debug.testing.max}"/>
+    <replaceregexp file="${release.file.debug.testing.max}" flags="g" byline="false"
+        match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
+    <file-es6 input="${release.file.debug.testing.max}" output="${release.file.debug.testing.max}"/>
+    <file-minimize input="${release.file.debug.testing.max}" output="${release.file.debug.testing}"/>
+
+    <delete dir="${workspace.optimize}/node_modules"/>
+    <delete file="${workspace.optimize}/package-lock.json"/>
 
     <mkdir dir="${workspace.release.temp}"/>
     <copy todir="${workspace.release.temp}">
       <fileset dir="${workspace.release}">
         <include name="${ant.project.name}-max.js"/>
         <include name="${ant.project.name}.js"/>
-        <include name="${ant.project.name}-core-max.js"/>
-        <include name="${ant.project.name}-core.js"/>
+        <include name="${ant.project.name}-testing-max.js"/>
+        <include name="${ant.project.name}-testing.js"/>
       </fileset>
     </copy>
     <copy todir="${workspace.release.temp}">
@@ -238,18 +262,6 @@
     <file-minimize input="${workspace.test}/${ant.project.name}.js" output="${workspace.test}/${ant.project.name}.js"/>
   </target>
 
-  <!--
-      In debug mode, for the internal variables window variants starting with
-      ___ are created so that they can be accessed during debugging. Otherwise
-      they cannot be accessed later from outside! For this to work, internal
-      variables must begin with _!
-
-      () => {
-          const _x = Math.serial();
-          will be replaced by:
-          const _x = window.___x = Math.serial();
-      }
-  -->
   <target name="debug" depends="release">
     <copy file="${release.file.max}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
     <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
