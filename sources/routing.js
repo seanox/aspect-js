@@ -557,6 +557,7 @@
          *    a#b#c           #x#y#z#a#b#c
          *
          * Invalid roots and paths cause an error.
+         *
          * The method has the following various signatures:
          *     function(root, path)
          *     function(root, path, ...)

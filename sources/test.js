@@ -929,9 +929,11 @@ compliant(null, window.Test = {
             /**
              * Asserts that a value is true.
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, value) 
              *     function(value)
+             *
              * @param {string} [message] message
              * @param {*} value assertion value
              * @throws {Error} If the assertion failed
@@ -946,9 +948,11 @@ compliant(null, window.Test = {
             /**
              * Asserts that a value is false.
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, value) 
              *     function(value)
+             *
              * @param {string} [message] message
              * @param {*} value assertion value
              * @throws {Error} If the assertion failed
@@ -964,9 +968,11 @@ compliant(null, window.Test = {
              * Asserts that two values are equals.
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, compare, actual)
              *     function(compare, actual)
+             *
              * @param {string} [message] message
              * @param {*} compare unexpected assertion value
              * @param {*} value unexpected assertion value
@@ -983,9 +989,11 @@ compliant(null, window.Test = {
              * Asserts that two values are not equals.
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, compare, actual)
              *     function(compare, actual)
+             *
              * @param {string} [message] message
              * @param {*} compare unexpected assertion value
              * @param {*} value unexpected assertion value
@@ -1002,9 +1010,11 @@ compliant(null, window.Test = {
              * Asserts that two values are the same.
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, compare, actual)
              *     function(compare, actual)
+             *
              * @param {string} [message] message
              * @param {*} compare unexpected assertion value
              * @param {*} value unexpected assertion value
@@ -1021,9 +1031,11 @@ compliant(null, window.Test = {
              * Asserts two values are not the same.
              * Difference between equals and same: === / == or !== / !=
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, compare, actual)
              *     function(compare, actual)
+             *
              * @param {string} [message] message
              * @param {*} compare unexpected assertion value
              * @param {*} value unexpected assertion value
@@ -1039,9 +1051,11 @@ compliant(null, window.Test = {
             /**
              * Asserts that a value is undefined.
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, value)
              *     function(value)
+             *
              * @param {string} [message] message
              * @param {*} value assertion value
              * @throws {Error} If the assertion failed
@@ -1056,9 +1070,11 @@ compliant(null, window.Test = {
             /**
              * Asserts that a value is not undefined.
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, value)
              *     function(value)
+             *
              * @param {string} [message] message
              * @param {*} value assertion value
              * @throws {Error} If the assertion failed
@@ -1073,9 +1089,11 @@ compliant(null, window.Test = {
             /**
              * Asserts that a value is null.
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, value) 
              *     function(value)
+             *
              * @param {string} [message] message
              * @param {*} value assertion value
              * @throws {Error} If the assertion failed
@@ -1090,9 +1108,11 @@ compliant(null, window.Test = {
             /**
              * Asserts that a value is not null.
              * If the assertion is false, an error with message is thrown.
+             *
              * The method has the following various signatures:
              *     function(message, value) 
              *     function(value) 
+             *
              * @param {string} [message] message
              * @param {*} value assertion value
              * @throws {Error} If the assertion failed
@@ -1106,9 +1126,11 @@ compliant(null, window.Test = {
     
             /**
              * Fails a test with an optional message.
+             *
              * The method has the following various signatures:
              *     function(message) 
              *     function() 
+             *
              * @param {*} [message] error message
              * @throws {Error} Assertion failed
              */
