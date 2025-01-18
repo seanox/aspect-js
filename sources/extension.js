@@ -25,23 +25,30 @@
  */
 "use strict";
 
-// Compliant takes over the task that the existing JavaScript API can be
-// manipulated in a controlled way. Controlled means that errors occur when
-// trying to overwrite existing objects and functions. Originally, the mechanism
-// was removed after loading the page, but the feature has proven to be
-// convenient for other modules and therefore remains.
-//
-// In the code, the method is used in an unconventional form.
-//
-//     compliant("Composite");
-//     compliant(null, window.Composite = {...});
-//     compliant("Object.prototype.ordinal");
-//     compliant(null, Object.prototype.ordinal = function() {...}
-//
-// This is only for the IDE so that syntax completion has a chance there. This
-// syntax will be simplified and corrected in the build process for the
-// releases.
-
+/**
+ * Compliant takes over the task that the existing JavaScript API can be
+ * manipulated in a controlled way. Controlled means that errors occur when
+ * trying to overwrite existing objects and functions. Originally, the mechanism
+ * was removed after loading the page, but the feature has proven to be
+ * convenient for other modules and therefore remains.
+ *
+ * In the code, the method is used in an unconventional form.
+ *
+ *     compliant("Composite");
+ *     compliant(null, window.Composite = {...});
+ *     compliant("Object.prototype.ordinal");
+ *     compliant(null, Object.prototype.ordinal = function() {...}
+ *
+ * This is only for the IDE so that syntax completion has a chance there. This
+ * syntax will be simplified and corrected in the build process for the
+ * releases.
+ *
+ * @param {string|null} context Context of the object or function to manipulate.
+ *     If null, only the payload is returned.
+ * @param {*} payload Payload to assign to the context.
+ * @returns {*} Assigned payload.
+ * @throws {Error} If the compliant function or context is already exists.
+ */
 if (window.compliant !== undefined)
     throw new Error("JavaScript incompatibility detected for: compliant");
 window.compliant = (context, payload) => {
@@ -95,9 +102,9 @@ window.compliant = (context, payload) => {
          *     Namespace.use(object);
          *     Namespace.use(object, ...string|number);
          *
-         * @param  levels of the namespace
-         * @return the created or already existing object(-level)
-         * @throws An error occurs in case of invalid data types or syntax 
+         * @param {...(string|number|object)} levels Levels of the namespace
+         * @returns {object} The created or already existing object (level)
+         * @throws {Error} In case of invalid data types or syntax
          */
         use(...levels) {
 
@@ -168,10 +175,10 @@ window.compliant = (context, payload) => {
          *     Namespace.create(object, value);
          *     Namespace.create(object, ...string|number, value);
          *
-         * @param  levels of the namespace
-         * @param  value to initialize/set
-         * @return the created or already existing object(-level)
-         * @throws An error occurs in case of invalid data types or syntax
+         * @param {...(string|number|object)} levels Levels of the namespace
+         * @param {*} value Value to initialize/set
+         * @returns {object} The created or already existing object (level)
+         * @throws {Error} In case of invalid data types or syntax
          */
         create(...levels) {
             if (levels.length < 2)
@@ -197,9 +204,9 @@ window.compliant = (context, payload) => {
          *     Namespace.lookup(object);
          *     Namespace.lookup(object, ...string|number);
          *
-         * @param  levels of the namespace
-         * @return the determined object(-level)
-         * @throws An error occurs in case of invalid data types or syntax
+         * @param {...(string|number|object)} levels Levels of the namespace
+         * @returns {object|undefined} The determined object(-level)
+         * @throws {Error} In case of invalid data types or syntax
          */
         lookup(...levels) {
 
@@ -267,9 +274,8 @@ window.compliant = (context, payload) => {
          *     Namespace.exists(object);
          *     Namespace.exists(object, ...string|number);
          *
-         * @param  levels of the namespace
-         * @return true if the namespace exists
-         * @throws An error occurs in case of invalid levels or syntax
+         * @param {...(string|number|object)} levels Levels of the namespace
+         * @returns {boolean} True if the namespace exists
          */
         exists(...levels) {
             if (levels.length < 1)
@@ -314,10 +320,10 @@ window.compliant = (context, payload) => {
 
 /**
  * Enhancement of the JavaScript API
- * Modifies the method to support node and nodes as NodeList and Array.
- * If the option exclusive is used, existing children will be removed first.
- * @param node      node(s)
- * @param exclusive existing children will be removed first
+ * Modifies the method to support node and nodes as NodeList and Array. If the
+ * option exclusive is used, existing children will be removed first.
+ * @param {(Node|NodeList|Array)} node Node(s) to be modified
+ * @param {boolean} [exclusive=false] True, removes existing children
  */
 (() => {
     const _appendChild = Element.prototype.appendChild;
@@ -343,7 +349,8 @@ window.compliant = (context, payload) => {
  * Enhancement of the JavaScript API
  * Adds a static function to create an alphanumeric unique (U)UID with fixed size.
  * The quality of the ID is dependent of the length.
- * @param size optional, default is 16
+ * @param {number} [size=16] Optional size of the unique ID
+ * @returns {string} The generated alphanumeric unique ID
  */
 compliant("Math.unique");
 compliant(null, Math.unique = (size) => {
@@ -365,6 +372,7 @@ compliant(null, Math.unique = (size) => {
  * Adds a static function to create a time based alphanumeric serial that is
  * chronologically sortable as text and contains the time and a counter if
  * serial are created at the same time.
+ *  @returns {string} The generated time-based alphanumeric serial
  */
 (() => {
     compliant("Math.serial");
@@ -385,10 +393,11 @@ compliant(null, Math.unique = (size) => {
 
 /**
  * Enhancement of the JavaScript API
- * Creates a literal pattern for the specified text.
- * Metacharacters or escape sequences in the text thus lose their meaning.
- * @param  text text to be literalized
- * @return a literal pattern for the specified text 
+ * Creates a literal pattern for the specified text. Metacharacters or escape
+ * sequences in the text thus lose their meaning.
+ * @param {string} text Text to be literalized
+ * @returns {string|null} Literal pattern for the specified text, or null if the
+ *     text is not usable
  */
 compliant("RegExp.quote");
 compliant(null, RegExp.quote = (text) => {
@@ -400,6 +409,7 @@ compliant(null, RegExp.quote = (text) => {
 /**
  * Enhancement of the JavaScript API
  * Adds a capitalize function to the String objects.
+ * @returns {string} String with the first character capitalized
  */
 compliant("String.prototype.capitalize");
 compliant(null, String.prototype.capitalize = function() {
@@ -411,6 +421,7 @@ compliant(null, String.prototype.capitalize = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds an uncapitalize function to the String objects.
+ * @returns {string} The string with the first character uncapitalized
  */
 compliant("String.prototype.uncapitalize");
 compliant(null, String.prototype.uncapitalize = function() {
@@ -422,6 +433,7 @@ compliant(null, String.prototype.uncapitalize = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a function for encoding the string objects in hexadecimal code.
+ * @returns {string} The hexadecimal encoded string
  */
 compliant("String.prototype.encodeHex");
 compliant(null, String.prototype.encodeHex = function() {
@@ -438,6 +450,7 @@ compliant(null, String.prototype.encodeHex = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a function for decoding hexadecimal code to the string objects.
+ * @returns {string} The decoded string
  */
 compliant("String.prototype.decodeHex");
 compliant(null, String.prototype.decodeHex = function() {
@@ -453,6 +466,8 @@ compliant(null, String.prototype.decodeHex = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a method for encoding Base64.
+ * @returns {string} The Base64 encoded string.
+ * @throws {Error} In case of a malformed character sequence.
  */
 compliant("String.prototype.encodeBase64");
 compliant(null, String.prototype.encodeBase64 = function() {
@@ -468,6 +483,8 @@ compliant(null, String.prototype.encodeBase64 = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a method for decoding Base64.
+ * @returns {string} The decoded string.
+ * @throws {Error} In case of a malformed character sequence
  */
 compliant("String.prototype.decodeBase64");
 compliant(null, String.prototype.decodeBase64 = function() {
@@ -482,6 +499,7 @@ compliant(null, String.prototype.decodeBase64 = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds an HTML encode function to the String objects.
+ * @returns {string} The HTML encoded string
  */
 compliant("String.prototype.encodeHtml");
 compliant(null, String.prototype.encodeHtml = function() {
@@ -493,6 +511,7 @@ compliant(null, String.prototype.encodeHtml = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a method for calculating a hash value.
+ * @returns {string} The calculated hash value
  */
 compliant("String.prototype.hashCode");
 compliant(null, String.prototype.hashCode = function() {
@@ -514,6 +533,7 @@ compliant(null, String.prototype.hashCode = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a decoding of slash sequences (control characters).
+ * @returns {string} The decoded string with processed control characters
  */
 compliant("String.prototype.unescape");
 compliant(null, String.prototype.unescape = function() {
@@ -528,6 +548,7 @@ compliant(null, String.prototype.unescape = function() {
 /**
  * Enhancement of the JavaScript API
  * Adds a property to get the UID for the window instance.
+ * @returns {string} The unique identifier (UID) for the window instance
  */
 compliant("window.serial");
 Object.defineProperty(window, "serial", {
@@ -536,9 +557,9 @@ Object.defineProperty(window, "serial", {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a property to get the context path.
- * The context path is a part of the request URI and can be compared with the
- * current working directory.
+ * Adds a property to get the context path. The context path is a part of the
+ * request URI and can be compared with the current working directory.
+ * @returns {string} The context path of the request URI.
  */
 compliant("window.location.contextPath");
 Object.defineProperty(window.location, "contextPath", {
@@ -547,8 +568,10 @@ Object.defineProperty(window.location, "contextPath", {
 
 /**
  * Enhancement of the JavaScript API
- * Adds a method to combine paths to a new one.
- * The result will always start with a slash but ends without it.
+ * Adds a method to combine paths to a new one. The result will always start
+ * with a slash but ends without it.
+ * @param {...string} paths Paths to be combined
+ * @returns {string} The combined path.
  */
 compliant("window.location.combine");
 compliant(null, window.location.combine = (...paths) =>
