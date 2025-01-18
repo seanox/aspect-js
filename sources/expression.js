@@ -43,12 +43,15 @@
          * optionally. The serial is an alias for caching compiled expressions.
          * Without, the expressions are always compiled. The function uses
          * variable parameters and has the following signatures:
+         *
          *     function(expression)
          *     function(serial, expression)
-         * @param  serial
-         * @param  expression
-         * @return the return value of the interpreted expression or an error if
-         *     an error or error has occurred
+         *
+         * @param {string} [serial] Optional serial for caching expressions
+         * @param {string} expression Expression to be interpreted.
+         * @returns {*} The return value of the interpreted expression, or an
+         *     error if an error has occurred
+         * @throws {Error} In case of invalid data types or syntax.
          */
         eval(...variants) {
 
@@ -99,9 +102,11 @@
     /**
      * Analyzes and finds the components of an expression and creates a
      * JavaScript from them. Created scripts are cached a reused as needed.
-     * @param  expression
-     * @param  depth
-     * @return the created JavaScript
+     * @param {string} expression Expression to analyze
+     * @param {number} [depth=0] Depth of the analysis
+     * @param {Array} [patches=[]] Patches to apply
+     * @returns {string} The created JavaScript
+     * @throws {Error} In case of an error in the expression structure
      */
     const _parse = (type, expression, patches = []) => {
 
