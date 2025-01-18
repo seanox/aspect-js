@@ -67,13 +67,15 @@
 
         /** The currently used language. */
         get locale() {return DataSource.locales ? DataSource.locales.selection : null;},
-                    
+
         /**
          * Changes the localization of the DataSource.
          * Only locales from locales.xml can be used, other values cause an
          * error.
-         * @param  locale
-         * @throws Error in the case of invalid locales
+         * @param {string} locale Locale to be set
+         * @throws {TypeError} In case of invalid locale type
+         * @throws {Error} In case of missing DataSource data or locales
+         * @throws {Error} In case of invalid locales
          */
         localize(locale) {
             
@@ -97,10 +99,13 @@
          * The data and the stylesheet can be passed as Locator, XMLDocument an
          * in mix. The result as a DocumentFragment. Optionally, a meta-object
          * or a map with parameters for the XSLTProcessor can be passed.
-         * @param  xml   locator or XMLDocument
-         * @param  style locator or XMLDocument 
-         * @param  meta  optional parameters for the XSLTProcessor 
-         * @return the transformation result as a DocumentFragment
+         * @param {string|XMLDocument} xml Locator or XMLDocument to be
+         *     transformed
+         * @param {string|XMLDocument} style Locator or XMLDocument stylesheet
+         * @param {Object} [meta] Optional parameters for the XSLTProcessor
+         * @returns {DocumentFragment} The transformation result as a
+         *     DocumentFragment
+         @throws {TypeError} In case of invalid xml document and/or stylesheet
          */
         transform(xml, style, meta) {
             
@@ -175,15 +180,15 @@
          * be transformed via XSLT, for which a meta-object or map with
          * parameters for the XSLTProcessor can be passed. When using the
          * transformation, the return type changes to a DocumentFragment.
-         * @param  locator   locator
-         * @param  transform locator of the transformation style
-         *     With the boolean true, the style is derived from the locator by
+         * @param {string} locator Locator to fetch data for.
+         * @param {string|boolean} transform Locator of the transformation
+         *     style. If boolean true, the style is derived from the locator
          *     using the file extension xslt.
-         * @param  meta      optional parameters for the XSLTProcessor
-         * @return the fetched data as XMLDocument or as DocumentFragment, if
-         *     the transformation is used
-         * @throws Error in the case of invalid arguments
-         */    
+         * @param {Object} [meta] Optional parameters for the XSLTProcessor.
+         * @returns {XMLDocument|DocumentFragment} The fetched data as an
+         *     XMLDocument or a DocumentFragment if transformation is used
+         * @throws {Error} In case of invalid arguments
+         */
         fetch(locator, transform, meta) {
             
             if (typeof locator !== "string"
@@ -235,12 +240,16 @@
         /**
          * Collects and concatenates multiple XML files in a new XMLDocument.
          * The method has the following various signatures:
+         *
          *     DataSource.collect(locator, ...);
          *     DataSource.collect(collector, [locators]);
-         * @param  collector name of the collector element in the XMLDocument
-         * @param  locators  Array or VarArg with locators
-         * @return the created XMLDocument, otherwise null
-         * @throws Error in the case of invalid arguments
+         *
+         * @param {string} collector Name of the collector element in the
+         *     XMLDocument
+         * @param {Array|string} locators Array or VarArg with locators
+         * @returns {XMLDocument|null} The created XMLDocument, otherwise null
+         * @throws {TypeError} In case of invalid arguments, collector,
+         *     collection entry
          */
         collect(...variants) {
             
@@ -283,6 +292,7 @@
     /**
      * Enhancement of the JavaScript API
      * Adds a method for cloning a XMLDocument.
+     * @returns {XMLDocument} The cloned XMLDocument
      */
     compliant("XMLDocument.prototype.clone");
     compliant(null, XMLDocument.prototype.clone = function() {
