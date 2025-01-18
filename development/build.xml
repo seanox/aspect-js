@@ -13,8 +13,8 @@
     <echo>             Publishes the version to the npm repository       </echo>
     <echo>                                                               </echo>
     <echo>  test       Creates a release for testing                     </echo>
-    <echo>                                                               </echo>
-    <echo>  debug      Creates a release for testing in debug mode       </echo>
+    <echo>             Starts the included development server            </echo>
+    <echo>             Console output of the access log                  </echo>
     <echo>                                                               </echo>
     <echo>  start      Starts the included development server            </echo>
     <echo>             Console output of the access log                  </echo>
@@ -258,14 +258,10 @@
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\10.0.0\2" byline="false"/>
   </target>
 
-  <target name="test" depends="debug">
-    <file-minimize input="${workspace.test}/${ant.project.name}.js" output="${workspace.test}/${ant.project.name}.js"/>
-  </target>
-
-  <target name="debug" depends="release">
-    <copy file="${release.file.max}" tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
-    <replaceregexp file="${workspace.test}/${ant.project.name}.js" flags="g" byline="false"
-        match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
+  <target name="test" depends="release">
+    <copy file="${workspace.release}/${ant.project.name}-debug-testing-max.js"
+        tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+    <antcall target="run"/>
   </target>
 
   <target name="run">
