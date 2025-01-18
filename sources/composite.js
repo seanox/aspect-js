@@ -338,9 +338,10 @@
          * call themselves recursively and do so with the lock they know. In
          * addition to the lock mechanism, the methods also control the START,
          * NEXT, and END events.
-         * @param  context  method (render, mound or scan)
-         * @param  selector
-         * @return the created lock as meta-object
+         * @param {Object} context Context (render, mound or scan)
+         * @param {string|Element} selector Selector to identify elements
+         * @returns {Object} The created lock as a meta-object
+         * @throws {Error} In case of an invalid context
          */
         lock(context, selector) {
             
@@ -431,11 +432,13 @@
         
         /**
          * Registers a callback function for composite events.
-         * @param  event    see Composite.EVENT_***
-         * @param  callback callback function
-         * @throws An error occurs in the following cases:
-         *     - event is not valid or is not supported
-         *     - callback is not implemented correctly or does not exist
+         * @param {string} event Event type (see Composite.EVENT_***)
+         * @param {function} callback Callback function to be registered
+         * @throws {TypeError} In case of invalid event type
+         * @throws {TypeError} In case of invalid callback type
+         * @throws {Error} In the following cases:
+         *     - Event is not valid or is not supported
+         *     - Callback is not implemented correctly or does not exist
          */
         listen(event, callback) {
             
@@ -458,9 +461,9 @@
         /**
          * Triggers an event.
          * All callback functions for this event are called.
-         * @param event    see Composite.EVENT_***
-         * @param variants up to five additional optional arguments that are
-         *     passed as arguments when the callback function is called
+         * @param {string} event Event type (see Composite.EVENT_***)
+         * @param {...*} variants Up to five additional optional arguments
+         *     passed to the callback function
          */
         fire(event, ...variants) {
             event = (event || "").trim();
@@ -478,9 +481,9 @@
         /**
          * Asynchronous or in reality non-blocking call of a function. Because
          * the asynchronous execution is not possible without Web Worker.
-         * @param task     function to be executed
-         * @param variants up to five additional optional arguments that are
-         *     passed as arguments when the callback function is called
+         * @param {function} task Function to be executed
+         * @param {...*} variants Up to five additional optional arguments
+         *     passed to the callback function
          */
         asynchron(task, ...variants) {
             window.setTimeout((invoke, ...variants) => {
@@ -556,10 +559,11 @@
          * input fields, so that the input reaches the user interface. In this
          * case, a possible value is not synchronized with the model. 
          *
-         * @param  selector selector
-         * @param  lock     unlocking of the model validation
-         * @return validation result
+         * @param {Element|string} selector DOM element or a string
+         * @param {boolean} [lock=true] Unlocking of the model validation
+         * @returns {boolean|undefined} Validation result
          *     true, false, undefined/void
+         * @throws {Error} In case of a non-unique selector
          */
         validate(selector, lock) {
             
@@ -788,9 +792,9 @@
          * concurrent execution of rendering works sequentially in the order of
          * the method call.
          * 
-         * @param  selector
-         * @param  lock
-         * @throws An error occurs in the following cases:
+         * @param {Element|string} selector DOM element or a string
+         * @param {boolean} lock Unlocking of the model validation
+         * @throws {Error} In the following cases:
          *     - namespace is not valid or is not supported
          *     - namespace cannot be created if it already exists as a method
          */
@@ -1138,10 +1142,10 @@
          * 
          *     Composite.customize("@ATTRIBUTES-STATICS", "...");
          *     
-         * @param  variants
-         * @throws An error occurs in the following cases:
-         *     - namespace is not valid or is not supported
-         *     - callback function is not implemented correctly
+         * @param {...*} variants Variants for customization
+         * @throws {Error} In following cases:
+         *     - Namespace is not valid or is not supported
+         *     - Callback function is not implemented correctly
          */
         customize(...variants) {
             
@@ -1273,8 +1277,9 @@
          * Details are described in the documentation:
          * https://github.com/seanox/aspect-js/blob/master/manual/en/markup.md#contents-overview           
          * 
-         * @param selector
-         * @param lock
+         * @param {Element|string} selector DOM element or a string
+         * @param {boolean} lock Unlocking of the model validation
+         * @throws {Error} In case of errors occurring
          */
         render(selector, lock) {
 
@@ -2100,9 +2105,12 @@
 
         /**
          * Loads a resource (JS, CSS, HTML are supported).
-         * @param  resource
-         * @param  strict
-         * @return the content when loading a HTML resource
+         * @param {string} resource Path to the resource
+         * @param {boolean} strict Flag to enforce strict loading
+         * @returns {string|undefined} The content when loading an HTML resource
+         * @throws {Error} In the following cases
+         *     - Unsupported resource type
+         *     - HTTP status other than 200 or 404 (with strict)
          */
         load(resource, strict) {
 
@@ -2201,7 +2209,10 @@
          * - JavaScript is loaded only if no corresponding JavaScript model 
          *   exists
          *
-         * @param composite
+         * @param {Element|string} composite DOM element or a string
+         * @throws {TypeError} In case of invalid composite
+         * @throws {Error} In case of unknown composites and a composites
+         *     without ID
          */
         include(...composite) {
 
@@ -2345,11 +2356,15 @@
      */
     const _models = new Set();
 
-    // Internal method for controlling temporary variables for expression
-    // rendering, such as for ATTRIBUTE_ITERATE. The goal is for the method to
-    // simulate a separate scope for temporary variables. For this purpose,
-    // global variables are created as expressions and removed again at the end
-    // of the scope or reset to a possible previously existing value.
+    /**
+     * Internal method for controlling temporary variables for expression
+     * rendering, such as for ATTRIBUTE_ITERATE. The goal is for the method to
+     * simulate a separate scope for temporary variables. For this purpose,
+     * global variables are created as expressions and removed again at the end
+     * of the scope or reset to a possible previously existing value.
+     * @param {string|null} compliant Compliance parameter
+     * @param {function} ___ Function to simulate scope for temporary variables
+     */
     compliant("___");
     compliant(null, ___ = (variable, serial, index) => {
         let object = _render_meta[serial];
@@ -2407,12 +2422,11 @@
      * 
      * If no meta information can be determined, e.g. because no IDs were found
      * or no enclosing composite was used, null is returned.
-     * 
-     * @param  element
-     * @return determined meta-object for the passed element, otherwise null
-     * @throws An error occurs in the following cases:
-     *     - in the case of an invalid composite ID
-     *     - in the case of an invalid element ID
+     *
+     * @param {Element} element DOM element to determine metadata for
+     * @returns {object|null} Determined meta-object for the passed element,
+     *     otherwise null
+     * @throws {Error} In case of an invalid IDs for composites and elements
      */
     const _mount_locate = (element) => {
 
@@ -2486,11 +2500,10 @@
      * an element with a valid element ID in a valid enclosing composite,
      * otherwise the method will return null.
      *
-     * @param  element
-     * @return determined meta-object for the passed element, otherwise null
-     * @throws An error occurs in the following cases:
-     *     - in the case of an invalid composite ID
-     *     - in the case of an invalid element ID
+     * @param {Element} element DOM element to determine metadata for
+     * @returns {object|null} Determined meta-object for the passed element,
+     *     otherwise null
+     * @throws {Error} In case of an invalid IDs for composites and elements
      */
     const _mount_lookup = (element) => {
 
@@ -2559,15 +2572,17 @@
      * Enhancement of the JavaScript API
      * Adds a static function to create and use a namespace for an object.
      * Without arguments, the method returns the global namespace window.
+     *
      * The method has the following various signatures:
      *     Object.use();
      *     Object.use(string);
      *     Object.use(string, ...string|number);
      *     Object.use(object);
      *     Object.use(object, ...string|number);
-     * @param  levels of the namespace
-     * @return the created or already existing object(-level)
-     * @throws An error occurs in case of invalid data types or syntax 
+     *
+     * @param {...(string|number|object)} levels Levels of the namespace
+     * @returns {object} The created or already existing object(-level)
+     * @throws {Error} In case of invalid data types or syntax
      */
     compliant("Object.use");
     compliant(null, Object.use = (...levels) =>
@@ -2577,15 +2592,17 @@
      * Enhancement of the JavaScript API
      * Adds a static function to determine an object via the namespace.
      * Without arguments, the method returns the global namespace window.
+     *
      * The method has the following various signatures:
      *     Object.lookup();
      *     Object.lookup(string);
      *     Object.lookup(string, ...string|number);
      *     Object.lookup(object);
      *     Object.lookup(object, ...string|number);
-     * @param  levels of the namespace
-     * @return the determined object(-level)
-     * @throws An error occurs in case of invalid data types or syntax
+     *
+     * @param {...(string|number|object)} levels Levels of the namespace
+     * @returns {object} The determined object(-level)
+     * @throws {Error} In case of invalid data types or syntax
      */
     compliant("Object.lookup");
     compliant(null, Object.lookup = (...levels) =>
@@ -2597,15 +2614,17 @@
      * In difference to the namespace function of the same name, qualifiers are
      * also supported in the namespace. The effect is the same. Qualifiers are
      * optional namespace elements at the end that use the colon as a separator.
+     *
      * The method has the following various signatures:
      *     Object.exists();
      *     Object.exists(string);
      *     Object.exists(string, ...string|number);
      *     Object.exists(object);
      *     Object.exists(object, ...string|number);
-     * @param  levels of the namespace
-     * @return true if the namespace exists
-     * @throws An error occurs in case of invalid data types or syntax
+     *
+     * @param {...(string|number|object)} levels Levels of the namespace
+     * @returns {boolean} True if the namespace exists
+     * @throws {Error} In case of invalid data types or syntax
      */
     compliant("Object.exists");
     compliant(null, Object.exists = (...levels) =>
@@ -2614,8 +2633,8 @@
     /**
      * Enhancement of the JavaScript API
      * Adds a static function to checks that an object is not undefined / null.
-     * @param  object
-     * @return true is neither undefined nor null
+     * @param {*} object Object to be checked
+     * @returns {boolean} True if the object is neither undefined nor null
      */
     compliant("Object.usable");
     compliant(null, Object.usable = (object) =>

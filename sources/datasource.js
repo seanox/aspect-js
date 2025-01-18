@@ -239,8 +239,8 @@
         
         /**
          * Collects and concatenates multiple XML files in a new XMLDocument.
-         * The method has the following various signatures:
          *
+         * The method has the following various signatures:
          *     DataSource.collect(locator, ...);
          *     DataSource.collect(collector, [locators]);
          *
