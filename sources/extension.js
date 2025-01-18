@@ -563,7 +563,9 @@ Object.defineProperty(window, "serial", {
  */
 compliant("window.location.contextPath");
 Object.defineProperty(window.location, "contextPath", {
-    value: window.location.pathname.replace(/\/([^\/]*\.[^\/]*){0,}$/g, "") || "/"
+    value: ((location) =>
+        location.substring(0, location.lastIndexOf("/")) + "/"
+    )(window.location.pathname || "/")
 });
 
 /**

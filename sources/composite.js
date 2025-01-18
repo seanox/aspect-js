@@ -127,7 +127,7 @@
         // they can be used by extensions.
             
         /** Path of the Composite for: modules (sub-directory of work path) */
-        get MODULES() {return window.location.combine(window.location.pathcontext, "/modules");},
+        get MODULES() {return window.location.combine(window.location.contextPath, "/modules");},
 
         /** Constant for attribute composite */
         get ATTRIBUTE_COMPOSITE() {return "composite";},
