@@ -1597,10 +1597,10 @@
                 //     Composite.ATTRIBUTE_VALUE
                 // Only static content uses Composite.ATTRIBUTE_TEXT, dynamic
                 // content and parameters use Composite.ATTRIBUTE_VALUE, and
-                // only the parameters use Composite.ATTRIBUTE_NAME. The meta
-                // objects for dynamic content also have their own rendering
-                // method for generating output. Static content is ignored later
-                // during rendering because it is unchangeable.
+                // only the parameters use Composite.ATTRIBUTE_NAME. For dynamic
+                // content the meta-objects also have their own rendering method
+                // for generating output. Static content is ignored later during
+                // rendering because it is unchangeable.
                 if (selector.nodeType === Node.TEXT_NODE) {
                     
                     // Elements of type: script + style are ignored.
