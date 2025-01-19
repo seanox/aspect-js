@@ -1334,26 +1334,26 @@
                 if (!(selector instanceof Node))
                     return;
 
-                // If a custom tag exists, the macro is executed. Macros are
-                // completely user-specific. The return value determines whether
-                // the standard functions are used or not. Only the return value
-                // false (not void, not empty) terminates the rendering for the
-                // macro without using the standard functions.
+                // If a custom tag exists, the action is executed. Custom tag
+                // are completely user-specific. The return value determines
+                // whether the standard functions are used or not. Only the
+                // return value false (not void, not empty) terminates the
+                // rendering for the macro without using the standard functions.
                 const macro = _macros.get(selector.nodeName.toLowerCase());
                 if (macro && macro(selector) === false)
                     return;
                 
-                // If a custom selector exists, the macro is executed. Selectors
-                // work similar to macros. Unlike macros, selectors use a CSS
-                // selector to detect elements. This selector must match the
-                // current element from the point of view of the parent.
-                // Selectors are more flexible and multifunctional. Therefore,
-                // different selectors and thus different functions can match
-                // one element. In this case, all implemented callback methods
-                // are performed. The return value determines whether the loop
-                // is aborted or not. Only the return value false (not void, not
-                // empty) terminates the loop and the rendering for the selector
-                // without using the standard functions.
+                // If a custom selector exists, the action is executed.
+                // Selectors work similar to macros. Unlike macros, selectors
+                // use a CSS selector to detect elements. This selector must
+                // match the current element from the point of view of the
+                // parent. Selectors are more flexible and multifunctional.
+                // Therefore, different selectors and thus different functions
+                // can match one element. In this case, all implemented callback
+                // methods are performed. The return value determines whether
+                // the loop is aborted or not. Only the return value false (not
+                // void, not empty) terminates the loop and the rendering for
+                // the selector without using the standard functions.
                 if (selector.parentNode) {
                     for (const [key, macro] of _selectors) {
                         const nodes = selector.parentNode.querySelectorAll(macro.selector);
