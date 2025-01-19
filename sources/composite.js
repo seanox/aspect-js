@@ -1364,12 +1364,13 @@
                     }
                 }
 
-                // Register each analyzed node/element and minimizes multiple
+                // Registers each analysed node/element and minimizes multiple
                 // analysis. For registration, the serial of the node/element is
                 // used. The node prototype has been enhanced with creation and
                 // a get-function. During the analysis, the attributes of an
                 // element (not node) containing an expression or all allowed
                 // attributes are cached in the memory (_render_meta).
+
                 let serial = selector.ordinal();
                 let object = _render_meta[serial];
                 if (!object) {
