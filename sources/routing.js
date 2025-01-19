@@ -409,7 +409,7 @@
             // Activates routing during the initial rendering via the boolean
             // attribute route. It must not have a value, otherwise it is
             // ignored and routing is not activated. The decision was
-            // deliberate, so that interpretations such as route=“off” do not
+            // deliberate, so that interpretations such as route="off" do not
             // cause false expectations and misunderstandings.
             _routing_active = document.body.hasAttribute("route");
             if (document.body.hasAttribute("route")
