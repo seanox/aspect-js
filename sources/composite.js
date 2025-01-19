@@ -1375,6 +1375,14 @@
                 let object = _render_meta[serial];
                 if (!object) {
 
+                    // Elements included in ignored elements of type: script +
+                    // style are ignored.
+                    const checkElementChainForIgnored = (element, regex) =>
+                        element && element.parentNode
+                            ? regex.test(element.parentNode.nodeName) || checkElementChainForIgnored(element.parentNode, regex) : false;
+                    if (checkElementChainForIgnored(selector, Composite.PATTERN_ELEMENT_IGNORE))
+                        return;
+
                     // Interceptors are a very special way to customize. Unlike
                     // the other ways, here the rendering is not shifted into
                     // own implementations. With an interceptor, an element is
