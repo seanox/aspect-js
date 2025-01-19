@@ -177,10 +177,10 @@
       <filelist dir="${workspace.sources}">
         <file name="extension.js"/>
         <file name="datasource.js"/>
-        <file name="messages.js"/>
         <file name="scripting.js"/>
         <file name="expression.js"/>
         <file name="composite.js"/>
+        <file name="messages.js"/>
         <file name="reactive.js"/>
         <file name="routing.js"/>
       </filelist>
