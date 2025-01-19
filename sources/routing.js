@@ -416,6 +416,9 @@
                     && document.body.getAttribute("route") !== "")
                 console.warn("Ignore value for attribute route");
 
+            if (!_routing_active)
+                return;
+
             // Without path, is forwarded to the root. The fact that the
             // interface can be called without a path if it wants to use the
             // routing must be taken into account in the declaration of the
