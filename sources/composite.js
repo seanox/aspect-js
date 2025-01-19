@@ -1671,11 +1671,11 @@
                                     this.value = word;
                                     this.element.textContent = word !== undefined ? word : "";
                                 }};
-                                const param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
-                                if (param) {
-                                    object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
-                                    object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
-                                } else object.attributes[Composite.ATTRIBUTE_VALUE] = match;
+                            const param = match.match(Composite.PATTERN_EXPRESSION_VARIABLE);
+                            if (param) {
+                                object.attributes[Composite.ATTRIBUTE_NAME] = param[1];
+                                object.attributes[Composite.ATTRIBUTE_VALUE] = "{{" + param[2] + "}}";
+                            } else object.attributes[Composite.ATTRIBUTE_VALUE] = match;
                             _render_meta[serial] = object;
                             return "{{" + serial + "}}";
                         });
