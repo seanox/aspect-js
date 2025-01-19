@@ -1612,12 +1612,6 @@
                 // rendering because it is unchangeable.
                 if (selector.nodeType === Node.TEXT_NODE) {
                     
-                    // Elements of type: script + style are ignored.
-                    // No expression is replaced here.
-                    if (selector.parentNode
-                            && selector.parentNode.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE))
-                        return;
-                    
                     // Text nodes are only analyzed once. Pure text is
                     // completely ignored, only text nodes with an expression as
                     // value are updated.
