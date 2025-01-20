@@ -1611,7 +1611,12 @@
                 // for generating output. Static content is ignored later during
                 // rendering because it is unchangeable.
                 if (selector.nodeType === Node.TEXT_NODE) {
-                    
+                    // TEXT_NODE is also used by markers. Markers have no
+                    // content and no render method and are ignored.
+                    if (typeof object.render === "undefined"
+                            && selector.textContent === "")
+                        return;
+
                     // Text nodes are only analyzed once. Pure text is
                     // completely ignored, only text nodes with an expression as
                     // value are updated.
