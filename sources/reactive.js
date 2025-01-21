@@ -252,7 +252,7 @@
                 // existing reactive object instances and also contains a
                 // reference to the original object and that can't be changed.
                 if (key === _secret)
-                    return target;
+                    return true;
 
                 // To decouple object, proxy and view, the original objects are
                 // always used as value and never the proxies.
@@ -265,14 +265,14 @@
                 // objects immediately, but only when they are explicitly
                 // requested via getter.
 
-                try {return target[key] = value;
+                try {target[key] = value;
                 } finally {
 
                     // Unwanted recursions due to repeated value assignments:
                     // a = a / a = c = b = a must be avoided so that no infinite
                     // render cycle is initiated.
                     if (this.cache.get(key) === value)
-                        return;
+                        return true;
                     this.cache.set(key, value);
 
                     // The registration is delayed so that the setting of values
@@ -295,6 +295,8 @@
                         }
 
                     }, _selector, target, key, this.notifications);
+
+                    return true;
                 }
             }
         });
