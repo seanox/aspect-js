@@ -32,6 +32,8 @@
  * the HTML elements STYLE and SCRIPT whose content is not supported by the
  * expression language.
  */
+"use strict";
+
 (() => {
 
     compliant("Expression");

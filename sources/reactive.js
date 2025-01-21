@@ -46,6 +46,8 @@
  * object is the key and the garbage collection can dispose of this objects with
  * associated proxies when not in use.
  */
+"use strict";
+
 (() => {
 
     compliant("Reactive");

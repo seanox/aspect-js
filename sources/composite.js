@@ -118,6 +118,8 @@
  * attributes are essential: COMPOSITE, ID -- they are cached and remain at the
  * markup, these cannot be changed. the MutationObserver will restore them.
  */
+"use strict";
+
 (() => {
 
     compliant("Composite");
