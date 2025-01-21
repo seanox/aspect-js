@@ -28,6 +28,8 @@
  * command, it was important to isolate the execution of the scripts so that
  * internal methods and constants cannot be accessed unintentionally.
  */
+"use strict";
+
 (() => {
 
     compliant("Scripting");

@@ -91,6 +91,8 @@
  * are helpful for implementing test are not used productively. For example,
  * the redirection and caching of console output.
  */
+"use strict";
+
 compliant("Test");
 compliant(null, window.Test = {
 

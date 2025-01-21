@@ -74,6 +74,8 @@
  * The number of repetitions indicates the number of returns in the direction of
  * the root.
  */
+"use strict";
+
 (() => {
 
     // Status of the activation of routing
