@@ -246,7 +246,7 @@ const contact = {
 ```html
 <html>
   <body>
-    <div id="contact" composite static>
+    <div id="contact" composite>
       <p>
         Example for use of events.
       </p>

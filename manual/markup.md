@@ -24,7 +24,7 @@ recursively to changes.
   - [output](#output)
   - [release](#release)
   - [render](#render)
-  - [static](#static)
+  - [route](#route)
   - [validate](#validate)
 - [@-Attributes](#-attributes) 
 - [Expression Language](#expression-language)
@@ -73,12 +73,12 @@ is required.
 The [Routing](routing.md#routing) uses composites as [views](routing.md#view)
 for the primary projection of JavaScript objects (models), which means that they
 can be used as targets for paths in the [view flow](routing.md#view-flow), which
-has a direct influence on the visibility of the composites. When Routing is
-active, composites can be marked with the attribute [static](#static), which
-makes a composite permanently visible as a view regardless of paths.
+has a direct influence on the visibility of the composites. When routing is
+active, composites can be marked with attribute [route](#route) so that their
+visibility is controlled by routing through paths and the permission concept.
 
 ```html
-<article id="example" composite static>
+<article id="example" composite route>
   ...
 </article>
 ```
@@ -529,14 +529,16 @@ corresponding events.
 __Alternatively, [reactive rendering](reactive.md) can be used, where changes in
 the data objects trigger a partial update of the view.__
 
-### static
-The attribute static marks elements so that they are excluded from path-based
-control and the internal permission concept of routing.
+### route
+The route attribute marks a composite as a path-addressable destination and is
+therefore included in the path-based control and the internal permission concept
+of routing. The attribute can only be used in the BODY tag and otherwise in
+combination with the attribute composite.
 
 > [!NOTE]
-> The static attribute is not a core attribute of the renderer. It is added as
-> a user-defined attribute by the [Routing](routing.md#view) and is listed here
-> for completeness.
+> The attribute route is not a core attribute of the renderer. It is added as a
+> custom attribute by the [Routing](routing.md#view) and is listed here for
+> completeness.
 
 [Learn more](routing.md#view)
 

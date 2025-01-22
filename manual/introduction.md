@@ -65,7 +65,7 @@ datasource, test environment and much more.
   - [iterate](#iterate)
   - [id](#id)
   - [composite](#composite)
-  - [static](#static)
+  - [route](#route)
   - [events](#events)
   - [validate](#validate)
   - [message](#message)
@@ -402,16 +402,11 @@ is required.
 The [Routing](routing.md#routing) uses composites as [views](routing.md#view)
 for the primary projection of JavaScript objects (models), which means that they
 can be used as targets for paths in the [view flow](routing.md#view-flow), which
-has a direct influence on the visibility of the composites. When Routing is
-active, composites can be marked with the attribute [static](#static), which
-makes a composite permanently visible as a view regardless of paths.
+has a direct influence on the visibility of the composites.  When routing is
+active, composites can be marked with attribute [route](#route) so that their
+visibility is controlled by routing through paths and the permission concept.
 
 [Learn more](markup.md#composite)
-
-### static
-TODO:
-
-[Learn more](markup.md#state)
 
 ### events
 Binds one or more [events](https://www.w3.org/TR/DOM-Level-3-Events) to an HTML
@@ -775,7 +770,7 @@ const contact = {
 ```html
 <html>
   <body>
-    <div id="contact" composite static>
+    <div id="contact" composite>
       <p>
         Example for use of events.
       </p>
