@@ -25,7 +25,7 @@
         // By default, the Routing is inactive. It is only activated by the
         // attribute route in the body tag. Thus composites are not views and
         // are not hidden. This is helpful for micro frontends without view
-        // flow because then the attribute static can be omitted.
+        // flow.
 
         Test.create({test() {
             const content = _snapshots.join("\r\n");
@@ -64,66 +64,66 @@
   </head>
   <body>
     {{model.counter}}
-    <div id="a" composite static>
-      <div id="a1" composite static>
-        <div id="a2" composite>
-          <div id="a3" composite static>
-            <div id="a4" composite>
-              <div id="a5" composite static>
+    <div id="a" composite>
+      <div id="a1" composite>
+        <div id="a2" composite route>
+          <div id="a3" composite>
+            <div id="a4" composite route>
+              <div id="a5" composite>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="a6" composite>
-        <div id="a7" composite static>
-          <div id="a8" composite>
-            <div id="a9" composite static>
-              <div id="a0" composite>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="b" composite>
-      <div id="b1" composite static>
-        <div id="b2" composite>
-          <div id="b3" composite static>
-            <div id="b4" composite>
-              <div id="b5" composite static>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="b6" composite>
-        <div id="b7" composite>
-          <div id="b8" composite static>
-            <div id="b9" composite>
-              <div id="b0" composite static>
+      <div id="a6" composite route>
+        <div id="a7" composite>
+          <div id="a8" composite route>
+            <div id="a9" composite>
+              <div id="a0" composite route>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="c" composite static>
-      <div id="c1" composite static>
-        <div id="c2" composite>
-          <div id="c3" composite static>
-            <div id="c4" composite>
-              <div id="c5" composite static>
+    <div id="b" composite route>
+      <div id="b1" composite>
+        <div id="b2" composite route>
+          <div id="b3" composite>
+            <div id="b4" composite route>
+              <div id="b5" composite>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="c6" composite>
-        <div id="c7" composite>
-          <div id="c8" composite static>
-            <div id="c9" composite>
-              <div id="c0" composite static>
+      <div id="b6" composite route>
+        <div id="b7" composite route>
+          <div id="b8" composite>
+            <div id="b9" composite route>
+              <div id="b0" composite>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="c" composite>
+      <div id="c1" composite>
+        <div id="c2" composite route>
+          <div id="c3" composite>
+            <div id="c4" composite route>
+              <div id="c5" composite>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="c6" composite route>
+        <div id="c7" composite route>
+          <div id="c8" composite>
+            <div id="c9" composite route>
+              <div id="c0" composite>
               </div>
             </div>
           </div>
