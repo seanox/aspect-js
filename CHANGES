@@ -43,6 +43,9 @@ CR: Release: Review, corrections and optimization
         Testing version, ES6 optimized, minimized and with testing API
       - aspect-js-testing-max.js
         Testing version, ES6 optimized and with testing API
+CR: Review: Corrections and optimization
+    - Compatibility with "use strict"
+    - Compatibility with ES6
 CR: SiteMap: Review, refactoring, corrections and optimization
     - Renaming to routing
     - Change to activation of routing to the attribute boolean route in the body
