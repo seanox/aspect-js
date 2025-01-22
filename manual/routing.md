@@ -50,31 +50,27 @@ environment of the entire application.
 ### View
 A view is the primary projection of models/components/content. This projection
 can contain additional substructures in the form of views and sub-views. Views
-can be static, always shown, or path-controlled. Paths address the complete
-chain of nested views and shows the parent views in addition to the target view.
-
-Static views use the boolean attribute `static`. This means that these views are
-always shown if their parent views are visible. The routing excludes all
-elements with the attribute `static`in the markup. These elements are therefore
-independent of paths and the internal permission concept of Routing.
+can be static, always shown, or with attribute `route` path-controlled. Paths
+address the complete chain of nested views and shows the parent views in
+addition to the target view.
 
 ```html
 <body route>
-  <header id="header" composite static>
+  <header id="header" composite>
     always shown, regardless of the path
   </header>
   <main>
-    <div id="a" composite static>
+    <div id="a" composite route>
       shown with path #a
     </div>
-    <div id="b" composite static>
+    <div id="b" composite route>
       shown with path #b
     </div>
-    <div id="c" composite static>
+    <div id="c" composite route>
       shown with path #c  
     </div>
   </main>
-  <footer id="footer" composite static>
+  <footer id="footer" composite>
     always shown, regardless of the path
   </footer>
 </body>
