@@ -56,7 +56,7 @@ Machine translation with [DeepL](https://deepl.com).
     - [output](markup.md#output)
     - [release](markup.md#release)
     - [render](markup.md#render))
-    - [static](markup.md#static)
+    - [route](markup.md#route)
     - [validate](markup.md#validate)
   - [@-Attributes](markup.md#-attributes)
   - [Expression Language](markup.md#expression-language)
