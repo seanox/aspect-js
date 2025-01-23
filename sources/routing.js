@@ -43,14 +43,9 @@
  *         ----
  * A view is the primary projection of models/components/content. This
  * projection can contain additional substructures in the form of views and
- * sub-views. Views can be static, always shown, or path-controlled. Paths
- * address the complete chain of nested views and shows the parent views in
- * addition to the target view.
- *
- * Static views use the boolean attribute static. This means that these views
- * are always shown if their parent views are visible. The routing excludes all
- * elements with the attribute staticin the markup. These elements are therefore
- * independent of paths and the internal permission concept of Routing.
+ * sub-views. Views can be static, always shown, or controlled by path and
+ * permissions. Paths address the complete chain of nested views and shows the
+ * parent views in addition to the target view.
  *
  *         View Flow
  *         ----
@@ -110,6 +105,9 @@
 
     compliant("Routing");
     compliant(null, window.Routing = {
+
+        /** Constant for attribute route */
+        get ATTRIBUTE_ROUTE() {return "route";},
 
         /**
          * Returns the current working path normalized. This assumes that the
@@ -248,12 +246,6 @@
     });
 
     /**
-     * Registration of the attribute static for hardening. The attribute is
-     * therefore more difficult to manipulate in markup.
-     */
-    Composite.customize("@ATTRIBUTES-STATICS", "static");
-
-    /**
      * The method accepts a path as a string and determines the corresponding
      * element that is best covered by this path (Path-to-Element). The path can
      * be longer than the actual target, similar to the concepts PATH_TRANSLATED
@@ -272,7 +264,8 @@
             let path = "";
             for (let element = lookup; element; element = element.parentElement) {
                 if (!element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
-                        || !element.hasAttribute(Composite.ATTRIBUTE_ID))
+                        || !element.hasAttribute(Composite.ATTRIBUTE_ID)
+                        || !element.hasAttribute(Routing.ATTRIBUTE_ROUTE))
                     continue;
                 const composite = element.getAttribute(Composite.ATTRIBUTE_ID);
                 const match = composite.match(Composite.PATTERN_COMPOSITE_ID);
@@ -283,8 +276,9 @@
             return path || undefined;
         }
 
+        const marker = `[${Composite.ATTRIBUTE_COMPOSITE}][${Routing.ATTRIBUTE_ROUTE}]`;
         const path = lookup.split("#").slice(1).map(entry =>
-            `[id="${entry}"][composite],[id^="${entry}"][composite]`);
+            `[id="${entry}"]${marker},[id^="${entry}@"]${marker}`);
         while (path.length > 0) {
             const element = document.querySelector(path.join(">"));
             if (element instanceof Element)
@@ -407,6 +401,11 @@
      */
     Composite.customize((element) => {
 
+        if (element instanceof Element
+                && element.hasAttribute("route")
+                && element.getAttribute("route") !== "")
+            console.warn("Ignore value for attribute route");
+
         if (_routing_active === undefined) {
             // Activates routing during the initial rendering via the boolean
             // attribute route. It must not have a value, otherwise it is
@@ -430,16 +429,11 @@
                 Routing.route("#");
         }
 
-        if (!_routing_active)
+        if (!_routing_active
+                || !(element instanceof Element)
+                || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE)
+                || !element.hasAttribute(Routing.ATTRIBUTE_ROUTE))
             return;
-        if (!(element instanceof Element)
-                || !element.hasAttribute(Composite.ATTRIBUTE_COMPOSITE))
-            return;
-        if (element.hasAttribute("static")) {
-            if (element.getAttribute("static") !== "")
-                console.warn("Ignore value for attribute static");
-            return;
-        }
 
         const composite = (element.getAttribute(Composite.ATTRIBUTE_ID) || '').trim();
         const path = _lookup(element);
