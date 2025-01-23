@@ -47,15 +47,30 @@
         };
 
         window.setTimeout(() => Routing.route("#"), 0);
-        window.setTimeout(() => _testRoute("#a"), 250);
-        window.setTimeout(() => _testRoute("#a#a1"), 500);
-        window.setTimeout(() => _testRoute("#a#a1#a2"), 750);
+
+        window.setTimeout(() => _testRoute("#a"), 100);
+        window.setTimeout(() => _testRoute("#a#a1"), 200);
+        window.setTimeout(() => _testRoute("#a#a1#a2"), 300);
+
+        window.setTimeout(() => _testRoute("#a2"), 400);
+        window.setTimeout(() => _testRoute("#a2#a3"), 500);
+        window.setTimeout(() => _testRoute("#a2#a3#4"), 600);
+
+        window.setTimeout(() => _testRoute("#a2"), 700);
+        window.setTimeout(() => _testRoute("#a2#a4"), 800);
+
         window.setTimeout(() => {
             _snapshots.push(document.body.innerHTML.match(/(id=\S+)/g));
+            document.body.innerText = _snapshots.join("\r\n");
             Test.start();
         }, 1000);
     </script>
     <script type="text/test">
+      id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
+      id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
+      id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
+      id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
+      id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
       id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
       id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"
       id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="a6",id="a7",id="a8",id="a9",id="a0",id="b",id="b1",id="b2",id="b3",id="b4",id="b5",id="b6",id="b7",id="b8",id="b9",id="b0",id="c",id="c1",id="c2",id="c3",id="c4",id="c5",id="c6",id="c7",id="c8",id="c9",id="c0"

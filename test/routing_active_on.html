@@ -23,13 +23,13 @@
         Test.activate();
 
         // Routing is activated with the rout attribute in the body tag. This
-        // hides composites views if there is no matching path and the
-        // composites do not use the attribute static.
+        // hides composites views with attribute route if there is no matching
+        // path.
 
         Test.create({test() {
             const content = _snapshots.join("\r\n");
             Assert.assertSameTo("script[type='text/test']", content);
-            Assert.assertEquals(2, _counter);
+            Assert.assertEquals(5, _counter);
         }});
 
         let _counter = 0;
@@ -46,11 +46,21 @@
         };
 
         window.setTimeout(() => Routing.route("#"), 0);
-        window.setTimeout(() => _testRoute("#a"), 250);
-        window.setTimeout(() => _testRoute("#a#a1"), 500);
-        window.setTimeout(() => _testRoute("#a#a1#a2"), 750);
+
+        window.setTimeout(() => _testRoute("#a"), 100);
+        window.setTimeout(() => _testRoute("#a#a1"), 200);
+        window.setTimeout(() => _testRoute("#a#a1#a2"), 300);
+
+        window.setTimeout(() => _testRoute("#a2"), 400);
+        window.setTimeout(() => _testRoute("#a2#a3"), 500);
+        window.setTimeout(() => _testRoute("#a2#a3#4"), 600);
+
+        window.setTimeout(() => _testRoute("#a2"), 700);
+        window.setTimeout(() => _testRoute("#a2#a4"), 800);
+
         window.setTimeout(() => {
             _snapshots.push(document.body.innerHTML.match(/(id=\S+)/g));
+            document.body.innerText = _snapshots.join("\r\n");
             Test.start();
         }, 1000);
     </script>
@@ -58,71 +68,76 @@
       id="a",id="a1",id="c",id="c1"
       id="a",id="a1",id="c",id="c1"
       id="a",id="a1",id="c",id="c1"
+      id="a",id="a1",id="c",id="c1"
       id="a",id="a1",id="a2",id="a3",id="c",id="c1"
+      id="a",id="a1",id="a2",id="a3",id="c",id="c1"
+      id="a",id="a1",id="a2",id="a3",id="c",id="c1"
+      id="a",id="a1",id="a2",id="a3",id="c",id="c1"
+      id="a",id="a1",id="a2",id="a3",id="a4",id="a5",id="c",id="c1"
     </script>
   </head>
   <body route>
     {{model.counter}}
-    <div id="a" composite static>
-      <div id="a1" composite static>
-        <div id="a2" composite>
-          <div id="a3" composite static>
-            <div id="a4" composite>
-              <div id="a5" composite static>
+    <div id="a" composite>
+      <div id="a1" composite>
+        <div id="a2" composite route>
+          <div id="a3" composite>
+            <div id="a4" composite route>
+              <div id="a5" composite>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="a6" composite>
-        <div id="a7" composite static>
-          <div id="a8" composite>
-            <div id="a9" composite static>
-              <div id="a0" composite>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="b" composite>
-      <div id="b1" composite static>
-        <div id="b2" composite>
-          <div id="b3" composite static>
-            <div id="b4" composite>
-              <div id="b5" composite static>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="b6" composite>
-        <div id="b7" composite>
-          <div id="b8" composite static>
-            <div id="b9" composite>
-              <div id="b0" composite static>
+      <div id="a6" composite route>
+        <div id="a7" composite>
+          <div id="a8" composite route>
+            <div id="a9" composite>
+              <div id="a0" composite route>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="c" composite static>
-      <div id="c1" composite static>
-        <div id="c2" composite>
-          <div id="c3" composite static>
-            <div id="c4" composite>
-              <div id="c5" composite static>
+    <div id="b" composite route>
+      <div id="b1" composite>
+        <div id="b2" composite route>
+          <div id="b3" composite>
+            <div id="b4" composite route>
+              <div id="b5" composite>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="c6" composite>
-        <div id="c7" composite>
-          <div id="c8" composite static>
-            <div id="c9" composite>
-              <div id="c0" composite static>
+      <div id="b6" composite route>
+        <div id="b7" composite route>
+          <div id="b8" composite>
+            <div id="b9" composite route>
+              <div id="b0" composite>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="c" composite>
+      <div id="c1" composite>
+        <div id="c2" composite route>
+          <div id="c3" composite>
+            <div id="c4" composite route>
+              <div id="c5" composite>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="c6" composite route>
+        <div id="c7" composite route>
+          <div id="c8" composite>
+            <div id="c9" composite route>
+              <div id="c0" composite>
               </div>
             </div>
           </div>
