@@ -12,4 +12,6 @@
 
 # Build specific
 /release/*.zip
+/release/*source*.js
+/release/*debug*.js
 /test/aspect-js.js
