@@ -347,12 +347,6 @@
         if (!_routing_active)
             return;
 
-        const location = Routing.location || "#";
-        if (location !== Browser.location) {
-            window.location.replace(location);
-            return;
-        }
-
         // Interceptors
         // - order of execution corresponds to the order of registration
         // - all interceptors are always checked and executed if they match
@@ -362,15 +356,22 @@
         // - on the first explicit false, terminates the logic in hashchange
         for (const interceptor of _interceptors) {
             if (typeof interceptor.path === "string") {
-                if (!Path.covers(interceptor.path))
+                if (!Path.PATTERN_PATH.test(interceptor.path)
+                        || !(event.newURL + "\0").startsWith(interceptor.path + "\0"))
                     continue;
             } else if (interceptor.path instanceof RegExp) {
-                if (!interceptor.path.test(Routing.location))
+                if (!interceptor.path.test(event.newURL))
                     continue;
             } else continue;
             if (typeof interceptor.actor === "function"
                     && interceptor.actor(_locate(event.oldURL), Browser.location) === false)
                 return;
+        }
+
+        const location = Routing.location || "#";
+        if (location !== Browser.location) {
+            window.location.replace(location);
+            return;
         }
 
         // Maintaining the history.
