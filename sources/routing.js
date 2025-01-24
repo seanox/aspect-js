@@ -364,7 +364,7 @@
                     continue;
             } else continue;
             if (typeof interceptor.actor === "function"
-                    && interceptor.actor(_locate(event.oldURL), Browser.location) === false)
+                    && interceptor.actor(event) === false)
                 return;
         }
 
