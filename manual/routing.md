@@ -163,8 +163,7 @@ const Model = {
 TODO:
 
 Interceptors take effect very early and before the path is checked and optimized
-by routing. The passed parameters are the oldHash and newHash used in the
-hashchange event.
+by routing. The passed parameter is the triggering hashChange event.
 
 Interceptors are designed to execute according to the order in which they are
 registered. Each interceptor is always evaluated and executed if it matches the
