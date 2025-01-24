@@ -162,6 +162,21 @@ const Model = {
 ## Interceptors
 TODO:
 
+Interceptors take effect very early and before the path is checked and optimized
+by routing. The passed parameters are the oldHash and newHash used in the
+hashchange event.
+
+Interceptors are designed to execute according to the order in which they are
+registered. Each interceptor is always evaluated and executed if it matches the
+specified criteria. Notably, interceptors do not create any entries in the
+browser history. They have the capability to modify the new hash/path, but it is
+essential to use the method `window.location.replace()` for such modifications.
+Following interceptors will operate on this potentially altered hash/path. If
+any interceptor returns false explicitly, it will terminate the logic within the
+hashchange event.
+
+TODO:
+
 ## Paths
 Paths are used for navigation, routing and controlling the view flow. The target
 can be a view or a function if using interceptors. For SPAs (single-page
