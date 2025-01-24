@@ -33,7 +33,6 @@ depending on the situation.
   - [View](#view)
   - [View Flow](#view-flow)
 - [Navigation](#navigation)
-- [View Flow](#view-flow-1)
 - [Permission Concept](#permission-concept)
 - [Interceptors](#interceptors)
 - [Paths](#paths)
