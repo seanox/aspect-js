@@ -115,7 +115,6 @@ Machine translation with [DeepL](https://deepl.com).
     - [View](routing.md#view)
     - [View Flow](routing.md#view-flow)
   - [Navigation](routing.md#navigation)
-  - [View Flow](routing.md#view-flow-1)
   - [Permission Concept](routing.md#permission-concept)
   - [Interceptors](routing.md#interceptors)
   - [Paths](routing.md#paths)
