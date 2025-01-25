@@ -872,16 +872,17 @@ called each (re-)rendering if the model has implemented the permit method.
 TODO:
 
 Interceptors take effect very early and before the path is checked and optimized
-by routing. The passed parameter is the triggering hashChange event.
+by routing. The passed parameter is a meta-object with the triggered oldHash and
+newHash.
 
 Interceptors are designed to execute according to the order in which they are
 registered. Each interceptor is always evaluated and executed if it matches the
 specified criteria. Notably, interceptors do not create any entries in the
-browser history. They have the capability to modify the new hash/path, but it is
-essential to use the method `window.location.replace()` for such modifications.
-Following interceptors will operate on this potentially altered hash/path. If
-any interceptor returns false explicitly, it will terminate the logic within the
-hashchange event.
+browser history. They have the capability to modify the new hash/path, e.g.
+using the methods `window.history.replaceState()` or `window.location.replace()`
+for such modifications. Following interceptors will operate on this potentially
+altered hash/path. If any interceptor returns false explicitly, it will
+terminate the logic within the hashchange event.
 
 [Learn more](routing.md#interceptors)
 
