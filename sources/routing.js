@@ -354,17 +354,26 @@
         // - can change the new hash/path, but please use replace
         // - following interceptors use the possibly changed hash/path
         // - on the first explicit false, terminates the logic in hashchange
+        const oldHash = _locate(event.oldURL);
+        const newHash = _locate(event.newURL);
         for (const interceptor of _interceptors) {
             if (typeof interceptor.path === "string") {
-                if (!Path.PATTERN_PATH.test(interceptor.path)
-                        || !(event.newURL + "\0").startsWith(interceptor.path + "\0"))
+                if (!Path.PATTERN_PATH.test(interceptor.path))
                     continue;
+                if (interceptor.path.endsWith("#")) {
+                    if (!newHash.startsWith(interceptor.path))
+                        continue;
+                } else {
+                    if (newHash !== interceptor.path
+                            && !newHash.startsWith(interceptor.path + "#"))
+                        continue;
+                }
             } else if (interceptor.path instanceof RegExp) {
-                if (!interceptor.path.test(event.newURL))
+                if (!interceptor.path.test(newHash))
                     continue;
             } else continue;
             if (typeof interceptor.actor === "function"
-                    && interceptor.actor(event) === false)
+                    && interceptor.actor(oldHash, newHash) === false)
                 return;
         }
 
