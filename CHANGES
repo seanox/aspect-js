@@ -1,6 +1,7 @@
 1.8.0 2025xxxx
 BF: Review: Corrections and optimization
 BF: Test: Correction for the output of messages with timestamp
+BF: Test: Correction of Assert.assertSame(), incorrect implementation
 CR: Composite: Validation works strictly by default
     The validation must explicitly return true so that the input data from the
     HTML elements is synchronized to the models. The behavior can be

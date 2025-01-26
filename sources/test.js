@@ -889,7 +889,7 @@ compliant(null, window.Test = {
             create(parameters, size) {
 
                 if (typeof size !== "number")
-                    throw new TypeError("nvalid data type");
+                    throw new TypeError("Invalid data type");
 
                 const assert = {message:null, values:[], error(...variants) {
                     variants.forEach((parameter, index, array) => {
@@ -1023,7 +1023,7 @@ compliant(null, window.Test = {
              * @throws {Error} If the assertion failed
              */      
             assertSame(...variants) {
-                const assert = Assert.create([], variants, 2);
+                const assert = Assert.create(variants, 2);
                 if (assert.values[0] === assert.values[1])
                     return;
                 throw assert.error("Assert.assertSame", "{0}", "{1}");
