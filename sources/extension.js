@@ -372,7 +372,7 @@ compliant(null, Math.unique = (size) => {
  * Adds a static function to create a time based alphanumeric serial that is
  * chronologically sortable as text and contains the time and a counter if
  * serial are created at the same time.
- *  @returns {string} The generated time-based alphanumeric serial
+ * @returns {string} The generated time-based alphanumeric serial
  */
 (() => {
     compliant("Math.serial");
