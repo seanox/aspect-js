@@ -1946,46 +1946,45 @@
                             iterate = meta.array;
                         } else iterate = Array.from(iterate);
 
-                        object.iterate.update = object.iterate.items.length !== iterate.length;
-                        if (object.iterate.update) {
-                            selector.innerHTML = "";
-                            object.iterate.items = Array.from(iterate);
-                            iterate.forEach((item, index, array) => {
-                                const meta = {};
-                                Object.defineProperty(meta, "item", {
-                                    enumerable:true, value:item
-                                });
-                                Object.defineProperty(meta, "index", {
-                                    enumerable:true, value:index
-                                });
-                                Object.defineProperty(meta, "data", {
-                                    enumerable:true, value:array
-                                });
-                                object.iterate.items[index] = meta
-                                const data = "{{___(\"" + object.iterate.name + "\", " + serial + ", " + index + ")}}";
-                                const node = document.createTextNode(data);
-                                selector.appendChild(node);
-                                Composite.render(node, lock.share());
-                                // For whatever reason, if forEach is used on
-                                // the NodeList, each time it is appended to the
-                                // DOM the elements are removed from the
-                                // NodeList piece by piece.
-                                Array.from(object.template.cloneNode(true).childNodes).forEach(node => {
-                                    selector.appendChild(node);
-                                    Composite.render(node, lock.share());
-                                });
+
+                        selector.innerHTML = "";
+                        object.iterate.items = Array.from(iterate);
+                        iterate.forEach((item, index, array) => {
+                            const meta = {};
+                            Object.defineProperty(meta, "item", {
+                                enumerable:true, value:item
                             });
-                            // The expression to reset the temporary variable is
-                            // created and inserted at the end of the iteration,
-                            // which resets the variable to the previous value.
-                            // This resets the variable to the previous value
-                            // and thus simulates the effect of own scopes.
-                            const data = "{{___(\"" + object.iterate.name + "\", " + serial + ")}}";
+                            Object.defineProperty(meta, "index", {
+                                enumerable:true, value:index
+                            });
+                            Object.defineProperty(meta, "data", {
+                                enumerable:true, value:array
+                            });
+                            object.iterate.items[index] = meta
+                            const data = "{{___(\"" + object.iterate.name + "\", " + serial + ", " + index + ")}}";
                             const node = document.createTextNode(data);
                             selector.appendChild(node);
                             Composite.render(node, lock.share());
-                        }
+                            // For whatever reason, if forEach is used on
+                            // the NodeList, each time it is appended to the
+                            // DOM the elements are removed from the
+                            // NodeList piece by piece.
+                            Array.from(object.template.cloneNode(true).childNodes).forEach(node => {
+                                selector.appendChild(node);
+                                Composite.render(node, lock.share());
+                            });
+                        });
+                        // The expression to reset the temporary variable is
+                        // created and inserted at the end of the iteration,
+                        // which resets the variable to the previous value.
+                        // This resets the variable to the previous value
+                        // and thus simulates the effect of own scopes.
+                        const data = "{{___(\"" + object.iterate.name + "\", " + serial + ")}}";
+                        const node = document.createTextNode(data);
+                        selector.appendChild(node);
+                        Composite.render(node, lock.share());
                     }
+
                     // The content is finally rendered, the enclosing container
                     // element itself, or more precisely the attributes, still
                     // needs to be updated.
@@ -2079,9 +2078,7 @@
                 // These elements manipulate the inner markup.
                 // This is intercepted by the MutationObserver.
                 if (selector.childNodes
-                        && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                        && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)
-                                && object.iterate.update)) {
+                        && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)) {
                     Array.from(selector.childNodes).forEach((node) => {
                         // The rendering is recursive, if necessary the node is
                         // then no longer available. For example, if a condition
