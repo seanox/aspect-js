@@ -69,9 +69,9 @@
  * The number of repetitions indicates the number of returns in the direction of
  * the root.
  */
-"use strict";
-
 (() => {
+
+    "use strict";
 
     // Status of the activation of routing
     // The status cannot be changed again after (de)activation and is only set
