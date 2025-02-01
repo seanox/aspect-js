@@ -39,9 +39,9 @@
  * The data is queried with XPath, the result can be concatenated and
  * aggregated and the result can be transformed with XSLT. 
  */
-"use strict";
-
 (() => {
+
+    "use strict";
 
     /** Path of the DataSource for: data (sub-directory of work path) */
     const DATA = window.location.combine(window.location.contextPath, "/data");

@@ -81,9 +81,9 @@
  * directory, which are loaded in addition to the locales/messages from the data
  * directory -- even at runtime. Again, existing keys cannot be overwritten.
  */
-"use strict";
-
 (() => {
+
+    "use strict";
 
     compliant("messages");
     compliant(null, window.messages = {});
