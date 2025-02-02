@@ -91,17 +91,24 @@
  * are helpful for implementing test are not used productively. For example,
  * the redirection and caching of console output.
  */
-"use strict";
+(() => {
 
-compliant("Test");
-compliant(null, window.Test = {
+    "use strict";
 
-    /**
-     * Activates the test API. The method can be called multiple times, but is
-     * ignored after the first call. A later deactivation of the test API is not
-     * possible.
-     */
-    activate() {
+    compliant("Test");
+    compliant(null, window.Test = {
+
+        /**
+         * Activates the test API. The method can be called multiple times, but
+         * is ignored after the first call. A later deactivation of the test API
+         * is not possible.
+         */
+        activate() {
+            _activate();
+        }
+    });
+
+    const _activate = () => {
 
         window["Test"] = {
 
@@ -1143,4 +1150,4 @@ compliant(null, window.Test = {
             }      
         });
     }
-});
+})();
