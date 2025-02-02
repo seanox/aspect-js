@@ -210,7 +210,7 @@
       </filelist>
     </file-compose>
     <copy file="${release.file.source.testing}" tofile="${release.file.testing.max}"/>
-    <copy file="${release.file.source}" tofile="${release.file.debug.testing.max}"/>
+    <copy file="${release.file.source.testing}" tofile="${release.file.debug.testing.max}"/>
     <replaceregexp file="${release.file.debug.testing.max}" flags="g" byline="false"
         match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
     <copy file="${release.file.testing.max}" tofile="${release.file.testing}"/>
@@ -268,7 +268,7 @@
   </target>
 
   <target name="test" depends="release">
-    <copy file="${workspace.release}/${ant.project.name}-debug-testing-max.js"
+    <copy file="${release.file.debug.testing.max}"
         tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
     <antcall target="run"/>
   </target>
