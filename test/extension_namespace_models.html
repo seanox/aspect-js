@@ -23,10 +23,10 @@
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
-            if (snapshots.length === 2)
+            if (snapshots.length === 1)
                 Test.start();
-            if (snapshots.length >= 2)
-                Assert.assertEquals("expected {1} steps but was {2}", 2, snapshots.length);
+            if (snapshots.length >= 1)
+                Assert.assertEquals("expected {1} steps but was {2}", 1, snapshots.length);
         });
 
         Test.create({test() {
@@ -38,7 +38,8 @@
         Test.create({test() {
             Assert.assertEquals("object", typeof moduleD);
             Assert.assertTrue(moduleD instanceof Element);
-            Assert.assertEquals("undefined", typeof moduleE);
+            Assert.assertEquals("object", typeof moduleE);
+            Assert.assertEquals("E", moduleE.test);
             Assert.assertEquals("object", typeof moduleF);
             Assert.assertEquals("F", moduleF.test);
             Assert.assertEquals("object", typeof moduleG);
@@ -48,7 +49,7 @@
         }});
 
         Test.create({test() {
-            Assert.assertTrue(document.body.innerText.includes("moduleE is not defined"));
+            Assert.assertFalse(document.body.innerText.includes("moduleE is not defined"));
         }});
     </script>
   </head>
