@@ -132,11 +132,9 @@
   <macrodef name="file-es6-lint">
     <attribute name="input"/>
     <sequential>
-      <copy file="@{input}" tofile="${release.file.lint}" overwrite="true"/>
       <exec executable="cmd.exe" dir="${workspace.release}" failonerror="true">
-        <arg value="/c npx eslint --config ${workspace.optimize}\.eslintrc ${release.file.lint}"/>
+        <arg value="/c npx eslint --config ${workspace.optimize}\.eslintrc @{input}"/>
       </exec>
-      <delete file="${release.file.lint}"/>
     </sequential>
   </macrodef>
 
@@ -145,7 +143,7 @@
     <attribute name="output"/>
     <sequential>
       <exec executable="cmd.exe" dir="${workspace.optimize}">
-        <arg value="/c npx uglifyjs @{input} -c -m -o @{output}"/>
+        <arg value="/c npx uglifyjs @{input} -c -m --no-module -o @{output}"/>
       </exec>
     </sequential>
   </macrodef>
@@ -159,7 +157,6 @@
     <property name="release.file.debug" value="${workspace.release}/${ant.project.name}-debug.js"/>
     <property name="release.file.debug.max" value="${workspace.release}/${ant.project.name}-debug-max.js"/>
     <property name="release.file.max" value="${workspace.release}/${ant.project.name}-max.js"/>
-    <property name="release.file.lint" value="${workspace.release}/${ant.project.name}-lint.js"/>
     <property name="release.file.testing" value="${workspace.release}/${ant.project.name}-testing.js"/>
     <property name="release.file.testing.max" value="${workspace.release}/${ant.project.name}-testing-max.js"/>
     <property name="release.file.debug.testing" value="${workspace.release}/${ant.project.name}-debug-testing.js"/>
@@ -197,14 +194,14 @@
         <file name="routing.js"/>
       </filelist>
     </file-compose>
-    <copy file="${release.file.source}" tofile="${release.file.max}"/>
-    <file-minimize input="${release.file.max}" output="${release.file}"/>
-
     <copy file="${release.file.source}" tofile="${release.file.debug.max}"/>
     <replaceregexp file="${release.file.debug.max}" flags="g" byline="false"
         match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
-    <copy file="${release.file.debug.max}" tofile="${release.file.debug.max}"/>
-    <file-minimize input="${release.file.debug.max}" output="${release.file.debug}"/>
+    <copy file="${release.file.source}" tofile="${release.file.max}"/>
+    <copy file="${release.file.max}" tofile="${release.file}"/>
+    <file-minimize input="${release.file.max}" output="${release.file}"/>
+    <file-es6-lint input="${release.file.max}"/>
+    <file-es6-lint input="${release.file}"/>
 
     <file-compose output="${release.file.source.testing}">
       <filelist dir="${workspace.sources}">
@@ -213,14 +210,13 @@
       </filelist>
     </file-compose>
     <copy file="${release.file.source.testing}" tofile="${release.file.testing.max}"/>
-    <file-es6-lint input="${release.file.testing.max}"/>
-    <file-minimize input="${release.file.testing.max}" output="${release.file.testing}"/>
-
-    <copy file="${release.file.source.testing}" tofile="${release.file.debug.testing.max}"/>
+    <copy file="${release.file.source}" tofile="${release.file.debug.testing.max}"/>
     <replaceregexp file="${release.file.debug.testing.max}" flags="g" byline="false"
         match="(\R\s+const )(_\w+)" replace="\1\2 = window.__\2"/>
-    <copy file="${release.file.debug.testing.max}" tofile="${release.file.debug.testing.max}"/>
-    <file-minimize input="${release.file.debug.testing.max}" output="${release.file.debug.testing}"/>
+    <copy file="${release.file.testing.max}" tofile="${release.file.testing}"/>
+    <file-minimize input="${release.file.testing.max}" output="${release.file.testing}"/>
+    <file-es6-lint input="${release.file.testing.max}"/>
+    <file-es6-lint input="${release.file.testing}"/>
 
     <delete dir="${workspace.optimize}/node_modules"/>
     <delete file="${workspace.optimize}/package-lock.json"/>
