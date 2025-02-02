@@ -122,6 +122,12 @@
 
     "use strict";
 
+    // Storage for variables with the page scope
+    const _render_context_scope = [];
+
+    // Storage for dynamic/temporary variables with the page scope
+    const _render_context_stack = [];
+
     compliant("Composite");
     compliant(null, window.Composite = {
 
@@ -2315,6 +2321,25 @@
                     composite.innerHTML = content;
             }
         }
+    });
+
+    /**
+     * The render function gets a getter for the context, which returns all
+     * variables for the page scope. The return value is an object that contains
+     * the persistent and dynamic/temporary variables for the scope page.
+     */
+    Object.defineProperty(Composite.render, "context", {
+        get: () => {
+            const scope = Array.from(_render_context_scope);
+            _render_context_stack.forEach(object => {
+                Object.keys(object).forEach(key => {
+                    scope[key] = object[key];
+                });
+            });
+            return scope;
+        },
+        configurable: false,
+        enumerable: true
     });
 
     /**
