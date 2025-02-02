@@ -30,8 +30,6 @@
  */
 (() => {
 
-    "use strict";
-
     compliant("Scripting");
     compliant(null, window.Scripting = {
 
@@ -268,7 +266,9 @@
         run(script) {
             if (typeof script !== "string")
                 throw new TypeError("Invalid data type");
-            if (script.trim())
+            if (!script.trim())
+                return;
+            with (Composite.render.context)
                 return eval(script);
         }
     });
