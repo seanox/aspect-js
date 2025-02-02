@@ -191,7 +191,7 @@
                 // logic and text. If the literals are replaced by numeric
                 // placeholders, only logic remains. Important is a flexible
                 // processing, because the order of ', " and ` is not defined.
-                expression = expression.replace(/((['\"\`]).*?\2)/gs,
+                expression = expression.replace(/((['\"\`])[.\s\S]*?\2)/g,
                     (match, literal) => _parse(TYPE_LITERAL, literal, patches));
 
                 // without literals, tabs have no relevance and can be replaced
@@ -229,7 +229,7 @@
                 // not be misinterpreted.
                 expression = expression.replace(/#\[([^\[\]]*)\]/g,
                     (match, element) => {
-                        element = element.replace(/\/{2}(.*?)\/{2}/gs, "\"+($1)+\"");
+                        element = element.replace(/\/{2}([.\s\S]*?)\/{2}/g, "\"+($1)+\"");
                         patches.push(_fill("document.getElementById(\"" + element + "\")", patches));
                         return "\r" + (patches.length -1) + "\n";
                 });
@@ -254,7 +254,7 @@
                     for (let counts = -1; counts < patches.length;) {
                         counts = patches.length;
                         expression = expression.replace(/(\([^\(\)]*\))/g, match => {
-                            match = match.replace(/^\( *\?+ *(.*?) *\)$/s, (match, logic) =>
+                            match = match.replace(/^\( *\?+ *([.\s\S]*?) *\)$/, (match, logic) =>
                                 "_tolerate(()=>(" + logic + "))");
                             patches.push(_fill(match, patches));
                             return "\t" + (patches.length -1) + "\n";
