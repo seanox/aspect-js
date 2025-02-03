@@ -420,12 +420,12 @@
                         Test.worker.output.log(`${Test.TIMESTAMP} Test is interrupted`
                                 + `\n\t${numerical(status.queue.size -status.queue.progress, "task")} still outstanding`
                                 + `\n\t${numerical(status.queue.faults, "fault")} were detected`
-                                + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
+                                + `\n\ttotal time ${Date.now() -status.queue.timing} ms`);
                     },
                     perform(status) {
                     },
                     response(status) {
-                        const timing = new Date().getTime() -status.task.timing;
+                        const timing = Date.now() -status.task.timing;
                         if (status.task.error)
                             Test.worker.output.error(`${Test.TIMESTAMP} Test task ${status.task.title} ${status.task.error.message}`);
                         else Test.worker.output.log(`${Test.TIMESTAMP} Test task ${status.task.title} was successful (${timing} ms)`);
@@ -434,7 +434,7 @@
                         Test.worker.output.log(`${Test.TIMESTAMP} Test is finished`
                                 + `\n\t${numerical(status.queue.size, "task")} were performed`
                                 + `\n\t${numerical(status.queue.faults, "fault")} were detected`
-                                + `\n\ttotal time ${new Date().getTime() -status.queue.timing} ms`);
+                                + `\n\ttotal time ${Date.now() -status.queue.timing} ms`);
                     }            
                 };
 
@@ -444,7 +444,7 @@
                 if (Test.worker.queue.stack.length <= 0) {
                     Test.worker.queue.stack = Array.from(_stack);
                     Test.worker.queue.size = Test.worker.queue.stack.length;
-                    Test.worker.queue.timing = new Date().getTime();
+                    Test.worker.queue.timing = Date.now();
                 }
                 
                 // Test.worker.timeout
@@ -461,10 +461,10 @@
 
                     const task = Test.worker.task;
                     if (!task.timeout
-                            || task.timeout > new Date().getTime())
+                            || task.timeout > Date.now())
                         return;
                     
-                    task.duration = new Date().getTime() -task.timing;
+                    task.duration = Date.now() -task.timing;
                     task.error = new Error(`Timeout occurred, expected ${task.timeout} ms but was ${task.duration} ms`);
                     Test.fire(Test.EVENT_RESPONSE, Test.status());
                     Test.worker.queue.faults++;
@@ -491,9 +491,9 @@
                         const meta = Test.worker.queue.stack.shift();
                         let timeout = false;
                         if ((meta.timeout || 0) > 0)
-                            timeout = new Date().getTime() +meta.timeout;
+                            timeout = Date.now() +meta.timeout;
 
-                        Test.worker.task = {title:null, meta, running:true, timing:new Date().getTime(), timeout, duration:false, error:null};
+                        Test.worker.task = {title:null, meta, running:true, timing:Date.now(), timeout, duration:false, error:null};
                         Test.worker.task.title = "#" + meta.serial;
                         if (typeof meta.name === "string"
                                 && meta.name.trim().length > 0)
@@ -520,9 +520,9 @@
                                     } else task.error = Error("Assert error expected failed");
                                 }
                                 task.running = false;
-                                task.duration = new Date().getTime() -task.timing;
+                                task.duration = Date.now() -task.timing;
                                 if (task.timeout
-                                        && task.timeout < new Date().getTime()
+                                        && task.timeout < Date.now()
                                         && !task.error) {
                                     task.error = new Error(`Timeout occurred, expected ${task.meta.timeout} ms but was ${task.duration} ms`);
                                     Test.fire(Test.EVENT_RESPONSE, Test.status());

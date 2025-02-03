@@ -247,7 +247,7 @@
 
       const loadTest = function(test) {
           outputMessage("info", "Loading " + test);
-          document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + new Date().getTime());
+          document.querySelector("iframe").setAttribute("src", test || queue.shift() + "?" + Date.now());
       };
 
       const performTest = function(event, status) {

@@ -70,7 +70,7 @@
   <body>
     _A_{{modelA.valueA}}_
     <p id="modelA" composite>
-      <input type="text" id="valueA" value="{{new Date().getTime()}}"
+      <input type="text" id="valueA" value="{{Date.now()}}"
           events="input" foo="{{modelA.valueA}}"/>
       Value of variable modelA.valueA: {{modelA.valueA}}
     </p>

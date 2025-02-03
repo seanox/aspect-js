@@ -376,9 +376,9 @@
     compliant(null, Math.serial = () =>
         _serial.toString());
     const _offset = -946684800000;
-    const _serial = {timing:new Date().getTime() + _offset, number:0,
+    const _serial = {timing:Date.now() + _offset, number:0,
         toString() {
-            const timing = new Date().getTime() + _offset;
+            const timing = Date.now() + _offset;
             this.number = this.timing === timing ? this.number +1 : 0;
             this.timing = timing;
             const serial = this.timing.toString(36);

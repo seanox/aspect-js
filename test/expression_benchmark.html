@@ -35,17 +35,23 @@
             }
         };
 
-        const timing = new Date().getTime();
+        // i5-1240P
+        // ----
+        // 1: Blink 30/60
+        // 2: Blink 25/25
+        // 2: Blink 30/30
+
+        const timing = Date.now();
         Test.create({test() {
-            Assert.assertTrue((new Date().getTime() -timing) < 2500);
+            Assert.assertTrue((Date.now() -timing) < 60);
         }});
-        Test.create({timeout:250, test() {
+        Test.create({timeout:25, test() {
             let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (let loop = 0; loop < 2500; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }});
-        Test.create({timeout:250, test() {
+        Test.create({timeout:30, test() {
             let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (let loop = 0; loop < 25000; loop++)
