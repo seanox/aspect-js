@@ -188,25 +188,6 @@
                                 || !target.hasOwnProperty(key))
                             return;
 
-                        // Special for elements with attribute iterate. For
-                        // these, the highest parent element with the attribute
-                        // iterate is searched for and registered as the
-                        // recipient. Why -- Iterate provides temporary
-                        // variables which can be used in the enclosed markup.
-                        // If these places are registered as recipients, these
-                        // temporary variables cannot be accessed later in the
-                        // expressions, which causes errors because the
-                        // temporary variables no longer exist. Since element
-                        // with the attribute iterate can be nested and the
-                        // expression can be based on a parent one, the topmost
-                        // one is searched for.
-
-                        for (let node = selector; node.parentNode; node = node.parentNode) {
-                            const meta = (Composite.render.meta || [])[node.ordinal()] || {};
-                            if (meta.attributes && meta.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE))
-                                selector = node;
-                        }
-
                         const recipients = notifications.get(key) || new Map();
 
                         // If the selector as the current rendered element is
