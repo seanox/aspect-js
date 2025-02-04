@@ -1423,7 +1423,7 @@
                     _interceptors.forEach((interceptor) =>
                         interceptor.call(null, selector));
 
-                    object = {serial, element:selector, attributes:{}, context:[..._render_context_stack]};
+                    object = {serial, element:selector, attributes:{}, context:[..._render_context_workspace]};
                     _render_meta[serial] = object;
                     if ((selector instanceof Element)
                             && selector.attributes) {
@@ -1510,6 +1510,7 @@
                             const template = selector.cloneNode(true);
                             const attributes = object.attributes;
                             object = {serial:marker.ordinal(), element:marker, attributes,
+                                context:[..._render_context_workspace],
                                 condition:{expression, template, marker, element:null, attributes, complete:false, share:null}};
                             _render_meta[object.serial] = object;
 
@@ -1590,7 +1591,9 @@
                     condition.element = condition.template.cloneNode(true);
                     const element = condition.element;
                     const attributes = Object.assign({}, condition.attributes);
-                    _render_meta[element.ordinal()] = {serial:element.ordinal(), element, attributes, condition};
+                    _render_meta[element.ordinal()] = {
+                        serial:element.ordinal(), element, attributes, condition,
+                        context:[..._render_context_workspace]};
 
                     // Load modules/components/composite resources.
                     // That no resources are loaded more than once is taken care
@@ -1690,6 +1693,7 @@
                             const node = document.createTextNode("");
                             const serial = node.ordinal();
                             const object = {serial, element:node, attributes:{}, value:null,
+                                context:[..._render_context_workspace],
                                 render() {
                                     let word = "";
                                     if (this.attributes.hasOwnProperty(Composite.ATTRIBUTE_NAME)) {
@@ -1731,7 +1735,8 @@
                                 } else {
                                     const node = document.createTextNode(word);
                                     const serial = node.ordinal();
-                                    const object = {serial, element:node, attributes:{}};
+                                    const object = {serial, element:node, attributes:{},
+                                        context:[..._render_context_workspace]};
                                     Composite.fire(Composite.EVENT_RENDER_NEXT, object.element);
                                     object.element.textContent = word;
                                     object.attributes[Composite.ATTRIBUTE_TEXT] = word;
