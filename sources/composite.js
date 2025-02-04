@@ -128,6 +128,14 @@
     // Storage for dynamic/temporary variables with the page scope
     const _render_context_stack = [];
 
+    // Storage for the currently used dynamic/temporary variables with the page
+    // scope. The storages _render_context_scope and _render_context_stack are
+    // used to manage the variables. So that these remain clean and the elements
+    // can use their initial context when rendering without manipulating
+    // _render_context_stack. This applies in particular to the generated
+    // children with their own meta-objects when iterating.
+    const _render_context_workspace = [];
+
     compliant("Composite");
     compliant(null, window.Composite = {
 
@@ -1312,15 +1320,21 @@
             if (!selector)
                 selector = Composite.render.queue[0];
 
-            // even before rendering, possible expressions in the initial ID
-            // should be resolved
+            // Even before rendering, possible expressions in the initial ID
+            // should be resolved. As the expression can refer to temporary
+            // variables, the context workspace must be set temporarily for
+            // scripting. As the object does not yet exist, the context
+            // corresponds to the current context stack. After resolving the
+            // expression, however, the context workspace must be reset.
             if (selector instanceof Element
                     && !_render_meta[selector.ordinal()]) {
+                _render_context_workspace.push(..._render_context_stack);
                 let id = selector.getAttribute(Composite.ATTRIBUTE_ID) || "";
                 if (id.match(Composite.PATTERN_EXPRESSION_CONTAINS)) {
                     id = Expression.eval(selector.ordinal() + ":" + Composite.ATTRIBUTE_ID, id);
                     selector.setAttribute(Composite.ATTRIBUTE_ID, id);
                 }
+                _render_context_workspace.length = 0;
             }
 
             lock = Composite.lock(Composite.render, selector);
@@ -1341,6 +1355,13 @@
                 
                 if (!(selector instanceof Node))
                     return;
+
+                let serial = selector.ordinal();
+                let object = _render_meta[serial];
+                _render_context_workspace.length = 0;
+                if (object && object.context)
+                    _render_context_workspace.push(...object.context);
+                else _render_context_workspace.push(..._render_context_stack);
 
                 // If a custom tag exists, the action is executed. Custom tag
                 // are completely user-specific. The return value determines
@@ -1379,8 +1400,6 @@
                 // element (not node) containing an expression or all allowed
                 // attributes are cached in the memory (_render_meta).
 
-                let serial = selector.ordinal();
-                let object = _render_meta[serial];
                 if (!object) {
 
                     // Elements included in ignored elements of type: script +
@@ -1404,7 +1423,7 @@
                     _interceptors.forEach((interceptor) =>
                         interceptor.call(null, selector));
 
-                    object = {serial, element:selector, attributes:{}};
+                    object = {serial, element:selector, attributes:{}, context:[..._render_context_stack]};
                     _render_meta[serial] = object;
                     if ((selector instanceof Element)
                             && selector.attributes) {
@@ -1928,23 +1947,16 @@
                         const match = iterate.match(Composite.PATTERN_EXPRESSION_VARIABLE);
                         if (!match)
                             throw new Error(`Invalid iterate${iterate ? ": " + iterate : ""}`);
-                        object.iterate = {name:match[1].trim(), expression:"{{" + match[2].trim() + "}}", items:[]};
+                        object.iterate = {name:match[1].trim(), expression:"{{" + match[2].trim() + "}}"};
                         object.template = selector.cloneNode(true);
                         selector.innerHTML = "";
                     }
-
-                    // A temporary global variable is required for the
-                    // iteration. If this variable already exists, the existing
-                    // is cached and restored at the end of the iteration.
 
                     const context = serial + ":" + Composite.ATTRIBUTE_ITERATE;
                     let iterate = Expression.eval(context, object.iterate.expression);
                     if (iterate instanceof Error)
                         throw iterate;
                     if (iterate) {
-                        delete object.iterate.variable;
-                        if (eval("typeof " + object.iterate.name + " !== \"undefined\""))
-                            object.iterate.variable = eval(object.iterate.name);
                         if (iterate instanceof XPathResult) {
                             const meta = {entry: null, array: [], iterate};
                             while (meta.entry = meta.iterate.iterateNext())
@@ -1952,45 +1964,37 @@
                             iterate = meta.array;
                         } else iterate = Array.from(iterate);
 
-                        object.iterate.update = object.iterate.items.length !== iterate.length;
-                        if (object.iterate.update) {
-                            selector.innerHTML = "";
-                            object.iterate.items = Array.from(iterate);
-                            iterate.forEach((item, index, array) => {
-                                const meta = {};
-                                Object.defineProperty(meta, "item", {
-                                    enumerable:true, value:item
-                                });
-                                Object.defineProperty(meta, "index", {
-                                    enumerable:true, value:index
-                                });
-                                Object.defineProperty(meta, "data", {
-                                    enumerable:true, value:array
-                                });
-                                object.iterate.items[index] = meta
-                                const data = "{{___(\"" + object.iterate.name + "\", " + serial + ", " + index + ")}}";
-                                const node = document.createTextNode(data);
+                        selector.innerHTML = "";
+
+                        iterate.forEach((item, index, array) => {
+                            const meta = {};
+                            Object.defineProperty(meta, "item", {
+                                enumerable:true, value:item
+                            });
+                            Object.defineProperty(meta, "index", {
+                                enumerable:true, value:index
+                            });
+                            Object.defineProperty(meta, "data", {
+                                enumerable:true, value:array
+                            });
+
+                            // Creation of the stack with the temporary
+                            // variables for the script context / page scope.
+                            _render_context_stack.push({[object.iterate.name]:meta});
+
+                            // For whatever reason, if forEach is used on the
+                            // NodeList, each time it is appended to the DOM the
+                            // elements are removed from the NodeList piece by
+                            // piece.
+                            Array.from(object.template.cloneNode(true).childNodes).forEach(node => {
                                 selector.appendChild(node);
                                 Composite.render(node, lock.share());
-                                // For whatever reason, if forEach is used on
-                                // the NodeList, each time it is appended to the
-                                // DOM the elements are removed from the
-                                // NodeList piece by piece.
-                                Array.from(object.template.cloneNode(true).childNodes).forEach(node => {
-                                    selector.appendChild(node);
-                                    Composite.render(node, lock.share());
-                                });
                             });
-                            // The expression to reset the temporary variable is
-                            // created and inserted at the end of the iteration,
-                            // which resets the variable to the previous value.
-                            // This resets the variable to the previous value
-                            // and thus simulates the effect of own scopes.
-                            const data = "{{___(\"" + object.iterate.name + "\", " + serial + ")}}";
-                            const node = document.createTextNode(data);
-                            selector.appendChild(node);
-                            Composite.render(node, lock.share());
-                        }
+
+                            // Clean up of the stack with the temporary
+                            // variables for the script context / page scope.
+                            _render_context_stack.pop();
+                        });
                     }
 
                     // The content is finally rendered, the enclosing container
@@ -2087,8 +2091,7 @@
                 // This is intercepted by the MutationObserver.
                 if (selector.childNodes
                         && !selector.nodeName.match(Composite.PATTERN_ELEMENT_IGNORE)
-                        && !(object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)
-                                && object.iterate.update)) {
+                        && !object.attributes.hasOwnProperty(Composite.ATTRIBUTE_ITERATE)) {
                     Array.from(selector.childNodes).forEach((node) => {
                         // The rendering is recursive, if necessary the node is
                         // then no longer available. For example, if a condition
@@ -2103,6 +2106,7 @@
                     selector.removeAttribute(Composite.ATTRIBUTE_RELEASE);
 
             } catch (error) {
+
                 console.error(error);
                 Composite.fire(Composite.EVENT_ERROR, error);
                 if (origin instanceof Element)
@@ -2111,9 +2115,14 @@
 
             } finally {
 
-                // The queue is used to prevent elements from being registered for
-                // update multiple times during a render cycle when a lock exists.
-                // When the selector is rendered, any queued jobs are removed.
+                // At the end of the rendering of an element, the temporary
+                // context must be reset/cleaned.
+                _render_context_workspace.length = 0;
+
+                // The queue is used to prevent elements from being registered
+                // for update multiple times during a render cycle when a lock
+                // exists. When the selector is rendered, any queued jobs are
+                // removed.
                 Composite.render.queue = Composite.render.queue.filter(entry => entry !== origin);
 
                 lock.release();
@@ -2331,7 +2340,7 @@
     Object.defineProperty(Composite.render, "context", {
         get: () => {
             const scope = Array.from(_render_context_scope);
-            _render_context_stack.forEach(object => {
+            _render_context_workspace.forEach(object => {
                 Object.keys(object).forEach(key => {
                     scope[key] = object[key];
                 });
@@ -2391,29 +2400,6 @@
      * All docked models are included in the set.
      */
     const _models = new Set();
-
-    /**
-     * Internal method for controlling temporary variables for expression
-     * rendering, such as for ATTRIBUTE_ITERATE. The goal is for the method to
-     * simulate a separate scope for temporary variables. For this purpose,
-     * global variables are created as expressions and removed again at the end
-     * of the scope or reset to a possible previously existing value.
-     * @param {string|null} compliant Compliance parameter
-     * @param {function} ___ Function to simulate scope for temporary variables
-     */
-    compliant("___");
-    compliant(null, ___ = (variable, serial, index) => {
-        let object = _render_meta[serial];
-        if (object && object.iterate) {
-            if (variable.match(/^[a-zA-Z_$][a-zA-Z0-9_$]*$/))
-                variable = `window["${variable}"]`;
-            if (index === undefined) {
-                if ("variable" in object.iterate)
-                    eval(variable + " = object.iterate.variable");
-                else eval("delete " + variable);
-            } else eval(variable + " = object.iterate.items[" + index + "]");
-        }
-    });
 
     const _recursion_detection = (element) => {
         const id = (element instanceof Element ? element.id || "" : "").trim();
