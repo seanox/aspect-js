@@ -328,10 +328,10 @@ JavaScript as a composite JavaScript.
 ```
 
 ### iterate
-Iterative output is based on lists, enumerations, and arrays. If an HTML element
+Iterative output is based on lists, enumerations and arrays. If an HTML element
 is declared as iterative, the inner HTML is used as a template from which
-updated content is generated and inserted with each interval cycle and inserted
-as inner HTML. As value for the attribute a [variable expression](
+updated content is generated and inserted as inner HTML with each render cycle.
+As value for the attribute a [variable expression](
     expression.md#variable-expression) is expected, for which a meta-object will
 be created, which allows access to the iteration in the template. Thus, the
 variable expression `iterate={{tempA:Model.list}}` creates the meta-object
