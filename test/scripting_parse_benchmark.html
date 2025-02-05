@@ -14,27 +14,32 @@
 
         Test.activate();
 
+        // 1: Blink   250 / 250   i5-1240P
+        // 1: WebKit  --- / 565   iPad Gen 10
+
         let source;
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             source = Test.read("scripting_parse_benchmark.js");
+            let timeout1;
+            if (navigator.engine === "blink") {
+                timeout1 = 250;
+            }
+            if (navigator.engine === "webkit") {
+                timeout1 = 575;
+            }
+            Test.create({timeout:timeout1, test() {
+                document.body.innerText += "Start 2500 runs\n";
+                const timing = Date.now();
+                for (let count = 0; count < 2500; count++) {
+                    try {Scripting.eval(source);
+                    } catch (error) {
+                        Assert.fail(error.message);
+                    }
+                }
+                document.body.innerText += "Timing " + (Date.now() -timing) + "\n";
+            }});
             Test.start();
         });
-
-        // i5-1240P
-        // ----
-        // 1: Blink 250/250
-
-        Test.create({timeout:250, test() {
-            document.body.innerText += "Start 2500 runs\n";
-            const timing = Date.now();
-            for (let count = 0; count < 2500; count++) {
-                try {Scripting.eval(source);
-                } catch (error) {
-                    Assert.fail(error.message);
-                }
-            }
-            document.body.innerText += "Timing " + (Date.now() -timing) + "\n";
-        }});
     </script>
   </head>
   <body>

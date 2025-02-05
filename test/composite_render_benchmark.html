@@ -16,17 +16,22 @@
     
         Test.activate();
 
-        // i5-1240P
-        // ----
-        // 1: Blink 350/575
+        // 1: Blink   350 / 575   i5-1240P
+        // 1: WebKit  --- / 750   iPad Gen 10
 
-        Test.create({test() {
-            Assert.assertTrue(String(timing) + "ms", timing < 575);
-        }});
-    
         let timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             timing = Date.now() -timing;
+            let timeout1;
+            if (navigator.engine === "blink") {
+                timeout1 = 575;
+            }
+            if (navigator.engine === "webkit") {
+                timeout1 = 750;
+            }
+            Test.create({test() {
+                Assert.assertTrue(String(timing) + "ms", timing < timeout1);
+            }});
             Test.start();
         });       
     </script>
