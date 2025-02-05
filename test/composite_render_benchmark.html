@@ -16,8 +16,9 @@
     
         Test.activate();
 
-        // 1: Blink   350 / 575   i5-1240P
-        // 1: WebKit  --- / 750   iPad Gen 10
+        // 1: Blink   350 /  575   i5-1240P
+        // 1: WebKit  --- /  750   iPad Gen 10
+        // 1: goanna  --- / 2385   i5-1240P
 
         let timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
@@ -28,6 +29,9 @@
             }
             if (navigator.engine === "webkit") {
                 timeout1 = 750;
+            }
+            if (navigator.engine === "goanna") {
+                timeout1 = 2550;
             }
             Test.create({test() {
                 Assert.assertTrue(String(timing) + "ms", timing < timeout1);

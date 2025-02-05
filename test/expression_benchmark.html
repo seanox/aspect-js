@@ -35,13 +35,17 @@
             }
         };
 
-        // 1: Blink 30 | 60   i5-1240P
-        // 2: Blink 25 | 25   i5-1240P
-        // 3: Blink 30 | 30   i5-1240P
+        // 1: Blink  30 |  60   i5-1240P
+        // 2: Blink  25 |  25   i5-1240P
+        // 3: Blink  30 |  30   i5-1240P
 
-        // 1: Blink -- | 80   i5-1240P
-        // 2: Blink -- | 70   i5-1240P
-        // 3: Blink -- | 75   i5-1240P
+        // 1: WebKit -- |  80   iPad Gen 10
+        // 2: WebKit -- |  70   iPad Gen 10
+        // 3: WebKit -- |  75   iPad Gen 10
+
+        // 1: goanna -- | 152   i5-1240P
+        // 2: goanna -- | 115   i5-1240P
+        // 3: goanna -- | 325   i5-1240P
 
         const timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -59,6 +63,11 @@
                 timeout1 = 95;
                 timeout2 = 75;
                 timeout3 = 75;
+            }
+            if (navigator.engine === "goanna") {
+                timeout1 = 200;
+                timeout2 = 150;
+                timeout3 = 375;
             }
             Test.create({test() {
                 Assert.assertTrue((Date.now() -timing) < timeout1);

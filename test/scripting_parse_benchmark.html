@@ -14,8 +14,9 @@
 
         Test.activate();
 
-        // 1: Blink   250 / 250   i5-1240P
-        // 1: WebKit  --- / 565   iPad Gen 10
+        // 1: Blink   250 /  250  i5-1240P
+        // 1: WebKit  --- /  565  iPad Gen 10
+        // 1: goanna  --- / 2075  i5-1240P
 
         let source;
         Composite.listen(Composite.EVENT_RENDER_END, () => {
@@ -26,6 +27,9 @@
             }
             if (navigator.engine === "webkit") {
                 timeout1 = 575;
+            }
+            if (navigator.engine === "goanna") {
+                timeout1 = 4000;
             }
             Test.create({timeout:timeout1, test() {
                 document.body.innerText += "Start 2500 runs\n";
