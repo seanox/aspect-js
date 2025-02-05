@@ -14,46 +14,127 @@
     
         Test.activate();
 
-        Namespace.create("eC", false);
-        Namespace.create("eT", false);
-        Namespace.create("eS", false);
-    
         Test.create({test() {
-            const text = snapshots.join("\r\n");
-            Assert.assertEquals(5, (text.match(/checked/g) || []).length);
-            Assert.assertEquals(4, (text.match(/disabled/g) || []).length);
-            Assert.assertEquals(3, (text.match(/xxx/g) || []).length);
+            const text = snapshots.join("\r\n\r\n");
+            document.body.innerText = text;
+            Assert.assertSameTo("script[type='text/test']", text);
         }});
 
         const snapshots = [];
         Composite.listen(Composite.EVENT_RENDER_END, () => {
+
             if (snapshots.length === 0) {
                 document.querySelector("input[type='checkbox']").checked = false;
                 document.querySelector("input[type='text']").disabled = false;
                 document.querySelector("span").removeAttribute("xxx");
             }
+
             let snapshot = document.body.innerHTML;
             snapshot = snapshot.replace(/^\s+/mg, "");
             snapshot = snapshot.replace(/<\!--([\s\.r\n].*?)*-->/g, "");
-            
             snapshots.push(snapshot.trim());
-            if (snapshots.length < 10) {
-                eC = [1,3,5,7,9].includes(snapshots.length);
-                eT = [0,2,4,6,8].includes(snapshots.length);
-                eS = [3,6,9].includes(snapshots.length);                
-                Composite.render(document.body);
-            } else Test.start();
-        }); 
+
+            if (snapshots.length < 10)
+                window.setTimeout(() =>
+                    Composite.render(document.body), 250);
+            else Test.start();
+        });
+    </script>
+    <script type="text/test">
+      0
+      false
+      <input type="checkbox" checked="false">
+      false
+      <input type="text">
+      false
+      <span></span>
+
+      1
+      undefined
+      <input type="checkbox">
+      undefined
+      <input type="text">
+      undefined
+      <span></span>
+
+      2
+      false
+      <input type="checkbox" checked="false">
+      undefined
+      <input type="text">
+      undefined
+      <span></span>
+
+      3
+      undefined
+      <input type="checkbox">
+      false
+      <input type="text" disabled="">
+      undefined
+      <span></span>
+
+      4
+      false
+      <input type="checkbox" checked="false">
+      undefined
+      <input type="text">
+      false
+      <span xxx="false"></span>
+
+      5
+      undefined
+      <input type="checkbox">
+      undefined
+      <input type="text">
+      undefined
+      <span></span>
+
+      6
+      false
+      <input type="checkbox" checked="false">
+      false
+      <input type="text" disabled="">
+      undefined
+      <span></span>
+
+      7
+      undefined
+      <input type="checkbox">
+      undefined
+      <input type="text">
+      undefined
+      <span></span>
+
+      8
+      false
+      <input type="checkbox" checked="false">
+      undefined
+      <input type="text">
+      false
+      <span xxx="false"></span>
+
+      9
+      undefined
+      <input type="checkbox">
+      false
+      <input type="text" disabled="">
+      undefined
+      <span></span>
     </script>
   </head>
   <body>
     <!--
       The attributes use expressions whose return value can be undefined.
       In these cases, the attribute must be temporarily removed and restored at
-      the next render cycle if the return value is not undefined. 
+      the next render cycle if the return value is not undefined.
+      The value false should not play a role!
     -->
-    <input type="checkbox" checked="{{eC ? false : undefined}}"/>
-    <input type="text" disabled="{{eT ? '' : undefined}}"/>
-    <span xxx="{{eS ? true : undefined}}"></span>
+    {{snapshots.length}}
+    {{snapshots.length % 2 === 0 ? false : 'undefined'}}
+    <input type="checkbox" checked="{{snapshots.length % 2 === 0 ? false : undefined}}"/>
+    {{snapshots.length % 3 === 0 ? false : 'undefined'}}
+    <input type="text" disabled="{{snapshots.length % 3 === 0 ? false : undefined}}"/>
+    {{snapshots.length % 4 === 0 ? false : 'undefined'}}
+    <span xxx="{{snapshots.length % 4 === 0 ? false : undefined}}"></span>
   </body>
 </html>

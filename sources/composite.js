@@ -2063,6 +2063,9 @@
                             }
                             selector.setAttribute(attribute, value);
                         } else selector.removeAttribute(attribute);
+                        selector[attribute] = value;
+                        // Attribute values must also be set in the JavaScript
+                        // so that it remains synchronized with the DOM!
                     });
                 }
 
