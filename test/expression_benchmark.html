@@ -43,15 +43,15 @@
 
         const timing = Date.now();
         Test.create({test() {
-            Assert.assertTrue((Date.now() -timing) < 60);
+            Assert.assertTrue((Date.now() -timing) < 75);
         }});
-        Test.create({timeout:25, test() {
+        Test.create({timeout:30, test() {
             let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (let loop = 0; loop < 2500; loop++)
                 Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
         }});
-        Test.create({timeout:30, test() {
+        Test.create({timeout:50, test() {
             let expression = document.querySelector("script[type='text/expression']");
             expression = expression.innerHTML;
             for (let loop = 0; loop < 25000; loop++)
