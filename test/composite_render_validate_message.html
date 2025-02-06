@@ -43,27 +43,13 @@
           document.body.innerHTML = "<pre>" + snapshots.join("\r\n")
                   .replace(/</g, "&lt;")
                   .replace(/>/g, "&gt;") + "</pre>";
-          let pattern = "script[type='text/test1']";
-          if (navigator.engine === "goanna")
-              pattern = "script[type='text/test2']";
-          Assert.assertSameTo(pattern, snapshots.join("\r\n"));
+          const pattern = Test.read("composite_render_attributes_" + navigator.engine + ".txt");
+          Assert.assertSameText(pattern, snapshots.join("\r\n"));
       }});
 
       const Model = {
-        text1: ""
+          text1: ""
       }
-    </script>
-    <script type="text/test1">
-      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change">
-      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" new_attr="wrong email"> xxx
-      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" new_attr="wrong email"> xxx@
-      <input id="text1" type="text" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change"> xxx@xxx
-    </script>
-    <script type="text/test2">
-      <input id="text1" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" type="text">
-      <input id="text1" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" new_attr="wrong email" type="text"> xxx
-      <input id="text1" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" new_attr="wrong email" type="text"> xxx@
-      <input id="text1" placeholder="e-mail address" pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$" events="input change" type="text"> xxx@xxx
     </script>
   </head>
   <body>
