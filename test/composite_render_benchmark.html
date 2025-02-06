@@ -37,7 +37,6 @@
             if (navigator.engine === "gecko") {
                 timeout1 = 350;
             }
-            alert(timeout1);
             Test.create({test() {
                 console.log(`Benchmark 1: ${timing}ms`);
                 Assert.assertTrue(`${timing}ms`, timing < timeout1);

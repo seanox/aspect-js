@@ -8,7 +8,6 @@
 // composites, where JS modules are optional.
 try {#import io/moduleY
 } catch (error) {
-    alert(error);
     _error_collector.push(String(error));
 }
 

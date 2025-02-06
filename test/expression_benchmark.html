@@ -47,6 +47,10 @@
         // 2: goanna -- | 100   i5-1240P
         // 3: goanna -- | 300   i5-1240P
 
+        // 1: Gecko  -- |  75   i5-1240P
+        // 2: Gecko  -- |  25   i5-1240P
+        // 3: Gecko  -- |  55   i5-1240P
+
         const timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
             if (Test.status().queue !== undefined)
@@ -69,6 +73,12 @@
                 timeout2 = 125;
                 timeout3 = 350;
             }
+            if (navigator.engine === "gecko") {
+                timeout1 = 75;
+                timeout2 = 50;
+                timeout3 = 75;
+            }
+
             Test.create({test() {
                 console.log(`Benchmark 1: ${Date.now() -timing}ms`);
                 Assert.assertTrue((Date.now() -timing) < timeout1);
