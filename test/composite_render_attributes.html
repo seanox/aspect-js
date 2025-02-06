@@ -17,10 +17,8 @@
         Test.create({test() {
             const text = snapshots.join("\r\n\r\n");
             document.body.innerText = text;
-            let pattern = "script[type='text/test1']";
-            if (navigator.engine === "goanna")
-                pattern = "script[type='text/test2']";
-            Assert.assertSameTo(pattern, text);
+            const pattern = Test.read("composite_render_attributes_" + navigator.engine + ".txt");
+            Assert.assertSameText(pattern, text);
         }});
 
         const snapshots = [];
