@@ -14,7 +14,7 @@
 
         Test.activate();
 
-        // 1: Blink   250 /  250  i5-1240P
+        // 1: Blink   250 /  190  i5-1240P
         // 1: WebKit  --- /  565  iPad Gen 10
         // 1: goanna  --- / 2075  i5-1240P
 
@@ -23,7 +23,7 @@
             source = Test.read("scripting_parse_benchmark.js");
             let timeout1;
             if (navigator.engine === "blink") {
-                timeout1 = 250;
+                timeout1 = 225;
             }
             if (navigator.engine === "webkit") {
                 timeout1 = 575;
@@ -41,6 +41,7 @@
                     }
                 }
                 document.body.innerText += "Timing " + (Date.now() -timing) + "\n";
+                console.log(`Benchmark 1: ${Date.now() -timing}ms`);
             }});
             Test.start();
         });

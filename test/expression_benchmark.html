@@ -39,13 +39,13 @@
         // 2: Blink  25 |  25   i5-1240P
         // 3: Blink  30 |  30   i5-1240P
 
-        // 1: WebKit -- |  80   iPad Gen 10
-        // 2: WebKit -- |  70   iPad Gen 10
-        // 3: WebKit -- |  75   iPad Gen 10
+        // 1: WebKit -- |  100  iPad Gen 10
+        // 2: WebKit -- |   65  iPad Gen 10
+        // 3: WebKit -- |   65  iPad Gen 10
 
-        // 1: goanna -- | 152   i5-1240P
-        // 2: goanna -- | 115   i5-1240P
-        // 3: goanna -- | 325   i5-1240P
+        // 1: goanna -- |  90   i5-1240P
+        // 2: goanna -- | 100   i5-1240P
+        // 3: goanna -- | 300   i5-1240P
 
         const timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -60,29 +60,34 @@
                 timeout3 = 50;
             }
             if (navigator.engine === "webkit") {
-                timeout1 = 95;
+                timeout1 = 115;
                 timeout2 = 75;
                 timeout3 = 75;
             }
             if (navigator.engine === "goanna") {
-                timeout1 = 200;
-                timeout2 = 150;
-                timeout3 = 375;
+                timeout1 = 115;
+                timeout2 = 125;
+                timeout3 = 350;
             }
             Test.create({test() {
+                console.log(`Benchmark 1: ${Date.now() -timing}ms`);
                 Assert.assertTrue((Date.now() -timing) < timeout1);
             }});
             Test.create({timeout:timeout2, test() {
+                const timing = Date.now();
                 let expression = document.querySelector("script[type='text/expression']");
                 expression = expression.innerHTML;
                 for (let loop = 0; loop < 2500; loop++)
-                  Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
+                    Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
+                console.log(`Benchmark 2: ${Date.now() -timing}ms`);
             }});
             Test.create({timeout:timeout3, test() {
+                const timing = Date.now();
                 let expression = document.querySelector("script[type='text/expression']");
                 expression = expression.innerHTML;
                 for (let loop = 0; loop < 25000; loop++)
-                  Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
+                    Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
+                console.log(`Benchmark 3: ${Date.now() -timing}ms`);
             }});
             Test.start();
         });
