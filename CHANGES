@@ -19,7 +19,7 @@ CR: Composite: Added Composite.lookup(selector)
 CR: Composite: Conversion from acceptors to interceptors
 CR: Composite: Conversion to a separate scope page for expression variables
     Variables are set by expressions, which includes the variables from the
-     attribute iterate, now use their own scope page and are no longer global.
+    attribute iterate, now use their own scope page and are no longer global.
 CR: Extension: Review, corrections and optimization
     - Renamed window.location.pathcontext in window.location.contextPath
 CR: Release: Review, corrections and optimization
