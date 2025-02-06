@@ -19,6 +19,7 @@
         // 1: Blink   350 /  325   i5-1240P
         // 1: WebKit  --- /  750   iPad Gen 10
         // 1: goanna  --- / 2300   i5-1240P
+        // 1: Gecko   --- /  335   i5-1240P
 
         let timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
@@ -33,6 +34,10 @@
             if (navigator.engine === "goanna") {
                 timeout1 = 2350;
             }
+            if (navigator.engine === "gecko") {
+                timeout1 = 350;
+            }
+            alert(timeout1);
             Test.create({test() {
                 console.log(`Benchmark 1: ${timing}ms`);
                 Assert.assertTrue(`${timing}ms`, timing < timeout1);
