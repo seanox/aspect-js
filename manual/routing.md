@@ -179,8 +179,8 @@ TODO:
 
 ## Paths
 Paths are used for navigation, routing and controlling the view flow. The target
-can be a view or a function if using interceptors. For SPAs (single-page
-applications), the anchor part of the URL is used for navigation and routes.
+can be a view or a function if using interceptors. For SPAs (Single-Page
+Applications), the anchor part of the URL is used for navigation and routes.
 
 ```
 https://example.local/example/#path

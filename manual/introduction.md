@@ -9,7 +9,8 @@
 Inspired by the good experiences with JSF (Java Server Faces) in terms of
 functionality and easy integration into the markup, the idea for a similar
 client-side full-stack solution with a minimalistic and lightweight approach for
-the implementation of single-page applications (SPAs) was born.
+the implementation of Single-Page Applications (SPAs) and Micro-Frontends was
+born.
 
 Seanox aspect-js takes the declarative approach of HTML and extends this with
 expression language, reactivity rendering with additional attributes, Model View
@@ -134,8 +135,9 @@ or
 ```
 
 __The framework has been developed for the implementation of modular and
-component-based single-page applications. Due to the automatic loading of
-resources, modules and data, a web server is required for use.__
+component-based Single-Page applications and Micro-Frontends. Due to the
+automatic loading of resources, modules and data, a web server is required for
+use.__
 
 ## Scope
 Seanox aspect-js works exclusively in the HTML element `BODY`, which itself is
@@ -888,8 +890,8 @@ terminate the logic within the hashchange event.
 
 ### Paths
 Paths are used for navigation, routing and controlling the view flow. The target
-can be a view or a function if using interceptors. For SPAs (single-page
-applications), the anchor part of the URL is used for navigation and routes.
+can be a view or a function if using interceptors. For SPAs (Single-Page
+Applications), the anchor part of the URL is used for navigation and routes.
 
 ```
 https://example.local/example/#path
