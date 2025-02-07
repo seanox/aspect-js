@@ -1,19 +1,20 @@
-1.8.0 2025xxxx
+1.8.0 20250207
 BF: Review: Corrections and optimization
 BF: Test: Correction for the output of messages with timestamp
 BF: Test: Correction of Assert.assertSame(), incorrect implementation
 BF: Composite: Correction of partial rendering of iterate
-CR: Composite: Validation works strictly by default
-    The validation must explicitly return true so that the input data from the
-    HTML elements is synchronized to the models. The behavior can be
-    deactivated with the declaration: validate="optional", which was the
-    previous default behavior. In the markup, the attribute strict is therefore
-    omitted.
-CR: Composite: Validation message is shown by default as native browser tooltip
-    In the markup, the attribute notification is therefore omitted.
-CR: Composite: Validation message added redirection to an attribute
-    If a message begin with @<attribute>:, which includes the return values of
-    express, these are redirected to the attribute declared in this way.
+CR: Composite: Validation corrections and optimization
+    - Validation works strictly by default
+      The validation must explicitly return true so that the input data from the
+      HTML elements is synchronized to the models. The behavior can be
+      deactivated with the declaration: validate="optional", which was the
+      previous default behavior. In the markup, the attribute strict is
+      therefore omitted.
+    - Validation message is shown by default as native browser tooltip
+      In the markup, the attribute notification is therefore omitted.
+    - Validation message added redirection to an attribute
+      If a message begin with @<attribute>:, which includes the return values of
+      express, these are redirected to the attribute declared in this way.
 CR: Composite: Added Composite.lookup(selector)
     Determines the corresponding meta-object for the passed selector.
 CR: Composite: Conversion from acceptors to interceptors

@@ -16,10 +16,10 @@ function and an easy integration into the markup, arose a similar client-side
 fullstack solution.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
-Applications (SPAs). This framework takes the declarative approach of HTML and
-extends this with expression language, reactivity rendering with additional
-attributes, Model View Controller, view model binding, events, interceptors,
-resource bundle, NoSQL datasource, test environment and much more.
+Applications (SPAs) and Micro-Frontends. This framework takes the declarative
+approach of HTML and extends this with expression language, reactivity rendering
+with additional attributes, Model View Controller, view model binding, events,
+interceptors, resource bundle, NoSQL datasource, test environment and much more.
 
 # Features
 - Easy integration in markup and JavaScript (clean code)  
@@ -52,8 +52,9 @@ resource bundle, NoSQL datasource, test environment and much more.
   internationalization (i18n), localization (l10n) and text outsourcing 
 - NoSQL datasource based on XML  
   lightweight data management for aggregation / projection / transformation
-- Micro Frontends  
-  platform and framework for the implementation of micro-frontends
+- Micro-Frontends and Single-Page Applications (SPAs)  
+  platform and framework for the implementation of Micro-Frontends and
+  Single-Page Applications
 - Test environment  
   for automated unit tests and integration tests
 - ... 
@@ -90,30 +91,25 @@ specific language governing permissions and limitations under the License.
   <img src="https://img.shields.io/badge/WebKit-tested-green?style=for-the-badge">
 </p>
 
-[Seanox aspect-js 1.7.0](https://github.com/seanox/aspect-js/releases/download/1.7.0/aspect-js-1.7.0.zip)  
-[Seanox aspect-js 1.7.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.7.0.zip)
+[Seanox aspect-js 1.8.0](https://github.com/seanox/aspect-js/releases/download/1.8.0/aspect-js-1.8.0.zip)  
+[Seanox aspect-js 1.8.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.8.0.zip)
 
 # Release Channels
 The release channels continuously provide the latest final versions, so Seanox
 aspect-js is always up to date.
 
-## Version 1.7.0
-
-### Standard: Contains all minimized
+## Version 1.8.0
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
-  for development and testing
-
-### Standard Max: Contains all
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js  
-  for development and testing not minimized and with comments
-
-### Core: Contains all minimized, except the Test API
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core.js  
   __for deployment without Test API__
 
-### Core Max: Contains all, except the Test API
-- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-core-max.js  
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js  
   __for deployment without Test API__ not minimized and with comments
+
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-testing.js  
+  for development and testing
+
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-testing-max.js  
+  for development and testing not minimized and with comments
 
 # Manuals
 - [Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/introduction.md#einf&uuml;hrung)
@@ -121,30 +117,20 @@ aspect-js is always up to date.
 - [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 # Changes
-## 1.7.0 20241228  
-BF: Composite: Correction from mounting (dock/undock) composites with namespace  
-BF: Composite: Correction when inserting markup into composites  
-BF: Composite: Correction when loading CSS modules  
-BF: Composite: Correction of the view model binding  
-BF: Composite Mount Events: Correction of the unwanted assignment of child elements  
-BF: Reactive: Correction of incorrect creation of proxies for HTML elements  
-BF: Reactive: Correction of unwanted rendering when docking modules  
-CR: Composite: Omission of the attribute namespace  
-CR: Composite: Omission of attributes strict in combination with composite  
-CR: Composite: Added EVENT_MODULE_LOAD when a module is loaded  
-CR: Composite: Added EVENT_MODULE_DOCK/EVENT_MODULE_READY/EVENT_MODULE_UNDOCK  
-CR: Composite Render Iterate: Optimization for updating markup  
-CR: Composite Render Iterate: Optimization of the error output in the view  
-CR: Composite Render Condition: Optimization of the error output in the view  
-CR: Composite Render: Optimization of IDs before rendering  
-CR: Datasource: Optimization of language selection  
-CR: Documentation: Reduction to English  
-CR: Expression: Optimization of the return of errors  
-CR: Expression: Extension of the element expression by //...// for embedding logic  
-CR: Expression: Optimization when interpreting in combination with text  
-CR: Messages: Change in case of multiple keys, the first one wins  
-CR: Messages: Added locales/messages for modules  
-CR: Test: Update web server to version 5.7.1  
+## 1.8.0 20250207  
+BF: Review: Corrections and optimization  
+BF: Test: Correction for the output of messages with timestamp  
+BF: Test: Correction of Assert.assertSame(), incorrect implementation  
+BF: Composite: Correction of partial rendering of iterate  
+CR: Composite: Validation corrections and optimization  
+CR: Composite: Added Composite.lookup(selector)  
+CR: Composite: Conversion from acceptors to interceptors  
+CR: Composite: Conversion to a separate scope page for expression variables  
+CR: Extension: Review, corrections and optimization  
+CR: Release: Review, corrections and optimization  
+CR: Review: Corrections and optimization  
+CR: SiteMap: Review, refactoring, corrections and optimization  
+CR: Test: Change the start to ant -f development/build.xml run  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
