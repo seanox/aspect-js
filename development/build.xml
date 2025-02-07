@@ -148,6 +148,24 @@
     </sequential>
   </macrodef>
 
+  <macrodef name="file-replace-tabs">
+    <attribute name="input"/>
+    <sequential>
+      <replaceregexp file="@{input}" flags="g" byline="true"
+          match=" {24}" replace="&#09;&#09;&#09;&#09;&#09;&#09;"/>
+      <replaceregexp file="@{input}" flags="g" byline="true"
+          match=" {20}" replace="&#09;&#09;&#09;&#09;&#09;"/>
+      <replaceregexp file="@{input}" flags="g" byline="true"
+          match=" {16}" replace="&#09;&#09;&#09;&#09;"/>
+      <replaceregexp file="@{input}" flags="g" byline="true"
+          match="^ {12}" replace="&#09;&#09;&#09;"/>
+      <replaceregexp file="@{input}" flags="g" byline="true"
+          match="^ {8}" replace="&#09;&#09;"/>
+      <replaceregexp file="@{input}" flags="g" byline="true"
+          match="^ {4}" replace="&#09;"/>
+    </sequential>
+  </macrodef>
+
   <target name="release" depends="changes">
     <release-locate/>
 
@@ -220,6 +238,9 @@
     <file-minimize input="${release.file.testing.max}" output="${release.file.testing}"/>
     <file-es6-lint input="${release.file.testing.max}"/>
     <file-es6-lint input="${release.file.testing}"/>
+
+    <file-replace-tabs input="${release.file.max}"/>
+    <file-replace-tabs input="${release.file.testing.max}"/>
 
     <delete dir="${workspace.optimize}/node_modules"/>
     <delete file="${workspace.optimize}/package-lock.json"/>

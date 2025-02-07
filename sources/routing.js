@@ -57,7 +57,7 @@
  *         ----
  * Paths are used for navigation, routing and controlling the view flow. The
  * target can be a view or a function if using interceptors. For SPAs
- * (single-page applications), the anchor part of the URL is used for navigation
+ * (Single-Page Applications), the anchor part of the URL is used for navigation
  * and routes.
  *
  * Similar to a file system, absolute and relative paths are also supported
