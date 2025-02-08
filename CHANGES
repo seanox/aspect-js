@@ -1,3 +1,8 @@
+1.8.1 2025xxxx
+BF: Composite: Validation corrections and optimization
+    - Omission of the reportValidity method call. More annoying than helpful due
+      to the loss of focus (standard browser behavior).
+
 1.8.0 20250207
 BF: Review: Corrections and optimization
 BF: Test: Correction for the output of messages with timestamp
