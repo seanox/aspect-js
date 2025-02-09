@@ -1963,6 +1963,18 @@
                             while (meta.entry = meta.iterate.iterateNext())
                                 meta.array.push(meta.entry);
                             iterate = meta.array;
+                        } else if (typeof iterate === "number"
+                                && iterate < 0) {
+                            iterate = [Math.abs(iterate)];
+                            for (let index = iterate[0] -1; index >= 0; index--)
+                                iterate.push(index);
+                            iterate.shift();
+                        } else if (typeof iterate === "number"
+                                && iterate >= 0) {
+                            iterate = [iterate];
+                            for (let index = 0; index < iterate[0]; index++)
+                                iterate.push(index);
+                            iterate.shift();
                         } else iterate = Array.from(iterate);
 
                         selector.innerHTML = "";

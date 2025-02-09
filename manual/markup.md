@@ -351,6 +351,32 @@ const Model = {
 </select>
 ```
 
+> [!NOTE]
+> If using arrays in combination with reactive objects, please note that iterate
+> accesses the arrays directly. If the array is a simple list of values, changes
+> to the values also mean a change to the array, which triggers the re-rendering
+> of the iterate. Should the values in the array be changed at runtime without
+> triggering a re-rendering of the iterate, the array must contain objects with
+> the values, because setting the value in the objects does not cause a change
+> in the array itself and therefore no re-renderingis triggered.  
+> 
+> Alternatively, the length of the array can also be passed to the iterate. It
+> then generates a list of values with the index without accessing the elements.
+> The index can then be used by the expression within the iterate to access the
+> array.
+
+```html
+<select iterate={{months:Model.months.length}}>
+  <option value="{{months.index}}">
+    {{Model.months[months.index]}}
+  </option>
+</select>
+```
+
+If the value for an iterator is a positive number, a list of values from 0 to
+(number -1) is used. If the value is negative, a descending list of values is
+used from (number +1) to 0.
+
 ### message
 Message is an optional part of [Validation](#validate) and is used for text and
 error output in case of an unconfirmed validation. This requires a combination

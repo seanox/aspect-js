@@ -1,7 +1,10 @@
-1.8.1 2025xxxx
+1.9.0 2025xxxx
 BF: Composite: Validation corrections and optimization
     - Omission of the reportValidity method call. More annoying than helpful due
       to the loss of focus (standard browser behavior).
+CR: Markup: iterate also supports numbers
+    Positive numbers cause a list of values from 0 to (number -1), negative
+    values cause a descending list of values from (number +1) to 0.
 
 1.8.0 20250207
 BF: Review: Corrections and optimization
