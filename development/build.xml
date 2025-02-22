@@ -13,7 +13,7 @@
     <echo>             Publishes the version to the npm repository       </echo>
     <echo>                                                               </echo>
     <echo>  test       Creates a release for testing                     </echo>
-    <echo>             Starts the included development server            </echo>
+    <echo>  test-max   Starts the included development server            </echo>
     <echo>             Console output of the access log                  </echo>
     <echo>                                                               </echo>
     <echo>  start      Starts the included development server            </echo>
