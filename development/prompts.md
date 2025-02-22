@@ -3,6 +3,11 @@ deutsch + Du
 
 # Documentation
 
+## Check text for comprehensibility
+JavaScript + Frontend:
+Bitte versetze dich in Lage eines JavaScript-Frontend-Entwickler:
+Ist der nachfolgende Text verständlich oder wirft er Fragen auf?
+
 ## Completion of method comments
 JavaScript:
 In den nachfolgenden Eingaben gebe ich Dir wiederholt JavaScript-Funktionen.

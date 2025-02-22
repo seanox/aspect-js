@@ -229,13 +229,13 @@ h1:after {
 <h1 title="{{'Hello World!'}}"/>
 
 <h1 output="{{'Hello World!'}}"/>
-<h1 output="{{'xml:/example/content'}}"/>
-<h1 output="xml:/example/content"/>
+<h1 output="{{'xml://example/content'}}"/>
+<h1 output="xml://example/content"/>
 <h1 output="{{Messages['hello']}}"/>
 
 <h1 import="{{'Hello World!'}}"/>
-<h1 import="{{'xml:/example/content'}}"/>
-<h1 import="xml:/example/content"/>
+<h1 import="{{'xml://example/content'}}"/>
+<h1 import="xml://example/content"/>
 <h1 import="{{Messages['hello']}}"/>
 ```
 

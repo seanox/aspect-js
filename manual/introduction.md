@@ -226,11 +226,11 @@ only be executed if the condition is `true`.
     and it's {{new Date().toLocaleTimeString()}} o'clock.">
 </p>
 
-<p output="xml:/example/content">
+<p output="xml://example/content">
   loading resource...
 </p>
 
-<p output="xml:/example/data xslt:/example/style">
+<p output="xml://example/data xslt://example/style">
   loading resource...
 </p>
 ```
@@ -254,11 +254,11 @@ only be executed if the condition is `true`.
     and it's {{new Date().toLocaleTimeString()}} o'clock.">
 </p>
 
-<p import="xml:/example/content">
+<p import="xml://example/content">
   loading resource...
 </p>
 
-<p import="xml:/example/data xslt:/example/style">
+<p import="xml://example/data xslt://example/style">
   loading resource...
 </p>
 

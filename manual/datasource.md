@@ -296,19 +296,19 @@ The DataSource can also be used directly in the markup with the attributes
 [import](markup.md#import) and [output](markup.md#output).
 
 ```html
-<article import="xml:/example/content">
+<article import="xml://example/content">
   loading resource...
 </article>
 
-<article import="xml:/example/data xslt:/example/style">
+<article import="xml://example/data xslt://example/style">
   loading resource...
 </article>
 
-<article output="xml:/example/content">
+<article output="xml://example/content">
   loading resource...
 </article>
 
-<article output="xml:/example/data xslt:/example/style">
+<article output="xml://example/data xslt://example/style">
   loading resource...
 </article>
 ```
