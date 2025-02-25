@@ -257,11 +257,11 @@ transformation URL (locator of the XSLT template) are is specified, separated by
 blank character. 
 
 ```html
-<article import="{{'xml://example/data xslt://example/style'}}">
+<article import="{{'xml://example/data + xslt://example/style'}}">
   loading resource...
 </article>
 
-<article import="xml://example/data xslt://example/style">
+<article import="xml://example/data + xslt://example/style">
   loading resource...
 </article>
 ```
@@ -477,11 +477,11 @@ transformation URL (locator of the XSLT template) are is specified, separated by
 blank character.
 
 ```html
-<article output="{{'xml://example/data xslt://example/style'}}">
+<article output="{{'xml://example/data + xslt://example/style'}}">
   loading resource...
 </article>
 
-<article output="xml://example/data xslt://example/style">
+<article output="xml://example/data + xslt://example/style">
   loading resource...
 </article>
 ```

@@ -300,7 +300,7 @@ The DataSource can also be used directly in the markup with the attributes
   loading resource...
 </article>
 
-<article import="xml://example/data xslt://example/style">
+<article import="xml://example/data + xslt://example/style">
   loading resource...
 </article>
 
@@ -308,7 +308,7 @@ The DataSource can also be used directly in the markup with the attributes
   loading resource...
 </article>
 
-<article output="xml://example/data xslt://example/style">
+<article output="xml://example/data + xslt://example/style">
   loading resource...
 </article>
 ```

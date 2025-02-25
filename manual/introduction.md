@@ -230,7 +230,7 @@ only be executed if the condition is `true`.
   loading resource...
 </p>
 
-<p output="xml://example/data xslt://example/style">
+<p output="xml://example/data + xslt://example/style">
   loading resource...
 </p>
 ```
@@ -258,7 +258,7 @@ only be executed if the condition is `true`.
   loading resource...
 </p>
 
-<p import="xml://example/data xslt://example/style">
+<p import="xml://example/data + xslt://example/style">
   loading resource...
 </p>
 
