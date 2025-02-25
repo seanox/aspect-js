@@ -22,19 +22,21 @@
  *     DESCRIPTION
  *     ----
  * DataSource is a NoSQL approach to data storage based on XML data in
- * combination with multilingual data separation, optional aggregation and
- * transformation.
- * A combination of the approaches of a read only DBS and a CMS.
- * 
- * Files are defined by locator.
- * A locator is a URL (xml://... or xslt://...) that is used absolute and
- * relative to the DataSource directory, but does not contain a locale
- * (language specification) in the path. The locale is determined automatically
- * for the language setting of the browser, or if this is not supported, the
- * standard from the locales.xml in the DataSource directory is used.
- * 
- * DataSource is based on static data.
- * Therefore, the implementation uses a cache to minimize network access.
+ * combination with multilingual data separation, optional aggregation, and
+ * transformation. It is a combination of the approaches of a read-only database
+ * system (DBS) and a content management system (CMS)."
+ *
+ * Data are addressed via a locator, which is a URL (xml://... or xslt://...),
+ * where both single and double slashes are supported. It is used as an absolute
+ * path without a file extension relative to the DataSource directory and does
+ * not contain a locale (language specification) in the path. The locale would
+ * be the first element in the path that the locator addresses. However, a
+ * locator can also be a fully qualified URL, which typically ends with a file
+ * extension (xml://....xml or xslt://....xslt). This kind of locator addresses
+ * an absolute path based on the current URL and does not include a locale.
+ *
+ * DataSource is based on static data. Therefore, the implementation uses a
+ * cache to minimize network access.
  * 
  * The data is queried with XPath, the result can be concatenated and
  * aggregated and the result can be transformed with XSLT. 
@@ -47,13 +49,18 @@
     const DATA = window.location.combine(window.location.contextPath, "/data");
 
     /**
-     * Pattern for a DataSource locator, based on the URL syntax but only
-     * the parts schema and path are used. A path segment begins with a word
-     * character _ a-z 0-9, optionally more word characters and additionally
-     * - can follow, but can not end with the - character. Paths are
-     * separated by the / character.
+     * Pattern for a DataSource locator, based on the URL syntax but only the
+     * schema, path, file and query are used. A path segment begins with a word
+     * character _ a-z 0-9, optionally more word characters and additionally -
+     * can follow, but can not end with the - character. Paths are separated by
+     * the / character.
+     * - group 1: DataSource URL without optional XPath
+     * - group 2: protocol
+     * - group 3: locator without optional XPath
+     * - group 4: file without slash (optional)
+     * - group 5: XPath without question mark (optional)
      */
-    const PATTERN_LOCATOR = /^(?:([a-z]+):\/+)(\/((\w+)|(\w+(\-+\w+)+)))+$/;
+    const PATTERN_LOCATOR = /^((?:(xml|xslt):\/?)((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))(?:\?([^\s]*))?$/;
 
     /** Pattern to detect JavaScript elements */
     const PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;
@@ -63,6 +70,28 @@
 
     /** Constant for attribute type */
     const ATTRIBUTE_TYPE = "type";
+
+    const _fetch = (locator) => {
+
+        let data = ((locator) => {
+            const hash = locator.hashCode();
+            if (_cache.hasOwnProperty(hash))
+                return _cache[hash];
+            const request = new XMLHttpRequest();
+            request.overrideMimeType("application/xslt+xml");
+            request.open("GET", locator, false);
+            request.send();
+            if (request.status !== 200)
+                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+            const data = request.responseXML;
+            _cache[hash] = data;
+            return data.clone();
+        })(locator.location);
+
+        if (locator.xpath === undefined)
+            return data;
+        return data.evaluate(locator.xpath, data, null, XPathResult.ANY_TYPE, null);
+    };
 
     compliant("DataSource");
     compliant(null, window.DataSource = {
@@ -110,19 +139,34 @@
          @throws {TypeError} In case of invalid xml document and/or stylesheet
          */
         transform(xml, style, meta) {
-            
-            if (typeof xml === "string"
-                    && xml.match(PATTERN_LOCATOR))
+
+            if (typeof xml === "string") {
+                if (!xml.match(PATTERN_LOCATOR)
+                        || xml.match(PATTERN_LOCATOR)[2] !== "xml")
+                    throw new Error("Invalid xml locator: " + String(xml));
                 xml = DataSource.fetch(xml);
-                
-            if (typeof style === "string"
-                    && style.match(PATTERN_LOCATOR))
+                if (xml instanceof XPathResult) {
+                    const document = document.implementation.createDocument(null, "data", null);
+                    for (let node = xml.iterateNext(); node; node = xml.iterateNext()) {
+                        node = document.importNode(node, true);
+                        document.documentElement.appendChild(node);
+                    }
+                    xml = document;
+                }
+            }
+
+            if (typeof style === "string") {
+                if (!style.match(PATTERN_LOCATOR)
+                        || style.match(PATTERN_LOCATOR)[2] !== "xslt"
+                        || style.match(PATTERN_LOCATOR)[5] !== undefined)
+                    throw new Error("Invalid xslt locator: " + String(style));
                 style = DataSource.fetch(style);
-            
+            }
+
             if (!(xml instanceof XMLDocument))
                 throw new TypeError("Invalid xml document");   
             if (!(style instanceof XMLDocument))
-                throw new TypeError("Invalid xml stylesheet");
+                throw new TypeError("Invalid xslt stylesheet");
 
             const processor = new XSLTProcessor();
             processor.importStylesheet(style);
@@ -186,57 +230,52 @@
          * @param {string|boolean} transform Locator of the transformation
          *     style. If boolean true, the style is derived from the locator
          *     using the file extension xslt.
-         * @param {Object} [meta] Optional parameters for the XSLTProcessor.
-         * @returns {XMLDocument|DocumentFragment} The fetched data as an
-         *     XMLDocument or a DocumentFragment if transformation is used
+         * @param {Object} [meta] Optional parameters for sthe XSLTProcessor.
+         * @returns {XMLDocument|DocumentFragment|NodeList} The fetched data as
+         *     an XMLDocument or a DocumentFragment if transformation is used.
+         *     When using XPath without transformation, the determined NodeList
+         *     is returned.
          * @throws {Error} In case of invalid arguments
          */
-        fetch(locator, transform, meta) {
-            
-            if (typeof locator !== "string"
-                    || !locator.match(PATTERN_LOCATOR))
-                throw new Error("Invalid locator: " + String(locator));
+        fetch(locator, transform = false, meta) {
 
-            const type = locator.match(PATTERN_LOCATOR)[1];
-            const path = locator.match(PATTERN_LOCATOR)[2];
-            
-            if (arguments.length === 1) {
-
-                let data = DATA + "/" + DataSource.locale + "/" + path + "." + type;
-                data = data.replace(/\/+/g, "/");
-                const hash = data.hashCode();
-                if (_cache.hasOwnProperty(hash))
-                    return _cache[hash];
-                
-                const request = new XMLHttpRequest();
-                request.overrideMimeType("application/xslt+xml");
-                request.open("GET", data, false);
-                request.send();
-                if (request.status !== 200)
-                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-                data = request.responseXML;
-                _cache[hash] = data;
-                
-                return data.clone();
-            }
-            
-            if (!type.match(/^xml$/)
-                    && transform)
-                throw new Error("Transformation is not supported for this locator");
-
-            const data = DataSource.fetch(locator);
-            if (!transform)
-                return data.clone();
-            
-            let style = locator.replace(/(^((\w+\-+(?=\w))+)\w*)|(^\w+)/, "xslt");
+            if (typeof locator !== "string")
+                throw new Error("Invalid xml locator: " + String(locator));
+            if (!locator.match(PATTERN_LOCATOR))
+                throw new Error("Invalid xml locator: " + String(locator));
             if (typeof transform !== "boolean") {
-                style = transform;
-                if (typeof style !== "string"
-                        || !style.match(PATTERN_LOCATOR))
-                    throw new Error("Invalid style: " + String(style));  
+                if (typeof transform !== "string"
+                        || !transform.match(PATTERN_LOCATOR)
+                        || !transform.match(PATTERN_LOCATOR)[2] !== "xslt")
+                    throw new Error("Invalid xslt locator: " + String(transform));
             }
-            
-            return DataSource.transform(data, DataSource.fetch(style), meta);
+
+            locator = ((locator) => {
+                const matches = locator.match(PATTERN_LOCATOR);
+                const absolute = matches[4] !== undefined;
+                const location = absolute
+                    ? `${window.location.contextPath}${matches[3]}`
+                    : `${DATA}/${DataSource.locale}${matches[3]}.${matches[2]}`;
+                return {
+                    source:   locator,
+                    location: location,
+                    type:     matches[2],
+                    xpath:    matches[5]
+                };
+            })(locator);
+
+            if (locator.type === "xslt"
+                    && locator.xpath !== undefined)
+                throw new Error("Invalid XSLT locator: " + locator.source);
+
+            // Use Cases:
+            // 1. no XPath and no transformation
+            // 2. no XPath and transformation only
+            // 3. XPath only and no transformation
+            // 4. XPath and transformation
+            if (transform === false)
+                return _fetch(locator);
+            return _transform(locator, transform, meta);
         },
         
         /**

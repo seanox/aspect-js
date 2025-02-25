@@ -267,7 +267,7 @@
         get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
 
         /** Pattern for a datasource url */
-        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/\S+)\s*(?:\s*(?:xslt|xsl):\s*(\/\S+))*$/i;},
+        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/\S+)(?:\s+\+\s+\s*(?:xslt|xsl):\s*(\/\S+))*$/i;},
 
         /** Pattern for all accepted events */
         get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/;},
@@ -1832,8 +1832,8 @@
 
                     } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
                         let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
-                        data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
-                        data[1] = DataSource.fetch("xml://" + data[1]);
+                        data[2] = DataSource.fetch("xslt:" + (data[2] || data[1]));
+                        data[1] = DataSource.fetch("xml:" + data[1]);
                         data = DataSource.transform(data[1], data[2]);
                         selector.appendChild(data, true);
                         const serial = selector.ordinal();
@@ -1887,8 +1887,8 @@
                         value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
                     if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
                         let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
-                        data[2] = DataSource.fetch("xslt://" + (data[2] || data[1]));
-                        data[1] = DataSource.fetch("xml://" + data[1]);
+                        data[2] = DataSource.fetch("xslt:" + (data[2] || data[1]));
+                        data[1] = DataSource.fetch("xml:" + data[1]);
                         data = DataSource.transform(data[1], data[2]);
                         selector.appendChild(data, true);
                     } else if (value instanceof Node)
