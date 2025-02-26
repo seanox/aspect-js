@@ -98,7 +98,7 @@
         const map = new Map();
         const xpath = "/locales/" + DataSource.locale + "/label";
         const result = data.evaluate(xpath, data, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-        for (let node = result.iterateNext(); node; node = result.iterateNext()) {
+        for (let node; node = result.iterateNext();) {
             const key = (node.getAttribute("key") || "").trim();
             if (!map.has(key)) {
                 const value = ((node.getAttribute("value") || "").trim()

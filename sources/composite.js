@@ -1876,7 +1876,7 @@
                             selector.appendChild(data, true);
                         } else {
                             const data = DataSource.fetch(String(value));
-                            for (let node = data.iterateNext(); node; node = data.iterateNext())
+                            for (let node; node = data.iterateNext();)
                                 selector.appendChild(node, true);
                         }
                         const serial = selector.ordinal();
@@ -1944,7 +1944,7 @@
                             selector.appendChild(data, true);
                         } else {
                             const data = DataSource.fetch(String(value));
-                            for (let node = data.iterateNext(); node; node = data.iterateNext())
+                            for (let node; node = data.iterateNext();)
                                 selector.appendChild(node, true);
                         }
                     } else if (value instanceof Node)
