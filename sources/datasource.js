@@ -71,28 +71,6 @@
     /** Constant for attribute type */
     const ATTRIBUTE_TYPE = "type";
 
-    const _fetch = (locator) => {
-
-        let data = ((locator) => {
-            const hash = locator.hashCode();
-            if (_cache.hasOwnProperty(hash))
-                return _cache[hash];
-            const request = new XMLHttpRequest();
-            request.overrideMimeType("application/xslt+xml");
-            request.open("GET", locator, false);
-            request.send();
-            if (request.status !== 200)
-                throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
-            const data = request.responseXML;
-            _cache[hash] = data;
-            return data.clone();
-        })(locator.location);
-
-        if (locator.xpath === undefined)
-            return data;
-        return data.evaluate(locator.xpath, data, null, XPathResult.ANY_TYPE, null);
-    };
-
     compliant("DataSource");
     compliant(null, window.DataSource = {
 
@@ -130,25 +108,61 @@
          * The data and the stylesheet can be passed as Locator, XMLDocument an
          * in mix. The result as a DocumentFragment. Optionally, a meta-object
          * or a map with parameters for the XSLTProcessor can be passed.
+         *
+         * The method has the following various signatures:
+         *     DataSource.transform(xml);
+         *     DataSource.transform(xml, meta);
+         *     DataSource.transform(xml, style, meta);
+         *
          * @param {string|XMLDocument} xml Locator or XMLDocument to be
          *     transformed
-         * @param {string|XMLDocument} style Locator or XMLDocument stylesheet
+         * @param {string|XMLDocument} [style] Locator or XMLDocument stylesheet
          * @param {Object} [meta] Optional parameters for the XSLTProcessor
          * @returns {DocumentFragment} The transformation result as a
          *     DocumentFragment
          @throws {TypeError} In case of invalid xml document and/or stylesheet
          */
-        transform(xml, style, meta) {
+        transform(...variants) {
+
+            let xml = undefined;
+            let style = undefined;
+            let meta = undefined;
+            if (!["string"].includes(typeof variants[0])
+                    && !(variants[0] instanceof XMLDocument))
+                throw new TypeError(`Invalid xml locator: ${typeof variants[0]}`);
+            xml = variants[0];
+            if (variants.length >= 3) {
+                if (!["string"].includes(typeof variants[1])
+                        && !(variants[1] instanceof XMLDocument))
+                    throw new TypeError(`Invalid xslt locator: ${typeof variants[1]}`);
+                style = variants[1];
+                if (!["object"].includes(typeof variants[2]))
+                    throw new TypeError(`Invalid meta object: ${typeof variants[2]}`);
+                meta = variants[2];
+            } else if (variants.length >= 2) {
+                if (!["string", "object"].includes(typeof variants[1])
+                        && !(variants[1] instanceof XMLDocument))
+                    throw new TypeError(`Invalid xslt locator or meta object: ${typeof variants[1]}`);
+                if (!["string"].includes(typeof variants[1])
+                        && !(variants[1] instanceof XMLDocument))
+                    meta = variants[1];
+                else style = variants[1];
+            }
 
             if (typeof xml === "string") {
                 if (!xml.match(PATTERN_LOCATOR)
                         || xml.match(PATTERN_LOCATOR)[2] !== "xml")
                     throw new Error("Invalid xml locator: " + String(xml));
                 xml = DataSource.fetch(xml);
-                if (xml instanceof XPathResult) {
+                if (!(xml instanceof XMLDocument)) {
                     const document = document.implementation.createDocument(null, "data", null);
-                    for (let node = xml.iterateNext(); node; node = xml.iterateNext()) {
-                        node = document.importNode(node, true);
+                    if (xml instanceof NodeList) {
+                        for (let node; node = xml.iterateNext();) {
+                            node = document.importNode(node, true);
+                            document.documentElement.appendChild(node);
+                        }
+                    } else {
+                        const node = document.createTextNode(String(xml));
                         document.documentElement.appendChild(node);
                     }
                     xml = document;
@@ -222,33 +236,21 @@
         },
         
         /**
-         * Fetch the data to a locator as XMLDocument. Optionally the data can
-         * be transformed via XSLT, for which a meta-object or map with
-         * parameters for the XSLTProcessor can be passed. When using the
-         * transformation, the return type changes to a DocumentFragment.
+         * Fetch the data to a locator as XMLDocument.
+         * TODO: +XPath, -Transformation
          * @param {string} locator Locator to fetch data for.
-         * @param {string|boolean} transform Locator of the transformation
-         *     style. If boolean true, the style is derived from the locator
-         *     using the file extension xslt.
-         * @param {Object} [meta] Optional parameters for sthe XSLTProcessor.
          * @returns {XMLDocument|DocumentFragment|NodeList} The fetched data as
          *     an XMLDocument or a DocumentFragment if transformation is used.
          *     When using XPath without transformation, the determined NodeList
          *     is returned.
          * @throws {Error} In case of invalid arguments
          */
-        fetch(locator, transform = false, meta) {
+        fetch(locator) {
 
             if (typeof locator !== "string")
                 throw new Error("Invalid xml locator: " + String(locator));
             if (!locator.match(PATTERN_LOCATOR))
                 throw new Error("Invalid xml locator: " + String(locator));
-            if (typeof transform !== "boolean") {
-                if (typeof transform !== "string"
-                        || !transform.match(PATTERN_LOCATOR)
-                        || !transform.match(PATTERN_LOCATOR)[2] !== "xslt")
-                    throw new Error("Invalid xslt locator: " + String(transform));
-            }
 
             locator = ((locator) => {
                 const matches = locator.match(PATTERN_LOCATOR);
@@ -268,14 +270,39 @@
                     && locator.xpath !== undefined)
                 throw new Error("Invalid XSLT locator: " + locator.source);
 
-            // Use Cases:
-            // 1. no XPath and no transformation
-            // 2. no XPath and transformation only
-            // 3. XPath only and no transformation
-            // 4. XPath and transformation
-            if (transform === false)
-                return _fetch(locator);
-            return _transform(locator, transform, meta);
+            const data = ((locator) => {
+                const hash = locator.hashCode();
+                if (_cache.hasOwnProperty(hash))
+                    return _cache[hash];
+                const request = new XMLHttpRequest();
+                request.overrideMimeType("application/xslt+xml");
+                request.open("GET", locator, false);
+                request.send();
+                if (request.status !== 200)
+                    throw new Error(`HTTP status ${request.status} for ${request.responseURL}`);
+                const data = request.responseXML;
+                _cache[hash] = data;
+                return data.clone();
+            })(locator.location);
+
+            if (locator.xpath === undefined)
+                return data;
+
+            const result = data.evaluate(locator.xpath, data, null, XPathResult.ANY_TYPE, null);
+            switch (result.resultType) {
+                case XPathResult.NUMBER_TYPE:
+                    return result.numberValue;
+                case XPathResult.STRING_TYPE:
+                    return result.stringValue;
+                case XPathResult.BOOLEAN_TYPE:
+                    return result.booleanValue;
+            }
+            if (result.singleNodeValue)
+                return result.singleNodeValue;
+            let nodes = document.createDocumentFragment();
+            for (let node; node = result.iterateNext();)
+                nodes.appendChild(node);
+            return nodes.childNodes.length > 0 ? nodes : null;
         },
         
         /**
@@ -385,13 +412,13 @@
 
     let xml = DataSource.data;
     let nodes = xml.evaluate("/locales/*[@default]", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-    for (let node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
+    for (let node; node = nodes.iterateNext();) {
         let name = node.nodeName.toLowerCase();
         if (!DataSource.locales.includes(name))
             DataSource.locales.push(name);
     }
     nodes = xml.evaluate("/locales/*", xml, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-    for (let node = nodes.iterateNext(); node; node = nodes.iterateNext()) {
+    for (let node; node = nodes.iterateNext();) {
         const name = node.nodeName.toLowerCase();
         if (!DataSource.locales.includes(name))
             DataSource.locales.push(name);
