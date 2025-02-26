@@ -122,19 +122,52 @@
 
     "use strict";
 
-    // Storage for variables with the page scope
+    /** Storage for variables with the page scope */
     const _render_context_scope = [];
 
-    // Storage for dynamic/temporary variables with the page scope
+    /** Storage for dynamic/temporary variables with the page scope */
     const _render_context_stack = [];
 
-    // Storage for the currently used dynamic/temporary variables with the page
-    // scope. The storages _render_context_scope and _render_context_stack are
-    // used to manage the variables. So that these remain clean and the elements
-    // can use their initial context when rendering without manipulating
-    // _render_context_stack. This applies in particular to the generated
-    // children with their own meta-objects when iterating.
+    /**
+     * Storage for the currently used dynamic/temporary variables with the page
+     * scope. The storages _render_context_scope and _render_context_stack are
+     * used to manage the variables. So that these remain clean and the elements
+     * can use their initial context when rendering without manipulating
+     * _render_context_stack. This applies in particular to the generated
+     * children with their own meta-objects when iterating.
+     */
     const _render_context_workspace = [];
+
+    /**
+     * Pattern for a DataSource XML locator, based on the URL syntax but only
+     * schema, path, file and query are used. A path segment begins with a word
+     * character _ a-z 0-9, optionally more word characters and additionally -
+     * can follow, but can not end with the - character. Paths are separated by
+     * the / character.
+     * - group 1: DataSource URL without optional XPath
+     * - group 2: protocol
+     * - group 3: locator without optional XPath
+     * - group 4: file without slash (optional)
+     * - group 5: XPath without question mark (optional)
+     */
+    const PATTERN_DATASOURCE_LOCATOR_XML = /^((xml):\/?((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))(?:\?(\S*))?$/;
+
+    /**
+     * Pattern for a DataSource XSLT locator, based on the URL syntax but only
+     * the schema, path and fileare used. A path segment begins with a word
+     * character _ a-z 0-9, optionally more word characters and additionally -
+     * can follow, but can not end with the - character. Paths are separated by
+     * the / character.
+     * - group 1: DataSource URL without optional XPath
+     * - group 2: protocol
+     * - group 3: locator without optional XPath
+     * - group 4: file without slash (optional)
+     */
+    const PATTERN_DATASOURCE_LOCATOR_XSLT = /^((xslt):\/?((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))$/;
+
+    /** Pattern for DataSource locator XML with transformation */
+    const PATTERN_DATASOURCE_LOCATOR_XML_XSLT = new RegExp(PATTERN_DATASOURCE_LOCATOR_XML.source.slice(0, -1)
+        + "\\s+\\+\\s+" + PATTERN_DATASOURCE_LOCATOR_XSLT.source.substring(1));
 
     compliant("Composite");
     compliant(null, window.Composite = {
@@ -265,9 +298,6 @@
 
         /** Pattern for a scope (custom tag, based on a word) */
         get PATTERN_CUSTOMIZE_SCOPE() {return /[_a-z]([\w-]*\w)?$/i;},
-
-        /** Pattern for a datasource url */
-        get PATTERN_DATASOURCE_URL() {return /^\s*xml:\s*(\/\S+)(?:\s+\+\s+\s*(?:xslt|xsl):\s*(\/\S+))*$/i;},
 
         /** Pattern for all accepted events */
         get PATTERN_EVENT() {return /^([A-Z][a-z]+)+$/;},
@@ -1290,7 +1320,7 @@
          * https://github.com/seanox/aspect-js/blob/master/manual/en/markup.md#contents-overview           
          * 
          * @param {Element|string} selector DOM element or a string
-         * @param {boolean} lock Unlocking of the model validation
+         * @param {boolean} [lock] Unlocking of the model validation
          * @throws {Error} In case of errors occurring
          */
         render(selector, lock) {
@@ -1828,18 +1858,31 @@
                     } else if (value instanceof Element
                             || value instanceof NodeList) {
                         selector.appendChild(value, true);
-                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
+                        delete object.attributes[Composite.ATTRIBUTE_IMPORT];
 
-                    } else if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                        let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
-                        data[2] = DataSource.fetch("xslt:" + (data[2] || data[1]));
-                        data[1] = DataSource.fetch("xml:" + data[1]);
-                        data = DataSource.transform(data[1], data[2]);
-                        selector.appendChild(data, true);
+                    } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
+                            || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                        if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
+                                && String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)[5] === undefined) {
+                            const xml = String(value);
+                            const style = xml.replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
+                            const data = DataSource.transform(xml, style);
+                            selector.appendChild(data, true);
+                        } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                            const parts = String(value).split(/\s+\+\s+/);
+                            const xml = DataSource.fetch(parts[0]);
+                            const style = DataSource.fetch(parts[1]);
+                            const data = DataSource.transform(xml, style);
+                            selector.appendChild(data, true);
+                        } else {
+                            const data = DataSource.fetch(String(value));
+                            for (let node = data.iterateNext(); node; node = data.iterateNext())
+                                selector.appendChild(node, true);
+                        }
                         const serial = selector.ordinal();
                         const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                    
+
                     } else if (_render_cache[value] !== undefined) {
                         selector.innerHTML = _render_cache[value];
                         const serial = selector.ordinal();
@@ -1885,12 +1928,25 @@
                     let value = object.attributes[Composite.ATTRIBUTE_OUTPUT];
                     if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
-                    if (String(value).match(Composite.PATTERN_DATASOURCE_URL)) {
-                        let data = String(value).match(Composite.PATTERN_DATASOURCE_URL);
-                        data[2] = DataSource.fetch("xslt:" + (data[2] || data[1]));
-                        data[1] = DataSource.fetch("xml:" + data[1]);
-                        data = DataSource.transform(data[1], data[2]);
-                        selector.appendChild(data, true);
+                    if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
+                            || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                        if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
+                                && String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)[5] === undefined) {
+                            const xml = String(value);
+                            const style = xml.replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
+                            const data = DataSource.transform(xml, style);
+                            selector.appendChild(data, true);
+                        } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                            const parts = String(value).split(/\s+\+\s+/);
+                            const xml = DataSource.fetch(parts[0]);
+                            const style = DataSource.fetch(parts[1]);
+                            const data = DataSource.transform(xml, style);
+                            selector.appendChild(data, true);
+                        } else {
+                            const data = DataSource.fetch(String(value));
+                            for (let node = data.iterateNext(); node; node = data.iterateNext())
+                                selector.appendChild(node, true);
+                        }
                     } else if (value instanceof Node)
                         selector.appendChild(value.cloneNode(true), true);
                     else if (value instanceof NodeList)
@@ -2093,7 +2149,7 @@
                     if (type.match(Composite.PATTERN_COMPOSITE_SCRIPT)) {
                         try {Scripting.eval(selector.textContent);
                         } catch (error) {
-                            throw new Error("Composite JavaScript", error);
+                            throw new Error("Composite JavaScript: " + error.message);
                         }
                     }
                 }
@@ -2148,7 +2204,7 @@
         /**
          * Loads a resource (JS, CSS, HTML are supported).
          * @param {string} resource Path to the resource
-         * @param {boolean} strict Flag to enforce strict loading
+         * @param {boolean} [strict] Flag to enforce strict loading
          * @returns {string|undefined} The content when loading an HTML resource
          * @throws {Error} In the following cases
          *     - Unsupported resource type
