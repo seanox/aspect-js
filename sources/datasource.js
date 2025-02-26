@@ -60,7 +60,7 @@
      * - group 4: file without slash (optional)
      * - group 5: XPath without question mark (optional)
      */
-    const PATTERN_LOCATOR = /^((?:(xml|xslt):\/?)((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))(?:\?([^\s]*))?$/i;
+    const PATTERN_LOCATOR = /^((xml|xslt):\/?((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))(?:\?(\S*))?$/;
 
     /** Pattern to detect JavaScript elements */
     const PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;
@@ -142,7 +142,7 @@
 
             if (typeof xml === "string") {
                 if (!xml.match(PATTERN_LOCATOR)
-                        || String(xml.match(PATTERN_LOCATOR)[2]).toLowerCase() !== "xml")
+                        || xml.match(PATTERN_LOCATOR)[2] !== "xml")
                     throw new Error("Invalid xml locator: " + String(xml));
                 xml = DataSource.fetch(xml);
                 if (xml instanceof XPathResult) {
@@ -157,7 +157,7 @@
 
             if (typeof style === "string") {
                 if (!style.match(PATTERN_LOCATOR)
-                        || String(style.match(PATTERN_LOCATOR)[2]).toLowerCase() !== "xslt"
+                        || style.match(PATTERN_LOCATOR)[2] !== "xslt"
                         || style.match(PATTERN_LOCATOR)[5] !== undefined)
                     throw new Error("Invalid xslt locator: " + String(style));
                 style = DataSource.fetch(style);
@@ -246,7 +246,7 @@
             if (typeof transform !== "boolean") {
                 if (typeof transform !== "string"
                         || !transform.match(PATTERN_LOCATOR)
-                        || !String(transform.match(PATTERN_LOCATOR)[2]).toLowerCase() !== "xslt")
+                        || !transform.match(PATTERN_LOCATOR)[2] !== "xslt")
                     throw new Error("Invalid xslt locator: " + String(transform));
             }
 
@@ -264,7 +264,7 @@
                 };
             })(locator);
 
-            if (String(locator.type).toLowerCase() === "xslt"
+            if (locator.type === "xslt"
                     && locator.xpath !== undefined)
                 throw new Error("Invalid XSLT locator: " + locator.source);
 
