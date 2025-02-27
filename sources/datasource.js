@@ -104,23 +104,28 @@
         },
         
         /**
-         * Transforms an XMLDocument based on a passed stylesheet.
-         * The data and the stylesheet can be passed as Locator, XMLDocument an
-         * in mix. The result as a DocumentFragment. Optionally, a meta-object
-         * or a map with parameters for the XSLTProcessor can be passed.
+         * Transforms an XMLDocument based on a passed or derived stylesheet.
+         * The data and the stylesheet can be passed as Locator, XMLDocument as
+         * a mix. The result as a DocumentFragment. Optionally, a meta-object
+         * as map with parameters for the XSLTProcessor can be passed.
+         *
+         * The XML locator also supports XPath. In this case, the XPathResult
+         * for the transformation is embedded in an artificial XML document with
+         * a data root element.
          *
          * The method has the following various signatures:
          *     DataSource.transform(xml);
          *     DataSource.transform(xml, meta);
          *     DataSource.transform(xml, style, meta);
          *
-         * @param {string|XMLDocument} xml Locator or XMLDocument to be
+         * @param {string|XMLDocument} xml Locator or XML document to be
          *     transformed
-         * @param {string|XMLDocument} [style] Locator or XMLDocument stylesheet
-         * @param {Object} [meta] Optional parameters for the XSLTProcessor
+         * @param {string|XMLDocument} [style] Optional locator or XMLDocument
+         *     that is used as a stylesheet for transformation
+         * @param {Object} [meta] Optional  parameters for the XSLT processor
          * @returns {DocumentFragment} The transformation result as a
          *     DocumentFragment
-         @throws {TypeError} In case of invalid xml document and/or stylesheet
+         * @throws {Error} In case of invalid arguments
          */
         transform(...variants) {
 
@@ -237,12 +242,14 @@
         
         /**
          * Fetch the data to a locator as XMLDocument.
-         * TODO: +XPath, -Transformation
-         * @param {string} locator Locator to fetch data for.
-         * @returns {XMLDocument|DocumentFragment|NodeList} The fetched data as
-         *     an XMLDocument or a DocumentFragment if transformation is used.
-         *     When using XPath without transformation, the determined NodeList
-         *     is returned.
+         * @param {string} locator Locator to fetch data for as XMLDocument.
+         *     Optionally, an XPath query is also supported. The XPath is
+         *     appended to the locator separated by a question mark. The return
+         *     value depends on the XPath and can be boolean, number, string,
+         *     list of nodes or null.
+         * @returns {XMLDocument|string|boolean|number|NodeList|null}
+         *     The fetched data as an XMLDocument. When using XPath, it can be
+         *     boolean, number, string, list of nodes or null.
          * @throws {Error} In case of invalid arguments
          */
         fetch(locator) {
@@ -290,18 +297,18 @@
 
             const result = data.evaluate(locator.xpath, data, null, XPathResult.ANY_TYPE, null);
             switch (result.resultType) {
+                case XPathResult.BOOLEAN_TYPE:
+                    return result.booleanValue;
                 case XPathResult.NUMBER_TYPE:
                     return result.numberValue;
                 case XPathResult.STRING_TYPE:
                     return result.stringValue;
-                case XPathResult.BOOLEAN_TYPE:
-                    return result.booleanValue;
             }
-            if (result.singleNodeValue)
-                return result.singleNodeValue;
             let nodes = document.createDocumentFragment();
-            for (let node; node = result.iterateNext();)
-                nodes.appendChild(node);
+            if (!result.singleNodeValue) {
+                for (let node; node = result.iterateNext();)
+                    nodes.appendChild(node);
+            } else nodes.appendChild(result.singleNodeValue);
             return nodes.childNodes.length > 0 ? nodes : null;
         },
         
@@ -310,7 +317,7 @@
          *
          * The method has the following various signatures:
          *     DataSource.collect(locator, ...);
-         *     DataSource.collect(collector, [locators]);
+         *     DataSource.collect(collector, locator, ...);
          *
          * @param {string} collector Name of the collector element in the
          *     XMLDocument
