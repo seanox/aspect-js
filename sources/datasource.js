@@ -319,49 +319,50 @@
          *     DataSource.collect(locator, ...);
          *     DataSource.collect(collector, locator, ...);
          *
-         * @param {string} collector Name of the collector element in the
-         *     XMLDocument
-         * @param {Array|string} locators Array or VarArg with locators
+         * @param {...string} locators or collector, the name of the root
+         *     element in the artificial XML document, followed by the locators
          * @returns {XMLDocument|null} The created XMLDocument, otherwise null
-         * @throws {TypeError} In case of invalid arguments, collector,
-         *     collection entry
+         * @throws {Error} In case of invalid arguments, collector or collection
          */
         collect(...variants) {
-            
+
             if (variants.length <= 0)
                 return null;
 
-            let collection = [];
-
             let collector = "collection";
-            if (variants.length === 2
-                    && typeof variants[0] === "string"
-                    && Array.isArray(variants[1])) {
-                if (!variants[0].match(PATTERN_WORD))
-                    throw new TypeError("Invalid collector");
-                collector = variants[0];
-                collection = Array.from(variants[1]);
-            } else if (variants.length === 1
-                    && Array.isArray(variants[0])) {
-                collection = collection.concat(variants[0]);
-            } else collection = Array.from(variants);
-            
-            let hash = collector.hashCode() + ":" + collection.join().hashCode();
-            collection.forEach((entry) =>
+            if (variants.length > 1
+                    && variants[0].match(PATTERN_WORD))
+                collector = variants.shift();
+            variants.forEach(entry => {
+                if (typeof entry !== "string")
+                    throw new TypeError(`Invalid xml locator: ${typeof entry}`);
+                if (!entry.match(PATTERN_LOCATOR))
+                    throw new TypeError(`Invalid xml locator: ${entry}`);
+            });
+
+            let hash = collector.hashCode() + ":" + variants.join().hashCode();
+            variants.forEach(entry =>
                 hash += ":" + String(entry).hashCode());
             if (_cache.hasOwnProperty(hash))
                 return _cache[hash].clone();
 
-            const root = document.implementation.createDocument(null, collector, null);
-            collection.forEach((entry) => {
-                if (typeof entry !== "string")
-                    throw new TypeError("Invalid collection entry");
-                root.documentElement.appendChild(DataSource.fetch(entry).documentElement.cloneNode(true));
+            const data = document.implementation.createDocument(null, collector, null);
+            variants.forEach(entry => {
+                const result = DataSource.fetch(entry);
+                if (result instanceof XMLDocument) {
+                    data.documentElement.appendChild(result.documentElement.cloneNode(true));
+                } else if (result instanceof NodeList) {
+                    for (const node of result)
+                        data.documentElement.appendChild(node);
+                } else {
+                    data.documentElement.appendChild(
+                        document.createTextNode(String(result)));
+                }
             });
 
-            _cache[hash] = root;
-            return root.clone();
-        }      
+            _cache[hash] = data;
+            return data.clone();
+        }
     });
 
     /**

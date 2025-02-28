@@ -17,10 +17,10 @@
         Test.create({test() {
             DataSource.collect();
         }});
-        Test.create({expected:/\bInvalid collection/i, test() {
+        Test.create({expected:/\bInvalid xml locator: object/i, test() {
             DataSource.collect(null);
         }}); 
-        Test.create({expected:/\bInvalid collection/i, test() {
+        Test.create({expected:/\bInvalid xml locator: object/i, test() {
             DataSource.collect({});
         }});
 
@@ -47,9 +47,8 @@
             Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_b']").length);
             Assert.assertEquals(1, collection.querySelectorAll("collection > test[id='collect_c']").length);
         }});
-        
         Test.create({test() {
-            const collection = DataSource.collect("xxx", ["xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c"]);
+            const collection = DataSource.collect("xxx", "xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_c");
             Assert.assertEquals(3, collection.querySelectorAll("xxx > test").length);
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_a']").length);
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_b']").length);
@@ -59,10 +58,10 @@
         Test.create({expected:/\b404/i, test() {
             DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", "xml://datasource_collect_d");
         }});
-        Test.create({expected:/\bInvalid collection/i, test() {
+        Test.create({expected:/\bInvalid xml locator: object/i, test() {
             DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", null);
         }});
-        Test.create({expected:/\bInvalid collection/i, test() {
+        Test.create({expected:/\bInvalid xml locator: object/i, test() {
             DataSource.collect("xml://datasource_collect_a", "xml://datasource_collect_b", {});
         }});
 
