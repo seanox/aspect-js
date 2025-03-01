@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<test id="collect_a">
-  <title>Collect A</title>
-  <group>collect</group>
-  <text>A</text>
+<test id="collect_a" test_x="a">
+  <title test="aa">Collect A</title>
+  <group test="bb">collect</group>
+  <text test="cc">A</text>
 </test>

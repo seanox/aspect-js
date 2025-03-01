@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<test id="collect_b">
+<test id="collect_b" test_x="b">
   <title>Collect B</title>
   <group>collect</group>
   <text>B</text>

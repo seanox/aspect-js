@@ -19,7 +19,7 @@
         }});
         Test.create({expected:/\bInvalid xml locator: object/i, test() {
             DataSource.collect(null);
-        }}); 
+        }});
         Test.create({expected:/\bInvalid xml locator: object/i, test() {
             DataSource.collect({});
         }});
@@ -53,6 +53,27 @@
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_a']").length);
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_b']").length);
             Assert.assertEquals(1, collection.querySelectorAll("xxx > test[id='collect_c']").length);
+        }});
+        Test.create({test() {
+            const collection = DataSource.collect("xxx", "xml://datasource_collect_a?//*/@test");
+            const evaluator = new XPathEvaluator();
+            let result;
+            result = evaluator.evaluate("count(/xxx/attribute[@test])=3", collection);
+            Assert.assertTrue(result.booleanValue);
+            result = evaluator.evaluate("boolean(/xxx/attribute[@test='aa'])", collection);
+            Assert.assertTrue(result.booleanValue);
+            result = evaluator.evaluate("boolean(/xxx/attribute[@test='bb'])", collection);
+            Assert.assertTrue(result.booleanValue);
+            result = evaluator.evaluate("boolean(/xxx/attribute[@test='cc'])", collection);
+            Assert.assertTrue(result.booleanValue);
+        }});
+
+        Test.create({test() {
+            const collection = DataSource.collect("xxx", "xml://datasource_collect_a?count(//*/attribute/@test)");
+            const evaluator = new XPathEvaluator();
+            let result;
+            result = evaluator.evaluate("boolean(/xxx/text[text()='0'])", collection);
+            Assert.assertTrue(result.booleanValue);
         }});
 
         Test.create({expected:/\b404/i, test() {
