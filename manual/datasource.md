@@ -88,15 +88,16 @@ with the as default declared language.
 ## Locator
 The data in the data storage is addressed via a locator, which is a URL
 (`xml://...` or `xslt://...`), where both single and double slashes are
-supported. It is used as an absolute path without a file extension relative to
-the DataSource directory and does not contain a locale (language specification)
-in the path. The locale would be the first element in the path that the locator
-addresses and is determined automatically for the language setting of the
-browser, or if this is not supported, the standard from the `locales.xml` in the
-DataSource data storage is used. But a locator can also be a fully qualified
-URL, which then ends with a file extension (`xml://....xml` or
-`xslt://....xslt`). This type of locator addresses an absolute path based on the
-current URL and is not enriched with the locale.
+supported. A locator can be used contextually or explicitly.
+
+- __Contextual Locator__: Uses an absolute path without a file extension
+  relative to the DataSource directory and does not contain a locale (language 
+  specification) in the path. The locale is determined automatically based on
+  the browser's language setting or, if not supported, the default locale from
+  the `locales.xml` in the DataSource data storage.
+- __Explicit Locator__: Uses a fully qualified URL with a file extension
+  (`xml://....xml` or `xslt://....xslt`). This locator addresses an absolute
+  path based on the current URL and is not enriched with the locale.
 
 Each locator starts with a protocol that corresponds to the file extension in
 the data storage. __Only lowercase letters are accepted here__, as the automatic
