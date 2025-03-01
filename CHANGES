@@ -2,9 +2,21 @@
 BF: Composite: Validation corrections and optimization
     - Omission of the reportValidity method call. More annoying than helpful due
       to the loss of focus (standard browser behavior).
+BF: DataSource: Correction for the use of locator/path with (sub)directories
 CR: Markup: iterate also supports numbers
     Positive numbers cause a list of values from 0 to (number -1), negative
     values cause a descending list of values from (number +1) to 0.
+CR: DataSource: optimization and extension
+    - Added support for fully qualified locator/path
+      For access to sources outside the data directory.
+    - Switch to stricter URL
+      Only one and two slashes are accepted between protocol and path.
+    - Added XPath support for locators
+CR: Markup: import / output optimization and extension for DateSource
+    - new syntax for DataSource locator and transformation
+      use: xml://example.xml + xslt://example-template.xslt
+    - new syntax for DataSource locator with XPath
+      use: xml://example.xml?<xpath>
 
 1.8.0 20250207
 BF: Review: Corrections and optimization
@@ -413,21 +425,6 @@ CR: MVC Path: Support paths with beginning numbers
     Any word character (alphanumeric character) and underscore can be used.
 CR: MVC SiteMap: Omission of autofocus, since the use scrollIntoView can be too individual
     The own implementation is very simple and much flexible.
-    window.addEventListener("hashchange", (event) => {
-        var path = Path.normalize(event.newURL || "#");
-        var target = SiteMap.lookup(path);
-        if (target) {
-            target = target.facet || target.face;
-            if (target) {
-                target = target.replace(/(?!=#)#/, " #");
-                target = document.querySelector(target);
-                if (target) {
-                    target.scrollIntoView(true);
-                    target.focus();
-                }
-            }
-        }
-    });
 CR: MVC SiteMap: Added variable paths for faces and facets
     The character sequence ... at the end of a facet in the SiteMap configuration defines a variable path for a face(t).
     The path can be of any length and can be used to pass parameters and is comparable to PATH_INFO in CGI.
