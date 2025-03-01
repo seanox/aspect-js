@@ -95,6 +95,7 @@ supported. A locator can be used contextually or explicitly.
   specification) in the path. The locale is determined automatically based on
   the browser's language setting or, if not supported, the default locale from
   the `locales.xml` in the DataSource data storage.
+
 - __Explicit Locator__: Uses a fully qualified URL with a file extension
   (`xml://....xml` or `xslt://....xslt`). This locator addresses an absolute
   path based on the current URL and is not enriched with the locale.
@@ -106,17 +107,46 @@ uppercase and lowercase letters are combined.
 
 ```
 xml://fileA -> ./data/en/fileA.xml
-xsl://fileA -> ./data/en/fileA.xsl
+xslt://fileA -> ./data/en/fileA.xslt
 
-xml://foo/fileA -> ./data/en/foo/fileA.xml
+xml://data/en/foo/fileA.xml -> ./data/en/foo/fileA.xml
+xslt://data/en/foo/fileA.xslt -> ./data/en/foo/fileA.xslt
 ```
 
 ## XPath
-XPath is used as a functional query language and for the transformation of
-dynamic content.
+The DataSource uses XPath as a functional query language. Locator and
+transformation support this language and thus provide dynamic data access.
 
-For more information please read:
+For more information about XPath please read:
 [https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
+
+Only for XML locators can the XPath be added at the end, separated by a question
+mark.
+
+```
+xml://fileA?//*/@title
+
+xml://data/en/foo/fileA.xml?//*/@title
+```
+
+The return value depends on the XPath and can be boolean, number, string,
+NodeList, or null. When querying nodes using XPath, nodes are always returned.
+This also includes attributes and text nodes.
+
+Attributes are returned as nodes with the name _attribute_. The name and value
+of the addressed attribute are represented in the node by the _name_ and _value_
+attributes.
+
+```
+<attribute name="name of the attribute" value="value of the attribute></attribute>
+```
+
+Text nodes are also returned as nodes, but then with the name _text_. The value
+of the addressed text node is then the content of the node.
+
+```
+<text>content of the text node</text>
+```
 
 ## fetch
 The data is fetched with a locator through the fetch method. The return value
@@ -275,7 +305,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
 Collecting with an own article's collector.
 
 ```javascript
-DataSource.collect("articles", ['xml://paper', 'xml://envelope', 'xml://pen']);
+DataSource.collect("articles", "xml://paper", "xml://envelope", "xml://pen");
 ```
 
 ```xml
