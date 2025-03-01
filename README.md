@@ -18,46 +18,41 @@ fullstack solution.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This framework takes the declarative
-approach of HTML and extends this with expression language, reactivity rendering
-with additional attributes, Model View Controller, view model binding, events,
-interceptors, resource bundle, NoSQL datasource, test environment and much more.
+approach of HTML and extends this with Expression Language, Reactivity Rendering
+with additional attributes, Model View Controller (MVC), View Model Binding,
+Events, Interceptors, Resource Bundle, Immutable NoSQL DataSource, Test
+Environment and much more.
 
 # Features
-- Easy integration in markup and JavaScript (clean code)  
-  combinable with other JavaScript frameworks if they don't do the same thing do
-  and use a different syntax
-- Lightweight implementation  
-  requires no additional frameworks
-- Component based architecture
-- Namespaces and domain concept  
-  for better structuring of components, modules and business logic
-- Modularization (supports macros and imports at the runtime)  
-  component concept for smart/automatic loading of composite resources at runtime
-- Event handling
-- Expression Language  
-  meta-language extension with full JavaScript support
-- Reactivity rendering  
-  rendering reacts to changes in data objects and triggers partial rendering on
-  consumers
-- Markup rendering  
-  supports: conditions, custom tags, events, filter, interval, interceptors,
-  iterate, rendering, resources messages, validation, ...
-- Markup hardening  
-  makes it difficult to manipulate the attributes in the markup  
-  non-visible components are removed from the DOM and only reinserted when used  
-- Model View Controller (MVC) / Model View ViewModel (MVVM)  
-  supports view model binding, events and interceptors 
-- Routing to organize the page into views  
-  supports paths (routes), interceptors and permission concepts
-- Resource Bundle / Resource Messages  
-  internationalization (i18n), localization (l10n) and text outsourcing 
-- NoSQL datasource based on XML  
-  lightweight data management for aggregation / projection / transformation
-- Micro-Frontends and Single-Page Applications (SPAs)  
-  platform and framework for the implementation of Micro-Frontends and
-  Single-Page Applications
-- Test environment  
-  for automated unit tests and integration tests
+- __Easy Integration in Markup and JavaScript (Clean Code)__ Combinable with
+  other JavaScript frameworks if they don't do the same thing and use a
+  different syntax.
+- __Lightweight Implementation__ Requires no additional frameworks.
+- __Component-Based Architecture__
+- __Namespaces and Domain Concept__ For better structuring of components,
+  modules, and business logic.
+- __Modularization (Supports Macros and Imports at Runtime)__ Component concept 
+  for smart/automatic loading of composite resources at runtime.
+- __Event Handling__
+- __Expression Language__ Meta-language extension with full JavaScript support.
+- __Reactivity Rendering__ reacts to changes in data objects and triggers
+  partial rendering on consumers.
+- __Markup Rendering__ Supports: conditions, custom tags, events, filter,
+  interval, interceptors, iterate, rendering, resource messages, validation, ...
+- __Markup Hardening__ Makes it difficult to manipulate the attributes in the
+  markup. Non-visible components are removed from the DOM and only reinserted
+  when used.
+- __Model View Controller (MVC) / Model View ViewModel (MVVM)__ Supports view
+  model binding, events, and interceptors.
+- __Routing to Organize the Page into Views__ Supports paths (routes),
+  interceptors, and permission concepts.
+- __Resource Bundle / Resource Messages__ Internationalization (i18n),
+  localization (l10n), and text outsourcing.
+- __Immutable NoSQL DataSource__ Based on XML Lightweight data management for 
+  aggregation, projection, and transformation.
+- __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and framework
+  for the implementation of micro-frontends and single-page applications.
+- __Test Environment__ For automated unit tests and integration tests.
 - ... 
 
 # Licence Agreement

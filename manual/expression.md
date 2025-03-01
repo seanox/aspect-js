@@ -171,19 +171,25 @@ be be enclosed in square brackets.
 ```
 
 ### Variable-Expression
-With the expression language, global variables can also be created and set at
-the runtime. The expression must begin with the name of a variable (identifier),
-which use the word characters `_ a-z A-Z 0-9` and is separated from the actual
-expression by a colon.
+With the expression language, variables in the page scope can also be created
+and set at the runtime. The expression must begin with the name of a variable
+(identifier), which use the word characters `_ a-z A-Z 0-9` and is separated
+from the actual expression by a colon.
 
 ```
 {{foo:1 +2 +3 + 'x hello'}}
 ```
 
-Creates or sets the value for global variable `foo` with `6x hello`.
+Creates or sets the value for variable `foo` in the page scope with `6x hello`.
 
 The expression corresponds to the JavaScript syntax:
     `var foo = 1 +2 +3 + 'x hello';`
+
+> [!IMPORTANT]
+> __Page Scope:__ Refers to the fact that variables can only be used in the
+> markup and are isolated from the rest of the JavaScript. These variables are
+> specifically intended for the display and processing of data in HTML markup
+> and are not accessible in general JavaScript code.
 
 ### Combination
 All types of expressions can be combined.

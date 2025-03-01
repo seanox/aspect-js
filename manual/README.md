@@ -85,7 +85,7 @@ Machine translation with [DeepL](https://deepl.com).
   - [Data Storage](datasource.md#data-storage)
   - [Locales](datasource.md#locales)
   - [Locator](datasource.md#locator)
-  - [XPath](datasource.md#xpath)
+  - [XPath and XPath Functions](datasource.md#xpath-and-xpath-functions)
   - [fetch](datasource.md#fetch)
   - [transform](datasource.md#transform)
   - [collect](datasource.md#collect)

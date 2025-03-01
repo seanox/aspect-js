@@ -25,7 +25,7 @@ similar to SQL.
 - [Data Storage](#data-storage)
 - [Locales](#locales)
 - [Locator](#locator)
-- [XPath](#xpath)
+- [XPath and XPath Functions](#xpath-and-xpath-functions)
 - [fetch](#fetch)
 - [transform](#transform)
 - [collect](#collect)
@@ -113,9 +113,11 @@ xml://data/en/foo/fileA.xml -> ./data/en/foo/fileA.xml
 xslt://data/en/foo/fileA.xslt -> ./data/en/foo/fileA.xslt
 ```
 
-## XPath
-The DataSource uses XPath as a functional query language. Locator and
-transformation support this language and thus provide dynamic data access.
+## XPath and XPath Functions
+The DataSource uses XPath and XPath function as a functional query language.
+Locator and transformation support this language and thus provide dynamic data
+access. __In the further documentation, only the term XPath is used, which
+includes the use of XPath functions.__
 
 For more information about XPath please read:
 https://www.w3schools.com/xml/xpath_intro.asp.
@@ -239,11 +241,12 @@ case the automatic escaping is cancelled or undone.
 <article escape="on">
   <![CDATA[
   <p>
-    Seanox aspect-js is a minimalist approach to implementing Single-Page
-    Applications (SPAs). This framework takes the declarative approach of HTML
-    and extends this with expression language, reactivity rendering with
-    additional attributes, Model View Controller, view model binding, resource
-    bundle, NoSQL datasource, test environment and much more.
+    Seanox aspect-js focuses on a minimalist approach to implementing
+    Single-Page Applications (SPAs) and Micro-Frontends. This framework takes
+    the declarative approach of HTML and extends this with Expression Language,
+    Reactivity Rendering with additional attributes, Model View Controller
+    (MVC), View Model Binding, Events, Interceptors, Resource Bundle, Immutable
+    NoSQL DataSource, Test Environment and much more.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>

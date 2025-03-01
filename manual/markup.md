@@ -5,8 +5,8 @@
 
 # Markup
 With Seanox aspect-js the declarative approach of HTML is taken up and extended.
-In addition to the expression language, the HTML elements are provided with
-additional attributes for functions and view model binding. The corresponding
+In addition to the Expression Language, the HTML elements are provided with
+additional attributes for functions and View Model Binding. The corresponding
 renderer is included in the composite implementation and actively monitors the
 DOM starting from the BODY element via the MutationObserver and works and reacts
 recursively to changes.
