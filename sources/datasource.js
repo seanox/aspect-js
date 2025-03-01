@@ -246,10 +246,17 @@
          *     Optionally, an XPath query is also supported. The XPath is
          *     appended to the locator separated by a question mark. The return
          *     value depends on the XPath and can be boolean, number, string,
-         *     list of nodes or null.
+         *     NodeList or null.
+         *
+         *     When querying nodes using XPath, nodes are always returned. This
+         *     also includes attributes and text nodes. Attributes are displayed
+         *     as nodes of type attribute with the attributes name and value.
+         *     Text nodes appear as nodes of the type text, whereby the content
+         *     of the text node is saved as node content.
+         *
          * @returns {XMLDocument|string|boolean|number|NodeList|null}
          *     The fetched data as an XMLDocument. When using XPath, it can be
-         *     boolean, number, string, list of nodes or null.
+         *     boolean, number, string, NodeList or null.
          * @throws {Error} In case of invalid arguments
          */
         fetch(locator) {
@@ -304,16 +311,43 @@
                 case XPathResult.STRING_TYPE:
                     return result.stringValue;
             }
-            let nodes = document.createDocumentFragment();
-            if (!result.singleNodeValue) {
+
+            const xml = document.implementation.createDocument(null, "collection", null);
+
+            let nodes = [];
+            if (result.resultType !== XPathResult.FIRST_ORDERED_NODE_TYPE
+                    && result.resultType !== XPathResult.ANY_UNORDERED_NODE_TYPE)
                 for (let node; node = result.iterateNext();)
-                    nodes.appendChild(node);
-            } else nodes.appendChild(result.singleNodeValue);
-            return nodes.childNodes.length > 0 ? nodes : null;
+                    nodes.push(node);
+            else nodes.push(result.singleNodeValue);
+            nodes = nodes.map(node => {
+                switch (node.nodeType) {
+                    case Node.ATTRIBUTE_NODE:
+                        const attribute = xml.createElement("attribute");
+                        attribute.setAttributeNode(node.cloneNode(true));
+                        return attribute;
+                    case Node.TEXT_NODE:
+                        const text = xml.createElement("text");
+                        text.textContent = text.textContent;
+                        return text;
+                }
+            });
+
+            if (nodes.length <= 0)
+                return null;
+
+            xml.documentElement.appendChild(nodes);
+            return xml.documentElement.childNodes;
         },
         
         /**
          * Collects and concatenates multiple XML files in a new XMLDocument.
+         *
+         * When querying nodes using XPath, nodes are always returned. This also
+         * includes attributes and text nodes. Attributes are displayed as nodes
+         * of type attribute with the attributes name and value. Text nodes
+         * appear as nodes of the type text, whereby the content of the text
+         * node is saved as node content.
          *
          * The method has the following various signatures:
          *     DataSource.collect(locator, ...);
@@ -352,11 +386,11 @@
                 if (result instanceof XMLDocument) {
                     data.documentElement.appendChild(result.documentElement.cloneNode(true));
                 } else if (result instanceof NodeList) {
-                    for (const node of result)
-                        data.documentElement.appendChild(node);
+                    data.documentElement.appendChild(result);
                 } else {
-                    data.documentElement.appendChild(
-                        document.createTextNode(String(result)));
+                    const text = data.createElement("text");
+                    text.textContent = String(result);
+                    data.documentElement.appendChild(text);
                 }
             });
 
