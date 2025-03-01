@@ -354,7 +354,9 @@ window.location.combine("a", "b", "c")
 
 ### window.location.contextPath
 Property to get the context path. The context path is a part of the request URI
-and can be compared with the current working directory.
+and can be compared with the current working directory. The context path does
+not end with a slash and can be empty if the application is located directly
+under the main domain of the server.
 
 ```javascript
 window.location.contextPath

@@ -555,13 +555,15 @@
      * Enhancement of the JavaScript API
      * Adds a property to get the context path. The context path is a part of
      * the request URI and can be compared with the current working directory.
+     * The context path does not end with a slash and can be empty if the
+     * application is located directly under the main domain of the server.
      * @returns {string} The context path of the request URI.
      */
     compliant("window.location.contextPath");
     Object.defineProperty(window.location, "contextPath", {
         value: ((location) =>
-            location.substring(0, location.lastIndexOf("/")) + "/"
-        )(window.location.pathname || "/")
+            location.substring(0, location.lastIndexOf("/"))
+        )(window.location.pathname)
     });
 
     /**

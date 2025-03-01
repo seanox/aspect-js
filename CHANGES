@@ -3,6 +3,9 @@ BF: Composite: Validation corrections and optimization
     - Omission of the reportValidity method call. More annoying than helpful due
       to the loss of focus (standard browser behavior).
 BF: DataSource: Correction for the use of locator/path with (sub)directories
+BF: Extensions: Correction of window.location.contextPath
+    The context path does not end with a slash and can be empty if the
+    application is located directly under the main domain of the server.
 CR: Markup: iterate also supports numbers
     Positive numbers cause a list of values from 0 to (number -1), negative
     values cause a descending list of values from (number +1) to 0.
