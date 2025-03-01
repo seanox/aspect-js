@@ -4,9 +4,10 @@
 - - -
 
 # DataSource
-DataSource is a NoSQL approach to data storage based on XML data in combination
-with multilingual data separation, optional aggregation and transformation. A
-combination of the approaches of a read only database and a CMS.
+DataSource is a Immutable NoSQL approach to data storage based on XML data in
+combination with multilingual data separation, optional aggregation and
+transformation. A combination of the approaches of a read only database and a
+CMS.
 
 DataSource is based on static data. Therefore, the implementation uses a cache
 to minimize network access.

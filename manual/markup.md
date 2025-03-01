@@ -249,6 +249,10 @@ for data and transformation are derived from it.
 <article import="xml://example/content">
   loading resource...
 </article>
+
+<article import="xml://example/content?count(//item)">
+    loading resource...
+</article>
 ```
 
 Example of importing a DataSource-URL with a specific data URL (locator) and
@@ -468,6 +472,10 @@ for data and transformation are derived from it.
 
 <article output="xml://example/content">
   loading resource...
+</article>
+
+<article output="xml://example/content?count(//item)">
+    loading resource...
 </article>
 ```
 

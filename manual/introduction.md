@@ -231,6 +231,10 @@ only be executed if the condition is `true`.
   loading resource...
 </p>
 
+<p output="xml://example/content?count(//item)">
+  loading resource...
+</p>
+
 <p output="xml://example/data + xslt://example/style">
   loading resource...
 </p>
@@ -256,6 +260,10 @@ only be executed if the condition is `true`.
 </p>
 
 <p import="xml://example/content">
+  loading resource...
+</p>
+
+<p import="xml://example/content?count(//item)">
   loading resource...
 </p>
 
@@ -517,9 +525,10 @@ automatically added to the HEAD when the page is loaded.
 [Learn more](markup.md#release)
 
 ## DataSource
-DataSource is a NoSQL approach to data storage based on XML data in combination
-with multilingual data separation, optional aggregation and transformation. A
-combination of the approaches of a read only database and a CMS.
+DataSource is a Immutable NoSQL approach to data storage based on XML data in
+combination with multilingual data separation, optional aggregation and
+transformation. A combination of the approaches of a read only database and a
+CMS.
 
 DataSource is based on static data. Therefore, the implementation uses a cache
 to minimize network access.
