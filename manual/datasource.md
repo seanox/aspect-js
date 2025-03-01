@@ -118,7 +118,7 @@ The DataSource uses XPath as a functional query language. Locator and
 transformation support this language and thus provide dynamic data access.
 
 For more information about XPath please read:
-[https://www.w3schools.com/xml/xpath_intro.asp](https://www.w3schools.com/xml/xpath_intro.asp).
+https://www.w3schools.com/xml/xpath_intro.asp.
 
 Only for XML locators can the XPath be added at the end, separated by a question
 mark.
@@ -134,72 +134,77 @@ NodeList, or null. When querying nodes using XPath, nodes are always returned.
 This also includes attributes and text nodes.
 
 Attributes are returned as nodes with the name _attribute_. The name and value
-of the addressed attribute are represented in the node by the _name_ and _value_
-attributes.
+of the addressed attribute are represented in the node as attributes _name_ and
+_value_.
 
 ```
-<attribute name="name of the attribute" value="value of the attribute></attribute>
+<attribute name="name of the attribute" value="value of the attribute"/>
 ```
 
-Text nodes are also returned as nodes, but then with the name _text_. The value
-of the addressed text node is then the content of the node.
+Text nodes are also returned as nodes, but then with the name _text_. The
+value of the addressed text node is then the content of the node.
 
 ```
 <text>content of the text node</text>
 ```
 
 ## fetch
-The data is fetched with a locator through the fetch method. The return value
-is an XMLDocument that can then be used in detail with XPath.
+Fetches data for a locator as _XMLDocument_ or as _boolean_, _number_, _string_,
+_NodeList_ or _null_ when using XPath. When querying nodes using XPath, nodes
+are always returned. This also includes attributes and text nodes. Attributes
+are returned as nodes with the name _attribute_. The name and value of the
+addressed attribute are represented in the node as attributes _name_ and
+_value_. Text nodes are also returned as nodes, but then with the name _text_.
+The content of the addressed text node is then the content of the node.
 
 ```javascript
-const xml = DataSource.fetch("xml://paper");
-xml.evaluate(...);
+const document = DataSource.fetch("xml://paper");
+
+const data = DataSource.fetch("xml://paper?//*/@price");
 ```
-
-Optionally the result can be transformed via XSLT. This requires a locator for
-a stylesheet.
-
-```javascript
-DataSource.fetch("xml://paper", "xslt://article");
-```
-
-During the transformation a new XMLDocument is created. Depending on the browser
-and XSLT processor, the structure of XMLDocument is different. Therefore, by
-default the root entity will be returned as a node. The behavior can be changed
-with option `raw`. If this is `true`, the XMLDocument is returned as original.
-
-```javascript
-DataSource.fetch("xml://paper", "xslt://article", true);
-```
-
-More details about the special features of the transformation can be found in
-chapter [transform](#transform).
 
 ## transform
 The transformation via XSLT (1.0) of XML data provides an additional way for
-generating dynamically data and content and can already be done with the fetch
-method, which is based on locators. Sometimes it is necessary to work directly
-with the XMLDocument. In these cases the transform method can be used, because
-the method accepts XMLDocument as well locator (also in a mix).
+dynamically data and content and can already be done with the fetch method,
+which is based on locators. Sometimes it is necessary to work directly with the
+XMLDocument. In these cases the transform method can be used, because the method
+accepts XMLDocument as well locator (also in a mix).
 
 ```javascript
-DataSource.fetch("xml://paper", "xslt://article");
-DataSource.fetch("xml://paper", "xslt://article", true);
+DataSource.transform("xml://paper", "xslt://article");
+```
 
-DataSource.fetch(xml, style);
-DataSource.fetch(xml, style, true);
+The specification of the stylesheet when using XML locators is optional. Without
+the specification, the stylesheet is automatically derived from the XML
+locators.
+
+```javascript
+DataSource.transform("xml://paper");
+```
+
+As an extension, a meta-object with data for the XSLT processor can be passed to
+the transfromation, which can then be used in the XSLT stylesheet.
+
+```javascript
+DataSource.transform("xml://paper", {...});
+DataSource.transform("xml://paper", "xslt://article", {...});
+```
+
+And the XML locator also supports XPath for transformation. For this purpose,
+the collected data is collected in an artificial XMLDocument with the root
+element _data_, which is then used as the basis for the transformation.
+
+```javascript
+DataSource.transform("xml://paper?//*/@price");
+DataSource.transform("xml://paper?//*/@price", "xslt://article");
+DataSource.transform("xml://paper?//*/@price", {...});
+DataSource.transform("xml://paper?//*/@price", "xslt://article", {...});
 ```
 
 During the transformation a new XMLDocument is created. Depending on the browser
 and XSLT processor, the structure of XMLDocument is different. Therefore, by
 default the root entity will be returned as a node. The behavior can be changed
 with option `raw`. If this is `true`, the XMLDocument is returned as original.
-
-Another feature concerns JavaScript elements. Their type is automatically
-changed to `composite/javascript` so that they are not executed automatically
-when embedding, but are deliberately interpreted by the renderer. This is
-important when using [condition](markup.md#condition).
 
 Another feature concerns JavaScript elements. Their type is automatically
 changed to `composite/javascript` so that they are not executed automatically
@@ -302,7 +307,7 @@ DataSource.collect("xml://paper", "xml://envelope", "xml://pen");
 </collector>
 ```
 
-Collecting with an own article's collector.
+Collecting with an own _articles_ collector.
 
 ```javascript
 DataSource.collect("articles", "xml://paper", "xml://envelope", "xml://pen");

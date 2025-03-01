@@ -241,18 +241,21 @@
         },
         
         /**
-         * Fetch the data to a locator as XMLDocument.
+         * Fetches data for a locator as XMLDocument or as boolean, number,
+         * string, NodeList or null when using XPath.
+         *
+         * When querying nodes using XPath, nodes are always returned. This also
+         * includes attributes and text nodes. Attributes are returned as nodes
+         * with the name attribute. The name and value of the addressed
+         * attribute are represented in the node as attributes name and value.
+         * Text nodes are also returned as nodes, but then with the name text.
+         * The content of the addressed text node is then the content of the
+         * node.
+         *
          * @param {string} locator Locator to fetch data for as XMLDocument.
          *     Optionally, an XPath query is also supported. The XPath is
-         *     appended to the locator separated by a question mark. The return
-         *     value depends on the XPath and can be boolean, number, string,
-         *     NodeList or null.
+         *     appended to the locator separated by a question mark.
          *
-         *     When querying nodes using XPath, nodes are always returned. This
-         *     also includes attributes and text nodes. Attributes are displayed
-         *     as nodes of type attribute with the attributes name and value.
-         *     Text nodes appear as nodes of the type text, whereby the content
-         *     of the text node is saved as node content.
          *
          * @returns {XMLDocument|string|boolean|number|NodeList|null}
          *     The fetched data as an XMLDocument. When using XPath, it can be
@@ -344,10 +347,12 @@
          * Collects and concatenates multiple XML files in a new XMLDocument.
          *
          * When querying nodes using XPath, nodes are always returned. This also
-         * includes attributes and text nodes. Attributes are displayed as nodes
-         * of type attribute with the attributes name and value. Text nodes
-         * appear as nodes of the type text, whereby the content of the text
-         * node is saved as node content.
+         * includes attributes and text nodes. Attributes are returned as nodes
+         * with the name attribute. The name and value of the addressed
+         * attribute are represented in the node as attributes name and value.
+         * Text nodes are also returned as nodes, but then with the name text.
+         * The content of the addressed text node is then the content of the
+         * node.
          *
          * The method has the following various signatures:
          *     DataSource.collect(locator, ...);
