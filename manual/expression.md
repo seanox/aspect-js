@@ -188,8 +188,8 @@ The expression corresponds to the JavaScript syntax:
 > [!IMPORTANT]
 > __Page Scope:__ Refers to the fact that variables can only be used in the
 > markup and are isolated from the rest of the JavaScript. These variables are
-> specifically intended for the display and processing of data in HTML markup
-> and are not accessible in general JavaScript code.
+> specifically intended for the output and processing of data in HTML markup and
+> are not accessible in general JavaScript code.
 
 ### Combination
 All types of expressions can be combined.

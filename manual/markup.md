@@ -502,8 +502,8 @@ enclosing condition attribute.
 ### release
 Inverse indicator that an HTML element was rendered. The renderer removes this
 attribute when an HTML element is rendered. This effect can be used for CSS to
-display elements only in rendered state. A corresponding CSS rule is
-automatically added to the HEAD when the page is loaded. 
+show elements only in rendered state. A corresponding CSS rule is automatically
+added to the HEAD when the page is loaded. 
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -594,8 +594,8 @@ influenced by the validation. This can use for it four states as return values:
 `true`, `not true`, `text`, `undefined/void`.
 
 #### true
-The validation was successful. No error is displayed and the default action of
-the browser is used. If possible the value is synchronized with the model.
+The validation was successful. No error is shown and the default action of the
+browser is used. If possible the value is synchronized with the model.
 
 #### not true and not undefined/void
 The validation failed and an error is shown. The return value indicates that the
@@ -633,12 +633,12 @@ optional.__
 </form>
 ```
 
-By default, validation message are shown displayed as a native browser toolbox
-for the input element. The corresponding message is set via the attribute of the
-same name. If custom validation and output need to be implemented, this behavior
-can be changed by redirecting the message to an attribute of the input element.
-For this purpose, the message, which at this point also includes the return
-value of expressions, must begin as follows: `@<attribute>:`.
+By default, validation message are shown as a native browser toolbox for the
+input element. The corresponding message is set via the attribute of the same
+name. If custom validation and output need to be implemented, this behavior can
+be changed by redirecting the message to an attribute of the input element. For
+this purpose, the message, which at this point also includes the return value of
+expressions, must begin as follows: `@<attribute>:`.
 
 A general strategy or standard implementation for error output is deliberately
 not provided, as this is too strict in most cases and can be implemented

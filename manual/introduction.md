@@ -196,8 +196,8 @@ Expressions can create and use variables in the page scope at runtime.
 > [!IMPORTANT]
 > __Page Scope:__ Refers to the fact that variables can only be used in the
 > markup and are isolated from the rest of the JavaScript. These variables are
-> specifically intended for the display and processing of data in HTML markup
-> and are not accessible in general JavaScript code.
+> specifically intended for the output and processing of data in HTML markup and
+> are not accessible in general JavaScript code.
 
 [Learn more](expression.md)
 
@@ -515,8 +515,8 @@ the data objects trigger a partial update of the view.__
 ### release
 Inverse indicator that an HTML element was rendered. The renderer removes this
 attribute when an HTML element is rendered. This effect can be used for CSS to
-display elements only in rendered state. A corresponding CSS rule is
-automatically added to the HEAD when the page is loaded.
+show elements only in rendered state. A corresponding CSS rule is automatically
+added to the HEAD when the page is loaded.
 
 ```html
 <span release>{{'Show me after rendering.'}}</span>
@@ -828,7 +828,7 @@ environment of the entire application.
 A view is the primary projection of models/components/content. This projection
 can contain additional substructures in the form of views and sub-views. Views
 can be static or path-controlled. Paths address the complete chain of nested
-views and display the parent views in addition to the target view.
+views and show the parent views in addition to the target view.
 
 ### View Flow
 View flow describes the access control and the sequence of views. The routing
