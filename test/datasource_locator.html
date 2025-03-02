@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        // Tests for invalid XML Locators
+        Test.create({expected:/\bInvalid locator: xml/i, test() {
+            DataSource.fetch("xml");
+        }});
+        Test.create({expected:/\bInvalid locator: xml:/i, test() {
+            DataSource.fetch("xml:");
+        }});
+        Test.create({expected:/\bInvalid locator: xml:\//i, test() {
+            DataSource.fetch("xml:/");
+        }});
+        Test.create({expected:/\bInvalid locator: xml:\/\//i, test() {
+            DataSource.fetch("xml://");
+        }});
+        Test.create({expected:/\bInvalid locator: xml:\/\/\//i, test() {
+            DataSource.fetch("xml:///");
+        }});
+        Test.create({expected:/\bHTTP status 404 for .*\/data\/xx\/b-b\.xml/i, test() {
+            DataSource.fetch("xml:/b-b");
+        }});
+
+        // Test for valid XML Locators
+        Test.create({test() {
+            DataSource.fetch("xml:/locator_a");
+            DataSource.fetch("xml:/b-b/locator_b");
+            DataSource.fetch("xml:/data/xx/b-b/locator_b.xml");
+            DataSource.fetch("xml:/data/xx/b-b/locator_b.xml?");
+            DataSource.fetch("xml:/data/xx/b-b/locator_b.xml?//*");
+            DataSource.fetch("xml:/data/xx/locator_a.xml");
+            DataSource.fetch("xml:/data/xx/locator_a.xml?");
+            DataSource.fetch("xml:/data/xx/locator_a.xml?//*");
+            DataSource.fetch("xml://data/xx/locator_a.xml");
+            DataSource.fetch("xml://data/xx/locator_a.xml?");
+            DataSource.fetch("xml://data/xx/locator_a.xml?//*");
+            DataSource.fetch("xml://data/xx/locator_a.xml?count(//*)");
+        }});
+
+        // Tests for invalid XSLT Locators
+        Test.create({expected:/\bInvalid locator: xslt/i, test() {
+            DataSource.fetch("xslt");
+        }});
+        Test.create({expected:/\bInvalid locator: xslt:/i, test() {
+            DataSource.fetch("xslt:");
+        }});
+        Test.create({expected:/\bInvalid locator: xslt:\//i, test() {
+            DataSource.fetch("xslt:/");
+        }});
+        Test.create({expected:/\bInvalid locator: xslt:\/\//i, test() {
+            DataSource.fetch("xslt://");
+        }});
+        Test.create({expected:/\bInvalid locator: xslt:\/\/\//i, test() {
+            DataSource.fetch("xslt:///");
+        }});
+        Test.create({expected:/\bHTTP status 404 for .*\/data\/xx\/b-b\.xslt/i, test() {
+            DataSource.fetch("xslt:/b-b");
+        }});
+
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/data\/xx\/b-b\/locator_b\.xslt\?\/\/\*/i, test() {
+            DataSource.fetch("xslt:/data/xx/b-b/locator_b.xslt?//*");
+        }});
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/data\/xx\/locator_a\.xslt\?/i, test() {
+            DataSource.fetch("xslt:/data/xx/locator_a.xslt?");
+        }});
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/data\/xx\/locator_a\.xslt\?\/\/\*/i, test() {
+            DataSource.fetch("xslt:/data/xx/locator_a.xslt?//*");
+        }});
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/\/data\/xx\/locator_a\.xslt\?/i, test() {
+            DataSource.fetch("xslt://data/xx/locator_a.xslt?");
+        }});
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/\/data\/xx\/locator_a\.xslt\?\/\/\*/i, test() {
+            DataSource.fetch("xslt://data/xx/locator_a.xslt?//*");
+        }});
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/\/data\/xx\/locator_a\.xslt\?count\(\/\/\*\)/i, test() {
+            DataSource.fetch("xslt://data/xx/locator_a.xslt?count(//*)");
+        }});
+        Test.create({expected:/\bInvalid xslt locator: xslt:\/data\/xx\/b-b\/locator_b\.xslt\?/i, test() {
+            DataSource.fetch("xslt:/data/xx/b-b/locator_b.xslt?");
+        }});
+
+        // Test for valid XML Locators
+        Test.create({test() {
+            DataSource.fetch("xslt:/locator_a");
+            DataSource.fetch("xslt:/b-b/locator_b");
+            DataSource.fetch("xslt:/data/xx/b-b/locator_b.xslt");
+
+            DataSource.fetch("xslt:/data/xx/locator_a.xslt");
+            DataSource.fetch("xslt://data/xx/locator_a.xslt");
+        }});
+
+        Test.create({expected:/\bInvalid locator: xml:\/data\/xx\/b-b\/locator_b\.xslt/i, test() {
+            DataSource.fetch("xml:/data/xx/b-b/locator_b.xslt");
+        }});
+        Test.create({expected:/\bInvalid locator: xslt:\/data\/xx\/b-b\/locator_b\.xml/i, test() {
+            DataSource.fetch("xslt:/data/xx/b-b/locator_b.xml");
+        }});
+
+        Test.start({auto:true});
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
