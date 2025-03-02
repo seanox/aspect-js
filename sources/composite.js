@@ -144,13 +144,13 @@
      * character _ a-z 0-9, optionally more word characters and additionally -
      * can follow, but can not end with the - character. Paths are separated by
      * the / character.
-     * - group 1: DataSource URL without optional XPath
-     * - group 2: protocol
-     * - group 3: locator without optional XPath
-     * - group 4: file without slash (optional)
+     * - group 1: Locator without optional XPath
+     * - group 2: Protocol
+     * - group 3: Path complete incl. file and file extension
+     * - group 4: file extension (optional)
      * - group 5: XPath without question mark (optional)
      */
-    const PATTERN_DATASOURCE_LOCATOR_XML = /^((xml):\/?((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))(?:\?(\S*))?$/;
+    const PATTERN_DATASOURCE_LOCATOR_XML = /^((xml):(?:\/)?((?:\/\w+(?:[\w-]*\w)?)+(?:\.(\2))?))(?:\?(\S*))?$/;
 
     /**
      * Pattern for a DataSource XSLT locator, based on the URL syntax but only
@@ -158,16 +158,16 @@
      * character _ a-z 0-9, optionally more word characters and additionally -
      * can follow, but can not end with the - character. Paths are separated by
      * the / character.
-     * - group 1: DataSource URL without optional XPath
-     * - group 2: protocol
-     * - group 3: locator without optional XPath
-     * - group 4: file without slash (optional)
+     * - group 1: Locator without optional XPath
+     * - group 2: Protocol
+     * - group 3: Path complete incl. file and file extension
+     * - group 4: file extension (optional)
      */
-    const PATTERN_DATASOURCE_LOCATOR_XSLT = /^((xslt):\/?((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))$/;
+    const PATTERN_DATASOURCE_LOCATOR_XSLT = /^((xslt):(?:\/)?((?:\/\w+(?:[\w-]*\w)?)+(?:\.(\2))?))$/;
 
     /** Pattern for DataSource locator XML with transformation */
     const PATTERN_DATASOURCE_LOCATOR_XML_XSLT = new RegExp(PATTERN_DATASOURCE_LOCATOR_XML.source.slice(0, -1)
-        + "\\s+\\+\\s+" + PATTERN_DATASOURCE_LOCATOR_XSLT.source.substring(1));
+        + "\\s+\\+\\s+" + "(xslt|" + PATTERN_DATASOURCE_LOCATOR_XSLT.source.substring(1).slice(0, -1).replace("\\2", "\\8") + ")$");
 
     compliant("Composite");
     compliant(null, window.Composite = {
@@ -1870,9 +1870,9 @@
                             selector.appendChild(data, true);
                         } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                             const parts = String(value).split(/\s+\+\s+/);
-                            const xml = DataSource.fetch(parts[0]);
-                            const style = DataSource.fetch(parts[1]);
-                            const data = DataSource.transform(xml, style);
+                            if (parts[1] === "xslt")
+                                parts[1] = parts[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
+                            const data = DataSource.transform(...parts);
                             selector.appendChild(data, true);
                         } else {
                             const data = DataSource.fetch(String(value));
@@ -1938,9 +1938,9 @@
                             selector.appendChild(data, true);
                         } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                             const parts = String(value).split(/\s+\+\s+/);
-                            const xml = DataSource.fetch(parts[0]);
-                            const style = DataSource.fetch(parts[1]);
-                            const data = DataSource.transform(xml, style);
+                            if (parts[1] === "xslt")
+                                parts[1] = parts[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
+                            const data = DataSource.transform(...parts);
                             selector.appendChild(data, true);
                         } else {
                             const data = DataSource.fetch(String(value));
