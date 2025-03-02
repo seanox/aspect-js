@@ -287,7 +287,7 @@
             const data = ((locator) => {
                 const hash = locator.hashCode();
                 if (_cache.hasOwnProperty(hash))
-                    return _cache[hash];
+                    return _cache[hash].clone();;
                 const request = new XMLHttpRequest();
                 request.overrideMimeType("application/xslt+xml");
                 request.open("GET", locator, false);
