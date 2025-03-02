@@ -54,19 +54,19 @@
      * character _ a-z 0-9, optionally more word characters and additionally -
      * can follow, but can not end with the - character. Paths are separated by
      * the / character.
-     * - group 1: DataSource URL without optional XPath
-     * - group 2: protocol
-     * - group 3: locator without optional XPath
-     * - group 4: file without slash (optional)
+     * - group 1: Locator without optional XPath
+     * - group 2: Protocol
+     * - group 3: Path complete incl. file and file extension
+     * - group 4: file extension (optional)
      * - group 5: XPath without question mark (optional)
      */
-    const PATTERN_LOCATOR = /^((xml|xslt):\/?((?:\/(?:(?:\w+)|(?:\w+(?:\-+\w+)+)))*(?:\/((?:(?:\w+)|(?:\w+(?:\-+\w+)+))\.\2))?))(?:\?(\S*))?$/;
+    const PATTERN_LOCATOR = /^((xml|xslt):(?:\/)?((?:\/\w+(?:[\w-]*\w)?)+(?:\.(\2))?))(?:\?(\S*))?$/;
 
     /** Pattern to detect JavaScript elements */
     const PATTERN_JAVASCRIPT = /^\s*text\s*\/\s*javascript\s*$/i;
 
     /** Pattern to detect a word (_ 0-9 a-z A-Z -) */
-    const PATTERN_WORD = /(^\w+$)|(^((\w+\-+(?=\w))+)\w*$)/;
+    const PATTERN_WORD = /^\w+([\w-]*\w)?$/;
 
     /** Constant for attribute type */
     const ATTRIBUTE_TYPE = "type";
@@ -262,9 +262,9 @@
         fetch(locator) {
 
             if (typeof locator !== "string")
-                throw new Error("Invalid xml locator: " + String(locator));
+                throw new Error("Invalid locator: " + String(locator));
             if (!locator.match(PATTERN_LOCATOR))
-                throw new Error("Invalid xml locator: " + String(locator));
+                throw new Error("Invalid locator: " + String(locator));
 
             locator = ((locator) => {
                 const matches = locator.match(PATTERN_LOCATOR);
@@ -282,7 +282,7 @@
 
             if (locator.type === "xslt"
                     && locator.xpath !== undefined)
-                throw new Error("Invalid XSLT locator: " + locator.source);
+                throw new Error("Invalid xslt locator: " + locator.source);
 
             const data = ((locator) => {
                 const hash = locator.hashCode();
@@ -299,7 +299,8 @@
                 return data.clone();
             })(locator.location);
 
-            if (locator.xpath === undefined)
+            if (locator.xpath === undefined
+                    || locator.xpath === "")
                 return data;
 
             const result = data.evaluate(locator.xpath, data, null, XPathResult.ANY_TYPE, null);
