@@ -160,12 +160,9 @@
                     throw new Error("Invalid xml locator: " + String(xml));
                 xml = DataSource.fetch(xml);
                 if (!(xml instanceof XMLDocument)) {
-                    const document = document.implementation.createDocument(null, "data", null);
+                    const document = window.document.implementation.createDocument(null, "data", null);
                     if (xml instanceof NodeList) {
-                        for (let node; node = xml.iterateNext();) {
-                            node = document.importNode(node, true);
-                            document.documentElement.appendChild(node);
-                        }
+                        document.documentElement.appendChild(xml);
                     } else {
                         const node = document.createTextNode(String(xml));
                         document.documentElement.appendChild(node);
@@ -315,7 +312,7 @@
                     return result.stringValue;
             }
 
-            const xml = document.implementation.createDocument(null, "collection", null);
+            const xml = window.document.implementation.createDocument(null, "collection", null);
 
             let nodes = [];
             if (result.resultType !== XPathResult.FIRST_ORDERED_NODE_TYPE
@@ -333,6 +330,8 @@
                         const text = xml.createElement("text");
                         text.textContent = text.textContent;
                         return text;
+                    default:
+                        return node;
                 }
             });
 
@@ -385,7 +384,7 @@
             if (_cache.hasOwnProperty(hash))
                 return _cache[hash].clone();
 
-            const data = document.implementation.createDocument(null, collector, null);
+            const data = window.document.implementation.createDocument(null, collector, null);
             variants.forEach(entry => {
                 const result = DataSource.fetch(entry);
                 if (result instanceof XMLDocument) {
