@@ -581,14 +581,14 @@
          *     
          *         true
          *         ----
-         * The validation was successful. No error is displayed and the default
+         * The validation was successful. No error is shown and the default
          * action of the browser is used. If possible the value is synchronized
          * with the model.
          * 
          *         not true and not undefined/void
          *         ----
-         * The validation failed; an error is displayed. An existing return
-         * value indicates that the default action of the browser should not be
+         * The validation failed; an error is shown. An existing return value
+         * indicates that the default action of the browser should not be
          * executed and so it is blocked. In this case, a possible value is not
          * synchronized with the model.
          * 
@@ -599,11 +599,11 @@
          * 
          *         undefined/void
          *         ----
-         * The validation failed; an error is displayed. No return value
-         * indicates that the default action of the browser should nevertheless
-         * be executed. This behavior is important e.g. for the validation of
-         * input fields, so that the input reaches the user interface. In this
-         * case, a possible value is not synchronized with the model. 
+         * The validation failed; an error is shown. No return value indicates
+         * that the default action of the browser should nevertheless be
+         * executed. This behavior is important e.g. for the validation of input
+         * fields, so that the input reaches the user interface. In this case, a
+         * possible value is not synchronized with the model.
          *
          * @param {Element|string} selector DOM element or a string
          * @param {boolean} [lock=true] Unlocking of the model validation
@@ -1774,8 +1774,8 @@
                             // Step 5:
                             // The newly created text nodes are inserted before
                             // the current text node. The current text node can
-                            // then be deleted, since its content is displayed
-                            // using the newly created text nodes.
+                            // then be deleted, since its content is shown using
+                            // the newly created text nodes.
                             
                             // For internal and temporary calls, no parent can
                             // exist.
@@ -1832,7 +1832,7 @@
                 // implementation. This is exclusively inverse indicator that an
                 // element was rendered. The renderer removes this attribute
                 // when an element is rendered. This effect can be used for CSS
-                // to display elements only in rendered state.   
+                // to display elements only in rendered state.
                 
                 // ATTRIBUTE_IMPORT: This declaration loads the content and
                 // replaces the inner HTML of an element with the content.
