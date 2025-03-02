@@ -73,7 +73,7 @@
          *     #export connector@io.example
          *
          * The macro #module is intended for debugging. It writes the following
-         * text as debug output to the console. The browser displays this output
+         * text as debug output to the console. The browser shows this output
          * with source, which can then be used as an entry point for debugging.
          *
          *
