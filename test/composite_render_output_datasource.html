@@ -51,6 +51,13 @@
       LIST EXT:
       SeptOctNovMayMarJuneJulyJanFebDecAugApr
       lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
     <script type="text/test">
       S: S
@@ -59,6 +66,13 @@
       LIST EXT:
       SeptOctNovMayMarJuneJulyJanFebDecAugApr
       lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
     <script type="text/test">
       S: S
@@ -69,6 +83,13 @@
       raw_a += "A";
       raw_a += "B";
       lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
     <script type="text/test">
       S: SAB
@@ -79,6 +100,13 @@
       raw_a += "A";
       raw_a += "B";
       lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
     <script type="text/test">
       S: SABAB
@@ -87,6 +115,13 @@
       LIST EXT:
       SeptOctNovMayMarJuneJulyJanFebDecAugApr
       lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
     <script type="text/test">
       S: SABAB
@@ -95,6 +130,13 @@
       LIST EXT:
       SeptOctNovMayMarJuneJulyJanFebDecAugApr
       lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
     <script type="text/test">
       S: SABAB
@@ -102,19 +144,38 @@
       JanFebMarAprMayJuneJulyAugSeptOctNovDec
       LIST EXT:
       SeptOctNovMayMarJuneJulyJanFebDecAugApr
-      lorem ipsum dolor sit amet 
+      lorem ipsum dolor sit amet
+      HelloWorld!
+      Hello
+      3
+      Hello
+      World
+      !
+      xxx
     </script>
   </head>
   <body>
     S: {{raw_a}}
-    <article output="xml://content_list">
+    <article output="xml://content_list + xslt">
       loading resource...  
     </article>
     <article output="xml://content_list + xslt://content_list_ext">
       loading resource...  
     </article>
-    <article output="xml://content_raw">
+    <article output="xml://content_raw + xslt">
       loading resource...  
+    </article>
+    <article output="xml://modules/test/datasource.xml?//content">
+      loading resource...
+    </article>
+    <article output="xml://modules/test/datasource.xml?//content[1]">
+      loading resource...
+    </article>
+    <article output="xml://modules/test/datasource.xml?count(//content)">
+      loading resource...
+    </article>
+    <article output="xml://modules/test/datasource.xml">
+      loading resource...
     </article>
   </body>
 </html>
