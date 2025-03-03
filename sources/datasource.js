@@ -188,7 +188,7 @@
 
             const processor = new XSLTProcessor();
             processor.importStylesheet(style);
-            if (meta && typeof meta === "object") {
+            if (typeof meta === "object") {
                 const set = typeof meta[Symbol.iterator] !== "function" ? Object.entries(meta) : meta
                 for (const [key, value] of set)
                     if (typeof meta[key] !== "function")
