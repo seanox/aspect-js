@@ -238,6 +238,10 @@ only be executed if the condition is `true`.
 <p output="xml://example/data + xslt://example/style">
   loading resource...
 </p>
+
+<p output="xml://example/data">
+  loading resource...
+</p>
 ```
 
 [Learn more](markup.md#output)
@@ -268,6 +272,10 @@ only be executed if the condition is `true`.
 </p>
 
 <p import="xml://example/data + xslt://example/style">
+  loading resource...
+</p>
+
+<p import="xml://example/data + xslt">
   loading resource...
 </p>
 

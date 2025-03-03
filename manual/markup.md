@@ -268,7 +268,14 @@ blank character.
 <article import="xml://example/data + xslt://example/style">
   loading resource...
 </article>
+
+<article import="xml://example/data + xslt">
+    loading resource...
+</article>
 ```
+
+If only _xslt_ is specified without a locator, a corresponding XSLT locator with
+the same name is derived from the XML locator.
 
 When inserting content from the DataSource, the type of JavaScript blocks is
 automatically changed to `composite/javascript` and only executed by the
@@ -492,7 +499,14 @@ blank character.
 <article output="xml://example/data + xslt://example/style">
   loading resource...
 </article>
+
+<article output="xml://example/data + xslt">
+    loading resource...
+</article>
 ```
+
+If only _xslt_ is specified without a locator, a corresponding XSLT locator with
+the same name is derived from the XML locator.
 
 When inserting content from the DataSource, the type of JavaScript blocks is
 automatically changed to `composite/javascript` and only executed by the
