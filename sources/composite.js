@@ -1862,22 +1862,19 @@
 
                     } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
                             || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
-                        if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
-                                && String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)[5] === undefined) {
-                            const xml = String(value);
-                            const style = xml.replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
-                            const data = DataSource.transform(xml, style);
-                            selector.appendChild(data, true);
-                        } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                        if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                             const parts = String(value).split(/\s+\+\s+/);
                             if (parts[1] === "xslt")
                                 parts[1] = parts[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
                             const data = DataSource.transform(...parts);
                             selector.appendChild(data, true);
                         } else {
-                            const data = DataSource.fetch(String(value));
-                            for (let node; node = data.iterateNext();)
-                                selector.appendChild(node, true);
+                            let data = DataSource.fetch(String(value));
+                            if (data instanceof XMLDocument)
+                                data = data.documentElement.childNodes;
+                            else if (!(data instanceof NodeList))
+                                data = window.document.createTextNode(String(data));
+                            selector.appendChild(data, true);
                         }
                         const serial = selector.ordinal();
                         const object = _render_meta[serial];
@@ -1930,22 +1927,19 @@
                         value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
                     if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
                             || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
-                        if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
-                                && String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)[5] === undefined) {
-                            const xml = String(value);
-                            const style = xml.replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
-                            const data = DataSource.transform(xml, style);
-                            selector.appendChild(data, true);
-                        } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                        if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                             const parts = String(value).split(/\s+\+\s+/);
                             if (parts[1] === "xslt")
                                 parts[1] = parts[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
                             const data = DataSource.transform(...parts);
                             selector.appendChild(data, true);
                         } else {
-                            const data = DataSource.fetch(String(value));
-                            for (let node; node = data.iterateNext();)
-                                selector.appendChild(node, true);
+                            let data = DataSource.fetch(String(value));
+                            if (data instanceof XMLDocument)
+                                data = data.documentElement.childNodes;
+                            else if (!(data instanceof NodeList))
+                                data = window.document.createTextNode(String(data));
+                            selector.appendChild(data, true);
                         }
                     } else if (value instanceof Node)
                         selector.appendChild(value.cloneNode(true), true);
