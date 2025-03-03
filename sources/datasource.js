@@ -152,6 +152,8 @@
                         && !(variants[1] instanceof XMLDocument))
                     meta = variants[1];
                 else style = variants[1];
+            } else if (variants.length >= 1) {
+                style = variants[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
             }
 
             if (typeof xml === "string") {

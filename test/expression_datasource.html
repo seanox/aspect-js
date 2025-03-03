@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script src="expression.js"></script>
+    <script type="text/javascript">
+    
+        Test.activate();
+
+        Test.create({test() {
+            const pattern = document.querySelector("script[type='text/test']").innerText.replace(/\s+/g, " ").trim();
+            Assert.assertEquals(pattern, document.body.innerText.replace(/\s+/g, " ").trim());
+        }});
+
+        Test.start({auto:true});
+    </script>
+    <script type="text/test">
+      [object DocumentFragment]
+      [object DocumentFragment]
+      [object DocumentFragment]
+      [object NodeList]
+      [object NodeList]
+      3
+      [object XMLDocument]
+      [object XMLDocument]
+    </script>
+  </head>
+  <body>
+    {{DataSource.transform('xml://content_list')}}
+    {{DataSource.transform('xml://content_list', 'xslt://content_list_ext')}}
+    {{DataSource.transform('xml://content_raw')}}
+    {{DataSource.fetch('xml://modules/test/datasource.xml?//content')}}
+    {{DataSource.fetch('xml://modules/test/datasource.xml?//content[1]')}}
+    {{DataSource.fetch('xml://modules/test/datasource.xml?count(//content)')}}
+    {{DataSource.fetch('xml://modules/test/datasource.xml')}}
+    {{DataSource.fetch('xml://modules/test/datasource.xml')}}
+  </body>
+</html>

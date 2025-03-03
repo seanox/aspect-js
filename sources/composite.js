@@ -1851,15 +1851,12 @@
                     let value = object.attributes[Composite.ATTRIBUTE_IMPORT];
                     if ((value || "").match(Composite.PATTERN_EXPRESSION_CONTAINS))
                         value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_IMPORT, String(value));
-
                     if (!value) {
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];                
-                    
                     } else if (value instanceof Element
                             || value instanceof NodeList) {
                         selector.appendChild(value, true);
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-
                     } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
                             || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                         if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
@@ -1872,6 +1869,8 @@
                             let data = DataSource.fetch(String(value));
                             if (data instanceof XMLDocument)
                                 data = data.documentElement.childNodes;
+                            else if (data instanceof DocumentFragment)
+                                data = data.childNodes
                             else if (!(data instanceof NodeList))
                                 data = window.document.createTextNode(String(data));
                             selector.appendChild(data, true);
@@ -1879,13 +1878,11 @@
                         const serial = selector.ordinal();
                         const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-
                     } else if (_render_cache[value] !== undefined) {
                         selector.innerHTML = _render_cache[value];
                         const serial = selector.ordinal();
                         const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
-                    
                     } else {
                         Composite.asynchron((selector, lock, url) => {
                             try {
@@ -1937,11 +1934,17 @@
                             let data = DataSource.fetch(String(value));
                             if (data instanceof XMLDocument)
                                 data = data.documentElement.childNodes;
+                            else if (data instanceof DocumentFragment)
+                                data = data.childNodes
                             else if (!(data instanceof NodeList))
                                 data = window.document.createTextNode(String(data));
                             selector.appendChild(data, true);
                         }
-                    } else if (value instanceof Node)
+                    } else if (value instanceof XMLDocument
+                            || value instanceof DocumentFragment)
+                        Array.from(value.childNodes).forEach((node, index) =>
+                            selector.appendChild(node.cloneNode(true), index === 0));
+                    else if (value instanceof Node)
                         selector.appendChild(value.cloneNode(true), true);
                     else if (value instanceof NodeList)
                         Array.from(value).forEach((node, index) =>
