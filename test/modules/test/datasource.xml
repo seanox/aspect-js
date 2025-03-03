@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<test>
+  <content>Hello</content>
+  <content>World</content>
+  <content>!</content>
+  <content_a>xxx</content_a>
+</test>
