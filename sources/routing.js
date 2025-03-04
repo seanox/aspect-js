@@ -76,7 +76,13 @@
     // Status of the activation of routing
     // The status cannot be changed again after (de)activation and is only set
     // initially when the page is loaded.
-    let _routing_active = undefined;
+    let _routing_active;
+
+    // Software interrupt that triggers the hashchange event via a timer if the
+    // hashchange event from the browser does not occur. If the browser event
+    // occurs as planned, the interrupt is discarded. It concerns Mozilla/Gecko,
+    // where the change from / to /# does not trigger a hashchange event.
+    let _routing_interrupt;
 
     // Map with all supported interceptors
     const _interceptors = new Array();
@@ -99,6 +105,8 @@
     }
 
     const _locate = (location) => {
+        if (location === null)
+            return null;
         const match = location.match(/#.*$/);
         return match ? match[0] : null;
     }
@@ -152,8 +160,14 @@
             if (path === null
                     || path === Browser.location)
                 return;
-            Composite.asynchron((path) => {
+            Composite.asynchron(path => {
+                const event = new Event("hashchange",{bubbles:false, cancelable:true});
+                event.oldURL = Browser.location;
+                event.newURL = path;
                 window.location.href = path;
+                _routing_interrupt = Composite.asynchron(event => {
+                    window.dispatchEvent(event);
+                }, event);
             }, path);
         },
         
@@ -343,6 +357,8 @@
      * path and organizes partial rendering.
      */
     window.addEventListener("hashchange", (event) => {
+
+        window.clearTimeout(_routing_interrupt);
 
         if (!_routing_active)
             return;
