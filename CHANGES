@@ -7,6 +7,9 @@ BF: DataSource: Correction of the method fetch when using the cache
 BF: Extensions: Correction of window.location.contextPath
     The context path does not end with a slash and can be empty if the
     application is located directly under the main domain of the server.
+BF: Routing: Correction / workaround if the hashchange event is missing
+    Correction for browsers that do not trigger a hashchange event when the
+    route is changed from / to /#.
 CR: Markup: iterate also supports numbers
     Positive numbers cause a list of values from 0 to (number -1), negative
     values cause a descending list of values from (number +1) to 0.
