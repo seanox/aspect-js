@@ -194,7 +194,9 @@
                     if (typeof meta[key] !== "function")
                         processor.setParameter(null, key, value);
             }
-            
+
+            let result = processor.transformToDocument(xml.clone());
+
             // Attribute escape converts text to HTML. Without, HTML tag symbols
             // < and > are masked and output as text.
             let escape = xml.evaluate("string(/*/@escape)", xml, null, XPathResult.ANY_TYPE, null).stringValue;
@@ -203,7 +205,6 @@
             // Workaround for some browsers, e.g. MS Edge, if they have problems
             // with !DOCTYPE + !ENTITY. Therefore the document is copied so that
             // the DOCTYPE declaration is omitted.
-            let result = processor.transformToDocument(xml.clone());
             let nodes = result.querySelectorAll(escape ? "*" : "*[escape]");
             nodes.forEach((node) => {
                 if (escape || (node.getAttribute("escape") || "on").match(/^yes|on|true|1$/i)) {
@@ -230,12 +231,13 @@
             if (result.body)
                 nodes = result.body.childNodes;
             else if (result.firstChild
-                    && result.firstChild.nodeName.match(/^transformiix\b/i))
+                    && result.firstChild.nodeName.match(/^TransforMiix\b/i))
                 nodes = result.firstChild.childNodes;
+
             const fragment = document.createDocumentFragment();
-            nodes = Array.from(nodes);
-            for (let loop = 0; loop < nodes.length; loop++)
-                fragment.appendChild(nodes[loop]);
+            nodes.forEach(node => {
+                fragment.appendChild(node);
+            });
             return fragment;
         },
         
