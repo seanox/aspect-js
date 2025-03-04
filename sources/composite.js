@@ -530,9 +530,10 @@
          * @param {function} task Function to be executed
          * @param {...*} variants Up to five additional optional arguments
          *     passed to the callback function
+         * @return {number} ID of the established timer
          */
         asynchron(task, ...variants) {
-            window.setTimeout((invoke, ...variants) => {
+            return window.setTimeout((invoke, ...variants) => {
                 invoke(...variants);
             }, 0, task, ...variants);
         },
@@ -1859,22 +1860,22 @@
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                     } else if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
                             || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                        let data = "";
                         if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                             const parts = String(value).split(/\s+\+\s+/);
                             if (parts[1] === "xslt")
                                 parts[1] = parts[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
-                            const data = DataSource.transform(...parts);
-                            selector.appendChild(data, true);
-                        } else {
-                            let data = DataSource.fetch(String(value));
-                            if (data instanceof XMLDocument)
-                                data = data.documentElement.childNodes;
-                            else if (data instanceof DocumentFragment)
-                                data = data.childNodes
-                            else if (!(data instanceof NodeList))
-                                data = window.document.createTextNode(String(data));
-                            selector.appendChild(data, true);
-                        }
+                            data = DataSource.transform(...parts);
+                        } else data = DataSource.fetch(String(value));
+
+                        if (data instanceof XMLDocument)
+                            data = data.documentElement.childNodes;
+                        else if (data instanceof DocumentFragment)
+                            data = data.childNodes
+                        else if (!(data instanceof NodeList))
+                            data = window.document.createTextNode(String(data));
+                        selector.appendChild(data, true);
+
                         const serial = selector.ordinal();
                         const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
@@ -1924,22 +1925,22 @@
                         value = Expression.eval(serial + ":" + Composite.ATTRIBUTE_OUTPUT, String(value));
                     if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML)
                             || String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
+                        let data = "";
                         if (String(value).match(PATTERN_DATASOURCE_LOCATOR_XML_XSLT)) {
                             const parts = String(value).split(/\s+\+\s+/);
                             if (parts[1] === "xslt")
                                 parts[1] = parts[0].replaceAll(/(^xml(:))|((\.)xml$)/g, "$4xslt$2");
-                            const data = DataSource.transform(...parts);
-                            selector.appendChild(data, true);
-                        } else {
-                            let data = DataSource.fetch(String(value));
-                            if (data instanceof XMLDocument)
-                                data = data.documentElement.childNodes;
-                            else if (data instanceof DocumentFragment)
-                                data = data.childNodes
-                            else if (!(data instanceof NodeList))
-                                data = window.document.createTextNode(String(data));
-                            selector.appendChild(data, true);
-                        }
+                            data = DataSource.transform(...parts);
+                        } else data = DataSource.fetch(String(value));
+
+                        if (data instanceof XMLDocument)
+                            data = data.documentElement.childNodes;
+                        else if (data instanceof DocumentFragment)
+                            data = data.childNodes
+                        else if (!(data instanceof NodeList))
+                            data = window.document.createTextNode(String(data));
+                        selector.appendChild(data, true);
+
                     } else if (value instanceof XMLDocument
                             || value instanceof DocumentFragment)
                         Array.from(value.childNodes).forEach((node, index) =>
