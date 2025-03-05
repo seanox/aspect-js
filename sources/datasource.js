@@ -234,8 +234,14 @@
                     && result.firstChild.nodeName.match(/^TransforMiix\b/i))
                 nodes = result.firstChild.childNodes;
 
+            // Important: AppendChild moves nodes from the NodeList indirectly.
+            // A node can only exist in a single parent element at any one time.
+            // If it is added to a new location, it is automatically “moved”
+            // from its previous context. Therefore, the NodeList is changed to
+            // an array.
+
             const fragment = document.createDocumentFragment();
-            nodes.forEach(node => {
+            Array.from(nodes).forEach(node => {
                 fragment.appendChild(node);
             });
             return fragment;
