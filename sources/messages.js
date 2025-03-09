@@ -134,7 +134,7 @@
         delete window.Messages;
 
         window.Messages = {
-            customize(label, ...values) {
+            populate(label, ...values) {
                 let text = Messages[label] || "";
                 for (let index = 0; index < values.length; index++)
                     text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);

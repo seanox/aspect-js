@@ -60,11 +60,12 @@ const title = messages.contact.title;
 <h1 output="{{messages.contact.title}}"/>
 ```
 
-Messages can also be customized at runtime using the `Messages.customize(label,
-    ...values)` method. For this purpose, the label is used as a template with
-placeholders, which are then filled. The values are passed as a list in the form
-of the spread notation. The placeholders are then a number with reference to the
-position in the value list, whose value is then inserted for the placeholder.
+Messages can also contain placeholders that can be populated at runtime using
+the `Messages.populate(label, ...values)` method. For this purpose, the label is
+used as a template with placeholders, which are then filled. The values are
+passed as a list in the form of the spread notation. The placeholders are then a
+number with reference to the position in the value list, whose value is then
+inserted for the placeholder.
 
 ```xml
 <?xml version="1.0"?>
@@ -77,10 +78,10 @@ position in the value list, whose value is then inserted for the placeholder.
 </locales>
 ```
 ```html
-<h1 output="{{Messages.customize('messages.welcome', 'Mr.', 'Doe', 'with extended user rights')}}"/>
+<h1 output="{{Messages.populate('messages.welcome', 'Mr.', 'Doe', 'with extended user rights')}}"/>
 ```
 ```javascript
-const welcome = Messages.customize("messages.welcome", "Mr.", "Doe", "with extended user rights");
+const welcome = Messages.populate("messages.welcome", "Mr.", "Doe", "with extended user rights");
 ```
 
 Placeholders can be used multiple times. Excess placeholders or placeholders for

@@ -13,7 +13,7 @@ BF: Routing: Correction / workaround if the hashchange event is missing
 CR: Markup: iterate also supports numbers
     Positive numbers cause a list of values from 0 to (number -1), negative
     values cause a descending list of values from (number +1) to 0.
-CR: DataSource: optimization and extension
+CR: DataSource: Optimization and extension
     - Added support for fully qualified locator/path
       For access to sources outside the data directory.
     - Switch to stricter URL
@@ -24,6 +24,9 @@ CR: Markup: import / output optimization and extension for DateSource
       use: xml://example.xml + xslt://example-template.xslt
     - new syntax for DataSource locator with XPath
       use: xml://example.xml?<xpath>
+CR: Message: Optimization and extension
+    - Renamed method customize to populate
+      The name customize was not concise and is needed in a new context.
 
 1.8.0 20250207
 BF: Review: Corrections and optimization
