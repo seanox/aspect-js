@@ -23,6 +23,14 @@ with additional attributes, Model View Controller (MVC), View Model Binding,
 Events, Interceptors, Resource Bundle, Immutable NoSQL DataSource, Test
 Environment and much more.
 
+__Recommendations for UI frameworks:__
+- https://bulma.io/
+- https://picocss.com/
+- https://vanillaframework.io/
+- https://fomantic-ui.com/
+- https://getbootstrap.com/
+- https://getuikit.com/
+
 # Features
 - __Easy Integration in Markup and JavaScript (Clean Code)__ Combinable with
   other JavaScript frameworks if they don't do the same thing and use a
