@@ -64,8 +64,8 @@ if "%JAVA%" == "" (
 )
 
 if not exist "%JAVA%\java.exe" (
-  echo Seanox Devwex Service [5.7.1 20241227]
-  echo Copyright ^(C^) 2024 Seanox Software Solutions
+  echo Seanox Devwex Service [5.9.0 20260411]
+  echo Copyright ^(C^) 2026 Seanox Software Solutions
   echo Experimental Server Engine
   echo.
   echo ERROR: Java Runtime Environment not found
@@ -75,7 +75,6 @@ if not exist "%JAVA%\java.exe" (
 for %%f in (%RUNTIME%\*.bat %RUNTIME%\*.cmd) do call %RUNTIME%\%%f
 
 set OPTIONS=%OPTIONS% -Dlibraries=%LIBRARIES%
-set OPTIONS=%OPTIONS% -Dfile.encoding=ISO-8859-1
 
 "%JAVA%\java.exe" -cp devwex.jar %OPTIONS% com.seanox.devwex.Service %1 %2
 
