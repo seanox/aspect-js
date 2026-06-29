@@ -48,7 +48,7 @@ The release is created by Ant script directly from the root directory of the
 project.
 
 ```
-ant -f ./develpoment/build.xml test
+ant -f ./development/build.xml test
 ```
 
 ## Test
@@ -93,9 +93,9 @@ https://en.wikipedia.org/wiki/Comparison_of_browser_engines
 
 ### Procedure
 - Create a release
-  `ant -f ./develpoment/build.xml test`
+  `ant -f ./development/build.xml test`
 - Start the server
-  `ant -f ./develpoment/build.xml run`
+  `ant -f ./development/build.xml run`
 - URLs to be tested
   http://127.0.0.1:8000  
   http://127.0.0.1:8000/index.html    
