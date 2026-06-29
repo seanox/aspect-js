@@ -1,8 +1,4 @@
 /**
- * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- * im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- * Diese Software unterliegt der Version 2 der Apache License.
- *
  * Seanox aspect-js, fullstack for single page applications
  * Copyright (C) 2025 Seanox Software Solutions
  *
@@ -236,7 +232,7 @@
 
             // Important: AppendChild moves nodes from the NodeList indirectly.
             // A node can only exist in a single parent element at any one time.
-            // If it is added to a new location, it is automatically “moved”
+            // If it is added to a new location, it is automatically ï¿½movedï¿½
             // from its previous context. Therefore, the NodeList is changed to
             // an array.
 
