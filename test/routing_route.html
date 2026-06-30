@@ -64,7 +64,7 @@
 
         let _test_active = false;
         window.addEventListener("hashchange", (event) => {
-            let new_location_hash = new URL(event.newURL).hash;
+            let new_location_hash = new URL(event.newURL, window.location.href).hash;
             if (!new_location_hash)
                 new_location_hash = event.newURL.match(/#+/);
             if (new_location_hash === "#" + _now) {
