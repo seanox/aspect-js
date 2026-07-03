@@ -1,10 +1,9 @@
 # IDE specific
-/.idea/
-/*.iml
+.idea
+.settings
+.project
 
-# IDE specific
-/.settings/
-/.project
+*.iml
 
 # Node.js specific
 /**/node_modules/
