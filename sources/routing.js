@@ -6,7 +6,7 @@
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -74,10 +74,10 @@
     // initially when the page is loaded.
     let _routing_active;
 
-    // Software interrupt that triggers the hashchange event via a timer if the
-    // hashchange event from the browser does not occur. If the browser event
-    // occurs as planned, the interrupt is discarded. It concerns Mozilla/Gecko,
-    // where the change from / to /# does not trigger a hashchange event.
+    // Task that triggers the hashchange event via a timer if the hashchange
+    // event from the browser does not occur. If the browser event occurs as
+    // planned, the interrupt is discarded. It concerns Mozilla/Gecko, where the
+    // change from / to /# does not trigger a hashchange event.
     let _routing_interrupt;
 
     // Map with all supported interceptors
@@ -156,11 +156,11 @@
             if (path === null
                     || path === Browser.location)
                 return;
-            Composite.asynchron(path => {
+            Composite.asynchronous(path => {
                 const event = new Event("hashchange",{bubbles:false, cancelable:true});
                 event.oldURL = Browser.location;
                 event.newURL = path;
-                _routing_interrupt = Composite.asynchron(event => {
+                _routing_interrupt = Composite.asynchronous(event => {
                     window.dispatchEvent(event);
                 }, event);
                 if (path.startsWith("#"))
@@ -342,7 +342,7 @@
     const _render = (element, focus = false) => {
         Composite.render(element);
         if (focus) {
-            Composite.asynchron((element) => {
+            Composite.asynchronous((element) => {
                 if (typeof element.focus === "function")
                     element.focus();
             }, element);
@@ -356,7 +356,8 @@
      */
     window.addEventListener("hashchange", (event) => {
 
-        window.clearTimeout(_routing_interrupt);
+        if (_routing_interrupt)
+            _routing_interrupt.cancel();
 
         if (!_routing_active)
             return;
@@ -433,7 +434,7 @@
         if (locationOldElement === document.body
                 || locationNewElement === document.body) {
             _render(document.body);
-            Composite.asynchron((element) => {
+            Composite.asynchronous((element) => {
                 if (typeof element.focus === "function")
                     element.focus();
             }, locationNewElement);
@@ -441,7 +442,7 @@
         }
         if (locationOldElement.contains(locationNewElement)) {
             _render(locationOldElement);
-            Composite.asynchron((element) => {
+            Composite.asynchronous((element) => {
                 if (typeof element.focus === "function")
                     element.focus();
             }, locationNewElement);
