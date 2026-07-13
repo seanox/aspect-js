@@ -6,7 +6,7 @@
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -176,7 +176,7 @@
 
                     // The registration is delayed so that the getting of values
                     // does not block unnecessarily.
-                    Composite.asynchron((selector, target, key, notifications) => {
+                    Composite.asynchronous((selector, target, key, notifications) => {
 
                         // Registration is performed only during rendering and
                         // if the key exists in the object.
@@ -254,7 +254,7 @@
 
                     // The registration is delayed so that the setting of values
                     // does not block unnecessarily.
-                    Composite.asynchron((selector, target, key, notifications) => {
+                    Composite.asynchronous((selector, target, key, notifications) => {
 
                         // Update only if the key exists in the object.
                         // Recursions during rendering are prevented via the

@@ -6,7 +6,7 @@
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -495,7 +495,7 @@
                                 && meta.name.trim().length > 0)
                             Test.worker.task.title += " " + meta.name.replace(/[\x00-\x20]+/g, " ").trim();
                         Test.fire(Test.EVENT_PERFORM, Test.status());
-                        Composite.asynchron(() => {
+                        Composite.asynchronous(() => {
                             const task = Test.worker.task;
                             try {task.meta.test();
                             } catch (error) {
