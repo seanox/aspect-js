@@ -13,10 +13,10 @@ BF: Routing: Correction / workaround if the hashchange event is missing
 CR: Composite: Switch to microtasks-based scheduling
     Microtasks-based scheduling to make update batching and execution order more
     deterministic.
-    - Microtasks run immediately after the current JavaScript code—before the
-      next macrotask starts
-    - Macrotask are not executed until the next event loop
-      iteration-after all microtasks have been processed.
+    - Microtasks run immediately after the current JavaScript code and before
+      the next macrotask (window.setTimeout) starts
+    - Macrotask are not executed until the next event loop iteration and after
+      all microtasks have been processed.
 CR: DataSource: Optimization and extension
     - Added support for fully qualified locator/path
       For access to sources outside the data directory.
