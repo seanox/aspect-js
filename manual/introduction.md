@@ -6,16 +6,22 @@
 # Introduction
 
 ## What is Seanox aspect-js?
-Inspired by the good experiences with JSF (Java Server Faces) in terms of
-functionality and easy integration into the markup, the idea for a similar
-client-side full-stack solution with a minimalistic and lightweight approach for
-the implementation of Single-Page Applications (SPAs) and Micro-Frontends was
-born.
+Influenced by the good experiences from JSF (JavaServer Faces) with regard to
+function and an easy integration into the markup, arose a similar client-side
+application runtime.
 
-Seanox aspect-js takes the declarative approach of HTML and extends this with
-Expression Language, Reactivity Rendering with additional attributes, Model View
-Controller (MVC), View Model Binding, Events, Interceptors, Resource Bundle,
-Immutable NoSQL DataSource, Test Environment and much more.
+The separation of web applications into frontend and backend, browser-based
+applications and distributed services has changed the structure of software
+systems. Seanox aspect-js explores concepts for organizing client-side
+applications through declarative markup, component structures, view-model
+binding and modular resources.
+
+Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
+Applications (SPAs) and Micro-Frontends. This framework takes the declarative
+approach of HTML and extends this with Expression Language, Reactivity Rendering
+with additional attributes, Model View Controller (MVC), View Model Binding,
+Events, Interceptors, Resource Bundle, Immutable NoSQL DataSource, Test
+Environment and much more.
 
 # Features
 - __Easy Integration in Markup and JavaScript (Clean Code)__ Combinable with

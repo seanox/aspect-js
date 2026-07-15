@@ -12,9 +12,15 @@
 </p>
 
 # Description
-Influenced by the good experiences from JSF (Java Server Faces) with regard to
+Influenced by the good experiences from JSF (JavaServer Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
 application runtime.
+
+The separation of web applications into frontend and backend, browser-based
+applications and distributed services has changed the structure of software
+systems. Seanox aspect-js explores concepts for organizing client-side
+applications through declarative markup, component structures, view-model
+binding and modular resources.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This framework takes the declarative

@@ -4,19 +4,26 @@
 
 # Motivation
 The separation of web applications into frontend and backend as well as the use
-of browser-based rich clients and microservices is more than just a trend. In
-addition to the strict separation of components, scalability and modularization
-are good arguments for this type of application architecture.
+of browser-based applications and distributed services has changed the structure
+of software systems.
 
-The amount of frameworks for browser-based rich clients is huge. They differ in
-functionality, complexity, size and sometimes require their own compilers and
-servers.
+Many frameworks support the development of client-side applications. They differ
+in their concepts, complexity and the amount of additional infrastructure they
+require.
 
-Seanox aspect-js focuses on a minimalist approach. Influenced by the good
-experiences with JSF (Java Server Faces) in regard to function and an easy
-integration into the markup, the idea arose for a similar client-side solution
-and as an experiment to understand reactive rendering, expression language and
-performance.
+Seanox aspect-js originated from the idea of transferring concepts from Java
+Server Faces (JSF) to the browser environment. In particular, the declarative
+description of user interfaces in markup, expression language, component
+structures and the connection between views and models were the starting points.
+
+Another motivation was the transfer of concepts from microservices to
+micro-frontends. The idea is to structure frontend applications into
+independent, domain-related units that can be dynamically loaded and composed
+into a larger application.
+
+The implementation explores how these concepts can be realized using browser
+technologies and how they interact with reactive rendering, modular resources
+and client-side application structures.
 
 
 
