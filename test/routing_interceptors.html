@@ -38,7 +38,7 @@
 
         let _sequence = ["#a", "#b#c", "#a#b#c", "#c#d", "#b#x", "#a#b#c", "#a", "#c#d", "#a#b#c", "#b#x"];
         const _snapshots = [];
-        const toggle = () => {
+        const runSequence = () => {
             window.setTimeout(() => {
                 _snapshots.push(document.body.innerText.replace(/\s+/g, ""));
                 if (_sequence.length <= 0) {
@@ -47,10 +47,10 @@
                     return;
                 }
                 Routing.route(_sequence.shift());
-                toggle();
+                runSequence();
             }, 250);
         };
-        toggle();
+        runSequence();
 
         Test.create({test() {
             const content = _snapshots.join("\r\n");
