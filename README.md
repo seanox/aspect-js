@@ -14,7 +14,7 @@
 # Description
 Influenced by the good experiences from JSF (Java Server Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
-fullstack solution.
+application runtime.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This framework takes the declarative
