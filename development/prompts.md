@@ -3,7 +3,7 @@ deutsch + Du
 
 # Documentation
 
-## Text Check for Comprehensibility
+## Text: Check for Comprehensibility
 
 ### Rolle
 Du bist ein erfahrener JavaScript-Frontend-Entwickler.
@@ -30,7 +30,7 @@ JavaScript-Frontend-Entwicklers.
 
 ---
 
-## Method Comments Completion of JSDoc 
+## Method Comments: Completion of JSDoc 
 
 Ich werde dir wiederholt JavaScript-Methoden schicken.
 
