@@ -160,22 +160,95 @@ const Model = {
 ```
 
 ## Interceptors
-TODO:
+Interceptors allow custom logic to be executed during navigation before the
+target path is evaluated and the view flow is processed by routing. They are
+intended to react to specific paths and can influence whether the navigation
+continues.
 
-Interceptors take effect very early and before the path is checked and optimized
-by routing. The passed parameter is a meta-object with the triggered oldHash and
-newHash.
+An interceptor is registered with `Routing.customize(path, actor)`. The `path`
+can be either an exact route string or a regular expression. The `actor` is a
+function that is executed when the specified path matches the requested
+navigation target. The actor is a callback that receives the previous hash and
+the new hash as parameters.
 
-Interceptors are designed to execute according to the order in which they are
-registered. Each interceptor is always evaluated and executed if it matches the
-specified criteria. Notably, interceptors do not create any entries in the
-browser history. They have the capability to modify the new hash/path, e.g.
-using the methods `window.history.replaceState()` or `window.location.replace()`
-for such modifications. Following interceptors will operate on this potentially
-altered hash/path. If any interceptor returns false explicitly, it will
-terminate the logic within the hashchange event.
+```javascript
+Routing.customize("#a#b#c", (previousHash, newHash) => {
+    console.log("Navigation from", previousHash, "to", newHash);
+});
+````
 
-TODO:
+Interceptors are processed before routing checks the path validity, resolves the
+target view and updates the view flow. They are therefore suitable for tasks
+such as authentication checks, redirects, route migration or custom navigation
+handling.
+
+### Execution order
+Interceptors are executed in the order in which they were registered.
+
+All registered interceptors are checked. If an interceptor matches the requested
+path, its actor function is executed. Following interceptors receive the
+potentially modified navigation target.
+
+An interceptor can stop further processing of the current navigation by
+returning `false` explicitly.
+
+```javascript
+Routing.customize("#a#b", (oldHash, newHash) => {
+    if (!User.isAuthenticated())
+        return false;
+});
+```
+
+Any other return value does not affect routing.
+
+### Path matching
+A string interceptor matches the specified path and all nested paths below it.
+
+```javascript
+Routing.customize("#a", actor);
+```
+
+matches:
+
+```
+#a
+#a#b
+#a#b#c
+```
+
+but not:
+
+```
+#abc
+#c#b#a
+```
+
+Regular expressions can be used for more flexible matching:
+
+```javascript
+Routing.customize(/^#a#\d+$/, actor);
+```
+
+### Navigation changes
+Interceptors do not create entries in the routing history. They are executed
+within the current navigation event.
+
+An interceptor can modify the target navigation if required. For example,
+`window.location.replace()` can be used to replace the current URL without
+creating an additional browser history entry.
+
+```javascript
+Routing.customize("#old-path", (oldHash, newHash) => {
+    window.location.replace("#new-path");
+});
+```
+
+Because interceptors are executed sequentially, subsequent interceptors operate
+on the updated navigation target.
+
+__Interceptors are executed before the normal routing process. Therefore,
+changes made by interceptors directly affect the following path resolution and
+view rendering.__
 
 ## Paths
 Paths are used for navigation, routing and controlling the view flow. The target
