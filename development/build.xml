@@ -114,6 +114,12 @@
           match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
       <replaceregexp file="@{output}" flags="g" byline="false"
           match=" +(\R)" replace="\1"/>
+      <replaceregexp file="@{output}" flags="gs"
+          match="(?si)(\}\)\(\);)\s+(/\*\*).*?\bDESCRIPTION[\s\*\r\n]+----( )*"
+          replace="\1${line.separator}${line.separator}\2"/>
+      <replaceregexp file="@{output}" flags="gs"
+          match="(?si)(/\*\*)[\s\r\n\*]+([\r\n]\s+\* \S)"
+          replace="\1\2"/>
     </sequential>
   </macrodef>
 
@@ -224,7 +230,14 @@
 
     <file-compose output="${release.file.source.testing}">
       <filelist dir="${workspace.sources}">
-        <file name="${release.file.source}"/>
+        <file name="extension.js"/>
+        <file name="datasource.js"/>
+        <file name="scripting.js"/>
+        <file name="expression.js"/>
+        <file name="composite.js"/>
+        <file name="messages.js"/>
+        <file name="reactive.js"/>
+        <file name="routing.js"/>
         <file name="test.js"/>
       </filelist>
     </file-compose>
