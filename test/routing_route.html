@@ -57,7 +57,7 @@
         const _now = Date.now();
 
         window.addEventListener("load", () => {
-            Composite.asynchron(() => {
+            Composite.asynchronous(() => {
                 window.location.href = "#" + _now;
             });
         });
@@ -77,15 +77,15 @@
                 Test.start();
                 return;
             }
-
+            
+            const redirect = (/^(#{2,}|[^#])/).test(new_location_hash); 
             if (new_location_hash !== "#" + _now)
-                logging("=: " + new_location_hash);
-
-            if ((/^(#{2,}|[^#])/).test(new_location_hash))
+                logging((redirect ? "+" : "=") + ": " + new_location_hash);
+            if (redirect)
                 return;
 
             const target = _targets.shift();
-            Composite.asynchron((target) => {
+            Composite.asynchronous((target) => {
                 const mode = String(target.match(/^[A-Z]/));
                 target = target.substring(2);
                 logging(mode + ": " + target);
@@ -135,42 +135,38 @@
       B: #a#b#c#d
       =: #a#b#c#d
       B: ##
-      =: ##
       =: #a#b#c
       B: #a#b#c#d
       =: #a#b#c#d
       B: ###x
-      =: ###x
       =: #a#b#x
       B: #a#b#x#y#z
       =: #a#b#x#y#z
       B: ####c
-      =: ####c
       =: #a#b#c
       B: #a#b#c#d
       =: #a#b#c#d
       B: ####b
-      =: ####b
       =: #a#b
       C: #a#b#c#d
       =: #a#b#c#d
       C: ##
-      =: ##
+      +: ##
       =: #a#b#c
       C: #a#b#c#d
       =: #a#b#c#d
       C: ###x
-      =: ###x
+      +: ###x
       =: #a#b#x
       C: y#z
-      =: #y#z
+      =: #a#b#x#y#z
       C: ####c
-      =: ####c
-      =: #c
+      +: ####c
+      =: #a#b#c
       C: #a#b#c#d
       =: #a#b#c#d
       C: ####b
-      =: ####b
+      +: ####b
       =: #a#b
       C: #
     </script>

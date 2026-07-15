@@ -6,7 +6,7 @@
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -117,6 +117,9 @@
 (() => {
 
     "use strict";
+
+    /** Internal queue for pending asynchronous callback executions */
+    const _asynchronous_queue = [];
 
     /** Storage for variables with the page scope */
     const _render_context_scope = [];
@@ -452,7 +455,7 @@
                             } else throw new Error("Invalid context: " + context);
                             const selector = context.queue.shift();
                             if (selector)
-                                Composite.asynchron(context, selector);
+                                Composite.asynchronous(context, selector);
                             context.lock = false;
                     }};
                 
@@ -521,18 +524,46 @@
         },
 
         /**
-         * Asynchronous or in reality non-blocking call of a function. Because
-         * the asynchronous execution is not possible without Web Worker.
-         * @param {function} task Function to be executed
-         * @param {...*} variants Up to five additional optional arguments
-         *     passed to the callback function
-         * @return {number} ID of the established timer
-         */
-        asynchron(task, ...variants) {
-            return window.setTimeout((invoke, ...variants) => {
-                invoke(...variants);
-            }, 0, task, ...variants);
-        },
+         * Schedules a callback as a microtask.
+         *
+         * Multiple calls within the same JavaScript execution turn are batched
+         * and executed together in a single microtask. The callback is invoked
+         * after the current synchronous execution stack has completed and
+         * before the next macrotask (such as window.setTimeout).
+         *
+         * The returned handle can be used to cancel execution before the
+         * callback is processed.
+         *
+         * @param {function} callback Function to be executed.
+         * @param {...*} data Optional arguments passed to the callback function.
+         * @returns {{cancel: function}} Cancellation handle.
+         */        
+        asynchronous(callback, ...data) {
+            if (typeof callback !== "function")
+                throw new TypeError("Invalid callback: " + typeof callback);
+            const state = {cancelled: false};
+            const task = {
+                cancel() {
+                    state.cancelled = true;
+                }
+            };
+            _asynchronous_queue.push({task, callback, data, state});
+            if (_asynchronous_queue.length > 1)
+                  return task;
+            Promise.resolve().then(() => {
+                for (const task of _asynchronous_queue.splice(0)) {
+                    if (task.state.cancelled)
+                        continue;
+                    try {task.callback(...task.data);
+                    } catch (error) {
+                        window.setTimeout(() => {
+                            throw error;
+                        }, 0);
+                    }
+                }
+            });
+            return task;
+        },  
 
         /**
          * Determines the corresponding meta-object for the passed selector.
@@ -1336,7 +1367,7 @@
                     && Composite.render.lock !== lock) {
                 if (!Composite.render.queue.includes(selector))
                     Composite.render.queue.push(selector);
-                Composite.asynchron(Composite.render);
+                Composite.asynchronous(Composite.render);
                 return;
             }
 
@@ -1881,7 +1912,7 @@
                         const object = _render_meta[serial];
                         delete object.attributes[Composite.ATTRIBUTE_IMPORT];
                     } else {
-                        Composite.asynchron((selector, lock, url) => {
+                        Composite.asynchronous((selector, lock, url) => {
                             try {
                                 const request = new XMLHttpRequest();
                                 request.overrideMimeType("text/plain");
