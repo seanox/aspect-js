@@ -47,7 +47,7 @@ __Recommendations for UI frameworks:__
   partial rendering on consumers.
 - __Markup Rendering__ Supports: conditions, custom tags, events, filter,
   interval, interceptors, iterate, rendering, resource messages, validation, ...
-- __Markup Hardening__ Makes it difficult to manipulate the attributes in the
+- __Markup Protection__ Makes it difficult to manipulate the attributes in the
   markup. Non-visible components are removed from the DOM and only reinserted
   when used.
 - __Model View Controller (MVC) / Model View ViewModel (MVVM)__ Supports view

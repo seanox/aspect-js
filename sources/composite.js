@@ -1203,7 +1203,7 @@
          * Parameters start with @ in difference to Interceptor/Selector/Tag.
          *
          *     @ATTRIBUTES-STATICS
-         * Static attributes are a component of the hardening of the markup.
+         * Static attributes are a component of the markup protection.
          * These attributes are observed by the renderer and manipulation is
          * made more difficult by restoring the original value. As value one or
          * more attributes separated by spaces are expected. The method can be
@@ -1223,15 +1223,16 @@
             if (variants.length > 0)
                 scope = variants[0];
 
-            // STATIC is used for hardening attributes in markup. Hardening
-            // makes the manipulation of attributes more difficult. At runtime,
-            // additional attributes can be declared as static. However, this
-            // function is not cheap, since the values of the attributes used at
-            // that time must be determined for all elements to be restored, for
-            // which purpose the complete DOM is analyzed (full DOM scan). The
-            // composite-specific static attributes (PATTERN_ATTRIBUTE_ACCEPT)
-            // are excluded from this function because they are already actively
-            // monitored by the MutationObserver.
+            // STATIC is used to define protected attributes in the markup.
+            // Markup protection makes attribute manipulation ast the runtime
+            // more difficult. At runtime, additional attributes can be declared
+            // as static. However, this function is not cheap, since the values
+            // of the attributes used at that time must be determined for all
+            // elements to be restored, for which purpose the complete DOM is
+            // analyzed (full DOM scan). The composite-specific static
+            // attributes (PATTERN_ATTRIBUTE_ACCEPT) are excluded from this
+            // function because they are already actively monitored by the
+            // MutationObserver.
             if (typeof scope === "string"
                     && variants.length > 1
                     && typeof variants[1] === "string"
@@ -1520,7 +1521,7 @@
                                 
                                 // The initial value of the static attribute is
                                 // registered for the restore. This is a part of
-                                // the markup hardening of the MutationObserver.                            
+                                // the markup protection of the MutationObserver.                            
                                 if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
                                         || attribute.name === Composite.ATTRIBUTE_ID
                                         || attribute.name === Composite.ATTRIBUTE_EVENTS)
@@ -1528,7 +1529,7 @@
 
                                 // The initial value of the static attribute is
                                 // registered for the restore. This is a part of
-                                // the markup hardening of the MutationObserver.
+                                // the markup protection of the MutationObserver.
                                 object.statics = object.statics || {};
                                 if (_statics.has(attribute.name))
                                     object.statics[attribute.name] = attribute.value;
@@ -2450,10 +2451,10 @@
 
     /**
      * Set of attributes to be hardened.
-     * The hardening of attributes is part of the safety concept and should make
-     * it more difficult to manipulate the markup at runtime. Hardening observes
-     * attributes and undoes changes. Initially, the list is empty because the
-     * policies and rules are too individual.
+     * Attribute protection is part of the security concept and is intended to
+     * make runtime manipulation of the markup more difficult. It monitors
+     * attributes and reverts any changes. The list is initially empty because
+     * the required policies and rules are highly application-specific. 
      * 
      * The following attributes are recommended:
      *     action        autocomplete      autofocus

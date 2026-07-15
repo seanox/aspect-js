@@ -33,7 +33,7 @@ recursively to changes.
   - [Tag](#tag)
   - [Selector](#selector)
   - [Interceptor](#interceptor)
-- [Hardening](markup.md#hardening)
+- [Protection](#protection)
 
 ## Attributes
 In Seanox aspect-js, the declarative approach is implemented with attributes
@@ -814,13 +814,13 @@ Composite.customize(function(element) {
 });
 ```
 
-## Hardening
-In Seanox aspect-js, a hardening of the markup is provided, which makes it
-difficult to manipulate the markup at runtime. On the one hand, hidden markup
-with a condition is physically removed from the DOM and on the other hand, the
-renderer observes manipulations of attributes at runtime. This observation
-is based on a filter with static attributes. Static attributes are read when an
-element is created in the DOM and restored when manipulated (deleted/changed).
+## Protection
+Seanox aspect-js provides markup protection that makes runtime manipulation of
+the markup more difficult. On the one hand, hidden markup with a condition is
+physically removed from the DOM and on the other hand, the renderer observes
+manipulations of attributes at runtime. This observation is based on a filter
+with static attributes. Static attributes are read when an element is created in
+the DOM and restored when manipulated (deleted/changed).
 
 To configure static attributes, use the method `Composite.customize(...)` and
 using the parameter `@ATTRIBUTES-STATICS`. The configuration can be done several

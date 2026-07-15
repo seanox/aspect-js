@@ -66,7 +66,7 @@ Machine translation with [DeepL](https://deepl.com).
     - [Selector](markup.md#selector)
     - [Interceptor](markup.md#interceptor)
     - [Parameters](markup.md#parameters)
-  - [Hardening](markup.md#hardening)
+  - [Protection](markup.md#protection)
 
 ### Scripting
 - [Scripting](scripting.md#scripting)
