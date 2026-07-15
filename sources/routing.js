@@ -160,12 +160,13 @@
                 const event = new Event("hashchange",{bubbles:false, cancelable:true});
                 event.oldURL = Browser.location;
                 event.newURL = path;
-                _routing_interrupt = Composite.asynchronous(event => {
-                    window.dispatchEvent(event);
-                }, event);
                 if (path.startsWith("#"))
                     window.location.hash = path.substring(1);
                 else window.location.href = path;
+                _routing_interrupt = Composite.asynchronous(event => {
+                    if (event.newURL != Browser.location)
+                        window.dispatchEvent(event);
+                }, event);
             }, path);
         },
         
