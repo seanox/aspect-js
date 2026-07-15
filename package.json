@@ -1,7 +1,7 @@
 {
   "name": "@seanox/aspect-js",
   "version": "0.0.0",
-  "description": "full stack JavaScript framework for SPAs incl. reactivity rendering, mvc / mvvm, models, expression language, datasource, routing, paths, unit test and some more",
+  "description": "JavaScript application runtime for SPAs incl. Expression Language, Reactivity Rendering with additional attributes, Model View Controller (MVC), View Model Binding, Events, Interceptors, Resource Bundle, Immutable NoSQL DataSource, Test Environment and much more.",
   "main": "release/aspect-js.js",
   "repository": {
     "type": "git",
@@ -10,7 +10,8 @@
   "keywords": [
     "seanox",
     "aspect-js",
-    "full stack",
+    "runtime",
+    "application runtime",
     "ui",
     "framework",
     "spa",
