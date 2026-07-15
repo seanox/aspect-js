@@ -36,27 +36,18 @@
             return false;
         });
 
+        let _sequence = ["#a", "#b#c", "#a#b#c", "#c#d", "#b#x", "#a#b#c", "#a", "#c#d", "#a#b#c", "#b#x"];
         const _snapshots = [];
         const toggle = () => {
             window.setTimeout(() => {
-                let snapshot = Routing.location;
                 _snapshots.push(document.body.innerText.replace(/\s+/g, ""));
-                if (_snapshots.length === 0)
-                    Routing.route("#");
-                else if (_snapshots.length % 5 === 0)
-                  Routing.route("#b#x");
-                else if (_snapshots.length % 4 === 0)
-                  Routing.route("#c#d");
-                else if (_snapshots.length % 3 === 0)
-                    Routing.route("#a#b#c");
-                else if (_snapshots.length % 2 !== 0)
-                    Routing.route("#a");
-                else if (_snapshots.length % 2 === 0)
-                    Routing.route("#b#c");
-                if (_snapshots.length > 10) {
+                if (_sequence.length <= 0) {
                     document.body.innerText = _snapshots.join("\r\n");
                     Test.start();
-                } else toggle();
+                    return;
+                }
+                Routing.route(_sequence.shift());
+                toggle();
             }, 250);
         };
         toggle();
