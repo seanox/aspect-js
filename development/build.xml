@@ -107,6 +107,8 @@
         <filelist refid="@{filelist}"/>
       </concat>
       <replaceregexp file="@{output}" flags="g" byline="false"
+          match="(?s)(\r\n)|(\n\r)|\r" replace="&#10;"/>
+      <replaceregexp file="@{output}" flags="g" byline="false"
           match="\b(compliant\(\x22([\w\.]+)\x22)\);\s*compliant\(\s*null,\s*(window\.)?\2\s*=\s*" replace="\1, "/>
       <replaceregexp file="@{output}" flags="g" byline="false"
           match="(?s)(?&lt;=\S)(/\*\*)" replace="${line.separator}${line.separator}\1"/>
@@ -114,10 +116,10 @@
           match="(?s)(?&lt;=.)(?:(/\*(?:\*\s+)+)LIZENZBEDINGUNGEN.*?----\s+(?:\s*\*\s+)*)" replace="\1"/>
       <replaceregexp file="@{output}" flags="g" byline="false"
           match=" +(\R)" replace="\1"/>
-      <replaceregexp file="@{output}" flags="gs"
+      <replaceregexp file="@{output}" flags="g" byline="false"
           match="(?si)(\}\)\(\);)\s+(/\*\*).*?\bDESCRIPTION[\s\*\r\n]+----( )*"
           replace="\1${line.separator}${line.separator}\2"/>
-      <replaceregexp file="@{output}" flags="gs"
+      <replaceregexp file="@{output}" flags="g" byline="false"
           match="(?si)(/\*\*)[\s\r\n\*]+([\r\n]\s+\* \S)"
           replace="\1\2"/>
     </sequential>
