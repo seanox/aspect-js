@@ -51,7 +51,7 @@
             document.querySelector("iframe[name='targetC']").setAttribute("x-id", "x4");
             document.querySelector("iframe[name='targetC']").setAttribute("x-title1", "x6");
 
-            Composite.asynchron(() => {
+            Composite.asynchronous(() => {
 
                 capture.snap(document.body.innerHTML);
 
@@ -76,7 +76,7 @@
                 document.querySelector("iframe[name='targetC']").setAttribute("x-id", "x4x");
                 document.querySelector("iframe[name='targetC']").setAttribute("x-title1", "x6x");
                 
-                Composite.asynchron(() => {
+                Composite.asynchronous(() => {
 
                     capture.snap(document.body.innerHTML);
                     
@@ -97,7 +97,7 @@
                     document.querySelector("iframe[name='targetC']").setAttribute("x-id", "x4xx");
                     document.querySelector("iframe[name='targetC']").setAttribute("x-title1", "x6xx");
                     
-                    Composite.asynchron(() => {
+                    Composite.asynchronous(() => {
                         capture.snap(document.body.innerHTML);
                         Test.start();
                     });

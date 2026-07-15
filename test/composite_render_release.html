@@ -25,10 +25,10 @@
             snapshots.push(snapshot);
             if (snapshots.length === 2) {
                 x = true;
-                Composite.asynchron(Composite.render, document.body);
+                Composite.asynchronous(Composite.render, document.body);
             }
             if (snapshots.length === 4)
-                Composite.asynchron(Test.start);
+                Composite.asynchronous(Test.start);
         };
 
         Composite.listen(Composite.EVENT_RENDER_START, snapshot);

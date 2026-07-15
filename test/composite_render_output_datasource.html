@@ -29,9 +29,9 @@
                 case 4: raw_x = false; break;
             }
             if (snapshots.length <= count)
-                Composite.asynchron(Composite.render, document.body);
+                Composite.asynchronous(Composite.render, document.body);
             if (snapshots.length === count)
-                Composite.asynchron(Test.start);
+                Composite.asynchronous(Test.start);
         });
         
         Test.create({test() {

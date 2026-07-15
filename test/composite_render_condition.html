@@ -60,7 +60,7 @@
                 return;
             capture.snap();
             if (capture.snapshots().length < capture.patterns().length)
-                Composite.asynchron(Composite.render, document.body);
+                Composite.asynchronous(Composite.render, document.body);
             if (capture.snapshots().length === capture.patterns().length)
                 Test.start();
             if (capture.snapshots().length > capture.size())
