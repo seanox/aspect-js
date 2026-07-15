@@ -81,10 +81,10 @@
     let _routing_interrupt;
 
     // Map with all supported interceptors
-    const _interceptors = new Array();
+    const _interceptors = [];
 
     // Array with the path history (optimized)
-    const _history = new Array();
+    const _history = [];
 
     const Browser = {
 
@@ -164,7 +164,7 @@
                     window.location.hash = path.substring(1);
                 else window.location.href = path;
                 _routing_interrupt = Composite.asynchronous(event => {
-                    if (event.newURL != Browser.location)
+                    if (event.newURL !== Browser.location)
                         window.dispatchEvent(event);
                 }, event);
             }, path);
