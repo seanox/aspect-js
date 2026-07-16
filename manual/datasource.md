@@ -1,26 +1,22 @@
-&#9665; [Scripting](scripting.md)
+<&#9665; [Scripting](scripting.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#datasource)
 &nbsp;&nbsp;&nbsp;&nbsp; [Resource Bundle](message.md) &#9655;
 - - -
 
 # DataSource
-DataSource is a Immutable NoSQL approach to data storage based on XML data in
-combination with multilingual data separation, optional aggregation and
-transformation. A combination of the approaches of a read only database and a
-CMS.
+DataSource is an immutable XML-based data repository for static application
+data. It combines structured XML storage with multilingual data separation,
+optional aggregation, and transformation using XPath and XSLT.
 
-DataSource is based on static data. Therefore, the implementation uses a cache
-to minimize network access.
- 
-The data is queried via XPath. The result can be concatenated and aggregated and
-the result can be transformed with XSLT.
+The concept combines characteristics of a read-only database and a content
+management system. DataSource is designed for data that is provided with the
+application and accessed primarily through queries and transformations.
 
 _Why the term NoSQL is used?_
 
-NoSQL has become a synonym and meanwhile describes an undefined data source with
-an undefined data model and a command set that differs from SQL. There is no
-standard for NoSQL, but there is a data source that can be functionally used
-similar to SQL.
+The term NoSQL is used here in the general sense of a non-relational data model.
+DataSource does not provide a relational database model or SQL interface, but
+instead uses hierarchical XML data with query and transformation mechanisms.
 
 ## Contents Overview
 - [Data Storage](#data-storage)
@@ -366,3 +362,4 @@ The DataSource can also be used directly in the markup with the attributes
 &#9665; [Scripting](scripting.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#datasource)
 &nbsp;&nbsp;&nbsp;&nbsp; [Resource Bundle](message.md) &#9655;
+>

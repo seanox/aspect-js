@@ -10,10 +10,11 @@ Influenced by the good experiences from JSF (JavaServer Faces) with regard to
 function and an easy integration into the markup, arose a similar client-side
 application runtime.
 
-The separation of web applications into frontend and backend, browser-based
-applications and distributed services has changed the structure of software
-systems. Seanox aspect-js explores concepts for organizing client-side
-applications through declarative markup, component structures, view-model
+The separation of web applications into frontend and backend, together with
+browser-based applications and distributed services, changed the structure of
+client-side applications. Seanox aspect-js investigates the application of
+concepts derived from JavaServer Faces (JSF) and microservices to browser-based
+applications, including declarative markup, component structures, view-model
 binding and modular resources.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
@@ -539,16 +540,13 @@ added to the HEAD when the page is loaded.
 [Learn more](markup.md#release)
 
 ## DataSource
-DataSource is a Immutable NoSQL approach to data storage based on XML data in
-combination with multilingual data separation, optional aggregation and
-transformation. A combination of the approaches of a read only database and a
-CMS.
+DataSource is an immutable XML-based data repository for static application
+data. It combines structured XML storage with multilingual data separation,
+optional aggregation, and transformation using XPath and XSLT.
 
-DataSource is based on static data. Therefore, the implementation uses a cache
-to minimize network access.
-
-The data is queried via XPath. The result can be concatenated and aggregated and
-the result can be transformed with XSLT.
+The concept combines characteristics of a read-only database and a content
+management system. DataSource is designed for data that is provided with the
+application and accessed primarily through queries and transformations.
 
 [Learn more](datasource.md#datasource)
 

@@ -3,27 +3,22 @@
 - - -
 
 # Motivation
-The separation of web applications into frontend and backend as well as the use
-of browser-based applications and distributed services has changed the structure
-of software systems.
+The separation of web applications into frontend and backend, together with
+browser-based applications and distributed services, changed the structure of
+web applications.
 
-Many frameworks support the development of client-side applications. They differ
-in their concepts, complexity and the amount of additional infrastructure they
-require.
+Seanox aspect-js originated from the idea of transferring concepts from
+JavaServer Faces (JSF) to the browser. Declarative markup, expression language,
+component structures and the connection between views and models served as the
+initial concepts.
 
-Seanox aspect-js originated from the idea of transferring concepts from Java
-Server Faces (JSF) to the browser environment. In particular, the declarative
-description of user interfaces in markup, expression language, component
-structures and the connection between views and models were the starting points.
+Another point of reference was the transfer of concepts from microservices to
+micro-frontends. This concerns the organization of frontend applications into
+domain-oriented modules that are composed at runtime.
 
-Another motivation was the transfer of concepts from microservices to
-micro-frontends. The idea is to structure frontend applications into
-independent, domain-related units that can be dynamically loaded and composed
-into a larger application.
-
-The implementation explores how these concepts can be realized using browser
-technologies and how they interact with reactive rendering, modular resources
-and client-side application structures.
+The project investigates the implementation of these concepts using browser
+technologies. It includes declarative markup, reactive rendering, modular
+resources and mechanisms for organizing client-side applications.
 
 
 
