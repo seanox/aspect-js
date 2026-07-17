@@ -18,11 +18,11 @@ applications, including declarative markup, component structures, view-model
 binding and modular resources.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
-Applications (SPAs) and Micro-Frontends. This framework takes the declarative
-approach of HTML and extends this with Expression Language, Reactivity Rendering
-with additional attributes, Model View Controller (MVC), View Model Binding,
-Events, Interceptors, Resource Bundle, Immutable NoSQL DataSource, Test
-Environment and much more.
+Applications (SPAs) and Micro-Frontends. This application runtime extends the
+declarative nature of HTML with Expression Language, reactive rendering,
+additional declarative attributes, Model-View-Controller (MVC), view-model
+binding, events, interceptors, resource bundles, an immutable NoSQL DataSource,
+an integrated test environment, and more.
 
 # Features
 - __Easy Integration in Markup and JavaScript (Clean Code)__ Combinable with
@@ -51,7 +51,7 @@ Environment and much more.
   localization (l10n), and text outsourcing.
 - __Immutable NoSQL DataSource__ Based on XML Lightweight data management for
   aggregation, projection, and transformation.
-- __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and framework
+- __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and runtime
   for the implementation of micro-frontends and single-page applications.
 - __Test Environment__ For automated unit tests and integration tests.
 - ...
@@ -111,8 +111,8 @@ Environment and much more.
   - [Events](#events-2)
 
 ## Getting Started
-The framework consists of one JavaScript file that can be included via the URL
-of a release channel or downloaded as a release.
+The runtime consists of one JavaScript file that can be included via the URL of
+a release channel or downloaded as a release.
 
 Release channels continuously provide the latest final major versions. This way,
 Seanox aspect-js is always up to date.
@@ -136,7 +136,7 @@ or
 <script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
 ```
 
-__The framework has been developed for the implementation of modular and
+__The runtime has been developed for the implementation of modular and
 component-based Single-Page applications and Micro-Frontends. Due to the
 automatic loading of resources, modules and data, a web server is required for
 use.__
@@ -929,22 +929,22 @@ are separated by the hash character (`#`).
 
 ## Components
 Seanox aspect-js is designed for a modular and component-based architecture. For
-this purpose, the framework supports declarative marking of components in the
+this purpose, the runtime supports declarative marking of components in the
 markup as well as automatic mechanisms for view-model binding and loading of
 outsourced resources at runtime.
 
 [Learn more](composite.md)
 
 ## Scripting
-Seanox aspect-js uses composite JavaScript. A dialect based on the browser
-JavaScript, enriched with [macros](#macros) -- a simple meta-syntax.
+Seanox aspect-js uses Composite JavaScript, a JavaScript dialect for browsers
+extended with a small set of [macros](#macros).
 
-Composite JavaScript, which includes the modules, is not inserted as an element,
-but executed directly with the eval method. Since an isolated and not the global
-scope is used for this, variables, constants and methods are not directly usable
-globally or across, which is why, among other things, the Composite-JavaScript
-was enriched with [macros](#macros), which take over such tasks, among other
-things.
+Composite JavaScript is executed directly in an isolated runtime scope rather
+than as a script-element. Variables, constants and functions declared in a
+module are local to that module and are not automatically available in the
+global scope or in other modules. The [macros](#macros) provide language
+extensions for tasks such as importing modules, exporting declarations and
+creating namespaces.
 
 [Learn more](scripting.md)
 
@@ -998,7 +998,7 @@ functions.
 ## Events
 Seanox aspect-js provides various events that can be used to implement
 extensions and to notify the application of certain operating states of the
-framework and runtime environment.
+runtime environment.
 
 [Learn more](events.md)
 

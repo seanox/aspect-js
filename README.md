@@ -24,11 +24,11 @@ applications, including declarative markup, component structures, view-model
 binding and modular resources.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
-Applications (SPAs) and Micro-Frontends. This framework takes the declarative
-approach of HTML and extends this with Expression Language, Reactivity Rendering
-with additional attributes, Model View Controller (MVC), View Model Binding,
-Events, Interceptors, Resource Bundle, Immutable NoSQL DataSource, Test
-Environment and much more.
+Applications (SPAs) and Micro-Frontends. This application runtime extends the
+declarative nature of HTML with Expression Language, reactive rendering,
+additional declarative attributes, Model-View-Controller (MVC), view-model
+binding, events, interceptors, resource bundles, an immutable NoSQL DataSource,
+an integrated test environment, and more.
 
 __Recommendations for UI frameworks:__
 - https://bulma.io/
@@ -65,7 +65,7 @@ __Recommendations for UI frameworks:__
   localization (l10n), and text outsourcing.
 - __Immutable NoSQL DataSource__ Based on XML Lightweight data management for 
   aggregation, projection, and transformation.
-- __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and framework
+- __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and runtime
   for the implementation of micro-frontends and single-page applications.
 - __Test Environment__ For automated unit tests and integration tests.
 - ... 

@@ -4,15 +4,15 @@
 - - -
 
 # Scripting
-Seanox aspect-js uses composite JavaScript. A dialect based on the browser
-JavaScript, enriched with [macros](#macros) -- a simple meta-syntax.
+Seanox aspect-js uses Composite JavaScript, a JavaScript dialect for browsers
+extended with a small set of [macros](#macros).
 
-Composite JavaScript, which includes the modules, is not inserted as an element,
-but executed directly with the eval method. Since an isolated and not the global
-scope is used for this, variables, constants and methods are not directly usable
-globally or across, which is why, among other things, the Composite-JavaScript
-was enriched with [macros](#macros), which take over such tasks, among other
-things.
+Composite JavaScript is executed directly in an isolated runtime scope rather
+than as a script-element. Variables, constants and functions declared in a
+module are local to that module and are not automatically available in the
+global scope or in other modules. The [macros](#macros) provide language
+extensions for tasks such as importing modules, exporting declarations and
+creating namespaces.
 
 ## Contents Overview
 - [Embedded Composite-JavaScript](#embedded-composite-javascript)
@@ -81,15 +81,14 @@ At their core, they are abbreviated notations or paraphrases for common
 JavaScript statements.
 
 ### #export
-Composite JavaScript, which includes the modules, is not inserted as an element,
-but executed directly with the eval method. Since an isolated scope and not the
-global scope is used for this, variables, constants and methods cannot be used
-directly globally or across scopes.
+Composite JavaScript is executed directly in an isolated runtime scope rather
+than as a script-element. Variables, constants and functions declared in a
+module are local to that module and are not automatically available in the
+global scope or in other modules.
 
-Here variables, constants and methods can be made globally usable with the macro
-`#export`. After the name of the macro, a space-separated list with the names of
-the elements that are to be made publicly accessible is expected up to the end
-of the line or up to the next semicolon.
+The `#export` macro makes selected variables, constants and functions available
+in the global scope. It expects a space-separated list of names that extends to
+the end of the line or the next semicolon.
 
 ```javascript
 const connector = {

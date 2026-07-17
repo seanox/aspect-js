@@ -239,11 +239,12 @@ case the automatic escaping is cancelled or undone.
   <![CDATA[
   <p>
     Seanox aspect-js focuses on a minimalist approach to implementing
-    Single-Page Applications (SPAs) and Micro-Frontends. This framework takes
-    the declarative approach of HTML and extends this with Expression Language,
-    Reactivity Rendering with additional attributes, Model View Controller
-    (MVC), View Model Binding, Events, Interceptors, Resource Bundle, Immutable
-    NoSQL DataSource, Test Environment and much more.
+    Single-Page Applications (SPAs) and Micro-Frontends. This application
+    runtime extends the declarative nature of HTML with Expression Language,
+    reactive rendering, additional declarative attributes, Model-View-Controller
+    (MVC), view-model binding, events, interceptors, resource bundles,
+    an immutable NoSQL DataSource, an integrated test environment, and
+    more.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>

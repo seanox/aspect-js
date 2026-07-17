@@ -5,9 +5,9 @@
 
 # Components
 Seanox aspect-js is designed for a modular and component-based architecture. For
-this purpose, the framework supports declarative marking of components in the
-markup as well as automatic mechanisms for view-model binding and loading of
-outsourced resources at runtime.
+this purpose, the application runtime supports declarative marking of components
+in the markup as well as automatic mechanisms for view-model binding and loading
+of outsourced resources at runtime.
 
 ## Contents Overview
 - [Module](#module)
@@ -113,10 +113,10 @@ CSS is inserted as a style element in the HEAD element. Without a HEAD element,
 the insertion causes an error.
 
 ### JavaScript
-JavaScript is not inserted as an element, instead it is executed directly with
-the eval method in an always fresh isolated scope. Since the constants,
-variables and methods created there are not globally available, these must be
-published e.g. with the macro [#export](scripting.md#export).
+JavaScript is not inserted into the document as a &lt;script&gt; element.
+Instead, it is executed directly in a isolated runtime scope. Variables,
+constants and functions declared there remain local to that scope unless they
+are explicitly exported e.g. with the macro [#export](scripting.md#export).
 
 ```javascript
 const login = {
@@ -138,7 +138,7 @@ declared for the element. Only then is an empty component with outsourced
 HTML/markup assumed.
 
 ## Common Standard Component
-When the page is loaded and the framework and application are initialized, the
+When the page is loaded and the runtime and application are initialized, the
 Commons component in the modules directory is also loaded automatically, which
 can consist of the JavaScript file `common.js` and/or the CSS stylesheet
 `common.css`. Both files are intended for storing initial and application-wide

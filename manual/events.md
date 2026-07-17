@@ -5,8 +5,8 @@
 
 # Events
 Seanox aspect-js provides various events that can be used to implement
-extensions and to notify the application of certain operating states of the
-framework and runtime environment.
+extensions and to notify the application of certain operating states of runtime
+environment.
 
 ## Contents Overview
 - [Rendering](#rendering)
