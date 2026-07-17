@@ -28,7 +28,7 @@ JavaScript-Frontend-Entwicklers.
 4. Fehlende Informationen
 5. Konkrete Verbesserungsvorschläge
 
----
+<text>
 
 ## Method Comments: Completion of JSDoc 
 
