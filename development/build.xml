@@ -30,6 +30,8 @@
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.test" value="${workspace}/test"/>
 
+  <property environment="env"/>
+ 
   <macrodef name="release-locate">
     <sequential>
       <copy file="CHANGES" tofile="CHANGES.tmp" overwrite="true"/>
@@ -298,9 +300,19 @@
     <replaceregexp file="${workspace}/README.md"
         match="(seanox/${ant.project.name}/archive/refs/tags/)\d+(?:\.\d+)*(\.zip)" flags="g" byline="false" replace="\1${release.version}\2"/>
   </target>
-
+  
   <target name="publish" depends="release">
+    <fail message="NPM_TOKEN environment variable is required!">
+      <condition>
+        <not>
+          <isset property="env.NPM_TOKEN"/>
+        </not>
+      </condition>
+    </fail>
     <replaceregexp file="${workspace}/package.json" match="(&quot;version&quot;: &quot;)\d+(?:\.\d+)+(\&quot;)" flags="g" replace="\1${release.version}\2" byline="false"/>
+    <exec executable="cmd.exe">
+      <arg value="/c echo //registry.npmjs.org/:_authToken=%NPM_TOKEN% &gt; .npmrc"/>
+    </exec>
     <exec executable="cmd.exe">
       <arg value="/c npm publish --access public"/>
     </exec>
