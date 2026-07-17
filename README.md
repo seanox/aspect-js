@@ -102,14 +102,14 @@ specific language governing permissions and limitations under the License.
   <img src="https://img.shields.io/badge/WebKit-tested-green?style=for-the-badge">
 </p>
 
-[Seanox aspect-js 1.8.0](https://github.com/seanox/aspect-js/releases/download/1.8.0/aspect-js-1.8.0.zip)  
-[Seanox aspect-js 1.8.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.8.0.zip)
+[Seanox aspect-js 1.9.0](https://github.com/seanox/aspect-js/releases/download/1.9.0/aspect-js-1.9.0.zip)  
+[Seanox aspect-js 1.9.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.9.0.zip)
 
 # Release Channels
 The release channels continuously provide the latest final versions, so Seanox
 aspect-js is always up to date.
 
-## Version 1.8.0
+## Version 1.9.0
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
   __for deployment without Test API__
 
@@ -128,20 +128,20 @@ aspect-js is always up to date.
 - [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
 
 # Changes
-## 1.8.0 20250207  
-BF: Review: Corrections and optimization  
-BF: Test: Correction for the output of messages with timestamp  
-BF: Test: Correction of Assert.assertSame(), incorrect implementation  
-BF: Composite: Correction of partial rendering of iterate  
-CR: Composite: Validation corrections and optimization  
-CR: Composite: Added Composite.lookup(selector)  
-CR: Composite: Conversion from acceptors to interceptors  
-CR: Composite: Conversion to a separate scope page for expression variables  
-CR: Extension: Review, corrections and optimization  
-CR: Release: Review, corrections and optimization  
-CR: Review: Corrections and optimization  
-CR: SiteMap: Review, refactoring, corrections and optimization  
-CR: Test: Change the start to ant -f development/build.xml run  
+## 1.9.0 20260717  
+BF: Composite: Validation corrections and optimization  
+BF: DataSource: Correction for the use of locator/path with (sub)directories  
+BF: DataSource: Correction of the method fetch when using the cache  
+BF: Extensions: Correction of window.location.contextPath  
+BF: Routing: Correction / workaround if the hashchange event is missing  
+CR: Composite: Switch to microtasks-based scheduling  
+CR: Composite: Renaming Composite.asynchron to Composite.asynchronous  
+CR: Composite: Renaming Markup Hardening to Markup Protection  
+CR: DataSource: Optimization and extension  
+CR: Markup: iterate also supports numbers  
+CR: Markup: import / output optimization and extension for DateSource  
+CR: Message: Optimization and extension  
+CR: Test: Update web server to version 5.9.0  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 

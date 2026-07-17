@@ -1,4 +1,4 @@
-1.9.0 2026xxxx
+1.9.0 20260717
 BF: Composite: Validation corrections and optimization
     - Omission of the reportValidity method call. More annoying than helpful due
       to the loss of focus (standard browser behavior).
