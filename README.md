@@ -27,7 +27,7 @@ Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This application runtime extends the
 declarative nature of HTML with Expression Language, reactive rendering,
 additional declarative attributes, Model-View-Controller (MVC), view-model
-binding, events, interceptors, resource bundles, an immutable NoSQL DataSource,
+binding, events, interceptors, resource bundles, an immutable XML data source,
 an integrated test environment, and more.
 
 __Recommendations for UI frameworks:__
@@ -63,8 +63,9 @@ __Recommendations for UI frameworks:__
   interceptors, and permission concepts.
 - __Resource Bundle / Resource Messages__ Internationalization (i18n),
   localization (l10n), and text outsourcing.
-- __Immutable NoSQL DataSource__ Based on XML Lightweight data management for 
-  aggregation, projection, and transformation.
+- __Immutable XML Data Source__ Read-only data management for structured
+  multilingual storage, aggregation, projection, and transformation via
+  XPath/XSLT.
 - __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and runtime
   for the implementation of micro-frontends and single-page applications.
 - __Test Environment__ For automated unit tests and integration tests.

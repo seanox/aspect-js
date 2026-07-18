@@ -21,7 +21,7 @@ Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This application runtime extends the
 declarative nature of HTML with Expression Language, reactive rendering,
 additional declarative attributes, Model-View-Controller (MVC), view-model
-binding, events, interceptors, resource bundles, an immutable NoSQL DataSource,
+binding, events, interceptors, resource bundles, an immutable XML data source,
 an integrated test environment, and more.
 
 # Features
@@ -49,8 +49,9 @@ an integrated test environment, and more.
   interceptors, and permission concepts.
 - __Resource Bundle / Resource Messages__ Internationalization (i18n),
   localization (l10n), and text outsourcing.
-- __Immutable NoSQL DataSource__ Based on XML Lightweight data management for
-  aggregation, projection, and transformation.
+- __Immutable XML Data Source__ Read-only data management for structured
+  multilingual storage, aggregation, projection, and transformation via
+  XPath/XSLT.
 - __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and runtime
   for the implementation of micro-frontends and single-page applications.
 - __Test Environment__ For automated unit tests and integration tests.
@@ -540,13 +541,12 @@ added to the HEAD when the page is loaded.
 [Learn more](markup.md#release)
 
 ## DataSource
-DataSource is an immutable XML-based data repository for static application
-data. It combines structured XML storage with multilingual data separation,
-optional aggregation, and transformation using XPath and XSLT.
-
-The concept combines characteristics of a read-only database and a content
-management system. DataSource is designed for data that is provided with the
-application and accessed primarily through queries and transformations.
+Immutable XML data source for static application data, combining structured XML
+storage with multilingual data separation, optional aggregation, and
+transformation capabilities via XPath and XSLT. The concept combines the
+characteristics of a read-only database and a content management system,
+targeting application-provided data that is accessed primarily through queries
+and transformations.
 
 [Learn more](datasource.md#datasource)
 

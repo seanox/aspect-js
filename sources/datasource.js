@@ -17,10 +17,13 @@
  * 
  *     DESCRIPTION
  *     ----
- * DataSource is a NoSQL approach to data storage based on XML data in
- * combination with multilingual data separation, optional aggregation, and
- * transformation. It is a combination of the approaches of a read-only database
- * system (DBS) and a content management system (CMS)."
+ * 
+ * Immutable XML data source for static application data, combining structured
+ * XML storage with multilingual data separation, optional aggregation, and
+ * transformation capabilities via XPath and XSLT. The concept combines the
+ * characteristics of a read-only database and a content management system,
+ * targeting application-provided data that is accessed primarily through
+ * queries and transformations.
  *
  * Data are addressed via a locator, which is a URL (xml://... or xslt://...),
  * where both single and double slashes are supported. It is used as an absolute

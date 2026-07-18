@@ -4,19 +4,12 @@
 - - -
 
 # DataSource
-DataSource is an immutable XML-based data repository for static application
-data. It combines structured XML storage with multilingual data separation,
-optional aggregation, and transformation using XPath and XSLT.
-
-The concept combines characteristics of a read-only database and a content
-management system. DataSource is designed for data that is provided with the
-application and accessed primarily through queries and transformations.
-
-_Why the term NoSQL is used?_
-
-The term NoSQL is used here in the general sense of a non-relational data model.
-DataSource does not provide a relational database model or SQL interface, but
-instead uses hierarchical XML data with query and transformation mechanisms.
+Immutable XML data source for static application data, combining structured XML
+storage with multilingual data separation, optional aggregation, and
+transformation capabilities via XPath and XSLT. The concept combines the
+characteristics of a read-only database and a content management system,
+targeting application-provided data that is accessed primarily through queries
+and transformations.
 
 ## Contents Overview
 - [Data Storage](#data-storage)
@@ -242,9 +235,8 @@ case the automatic escaping is cancelled or undone.
     Single-Page Applications (SPAs) and Micro-Frontends. This application
     runtime extends the declarative nature of HTML with Expression Language,
     reactive rendering, additional declarative attributes, Model-View-Controller
-    (MVC), view-model binding, events, interceptors, resource bundles,
-    an immutable NoSQL DataSource, an integrated test environment, and
-    more.
+    (MVC), view-model binding, events, interceptors, resource bundles, an
+    immutable XML data source, an integrated test environment, and more.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>
