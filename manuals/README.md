@@ -72,7 +72,7 @@
   - [Protection](markup.md#protection)
 - __[Scripting](scripting.md#scripting)__
   - [Embedded Composite-JavaScript](scripting.md#embedded-composite-javascript)
-  - [Moduls](scripting.md#moduls)
+  - [Modules](scripting.md#modules)
   - [Macros](scripting.md#macros)
     - [#export](scripting.md#export)
     - [#import](scripting.md#import)

@@ -16,7 +16,7 @@ creating namespaces.
 
 ## Contents Overview
 - [Embedded Composite-JavaScript](#embedded-composite-javascript)
-- [Moduls](#moduls)
+- [Modules](#modules)
 - [Macros](#macros)
   - [#export](#export)
   - [#import](#import)
@@ -41,7 +41,7 @@ with other composite attributes to control execution.
 </script>
 ```
 
-## Moduls
+## Modules
 Modules are an integral part of the composite concept. This concept assumes that
 the resources for a composite (JS, CSS, HTML) are outsourced to the module
 directory and loaded at runtime. Which, among other things, should shorten the

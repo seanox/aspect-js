@@ -124,9 +124,9 @@ aspect-js is always up to date.
   for development and testing not minimized and with comments
 
 # Manuals
-- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manual/introduction.md#getting-started)
+- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manuals/introduction.md#getting-started)
 - [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
-- [Manual](https://github.com/seanox/aspect-js/tree/master/manual/#readme)
+- [Manual](https://github.com/seanox/aspect-js/tree/master/manuals/#readme)
 
 # Changes
 ## 1.9.0 20260717  
