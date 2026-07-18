@@ -184,9 +184,11 @@ Machine translation with [DeepL](https://deepl.com).
     - [Extension](test.md#extension)
     
   </details> 
-   
-  - __[Test](test.md#test)__
-  - __[Development](development.md#development)__
+  <details>
+    <summary>
+      <strong><a href="development.md#development">Development</a><strong>
+    </summary>
+
     - [Server](development.md#server)
     - [Build](development.md#build)
     - [Test](development.md#test)
@@ -198,3 +200,5 @@ Machine translation with [DeepL](https://deepl.com).
       - [npmjs.com](development.md#npmjscom)
       - [cdn.jsdelivr.net](development.md#cdnjsdelivrnet)
     - [Playground](development.md#playground)
+  
+  </details> 
