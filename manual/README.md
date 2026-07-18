@@ -1,5 +1,4 @@
 # Manual
-Machine translation with [DeepL](https://deepl.com).
 
 ## Table Of Contents 
 - __[Motivation](motivation.md#motivation)__
@@ -99,7 +98,12 @@ Machine translation with [DeepL](https://deepl.com).
       - [Absolute Path](routing.md#absolute-path)  
 
 - __Runtime__
-  - __[DataSource](datasource.md#datasource)__
+  </details> 
+  <details>
+    <summary>
+      <strong><a href="datasource.md#datasource">DataSource</a><strong>
+    </summary>
+    
     - [Data Storage](datasource.md#data-storage)
     - [Locales](datasource.md#locales)
     - [Locator](datasource.md#locator)
@@ -108,8 +112,18 @@ Machine translation with [DeepL](https://deepl.com).
     - [transform](datasource.md#transform)
     - [collect](datasource.md#collect)
     - [Supplement](datasource.md#supplement)
-  - __[Resource Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)__
-  - __[Events](events.md#events)__
+    
+  </details> 
+  <details>
+    <summary>
+      <strong><a href="message.md#resource-bundle-messagesi18nl10n">Resource Bundle (i18n/l10n)</a><strong>
+    </summary>
+  </details> 
+  <details>
+    <summary>
+      <strong><a href="events.md#events">Events</a><strong>
+    </summary>
+    
     - [Rendering](events.md#rendering)
       - [Composite.EVENT_RENDER_START](events.md#compositeevent_render_start)
       - [Composite.EVENT_RENDER_NEXT](events.md#compositeevent_render_next)
@@ -134,7 +148,13 @@ Machine translation with [DeepL](https://deepl.com).
       - [Composite.EVENT_HTTP_END](events.md#compositeevent_http_end)
     - [Error](events.md#error)
       - [Composite.EVENT_ERROR](events.md#compositeevent_error)
-  - __[API Extensions](extension.md#api-extensions)__
+
+  </details> 
+  <details>
+    <summary>
+      <strong><a href="extension.md#api-extensions">API Extensions</a><strong>
+    </summary>
+  
     - [Namespace](extension.md#namespace)
     - [Element](extension.md#element)
     - [Math](extension.md#math)
@@ -143,6 +163,8 @@ Machine translation with [DeepL](https://deepl.com).
     - [String](extension.md#string)
     - [window](extension.md#window)
     - [XMLHttpRequest](extension.md#xmlhttprequest)
+
+  </details> 
 
 - __Development__
   <details>
