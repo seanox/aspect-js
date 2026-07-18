@@ -4,7 +4,7 @@
 - - -
 
 # Expression Language
-Expressions or the Expression Language (EL) is a simple access to the
+Expressions or the expression language (EL) is a simple access to the
 client-side JavaScript and thus to the models and components in Seanox
 aspect-js. In the expressions the complete JavaScript API is supported, which
 is enhanced with additional keywords, so that also the numerous arithmetic and
@@ -17,7 +17,7 @@ logical operators can be used.
 The expression language can be used from the HTML element `BODY` on in the
 complete markup as free text, as well as in all attributes. Exceptions are the
 HTML elements `STYLE` and `SCRIPT` whose content is not supported by the
-expression Language.
+expression language.
 
 The renderer interprets the expression syntax `{{...}}` hard and therefore the
 character sequence `{{` as well as `}}` must be used inside the expression via
@@ -60,7 +60,7 @@ their characteristics as parts of a phrase.
 
 ### Text
 Text is not a regular element of the expression. This occurs for attributes when
-the Expression Language is combined with text.
+the expression language is combined with text.
 
 ```html
 <p output="Today is {{Calendar.weekday}} and it's {{Clock.time}}."></p>

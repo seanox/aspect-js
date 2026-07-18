@@ -19,7 +19,7 @@ binding and modular resources.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This application runtime extends the
-declarative nature of HTML with Expression Language, reactive rendering,
+declarative nature of HTML with expression language, reactive rendering,
 additional declarative attributes, Model-View-Controller (MVC), view-model
 binding, events, interceptors, resource bundles, an immutable XML data source,
 an integrated test environment, and more.
@@ -147,7 +147,7 @@ Seanox aspect-js works exclusively in the HTML element `BODY`, which itself is
 included.
 
 ## Expression Language
-Expressions or the Expression Language (EL) is a simple access to the
+Expressions or the expression language (EL) is a simple access to the
 client-side JavaScript and thus to the models and components in Seanox
 aspect-js. In the expressions the complete JavaScript API is supported, which
 is enhanced with additional keywords, so that also the numerous arithmetic and
@@ -156,7 +156,7 @@ logical operators can be used.
 The expression language can be used from the HTML element `BODY` on in the
 complete markup as free text, as well as in all attributes. Exceptions are the
 HTML elements `STYLE` and `SCRIPT` whose content is not supported by the
-expression Language. When used as free text, plain text is generated as output.
+expression language. When used as free text, plain text is generated as output.
 Adding markup, especially HTML code, is not possible this way and is only
 supported with the attributes `output` and `import`.
  

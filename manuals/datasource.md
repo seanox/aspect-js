@@ -233,7 +233,7 @@ case the automatic escaping is cancelled or undone.
   <p>
     Seanox aspect-js focuses on a minimalist approach to implementing
     Single-Page Applications (SPAs) and Micro-Frontends. This application
-    runtime extends the declarative nature of HTML with Expression Language,
+    runtime extends the declarative nature of HTML with expression language,
     reactive rendering, additional declarative attributes, Model-View-Controller
     (MVC), view-model binding, events, interceptors, resource bundles, an
     immutable XML data source, an integrated test environment, and more.

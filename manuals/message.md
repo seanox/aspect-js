@@ -45,7 +45,7 @@ the browser. If the language set there is not supported, the language declared
 as `default` is used.
 
 After loading the application, Messages are available as an associative array
-and can be used in JavaScript directly and in the Markup as Expression Language.
+and can be used in JavaScript directly and in the Markup as expression language.
 
 ```javascript
 const title = Messages["contact.title"];

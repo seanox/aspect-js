@@ -25,7 +25,7 @@ binding and modular resources.
 
 Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
 Applications (SPAs) and Micro-Frontends. This application runtime extends the
-declarative nature of HTML with Expression Language, reactive rendering,
+declarative nature of HTML with expression language, reactive rendering,
 additional declarative attributes, Model-View-Controller (MVC), view-model
 binding, events, interceptors, resource bundles, an immutable XML data source,
 an integrated test environment, and more.
