@@ -145,6 +145,12 @@ Machine translation with [DeepL](https://deepl.com).
     - [XMLHttpRequest](extension.md#xmlhttprequest)
 
 - __Development__
+  - <details>
+      <summary>xxx</summary>
+      - x1
+      - x2
+      - x3
+    </details>  
   - __[Test](test.md#test)__
     - [Task](test.md#task)
       - [name](test.md#name)
