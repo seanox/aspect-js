@@ -145,19 +145,10 @@ Machine translation with [DeepL](https://deepl.com).
     - [XMLHttpRequest](extension.md#xmlhttprequest)
 
 - __Development__
-  
   <details>
     <summary>
       <strong><a href="test.md#test">Test</a><strong>
     </summary>
-      
-    - x1
-    - x2
-    - x3
-      
-  </details> 
-   
-  - __[Test](test.md#test)__
     - [Task](test.md#task)
       - [name](test.md#name)
       - [test](test.md#test)
@@ -190,6 +181,9 @@ Machine translation with [DeepL](https://deepl.com).
     - [Control](test.md#control)
     - [Events](test.md#events)
     - [Extension](test.md#extension)
+  </details> 
+   
+  - __[Test](test.md#test)__
   - __[Development](development.md#development)__
     - [Server](development.md#server)
     - [Build](development.md#build)
