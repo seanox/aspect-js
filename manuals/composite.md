@@ -1,4 +1,4 @@
-&#9665; [Routing](routing.md)
+&#9665; [Scripting](scripting.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#components)
 &nbsp;&nbsp;&nbsp;&nbsp; [Reactivity Rendering](reactive.md) &#9655;
 - - -
@@ -275,6 +275,6 @@ chapters [Model-View-Controler](mvc.md) and [View-Model-Binding](
 
 
 - - -
-&#9665; [Routing](routing.md)
+&#9665; [Scripting](scripting.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#components)
 &nbsp;&nbsp;&nbsp;&nbsp; [Reactivity Rendering](reactive.md) &#9655;

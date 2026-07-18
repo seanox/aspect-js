@@ -1,6 +1,6 @@
 &#9665; [DataSource](datasource.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#resource-bundle-i18nl10n)
-&nbsp;&nbsp;&nbsp;&nbsp; [Model View Controller](mvc.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [Events](events.md) &#9655;
 - - -
 
 # Resource Bundle (Messages/i18n/l10n)
@@ -104,4 +104,4 @@ with the as default declared language.
 - - -
 &#9665; [DataSource](datasource.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#resource-bundle)
-&nbsp;&nbsp;&nbsp;&nbsp; [Model View Controller](mvc.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [Events](events.md) &#9655;

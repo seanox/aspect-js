@@ -986,16 +986,16 @@ consumers in the view.
 The JavaScript API for Seanox aspect-js has been extended by some general
 functions.
 
-- [Namespace](extension.md#namespace)
-- [Element](extension.md#element)
-- [Math](extension.md#math)
-- [Object](extension.md#object)
-- [RegExp](extension.md#regexp)
-- [String](extension.md#string)
-- [window](extension.md#window)
-- [XMLHttpRequest](extension.md#xmlhttprequest)
+- [Namespace](extensions.md#namespace)
+- [Element](extensions.md#element)
+- [Math](extensions.md#math)
+- [Object](extensions.md#object)
+- [RegExp](extensions.md#regexp)
+- [String](extensions.md#string)
+- [window](extensions.md#window)
+- [XMLHttpRequest](extensions.md#xmlhttprequest)
 
-[Learn more](extension.md)
+[Learn more](extensions.md)
 
 ## Events
 Seanox aspect-js provides various events that can be used to implement

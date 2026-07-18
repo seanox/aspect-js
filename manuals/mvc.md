@@ -1,4 +1,4 @@
-&#9665; [Resource Bundle](message.md)
+&#9665; [Reactivity Rendering](reactive.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#model-view-controller)
 &nbsp;&nbsp;&nbsp;&nbsp; [Routing](routing.md) &#9655;
 - - -
@@ -263,6 +263,6 @@ const contact = {
 
 
 - - -
-&#9665; [Resource Bundle](message.md)
+&#9665; [Reactivity Rendering](reactive.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#model-view-controller)
 &nbsp;&nbsp;&nbsp;&nbsp; [Routing](routing.md) &#9655;

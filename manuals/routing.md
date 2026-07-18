@@ -1,6 +1,6 @@
 &#9665; [Model-View-Controller](mvc.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#routing)
-&nbsp;&nbsp;&nbsp;&nbsp; [Components](composite.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [DataSource](datasource.md) &#9655;
 - - -
 
 # Routing
@@ -336,4 +336,4 @@ Absolute Paths start with the root, represented by a leading hash sign (`#`).
 - - -
 &#9665; [Model-View-Controller](mvc.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#routing)
-&nbsp;&nbsp;&nbsp;&nbsp; [Components](composite.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [DataSource](datasource.md) &#9655;

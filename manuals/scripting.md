@@ -1,6 +1,6 @@
 &#9665; [Markup](markup.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#scripting)
-&nbsp;&nbsp;&nbsp;&nbsp; [DataSource](datasource.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [Composite](composite.md) &#9655;
 - - -
 
 # Scripting
@@ -209,4 +209,4 @@ macro [#module](#module).
 - - -
 &#9665; [Markup](markup.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#scripting)
-&nbsp;&nbsp;&nbsp;&nbsp; [DataSource](datasource.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [Composite](composite.md) &#9655;

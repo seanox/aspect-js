@@ -1,4 +1,4 @@
-<&#9665; [Scripting](scripting.md)
+&#9665; [Routing](routing.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#datasource)
 &nbsp;&nbsp;&nbsp;&nbsp; [Resource Bundle](message.md) &#9655;
 - - -
@@ -352,7 +352,7 @@ The DataSource can also be used directly in the markup with the attributes
 
 
 - - -
-&#9665; [Scripting](scripting.md)
+&#9665; [Routing](routing.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#datasource)
 &nbsp;&nbsp;&nbsp;&nbsp; [Resource Bundle](message.md) &#9655;
 >

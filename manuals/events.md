@@ -1,6 +1,6 @@
-&#9665; [Extension](extension.md)
+&#9665; [Resource Bundle](message.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#events)
-&nbsp;&nbsp;&nbsp;&nbsp; [Test](test.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [API Extension](extensions.md) &#9655;
 - - -
 
 # Events
@@ -185,6 +185,6 @@ prevent JavaScript from being executed generally cannot trigger the error event.
 
 
 - - -
-&#9665; [Extension](extension.md)
+&#9665; [Resource Bundle](message.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#events)
-&nbsp;&nbsp;&nbsp;&nbsp; [Test](test.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [API Extension](extensions.md) &#9655;

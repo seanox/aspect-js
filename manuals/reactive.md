@@ -1,6 +1,6 @@
-&#9665; [Components](composite.md)
+&#9665; [Composite](composite.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#reactivity-rendering)
-&nbsp;&nbsp;&nbsp;&nbsp; [Extension](extension.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [Model View Controller](mvc.md) &#9655;
 - - -
 
 # Reactivity Rendering
@@ -183,6 +183,6 @@ attribute `iterate`, which is already taken into account automatically.
 
 
 - - -
-&#9665; [Components](composite.md)
+&#9665; [Composite](composite.md)
 &nbsp;&nbsp;&nbsp;&nbsp; &#8801; [Table of Contents](README.md#reactivity-rendering)
-&nbsp;&nbsp;&nbsp;&nbsp; [Extension](extension.md) &#9655;
+&nbsp;&nbsp;&nbsp;&nbsp; [Model View Controller](mvc.md) &#9655;
