@@ -146,10 +146,12 @@ Machine translation with [DeepL](https://deepl.com).
 
 - __Development__
   - <details>
-      <summary>xxx</summary>
+      <summary>__xxx__</summary>
+      
       - x1
       - x2
       - x3
+      
     </details>  
   - __[Test](test.md#test)__
     - [Task](test.md#task)
