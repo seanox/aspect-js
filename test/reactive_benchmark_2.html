@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      body div {
+        display: inline;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        // Benchmark 2: Root-Update
+        //
+        // Renders a tree whose entire structure depends on state.x.
+        // Updating state.x at the root invalidates almost the complete render
+        // tree.
+        //
+        // The benchmark measures:
+        // - Reactive invalidation from the root
+        // - Template evaluation
+        // - Renderer throughput
+        // - DOM creation and insertion
+        // - End-to-end render latency until rendering has finished
+        //
+        // Increasing state.x from 10 to 11 expands every nesting level,
+        // growing the tree from 10^4 (10,000) to 11^4 (14,641) rendered nodes.
+        // This represents a worst-case full-tree update where nearly every node
+        // must be regenerated.
+        //
+        // Blink    max.  650 ms   i5-1240P
+        // WebKit   max. 1150 ms   A14 (iPad Gen 10)
+        // goanna   max.  --- ms   i5-1240P
+        // Gecko    max.  775 ms   i5-1240P
+
+        const state = {x: 10}.reactive();
+        const result = {duration: ""}.reactive();
+
+        let phase = 0;
+        let timing;
+
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            phase++;
+            if (phase === 1) {
+                timing = performance.now();
+                state.x = 11;
+            } else if (phase === 2) {
+                const elapsed = performance.now() -timing;
+                let timeout;
+                if (navigator.engine === "blink")
+                    timeout = 650;
+                if (navigator.engine === "webkit")
+                    timeout = 1150;
+                if (navigator.engine === "goanna")
+                    timeout = 3500;
+                if (navigator.engine === "gecko")
+                    timeout = 775;
+                result.duration = `Duration ${elapsed.toFixed(2)} ms`;
+                Test.create({test() {
+                    console.log(`Benchmark B (Root-Update): ${elapsed.toFixed(2)}ms`);
+                    Assert.assertTrue(`${elapsed.toFixed(2)}ms`, elapsed < timeout);
+                }});
+                Test.start();
+            }
+        });
+    </script>
+  </head>
+  <body>
+    Info: Output is hidden
+    <div iterate="{{a:new Array(state.x)}}" style="display:none;">
+      <div iterate="{{b:new Array(state.x)}}">
+        <div iterate="{{c:new Array(state.x)}}">
+          <div iterate="{{d:new Array(state.x)}}">
+            {{a.index}}{{b.index}}{{c.index}}{{d.index}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    {{state.x}}
+    <p id="duration">{{result.duration}}</p>
+  </body>
+</html>

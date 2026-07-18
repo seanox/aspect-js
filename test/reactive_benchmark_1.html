@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+      body div {
+        display: inline;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        // Benchmark 1: Leaf Update
+        //
+        // Renders a static 10×10×10×10 DOM tree (10,000 nodes) and then updates
+        // exactly one reactive value bound to #target.
+        //
+        // The benchmark verifies that a reactive renderer invalidates only the
+        // affected binding instead of traversing or re-rendering unrelated
+        // parts of the DOM. The size of the surrounding tree serves solely to
+        // detect unnecessary work during the update phase.
+        //
+        // Blink    max. 100 ms   i5-1240P
+        // WebKit   max. 125 ms   A14 (iPad Gen 10)
+        // goanna   max. 300 ms   i5-1240P
+        // Gecko    max.  70 ms   i5-1240P
+
+        const model = {value: 0}.reactive();
+        const result = {duration: ""}.reactive();
+
+        let phase = 0;
+        let timing;
+
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            phase++;
+            if (phase === 1) {
+                timing = performance.now();
+                model.value++;
+            } else if (phase === 2) {
+                const elapsed = performance.now() -timing;
+                let timeout;
+                if (navigator.engine === "blink")
+                    timeout = 25;
+                if (navigator.engine === "webkit")
+                    timeout = 75;
+                if (navigator.engine === "goanna")
+                    timeout = 200;
+                if (navigator.engine === "gecko")
+                    timeout = 25;
+                result.duration = `Duration ${elapsed.toFixed(2)} ms`;
+                Test.create({test() {
+                    console.log(`Benchmark A (Leaf-Update): ${elapsed.toFixed(2)}ms`);
+                    Assert.assertTrue(`${elapsed.toFixed(2)}ms`, elapsed < timeout);
+                }});
+                Test.start();
+            }
+        });
+    </script>
+  </head>
+  <body>
+    Info: Output is hidden
+    <div iterate="{{a:new Array(10)}}" style="display:none;">
+      <div iterate="{{b:new Array(10)}}">
+        <div iterate="{{c:new Array(10)}}">
+          <div iterate="{{d:new Array(10)}}">
+            {{a.index}}{{b.index}}{{c.index}}{{d.index}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <p id="target">{{model.value}}</p>
+    <p id="duration">{{result.duration}}</p>
+  </body>
+</html>

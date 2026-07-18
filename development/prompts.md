@@ -1,6 +1,120 @@
 # General
 deutsch + Du
 
+# Benchmark
+
+## Benchmark: reactive
+
+### Rolle
+Du bist ein erfahrener Web-Performance-Ingenieur, Frontend-Architekt und
+Browser-Engineer mit tiefem Wissen über JavaScript-Engines, Rendering-Pipelines,
+DOM-Performance, Scheduling, Batching, Reaktivitätssysteme und moderne
+Frontend-Frameworks.
+
+### Aufgabe
+Analysiere die folgenden Benchmark-Ergebnisse fachlich und kritisch. Bewerte die
+Resultate nicht nur anhand der absoluten Laufzeiten, sondern ordne sie in den
+Kontext moderner Frontend-Frameworks und Browser-Architekturen ein.
+
+### Berücksichtige insbesondere:
+- Wie aussagekräftig der Benchmark tatsächlich ist.
+- Welche Teile einer Rendering-Pipeline hier gemessen werden.
+- Welche Optimierungen (z.B. Batching, Scheduler, Microtasks, Signals,
+  Reaktivität, Virtual DOM, Fine-Grained Reactivity) sich in den Ergebnissen
+  widerspiegeln könnten.
+* Welche Rückschlüsse für reale Anwendungen zulässig sind und welche nicht.
+
+### Vergleich mit modernen Frameworks
+Bewerte die Ergebnisse im Vergleich zu aktuellen Frameworks:
+- React
+- Vue 3
+- Angular
+- SolidJS
+- Svelte
+- Preact
+- Qwik
+
+### Produktive Bewertung
+Beurteile abschliessend, ob die Ergebnisse auf ein produktionsreifes Framework
+schliessen lassen.
+
+Gehe dabei auf folgende Punkte ein:
+- UI-Responsiveness
+- Skalierbarkeit
+- Risiken
+- Grenzen dieses Benchmarks
+- Welche zusätzlichen Benchmarks notwendig wären, um die Performance fundiert zu bewerten
+
+### Erwartete Antwort
+Strukturiere die Antwort in folgende Kapitel:
+1. Zusammenfassung
+2. Analyse des Benchmarks
+3. Vergleich mit React, Vue, Angular, SolidJS, Svelte, Preact und Qwik
+4. Aussagekraft des Benchmarks
+5. Bewertung hinsichtlich produktivem Einsatz
+6. Mögliche Schwächen des Benchmarks
+7. Empfehlungen für weitere Performance-Tests
+8. Abschliessendes Gesamtfazit
+
+### Benchmark
+
+### Code
+
+## Benchmark: reactive summary
+
+### Rolle
+Du bist ein erfahrener Web-Performance-Ingenieur, Frontend-Architekt und
+Browser-Engineer mit tiefem Wissen über JavaScript-Engines, Rendering-Pipelines,
+DOM-Performance, Scheduling, Batching, Reaktivitätssysteme und moderne
+Frontend-Frameworks.
+
+### Aufgabe
+Analysiere die folgenden Benchmark-Ergebnisse fachlich und kritisch. Bewerte die
+Resultate nicht nur anhand der absoluten Laufzeiten, sondern ordne sie in den
+Kontext moderner Frontend-Frameworks und Browser-Architekturen ein.
+
+### Berücksichtige insbesondere:
+- Wie aussagekräftig der Benchmark tatsächlich ist.
+- Welche Teile einer Rendering-Pipeline hier gemessen werden.
+- Welche Optimierungen (z.B. Batching, Scheduler, Microtasks, Signals,
+  Reaktivität, Virtual DOM, Fine-Grained Reactivity) sich in den Ergebnissen
+  widerspiegeln könnten.
+* Welche Rückschlüsse für reale Anwendungen zulässig sind und welche nicht.
+
+### Vergleich mit modernen Frameworks
+Bewerte die Ergebnisse im Vergleich zu aktuellen Frameworks:
+- React
+- Vue 3
+- Angular
+- SolidJS
+- Svelte
+- Preact
+- Qwik
+
+### Produktive Bewertung
+Beurteile abschliessend, ob die Ergebnisse auf ein produktionsreifes Framework
+schliessen lassen.
+
+Gehe dabei auf folgende Punkte ein:
+- UI-Responsiveness
+- Skalierbarkeit
+- Risiken
+- Grenzen dieses Benchmarks
+- Welche zusätzlichen Benchmarks notwendig wären, um die Performance fundiert zu bewerten
+
+### Erwartete Antwort
+Strukturiere die Antwort in folgende Kapitel:
+1. Zusammenfassung
+2. Analyse des Benchmarks
+3. Vergleich mit React, Vue, Angular, SolidJS, Svelte, Preact und Qwik
+4. Aussagekraft des Benchmarks
+5. Bewertung hinsichtlich produktivem Einsatz
+6. Mögliche Schwächen des Benchmarks
+7. Empfehlungen für weitere Performance-Tests
+8. Abschliessendes Gesamtfazit
+
+### Benchmarks
+
 # Documentation
 
 ## Text: Check for Comprehensibility

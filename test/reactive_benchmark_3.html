@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+       Test.activate();
+
+       // Benchmark 3: 1000 Small Updates (Batching)
+       //
+       // Performs 1000 synchronous updates to a single reactive value.
+       //
+       // The benchmark primarily measures the efficiency of the framework's
+       // reactivity system, scheduler and batching strategy. An optimized
+       // renderer should coalesce the updates into a single (or very few)
+       // render pass(es) instead of rendering after every assignment.
+       //
+       // This benchmark is intentionally focused on update coalescing. It does
+       // not measure DOM complexity, diffing performance, layout, paint,
+       // component trees or overall application rendering performance.  
+       //
+       // Frameworks like React/Vue/Solid optimize this case.
+       //
+       // Blink    max. 15 ms   i5-1240P
+       // WebKit   max. 50 ms   A14 (iPad Gen 10)
+       // goanna   max. 50 ms   i5-1240P
+       // Gecko    max. 15 ms   i5-1240P
+      
+       const model = {value: 0}.reactive();
+       const result = {duration: ""}.reactive();
+      
+       let initialRenderDone = false;
+       let finished = false;
+       let timing;
+       let renderCount = 0;
+       let checkTask;
+       let lastRender;
+      
+       Composite.listen(Composite.EVENT_RENDER_END, () => {
+
+           if (finished)
+               return;
+      
+           lastRender = performance.now();
+      
+           if (!initialRenderDone) {
+               initialRenderDone = true;
+               timing = performance.now();
+               renderCount = 0;
+               for (let i = 0; i < 1000; i++)
+                   model.value = i;
+               return;
+           }
+      
+           renderCount++;
+           if (checkTask)
+               checkTask.cancel();
+           
+           checkTask = Composite.asynchronous(() => {
+
+               finished = true;
+      
+               const elapsed = lastRender - timing;
+               let timeout;
+               if (navigator.engine === "blink")
+                   timeout = 15;
+               if (navigator.engine === "webkit")
+                   timeout = 50;
+               if (navigator.engine === "goanna")
+                   timeout = 50;
+               if (navigator.engine === "gecko")
+                   timeout = 15;
+      
+               result.duration = `Duration ${elapsed.toFixed(2)} ms`;
+      
+               Test.create({test() {
+                   console.log(`Benchmark C (Batching): ${elapsed.toFixed(2)}ms, ${renderCount} render cycle(s)`);
+                   Assert.assertTrue(`${elapsed.toFixed(2)}ms`, elapsed < timeout);
+               }});
+      
+               Test.start();
+           });
+       });    
+    </script>
+  </head>
+  <body>
+    <p id="target">{{model.value}}</p>
+    <p id="duration">{{result.duration}}</p>
+  </body>
+</html>

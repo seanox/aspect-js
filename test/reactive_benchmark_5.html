@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="ISO-8859-1">
+    <title>Seanox aspect-js test environment</title>
+    <style>
+      body {
+        font-family: monospace;
+      }
+    </style>
+    <script src="aspect-js.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        // Benchmark 5: Worst Case - All 10,000 Bindings Must Update
+        //
+        // Creates 10,000 DOM bindings that depend on the same reactive value.
+        // When the reactive counter changes, all dependent bindings are
+        // invalidated and must be processed by the reactive update pipeline.
+        //
+        // This benchmark measures the throughput and overhead of dependency
+        // tracking, change propagation, expression evaluation, and binding
+        // updates under a worst-case full invalidation scenario.
+        //
+        // It intentionally represents a case where every binding is affected,
+        // so the benchmark evaluates the framework's raw update capacity rather
+        // than its ability to optimize away unchanged work.
+        //
+        // Blink    max. 1600 ms   i5-1240P
+        // WebKit   max. 1200 ms   A14 (iPad Gen 10)
+        // goanna   max. 1800 ms   i5-1240P
+        // Gecko    max. 1400 ms   i5-1240P
+
+        const state = {counter: 0}.reactive();
+        const result = {duration: ""}.reactive();
+
+        let phase = 0;
+        let timing;
+
+        Composite.listen(Composite.EVENT_RENDER_END, () => {
+            phase++;
+            if (phase === 1) {
+                timing = performance.now();
+                state.counter++;
+            } else if (phase === 2) {
+                const elapsed = performance.now() -timing;
+                let timeout;
+                if (navigator.engine === "blink")
+                    timeout = 1000;
+                if (navigator.engine === "webkit")
+                    timeout = 2000;
+                if (navigator.engine === "goanna")
+                    timeout = 5000;
+                if (navigator.engine === "gecko")
+                    timeout = 1000;
+                result.duration = `Duration ${elapsed.toFixed(2)} ms`;
+                Test.create({test() {
+                    console.log(`Benchmark E (Worst Case): ${elapsed.toFixed(2)}ms`);
+                    Assert.assertTrue(`${elapsed.toFixed(2)}ms`, elapsed < timeout);
+                }});
+                Test.start();
+            }
+        });
+    </script>
+  </head>
+  <body>
+    Info: Output is hidden
+    <div iterate="{{row:new Array(10000)}}" style="display:none;">{{state.counter}}</div>
+    <p id="duration">{{result.duration}}</p>
+  </body>
+</html>

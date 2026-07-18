@@ -1,3 +1,8 @@
+1.9.1 2027xxxx
+BF: Documentation: Update of content
+BF: Build: Optimizing npm access
+CR: Test: Expansion of benchmarks/tests
+
 1.9.0 20260717
 BF: Composite: Validation corrections and optimization
     - Omission of the reportValidity method call. More annoying than helpful due
