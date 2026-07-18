@@ -147,7 +147,9 @@ Machine translation with [DeepL](https://deepl.com).
 - __Development__
   
   <details>
-    <summary>__x__</summary>
+    <summary>
+      <strong><a href="test.md#test">Test</a><strong>
+    </summary>
       
     - x1
     - x2
