@@ -1,4 +1,4 @@
-# Manual
+# Manuals
 
 ## Table Of Contents 
 - __[Motivation](#motivation)__
@@ -12,7 +12,7 @@
   - [Composite](#composite)
   - [Reactivity Rendering](#reactivity-rendering)
   - [Model View Controller](#model-view-controller)
-  - [Routing](#routing)]
+  - [Routing](#routing)
 - __[Runtime](Runtime)__  
   - [DataSource](#datasource)
   - [Resource Bundle](#resource-bundle-i18nl10n)
