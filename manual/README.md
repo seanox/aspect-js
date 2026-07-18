@@ -116,7 +116,11 @@
   
   </details> 
   
-  - __[Reactivity Rendering](reactive.md#reactivity-rendering)__
+  <details>
+    <summary>
+      <strong><a href="reactive.md#reactivity-rendering)">Reactivity Rendering</a></strong>
+    </summary>
+  </details>
   
   <details>
     <summary>
@@ -138,7 +142,7 @@
   </details> 
 
 - __Runtime__
-  - <details>
+  <details>
     <summary>
       <strong><a href="datasource.md#datasource">DataSource</a></strong>
     </summary>
@@ -154,9 +158,11 @@
     
   </details>
   
-  
-  - __[Resource Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)__
-  
+  <details>
+    <summary>
+      <strong><a href="message.md#resource-bundle-messagesi18nl10n)">Resource Bundle (i18n/l10n)</a></strong>
+    </summary>
+  </details>
   
   <details>
     <summary>
