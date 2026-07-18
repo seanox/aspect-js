@@ -45,10 +45,12 @@ represented is not restricted.
 In Seanox aspect-js the views are represented by the markup.
 
 ## Controller
-The (application)controller controls internal processes within an application
-(view flow) and takes over the data flow between view and model with the
-view-model binding, whereby we can also speak of MVVM (Model-View-ViewModel) and
-MVCS (Model-View-Controller-Service) here.
+The (application) controller controls internal processes within an application
+(view flow) and takes over the data flow between the view and modules through
+the view-model binding. The modules define the responsibilities of the
+application layer. Depending on whether a module represents a model,
+view-model, controller-related logic, or service-oriented functionality,
+different architectural patterns such as MVC, MVVM, or MVCS can be implemented.
 
 ## Contents Overview
 - [Model](#model)
