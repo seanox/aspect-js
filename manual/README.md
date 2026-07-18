@@ -138,7 +138,7 @@
   </details> 
 
 - __Runtime__
-  <details>
+  - <details>
     <summary>
       <strong><a href="datasource.md#datasource">DataSource</a></strong>
     </summary>
