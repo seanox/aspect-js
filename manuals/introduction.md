@@ -6,69 +6,159 @@
 # Introduction
 
 ## What is Seanox aspect-js?
-Seanox aspect-js is a browser-native application runtime for implementing
-Single-Page Applications (SPAs) and Micro-Frontends. It builds upon standard
-browser technologies such as HTML, JavaScript and the DOM, extending them with
-declarative application concepts including expression language, declarative
-attributes, reactive rendering, component-based composition, view-model binding,
-routing, events, interceptors and modular resources.
+Seanox aspect-js is a browser-native application runtime for Single-Pag
+Applications (SPAs) and Micro-Frontends.
 
-The project originated from the idea of transferring concepts from JavaServer
-Faces (JSF) to browser-based applications. Declarative markup, expression
-language, component structures and the connection between views and models
-served as the initial concepts. Later, ideas from microservices were adopted to
-support modular frontend applications composed from independently organized
-resources at runtime.
+Applications remain composed of HTML, CSS and JavaScript resources that are
+loaded, connected and managed by the runtime. Native browser technologies are 
+extended with declarative application concepts such as expression language,
+component composition, view-model binding, routing and reactive rendering
+without requiring compilation.
 
-The separation of web applications into frontend and backend, together with
-browser-based applications and distributed services, changed the structure of
-client-side applications. Seanox aspect-js applies these concepts to
-browser-based applications while preserving HTML as the primary declarative
+The programming model applies established enterprise UI concepts such as
+declarative views, expression language, component composition and view-model
+binding directly in the browser while preserving HTML as the primary view
 language and JavaScript as the application language.
 
-# Features
-- __HTML and JavaScript Integration__
-  Uses HTML markup and JavaScript objects as the primary application model. Can
-  be combined with other JavaScript frameworks when their functionality and
-  syntax do not overlap.
-- __Declarative Markup__
-  Extends HTML with declarative attributes, expressions and runtime processing
-  for conditions, iteration, rendering, validation, events and related
-  operations.
-- __Expression Language__
-  Provides expressions in markup with access to JavaScript functionality and
-  application models.
-- __Component-Based Architecture__
-  Provides components composed of markup, styles, scripts and additional
-  resources.
-- __View-Model Binding__
-  Connects HTML elements with JavaScript objects and supports synchronization of
-  values, states and events.
-- __Reactive Rendering__
-  Updates affected parts of the view when reactive data objects change.
-- __Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)__
-  Supports separation of presentation, application logic and data through
-  models, views, controllers and bindings.
-- __Modular Resources and Runtime Imports__
-  Supports namespaces, modules, macros and loading of component resources at
-  runtime.
-- __Routing and View Flow__
-  Organizes views through paths, navigation, interceptors and permission
-  concepts.
-- __Resource Bundles__
-  Provides externalized messages and support for internationalization (i18n) and
-  localization (l10n).
-- __XML Data Source__
-  Provides an immutable XML-based data source with querying and transformation
-  capabilities using XPath and XSLT.
-- __Single-Page Applications and Micro-Frontends__
-  Provides runtime concepts for structuring applications as modular browser
-  applications.
-- __Test Environment__
-  Provides APIs for implementing and executing unit and integration tests.
+## Getting Started
+
+### Prerequisites
+- Browser with ECMAScript 6 support or higher
+- Web server for hosting (required for runtime loading of modules, resources,
+  and data)
+
+### Choose a Runtime Variant
+The runtime consists of one JavaScript file that can be included via the URL of
+a release channel or downloaded as a release.
+
+Release channels continuously provide the latest final major versions.
+
+Each release consists of different versions for different purposes. These
+versions are also always available in two variants. The standard is the
+compressed version for production environments. Optionally, the uncompressed and
+documented max variant is also available for development and error analysis.
+
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
+  __for deployment without Test API__
+
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js  
+  __for deployment without Test API__ not minimized and with comments
+
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-testing.js  
+  for development and testing
+
+- https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-testing-max.js  
+  for development and testing not minimized and with comments
+
+### First Composite (Explicit Rendering Flow)
+
+Create `index.html` and declare one composite:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-testing-max.js"></script>
+  </head>
+  <body>
+    <div id="example" composite></div>
+  </body>
+</html>
+```
+
+Add module resources in the default module directory:
+
+```text
++ modules
+  - example.css
+  - example.js
+  - example.html
+- index.html
+```
+
+Implement the model in `modules/example.js`:
+
+```javascript
+const example = {
+    message: "",
+    validate(element, value) {
+        return true;
+    }
+};
+
+#export example;
+```
+
+Implement the view in `modules/example.html`:
+
+```html
+<input id="message" type="text"
+    events="input change" validate render="#preview"/>
+<p id="preview">{{example.message}}</p>
+```
+
+Optional style in `modules/example.css`:
+
+```css
+#example {
+  padding: 8px;
+}
+```
+
+This example shows the explicit data/render flow: `events` triggers
+synchronization from input to model, `validate` controls the sync result, and
+ `render` refreshes selected targets (`#preview`). The expression
+ `{{example.message}}` outputs model data into the markup.
+
+### What the Runtime Does Here
+When the page is rendered, the composite `id="example"` is used as the component
+key. aspect-js resolves resources by that ID and loads CSS, JavaScript, and HTML
+in this order. The JavaScript model and markup are then connected through
+view-model binding, based on matching IDs and model properties.
+
+`#export example;` is required because Composite JavaScript runs in an isolated
+scope. Without export, the model is not published to the runtime namespace used
+by the binding.
+
+The HTML resource (`modules/example.html`) is auto-loaded only if the composite
+element has no inner HTML and does not use `import` or `output`.
+
+### Optional Next Step: Reactive Model
+The first example intentionally uses explicit `render`, so the update mechanism
+is visible. As a next step, you can make the model reactive and remove `render`
+for this case.
+
+```javascript
+const example = {
+    message: "",
+    validate(element, value) {
+        return true;
+    }
+}.reactive();
+
+#export example;
+```
+
+```html
+<input id="message" type="text"
+    events="input change" validate/>
+<p>{{example.message}}</p>
+```
+
+With this setup, changes to reactive model values update consumers
+automatically.
+
+### Learning Path
+
+The following tutorials provide separate learning paths for Micro Frontends and
+Single-Page Applications. Each path consists of incremental steps that extend or
+modify the previous result. The differences between consecutive steps illustrate
+the implementation of individual concepts.
+
+- [Micro Frontend](https://github.com/seanox/aspect-js-tutorial#micro-frontend)
+- [SPA (Single Page Application)](https://github.com/seanox/aspect-js-tutorial#spa-single-page-application)
 
 ## Contents Overview
-- [Getting Started](#getting-started)
 - [Scope](#scope)
 - [Expression Language](#expression-language)
 - [Attributes](#attributes)
@@ -121,36 +211,6 @@ language and JavaScript as the application language.
   - [Control](#control)
   - [Events](#events-2)
 
-## Getting Started
-The runtime consists of one JavaScript file that can be included via the URL of
-a release channel or downloaded as a release.
-
-Release channels continuously provide the latest final major versions. This way,
-Seanox aspect-js is always up to date.
-
-Each release consists of different versions for different purposes. These
-versions are also always available in two variants. The standard is the
-compressed version for productive use. Optionally, the uncompressed and
-documented max variant is also available for development and error analysis.
-
-To begin, create an HTML file, e.g. _index.html_ and insert Seanox apect-js.
-
-```html
-<!-- development version, includes helpful comments -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-max.js"></script>
-```
-
-or
-
-```html
-<!-- production and minimized version -->
-<script src="https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js"></script>
-```
-
-__The runtime has been developed for the implementation of modular and
-component-based Single-Page applications and Micro-Frontends. Due to the
-automatic loading of resources, modules and data, a web server is required for
-use.__
 
 ## Scope
 Seanox aspect-js works exclusively in the HTML element `BODY`, which itself is

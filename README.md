@@ -12,24 +12,18 @@
 </p>
 
 # Description
-Seanox aspect-js is a browser-native application runtime for implementing
-Single-Page Applications (SPAs) and Micro-Frontends. It builds upon standard
-browser technologies such as HTML, JavaScript and the DOM, extending them with
-declarative application concepts including expression language, declarative
-attributes, reactive rendering, component-based composition, view-model binding,
-routing, events, interceptors and modular resources.
+Seanox aspect-js is a browser-native application runtime for Single-Pag
+Applications (SPAs) and Micro-Frontends.
 
-The project originated from the idea of transferring concepts from JavaServer
-Faces (JSF) to browser-based applications. Declarative markup, expression
-language, component structures and the connection between views and models
-served as the initial concepts. Later, ideas from microservices were adopted to
-support modular frontend applications composed from independently organized
-resources at runtime.
+Applications remain composed of HTML, CSS and JavaScript resources that are
+loaded, connected and managed by the runtime. Native browser technologies are 
+extended with declarative application concepts such as expression language,
+component composition, view-model binding, routing and reactive rendering
+without requiring compilation.
 
-The separation of web applications into frontend and backend, together with
-browser-based applications and distributed services, changed the structure of
-client-side applications. Seanox aspect-js applies these concepts to
-browser-based applications while preserving HTML as the primary declarative
+The programming model applies established enterprise UI concepts such as
+declarative views, expression language, component composition and view-model
+binding directly in the browser while preserving HTML as the primary view
 language and JavaScript as the application language.
 
 __Recommendations for UI frameworks:__
@@ -117,8 +111,7 @@ specific language governing permissions and limitations under the License.
 [Seanox aspect-js 1.9.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.9.0.zip)
 
 # Release Channels
-The release channels continuously provide the latest final versions, so Seanox
-aspect-js is always up to date.
+The release channels continuously provide the latest final versions.
 
 ## Version 1.9.0
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
