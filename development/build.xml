@@ -29,6 +29,7 @@
   <property name="workspace.release.temp" value="${workspace.release}/temp"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.test" value="${workspace}/test"/>
+  <property name="workspace.benchmarks" value="${workspace}/benchmarks"/>
 
   <property environment="env"/>
  
@@ -322,12 +323,16 @@
   <target name="test" depends="release">
     <copy file="${release.file.debug.testing}"
         tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+    <copy file="${release.file.debug.testing}"
+        tofile="${workspace.benchmarks}/${ant.project.name}.js" overwrite="true"/>
     <antcall target="run"/>
   </target>
 
   <target name="test-max" depends="release">
     <copy file="${release.file.debug.testing.max}"
         tofile="${workspace.test}/${ant.project.name}.js" overwrite="true"/>
+    <copy file="${release.file.debug.testing.max}"
+        tofile="${workspace.benchmarks}/${ant.project.name}.js" overwrite="true"/>
     <antcall target="run"/>
   </target>
 
