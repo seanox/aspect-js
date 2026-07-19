@@ -45,7 +45,7 @@
     - [Variable-Expression](expression.md#variable-expression)
     - [Combination](expression.md#combination)
     - [(?...) tolerate](expression.md#-tolerate)
-  - [Supplement](expression.md#supplement)
+  - [Notes](expression.md#notes)
 - __[Markup](markup.md#markup)__
   - [Attributes](markup.md#attributes)
     - [composite](markup.md#composite)
@@ -94,7 +94,7 @@
     - [HTML](composite.md#html)
   - [Common Standard Component](composite.md#common-standard-component)
   - [Namespace](composite.md#namespace)
-  - [Supplement](composite.md#supplement)
+  - [Notes](composite.md#notes)
 - __[Reactivity Rendering](reactive.md#reactivity-rendering)__
 - __[Model View Controller](mvc.md#model-view-controller)__
   - [Model](mvc.md#model)
@@ -130,7 +130,7 @@
   - [fetch](datasource.md#fetch)
   - [transform](datasource.md#transform)
   - [collect](datasource.md#collect)
-  - [Supplement](datasource.md#supplement)
+  - [Notes](datasource.md#notes)
 - __[Resource Bundle (i18n/l10n)](message.md#resource-bundle-messagesi18nl10n)__
 - __[Events](events.md#events)__
   - [Rendering](events.md#rendering)

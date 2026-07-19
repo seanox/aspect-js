@@ -19,7 +19,7 @@ and transformations.
 - [fetch](#fetch)
 - [transform](#transform)
 - [collect](#collect)
-- [Supplement](#supplement)
+- [Notes](#notes)
 
 ## Data Storage
 By default, the data storage is located as `./data` relative to the application
@@ -327,7 +327,7 @@ DataSource.collect("articles", "xml://paper", "xml://envelope", "xml://pen");
 </articles>
 ```
 
-## Supplement
+## Notes
 The DataSource can also be used directly in the markup with the attributes
 [import](markup.md#import) and [output](markup.md#output).
 

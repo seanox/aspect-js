@@ -38,7 +38,7 @@ escape sequence `\{\{` and/or `\}\}`.
   - [Variable-Expression](#variable-expression)
   - [Combination](#combination)
   - [(?...) tolerate](#-tolerate)
-- [Supplement](#supplement)
+- [Notes](#notes)
 
 ## Elements
 An expression is a set of words, where the words are classified according to
@@ -213,7 +213,7 @@ tolerating behavior.
 {{"Expression with an error " + (?object.that.does.not.exist()) + "!"}}
 ```
 
-## Supplement
+## Notes
 Expressions are interpreted by the renderer that starts after loading the page.
 So expressions can be visible when loading the page. It is recommended to use
 the attribute [release](markup.md#release).

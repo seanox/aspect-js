@@ -722,7 +722,7 @@
                 }            
             }
 
-            // ATTRIBUTE_VALIDATE can be supplemented with ATTRIBUTE_MESSAGE.
+            // ATTRIBUTE_VALIDATE can be combined with ATTRIBUTE_MESSAGE.
             // However, ATTRIBUTE_MESSAGE has no effect without
             // ATTRIBUTE_VALIDATE. The value of ATTRIBUTE_MESSAGE is used as an
             // error message if the validation was not successful. For this

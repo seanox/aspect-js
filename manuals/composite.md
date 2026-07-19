@@ -21,7 +21,7 @@ of outsourced resources at runtime.
   - [HTML](#html)
 - [Common Standard Component](#common-standard-component)
 - [Namespace](#namespace)
-- [Supplement](#supplement)
+- [Notes](#notes)
 
 ## Module
 A module represents a closed functional program unit, which is usually provided
@@ -267,7 +267,7 @@ directory.
 - index.html
 ```
 
-# Supplement
+# Notes
 Because of the close connection, we deliberately refer to the more detailed
 chapters [Model-View-Controler](mvc.md) and [View-Model-Binding](
     mvc.md#view-model-binding).
