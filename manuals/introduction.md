@@ -170,6 +170,7 @@ is enhanced with additional keywords, so that also the numerous arithmetic and
 logical operators can be used.
 
   </summary>
+  <br/>
 
 The expression language can be used from the HTML element `BODY` on in the
 complete markup as free text, as well as in all attributes. Exceptions are the
