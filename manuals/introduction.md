@@ -168,7 +168,6 @@ client-side JavaScript and thus to the models and components in Seanox
 aspect-js. In the expressions the complete JavaScript API is supported, which
 is enhanced with additional keywords, so that also the numerous arithmetic and
 logical operators can be used.
-
   </summary>
   <br/>
 
