@@ -162,15 +162,17 @@ included.
   </summary>
 </details>
 
-## Expression Language
-
 <details>
   <summary>
+
+## Expression Language
+
 Expressions or the expression language (EL) is a simple access to the
 client-side JavaScript and thus to the models and components in Seanox
 aspect-js. In the expressions the complete JavaScript API is supported, which
 is enhanced with additional keywords, so that also the numerous arithmetic and
 logical operators can be used.
+
   </summary>
   
 The expression language can be used from the HTML element `BODY` on in the
