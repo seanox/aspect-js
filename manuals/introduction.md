@@ -153,6 +153,7 @@ automatic loading of resources, modules and data, a web server is required for
 use.__
 
 ## Scope
+
 <details>
   <summary>
   
@@ -162,10 +163,10 @@ included.
   </summary>
 </details>
 
+## Expression Language
+
 <details>
   <summary>
-
-## Expression Language
 
 Expressions or the expression language (EL) is a simple access to the
 client-side JavaScript and thus to the models and components in Seanox
