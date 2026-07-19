@@ -16,9 +16,10 @@ Another point of reference was the transfer of concepts from microservices to
 micro-frontends. This concerns the organization of frontend applications into
 domain-oriented modules that are composed at runtime.
 
-The project investigates the implementation of these concepts using browser
-technologies. It includes declarative markup, reactive rendering, modular
-resources and mechanisms for organizing client-side applications.
+The project originated from an interest in how these concepts could be
+implemented using browser technologies. This includes declarative markup,
+expression languages, reactive rendering, modular resources and mechanisms for
+organizing client-side applications.
 
 
 

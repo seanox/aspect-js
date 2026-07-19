@@ -1,7 +1,7 @@
 {
   "name": "@seanox/aspect-js",
   "version": "0.0.0",
-  "description": "JavaScript application runtime for SPAs incl. Expression Language, Reactivity Rendering with additional attributes, Model View Controller (MVC), View Model Binding, Events, Interceptors, Resource Bundle, Immutable XML data source, Test Environment and much more.",
+  "description": "A browser-native application runtime for building SPAs and Micro-Frontends by extending HTML and JavaScript with declarative application features.",
   "main": "release/aspect-js.js",
   "repository": {
     "type": "git",

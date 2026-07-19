@@ -12,23 +12,25 @@
 </p>
 
 # Description
-Influenced by the good experiences from JSF (JavaServer Faces) with regard to
-function and an easy integration into the markup, arose a similar client-side
-application runtime.
+Seanox aspect-js is a browser-native application runtime for implementing
+Single-Page Applications (SPAs) and Micro-Frontends. It builds upon standard
+browser technologies such as HTML, JavaScript and the DOM, extending them with
+declarative application concepts including expression language, declarative
+attributes, reactive rendering, component-based composition, view-model binding,
+routing, events, interceptors and modular resources.
+
+The project originated from the idea of transferring concepts from JavaServer
+Faces (JSF) to browser-based applications. Declarative markup, expression
+language, component structures and the connection between views and models
+served as the initial concepts. Later, ideas from microservices were adopted to
+support modular frontend applications composed from independently organized
+resources at runtime.
 
 The separation of web applications into frontend and backend, together with
 browser-based applications and distributed services, changed the structure of
-client-side applications. Seanox aspect-js investigates the application of
-concepts derived from JavaServer Faces (JSF) and microservices to browser-based
-applications, including declarative markup, component structures, view-model
-binding and modular resources.
-
-Seanox aspect-js focuses on a minimalist approach to implementing Single-Page
-Applications (SPAs) and Micro-Frontends. This application runtime extends the
-declarative nature of HTML with expression language, reactive rendering,
-additional declarative attributes, Model-View-Controller (MVC), view-model
-binding, events, interceptors, resource bundles, an immutable XML data source,
-an integrated test environment, and more.
+client-side applications. Seanox aspect-js applies these concepts to
+browser-based applications while preserving HTML as the primary declarative
+language and JavaScript as the application language.
 
 __Recommendations for UI frameworks:__
 - https://bulma.io/
