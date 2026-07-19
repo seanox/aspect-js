@@ -49,26 +49,27 @@ __Recommendations for UI frameworks:__
 - __Modularization (Supports Macros and Imports at Runtime)__ Component concept 
   for smart/automatic loading of composite resources at runtime.
 - __Event Handling__
-- __Expression Language__ Meta-language extension with full JavaScript support.
-- __Reactivity Rendering__ reacts to changes in data objects and triggers
-  partial rendering on consumers.
+- __Expression Language__ Extension of the markup language with support for
+  JavaScript expressions.
+- __Reactivity Rendering__ Responds to changes in data objects and performs
+  partial updates of affected consumers in the view.
 - __Markup Rendering__ Supports: conditions, custom tags, events, filter,
   interval, interceptors, iterate, rendering, resource messages, validation, ...
 - __Markup Protection__ Makes it difficult to manipulate the attributes in the
   markup. Non-visible components are removed from the DOM and only reinserted
   when used.
 - __Model View Controller (MVC) / Model View ViewModel (MVVM)__ Supports view
-  model binding, events, and interceptors.
-- __Routing to Organize the Page into Views__ Supports paths (routes),
-  interceptors, and permission concepts.
-- __Resource Bundle / Resource Messages__ Internationalization (i18n),
-  localization (l10n), and text outsourcing.
+  model binding, event handling, and interceptors.
+- __Routing for View and Page Organization__ Supports routes, interceptors, and
+  permission concepts.
+- __Resource Bundle / Resource Messages__ Supports internationalization (i18n),
+  localization (l10n), and externalization of text resources.
 - __Immutable XML Data Source__ Read-only data management for structured
   multilingual storage, aggregation, projection, and transformation via
   XPath/XSLT.
 - __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and runtime
-  for the implementation of micro-frontends and single-page applications.
-- __Test Environment__ For automated unit tests and integration tests.
+  environment for implementing micro-frontends and single-page applications.
+- __Test Environment__ Supports automated unit and integration testing.
 - ... 
 
 # License Terms
