@@ -226,9 +226,7 @@ logical operators can be used.
 The expression language can be used from the HTML element `BODY` on in the
 complete markup as free text, as well as in all attributes. Exceptions are the
 HTML elements `STYLE` and `SCRIPT` whose content is not supported by the
-expression language. When used as free text, plain text is generated as output.
-Adding markup, especially HTML code, is not possible this way and is only
-supported with the attributes `output` and `import`.
+expression language.
  
 ```html
 <body lang="{{DataSource.locale}}">
@@ -238,44 +236,6 @@ supported with the attributes `output` and `import`.
   </p>
 </body>
 ```
-
-Expressions are interpreted by the renderer that starts after the page is
-loaded. Thus, expressions may be visible when the page is loaded. Here it is
-recommended to use the attributes [output](markup.md#output) and [import](
-    markup.md#import), which cause a direct output to the inner HTML of the
-element.
-
-```html
-<p output="Today is {{new Date().toDateString()}}
-    and it's {{new Date().toLocaleTimeString()}} o'clock.">
-</p>
-```
-
-Or the use of the attribute [release](markup.md#release), which makes HTML
-elements and their contents visible only after rendering.
-
-```html
-<p release>
-  Today is {{new Date().toDateString()}}
-  and it's {{new Date().toLocaleTimeString()}} o'clock.
-</p>
-```
-
-Expressions can create and use variables in the page scope at runtime.
-
-```html
-{{now:new Date()}}
-<p>
-  Today is {{now.toDateString()}}
-  and it's {{now.toLocaleTimeString()}} o'clock.
-</p>
-```
-
-> [!IMPORTANT]
-> __Page Scope:__ Refers to the fact that variables can only be used in the
-> markup and are isolated from the rest of the JavaScript. These variables are
-> specifically intended for the output and processing of data in HTML markup and
-> are not accessible in general JavaScript code.
 
 [Learn more](expression.md)
 
@@ -407,26 +367,6 @@ refreshing automatically and ends when:
 <p interval="1000">
   {{new Date().toLocaleTimeString()}}
 </p>
-```
-
-With the combination of interval and variable expression, the implementation of
-a permanent counter is very simple.
-
-```html
-{{counter:0}}
-<p interval="1000">
-  {{counter:parseInt(counter) +1}}
-  {{counter}}
-</p>
-```
-
-The interval attribute can be used in combination with embedded JavaScript as
-composite JavaScript.
-
-```html
-<script type="composite/javascript" interval="1000">
-    console.log(new Date().toLocaleTimeString());
-</script>
 ```
 
 [Learn more](markup.md#interval)
@@ -564,16 +504,6 @@ with the attributes [validate](#validate) and [events](#events).
   <input id="text1" type="text" placeholder="e-mail address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required"
-      events="input change" render="#Model"/>
-  <input type="submit" value="submit" validate events="click"/>
-</form>
-```
-
-```html
-<form id="Model" composite>
-  <input id="text1" type="text" placeholder="e-mail address"
-      pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
-      validate message="{{Messages['Model.text1.validation.message']}}"
       events="input change" render="#Model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
@@ -948,14 +878,6 @@ Routing.forward("##x");
 In difference to the navigate method, the forwarding is executed directly
 instead of triggering an asynchronous forwarding by changing the location hash.
 
-Relative paths without hash at the beginning are possible, but only work with
-`Routing.route(path)` and `Routing.forward(path)`.
-
-```javascript
-Routing.route("x#y#z");
-Routing.forward("x#y#z");
-```
-
 [Learn more](routing.md#navigation)
 
 ## Permission Concept
@@ -1039,17 +961,6 @@ directly or indirectly in an expression when the value of the value property
 changes or, more precisely, when a changed value has been set final in the data
 object, which can be relevant when using getters and setters.
 
-Reactive works permanently recursively on all object levels and also on the
-objects which are added later as values. Even if these objects do not explicitly
-use Reactive, new instances are created for the referenced objects. Initiating
-objects and reactive models are logically decoupled and are synchronized
-bidirectionally. In contrast, views and reactive models, like models internally,
-use proxies that behave and can be used like the initiating originals. However,
-proxies are separate instances that are compatible but not identical to the
-initiating object. This logical separation is necessary so that the renderer can
-generate appropriate notifications when data changes and thus update the
-consumers in the view.
-
 [Learn more](reactive.md)
 
 ## API Extensions
@@ -1087,115 +998,13 @@ consciously at runtime.
 Test.activate();
 
 Test.create({test() {
-    ...
+    Assert.assertTrue(true);
 }});
 
 Test.start();
 ```
 
 [Learn more](test.md)
-
-### Task
-The smallest component in an integration test, used here as 'task', because
-'case' is a keyword in JavaScript. It can be implemented alone, but is always
-used in a scenario.
-
-```javascript
-Test.activate();
-
-Test.create({test() {
-    Assert.assertTrue(true);
-}});
-
-Test.start();
-```
-
-Task is primarily a meta-object.
-
-```
-{name:..., test:..., timeout:..., expected:..., ignore:...}
-```
-
-[Learn more](test.m#task)
-
-### Scenario
-A scenario is a sequence of a lot of test cases (tasks).
-
-```javascript
-Test.activate();
-
-Test.create({test() {
-    Assert.assertTrue(true);
-}});
-Test.create({name:"example", timeout:1000, test() {
-    Assert.assertTrue(true);
-}});
-Test.create({error:Error test() {
-    throw new Error();
-}});
-Test.create({error:/^My Error/i, test() {
-    throw new Error("My Error");
-}});
-Test.create({ignore:true, test() {
-    Assert.assertTrue(true);
-}});
-
-Test.start();
-```
-
-[Learn more](test.md#szenario)
-
-### Suite
-A suite is a complex bundle of different test cases, scenarios and other suites.
-Usually a suite consists of different files, which then represent a complex
-test. An example of a good suite is a cascade of different files und the test
-can be started in any file and place. This makes it possible to perform the
-integration test on different levels and with different complexity.
-
-[Learn more](test.m#suite)
-
-### Assert
-The test cases are implemented with assertions. The Test API provides elementary
-assertions, you can implement more. The function is simple. If an assertion was
-not `true`, an error is thrown.
-
-```javascript
-Test.activate();
-
-Test.create({test() {
-
-    Assert.assertTrue(true);
-    Assert.assertTrue("message", true);
-
-    Assert.assertFalse(false);
-    Assert.assertFalse("message", false);
-
-    Assert.assertEquals(expected, value);
-    Assert.assertEquals("message", expected, value);
-
-    Assert.assertNotEquals(unexpected, value);
-    Assert.assertNotEquals("message", unexpected, value);
-
-    Assert.assertSame(expected, value);
-    Assert.assertSame("message", expected, value);
-
-    Assert.assertNotSame(unexpected, value);
-    Assert.assertNotSame("message", unexpected, value);
-
-    Assert.assertNull(null);
-    Assert.assertNull("message", null);
-
-    Assert.assertNotNull(null);
-    Assert.assertNotNull("message", null);
-
-    Assert.fail();
-    Assert.fail("message");
-}});
-
-Test.start();
-```
-
-[Learn more](test.m#assert)
 
 ### Configuration
 Optionally, the Test API can be configured with each start. 
