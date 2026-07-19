@@ -117,6 +117,43 @@ Strukturiere die Antwort in folgende Kapitel:
 
 # Documentation
 
+## Text: Getting Started
+
+### Aufagbe
+Erstellen Sie eine englische "Getting Started" auf der Grundlage der Markdown-Dateien im Verzeichnis `manuals` und der Datei `README.md`.
+
+### Zielgruppe
+- Frontend-Entwickler
+- Frontend-Architekten
+
+### Schreibstil
+- Klar, praktisch und kompakt
+- Professionell, aber nicht akademisch
+- Einfaches und verständliches Englisch verwenden
+- Fokus auf technische Informationen und Entwickler-Workflows
+
+### Inhaltliche Anforderungen
+- Extrahiere und konsolidiere die relevanten Informationen aus den vorhandenen Markdown-Dateien
+- Erstelle eine eigenständige Getting-Started-Anleitung, mit der Entwickler das Projekt verstehen und erste Schritte durchführen können
+- Verwende ausschließlich Informationen, die in den Quelldateien vorhanden sind
+- Beschreibe Setup, Konfiguration, Konzepte und typische Nutzung, sofern diese dokumentiert sind
+- Verwende technische Begriffe nur dort, wo sie für das Verständnis notwendig sind
+
+### Vermeiden
+- Marketing-Sprache
+- Buzzwords
+- Subjektive Bewertungen oder Wertungen
+- Versprechen, Garantien oder Erfolgsbehauptungen
+- Nicht belegte Annahmen oder Ergänzungen
+- Wiederholungen und unnötige Ausführlichkeit
+- Formulierungen mit Gewährleistungs- oder Haftungscharakter
+
+### Ausgabe
+- Erstelle ein eigenständiges Markdown-Dokument mit dem Titel "Getting Started"
+- Schreibe das gesamte Dokument auf Englisch
+- Verwende eine Struktur mit sinnvollen Überschriften, Listen und Code-Blöcken, wenn diese die Lesbarkeit verbessern
+- Das Ergebnis soll direkt als Projektdokumentation verwendet werden können
+
 ## Text: Check for Comprehensibility
 
 ### Rolle
