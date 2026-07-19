@@ -153,7 +153,6 @@ automatic loading of resources, modules and data, a web server is required for
 use.__
 
 ## Scope
-
 <details>
   <summary>
 Seanox aspect-js works exclusively in the HTML element `BODY`, which itself is
@@ -162,7 +161,6 @@ included.
 </details>
 
 ## Expression Language
-
 <details>
   <summary>
 Expressions or the expression language (EL) is a simple access to the
