@@ -168,8 +168,9 @@ client-side JavaScript and thus to the models and components in Seanox
 aspect-js. In the expressions the complete JavaScript API is supported, which
 is enhanced with additional keywords, so that also the numerous arithmetic and
 logical operators can be used.
+
   </summary>
-  
+
 The expression language can be used from the HTML element `BODY` on in the
 complete markup as free text, as well as in all attributes. Exceptions are the
 HTML elements `STYLE` and `SCRIPT` whose content is not supported by the
