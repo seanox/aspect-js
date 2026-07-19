@@ -27,37 +27,45 @@ browser-based applications while preserving HTML as the primary declarative
 language and JavaScript as the application language.
 
 # Features
-- __Easy Integration in Markup and JavaScript (Clean Code)__ Combinable with
-  other JavaScript frameworks if they don't do the same thing and use a
-  different syntax.
-- __Lightweight Implementation__ Requires no additional frameworks.
+- __HTML and JavaScript Integration__
+  Uses HTML markup and JavaScript objects as the primary application model. Can
+  be combined with other JavaScript frameworks when their functionality and
+  syntax do not overlap.
+- __Declarative Markup__
+  Extends HTML with declarative attributes, expressions and runtime processing
+  for conditions, iteration, rendering, validation, events and related
+  operations.
+- __Expression Language__
+  Provides expressions in markup with access to JavaScript functionality and
+  application models.
 - __Component-Based Architecture__
-- __Namespaces and Domain Concept__ For better structuring of components,
-  modules, and business logic.
-- __Modularization (Supports Macros and Imports at Runtime)__ Component concept
-  for smart/automatic loading of composite resources at runtime.
-- __Event Handling__
-- __Expression Language__ Meta-language extension with full JavaScript support.
-- __Reactivity Rendering__ reacts to changes in data objects and triggers
-  partial rendering on consumers.
-- __Markup Rendering__ Supports: conditions, custom tags, events, filter,
-  interval, interceptors, iterate, rendering, resource messages, validation, ...
-- __Markup Protection__ Makes it difficult to manipulate the attributes in the
-  markup. Non-visible components are removed from the DOM and only reinserted
-  when used.
-- __Model View Controller (MVC) / Model View ViewModel (MVVM)__ Supports view
-  model binding, events, and interceptors.
-- __Routing to Organize the Page into Views__ Supports paths (routes),
-  interceptors, and permission concepts.
-- __Resource Bundle / Resource Messages__ Internationalization (i18n),
-  localization (l10n), and text outsourcing.
-- __Immutable XML Data Source__ Read-only data management for structured
-  multilingual storage, aggregation, projection, and transformation via
-  XPath/XSLT.
-- __Micro-Frontends and Single-Page Applications (SPAs)__ Platform and runtime
-  for the implementation of micro-frontends and single-page applications.
-- __Test Environment__ For automated unit tests and integration tests.
-- ...
+  Provides components composed of markup, styles, scripts and additional
+  resources.
+- __View-Model Binding__
+  Connects HTML elements with JavaScript objects and supports synchronization of
+  values, states and events.
+- __Reactive Rendering__
+  Updates affected parts of the view when reactive data objects change.
+- __Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)__
+  Supports separation of presentation, application logic and data through
+  models, views, controllers and bindings.
+- __Modular Resources and Runtime Imports__
+  Supports namespaces, modules, macros and loading of component resources at
+  runtime.
+- __Routing and View Flow__
+  Organizes views through paths, navigation, interceptors and permission
+  concepts.
+- __Resource Bundles__
+  Provides externalized messages and support for internationalization (i18n) and
+  localization (l10n).
+- __XML Data Source__
+  Provides an immutable XML-based data source with querying and transformation
+  capabilities using XPath and XSLT.
+- __Single-Page Applications and Micro-Frontends__
+  Provides runtime concepts for structuring applications as modular browser
+  applications.
+- __Test Environment__
+  Provides APIs for implementing and executing unit and integration tests.
 
 ## Contents Overview
 - [Getting Started](#getting-started)
