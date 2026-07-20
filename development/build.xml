@@ -30,6 +30,7 @@
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.test" value="${workspace}/test"/>
   <property name="workspace.benchmarks" value="${workspace}/benchmarks"/>
+  <property name="workspace.tutorials" value="${workspace}/tutorials"/>
 
   <property environment="env"/>
  
@@ -177,7 +178,7 @@
           match="^ {4}" replace="&#09;"/>
     </sequential>
   </macrodef>
-
+  
   <target name="release" depends="changes">
     <release-locate/>
 
@@ -264,6 +265,39 @@
     <delete dir="${workspace.optimize}/node_modules"/>
     <delete file="${workspace.optimize}/package-lock.json"/>
 
+    <delete>
+      <fileset dir="${workspace.tutorials}">
+        <include name="**/aspect-js*.js"/>
+      </fileset>
+    </delete>
+    
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_02 Integration of Seanox aspect-js/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_03 Prototype - Splitting into components/assets"/>  
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_03 Prototype - Splitting into components"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_04 Internationalization (i18n)"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_05 The first module"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_06 Usage of dynamic data"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_07 Business logic in detail"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_08 Debugging"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_02 Integration of Seanox aspect-js/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_03 Prototype - Splitting into components"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_04 Internationalization (i18n)"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_05 The first module"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_06 DataSource - Usage of dynamic data"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_07 Routing - Controlling components and views"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_08 Routing - Variable paths"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_09 Routing - Interceptors"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_10 MVC - Synchronization"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_11 MVC - Synchronization and validation"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_12 Components - Macros and modules"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_13 Components - Example for a spinner"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_14 Components - Example for dynamic table with CSV download"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_15 Debugging"/>
+    
+    <copy file="${release.file.testing.max}" todir="${workspace.tutorials}/micro-frontend/Step_09 Testing/assets"/>
+    <copy file="${release.file.testing.max}" todir="${workspace.tutorials}/single-page-application/Step_16 Testing - Activation/assets"/>
+    <copy file="${release.file.testing.max}" todir="${workspace.tutorials}/single-page-application/Step_17 Testing - UI Test/assets"/>
+
     <mkdir dir="${workspace.release.temp}"/>
     <copy todir="${workspace.release.temp}">
       <fileset dir="${workspace.release}">
@@ -275,7 +309,7 @@
     </copy>
     <copy todir="${workspace.release.temp}">
       <fileset dir="${workspace}">
-        <include name="manual/**/*"/>
+        <include name="manuals/**/*"/>
         <include name="CHANGES"/>
         <include name="LICENSE"/>
         <include name="README.md"/>
@@ -287,11 +321,14 @@
     <zip destfile="${workspace.release}/${ant.project.name}-${release.version}.zip">
       <fileset dir="${workspace.release.temp}" includes="**/*"/>
     </zip>
+    <touch datetime="${release.date}" pattern="yyyyMMdd" file="${workspace.release}/${ant.project.name}-${release.version}.zip"/>
     <delete dir="${workspace.release.temp}"/>
-    <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${workspace.release}" includes="${ant.project.name}-${release.version}.zip"/>
-    </touch>
-
+    
+    <zip destfile="${workspace.release}/${ant.project.name}-tutorials-${release.version}.zip">
+      <fileset dir="${workspace.tutorials}" includes="**/*"/>
+    </zip>
+    <touch datetime="${release.date}" pattern="yyyyMMdd" file="${workspace.release}/${ant.project.name}-tutorials-${release.version}.zip"/>
+    
     <replaceregexp file="${workspace}/README.md"
         match="(Seanox ${ant.project.name} )\d+(\.\d+)*" flags="g" byline="false"
         replace="\1${release.version}"/>
@@ -336,10 +373,9 @@
     <antcall target="run"/>
   </target>
 
-  <target name="run">
+  <target name="start">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
         dir="server" fork="true" spawn="false">
-      <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
       <arg value="start"/>
     </java>
   </target>
@@ -347,7 +383,6 @@
   <target name="stop">
     <java classpath="server/devwex.jar" classname="com.seanox.devwex.Service"
         dir="server" fork="true" spawn="false">
-      <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
       <arg value="stop"/>
       <arg value="127.0.0.1:8001"/>
     </java>
