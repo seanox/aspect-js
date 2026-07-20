@@ -36,7 +36,6 @@
             Test.create({test() {
                 const message = `${timing} ms (expected max. ${timeout1} ms)`;
                 console.log(`Duration: ${message}`);
-                console.log(`Benchmark Leaf-Update: ${message}`);
                 Assert.assertTrue(`Duration ${message}`, timing < timeout1);
             }});
             Test.start();
