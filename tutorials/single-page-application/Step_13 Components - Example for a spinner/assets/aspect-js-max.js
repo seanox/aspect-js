@@ -1,16 +1,12 @@
 /**
- * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- * im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- * Diese Software unterliegt der Version 2 der Apache License.
- *
- * Seanox aspect-js, fullstack for single page applications
+ * Seanox aspect-js, application runtime for single-page applications
  * Copyright (C) 2025 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -565,11 +561,14 @@
 			.replace(/[\/\\]+/g, "/")
 			.replace(/(^\/+)|(\/+$)/g, ""));
 })();
+
 /**
- * DataSource is a NoSQL approach to data storage based on XML data in
- * combination with multilingual data separation, optional aggregation, and
- * transformation. It is a combination of the approaches of a read-only database
- * system (DBS) and a content management system (CMS)."
+ * Immutable XML data source for static application data, combining structured
+ * XML storage with multilingual data separation, optional aggregation, and
+ * transformation capabilities via XPath and XSLT. The concept combines the
+ * characteristics of a read-only database and a content management system,
+ * targeting application-provided data that is accessed primarily through
+ * queries and transformations.
  *
  * Data are addressed via a locator, which is a URL (xml://... or xslt://...),
  * where both single and double slashes are supported. It is used as an absolute
@@ -1680,6 +1679,9 @@
 
 	"use strict";
 
+	/** Internal queue for pending asynchronous callback executions */
+	const _asynchronous_queue = [];
+
 	/** Storage for variables with the page scope */
 	const _render_context_scope = [];
 
@@ -2013,7 +2015,7 @@
 						    } else throw new Error("Invalid context: " + context);
 						    const selector = context.queue.shift();
 						    if (selector)
-						        Composite.asynchron(context, selector);
+						        Composite.asynchronous(context, selector);
 						    context.lock = false;
 					}};
 
@@ -2082,17 +2084,45 @@
 		},
 
 		/**
-		 * Asynchronous or in reality non-blocking call of a function. Because
-		 * the asynchronous execution is not possible without Web Worker.
-		 * @param {function} task Function to be executed
-		 * @param {...*} variants Up to five additional optional arguments
-		 *     passed to the callback function
-		 * @return {number} ID of the established timer
+		 * Schedules a callback as a microtask.
+		 *
+		 * Multiple calls within the same JavaScript execution turn are batched
+		 * and executed together in a single microtask. The callback is invoked
+		 * after the current synchronous execution stack has completed and
+		 * before the next macrotask (such as window.setTimeout).
+		 *
+		 * The returned handle can be used to cancel execution before the
+		 * callback is processed.
+		 *
+		 * @param {function} callback Function to be executed.
+		 * @param {...*} data Optional arguments passed to the callback function.
+		 * @returns {{cancel: function}} Cancellation handle.
 		 */
-		asynchron(task, ...variants) {
-			return window.setTimeout((invoke, ...variants) => {
-				invoke(...variants);
-			}, 0, task, ...variants);
+		asynchronous(callback, ...data) {
+			if (typeof callback !== "function")
+				throw new TypeError("Invalid callback: " + typeof callback);
+			const state = {cancelled: false};
+			const task = {
+				cancel() {
+					state.cancelled = true;
+				}
+			};
+			_asynchronous_queue.push({task, callback, data, state});
+			if (_asynchronous_queue.length > 1)
+				  return task;
+			Promise.resolve().then(() => {
+				for (const task of _asynchronous_queue.splice(0)) {
+					if (task.state.cancelled)
+						continue;
+					try {task.callback(...task.data);
+					} catch (error) {
+						window.setTimeout(() => {
+						    throw error;
+						}, 0);
+					}
+				}
+			});
+			return task;
 		},
 
 		/**
@@ -2252,7 +2282,7 @@
 				}
 			}
 
-			// ATTRIBUTE_VALIDATE can be supplemented with ATTRIBUTE_MESSAGE.
+			// ATTRIBUTE_VALIDATE can be combined with ATTRIBUTE_MESSAGE.
 			// However, ATTRIBUTE_MESSAGE has no effect without
 			// ATTRIBUTE_VALIDATE. The value of ATTRIBUTE_MESSAGE is used as an
 			// error message if the validation was not successful. For this
@@ -2733,7 +2763,7 @@
 		 * Parameters start with @ in difference to Interceptor/Selector/Tag.
 		 *
 		 *     @ATTRIBUTES-STATICS
-		 * Static attributes are a component of the hardening of the markup.
+		 * Static attributes are a component of the markup protection.
 		 * These attributes are observed by the renderer and manipulation is
 		 * made more difficult by restoring the original value. As value one or
 		 * more attributes separated by spaces are expected. The method can be
@@ -2753,15 +2783,16 @@
 			if (variants.length > 0)
 				scope = variants[0];
 
-			// STATIC is used for hardening attributes in markup. Hardening
-			// makes the manipulation of attributes more difficult. At runtime,
-			// additional attributes can be declared as static. However, this
-			// function is not cheap, since the values of the attributes used at
-			// that time must be determined for all elements to be restored, for
-			// which purpose the complete DOM is analyzed (full DOM scan). The
-			// composite-specific static attributes (PATTERN_ATTRIBUTE_ACCEPT)
-			// are excluded from this function because they are already actively
-			// monitored by the MutationObserver.
+			// STATIC is used to define protected attributes in the markup.
+			// Markup protection makes attribute manipulation ast the runtime
+			// more difficult. At runtime, additional attributes can be declared
+			// as static. However, this function is not cheap, since the values
+			// of the attributes used at that time must be determined for all
+			// elements to be restored, for which purpose the complete DOM is
+			// analyzed (full DOM scan). The composite-specific static
+			// attributes (PATTERN_ATTRIBUTE_ACCEPT) are excluded from this
+			// function because they are already actively monitored by the
+			// MutationObserver.
 			if (typeof scope === "string"
 					&& variants.length > 1
 					&& typeof variants[1] === "string"
@@ -2897,7 +2928,7 @@
 					&& Composite.render.lock !== lock) {
 				if (!Composite.render.queue.includes(selector))
 					Composite.render.queue.push(selector);
-				Composite.asynchron(Composite.render);
+				Composite.asynchronous(Composite.render);
 				return;
 			}
 
@@ -3050,7 +3081,7 @@
 
 						        // The initial value of the static attribute is
 						        // registered for the restore. This is a part of
-						        // the markup hardening of the MutationObserver.
+						        // the markup protection of the MutationObserver.
 						        if (attribute.name.match(Composite.PATTERN_ATTRIBUTE_STATIC)
 										|| attribute.name === Composite.ATTRIBUTE_ID
 										|| attribute.name === Composite.ATTRIBUTE_EVENTS)
@@ -3058,7 +3089,7 @@
 
 						        // The initial value of the static attribute is
 						        // registered for the restore. This is a part of
-						        // the markup hardening of the MutationObserver.
+						        // the markup protection of the MutationObserver.
 						        object.statics = object.statics || {};
 						        if (_statics.has(attribute.name))
 						            object.statics[attribute.name] = attribute.value;
@@ -3442,7 +3473,7 @@
 						const object = _render_meta[serial];
 						delete object.attributes[Composite.ATTRIBUTE_IMPORT];
 					} else {
-						Composite.asynchron((selector, lock, url) => {
+						Composite.asynchronous((selector, lock, url) => {
 						    try {
 						        const request = new XMLHttpRequest();
 						        request.overrideMimeType("text/plain");
@@ -3980,10 +4011,10 @@
 
 	/**
 	 * Set of attributes to be hardened.
-	 * The hardening of attributes is part of the safety concept and should make
-	 * it more difficult to manipulate the markup at runtime. Hardening observes
-	 * attributes and undoes changes. Initially, the list is empty because the
-	 * policies and rules are too individual.
+	 * Attribute protection is part of the security concept and is intended to
+	 * make runtime manipulation of the markup more difficult. It monitors
+	 * attributes and reverts any changes. The list is initially empty because
+	 * the required policies and rules are highly application-specific.
 	 *
 	 * The following attributes are recommended:
 	 *     action        autocomplete      autofocus
@@ -4631,7 +4662,7 @@
 		delete window.Messages;
 
 		window.Messages = {
-			customize(label, ...values) {
+			populate(label, ...values) {
 				let text = Messages[label] || "";
 				for (let index = 0; index < values.length; index++)
 					text = text.replace(new RegExp("\\{" + index + "\\}", "g"), values[index]);
@@ -4820,7 +4851,7 @@
 
 					// The registration is delayed so that the getting of values
 					// does not block unnecessarily.
-					Composite.asynchron((selector, target, key, notifications) => {
+					Composite.asynchronous((selector, target, key, notifications) => {
 
 						// Registration is performed only during rendering and
 						// if the key exists in the object.
@@ -4898,7 +4929,7 @@
 
 					// The registration is delayed so that the setting of values
 					// does not block unnecessarily.
-					Composite.asynchron((selector, target, key, notifications) => {
+					Composite.asynchronous((selector, target, key, notifications) => {
 
 						// Update only if the key exists in the object.
 						// Recursions during rendering are prevented via the
@@ -4987,17 +5018,17 @@
 	// initially when the page is loaded.
 	let _routing_active;
 
-	// Software interrupt that triggers the hashchange event via a timer if the
-	// hashchange event from the browser does not occur. If the browser event
-	// occurs as planned, the interrupt is discarded. It concerns Mozilla/Gecko,
-	// where the change from / to /# does not trigger a hashchange event.
+	// Task that triggers the hashchange event via a timer if the hashchange
+	// event from the browser does not occur. If the browser event occurs as
+	// planned, the interrupt is discarded. It concerns Mozilla/Gecko, where the
+	// change from / to /# does not trigger a hashchange event.
 	let _routing_interrupt;
 
 	// Map with all supported interceptors
-	const _interceptors = new Array();
+	const _interceptors = [];
 
 	// Array with the path history (optimized)
-	const _history = new Array();
+	const _history = [];
 
 	const Browser = {
 
@@ -5068,21 +5099,24 @@
 			if (path === null
 					|| path === Browser.location)
 				return;
-			Composite.asynchron(path => {
+			Composite.asynchronous(path => {
 				const event = new Event("hashchange",{bubbles:false, cancelable:true});
 				event.oldURL = Browser.location;
 				event.newURL = path;
-				window.location.href = path;
-				_routing_interrupt = Composite.asynchron(event => {
-					window.dispatchEvent(event);
+				if (path.startsWith("#"))
+					window.location.hash = path.substring(1);
+				else window.location.href = path;
+				_routing_interrupt = Composite.asynchronous(event => {
+					if (event.newURL !== Browser.location)
+						window.dispatchEvent(event);
 				}, event);
 			}, path);
 		},
 
 		/**
 		 * Forwards to the given path. In difference to the route method, the
-		 * forwarding is executed directly, instead the navigate method triggers
-		 * asynchronous forwarding by changing the location hash.
+		 * forwarding is triggered directly as an event, whereas the route
+		 * method an asynchronous forwarding by changing the location hash.
 		 * @param {string} path
 		 */
 		forward(path) {
@@ -5252,7 +5286,7 @@
 	const _render = (element, focus = false) => {
 		Composite.render(element);
 		if (focus) {
-			Composite.asynchron((element) => {
+			Composite.asynchronous((element) => {
 				if (typeof element.focus === "function")
 					element.focus();
 			}, element);
@@ -5266,7 +5300,8 @@
 	 */
 	window.addEventListener("hashchange", (event) => {
 
-		window.clearTimeout(_routing_interrupt);
+		if (_routing_interrupt)
+			_routing_interrupt.cancel();
 
 		if (!_routing_active)
 			return;
@@ -5343,7 +5378,7 @@
 		if (locationOldElement === document.body
 				|| locationNewElement === document.body) {
 			_render(document.body);
-			Composite.asynchron((element) => {
+			Composite.asynchronous((element) => {
 				if (typeof element.focus === "function")
 					element.focus();
 			}, locationNewElement);
@@ -5351,7 +5386,7 @@
 		}
 		if (locationOldElement.contains(locationNewElement)) {
 			_render(locationOldElement);
-			Composite.asynchron((element) => {
+			Composite.asynchronous((element) => {
 				if (typeof element.focus === "function")
 					element.focus();
 			}, locationNewElement);
