@@ -135,7 +135,7 @@ Erstellen Sie eine englische "Getting Started" auf der Grundlage der Markdown-Da
 ### Inhaltliche Anforderungen
 - Extrahiere und konsolidiere die relevanten Informationen aus den vorhandenen Markdown-Dateien
 - Erstelle eine eigenständige Getting-Started-Anleitung, mit der Entwickler das Projekt verstehen und erste Schritte durchführen können
-- Verwende ausschließlich Informationen, die in den Quelldateien vorhanden sind
+- Verwende ausschliesslich Informationen, die in den Quelldateien vorhanden sind
 - Beschreibe Setup, Konfiguration, Konzepte und typische Nutzung, sofern diese dokumentiert sind
 - Verwende technische Begriffe nur dort, wo sie für das Verständnis notwendig sind
 
