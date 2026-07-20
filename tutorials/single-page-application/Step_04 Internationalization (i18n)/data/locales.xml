@@ -1,0 +1,437 @@
+<?xml version="1.0"?>
+<!DOCTYPE locales [
+  <!ENTITY auml "&#228;">
+  <!ENTITY ouml "&#246;">
+  <!ENTITY uuml "&#252;">
+  <!ENTITY Auml "&#196;">
+  <!ENTITY Ouml "&#214;">
+  <!ENTITY Uuml "&#220;">
+]>
+<locales>
+  <de>
+    <label key="about.title" value="&Uuml;ber uns"/>
+    <label key="about.text">
+      <![CDATA[
+      Wir bieten Beratungsleistungen in allen Aspekten der Architektur von der Konzeption
+      bis zur Implementierung an.<br/>
+      EXAMPLE Architects schafft transformative Kultur-, Unternehmens-, Wohn- und
+      andere R&auml;ume, die sich nahtlos in ihre Umgebung integrieren lassen.<br/>
+      Architektur ist unsere lebendige Leidenschaft und wir geben sie gerne an unsere
+      Kunden weiter.
+      ]]> 
+    </label>
+
+    <label key="calendar.day.1.short" value="Mo"/>
+    <label key="calendar.day.2.short" value="Di"/>
+    <label key="calendar.day.3.short" value="Mi"/>
+    <label key="calendar.day.4.short" value="Do"/>
+    <label key="calendar.day.5.short" value="Fr"/>
+    <label key="calendar.day.6.short" value="Sa"/>
+    <label key="calendar.day.7.short" value="So"/>
+    
+    <label key="common.text.closed" value="geschlossen"/>
+    <label key="common.text.powered" value="Unterst&uuml;tzt von"/>
+    
+    <label key="company.name.1" value="EXAMPLE"/>
+    <label key="company.name.2" value="Architects"/>
+
+    <label key="contact.title" value="Kontakt"/>
+    <label key="contact.text">
+      Lassen Sie uns Kontakt aufnehmen und &uuml;ber Ihr n&auml;chstes Projekt sprechen.
+    </label>
+    <label key="contact.office.hours.title" value="B&uuml;rozeiten"/>
+    <label key="contact.form.name.title" value="Name"/>
+    <label key="contact.form.email.title" value="E-Mail"/>
+    <label key="contact.form.subject.title" value="Betreff"/>
+    <label key="contact.form.comment.title" value="Nachricht"/>
+    <label key="contact.form.send.title" value="NACHRICHT SENDEN"/>
+    <label key="contact.map.title" value="Map"/>
+
+    <label key="locale.de.title" value="Deutsch"/>
+    <label key="locale.en.title" value="English"/>
+    <label key="locale.ru.title" value="Русский"/>
+    
+    <label key="person.title" value="Team Details (Beispiel)"/>
+    <label key="person.john.name">
+      John Doe
+    </label>
+    <label key="person.john.role">
+      CEO &amp; Gr&uuml;nder
+    </label>
+    <label key="person.john.summary">
+      John schloss sein Studium mit einem Bachelor of Architecture ab. Er liebt
+      es zu reisen neue Erfahrungen und Inspirationen zu sammeln; Architektur ist
+      seine Leidenschaft.
+    </label>
+    <label key="person.john.text">
+      <![CDATA[
+      John ist der Gr&uuml;nder und CEO von EXAMPLE Architects. Vor der Gr&uuml;ndung
+      der Firma im Jahr 1996 arbeitete John in Kopenhagen und Berlin f&uuml;r
+      namhafte Unternehmen. "Mein Ziel als Architekt ist es, Kunden bei der Realisierung
+      von Geb&auml;uden zu unterst&uuml;tzen, die ihre Ambitionen und Tr&auml;ume
+      f&ouml;rdern. Ich glaube, dass ein Geb&auml;ude den Geschmack und die Werte
+      seiner Eigent&uuml;mer und Nutzer widerspiegeln kann und sollte", eine Philosophie,
+      die das gesamte Unternehmen durchdringt.<br/>
+      <br/>
+      John schloss sein Studium mit einem Bachelor of Architecture ab. Er liebt
+      es zu reisen und nach neuen Erfahrungen und Inspirationen zu suchen; Architektur
+      ist seine Leidenschaft.
+      ]]>
+    </label>
+    <label key="person.jane.name">
+      Jane Doe
+    </label>
+    <label key="person.jane.role">
+      Architekt
+    </label>
+    <label key="person.jane.summary">
+      Seit ihrem Eintritt im Jahr 2016 arbeitet sie an Machbarkeitsstudien, Entwurfs-
+      und Umsetzungspl&auml;ne und &uuml;bernimmt selbst&auml;ndige Projektleitung.
+    </label>
+    <label key="person.jane.text">
+      <![CDATA[
+      ]]>
+    </label>
+    <label key="person.mike.name">
+      Mike Ross
+    </label>
+    <label key="person.mike.role">
+      Architekt
+    </label>
+    <label key="person.mike.summary">
+      Mike hat zahlreiche nationale und internationale Auszeichnungen erhalten und
+      ist international bekannt und erfreut sich wegen seiner Erfahrungen grosser
+      Beliebtheit.
+    </label>
+    <label key="person.mike.text">
+      <![CDATA[
+      ]]>
+    </label>
+    <label key="person.dan.name">
+      Dan Star
+    </label>
+    <label key="person.dan.role">
+      Architekt
+    </label>
+    <label key="person.dan.summary">
+      Dan verf&uuml;gt &uuml;ber umfangreiche Kenntnisse in den Bereichen Building
+      Information Modeling (BIM), technisches und nachhaltiges Design und Geb&auml;udeperformance.
+    </label>
+    <label key="person.dan.text">
+      <![CDATA[
+      ]]>
+    </label>
+    
+    <label key="projects.title" value="Projekte"/>
+    
+    <label key="project.title" value="Projekt Details (Beispiel)"/>
+    <label key="project.type.brick.title" value="Massivhaus"/>
+    <label key="project.type.renovated.title" value="Renovierung"/>
+    <label key="project.type.summer.title" value="Sommerhaus"/>
+    <label key="project.type.summer.text">
+      <![CDATA[
+      <h2>{{Messages['project.type.summer.title']}}</h2>
+      <p class="w3-opacity">
+        Schlichte Eleganz in Klinker und Holz.
+      </p>          
+      <p>
+        Sommerhaus mit zwei Schlafzimmern, zwei Badezimmern, Wohnzimmer, Esszimmer,
+        K&uuml;che, Sauna und Kamin f&uuml;r bis zu 6 Personen. Fussbodenheizung
+        mit Gas-Therme.
+      </p>
+      <p>
+        Der grossz&uuml;gige Wohnbereich ist mit edlem Echtholz ausgestattet. Im
+        Erdgeschoss befinden sich eine K&uuml;che, ein Duschbad mit Sauna und im
+        ersten Stock zwei Schlafzimmer mit Bad und WC.       
+      </p>
+      ]]> 
+    </label>
+    <label key="project.type.prefab.title" value="Fertighaus"/>  
+  </de>
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  
+  <en default="true">
+    <label key="about.title" value="About"/>
+    <label key="about.text">
+      <![CDATA[
+      We provide consulting services in all aspects of architecture from conception
+      to implementation.<br/>
+      EXAMPLE Architects creates transformative cultural, corporate, residential
+      and other spaces that integrate seamlessly into their environment.<br/>
+      Architecture is our living passion and we are happy to pass it on to
+      our customers.
+      ]]> 
+    </label>
+
+    <label key="calendar.day.1.short" value="Mon"/>
+    <label key="calendar.day.2.short" value="Tue"/>
+    <label key="calendar.day.3.short" value="Wed"/>
+    <label key="calendar.day.4.short" value="Thu"/>
+    <label key="calendar.day.5.short" value="Fri"/>
+    <label key="calendar.day.6.short" value="Sat"/>
+    <label key="calendar.day.7.short" value="Sun"/>
+    
+    <label key="common.text.closed" value="closed"/>
+    <label key="common.text.powered" value="Powered by"/>
+    
+    <label key="company.name.1" value="EXAMPLE"/>
+    <label key="company.name.2" value="Architects"/>
+
+    <label key="contact.title" value="Contact"/>
+    <label key="contact.text">
+      Lets get in touch and talk about your next project.
+    </label>
+    <label key="contact.office.hours.title" value="Office Hours"/>
+    <label key="contact.form.name.title" value="Name"/>
+    <label key="contact.form.email.title" value="Email"/>
+    <label key="contact.form.subject.title" value="Subject"/>
+    <label key="contact.form.comment.title" value="Comment"/>
+    <label key="contact.form.send.title" value="SEND MESSAGE"/>
+    <label key="contact.map.title" value="Map"/>
+
+    <label key="locale.de.title" value="Deutsch"/>
+    <label key="locale.en.title" value="English"/>
+    <label key="locale.ru.title" value="Русский"/>
+    
+    <label key="person.title" value="Team Details (Example)"/>
+    <!-- Normally, this data comes as an entity from a data source. -->
+    <label key="person.john.name">
+      John Doe
+    </label>
+    <label key="person.john.role">
+      CEO &amp; Founder
+    </label>
+    <label key="person.john.summary">
+      John graduated with a Bachelor of Architecture. He loves to travel
+      for new experiences and inspiration; architecture is his passion.
+    </label>
+    <label key="person.john.text">
+      <![CDATA[
+      John is the founder and CEO of EXAMPLE Architects. Prior to founding
+      the firm in 1996, John worked in Copenhagen and Berlin for well-known
+      companies. "My goal as an architect is to support clients in realizing
+      buildings that promote their ambitions and dreams. I believe that
+      a building can and should reflect the tastes and values of its owners
+      and users", a philosophy that permeates the entire company.<br/>
+      <br/> 
+      John graduated with a Bachelor of Architecture. He loves to travel
+      for new experiences and inspiration; architecture is his passion.
+      ]]>
+    </label>
+    <label key="person.jane.name">
+      Jane Doe
+    </label>
+    <label key="person.jane.role">
+      Architect
+    </label>
+    <label key="person.jane.summary">
+      Since joining in 2016, she has been working on feasibility studies,
+      design and implementation plans and independently managing projects.
+    </label>
+    <label key="person.jane.text">
+      <![CDATA[
+      ]]>
+    </label>
+    <label key="person.mike.name">
+      Mike Ross
+    </label>
+    <label key="person.mike.role">
+      Architect
+    </label>
+    <label key="person.mike.summary">
+      Mike has received numerous national and international awards and is
+      internationally known and enjoys great popularity.
+    </label>
+    <label key="person.mike.text">
+      <![CDATA[
+      ]]>
+    </label>
+    <label key="person.dan.name">
+      Dan Star
+    </label>
+    <label key="person.dan.role">
+      Architect
+    </label>
+    <label key="person.dan.summary">
+      Dan has extensive knowledge of Building Information Modeling (BIM),
+      technical and sustainable design and building performance.
+    </label>
+    <label key="person.dan.text">
+      <![CDATA[
+      ]]>
+    </label>
+    
+    <label key="projects.title" value="Projects"/>
+    
+    <label key="project.title" value="Project Details (Example)"/>
+    <label key="project.type.brick.title" value="Brick House"/>
+    <label key="project.type.renovated.title" value="Renovated"/>
+    <label key="project.type.summer.title" value="Summer House"/>
+    <!-- 
+      Markup cannot be created or inserted by messages as Expression Language.
+      The DataSource should be used for this because it supports the transformation
+      of data into HTML (fragments).
+      Alternatively, the attributes output and import can also be used.
+      Markup can then also be output as messages.
+    -->
+    <label key="project.type.summer.text">
+      <![CDATA[
+      <h2>{{Messages['project.type.summer.title']}}</h2>
+      <p class="w3-opacity">
+        Simple elegance in clinker and wood.
+      </p>          
+      <p>
+        Summer house with two bedrooms, two bathrooms, living room, dining
+        room, kitchen, sauna and fireplace for up to 6 people. Underfloor
+        heating/gas floor heating.
+      </p>
+      <p>
+        The spacious living area is equipped with noble real wood. On the
+        ground floor there is a kitchen, a shower room with sauna and on the
+        first floor two bedrooms with bath and toilet.       
+      </p>
+      ]]> 
+    </label>
+    <label key="project.type.prefab.title" value="Prefab House"/>
+  </en>
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  
+  <ru>
+    <label key="about.title" value="O нас"/>
+    <label key="about.text">
+      <![CDATA[
+      Мы предлагаем консультационные услуги по всем аспектам архитектуры, от разработки
+      концепции до реализации проекта.<br/>
+      EXAMPLE Architects создает преобразующие культурные, корпоративные, жилые
+      и другие среды, которые могут быть легко интегрированы в их среду.
+      Архитектура - это наша живая страсть, и мы с удовольствием передаем ее нашим
+      клиентам.
+      ]]> 
+    </label>
+
+    <label key="calendar.day.1.short" value="ПО"/>
+    <label key="calendar.day.2.short" value="ВТ"/>
+    <label key="calendar.day.3.short" value="СР"/>
+    <label key="calendar.day.4.short" value="ЧТ"/>
+    <label key="calendar.day.5.short" value="ПТ"/>
+    <label key="calendar.day.6.short" value="СБ"/>
+    <label key="calendar.day.7.short" value="ВС"/>
+    
+    <label key="common.text.closed" value="закрыт"/>
+    <label key="common.text.powered" value="При поддержке"/>
+    
+    <label key="company.name.1" value="EXAMPLE"/>
+    <label key="company.name.2" value="Architects"/>
+
+    <label key="contact.title" value="Контакт"/>
+    <label key="contact.text">
+      Давайте свяжемся и поговорим о вашем следующем проекте.
+    </label>
+    <label key="contact.office.hours.title" value="Часы работы"/>
+    <label key="contact.form.name.title" value="Наименование"/>
+    <label key="contact.form.email.title" value="Электронная почта"/>
+    <label key="contact.form.subject.title" value="Субъект"/>
+    <label key="contact.form.comment.title" value="Весть"/>
+    <label key="contact.form.send.title" value="ОТПРАВИТЬ СООБЩЕНИЕ"/>
+    <label key="contact.map.title" value="Карта"/>
+
+    <label key="locale.de.title" value="Deutsch"/>
+    <label key="locale.en.title" value="English"/>
+    <label key="locale.ru.title" value="Русский"/>
+    
+    <label key="person.title" value="Детали команды (пример)"/>
+    <label key="person.john.name">
+      John Doe
+    </label>
+    <label key="person.john.role">
+      CEO &amp; Основатель
+    </label>
+    <label key="person.john.summary">
+      John закончил обучение со степенью бакалавра архитектуры. Он любит путешествовать
+      и получать новые впечатления и вдохновение.
+    </label>
+    <label key="person.john.text">
+      <![CDATA[
+      John является основателем и генеральным директором компании EXAMPLE Architects.
+      До основания компании в 1996 году, Джон работал в Копенгагене и Берлине
+      для известные компании. "Моя цель как архитектора состоит в том, чтобы помогать
+      клиентам в реализации следующих задач зданий, которые поддерживают их амбиции
+      и мечты. для продвижения по службе. Я верю, что здание усилит вкус и ценности.
+      Его владельцев и пользователей могут и должны отражать философию", которая
+      пронизывает всю компанию.<br/>
+      <br/>
+      John закончил обучение со степенью бакалавра архитектуры. Он любит путешествовать
+      и искать новые впечатления и вдохновения; архитектура - его страсть.
+      ]]>
+    </label>
+    <label key="person.jane.name">
+      Jane Doe
+    </label>
+    <label key="person.jane.role">
+      Архитектор
+    </label>
+    <label key="person.jane.summary">
+      С момента присоединения к компании в 2016 году Джейн отвечает за технико-экономическое
+      обоснование, разработку, планирование и управление проектами.
+    </label>
+    <label key="person.jane.text">
+      <![CDATA[
+      ]]>
+    </label>
+    <label key="person.mike.name">
+      Mike Ross
+    </label>
+    <label key="person.mike.role">
+      Архитектор
+    </label>
+    <label key="person.mike.summary">
+      Mike получил множество национальных и международных наград, известен во всем
+      мире и пользуется большой популярностью благодаря своему опыту.
+    </label>
+    <label key="person.mike.text">
+      <![CDATA[
+      ]]>
+    </label>
+    <label key="person.dan.name">
+      Dan Star
+    </label>
+    <label key="person.dan.role">
+      Архитектор
+    </label>
+    <label key="person.dan.summary">
+      Dan обладает обширными знаниями в области Building Information Modeling (BIM),
+      технического и устойчивого проектирования и эксплуатации зданий.
+    </label>
+    <label key="person.dan.text">
+      <![CDATA[
+      ]]>
+    </label>
+    
+    <label key="projects.title" value="Проекты"/>
+    
+    <label key="project.title" value="Детали проекта (пример)"/>
+    <label key="project.type.brick.title" value="Mассивный дом"/>
+    <label key="project.type.renovated.title" value="Ремонт"/>
+    <label key="project.type.summer.title" value="Дача"/>
+    <label key="project.type.summer.text">
+      <![CDATA[
+      <h2>{{Messages['project.type.summer.title']}}</h2>
+      <p class="w3-opacity">
+        Простая элегантность в клинкере и дереве.
+      </p>          
+      <p>
+        Летний домик с двумя спальнями, двумя ванными комнатами, гостиной, столовой,
+        кухней, сауной и камином на 6 персон. Половое отопление с газовым котлом.
+      </p>
+      <p>
+        Просторная гостиная оборудована натуральным натуральным деревом. На первом
+        этаже находится кухня, душевая комната с сауной, а на втором этаже две спальни
+        с ванной и туалетом.       
+      </p>
+      ]]> 
+    </label>
+    <label key="project.type.prefab.title" value="Сборный"/>  
+  </ru>
+</locales>

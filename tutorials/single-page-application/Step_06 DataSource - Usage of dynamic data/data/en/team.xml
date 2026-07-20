@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<team>
+  <person>
+    <id>2</id>
+    <email>john.doe@example-architects.local</email>
+    <name>John Doe</name>
+    <role>CEO &amp; Founder</role>
+    <summary>
+      <![CDATA[
+      John graduated with a Bachelor of Architecture. He loves to travel
+      for new experiences and inspiration; architecture is his passion.  
+      ]]>
+    </summary>
+    <text>
+      <![CDATA[
+      John is the founder and CEO of EXAMPLE Architects. Prior to founding
+      the firm in 1996, John worked in Copenhagen and Berlin for well-known
+      companies. "My goal as an architect is to support clients in realizing
+      buildings that promote their ambitions and dreams. I believe that
+      a building can and should reflect the tastes and values of its owners
+      and users", a philosophy that permeates the entire company.<br/>
+      <br/>
+      John graduated with a Bachelor of Architecture. He loves to travel
+      for new experiences and inspiration; architecture is his passion.    
+      ]]>
+    </text>
+  </person>
+  <person>
+    <id>1</id>
+    <email>jane.doe@example-architects.local</email>
+    <name>Jane Doe</name>
+    <role>Architect</role>
+    <summary>
+      Since joining in 2016, she has been working on feasibility studies,
+      design and implementation plans and independently managing projects.   
+    </summary>
+    <text>
+      <![CDATA[
+      ]]>
+    </text>
+  </person>
+  <person>
+    <id>3</id>
+    <email>mike.ross@example-architects.local</email>>
+    <name>Mike Ross</name>
+    <role>Architect</role>
+    <summary>
+      Mike has received numerous national and international awards and is
+      internationally known and enjoys great popularity.   
+    </summary>
+    <text>
+      <![CDATA[
+      ]]>
+    </text>
+  </person>
+  <person>
+    <id>4</id>
+    <email>dan.star@@example-architects.local</email>
+    <name>Dan Star</name>
+    <role>Architect</role>
+    <summary>
+      Dan has extensive knowledge of Building Information Modeling (BIM),
+      technical and sustainable design and building performance.  
+    </summary>
+    <text>
+      <![CDATA[
+      ]]>
+    </text>
+  </person>
+</team>

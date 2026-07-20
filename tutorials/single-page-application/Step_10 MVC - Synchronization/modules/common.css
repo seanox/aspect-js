@@ -1,0 +1,10 @@
+body.home {
+  background-image: url("./assets/images/architect.jpg");
+  background-position: center -3.65em;;
+  background-size: cover;
+}
+main {
+  margin-bottom: 0.75em;
+  max-width: 1564px!important;
+  min-height: calc(100vh - 6.4em)!important;
+}

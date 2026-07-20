@@ -1,0 +1,11 @@
+#name:true #email:false #subject:false #comment:false form:false
+#name:false #email:false #subject:false #comment:false form:false
+#name:false #email:true #subject:false #comment:false form:false
+#name:false #email:false #subject:false #comment:false form:false
+#name:false #email:false #subject:true #comment:false form:false
+#name:false #email:false #subject:false #comment:false form:false
+#name:false #email:false #subject:false #comment:false form:false
+#name:false #email:true #subject:false #comment:false form:false
+#name:false #email:false #subject:false #comment:false form:false
+#name:false #email:true #subject:false #comment:false form:false
+true

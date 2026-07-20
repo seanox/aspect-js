@@ -1,0 +1,322 @@
+<form>
+  <p>
+    <label for="market:select">{{messages.news.market}}</label>
+    <select id="market:select">
+      <option value="" selected="selected" disabled="disabled">
+        {{messages.news.select}}</option>
+      <option>Africa</option>
+      <option>North America</option>
+      <option>South America</option>
+      <option>Antarctica</option>
+      <option>Asia</option>
+      <option>Australia</option>
+      <option>Europe</option>
+    </select>
+  </p>
+  <p>
+    <label for="datatype:select">{{messages.news.datatype}}</label>
+    <select id="datatype:select">
+      <option value="" selected="selected" disabled="disabled">
+        {{messages.news.select}}</option>
+      <option>Accessories</option>
+      <option>Brands</option>
+      <option>Equipments</option>
+      <option>Images</option>
+      <option>Marketing Texts</option>
+      <option>Media</option>
+      <option>Product Groups</option>
+      <option>Products</option>
+      <option>Services</option>
+      <option>Technical Data</option>
+    </select>
+  </p>
+  <p>
+    <button type="button" id="search">
+      <span>&#10095;</span>
+      {{messages.news.search}}
+    </button>
+  </p>
+</form>
+
+<h2 output="{{messages.news.list.empty}}"></h2>
+<h2 output="{{messages.news.list.summary}}"></h2>
+<table id="news:list">
+  <tr>
+    <th>
+      <input type="checkbox" id="toggle"/>
+      <label for="toggle"></label>
+    </th>
+    <th>{{messages.news.date}}</th>
+    <th>{{messages.news.market}}</th>
+    <th>{{messages.news.id}}</th>
+    <th>{{messages.news.title}}</th>
+    <th>{{messages.news.description}}</th>
+    <th>{{messages.news.change}}</th>
+  </tr>
+  <tr class="group">
+    <td></td>
+    <td colspan="6">xxxxxxxx xxxxxx xxx xxxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:1" value="1"/>
+      <label for="item:1"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:2" value="2"/>
+      <label for="item:2"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:3" value="3"/>
+      <label for="item:3"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:4" value="4"/>
+      <label for="item:4"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:5" value="5"/>
+      <label for="item:5"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:6" value="6"/>
+      <label for="item:6"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr class="group">
+    <td></td>
+    <td colspan="6">xxxxxxxx xxxxxx xxx xxxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:7" value="7"/>
+      <label for="item:7"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:8" disabled value="8"/>
+      <label for="item:8"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:9" disabled value="9"/>
+      <label for="item:9"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+  <tr>
+    <td>
+      <input type="checkbox" id="item:10" disabled value="10"/>
+      <label for="item:10"></label>
+    </td>
+    <td>00/00/0000</td>
+    <td>Europe</td>
+    <td>000000</td>
+    <td>
+      <span>xxx xxxx xxxxxxxxxx</span>
+      xxxxx x xxxx
+    </td>
+    <td>x xxx xxxx xxxxxxxxxx xxxxxxxx xxxxxx xxx xxxx xxxxxx xxxxxx xxx xxxxxxxx xx xxxx</td>
+    <td>xxxxxxxx xxxxxx xxx</td>
+  </tr>
+</table>
+
+<form>
+  <table>
+    <tr>
+      <td>
+        <p>
+          <label for="function">
+            {{messages.news.function}}
+          </label>
+          <select id="function">
+            <option value="" selected="selected" disabled="disabled">
+              {{messages.news.select}}</option>
+            <option>{{messages.news.function.preview.you}}</option>
+            <option>{{messages.news.function.preview.email}}</option>
+            <option>{{messages.news.function.recipients}}</option>
+            <option>{{messages.news.function.publish}}</option>
+          </select>
+        </p>
+      </td>
+      <td>
+        <p>
+          <label for="recipients">
+            {{messages.news.function.email.error}} /
+            {{messages.news.function.email}}
+          </label>
+          <input type="text" id="recipients"/>
+        </p>
+      </td>
+    </tr>
+  </table>
+  <p>
+    <button type="button" id="apply">
+      <span>&#10095;</span>
+      {{messages.news.function.apply}}
+    </button>
+  </p>
+</form>
+
+<h2 output="{{messages.news.recipients.empty}}"></h2>
+<h2 output="{{messages.news.recipients}}"></h2>
+<table id="recipients">
+  <tr>
+    <th>{{messages.news.language}} Language</th>
+    <th>{{messages.news.email}} Mail address (obfuscated)</th>
+    <th>{{messages.news.permissions}} Permissions</th>
+    <th>{{messages.news.markets}} Markets</th>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+  <tr>
+    <td>xx</td>
+    <td>x***.x******@example.local</td>
+    <td>xxx xxx xxx<br/>x x x x x</td>
+    <td>xxxxxx</td>
+  </tr>
+</table>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>EXAMPLE Architects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/styles/w3.css">
+    <link rel="stylesheet" href="assets/styles/font-awesome.css">
+    <!--
+    
+      Integration of Seanox aspect-js
+      Seanox aspect-js is pure JavaScript and consists of a file.
+      The library can be downloaded and integrated standalone or a release channel can be used.
+          see also https://github.com/seanox/aspect-js/blob/master/manual/introduction.md#getting-started
+
+          404 Resource Not Found is shown in the console:      
+      http://127.0.0.1/.../data/locales.xml
+      aspect-js supports a NoSQL data source and a resource bundle for internationalization.
+      During the start, the framework searches for appropriate data.
+      If these are missing, this is okay.
+      The explanation will follow a later in step 04.
+      
+          404 Resource Not Found is shown in the console:      
+      http://127.0.0.1/.../modules/common.css
+      http://127.0.0.1/.../modules/common.js
+      aspect-js supports a module concept.
+      Because the framework can not know the structure of the modules, it is helpful in some cases,
+      if already when initializing the application general is done, there is the module "common",
+      which is searched automatically with the program start.
+      If these are missing, this is okay.
+      The explanation will follow a later in step 03.
+
+    -->
+    <script type="text/javascript" src="assets/aspect-js-max.js"></script>
+    <!-- 
+      The styles have been moved to the module files.
+          see: /modules/*.css
+    -->
+  </head>
+  <body>
+    <!--
+    
+      aspect-js supports a module concept where the modules are called composites.
+      Composites are declared with an ID and the attribute composite.
+      Composites can consist of markup (HTML), CSS and JavaScript.
+      All these components are optional and can be moved to the module directory.
+      The renderer automatically searches for corresponding components in the module directory.
+      Markup is only searched for if the composite has no inner HTML.
+          see also: https://github.com/seanox/aspect-js/blob/master/manual/composite.md#components
+
+          attribute release
+      The optional attribute does not display the elements until they have been rendered.
+      Among other things, this prevents the Expression Language from being displayed before it has been processed.
+
+    -->
+
+    <!-- Navbar (sit on top) -->
+    <div id="menu" class="w3-top" composite release>
+    </div>
+
+    <!-- Header -->
+    <header id="home" class="w3-display-container w3-content w3-wide" composite release>
+    </header>
+
+    <!-- Page content -->
+    <main class="w3-content w3-padding">
+
+
+      <!-- Project Section -->
+      <section id="projects" composite release>
+      </section>
+      
+      <!-- Project Details Section -->
+      <section id="project" composite release>
+      </section>
+  
+      <!-- About Section -->
+      <section id="about" composite release>
+      </section>
+      
+      <!-- Team Details Section -->
+      <section id="person" composite release>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" composite release>
+      </section>
+    </main>
+  
+    <!-- Footer -->
+    <footer id="footer" class="w3-center w3-black w3-padding-16" composite release>
+    </footer>
+  </body>
+</html>
