@@ -155,8 +155,8 @@ Single-Page Applications. Each path consists of incremental steps that extend or
 modify the previous result. The differences between consecutive steps illustrate
 the implementation of individual concepts.
 
-- [Micro-Frontend](../tutorial/micro-frontend)
-- [SPA (Single Page Application)](../tutorial/spa-single-page-application)
+- [Micro-Frontend](../../tutorial/micro-frontend)
+- [SPA (Single Page Application)](../../tutorial/spa-single-page-application)
 
 ## Contents Overview
 - [Scope](#scope)
