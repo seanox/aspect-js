@@ -273,26 +273,26 @@
     
     <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_02 Integration of Seanox aspect-js/assets"/>
     <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_03 Prototype - Splitting into components/assets"/>  
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_03 Prototype - Splitting into components"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_04 Internationalization (i18n)"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_05 The first module"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_06 Usage of dynamic data"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_07 Business logic in detail"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_08 Debugging"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_03 Prototype - Splitting into components/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_04 Internationalization (i18n)/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_05 The first module/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_06 Usage of dynamic data/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_07 Business logic in detail/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/micro-frontend/Step_08 Debugging/assets"/>
     <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_02 Integration of Seanox aspect-js/assets"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_03 Prototype - Splitting into components"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_04 Internationalization (i18n)"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_05 The first module"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_06 DataSource - Usage of dynamic data"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_07 Routing - Controlling components and views"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_08 Routing - Variable paths"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_09 Routing - Interceptors"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_10 MVC - Synchronization"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_11 MVC - Synchronization and validation"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_12 Components - Macros and modules"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_13 Components - Example for a spinner"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_14 Components - Example for dynamic table with CSV download"/>
-    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_15 Debugging"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_03 Prototype - Splitting into components/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_04 Internationalization (i18n)/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_05 The first module/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_06 DataSource - Usage of dynamic data/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_07 Routing - Controlling components and views/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_08 Routing - Variable paths/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_09 Routing - Interceptors/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_10 MVC - Synchronization/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_11 MVC - Synchronization and validation/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_12 Components - Macros and modules/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_13 Components - Example for a spinner/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_14 Components - Example for dynamic table with CSV download/assets"/>
+    <copy file="${release.file.max}" todir="${workspace.tutorials}/single-page-application/Step_15 Debugging/assets"/>
     
     <copy file="${release.file.testing.max}" todir="${workspace.tutorials}/micro-frontend/Step_09 Testing/assets"/>
     <copy file="${release.file.testing.max}" todir="${workspace.tutorials}/single-page-application/Step_16 Testing - Activation/assets"/>
