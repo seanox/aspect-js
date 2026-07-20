@@ -232,7 +232,7 @@ case the automatic escaping is cancelled or undone.
   <![CDATA[
   <p>
     Seanox aspect-js focuses on a minimalist approach to implementing
-    Single-Page Applications (SPAs) and Micro-Frontends. This application
+    single-page applications (SPAs) and micro-frontends. This application
     runtime extends the declarative nature of HTML with expression language,
     reactive rendering, additional declarative attributes, Model-View-Controller
     (MVC), view-model binding, events, interceptors, resource bundles, an

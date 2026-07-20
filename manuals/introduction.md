@@ -6,8 +6,8 @@
 # Introduction
 
 ## What is Seanox aspect-js?
-Seanox aspect-js is a browser-native application runtime for Single-Pag
-Applications (SPAs) and Micro-Frontends.
+Seanox aspect-js is a browser-native application runtime for single-pag
+applications (SPAs) and micro-frontends.
 
 Applications remain composed of HTML, CSS and JavaScript resources that are
 loaded, connected and managed by the runtime. Native browser technologies are 
@@ -150,13 +150,13 @@ automatically.
 
 ### Learning Path
 
-The following tutorials provide separate learning paths for Micro Frontends and
+The following tutorials provide separate learning paths for micro-frontends and
 Single-Page Applications. Each path consists of incremental steps that extend or
 modify the previous result. The differences between consecutive steps illustrate
 the implementation of individual concepts.
 
-- [Micro Frontend](https://github.com/seanox/aspect-js-tutorial#micro-frontend)
-- [SPA (Single Page Application)](https://github.com/seanox/aspect-js-tutorial#spa-single-page-application)
+- [Micro-Frontend](../tutorial/micro-frontend)
+- [SPA (Single Page Application)](../tutorial/spa-single-page-application)
 
 ## Contents Overview
 - [Scope](#scope)
