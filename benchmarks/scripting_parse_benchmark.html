@@ -14,23 +14,23 @@
 
         Test.activate();
 
-        // 1: Blink   250 /  190  i5-1240P
-        // 1: WebKit  --- /  565  iPad Gen 10
-        // 1: goanna  --- / 2075  i5-1240P
+        // Blink    max.  250 ms   i5-1240P
+        // WebKit   max.  565 ms   A14 (iPad Gen 10)
+        // goanna   max. 2075 ms   i5-1240P
+        // Gecko    max.  250 ms   i5-1240P
 
         let source;
         Composite.listen(Composite.EVENT_RENDER_END, () => {
             source = Test.read("scripting_parse_benchmark.js");
             let timeout1;
-            if (navigator.engine === "blink") {
+            if (navigator.engine === "blink")
                 timeout1 = 250;
-            }
-            if (navigator.engine === "webkit") {
+            if (navigator.engine === "webkit")
                 timeout1 = 575;
-            }
-            if (navigator.engine === "goanna") {
+            if (navigator.engine === "goanna")
                 timeout1 = 4000;
-            }
+            if (navigator.engine === "gecko")
+                timeout1 = 250;
             Test.create({timeout:timeout1, test() {
                 document.body.innerText += "Start 2500 runs\n";
                 const timing = Date.now();

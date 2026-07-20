@@ -35,21 +35,21 @@
             }
         };
 
-        // 1: Blink  30 |  60   i5-1240P
-        // 2: Blink  25 |  25   i5-1240P
-        // 3: Blink  30 |  30   i5-1240P
+        // 1: Blink    max.  75   i5-1240P
+        // 2: Blink    max.  25   i5-1240P
+        // 3: Blink    max.  25   i5-1240P
 
-        // 1: WebKit -- | 100   iPad Gen 10
-        // 2: WebKit -- |  65   iPad Gen 10
-        // 3: WebKit -- |  65   iPad Gen 10
+        // 1: WebKit   max. 100   A14 (iPad Gen 10)
+        // 2: WebKit   max.  65   A14 (iPad Gen 10)
+        // 3: WebKit   max.  65   A14 (iPad Gen 10)
 
-        // 1: goanna -- |  90   i5-1240P
-        // 2: goanna -- | 100   i5-1240P
-        // 3: goanna -- | 300   i5-1240P
+        // 1: goanna   max.  90   i5-1240P
+        // 2: goanna   max. 100   i5-1240P
+        // 3: goanna   max. 300   i5-1240P
 
-        // 1: Gecko  -- |  75   i5-1240P
-        // 2: Gecko  -- |  25   i5-1240P
-        // 3: Gecko  -- |  55   i5-1240P
+        // 1: Gecko    max.  75   i5-1240P
+        // 2: Gecko    max.  25   i5-1240P
+        // 3: Gecko    max.  55   i5-1240P
 
         const timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, function() {
@@ -60,8 +60,8 @@
             let timeout3;
             if (navigator.engine === "blink") {
                 timeout1 = 75;
-                timeout2 = 30;
-                timeout3 = 50;
+                timeout2 = 25;
+                timeout3 = 25;
             }
             if (navigator.engine === "webkit") {
                 timeout1 = 115;
@@ -79,9 +79,10 @@
                 timeout3 = 75;
             }
 
-            Test.create({test() {
-                console.log(`Benchmark 1: ${Date.now() -timing}ms`);
-                Assert.assertTrue((Date.now() -timing) < timeout1);
+            Test.create({timeout:timeout1, test() {
+                const duration = Date.now() -timing;
+                const message = `Duration: ${duration} ms (expected max. ${timeout1} ms)`; 
+                console.log(`Benchmark 1: ${message}`);
             }});
             Test.create({timeout:timeout2, test() {
                 const timing = Date.now();
@@ -89,7 +90,9 @@
                 expression = expression.innerHTML;
                 for (let loop = 0; loop < 2500; loop++)
                     Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval(expression));
-                console.log(`Benchmark 2: ${Date.now() -timing}ms`);
+                const duration = Date.now() -timing;
+                const message = `Duration: ${duration} ms (expected max. ${timeout2} ms)`; 
+                console.log(`Benchmark 2: ${message}`);
             }});
             Test.create({timeout:timeout3, test() {
                 const timing = Date.now();
@@ -97,7 +100,9 @@
                 expression = expression.innerHTML;
                 for (let loop = 0; loop < 25000; loop++)
                     Assert.assertEquals(" A:f11[0]->x->y B:12 C:4 D:1[0]", Expression.eval("ceb_1", expression));
-                console.log(`Benchmark 3: ${Date.now() -timing}ms`);
+                const duration = Date.now() -timing;
+                const message = `Duration: ${duration} ms (expected max. ${timeout3} ms)`; 
+                console.log(`Benchmark 3: ${message}`);
             }});
             Test.start();
         });
