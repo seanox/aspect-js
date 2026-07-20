@@ -17,9 +17,9 @@
         Test.activate();
 
         // Blink    max.  300   i5-1240P
-        // WebKit   max.  750   A14 (iPad Gen 10)
-        // goanna   max. 2300   i5-1240P
-        // Gecko    max.  335   i5-1240P
+        // WebKit   max.  375   A14 (iPad Gen 10)
+        // goanna   max. 2250   i5-1240P
+        // Gecko    max.  325   i5-1240P
 
         let timing = Date.now();
         Composite.listen(Composite.EVENT_RENDER_END, () => {
@@ -28,13 +28,16 @@
             if (navigator.engine === "blink")
                 timeout1 = 300;
             if (navigator.engine === "webkit")
-                timeout1 = 775;
+                timeout1 = 375;
             if (navigator.engine === "goanna")
-                timeout1 = 2350;
+                timeout1 = 2250;
             if (navigator.engine === "gecko")
-                timeout1 = 350;
-            Test.create({timeout:timeout1, test() {
-                console.log(`Duration: ${timing} ms (expected max. ${timeout1} ms)`);
+                timeout1 = 325;
+            Test.create({test() {
+                const message = `${timing} ms (expected max. ${timeout1} ms)`;
+                console.log(`Duration: ${message}`);
+                console.log(`Benchmark Leaf-Update: ${message}`);
+                Assert.assertTrue(`Duration ${message}`, timing < timeout1);
             }});
             Test.start();
         });       

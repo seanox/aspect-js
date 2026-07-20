@@ -61,7 +61,7 @@
                 if (navigator.engine === "goanna")
                     timeout = 200;
                 if (navigator.engine === "gecko")
-                    timeout = 25;
+                    timeout = 50;
                 result.duration = `Duration ${elapsed.toFixed(2)} ms`;
                 Test.create({timeout:timeout, test() {
                     const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;

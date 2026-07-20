@@ -28,10 +28,10 @@
        //
        // Modern frameworks optimize this case.
        //
-       // Blink    max. 15 ms   i5-1240P
-       // WebKit   max. 50 ms   A14 (iPad Gen 10)
+       // Blink    max.  5 ms   i5-1240P
+       // WebKit   max. 10 ms   A14 (iPad Gen 10)
        // goanna   max. 50 ms   i5-1240P
-       // Gecko    max. 15 ms   i5-1240P
+       // Gecko    max.  5 ms   i5-1240P
       
        const model = {value: 0}.reactive();
        const result = {duration: ""}.reactive();
@@ -70,11 +70,11 @@
                if (navigator.engine === "blink")
                    timeout = 5;
                if (navigator.engine === "webkit")
-                   timeout = 50;
+                   timeout = 10;
                if (navigator.engine === "goanna")
                    timeout = 50;
                if (navigator.engine === "gecko")
-                   timeout = 15;
+                   timeout = 5;
                result.duration = `Duration ${elapsed.toFixed(2)} ms`;
                Test.create({test() {
                    const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;

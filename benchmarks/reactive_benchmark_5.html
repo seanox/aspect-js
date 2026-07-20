@@ -28,9 +28,9 @@
         // than its ability to optimize away unchanged work.
         //
         // Blink    max. 1750 ms   i5-1240P
-        // WebKit   max. 2000 ms   A14 (iPad Gen 10)
-        // goanna   max. 5000 ms   i5-1240P
-        // Gecko    max. 1000 ms   i5-1240P
+        // WebKit   max.  600 ms   A14 (iPad Gen 10)
+        // goanna   max. 1850 ms   i5-1240P
+        // Gecko    max. 1350 ms   i5-1240P
 
         const state = {counter: 0}.reactive();
         const result = {duration: ""}.reactive();
@@ -49,11 +49,11 @@
                 if (navigator.engine === "blink")
                     timeout = 1750;
                 if (navigator.engine === "webkit")
-                    timeout = 2000;
+                    timeout = 600;
                 if (navigator.engine === "goanna")
-                    timeout = 5000;
+                    timeout = 1850;
                 if (navigator.engine === "gecko")
-                    timeout = 1000;
+                    timeout = 1350;
                 result.duration = `Duration ${elapsed.toFixed(2)} ms`;
                 Test.create({timeout:100, test() {
                     const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;

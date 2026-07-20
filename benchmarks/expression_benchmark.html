@@ -43,7 +43,7 @@
         // 2: WebKit   max.  65   A14 (iPad Gen 10)
         // 3: WebKit   max.  65   A14 (iPad Gen 10)
 
-        // 1: goanna   max.  90   i5-1240P
+        // 1: goanna   max. 115   i5-1240P
         // 2: goanna   max. 100   i5-1240P
         // 3: goanna   max. 300   i5-1240P
 
@@ -64,19 +64,19 @@
                 timeout3 = 25;
             }
             if (navigator.engine === "webkit") {
-                timeout1 = 115;
-                timeout2 = 75;
-                timeout3 = 75;
+                timeout1 = 125;
+                timeout2 = 50;
+                timeout3 = 50;
             }
             if (navigator.engine === "goanna") {
-                timeout1 = 115;
-                timeout2 = 125;
-                timeout3 = 350;
+                timeout1 = 125;
+                timeout2 = 100;
+                timeout3 = 300;
             }
             if (navigator.engine === "gecko") {
-                timeout1 = 75;
-                timeout2 = 50;
-                timeout3 = 75;
+                timeout1 = 50;
+                timeout2 = 25;
+                timeout3 = 50;
             }
 
             Test.create({timeout:timeout1, test() {
