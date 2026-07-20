@@ -12,8 +12,8 @@
 </p>
 
 # Description
-Seanox aspect-js is a browser-native application runtime for Single-Pag
-Applications (SPAs) and Micro-Frontends.
+Seanox aspect-js is a browser-native application runtime for single-pag
+applications (SPAs) and micro-frontends.
 
 Applications remain composed of HTML, CSS and JavaScript resources that are
 loaded, connected and managed by the runtime. Native browser technologies are 
