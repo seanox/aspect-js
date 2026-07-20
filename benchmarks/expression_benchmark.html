@@ -35,8 +35,8 @@
             }
         };
 
-        // 1: Blink    max.  75   i5-1240P
-        // 2: Blink    max.  25   i5-1240P
+        // 1: Blink    max.  50   i5-1240P
+        // 2: Blink    max.  20   i5-1240P
         // 3: Blink    max.  25   i5-1240P
 
         // 1: WebKit   max. 100   A14 (iPad Gen 10)
@@ -59,8 +59,8 @@
             let timeout2;
             let timeout3;
             if (navigator.engine === "blink") {
-                timeout1 = 75;
-                timeout2 = 25;
+                timeout1 = 50;
+                timeout2 = 20;
                 timeout3 = 25;
             }
             if (navigator.engine === "webkit") {

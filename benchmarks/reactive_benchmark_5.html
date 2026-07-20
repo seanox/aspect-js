@@ -27,10 +27,10 @@
         // so the benchmark evaluates the framework's raw update capacity rather
         // than its ability to optimize away unchanged work.
         //
-        // Blink    max. 1600 ms   i5-1240P
-        // WebKit   max. 1200 ms   A14 (iPad Gen 10)
-        // goanna   max. 1800 ms   i5-1240P
-        // Gecko    max. 1400 ms   i5-1240P
+        // Blink    max. 1750 ms   i5-1240P
+        // WebKit   max. 2000 ms   A14 (iPad Gen 10)
+        // goanna   max. 5000 ms   i5-1240P
+        // Gecko    max. 1000 ms   i5-1240P
 
         const state = {counter: 0}.reactive();
         const result = {duration: ""}.reactive();
@@ -47,7 +47,7 @@
                 const elapsed = performance.now() -timing;
                 let timeout;
                 if (navigator.engine === "blink")
-                    timeout = 1000;
+                    timeout = 1750;
                 if (navigator.engine === "webkit")
                     timeout = 2000;
                 if (navigator.engine === "goanna")
@@ -55,8 +55,10 @@
                 if (navigator.engine === "gecko")
                     timeout = 1000;
                 result.duration = `Duration ${elapsed.toFixed(2)} ms`;
-                Test.create({timeout:timeout, test() {
-                    console.log(`Benchmark Worst Case: ${elapsed.toFixed(2)}ms`);
+                Test.create({timeout:100, test() {
+                    const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;
+                    console.log(`Benchmark Worst Case: ${message}`);
+                    Assert.assertTrue(`Duration ${message}`, elapsed < timeout);                    
                 }});
                 Test.start();
             }

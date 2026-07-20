@@ -34,7 +34,7 @@
         // This represents a worst-case full-tree update where nearly every node
         // must be regenerated.
         //
-        // Blink    max.  650 ms   i5-1240P
+        // Blink    max.  575 ms   i5-1240P
         // WebKit   max. 1150 ms   A14 (iPad Gen 10)
         // goanna   max.  --- ms   i5-1240P
         // Gecko    max.  775 ms   i5-1240P
@@ -54,16 +54,18 @@
                 const elapsed = performance.now() -timing;
                 let timeout;
                 if (navigator.engine === "blink")
-                    timeout = 650;
+                    timeout = 575;
                 if (navigator.engine === "webkit")
                     timeout = 1150;
                 if (navigator.engine === "goanna")
-                    timeout = 3500;
+                    timeout = 5000;
                 if (navigator.engine === "gecko")
                     timeout = 775;
                 result.duration = `Duration ${elapsed.toFixed(2)} ms`;
-                Test.create({timeout:timeout, test() {
-                    console.log(`Benchmark Root-Update: ${elapsed.toFixed(2)}ms`);
+                Test.create({test() {
+                    const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;
+                    console.log(`Benchmark Root-Update: ${message}`);
+                    Assert.assertTrue(`Duration ${message}`, elapsed < timeout);
                 }});
                 Test.start();
             }

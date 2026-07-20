@@ -33,7 +33,7 @@
         // - scheduler overhead
         // - incremental DOM update performance
         //
-        // Blink    max.  75 ms   i5-1240P
+        // Blink    max.  50 ms   i5-1240P
         // WebKit   max.  75 ms   A14 (iPad Gen 10)
         // goanna   max. 200 ms   i5-1240P
         // Gecko    max.  50 ms   i5-1240P
@@ -55,7 +55,7 @@
                 const elapsed = performance.now() -timing;
                 let timeout;
                 if (navigator.engine === "blink")
-                    timeout = 25;
+                    timeout = 50;
                 if (navigator.engine === "webkit")
                     timeout = 75;
                 if (navigator.engine === "goanna")
@@ -64,7 +64,9 @@
                     timeout = 25;
                 result.duration = `Duration ${elapsed.toFixed(2)} ms`;
                 Test.create({timeout:timeout, test() {
-                    console.log(`Benchmark Mid-Tree Update: ${elapsed.toFixed(2)}ms`);
+                    const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;
+                    console.log(`Benchmark Mid-Tree Update: ${message}`);
+                    Assert.assertTrue(`Duration ${message}`, elapsed < timeout);                    
                 }});
                 Test.start();
             }

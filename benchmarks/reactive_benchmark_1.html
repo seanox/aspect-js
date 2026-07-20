@@ -26,10 +26,10 @@
         // parts of the DOM. The size of the surrounding tree serves solely to
         // detect unnecessary work during the update phase.
         //
-        // Blink    max. 100 ms   i5-1240P
-        // WebKit   max. 125 ms   A14 (iPad Gen 10)
-        // goanna   max. 300 ms   i5-1240P
-        // Gecko    max.  70 ms   i5-1240P
+        // Blink    max.  75 ms   i5-1240P
+        // WebKit   max.  75 ms   A14 (iPad Gen 10)
+        // goanna   max. 200 ms   i5-1240P
+        // Gecko    max.  25 ms   i5-1240P
 
         const model = {value: 0}.reactive();
         const result = {duration: ""}.reactive();
@@ -46,7 +46,7 @@
                 const elapsed = performance.now() -timing;
                 let timeout;
                 if (navigator.engine === "blink")
-                    timeout = 25;
+                    timeout = 75;
                 if (navigator.engine === "webkit")
                     timeout = 75;
                 if (navigator.engine === "goanna")
@@ -54,8 +54,10 @@
                 if (navigator.engine === "gecko")
                     timeout = 25;
                 result.duration = `Duration ${elapsed.toFixed(2)} ms`;
-                Test.create({timeout:timeout, test() {
-                    console.log(`Benchmark Leaf-Update: ${elapsed.toFixed(2)}ms`);
+                Test.create({test() {
+                    const message = `${elapsed.toFixed(2)} ms (expected max. ${timeout} ms)`;
+                    console.log(`Benchmark Leaf-Update: ${message}`);
+                    Assert.assertTrue(`Duration ${message}`, elapsed < timeout);
                 }});
                 Test.start();
             }
