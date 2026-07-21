@@ -35,41 +35,41 @@ __Recommendations for UI frameworks:__
 - https://getuikit.com/
 
 # Features
-- __HTML and JavaScript Integration__
+- __HTML and JavaScript Integration__  
   Uses HTML markup and JavaScript objects as the primary application model. Can
   be combined with other JavaScript frameworks when their functionality and
   syntax do not overlap.
-- __Declarative Markup__
+- __Declarative Markup__  
   Extends HTML with declarative attributes, expressions and runtime processing
   for conditions, iteration, rendering, validation, events and related
   operations.
-- __Expression Language__
+- __Expression Language__  
   Provides expressions in markup with access to JavaScript functionality and
   application models.
-- __Component-Based Architecture__
+- __Component-Based Architecture__  
   Provides components composed of markup, styles, scripts and additional
   resources.
-- __View-Module Binding__
+- __View-Module Binding__  
   Connects HTML elements with JavaScript modules for synchronization of values,
   states and events in architectures such as __MVC__, __MVVM__ and __MVCS__.
-- __Reactive Rendering__
+- __Reactive Rendering__  
   Updates affected parts of the view when reactive data objects change.
-- __Modular Resources and Runtime Imports__
+- __Modular Resources and Runtime Imports__  
   Supports namespaces, modules, macros and loading of component resources at
   runtime.
-- __Routing and View Flow__
+- __Routing and View Flow__  
   Organizes views through paths, navigation, interceptors and permission
   concepts.
-- __Resource Bundles__
+- __Resource Bundles__  
   Provides externalized messages and support for internationalization (i18n) and
   localization (l10n).
-- __XML Data Source__
+- __XML Data Source__  
   Provides an immutable XML-based data source with querying and transformation
   capabilities using XPath and XSLT.
-- __Single-Page Applications and Micro-Frontends__
+- __Single-Page Applications and Micro-Frontends__  
   Provides runtime concepts for structuring applications as modular browser
   applications.
-- __Test Environment__
+- __Test Environment__  
   Provides APIs for implementing and executing unit and integration tests.
   
 # Manuals
