@@ -74,8 +74,8 @@ __Recommendations for UI frameworks:__
   
 # Manuals
 - [Getting Started](https://github.com/seanox/aspect-js/blob/master/manuals/introduction.md#introduction)
-- [Tutorial + Demo](https://github.com/seanox/aspect-js/tree/master/tutorials#description)
-- [Manuals](https://github.com/seanox/aspect-js/tree/master/manuals#manuals)
+- [Tutorial + Demo](https://github.com/seanox/aspect-js/tree/master/tutorials#readme)
+- [Manuals](https://github.com/seanox/aspect-js/tree/master/manuals#readme)
 
 # License Terms
 Seanox Software Solutions is an open-source project, hereinafter referred to as
