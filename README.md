@@ -73,9 +73,9 @@ __Recommendations for UI frameworks:__
   Provides APIs for implementing and executing unit and integration tests.
   
 # Manuals
-- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manuals/introduction.md#getting-started)
-- [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
-- [Manual](https://github.com/seanox/aspect-js/tree/master/manuals/#table-of-contents)
+- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manuals/introduction.md#introduction)
+- [Tutorial + Demo](https://github.com/seanox/aspect-js/tree/master/tutorials#description)
+- [Manuals](https://github.com/seanox/aspect-js/tree/master/manuals#manuals)
 
 # License Terms
 Seanox Software Solutions is an open-source project, hereinafter referred to as
