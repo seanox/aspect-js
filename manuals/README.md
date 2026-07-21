@@ -5,22 +5,22 @@
 - __[Introduction](#introduction)__
 - __[Getting Started](#introduction)__
 - __[Language](#language)__
-  - [Expression Language](#expression-language)
-  - [Markup](#markup)
-  - [Scripting](#scripting)
+  - [Expression Language](expression.md#expression-language)
+  - [Markup](markup.md#markup)
+  - [Scripting](scripting.md#scripting)
 - __[Components](#components)__  
-  - [Composite](#composite)
-  - [Reactivity Rendering](#reactivity-rendering)
-  - [Model View Controller](#model-view-controller)
-  - [Routing](#routing)
-- __[Runtime](Runtime)__  
-  - [DataSource](#datasource)
-  - [Resource Bundle](#resource-bundle-i18nl10n)
-  - [Events](#events)
-  - [API Extensions](#api-extensions)
+  - [Composite](composite.md#composite)
+  - [Reactivity Rendering](reactive.md#reactivity-rendering)
+  - [Model View Controller](mvc.md#model-view-controller)
+  - [Routing](routing.md#routing)
+- __[Runtime](#runtime)__  
+  - [DataSource](datasource.md#datasource)
+  - [Resource Bundle](message.md#resource-bundle-messagesi18nl10n)
+  - [Events](events.md#events)
+  - [API Extensions](extensions.md#api-extensions)
 - __[Development](#development)__
-  - [Test](#test)
-  - [Development](#development)
+  - [Test](test.md#test)
+  - [Development](development.md#development)
 
 ### Motivation
 - __[Motivation](motivation.md#motivation)__

@@ -74,6 +74,11 @@ __Recommendations for UI frameworks:__
   applications.
 - __Test Environment__
   Provides APIs for implementing and executing unit and integration tests.
+  
+# Manuals
+- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manuals/introduction.md#getting-started)
+- [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
+- [Manual](https://github.com/seanox/aspect-js/tree/master/manuals/#table-of-contents)
 
 # License Terms
 Seanox Software Solutions is an open-source project, hereinafter referred to as
@@ -107,13 +112,13 @@ specific language governing permissions and limitations under the License.
   <img src="https://img.shields.io/badge/WebKit-tested-green?style=for-the-badge">
 </p>
 
-[Seanox aspect-js 1.9.0](https://github.com/seanox/aspect-js/releases/download/1.9.0/aspect-js-1.9.0.zip)  
-[Seanox aspect-js 1.9.0 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.9.0.zip)
+[Seanox aspect-js 1.9.1](https://github.com/seanox/aspect-js/releases/download/1.9.1/aspect-js-1.9.1.zip)  
+[Seanox aspect-js 1.9.1 Sources](https://github.com/seanox/aspect-js/archive/refs/tags/1.9.1.zip)
 
 # Release Channels
 The release channels continuously provide the latest final versions.
 
-## Version 1.9.0
+## Version 1.9.1
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js.js  
   __for deployment without Test API__
 
@@ -126,26 +131,12 @@ The release channels continuously provide the latest final versions.
 - https://cdn.jsdelivr.net/npm/@seanox/aspect-js/release/aspect-js-testing-max.js  
   for development and testing not minimized and with comments
 
-# Manuals
-- [Getting Started](https://github.com/seanox/aspect-js/blob/master/manuals/introduction.md#getting-started)
-- [Tutorial + Demo](https://github.com/seanox/aspect-js-tutorial#description)
-- [Manual](https://github.com/seanox/aspect-js/tree/master/manuals/#readme)
-
 # Changes
-## 1.9.0 20260717  
-BF: Composite: Validation corrections and optimization  
-BF: DataSource: Correction for the use of locator/path with (sub)directories  
-BF: DataSource: Correction of the method fetch when using the cache  
-BF: Extensions: Correction of window.location.contextPath  
-BF: Routing: Correction / workaround if the hashchange event is missing  
-CR: Composite: Switch to microtasks-based scheduling  
-CR: Composite: Renaming Composite.asynchron to Composite.asynchronous  
-CR: Composite: Renaming Markup Hardening to Markup Protection  
-CR: DataSource: Optimization and extension  
-CR: Markup: iterate also supports numbers  
-CR: Markup: import / output optimization and extension for DateSource  
-CR: Message: Optimization and extension  
-CR: Test: Update web server to version 5.9.0  
+## 1.9.1 2027xxxx (upcoming version)  
+BF: Documentation: Update of content  
+BF: Build: Optimizing npm access  
+CR: Test: Expansion of benchmarks/tests  
+CR: Tutorial: Integration into the project  
 
 [Read more](https://raw.githubusercontent.com/seanox/aspect-js/master/CHANGES)
 
