@@ -18,14 +18,13 @@
  *     DESCRIPTION
  *     ----
  *
- * With aspect-js the declarative approach of HTML is taken up and extended.
- * In addition to the expression language, the HTML elements are provided with
- * additional attributes for functions and view model binding. The corresponding
- * renderer is included in the composite implementation and actively monitors
- * the DOM via the MutationObserver and thus reacts recursively to changes in
- * the DOM.
+ * With aspect-js, the declarative approach of HTML is adopted and extended. In
+ * addition to the expression language, HTML elements are enhanced with
+ * attributes for functions and view-module binding. The corresponding renderer
+ * is integrated into the composite implementation, actively observes the DOM
+ * using MutationObserver, and recursively reacts to DOM changes.
  *
- * This is the static component for rendering and the view model binding.
+ * This is the static component for rendering and the view-module binding.
  * Processing runs in the background and starts automatically when the page is
  * loaded.
  *
@@ -55,7 +54,7 @@
  * themselves, and be a link between the user interface (view) and middleware
  * (backend).
  *
- * The required view model binding is part of the Model View Controller and the
+ * The required view-module binding is part of the Model View Controller and the
  * Composite API.
  *
  *         property
@@ -70,7 +69,7 @@
  * In some cases, the identifier (ID) may not be unique. For example, in cases
  * where properties are arrays or an iteration is used. In these cases the
  * identifier can be extended by an additional unique qualifier separated by a
- * colon. Qualifiers behave like properties during view model binding and extend
+ * colon. Qualifiers behave like properties during view-module binding and extend
  * the namespace.
  *
  *         unique
@@ -779,7 +778,7 @@
 
         /**
          * Mounts the as selector passed element(s) with all its children where
-         * a view model binding is possible. Mount is possible for all elements
+         * a view-module binding is possible. Mount is possible for all elements
          * with ATTRIBUTE_ID, not only for composite objects and their children.
          *
          * View-model binding is about linking of HTML elements in markup (view)
@@ -792,7 +791,7 @@
          * logic themselves, and be a link between the user interface (view) and
          * middleware (backend).
          *
-         * The required view model binding is part of the Model View Controller
+         * The required view-module binding is part of the Model View Controller
          * and the Composite API.
          *
          * The view as presentation and user interface for interactions and the
@@ -1854,7 +1853,7 @@
 
                 // The attributes ATTRIBUTE_EVENTS, ATTRIBUTE_VALIDATE and
                 // ATTRIBUTE_RENDER are processed in Composite.mount(selector)
-                // the view model binding and are only mentioned here for
+                // the view-module binding and are only mentioned here for
                 // completeness.
                 
                 // The attribute ATTRIBUTE_RELEASE has no functional
@@ -2985,7 +2984,7 @@
                 });
 
                 // All removed elements are cleaned and if necessary the undock
-                // method is called if a view model binding exists.
+                // method is called if a view-module binding exists.
                 (record.removedNodes || []).forEach((node) =>
                     _cleanup(node));
             });

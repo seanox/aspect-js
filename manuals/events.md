@@ -13,7 +13,7 @@ environment.
   - [Composite.EVENT_RENDER_START](#compositeevent_render_start)
   - [Composite.EVENT_RENDER_NEXT](#compositeevent_render_next)
   - [Composite.EVENT_RENDER_END](#compositeevent_render_end)
-- [View Model Binding](#view-model-binding)
+- [View-Module Binding](#view-module-binding)
   - [Composite.EVENT_MOUNT_START](#compositeevent_mount_start)
   - [Composite.EVENT_MOUNT_NEXT](#compositeevent_mount_next)
   - [Composite.EVENT_MOUNT_END](#compositeevent_mount_end)
@@ -58,10 +58,10 @@ start until after the event.
 The event occurs at the final end of the rendering. The processing itself ends
 before the event.
 
-# View Model Binding
-The following events occur during the view model binding. The current selector
+# View-Module Binding
+The following events occur during the view-module binding. The current selector
 is passed to the callback method. The method can influence the selector as well
-as the corresponding element, but not the view model binding.
+as the corresponding element, but not the view-module binding.
 
 ```javascript
 Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
@@ -70,16 +70,16 @@ Composite.listen(Composite.EVENT_MOUNT_***, function(event, selector) {
 ```
 
 ## Composite.EVENT_MOUNT_START
-The event occurs when the view model binding is started. Processing itself
+The event occurs when the view-module binding is started. Processing itself
 does not start until after the event.
 
 ## Composite.EVENT_MOUNT_NEXT
-The event occurs during recursive iteration during view model binding, if during
-a render cycle, the view model binding of another element starts. The processing
-itself does not start until after the event.
+The event occurs during recursive iteration during view-module binding, if
+during a render cycle, the view-module binding of another element starts. The
+processing itself does not start until after the event.
 
 ## Composite.EVENT_MOUNT_END
-The event occurs with the final end of the view model binding. The processing
+The event occurs with the final end of the view-module binding. The processing
 itself ends before the event.
 
 # Modules
