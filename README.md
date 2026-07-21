@@ -18,11 +18,11 @@ applications (SPAs) and micro-frontends.
 Applications remain composed of HTML, CSS and JavaScript resources that are
 loaded, connected and managed by the runtime. Native browser technologies are 
 extended with declarative application concepts such as expression language,
-component composition, view-model binding, routing and reactive rendering
+component composition, view-module binding, routing and reactive rendering
 without requiring compilation.
 
 The programming model applies established enterprise UI concepts such as
-declarative views, expression language, component composition and view-model
+declarative views, expression language, component composition and view-module
 binding directly in the browser while preserving HTML as the primary view
 language and JavaScript as the application language.
 
@@ -49,14 +49,11 @@ __Recommendations for UI frameworks:__
 - __Component-Based Architecture__
   Provides components composed of markup, styles, scripts and additional
   resources.
-- __View-Model Binding__
-  Connects HTML elements with JavaScript objects and supports synchronization of
-  values, states and events.
+- __View-Module Binding__
+  Connects HTML elements with JavaScript modules for synchronization of values,
+  states and events in architectures such as __MVC__, __MVVM__ and __MVCS__.
 - __Reactive Rendering__
   Updates affected parts of the view when reactive data objects change.
-- __Model-View-Controller (MVC) / Model-View-ViewModel (MVVM)__
-  Supports separation of presentation, application logic and data through
-  models, views, controllers and bindings.
 - __Modular Resources and Runtime Imports__
   Supports namespaces, modules, macros and loading of component resources at
   runtime.
