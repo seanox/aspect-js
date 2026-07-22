@@ -3,79 +3,96 @@
 &nbsp;&nbsp;&nbsp;&nbsp; [Routing](routing.md) &#9655;
 - - -
 
-# Model View Controller
-The Model View Controller (MVC) is a design pattern for separating interaction,
-data and presentation. A distinction should be made between I/O controller and
-application controller. The pure MVC design pattern means the I/O controller for
-the transmission of interactions. Since this is provided by the operating system
-and browser, Seanox aspect-js ostensibly refers to the application controller.
+# View-Module Binding
+View-Module Binding is the mechanism used by Seanox aspect-js to connect a view
+with an application module. The application runtime establishes this connection
+within a composite, synchronizes values, propagates events, invokes module
+methods, and manages the module lifecycle.
 
-```
-+------------------------------------------+--------------+-----------------------+
-|  View                                    |  Controller  |  Model                |
-+------------------------------------------+--------------+-----------------------+
-|  Markup                                  |  Composite   |  JavaScript           |
-|                                          |  Reactive    |                       |
-+------------------------------------------+--------------+-----------------------+
-|  <form id="model" composite>             |  aspect-js   |  const model = {      |
-|    <input id="message" events="input"/>  |              |      message: "",     | 
-|    <button id="submit"/>                 |              |      submit: {        |
-|  </form>                                 |              |          onClick() {  |
-|                                          |              |          }            |
-|                                          |              |      }                |
-|                                          |              |  }                    |
-+------------------------------------------+--------------+-----------------------+
+The runtime provides the infrastructure for connecting views and modules but
+does not define the architectural role of a module.
+
+```text
+       Runtime
+          │
+          ▼             
+View ◄─────────► Module 
 ```
 
-## Model
-Models are representable/projectable static JavaScript objects that can provide
-and receive data, states and interactions for views, comparable to managed beans
-and DTOs (Data Transfer Objects). As singletons/facades/delegates, they can use
-other components and abstractions, contain business logic themselves, and be a
-link between the user interface (view) and middleware (backend). The required
-view model binding is part of the Model View Controller and the Composite API.
-Details about view-model binding are described in chapter [Model-View-Controller
-    - Binding](mvc.md#binding).
-
-## View
-The view is exclusively responsible for the representation or projection of a
-model. Where projection is an important term because the way a model is
-represented is not restricted.
-
-In Seanox aspect-js the views are represented by the markup.
-
-## Controller
-The (application) controller controls internal processes within an application
-(view flow) and takes over the data flow between the view and modules through
-the view-model binding. The modules define the responsibilities of the
-application layer. Depending on whether a module represents a model,
-view-model, controller-related logic, or service-oriented functionality,
-different architectural patterns such as MVC, MVVM, or MVCS can be implemented.
+Depending on the application architecture, a module may implement a ViewModel,
+Controller, Service, Application Model, or another architectural role defined by
+the application.
 
 ## Contents Overview
-- [Model](#model)
+- [Application Module](#application-module)
 - [View](#view)
-- [Controller](#controller)
-- [View Model Binding](#view-model-binding)
-  - [Composite](#composite)
-  - [Binding](#binding)
-  - [Dock](#dock)
-  - [Undock](#undock)
-  - [Synchronization](#synchronization)
-  - [Validation](#validation)
-  - [Events](#events)
+- [Application Runtime](#application-runtime)
+- [Composite](#composite)
+- [Binding](#binding)
+- [Synchronization](#synchronization)
+- [Validation](#validation)
+- [Events](#events)
+- [Dock](#dock)
+- [Undock](#undock)
+- [Architectural Patterns](#architectural-patterns)
+  - [MVC](#mvc)
+  - [MVVM](#mvvm)
+  - [MVCS](#mvcs)
+  - [Other Architectures](#other-architectures)
 
-## View Model Binding
-The view-model binding takes over the bidirectional linking of the HTML elements
-of the view with the models as static JavaScript objects and thus organizes the
-data flow, communicates events as well as states and binds functions.
+## Application Module
+A module is the JavaScript object associated with a composite.
 
-### Composite
-The basis for view-model binding is formed by composites, which are functionally
-independent components consisting of markup, CSS, JavaScript, and optionally
-other resources. All components are bound via, the also called Composite ID, ID
-of the HTML construct, the model with the same name in JavaScript and the ID
-corresponding to the HTML in CSS.
+Together with HTML, CSS, and optional additional resources, it forms a module
+within an application. Modules provide application-specific data, state, and
+interactions for views. Depending on the architecture, they can coordinate
+application logic, domain models, or services.
+
+The runtime connects the view with its corresponding module but does not impose
+an architectural pattern. Depending on the application, a module can implement
+one of many architectural roles, for example:
+- ViewModel
+- Controller
+- Service
+- Application Model
+- another architectural role defined by the application
+
+Modules can contain presentation logic, coordinate domain models, use other
+components and abstractions, invoke services, or manage UI-specific state.
+
+## View
+The view defines the user interface and is implemented with HTML markup. It
+represents the information and interactions provided by the associated
+Application Module according to its own structure. The view is responsible for
+presentation and does not define application logic. The Application Runtime
+connects and synchronizes the view with the associated Application Module.
+
+## Application Runtime
+The runtime provides the infrastructure required to connect views and modules.
+
+Its responsibilities include:
+- connecting views with modules,
+- synchronizing values between views and modules,
+- forwarding UI events,
+- rendering and reactive updates,
+- routing,
+- component management, and
+- lifecycle management.
+
+The runtime manages the binding mechanisms between the view and the module. It
+provides infrastructure for rendering, synchronization, events, routing, and
+lifecycle management, but does not implement application logic or prescribe an
+application architecture.
+
+## Composite
+A composite is the basis for view-module binding and consists of:
+- HTML
+- CSS
+- JavaScript (Module)
+- optional additional resources
+
+Each composite is identified by its Composite ID, which connects the HTML
+element, the corresponding module, and the CSS selector.
 
 ```html
 <!DOCTYPE HTML>
@@ -101,15 +118,14 @@ const example = {
 }
 ```
 
-The Composite ID is thus a unique identifier within the application. It is a
-string of letters, numbers, and underscores that is at least one character long,
-begins with an underscore or a letter, and is formed by combining the id and
-composite attributes on an HTML element.
+The Composite ID uniquely identifies a composite within the application. It is
+formed from the `id` and `composite` attributes of the HTML element and
+determines the location of the corresponding module in the global object
+hierarchy. A Composite ID consists of letters, digits, and underscores and must
+start with a letter or an underscore.
 
-Composites, or better their composite ID, define the point in the global object
-tree where the corresponding JavaScript model is located. All HTML elements with
-an ID enclosed by a composite are then reflected as branches in the
-corresponding JavaScript model if they are implemented accordingly in the model.
+Elements inside the composite that define an `id` correspond to properties of
+the module when they are implemented there.
 
 ```javascript
 const model = {
@@ -132,12 +148,16 @@ const model = {
 </html>
 ```
 
-### Binding
-View-model binding is about linking markup/HTML (view) to the corresponding
-JavaScript object (model). The binding passes interactions and state changes of
-the view to the model and provides an interface for middleware functions and
-services for the view. In this way, no manual implementation of events,
-synchronization and interaction between view and application logic is required.
+## Binding
+View-Module Binding connects the HTML view with the corresponding module. The
+runtime performs event wiring and synchronization based on the binding
+configuration.
+
+The runtime:
+- synchronizes values,
+- forwards UI events,
+- invokes module methods, and
+- updates the view.
 
 ```javascript
 const model = {
@@ -168,70 +188,28 @@ const model = {
 </html>
 ```
 
-### Dock
-If a composite is used/inserted in the DOM, the corresponding model is
-docked/linked and when removing from the DOM, the corresponding model is
-undocked/unlinked. In both cases the model can optionally implement appropriate
-methods. The method `dock` is executed before rendering, before inserting the
-composite into the DOM, or after loading the page during initial rendering, and
-can be used to prepare the view. The method `undock` is executed after the
-composite is removed from the DOM and can be used to postprocess/clean the view.
+## Synchronization
+Synchronization transfers values between HTML elements and the corresponding
+properties of the module in addition to the static binding. It is triggered
+only by the events declared with the `events` attribute.
 
-```javascript
-const model = {
-    dock() {
-        ...
-    },
-    undock() {
-        ...
-    }
-};
-```
+More details about the usage can be found in chapter [events](markup.md#events).
 
-```html
-<html>
-  <body>
-    <div id="model" composite>
-      ...
-    </div>
-  </body>
-</html>
-```
-
-For  composites in combination with a [condition](markup.md#condition), the call
-of the methods depends on the result of the condition.
-
-### Undock
-More details can be found in chapter [Dock](#undock)
-
-### Synchronization
-In addition to the static linking and assignment of HTML elements to JavaScript
-objects (models), the view model binding also includes the synchronization of
-values between the HTML elements and the fields of the JavaScript object. The
-synchronization depends on events that are declared for the HTML element with
-the attribute [events](markup.md#events) and so the synchronization is executed
-only when one of the defined events occurs.
-
-More details about the usage can be found in chapter [events](
-    markup.md#events).
-
-### Validation
-The synchronization of values between view (HTML elements) and the fields of
-JavaScript models can be monitored and controlled by validation. Validation is
-declared in HTML via the [validate](markup.md#validate) attribute in combination
-with the [events](markup.md#events) attribute and requires a corresponding
-validation method in the JavaScript object (model).
+## Validation
+Validation controls whether synchronization of values between the view and the
+module is performed. It is declared with the `validate` attribute together with
+the `events` attribute. The corresponding validation method is implemented by
+the module.
 
 More details about the usage can be found in chapter [validate](
     markup.md#validate).
 
-### Events
-Events, more precisely the interaction between view and model, are also
-considered during view model binding. The methods for interaction will be
-implemented only in the model. In the markup itself, no declaration is required.
-The view model binding knows the available events for HTML. During binding, the
-model is searched for corresponding methods that will be registered as event
-listeners.
+## Events
+The runtime forwards supported HTML events to matching methods of the module.
+
+Events are mapped to methods following a naming convention. Matching methods are
+discovered during binding and registered automatically as event listeners. Event
+handlers can be resolved from module methods according to the naming convention.
 
 ```javascript
 const contact = {
@@ -259,6 +237,118 @@ const contact = {
   </body>
 </html>
 ```
+
+## Dock
+When a composite becomes part of the DOM, its module is docked and, if
+implemented, `dock()` is executed before the composite is rendered. The method
+can be used to prepare the view.
+
+```javascript
+const model = {
+    dock() {
+        ...
+    }
+};
+```
+
+## Undock
+When a composite is removed from the DOM, its module is undocked, after which
+the optional `undock()` method is executed. The method can be used for cleanup.
+
+```javascript
+const model = {
+    undock() {
+        ...
+    }
+};
+```
+
+If a composite is controlled by a condition, docking and undocking depend on the
+evaluation of that condition.
+
+## Architectural Patterns
+View-Module Binding is independent of the application architecture.
+
+The runtime connects views with their associated modules.
+
+```text
+        Runtime
+           │
+           ▼
+View ◄───────────► Module
+```
+
+The architectural role of the module depends entirely on its implementation.
+
+### MVC
+In MVC, the module typically implements the Controller.
+
+
+```text
+        Runtime
+           │
+           ▼
+View ◄───────────► Module
+                     │
+          (implements Controller)
+                     │
+                     ▼
+                Domain Model
+```
+
+The Controller processes user interactions, coordinates domain models, and
+invokes services.
+
+### MVVM
+In MVVM, the module typically implements the ViewModel.
+
+```text
+        Runtime
+           │
+           ▼
+View ◄───────────► Module
+                     │
+           (implements ViewModel)
+                     │
+                     ▼
+                Domain Model
+```
+
+The ViewModel contains presentation logic, UI state, computed values, and
+commands.
+
+Domain data remains part of the Domain Model.
+
+### MVCS
+In MVCS, the module typically implements the Controller and delegates
+application logic to services.
+
+```text
+        Runtime
+           │
+           ▼
+View ◄───────────► Module
+                     │
+          (implements Controller)
+                     │
+                     ▼
+                  Services
+                     │
+                     ▼
+                Domain Model
+```
+
+### Other Architectures
+The runtime is independent of any specific architectural pattern.
+
+A module may also implement:
+- a Service
+- a Application Model
+- another architectural role defined by the application
+
+The runtime connects views with their associated modules.
+
+The architectural role of that module is defined solely by the application.
 
 
 
