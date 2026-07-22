@@ -231,12 +231,8 @@ case the automatic escaping is cancelled or undone.
 <article escape="on">
   <![CDATA[
   <p>
-    Seanox aspect-js focuses on a minimalist approach to implementing
-    single-page applications (SPAs) and micro-frontends. This application
-    runtime extends the declarative nature of HTML with expression language,
-    reactive rendering, additional declarative attributes, Model-View-Controller
-    (MVC), view-model binding, events, interceptors, resource bundles, an
-    immutable XML data source, an integrated test environment, and more.
+    Seanox aspect-js is a browser-native application runtime for single-pag
+    applications (SPAs) and micro-frontends.
   </p>
   <a href="https://github.com/seanox/aspect-js">read more</a>
   ]]>
