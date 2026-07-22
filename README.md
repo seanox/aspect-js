@@ -36,9 +36,9 @@ __Recommendations for UI frameworks:__
 
 # Features
 - __HTML and JavaScript Integration__  
-  Uses HTML markup and JavaScript objects as the primary application module. Can
-  be combined with other JavaScript frameworks when their functionality and
-  syntax do not overlap.
+  Uses component resources consisting of HTML, CSS and JavaScript as primary
+  application modules and can be combined with other JavaScript frameworks,
+  provided their functionality and syntax do not overlap.
 - __Declarative Markup__  
   Extends HTML with declarative attributes, expressions and runtime processing
   for conditions, iteration, rendering, validation, events and related
