@@ -94,7 +94,7 @@ removed from the DOM and can be reinserted later by refreshing the __parent
 element__ if the expression returns `true`.
 
 ```html
-<article condition="{{Model.visible}}">
+<article condition="{{model.visible}}">
   ...
 </article>
 ```
@@ -105,7 +105,7 @@ terminated. If the element is added back to the DOM with a later refresh, a new
 timer starts, so it is not continued.
 
 ```html
-<article interval="{{1000}}" condition="{{Model.visible}}">
+<article interval="{{1000}}" condition="{{model.visible}}">
   ...
 </article>
 ```
@@ -116,7 +116,7 @@ JavaScript, because here the renderer has control over the script execution and
 not the browser.
 
 ```html
-<script type="composite/javascript" condition="{{Model.visible}}">
+<script type="composite/javascript" condition="{{model.visible}}">
     ...
 </script>
 ```
@@ -148,7 +148,7 @@ _Input_ or _Change_ at the HTML element _text1_. In the example, the input value
 of _text1_ is output synchronously with _output1_.
 
 ```javascript
-const Model = {
+const model = {
     validate(element, value) {
         return true;
     },
@@ -157,7 +157,7 @@ const Model = {
 ```
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="text1" type="text"
       validate events="input change"/>
   <input type="submit" value="submit"
@@ -194,7 +194,7 @@ The import attribute can be combined with the condition attribute and will then
 only be executed if the condition is `true`.
 
 ```javascript
-const Model = {
+const model = {
     publishForm() {
         const form = document.createElement("form");
         const label = document.createElement("label");
@@ -218,10 +218,10 @@ const Model = {
 ```
 
 ```html
-<article import="{{Model.publishImg()}}">
+<article import="{{model.publishImg()}}">
   loading image...
 </article>
-<article import="{{Model.publishForm()}}">
+<article import="{{model.publishForm()}}">
   loading form...
 </article>
 ```
@@ -313,7 +313,7 @@ removed from the DOM. This makes the interval attribute easy to use and control
 in combination with the condition attribute.
 
 ```html
-<span interval="1000" condition="{{IntervalModel.isVisible()}}">
+<span interval="1000" condition="{{model.isVisible()}}">
   ...
 </span>
 ```
@@ -345,17 +345,17 @@ updated content is generated and inserted as inner HTML with each render cycle.
 As value for the attribute a [variable expression](
     expression.md#variable-expression) is expected, for which a meta-object will
 be created, which allows access to the iteration in the template. Thus, the
-variable expression `iterate={{tempA:Model.list}}` creates the meta-object
+variable expression `iterate={{tempA:model.list}}` creates the meta-object
 `tempA = {item, index, data}`.
 
 ```javascript
-const Model = {
+const model = {
     months: ["Spring", "Summer", "Autumn", "Winter"]
 };
 ```
 
 ```html
-<select iterate={{months:Model.months}}>
+<select iterate={{months:model.months}}>
   <option value="{{months.index}}">
     {{months.item}}
   </option>
@@ -377,9 +377,9 @@ const Model = {
 > array.
 
 ```html
-<select iterate={{months:Model.months.length}}>
+<select iterate={{months:model.months.length}}>
   <option value="{{months.index}}">
-    {{Model.months[months.index]}}
+    {{model.months[months.index]}}
   </option>
 </select>
 ```
@@ -394,21 +394,21 @@ error output in case of an unconfirmed validation. This requires a combination
 with the attributes [validate](#validate) and [events](#events). 
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="email" type="text" placeholder="email address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required"
-      events="input change" render="#Model"/>
+      events="input change" render="#model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="email" type="text" placeholder="email address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
-      validate message="{{Messages['Model.email.validation.message']}}"
-      events="input change" render="#Model"/>
+      validate message="{{Messages['model.email.validation.message']}}"
+      events="input change" render="#model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
@@ -425,7 +425,7 @@ The output attribute can be combined with the condition attribute and will then
 only be executed if the condition is `true`.
 
 ```javascript
-const Model = {
+const model = {
     publishForm() {
         const form = document.createElement("form");
         const label = document.createElement("label");
@@ -449,10 +449,10 @@ const Model = {
 ```
 
 ```html
-<article output="{{Model.publishImg()}}">
+<article output="{{model.publishImg()}}">
   loading image...
 </article>
-<article output="{{Model.publishForm()}}">
+<article output="{{model.publishForm()}}">
   loading form...
 </article>
 ```
@@ -530,39 +530,39 @@ occurring events. The expected value is one or more space-separated CSS or Query
 selectors that define the targets.
 
 ```javascript
-const Model = {
+const model = {
     _status1: 0,
     getStatus1() {
-        return ++Model._status1;
+        return ++model._status1;
     },
     _status2: 0,
     getStatus2() {
-        return ++Model._status2;
+        return ++model._status2;
     },
     _status3: 0,
     getStatus3() {
-        return ++Model._status3;
+        return ++model._status3;
     }
 };
 ```
 
 ```html
 Target #1:
-<span id="outputText1">{{Model.status1}}</span>
+<span id="outputText1">{{model.status1}}</span>
 Events: Wheel
 <input id="text1" type="text"
     events="wheel"
     render="#outputText1, #outputText2, #outputText3"/>
 
 Target #2:
-<span id="outputText2">{{Model.status2}}</span>
+<span id="outputText2">{{model.status2}}</span>
 Events: MouseDown KeyDown
 <input id="text1" type="text"
     events="mousedown keydown"
     render="#outputText2, #outputText3"/>
 
 Target #3:
-<span id="outputText3">{{Model.status3}}</span>
+<span id="outputText3">{{model.status3}}</span>
 Events: MouseUp KeyUp
 <input id="text1" type="text"
     events="mouseup keyup"
@@ -639,10 +639,10 @@ then always synchronized with the model. The effects of validation are then only
 optional.__
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
-      validate="optional" events="input change" render="#Model"/>
-  Model.text1: {{Model.text1}}
+      validate="optional" events="input change" render="#model"/>
+  model.text1: {{model.text1}}
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
@@ -674,7 +674,7 @@ input[type='text'][fault]:not([fault='']) {
 ```
 
 ```javascript
-const Model = {
+const model = {
     validate(element, value) {
         const PATTER_EMAIL_SIMPLE = /^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$/;
         const test = PATTER_EMAIL_SIMPLE.test(value);
@@ -685,11 +685,11 @@ const Model = {
 ```
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       validate message="@fault:Wrong e-mail address"
-      events="input change" render="#Model"/>
-  Model.text1: {{Model.text1}}
+      events="input change" render="#model"/>
+  model.text1: {{model.text1}}
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
@@ -723,7 +723,7 @@ HTML code, is not possible and is only supported with the attributes `output`
 and `import`.
 
 ```html
-<article title="{{Model.title}}">
+<article title="{{model.title}}">
   {{'Hello World!'}}
   ...
 </article>

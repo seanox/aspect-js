@@ -11,7 +11,7 @@ be used in the HTML elements and in the free text. The data objects must then
 use `Reactive(object)` or `Object.prototype.reactive()` for reactive rendering.
 
 ```javascript
-const Model = {
+const model = {
     value: ...
 }.reactive();
 ```

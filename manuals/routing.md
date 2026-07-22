@@ -146,7 +146,7 @@ The return value is a path. The view and possible sub-views are not shown and
 the page/navigation is redirected to the returned path.
 
 ```javascript
-const Model = {
+const model = {
     permit() {
         if (condition === 1)
             return;        

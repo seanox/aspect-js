@@ -332,7 +332,7 @@ removed from the DOM and can be reinserted later by refreshing the __parent
 element__ if the expression returns `true`.
 
 ```html
-<article condition="{{Model.visible}}">
+<article condition="{{model.visible}}">
   ...
 </article>
 ```
@@ -343,7 +343,7 @@ JavaScript, because here the renderer has control over the script execution and
 not the browser.
 
 ```html
-<script type="composite/javascript" condition="{{Model.visible}}">
+<script type="composite/javascript" condition="{{model.visible}}">
     ...
 </script>
 ```
@@ -378,17 +378,17 @@ updated content is generated and inserted as inner HTML with each render cycle.
 as inner HTML. As value for the attribute a [variable expression](
     expression.md#variable-expression) is expected, for which a meta-object will
 be created, which allows access to the iteration in the template. Thus, the
-variable expression `iterate={{tempA:Model.list}}` creates the meta-object
+variable expression `iterate={{tempA:model.list}}` creates the meta-object
 `tempA = {item, index, data}`.
 
 ```javascript
-const Model = {
+const model = {
     months: ["Spring", "Summer", "Autumn", "Winter"]
 };
 ```
 
 ```html
-<select iterate={{months:Model.months}}>
+<select iterate={{months:model.months}}>
   <option value="{{months.index}}">
     {{months.item}}
   </option>
@@ -480,10 +480,10 @@ if the model provides a corresponding validate method
 in a composite.
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
-      validate events="input change" render="#Model"/>
+      validate events="input change" render="#model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
@@ -500,11 +500,11 @@ error output in case of an unconfirmed validation. This requires a combination
 with the attributes [validate](#validate) and [events](#events).
 
 ```html
-<form id="Model" composite>
+<form id="model" composite>
   <input id="text1" type="text" placeholder="e-mail address"
       pattern="^\w+([\w\.\-]*\w)*@\w+([\w\.\-]*\w{2,})$"
       validate message="Valid e-mail address required"
-      events="input change" render="#Model"/>
+      events="input change" render="#model"/>
   <input type="submit" value="submit" validate events="click"/>
 </form>
 ```
@@ -950,7 +950,7 @@ be used in the HTML elements and in the free text. The data objects must then
 use `Reactive(object)` or `Object.prototype.reactive()` for reactive rendering.
 
 ```javascript
-const Model = {
+const model = {
     value: ...
 }.reactive();
 ```
