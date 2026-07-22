@@ -11,7 +11,7 @@
 - __[Components](#components)__  
   - [Composite](composite.md#composite)
   - [Reactivity Rendering](reactive.md#reactivity-rendering)
-  - [Model View Controller](mvc.md#model-view-controller)
+  - [View-Module Binding](binding.md#view-module-binding)
   - [Routing](routing.md#routing)
 - __[Runtime](#runtime)__  
   - [DataSource](datasource.md#datasource)
@@ -96,18 +96,22 @@
   - [Namespace](composite.md#namespace)
   - [Notes](composite.md#notes)
 - __[Reactivity Rendering](reactive.md#reactivity-rendering)__
-- __[Model View Controller](mvc.md#model-view-controller)__
-  - [Model](mvc.md#model)
-  - [View](mvc.md#view)
-  - [Controller](mvc.md#controller)
-  - [View Model Binding](mvc.md#view-model-binding)
-    - [Composite](mvc.md#composite)
-    - [Binding](mvc.md#binding)
-    - [Dock](mvc.md#dock)
-    - [Undock](mvc.md#undock)
-    - [Synchronization](mvc.md#synchronization)
-    - [Validation](mvc.md#validation)
-    - [Events](mvc.md#events)
+- __[View-Module Binding](binding.md#view-module-binding)__
+  - [Application Module](binding.md#application-module)
+  - [View](binding.md#view)
+  - [Application Runtime](binding.md#application-runtime)
+  - [Composite](binding.md#composite)
+  - [Binding](binding.md#binding)
+  - [Synchronization](binding.md#synchronization)
+  - [Validation](binding.md#validation)
+  - [Events](binding.md#events)
+  - [Dock](binding.md#dock)
+  - [Undock](binding.md#undock)
+  - [Architectural Patterns](binding.md#architectural-patterns)
+    - [MVC](binding.md#mvc)
+    - [MVVM](binding.md#mvvm)
+    - [MVCS](binding.md#mvcs)
+    - [Other Architectures](binding.md#other-architectures)
 - __[Routing](routing.md#routing)__
   - [Terms](routing.md#terms)
     - [Page](routing.md#page)
