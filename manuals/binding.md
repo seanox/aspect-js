@@ -12,12 +12,7 @@ methods, and manages the module lifecycle.
 The runtime provides the infrastructure for connecting views and modules but
 does not define the architectural role of a module.
 
-```text
-       Runtime
-          │
-          ▼             
-View ◄─────────► Module 
-```
+<img src="./binding_view_module.svg" width="200"/>
 
 Depending on the application architecture, a module may implement a ViewModel,
 Controller, Service, Application Model, or another architectural role defined by
@@ -44,21 +39,20 @@ the application.
 A module is the JavaScript object associated with a composite.
 
 Together with HTML, CSS, and optional additional resources, it forms a module
-within an application. Modules provide application-specific data, state, and
-interactions for views. Depending on the architecture, they can coordinate
-application logic, domain models, or services.
+within an application. Modules provide application-specific data, state and
+interactions for views.
 
 The runtime connects the view with its corresponding module but does not impose
-an architectural pattern. Depending on the application, a module can implement
-one of many architectural roles, for example:
+an architectural pattern. A module can implement one of many architectural
+roles, for example:
 - ViewModel
 - Controller
 - Service
 - Application Model
 - another architectural role defined by the application
 
-Modules can contain presentation logic, coordinate domain models, use other
-components and abstractions, invoke services, or manage UI-specific state.
+Modules can contain presentation logic, coordinate domain models, invoke
+services or manage UI-specific state.
 
 ## View
 The view defines the user interface and is implemented with HTML markup. It
@@ -80,7 +74,7 @@ Its responsibilities include:
 - lifecycle management.
 
 The runtime manages the binding mechanisms between the view and the module. It
-provides infrastructure for rendering, synchronization, events, routing, and
+provides infrastructure for rendering, synchronization, events, routing and
 lifecycle management, but does not implement application logic or prescribe an
 application architecture.
 
@@ -271,30 +265,14 @@ View-Module Binding is independent of the application architecture.
 
 The runtime connects views with their associated modules.
 
-```text
-        Runtime
-           │
-           ▼
-View ◄───────────► Module
-```
+<img src="./binding_view_module.svg" width="200"/>
 
 The architectural role of the module depends entirely on its implementation.
 
 ### MVC
 In MVC, the module typically implements the Controller.
 
-
-```text
-        Runtime
-           │
-           ▼
-View ◄───────────► Module
-                     │
-          (implements Controller)
-                     │
-                     ▼
-                Domain Model
-```
+<img src="./binding_mvc.svg" width="200"/>
 
 The Controller processes user interactions, coordinates domain models, and
 invokes services.
@@ -302,17 +280,7 @@ invokes services.
 ### MVVM
 In MVVM, the module typically implements the ViewModel.
 
-```text
-        Runtime
-           │
-           ▼
-View ◄───────────► Module
-                     │
-           (implements ViewModel)
-                     │
-                     ▼
-                Domain Model
-```
+<img src="./binding_mvvm.svg" width="200"/>
 
 The ViewModel contains presentation logic, UI state, computed values, and
 commands.
@@ -323,27 +291,14 @@ Domain data remains part of the Domain Model.
 In MVCS, the module typically implements the Controller and delegates
 application logic to services.
 
-```text
-        Runtime
-           │
-           ▼
-View ◄───────────► Module
-                     │
-          (implements Controller)
-                     │
-                     ▼
-                  Services
-                     │
-                     ▼
-                Domain Model
-```
+<img src="./binding_mvcs.svg" width="200"/>
 
 ### Other Architectures
 The runtime is independent of any specific architectural pattern.
 
 A module may also implement:
 - a Service
-- a Application Model
+- an Application Model
 - another architectural role defined by the application
 
 The runtime connects views with their associated modules.
