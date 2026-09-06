@@ -2634,10 +2634,10 @@
                     attribute = attribute.replace(/^@+/, "");
                 }
                 selector.setAttribute(attribute, value);
+                // Attribute values must also be set in the JavaScript so that it
+                // remains synchronized with the DOM!
+                selector[attribute] = value;
             } else selector.removeAttribute(attribute);
-            // Attribute values must also be set in the JavaScript so that it
-            // remains synchronized with the DOM!
-            selector[attribute] = value;
         });
     };
 
