@@ -97,8 +97,9 @@ application logic, declarative presentation, and runtime mechanisms.
 > - manages the composite lifecycle
 
 ## Trust Boundary
-Seanox composite-js is an application runtime. Everything loaded and interpreted
-by the runtime is part of the application and is therefore trusted.
+Seanox composite-js is an application runtime. Content that is loaded and
+interpreted as application resources is considered part of the application and
+is therefore trusted.
 
 This includes:
 - Application Modules
@@ -113,11 +114,17 @@ The trust boundary is the configured application context. Runtime resources are
 resolved within this context path. Content outside this context is not
 considered application code unless explicitly included by the application.
 
+The application context is therefore a resource boundary, not a security
+sandbox. It does not isolate JavaScript execution or protect trusted application
+code from other trusted application code.
+
 The runtime is not a sandbox for untrusted content. External or user-provided
 data must be handled appropriately before being introduced as executable
 application content.
 
-Dynamic code execution is intentional and part of the runtime execution model.
+Dynamic code execution is intentional and is part of the runtime execution
+model. Composite Scripts and Expressions execute with the privileges of the
+application context; they are not executed in an isolated JavaScript sandbox.
 
 ## Composite
 A composite is an independently identified, domain-oriented application unit
