@@ -34,7 +34,7 @@ Inside an expression, the character sequences `{{` and `}}` must be escaped as
   - [Element-Expression](#element-expression)
   - [Variable-Expression](#variable-expression)
   - [Combination](#combination)
-  - [(? ...) tolerate](#-tolerate)
+  - [(? ...) tolerate](#--tolerate)
 - [Notes](#notes)
 
 ## Elements
@@ -203,6 +203,26 @@ Syntax errors are excluded from this tolerating behavior.
 ```
 {{"Expression with an error " + ((? object.that.does.not.exist()) ?? "") + "!"}}
 ```
+
+> [!IMPORTANT]  
+> __(? ...)__ is a macro shorthand for the internal method `_tolerate(...)`.
+> When used within another method call, the macro must be enclosed in
+> parentheses to ensure that the complete macro expression is passed as an
+> argument.
+> 
+> The example above is equivalent to:
+> ```
+> {{"Expression with an error " + (_tolerate(object.that.does.not.exist()) ?? "") + "!"}}
+> ```
+> When used within another method call:
+> ```
+> {{"Expression with an error " + String((? object.that.does.not.exist()) ?? "") + "!"}}
+> ```
+>
+> The example above is equivalent to:
+> ```javascript
+> {{"Expression with an error " + String(_tolerate(object.that.does.not.exist()) ?? "") + "!"}}
+> ```
 
 ## Notes
 Expressions are interpreted by the composer during rendering after the page has

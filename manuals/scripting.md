@@ -23,7 +23,7 @@ declarations and creating namespaces.
   - [#export](#export)
   - [#import](#import)
   - [#use](#use)
-  - [(? ...) tolerate](#-tolerate)
+  - [(? ...) tolerate](#--tolerate)
 - [Debugging](#debugging)
 
 ## Embedded Composite Script
@@ -165,6 +165,26 @@ errors are excluded from this tolerating behavior.
 ```javascript
 const value = (? object.that.does.not.exist());
 ```
+
+> [!IMPORTANT]  
+> __(? ...)__ is a macro shorthand for the internal method `_tolerate(...)`.
+> When used within another method call, the macro must be enclosed in
+> parentheses to ensure that the complete macro expression is passed as an
+> argument.
+> 
+> The example above is equivalent to:
+> ```javascript
+> const value = _tolerate(object.that.does.not.exist());
+> ```
+> When used within another method call:
+> ```javascript
+> const value = String((? object.that.does.not.exist()));
+> ```
+> 
+> The example above is equivalent to:
+> ```javascript
+> const value = String(_tolerate(object.that.does.not.exist()));
+> ```
 
 ## Debugging
 When loading composite scripts, the runtime automatically appends a `sourceURL`

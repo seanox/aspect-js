@@ -103,7 +103,7 @@
     - [Element-Expression](expression.md#element-expression)
     - [Variable-Expression](expression.md#variable-expression)
     - [Combination](expression.md#combination)
-    - [(? ...) tolerate](expression.md#-tolerate)
+    - [(? ...) tolerate](expression.md#--tolerate)
   - [Notes](expression.md#notes)
 - __[Markup](markup.md#markup)__
   - [Attributes](markup.md#attributes)
@@ -136,7 +136,7 @@
     - [#export](scripting.md#export)
     - [#import](scripting.md#import)
     - [#use](scripting.md#use)
-    - [(? ...) tolerate](scripting.md#-tolerate)
+    - [(? ...) tolerate](scripting.md#--tolerate)
   - [Debugging](scripting.md#debugging)
 
 ### Components
