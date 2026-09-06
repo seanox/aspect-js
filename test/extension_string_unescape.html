@@ -20,6 +20,31 @@
             Assert.assertNotEquals("\n\rxxx", ("\\r\\nxxx").unescape());
         }});
 
+        Test.create({test() {
+            Assert.assertEquals("+(function(){ throw new Error(INJECTED); })()//",
+                    ('"+(function(){ throw new Error("INJECTED"); })()//').unescape());
+            Assert.assertEquals("+(()=>{ throw new Error(INJECTED); })()//",
+                    ('"+(()=>{ throw new Error("INJECTED"); })()//').unescape());
+            Assert.assertEquals(";throw new Error(INJECTED);//",
+                    ('";throw new Error("INJECTED");//').unescape());
+        }});
+
+        Test.create({test() {
+            Assert.assertEquals("\\+(function(){ throw new Error(INJECTED); })()//",
+                    ('\\\\"+(function(){ throw new Error("INJECTED"); })()//').unescape());
+            Assert.assertEquals("\\\\+(function(){ throw new Error(INJECTED); })()//",
+                    ('\\\\\\\\"+(function(){ throw new Error("INJECTED"); })()//').unescape());
+            Assert.assertEquals("\\\\\\+(function(){ throw new Error(INJECTED); })()//",
+                    ('\\\\\\\\\\\\"+(function(){ throw new Error("INJECTED"); })()//').unescape());
+        }});
+
+        Test.create({test() {
+            Assert.assertEquals("+(eval('throw new Error(INJECTED)'))//",
+                    ('"+(eval(\'throw new Error("INJECTED")\'))//').unescape());
+            Assert.assertEquals("+(eval(\throw new Error('INJECTED')))//",
+                    ('"+(eval("throw new Error(\'INJECTED\')"))//').unescape());
+        }});
+
         Test.start({auto:true});
     </script>
   </head>

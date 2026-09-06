@@ -17,6 +17,8 @@ BF: Extension: Corrections and optimization
     - String.prototype.decodeHex
       - Empty string returns empty string, not 0x anymore
       - Throws an error if the string does not start with 0x
+    - String.prototype.unescape
+      - Correction of literal boundaries
 BF: Routing: Correction of route expression generation
     Incorrect generation of route expressions when a route was combined
     condition.
