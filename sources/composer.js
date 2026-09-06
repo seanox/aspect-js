@@ -2613,8 +2613,7 @@
             // temporary and is checked again at the next render cycle and
             // possibly inserted again if the expression returns a return value.
             if (value !== undefined) {
-                value = String(value).encodeHtml();
-                value = value.replace(/"/g, "&quot;");
+                value = String(value);
                 // Special case attribute value, here primarily the value of the
                 // property must be set, the value of the attribute is optional.
                 // Changing the value does not trigger an event, so no unwanted

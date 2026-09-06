@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Seanox composite-js Test Environment</title>
+    <style>
+      body {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+    <script src="composite-js-testing.js"></script>
+    <script type="text/javascript">
+
+        Test.activate();
+
+        // Regression Test:
+        // Double encoding + undefined
+        // Attribute value is encoded using encodeHtml() + &quot; and set via
+        // setAttribute/property -- neither of them decodes
+        //     -> `title="{{'a<b'}}"` results in a literal `a&lt;b`.
+        // If the value is undefined the attribute is removed, but then
+        // selector[attribute] = undefined
+        //     -> `input.value === "undefined"`.                                                                                                                                     | composer.js:2608-2633                                                                          | 2  |
+
+        Test.create({test() {
+            const element = document.querySelector("#encoded");
+            Assert.assertEquals("a<b", element.getAttribute("title"));
+            Assert.assertEquals("a<b", element.title);
+            Assert.assertEquals("a\"b", element.getAttribute("data-value"));
+            Assert.assertEquals("a\"b", element.dataset.value);
+        }});
+
+        Test.create({test() {
+            const element = document.querySelector("#undefined");
+            Assert.assertEquals(null, element.getAttribute("value"));
+            Assert.assertEquals("", element.value);
+        }});
+
+        Composer.listen(Composer.EVENT_RENDER_END, () => {
+            Test.start();
+        });
+    </script>
+  </head>
+  <body>
+    <span id="encoded" title="{{'a<b'}}" data-value="{{'a&quot;b'}}"></span>
+    <input id="undefined" value="{{undefined}}">
+  </body>
+</html>
