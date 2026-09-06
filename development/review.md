@@ -1,8 +1,3 @@
-https://raw.githubusercontent.com/seanox/composite-js/refs/heads/master/development/review.md
----
-
-
-
 # Code-Review `sources/*.js`
 
 Stand: 2026-09-04
