@@ -231,11 +231,11 @@
                         return "\r" + (patches.length -1) + "\n";
                 });
 
-                // (?...) tolerates the enclosed code. If an error occurs there,
-                // the expression will be false, but will not cause the error
-                // itself. This is convenient if you want check/use references
-                // or variables that do not yet exist or errors of methods are
-                // to be suppressed.
+                // (? ...) tolerates the enclosed code. If an error occurs
+                // there, the expression will be undefined, but will not cause
+                // the error itself. This is convenient if you want check/use
+                // references or variables that do not yet exist or errors of
+                // methods are to be suppressed.
 
                 // To avoid complicated parsing of round brackets, bracket
                 // expressions that have no other round bracket expressions are

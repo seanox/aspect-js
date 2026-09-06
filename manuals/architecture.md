@@ -263,7 +263,7 @@ A Composite script is ECMAScript code extended by _composite-js_-specific
 - `#import`
 - `#export`
 - `#use`
-- `(?...)`
+- `(? ...)`
 
 The Composite script of a Composite module is loaded and executed by the runtime
 as part of realizing the Composite. Its execution establishes the application

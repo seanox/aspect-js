@@ -45,10 +45,10 @@
          *            function scope usable in the global scope, optionally in a
          *            namespace declared with an @ symbol
          * #use       creates the passed namespaces if they do not already exist
-         * (?...)     tolerant expression, a macro with a different syntax, the
+         * (? ...)    tolerant expression, a macro with a different syntax, the
          *            enclosed logic is executed fault-tolerantly and
-         *            corresponds to the value false in case of an error, except
-         *            for syntax errors
+         *            corresponds to the value undefined in case of an error,
+         *            except for syntax errors
          *
          * @param {string} script
          * @param {string} [url] Optional sourceURL
@@ -92,7 +92,7 @@
                 // syntax is undefined by optional whitepsaces between ( and ?).
 
                 if (brackets < 0) {
-                    if (digit === "?") {
+                    if (digit === "? ") {
                         brackets = 1;
                         let macro = "_tolerate(()=>";
                         script = script.substring(0, cursor) + macro + script.substring(cursor +1);
@@ -268,7 +268,7 @@
     const _tolerate = (invocation) => {
         try {return invocation.call(window);
         } catch (error) {
-            return false;
+            return undefined;
         }
     };
 })();

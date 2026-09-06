@@ -34,7 +34,7 @@ Inside an expression, the character sequences `{{` and `}}` must be escaped as
   - [Element-Expression](#element-expression)
   - [Variable-Expression](#variable-expression)
   - [Combination](#combination)
-  - [(?...) tolerate](#-tolerate)
+  - [(? ...) tolerate](#-tolerate)
 - [Notes](#notes)
 
 ## Elements
@@ -189,18 +189,19 @@ All types of expressions can be combined.
 {{foo:not empty Foo.data and not empty Foo.data.items ? String(Foo.data.items[0].fieldA).substring(2) : ''}}
 ```
 
-### (?...) tolerate
+### (? ...) tolerate
 Expressions are executed like JavaScript and can cause corresponding errors.
 Object-based approaches often require checks for specific object levels, which
 can make expressions unclear.
 
-For these cases, expressions can use the tolerating syntax `(?...)`. If the
-logic inside the brackets causes an error, no error is raised and no output is
-written to the browser console. Instead, the brackets represent the value
-`false`. Syntax errors are excluded from this tolerating behavior.
+For these cases, expressions can use the tolerating syntax `(? ...)`. __The ?
+operator must be followed by at least one whitespace character.__ If the logic
+inside the brackets causes an error, no error is raised and no output is written
+to the browser console. Instead, the brackets represent the value `undefined`.
+Syntax errors are excluded from this tolerating behavior.
 
 ```
-{{"Expression with an error " + (?object.that.does.not.exist()) + "!"}}
+{{"Expression with an error " + ((? object.that.does.not.exist()) ?? "") + "!"}}
 ```
 
 ## Notes

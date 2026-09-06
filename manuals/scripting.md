@@ -23,7 +23,7 @@ declarations and creating namespaces.
   - [#export](#export)
   - [#import](#import)
   - [#use](#use)
-  - [(?...) tolerate](#-tolerate)
+  - [(? ...) tolerate](#-tolerate)
 - [Debugging](#debugging)
 
 ## Embedded Composite Script
@@ -156,14 +156,14 @@ object level if they do not already exist.
 #use a.b.c d.e.f g.h.i
 ```
 
-### (?...) tolerate
-The tolerating syntax `(?...)` is a special macro. If the logic inside the
+### (? ...) tolerate
+The tolerating syntax `(? ...)` is a special macro. If the logic inside the
 brackets causes an error, no error is raised and no output is written to the
-browser console. Instead, the brackets represent the value `false`. Syntax
+browser console. Instead, the brackets represent the value `undefined`. Syntax
 errors are excluded from this tolerating behavior.
 
 ```javascript
-const value = (?object.that.does.not.exist());
+const value = (? object.that.does.not.exist());
 ```
 
 ## Debugging
