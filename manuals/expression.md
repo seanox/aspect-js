@@ -190,39 +190,31 @@ All types of expressions can be combined.
 ```
 
 ### (? ...) tolerate
-Expressions are executed like JavaScript and can cause corresponding errors.
-Object-based approaches often require checks for specific object levels, which
-can make expressions unclear.
+Expressions are evaluated like JavaScript and can cause errors. With object
+access, checks for individual object levels may be required.
 
-For these cases, expressions can use the tolerating syntax `(? ...)`. __The ?
-operator must be followed by at least one whitespace character.__ If the logic
-inside the brackets causes an error, no error is raised and no output is written
-to the browser console. Instead, the brackets represent the value `undefined`.
-Syntax errors are excluded from this tolerating behavior.
+The syntax `(? ...)` suppresses errors within the brackets -- __the ? must be
+followed by at least one whitespace character__. If an error occurs, the 
+expression evaluates to undefined and nothing is written to the browser console.
+Syntax errors are not suppressed.
 
 ```
-{{"Expression with an error " + ((? object.that.does.not.exist()) ?? "") + "!"}}
+{{"Expression with an error " + (? object.that.does.not.exist()) + "!"}}
 ```
 
-> [!IMPORTANT]  
-> __(? ...)__ is a macro shorthand for the internal method `_tolerate(...)`.
-> When used within another method call, the macro must be enclosed in
-> parentheses to ensure that the complete macro expression is passed as an
-> argument.
-> 
-> The example above is equivalent to:
-> ```
-> {{"Expression with an error " + (_tolerate(object.that.does.not.exist()) ?? "") + "!"}}
-> ```
-> When used within another method call:
-> ```
-> {{"Expression with an error " + String((? object.that.does.not.exist()) ?? "") + "!"}}
-> ```
->
-> The example above is equivalent to:
-> ```javascript
-> {{"Expression with an error " + String(_tolerate(object.that.does.not.exist()) ?? "") + "!"}}
-> ```
+> [!NOTE]  
+> `(? ...)` is a macro for `_tolerate(...)`. When used as an argument in another
+> method call, enclose the macro in parentheses.
+
+```
+{{"..." + String((? object.that.does.not.exist())) + "..."}}
+```
+
+is equivalent to:
+
+```
+{{"..." + String(_tolerate(object.that.does.not.exist())) + "..."}}
+```
 
 ## Notes
 Expressions are interpreted by the composer during rendering after the page has

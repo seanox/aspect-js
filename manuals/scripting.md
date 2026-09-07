@@ -157,34 +157,29 @@ object level if they do not already exist.
 ```
 
 ### (? ...) tolerate
-The tolerating syntax `(? ...)` is a special macro. If the logic inside the
-brackets causes an error, no error is raised and no output is written to the
-browser console. Instead, the brackets represent the value `undefined`. Syntax
-errors are excluded from this tolerating behavior.
+The tolerating syntax `(? ...)` is a special macro -- __the ? must be followed
+by at least one whitespace character__. If the logic inside the brackets causes
+an error, no error is raised and no output is written to the browser console.
+Instead, the brackets represent the value `undefined`. Syntax errors are
+excluded from this tolerating behavior.
 
 ```javascript
 const value = (? object.that.does.not.exist());
 ```
 
-> [!IMPORTANT]  
-> __(? ...)__ is a macro shorthand for the internal method `_tolerate(...)`.
-> When used within another method call, the macro must be enclosed in
-> parentheses to ensure that the complete macro expression is passed as an
-> argument.
-> 
-> The example above is equivalent to:
-> ```javascript
-> const value = _tolerate(object.that.does.not.exist());
-> ```
-> When used within another method call:
-> ```javascript
-> const value = String((? object.that.does.not.exist()));
-> ```
-> 
-> The example above is equivalent to:
-> ```javascript
-> const value = String(_tolerate(object.that.does.not.exist()));
-> ```
+> [!NOTE]  
+> `(? ...)` is a macro for `_tolerate(...)`. When used as an argument in another
+> method call, enclose the macro in parentheses.
+
+```
+{{"..." + String((? object.that.does.not.exist())) + "..."}}
+```
+
+is equivalent to:
+
+```
+{{"..." + String(_tolerate(object.that.does.not.exist()) + "..."}}
+```
 
 ## Debugging
 When loading composite scripts, the runtime automatically appends a `sourceURL`
