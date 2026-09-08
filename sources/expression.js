@@ -242,12 +242,12 @@
                 // iteratively replaced by placeholders \t...\n. At the end
                 // there should be no more brackets.
 
-                if (expression.match(/\(\s*\?/)) {
+                if (expression.match(/\(\?/)) {
                     for (let counts = -1; counts < patches.length;) {
                         counts = patches.length;
                         expression = expression.replace(/(\([^\(\)]*\))/g, match => {
-                            match = match.replace(/^\( *\?+ *([.\s\S]*?) *\)$/, (match, logic) =>
-                                "_tolerate(()=>(" + logic + "))");
+                            match = match.replace(/^\(\? *([.\s\S]*?) *\)$/, (match, logic) =>
+                                "(_tolerate(()=>(" + logic + ")))");
                             patches.push(_fill(match, patches));
                             return "\t" + (patches.length -1) + "\n";
                         });
