@@ -62,7 +62,7 @@ das der Renderer ausführt.
 
 </details>
 
-### ~~4. Jede `{{…}}`-Sequenz im DOM ist ausführbarer JS-Code~~
+### ~~4. Jede `{{...}}`-Sequenz im DOM ist ausführbarer JS-Code~~
 
 <details>
   <summary>Problem</summary>
@@ -103,14 +103,20 @@ Map, Set, Date, WeakMap, Promise und TypedArrays werden zerstört: Methoden
 werden mit `this = proxy` aufgerufen -> `TypeError: incompatible receiver`. Nur
 `Node`/`NodeList`/`HTMLCollection` ausgenommen.
 
-### 8. Tolerant-Makro `(?…)` korrumpiert Regex-Literale
+### ~~8. Tolerant-Makro `(?...)` korrumpiert Regex-Literale~~
+
+<details>
+  <summary>Problem</summary>
+
 > Stelle: scripting.js:94-141; expression.js:242-252,
 > Story-Points: 8
 
 `/(?:ab)+/` -> `/(_tolerate(()=>:ab))+/`. Regex-Literale werden im Parser nicht
 als Literal erkannt; `/["]/` schaltet in String-Modus und verschluckt
 nachfolgende `#export`-Makros. Gleiche Erkennung in expression.js trifft
-`(?:…)`.
+`(?:...)`.
+
+</details>
 
 ### ~~9. Doppel-Encoding + `"undefined"`~~
 
@@ -141,7 +147,7 @@ endlos.
 
 Per Zuweisung statt `defineProperty({enumerable:false})`:
 `Object.prototype.ordinal/reactive/toPlainString`, `String.prototype.*`,
-`Element.prototype.*` erscheinen in jedem `for…in`. `ordinal()` gibt vorhandenes
+`Element.prototype.*` erscheinen in jedem `for...in`. `ordinal()` gibt vorhandenes
 eigenes `serial`-Feld zurück (Kollision). `compliant` wirft hart bei künftigen
 Standard-Kollisionen -> Framework stirbt beim Laden statt zu degradieren.
 
@@ -174,7 +180,7 @@ pushen.
 > Stelle: composer.js:2841-2861, 3015, Story-Points: 2
 
 Wirft `Composite.include("common")` (HTTP ≠ 200/404), wird weder
-MutationObserver installiert noch gerendert – Seite bleibt leer ohne
+MutationObserver installiert noch gerendert -- Seite bleibt leer ohne
 Fehlermeldung.
 
 ### 16. Listener-Exceptions in `fire(EVENT_RENDER_END)`
@@ -205,7 +211,7 @@ invertiert. Toter/falscher Codepfad, potenziell Doppel-Dispatch.
 ### 20. Selector-Injection/Crash
 > Stelle: routing.js:295-298, 336-352, Story-Points: 2
 
-Hash-Segmente unescaped in `querySelector('[id="…"]')`; `PATTERN_PATH` erlaubt
+Hash-Segmente unescaped in `querySelector('[id="..."]')`; `PATTERN_PATH` erlaubt
 `"`, `]`, `\` -> DOMException im hashchange-Listener. `newHash === null`
 (Navigation ohne `#`) -> TypeError bei String-Interceptoren; RegExp mit `g`-Flag
 statusbehaftet.
@@ -289,7 +295,7 @@ Parse-Fehler oder falscher MIME wird gecached -> jeder Folgeaufruf
 (31er-Hash) kollisionsanfällig -> falsche Dokumente. `DataSource.cache` ist
 totes Public-API.
 
-### ~~30. Text ausserhalb `{{}}` wird ungeescaped in `"…"` gesetzt~~
+### ~~30. Text ausserhalb `{{}}` wird ungeescaped in `"..."` gesetzt~~
 
 <details>
   <summary>Problem</summary>
@@ -357,7 +363,7 @@ SecurityError in Cross-Origin-iframe bei jedem `console.log` nach
 `assertEquals` ≡ `assertSame` (beide `===`) trotz Doku; `typeof meta == null`
 immer false; Off-by-one in `Assert.create` (`index > values.length`);
 `clearTimeout` für `setInterval`-Handles; String-basierter Kontrollfluss auf
-`Timeout occurred…`; `typeValue` dispatcht `input` mit `bubbles=false`.
+`Timeout occurred...`; `typeValue` dispatcht `input` mit `bubbles=false`.
 
 ### 38. `Math.unique` und `RegExp`-Erweiterungen
 > Stelle: extension.js:351-401, Story-Points: 1
@@ -377,7 +383,7 @@ widerspricht Implementierung.
 ### 40. Catch in `include`
 > Stelle: composer.js:940-944, 1314-1320, Story-Points: 1
 
-Setzt `origin.innerText = "Error: …"` und greift auf `error.message` zu ->
+Setzt `origin.innerText = "Error: ..."` und greift auf `error.message` zu ->
 TypeError bei Nicht-Error-Werten; Fehlerausgabe ersetzt Container-Inhalt.
 `return result` im Event-Callback wirkungslos.
 
@@ -409,8 +415,8 @@ Drei konzeptionelle Kernprobleme, aus denen viele Einzel-Findings folgen:
    Keyed-Diffing der zweite.
 
 ## Empfohlene Reihenfolge
-1. __Quick Wins__ (je 1–2 SP, zusammen ~15 SP): #2, #9, #10, #22, #26, #30, #31,
-   #32, #33, #36 – echte Bugs mit klarer Lösung.
+1. __Quick Wins__ (je 1-2 SP, zusammen ~15 SP): #2, #9, #10, #22, #26, #30, #31,
+   #32, #33, #36 -- echte Bugs mit klarer Lösung.
 2. __Sicherheit/Stabilität__: #1, #3, #7, #11, #20, #25.
 3. __Architektur__: #4, #5, #6, #8, #12, #13, #21.
 4. Rest nach Bedarf.
