@@ -84,6 +84,12 @@ In Bootstrap, `load`, `import`, DataSource und Messages. Deprecated, blockiert
 UI; `status 0` (`file://`, CORS, offline) bricht die gesamte
 Framework-Initialisierung ab. Netzwerkfehler nicht abgefangen.
 
+Korrektur:
+- `file://` ist kein unterstütztes Deployment-Szenario
+- Ressourcen sind bewusst auf den Context-Path beschränkt sind und damit
+  Cross-Origin-Ressourcen gar nicht zum normalen Anwendungsfall gehören,
+- Offline-Betrieb kein Ziel ist,
+
 ### 6. Speicherlecks / unbegrenzt wachsender Zustand
 > Stelle: composer.js:730-731, 812, 1873, 2269, 2927;
 > expression.js:60-75; reactive.js:117, 119, 182-213,
@@ -95,6 +101,27 @@ aufgeräumt); Expression-`_cache` (Map `serial:attr`, nie geleert);
 Reactive-`notifications` (DOM-Refs pro Key, Cleanup nur im `set`-Trap desselben
 Keys). `_lock.release` mountet bei jedem Render-Ende alle
 `querySelectorAll("*")` -> quadratisch.
+
+##### 6.1. `Composer.mount.stack` räumt entfernte DOM-Elemente nicht auf
+- Mount-Referenzen bleiben im Stack erhalten.
+##### 6.2. `Composer.mount.stack` durch `Set` statt Array verwalten**
+- Vermeidet `includes()` mit O(n) und erleichtert gezieltes Entfernen.
+##### 6.3. `_render_meta` besitzt keinen konsistenten DOM-Lifecycle
+- Render-Metadaten müssen zuverlässig beim Entfernen eines Elements freigegeben werden.
+##### ~~6.4. `_render_meta` hält entfernte DOM-Bäume über `template`-Referenzen fest~~
+- Besonders relevant bei `condition`/Templates.
+- Erledigt mit: https://github.com/seanox/composite-js/blob/master/manuals/architecture.md#trust-boundary
+##### 6.5. `Expression._cache` wird beim Entfernen von DOM-Elementen nicht bereinigt
+- Cache-Einträge mit `serial` bleiben dauerhaft bestehen.
+##### 6.6. `Reactive.notifications` entfernt obsolete DOM-Subscriptions zu spät
+- Cleanup erfolgt derzeit erst bei einem späteren Reactive-Update.
+##### 6.7. Kein zentraler Cleanup-Lifecycle für Composer, Expression und Reactive
+- Ein gemeinsamer Cleanup-Pfad sollte alle elementbezogenen Ressourcen freigeben.
+##### 6.8. `serial`-basierter globaler Zustand verhindert sauberes Lifecycle-Management
+- `serial` dient gleichzeitig als Identifier für mehrere langlebige globale Strukturen.
+##### 6.9.`iterate` durch Keyed-Diffing statt vollständigem Re-Rendering optimieren
+- Nicht direkt derselbe Fehler wie #6, aber der wichtigste strukturelle Hebel,
+  um die Menge an erzeugtem/verworfenem Zustand drastisch zu reduzieren.
 
 ### 7. Reactive-Proxy zerstört Objekte mit internen Slots
 > Stelle: reactive.js:121-163, Story-Points: 3
