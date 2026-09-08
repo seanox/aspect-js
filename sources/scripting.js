@@ -28,6 +28,11 @@
  */
 (() => {
 
+    const PATTERN_EVAL_MACRO_MATCH = /(^|\W)(#(?:import|export|use))\s/;
+    const PATTERN_EVAL_MACRO_IMPORT = /^(\w+(\/\w+)*)(\s+(\w+(\/\w+)*))*$/;
+    const PATTERN_EVAL_MACRO_EXPORT = /^([_a-z]\w*)(?:@((?:[_a-z]\w*)(?:\.[_a-z]\w*)*))?$/i;
+    const PATTERN_EVAL_MACRO_USE = /^([_a-z]\w*)(\.[_a-z]\w*)*(\s+([_a-z]\w*)(\.[_a-z]\w*)*)*$/i;
+
     compliant("Scripting");
     compliant(null, window.Scripting = {
 
@@ -50,8 +55,9 @@
          *            corresponds to the value undefined in case of an error,
          *            except for syntax errors
          *
-         * @param {string} script
          * @param {string} [url] Optional sourceURL
+         * @param {string} script
+         * @param {boolean} [debug=false] Optional debug
          * @returns {*} the return value from the script
          *
          * see also: https://seanox.github.io/composite-js/manuals/scripting.html#macros
@@ -59,11 +65,12 @@
          */
         eval(...variants) {
 
-            let [url, script] = variants.length > 1
+            let [url, script, debug = false] = variants.length > 1
                     ? variants : [undefined, variants[0]];
 
             if (typeof script !== "string"
-                    || (url && typeof url !== "string"))
+                    || (url && typeof url !== "string")
+                    || (debug !== undefined && typeof debug !== "boolean"))
                 throw new TypeError("Invalid data type");
 
             // Performance is important here.
@@ -76,35 +83,19 @@
             // - ignore: "..."
             // - ignore: `...`
             // - detect: (^|\W)#(import|export|use)\s+...(\W|$)
-            // - detect: \(\s*\?...\)
+            // - detect: \(\?\s+...)
 
             let pattern;
-            let brackets;
+            let brackets = [];
             for (let cursor = 0; cursor < script.length; cursor++) {
                 let digit = script.charAt(cursor);
-                if (cursor >= script.length
-                        && !pattern)
-                    continue;
 
                 // The macro for the tolerant logic is a bit more complicated,
                 // because round brackets have to be counted here. Therefore the
-                // parsing runs parallel to the other macros. In addition, the
-                // syntax is undefined by optional whitepsaces between ( and ?).
-
-                if (brackets < 0) {
-                    if (digit === "?") {
-                        brackets = 1;
-                        let macro = "(_tolerate(()=>";
-                        script = script.substring(0, cursor) + macro + script.substring(cursor +1);
-                        cursor += macro.length;
-                        continue;
-                    }
-                    if (!digit.match(/\s/))
-                        brackets = 0;
-                }
+                // parsing runs parallel to the other macros.
 
                 if (digit === "\\") {
-                    cursor++
+                    cursor++;
                     continue;
                 }
 
@@ -124,19 +115,31 @@
                             pattern = "*/";
                         continue;
 
+                    // A distinction is needed to identify the end of the
+                    // tolerate function later on, in order to insert additional
+                    // closing brackets. That is why we count and classify:
+                    //     0: normal (...).
+                    //     1: tolerant (? ...)
                     case "(":
-                        if (brackets > 0)
-                            brackets++;
-                        else brackets = -1;
+                        if (script[cursor +1] === "?"
+                                && (/\s/).test(script[cursor +2])) {
+                            brackets.push(1);
+                            let macro = "_tolerate(()=>";
+                            script = script.substring(0, cursor +1)
+                                + macro + script.substring(cursor +3);
+                            cursor += macro.length;
+                        } else brackets.push(0);
                         continue;
 
                     case ")":
-                        if (brackets <= 0)
+                        // Get the type of the corresponding opening bracket.
+                        let bracket = brackets.pop();
+                        if (bracket !== 1)
                             continue;
-                        if (--brackets > 0)
-                            continue;
-                        let macro = "))";
-                        script = script.substring(0, cursor) + macro + script.substring(cursor);
+
+                        let macro = ")";
+                        script = script.substring(0, cursor)
+                            + macro + script.substring(cursor);
                         cursor += macro.length;
                         continue;
 
@@ -148,7 +151,7 @@
 
                     case "#":
                         let string = script.substring(cursor -1, cursor +10);
-                        let match = string.match(/(^|\W)(#(?:import|export|use))\s/);
+                        let match = string.match(PATTERN_EVAL_MACRO_MATCH);
                         if (match) {
                             let macro = match[2];
                             for (let offset = cursor +macro.length; offset <= script.length; offset++) {
@@ -161,17 +164,17 @@
 
                                 switch (macro) {
                                     case "#import":
-                                        if (!parameters.match(/^(\w+(\/\w+)*)(\s+(\w+(\/\w+)*))*$/))
+                                        if (!parameters.match(PATTERN_EVAL_MACRO_IMPORT))
                                             throw new Error(("Invalid macro: #import " + parameters).trim());
-                                        const imports = parameters.split(/\s+/).map(entry => "\"" + entry + "\"");
+                                        const imports = parameters.split(/\s+/).map(
+                                            entry => "\"" + entry + "\"");
                                         macro = "_import(...[" + imports.join(",") + "])";
                                         break;
 
                                     case "#export":
                                         const exports = [];
-                                        const pattern = /^([_a-z]\w*)(?:@((?:[_a-z]\w*)(?:\.[_a-z]\w*)*))?$/i;
                                         parameters.split(/\s+/).forEach(entry => {
-                                            const match = entry.match(pattern);
+                                            const match = entry.match(PATTERN_EVAL_MACRO_EXPORT);
                                             if (!match)
                                                 throw new Error(("Invalid macro: #export " + parameters).trim());
                                             parameters = [match[1], "\"" + match[1] + "\""];
@@ -183,9 +186,10 @@
                                         break;
 
                                     case "#use":
-                                        if (!parameters.match(/^([_a-z]\w*)(\.[_a-z]\w*)*(\s+([_a-z]\w*)(\.[_a-z]\w*)*)*$/i))
+                                        if (!parameters.match(PATTERN_EVAL_MACRO_USE))
                                             throw new Error(("Invalid macro: #use " + parameters).trim());
-                                        const uses = parameters.split(/\s+/).map(entry => "\"" + entry + "\"");
+                                        const uses = parameters.split(/\s+/).map(
+                                            entry => "\"" + entry + "\"");
                                         macro = "_use(...[" + uses.join(",") + "])";
                                         break;
                                 }
@@ -203,7 +207,8 @@
                 }
             }
 
-            return this.run(url ? script + "\n\n//# sourceURL=" + url + "\n" : script);
+             script = url ? script + "\n\n//# sourceURL=" + url + "\n" : script;
+             return debug ? script : this.run(script);
         },
 
         /**
