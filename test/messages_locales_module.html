@@ -36,16 +36,16 @@
     </script>
     <script type="text/test">
       xxX
-      false
+      undefined
       xxX
       oo_nsA_a_ns3
     </script>
   </head>
   <body>
     {{messages.xx}}
-    {{(?messages.nsA.a.ns3.oo)}}
+    {{String(? messages.nsA.a.ns3.oo)}}
     <div id="ns3@nsA:a" composite></div>
     {{messages.xx}}
-    {{(?messages.nsA.a.ns3.oo)}}
+    {{(? messages.nsA.a.ns3.oo)}}
   </body>
 </html>

@@ -40,7 +40,7 @@
         }
 
         Test.create({test() {
-            Assert.assertEquals("false", OutputA1.textContent);
+            Assert.assertEquals("undefined", OutputA1.textContent);
         }});
         Test.create({test() {
             Assert.assertEquals("a:0", window["a:0"].id);
@@ -61,7 +61,7 @@
             Assert.assertEquals("2: c of a,b,c", window["a:2"].value);
         }});
         Test.create({test() {
-            Assert.assertEquals("false", OutputA2.textContent);
+            Assert.assertEquals("undefined", OutputA2.textContent);
         }});
 
         Test.create({test() {
@@ -154,8 +154,8 @@
         }});
     </script>
     <script type="text/test">
-      false
-      false
+      undefined
+      undefined
       123
       123
       S:7:171717
@@ -246,8 +246,8 @@
       I:i 0:4 1:3 2:2 3:1 4:0
     </script>
     <script type="text/test-webkit">
-      false
-      false
+      undefined
+      undefined
       123
       123
       S:7:171717
@@ -339,11 +339,11 @@
     </script>
   </head>
   <body>
-    <div id="OutputA1">{{(?tempA)}}</div>
+    <div id="OutputA1">{{String(? tempA)}}</div>
     <div iterate={{tempA:TestModel.listA}}>
       <input id="a:{{tempA.index}}" type="text" value="{{tempA.index}}: {{tempA.item}} of {{tempA.data}}">
     </div>
-    <div id="OutputA2">{{(?tempA)}}</div>
+    <div id="OutputA2">{{String(? tempA)}}</div>
 
     <div id="OutputB1">{{tempB()}}</div>
     <div iterate={{tempB:TestModel.listB}}>
@@ -351,7 +351,7 @@
     </div>
     <div id="OutputB2">{{tempB()}}</div>
 
-    {{s1:((?s1) || 0) +1}}
+    {{s1:((? s1) || 0) +1}}
     S:{{s1}}:<span id="OutputS1" iterate="{{tempS:TestModel.listA}}" import="{{testS(s1)}}">---</span>
     
     <table>

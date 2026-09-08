@@ -42,21 +42,21 @@
     </script>
     <script type="text/test">
       ---- ns3
-      undefined
-      undefined
-      object
-      false
+      A1: undefined
+      B1: undefined
+      C1: object
+      D1:
       ---- ns4
-      undefined
-      undefined
-      undefined
-      object
+      A2: undefined
+      B2: undefined
+      C2: undefined
+      D2: object
       ---- ns5
-      object
-      false
+      A3: object
+      B3: false
       ---- ns6
-      object
-      true
+      A4: object
+      B4: true
       ----
     </script>
   </head>
@@ -66,32 +66,32 @@
     <div id="ns3@nsA:a" composite></div>
     <div id="ns3@nsA:a:b" composite></div>
     <pre>
-    {{(?typeof ns3)}}
-    {{(?typeof nsA.ns3)}}
-    {{(?typeof nsA.a.ns3)}}
-    {{(?typeof nsA.a.b.ns3)}}
+    A1: {{(? typeof ns3)}}
+    B1: {{(? typeof nsA.ns3)}}
+    C1: {{(? typeof nsA.a.ns3)}}
+    D1: {{(? typeof nsA.a.b.ns3)}}
     </pre>
     ---- ns4
     <div id="ns4@nsB" composite></div>
     <div id="ns4@nsB:a" composite></div>
     <div id="ns4@nsB:a:b" composite></div>
     <pre>
-    {{(?typeof ns4)}}
-    {{(?typeof nsB.ns4)}}
-    {{(?typeof nsB.a.ns4)}}
-    {{(?typeof nsB.a.b.ns4)}}
+    A2: {{(? typeof ns4)}}
+    B2: {{(? typeof nsB.ns4)}}
+    C2: {{(? typeof nsB.a.ns4)}}
+    D2: {{(? typeof nsB.a.b.ns4)}}
     </pre>
     ---- ns5
     <div id="ns5" composite></div>
     <pre>
-    {{typeof ns5}}
-    {{ns5 instanceof Element}}
+    A3: {{typeof ns5}}
+    B3: {{ns5 instanceof Element}}
     </pre>
     ---- ns6
     <div id="ns6" composite></div>
     <pre>
-    {{typeof ns6}}
-    {{ns6 instanceof Element}}
+    A4: {{typeof ns6}}
+    B4: {{ns6 instanceof Element}}
     </pre>
     ----
   </body>

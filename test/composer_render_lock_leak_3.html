@@ -24,10 +24,14 @@
             const snapshot = document.body.textContent.trim();
             snapshots.push(snapshot);
             if (snapshots.length === 1)
-                Test.start();
+                window.setTimeout(() => Test.start(), 1500);
             if (snapshots.length > 1)
                 Assert.assertEquals("expected {1} steps but was {2}", 1, snapshots.length);
         });
+
+        Test.create({test() {
+            Assert.assertEquals("expected {1} steps but was {2}", 1, snapshots.length);
+        }});
     </script>
   </head>
   <body>
