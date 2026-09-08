@@ -92,9 +92,9 @@
                 // syntax is undefined by optional whitepsaces between ( and ?).
 
                 if (brackets < 0) {
-                    if (digit === "? ") {
+                    if (digit === "?") {
                         brackets = 1;
-                        let macro = "_tolerate(()=>";
+                        let macro = "(_tolerate(()=>";
                         script = script.substring(0, cursor) + macro + script.substring(cursor +1);
                         cursor += macro.length;
                         continue;
@@ -135,7 +135,7 @@
                             continue;
                         if (--brackets > 0)
                             continue;
-                        let macro = ")";
+                        let macro = "))";
                         script = script.substring(0, cursor) + macro + script.substring(cursor);
                         cursor += macro.length;
                         continue;
