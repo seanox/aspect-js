@@ -202,20 +202,6 @@ Syntax errors are not suppressed.
 {{"Expression with an error " + (? object.that.does.not.exist()) + "!"}}
 ```
 
-> [!NOTE]  
-> `(? ...)` is a macro for `_tolerate(...)`. When used as an argument in another
-> method call, enclose the macro in parentheses.
-
-```
-{{"..." + String((? object.that.does.not.exist())) + "..."}}
-```
-
-is equivalent to:
-
-```
-{{"..." + String(_tolerate(object.that.does.not.exist())) + "..."}}
-```
-
 ## Notes
 Expressions are interpreted by the composer during rendering after the page has
 loaded. They can therefore be visible during page loading. Use the attribute

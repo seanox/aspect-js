@@ -167,20 +167,6 @@ excluded from this tolerating behavior.
 const value = (? object.that.does.not.exist());
 ```
 
-> [!NOTE]  
-> `(? ...)` is a macro for `_tolerate(...)`. When used as an argument in another
-> method call, enclose the macro in parentheses.
-
-```
-{{"..." + String((? object.that.does.not.exist())) + "..."}}
-```
-
-is equivalent to:
-
-```
-{{"..." + String(_tolerate(object.that.does.not.exist()) + "..."}}
-```
-
 ## Debugging
 When loading composite scripts, the runtime automatically appends a `sourceURL`
 directive mapping the evaluated script to its original module path:
