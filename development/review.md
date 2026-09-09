@@ -115,7 +115,7 @@ Keys). `_lock.release` mountet bei jedem Render-Ende alle
 - Besonders relevant bei `condition`/Templates.
 - Erledigt mit: https://github.com/seanox/composite-js/blob/master/manuals/architecture.md#trust-boundary
 
-##### 6.5. `Expression._cache` wird beim Entfernen von DOM-Elementen nicht bereinigt
+##### ~~6.5. `Expression._cache` wird beim Entfernen von DOM-Elementen nicht bereinigt~~
 - Cache-Einträge mit `serial` bleiben dauerhaft bestehen.
 
 ##### 6.6. `Reactive.notifications` entfernt obsolete DOM-Subscriptions zu spät
