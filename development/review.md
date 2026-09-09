@@ -56,7 +56,6 @@ ebenso `import`/`include` ohne Sanitizing. XSLT-Output setzt
 `innerHTML = textContent` und schreibt `<script>` in `composite/javascript` um,
 das der Renderer ausführt.
 
-> [!NOTE]
 > - No contradiction in the documentary
 > - A dynamic/active execution is part of the concept
 
@@ -216,7 +215,6 @@ Meta, Cache-Einträge, Mount-Stack, Listener). Skaliert schlecht, verstärkt
 [6. Keyed Reconciliation](#6-speicherlecks--unbegrenzt-wachsender-zustand) ist
 ein Architekturvorhaben.
 
-> [!NOTE]
 > - The restructuring is part of the concept
 > - The memory leaks remain unresolved; this is handled by
 >   [6. Keyed Reconciliation](#6-speicherlecks--unbegrenzt-wachsender-zustand)
@@ -368,7 +366,6 @@ totes Public-API.
 
 `Er sagte "Hi" {{x}}` oder Backslash am Ende -> SyntaxError.
 
-> [!NOTE]
 > Kein Fehler, sondern erwartetes Verhalten: Text ausserhalb von {{}} wird als
 > String-Literal verarbeitet. \" wird dabei von der Runtime als Escape-Sequenz
 > interpretiert und zu " aufgelöst. Soll der Backslash erhalten bleiben, muss
