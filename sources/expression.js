@@ -77,6 +77,7 @@
          * @param {number} size Maximum number of cached scripts.
          */
         prune(size) {
+            size = Math.max(0, size);
             while (_cache.size > size)
                 _cache.delete(_cache.keys().next().value);
         }
