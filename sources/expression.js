@@ -60,14 +60,25 @@
             let script = serial ? _cache.get(serial) : null;
             if (!script)
                 script = _parse(TYPE_MIXED, expression);
-            if (serial)
+            if (serial) {
+                _cache.delete(serial);
                 _cache.set(serial, script);
+            }
 
             try {return Scripting.run(script);
             } catch (error) {
                 console.error(error.message + "\n\t" + script);
                 return new Error(error.message + " in " + script);
             }
+        },
+
+        /**
+         * Removes cached expression scripts until the cache size is <= size.
+         * @param {number} size Maximum number of cached scripts.
+         */
+        prune(size) {
+            while (_cache.size > size)
+                _cache.delete(_cache.keys().next().value);
         }
     });
 

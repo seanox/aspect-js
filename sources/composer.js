@@ -3014,8 +3014,13 @@
 
                 // All removed elements are cleaned and if necessary the undock
                 // method is called if a composite binding exists.
-                (record.removedNodes || []).forEach((node) =>
-                    _cleanup(node));
+                (record.removedNodes || []).forEach(_cleanup);
+
+                // Indirectly clear the Expressions script cache: Since serial
+                // is used only as a key prefix, an LRU cache can be truncated
+                // to the current cache size, effectively providing implicit
+                // cleanup without tracking serials.
+                Expression.prune(_render_meta.length);
             });
         })).observe(document.body, {childList:true, subtree:true, attributes:true, attributeOldValue:true, characterData:true});
 
