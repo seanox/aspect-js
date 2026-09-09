@@ -111,7 +111,7 @@ Keys). `_lock.release` mountet bei jedem Render-Ende alle
 ##### 6.3. `_render_meta` besitzt keinen konsistenten DOM-Lifecycle
 - Render-Metadaten müssen zuverlässig beim Entfernen eines Elements freigegeben werden.
 
-##### ~~6.4. `_render_meta` hält entfernte DOM-Bäume über `template`-Referenzen fest~~
+##### 6.4. `_render_meta` hält entfernte DOM-Bäume über `template`-Referenzen fest
 - Besonders relevant bei `condition`/Templates.
 - Erledigt mit: https://github.com/seanox/composite-js/blob/master/manuals/architecture.md#trust-boundary
 
@@ -199,17 +199,29 @@ endlos.
 
 Per Zuweisung statt `defineProperty({enumerable:false})`:
 `Object.prototype.ordinal/reactive/toPlainString`, `String.prototype.*`,
-`Element.prototype.*` erscheinen in jedem `for...in`. `ordinal()` gibt vorhandenes
-eigenes `serial`-Feld zurück (Kollision). `compliant` wirft hart bei künftigen
-Standard-Kollisionen -> Framework stirbt beim Laden statt zu degradieren.
+`Element.prototype.*` erscheinen in jedem `for...in`. `ordinal()` gibt
+vorhandenes eigenes `serial`-Feld zurück (Kollision). `compliant` wirft hart bei
+künftigen Standard-Kollisionen -> Framework stirbt beim Laden statt zu
+degradieren.
 
-### 12. Iterate ohne Diffing
+### ~~12. Iterate ohne Diffing~~
+
+<details>
+  <summary>Problem</summary>
+
 > Stelle: composer.js:2494-2563, Story-Points: 13
 
 Jeder Render-Zyklus leert `innerHTML` und baut alle Kinder neu (neue Serials,
 Meta, Cache-Einträge, Mount-Stack, Listener). Skaliert schlecht, verstärkt
 [6. Keyed Reconciliation](#6-speicherlecks--unbegrenzt-wachsender-zustand) ist
 ein Architekturvorhaben.
+
+> [!NOTE]
+> - The restructuring is part of the concept
+> - The memory leaks remain unresolved; this is handled by
+>   [6. Keyed Reconciliation](#6-speicherlecks--unbegrenzt-wachsender-zustand)
+
+</details>
 
 ### 13. Kein Function-Cache
 > Stelle: scripting.js:219-233; composer.js:59, 1537-1547,
